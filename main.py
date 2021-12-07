@@ -122,7 +122,24 @@ class UI_main_window(QMainWindow, ui):
         # self.label_position = QLabel(
         #     self.label_132, alignment=QtCore.Qt.AlignCenter
         # )
+    # def mousePressEvent(self, event):
+    #     if event.button() == Qt.LeftButton:
 
+    #         pen = QtGui.QPen()
+    #         pen.setWidth(3)
+    #         pen.setColor(QtGui.QColor(255, 0, 0))
+
+    #         brush = QtGui.QBrush()
+    #         brush.setColor(QtGui.QColor(255, 0, 0))
+    #         brush.setStyle(Qt.SolidPattern)
+    #         painter = QPainter(self)
+    #         painter.setPen(QPen(Qt.red, 2, Qt.SolidLine))
+    #         painter.drawRect(rect)
+
+    #         painter.setBrush(brush)
+    #         painter.setPen(pen)
+    #         painter.drawRect(207, 152, 409, 222)
+    #         painter.end()
     def wq(self, e):
         pos = self.mapToGlobal(e.pos())
         self.location = pos.x(), pos.y()
@@ -141,6 +158,9 @@ class UI_main_window(QMainWindow, ui):
             self.label_133.setToolTip("This is a text")
             # convert image file into pixmap
             self.pixmap_image = QtGui.QPixmap(self.filename)
+            # create painter instance with pixmap
+            self.painterInstance = QtGui.QPainter(self.pixmap_image)
+
             # self.pixmap_image = QtGui.QPixmap(self.filename)
             # painter.drawPoint(x,y)
             # painter.end()
