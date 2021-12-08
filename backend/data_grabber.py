@@ -62,6 +62,7 @@ class sheetOverView():
     #    
     #______________________________________________________________________________________________________________________________
     def update_pointer(self,pt):
+        self.pointer_layer = self.init_img((0,0,0))
         self.pointer_layer = self.draw_pointer(self.pointer_layer, pt)
         #return cv2.cvtColor( self.res, cv2.COLOR_BGR2RGB)
     
@@ -69,6 +70,7 @@ class sheetOverView():
     #    
     #______________________________________________________________________________________________________________________________
     def update_selected(self,selecteds):
+        self.select_layer = self.init_img((0,0,0))
         for s in selecteds:
             self.select_layer = self.draw_selected(self.select_layer, s) 
         #return cv2.cvtColor( self.res, cv2.COLOR_BGR2RGB)
