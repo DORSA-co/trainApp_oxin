@@ -112,13 +112,16 @@ class UI_main_window(QMainWindow, ui):
     #     print(self.location)
     #     return super().mouseReleaseEvent(e)
     #     print('ASDW')
-
+        self.up_side_technical_2.mouseMoveEvent = self.down_drag
+        self.up_side_technical_2.mouseReleaseEvent = self.down_release
     # def mouseMoveEvent(self, e):
     #     pos = self.mapToGlobal(e.pos())
     #     self.label_132.setText(f"x: {pos.x()}, y: {pos.y()}")
     #     return super().mouseMoveEvent(e)
         # self.video_label = QtWidgets.QLabel()
-        self.label_132.mouseMoveEvent = self.we
+        self.up_side_technical.mouseMoveEvent = self.up_drag
+        self.up_side_technical.mouseReleaseEvent = self.up_release
+
         # self.label_position = QLabel(
         #     self.label_132, alignment=QtCore.Qt.AlignCenter
         # )
@@ -140,42 +143,90 @@ class UI_main_window(QMainWindow, ui):
     #         painter.setPen(pen)
     #         painter.drawRect(207, 152, 409, 222)
     #         painter.end()
-    def wq(self, e):
+
+
+    # def mousePressEvent(self, event):
+    #     self.begin = event.pos()
+    #     self.end = event.pos()
+    #     self.update()
+
+    # def mouseMoveEvent(self, event):
+    #     self.end = event.pos()
+    #     self.update()
+
+    # def mouseReleaseEvent(self, event):
+    #     self.begin = event.pos()
+    #     self.end = event.pos()
+    #     # self.update()
+
+
+
+
+
+    def up_release(self, e):
         pos = self.mapToGlobal(e.pos())
         self.location = pos.x(), pos.y()
-        print('sdaw')
+        print('Realese mouse')
+        self.label_3.setText("Start Draging")
+        self.label_3.setStyleSheet("color: black;")
+        QApplication.setOverrideCursor(Qt.ArrowCursor)
         return super().mouseReleaseEvent(e)
 
-    def we(self, e):
+    def up_drag(self, e):
         # pos = self.mapToGlobal(e.pos())
         x=e.pos().x()
         y=e.pos().y()
-        print(x)
-        if x>0 and y>0 and y<self.label_132.height() and x<self.label_132.width():
-            self.label_133.setText("(%d, %d)" % (x, y))
+        if x>0 and y>0 and y<self.up_side_technical.height() and x<self.up_side_technical.width():
+            self.label_3.setText("UP Side Draging (%d, %d)" % (x, y))
             # return False
         # self.label_134.setText(f"x: {pos.x()}, y: {pos.y()}")
-            self.label_133.setToolTip("This is a text")
-            # convert image file into pixmap
-            self.pixmap_image = QtGui.QPixmap(self.filename)
-            # create painter instance with pixmap
-            self.painterInstance = QtGui.QPainter(self.pixmap_image)
+            # self.label_133.setToolTip("This is a text")
+            self.label_3.setStyleSheet("color: rgb(15,84,5);")
+            input_image = cv2.imread('1.jpg')
+            image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
+            self.crop_image_up.setPixmap(QPixmap.fromImage(image))
+            QApplication.setOverrideCursor(Qt.ClosedHandCursor)
+            input_image = cv2.imread('2.jpg')
+            image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
+            self.crop_image_down.setPixmap(QPixmap.fromImage(image))
+            QApplication.setOverrideCursor(Qt.ClosedHandCursor)
 
-            # self.pixmap_image = QtGui.QPixmap(self.filename)
-            # painter.drawPoint(x,y)
-            # painter.end()
-            # self.update()
+        else :
+            self.label_3.setText("Out of Band")
+            self.label_3.setStyleSheet("color: red;")
         return super().mouseMoveEvent(e)
-        # print(self.label_position())
+        
+    def down_release(self, e):
+        pos = self.mapToGlobal(e.pos())
+        self.location = pos.x(), pos.y()
+        print('Realese mouse')
+        self.label_3.setText("Start Draging")
+        self.label_3.setStyleSheet("color: black;")
+        QApplication.setOverrideCursor(Qt.ArrowCursor)
+        return super().mouseReleaseEvent(e)
 
-    def draw_something(self):
-        painter =QtGui.QPainter(self.label.pixmap())
-        pen = QtGui.QPen()
-        pen.setWidth(40)
-        pen.setColor(QtGui.QColor('red'))
-        painter.setPen(pen)
-        painter.drawPoint(200, 150)
-        painter.end()
+    def down_drag(self, e):
+        # pos = self.mapToGlobal(e.pos())
+        x=e.pos().x()
+        y=e.pos().y()
+        if x>0 and y>0 and y<self.up_side_technical_2.height() and x<self.up_side_technical_2.width():
+            self.label_3.setText("Down Side Draging (%d, %d)" % (x, y))
+            # return False
+        # self.label_134.setText(f"x: {pos.x()}, y: {pos.y()}")
+            # self.label_133.setToolTip("This is a text")
+            self.label_3.setStyleSheet("color: rgb(15,84,5);")
+            input_image = cv2.imread('2.jpg')
+            image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
+            self.crop_image_up.setPixmap(QPixmap.fromImage(image))
+            input_image = cv2.imread('3.jpg')
+            image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
+            self.crop_image_down.setPixmap(QPixmap.fromImage(image))
+            QApplication.setOverrideCursor(Qt.ClosedHandCursor)
+
+        else :
+            self.label_3.setText("Out of Band")
+            self.label_3.setStyleSheet("color: red;")
+        return super().mouseMoveEvent(e)
 
 
     # TOGGLE MENU
