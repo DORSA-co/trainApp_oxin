@@ -68,7 +68,7 @@ class UI_main_window(QMainWindow, ui):
         self.Data_auquzation_btn.clicked.connect(self.buttonClick)
         self.label_btn.clicked.connect(self.buttonClick)
         self.tuning_btn.clicked.connect(self.buttonClick)
-        self.offline_test_btn.clicked.connect(self.buttonClick)
+        self.pbt_btn.clicked.connect(self.buttonClick)
         
         # extra left bar
         # #---------------
@@ -222,6 +222,8 @@ class UI_main_window(QMainWindow, ui):
             image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
             self.crop_image_down.setPixmap(QPixmap.fromImage(image))
             QApplication.setOverrideCursor(Qt.ClosedHandCursor)
+            print(self.up_side_technical.width())
+            print(self.up_side_technical.height())
 
         else :
             self.label_3.setText("Out of Band")
@@ -354,7 +356,7 @@ class UI_main_window(QMainWindow, ui):
         print('no ani')   
 
  
-    # TOGGLE LOGIN
+    # TOGGLE LOGIN & setting
     # ///////////////////////////////////////////////////////////////
 
     def show_login(self):
@@ -475,7 +477,7 @@ class UI_main_window(QMainWindow, ui):
             self.Data_auquzation_btn.setStyleSheet("background-image: url(:/icons/images/icons/graber.png);")
             self.label_btn.setStyleSheet("background-image: url(:/icons/images/icons/label.png);")
             self.tuning_btn.setStyleSheet("background-image: url(:/icons/images/icons/tuning.png);")
-            self.offline_test_btn.setStyleSheet("background-image: url(:/icons/images/icons/pbt.png);")
+            self.pbt_btn.setStyleSheet("background-image: url(:/icons/images/icons/pbt.png);")
             # self.page_aboutus_btn.setStyleSheet("QPushButton {background-color: rgb(100,100,100);;	color: rgb(0,0,0);	border: none;	text-align: left;padding-left: 10px;}QPushButton:hover {background-color:  rgb(197 , 195,196)};QPushButton:pressed {background-color: rgb(197 , 195,196);}")
               
 
@@ -536,10 +538,10 @@ class UI_main_window(QMainWindow, ui):
             # self.stackedWidget.setCurrentWidget(self.page_tuning)
             self.hi()
 
-        if btnName =='offline_test_btn':
+        if btnName =='pbt_btn':
             self.left_bar_clear()
-            self.offline_test_btn.setStyleSheet("background-image: url(:/icons/images/icons/pbt.png);background-color: rgb(212, 212, 212);")
-            self.stackedWidget.setCurrentWidget(self.page_offline_test)
+            self.pbt_btn.setStyleSheet("background-image: url(:/icons/images/icons/pbt.png);background-color: rgb(212, 212, 212);")
+            self.stackedWidget.setCurrentWidget(self.page_pbt)
         if btnName =='aboutus_btn':
             self.left_bar_clear()
             # self.page_aboutus_btn.setStyleSheet("QPushButton {background-color: rgb(197 , 195,196);	color: rgb(0,0,0);	border: none;	text-align: left;padding-left: 10px;}QPushButton:hover {background-color:  rgb(197 , 195,196)};QPushButton:pressed {background-color: rgb(197 , 195,196);}")
@@ -600,7 +602,8 @@ class UI_main_window(QMainWindow, ui):
         if btnName =='setting_btn':
             self.setting_win()
 
-
+        if self.extraLeftBox.width()!=0:
+            self.hi()
 
 
 
