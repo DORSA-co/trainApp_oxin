@@ -112,6 +112,8 @@ class sheetOverView():
     def draw_pointer(self,img, pt):
         res = np.copy(img)
         x,y = pt
+        x = int(x*self.w)
+        y = int(y*self.h)
         xmin = x - self.cell_w // 2
         xmax = x + self.cell_w // 2
         ymin = y - self.cell_h // 2
