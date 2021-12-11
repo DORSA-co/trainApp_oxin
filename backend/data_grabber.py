@@ -17,7 +17,6 @@ class sheetOverView():
                  side,
                  sheet_shape,
                  sheet_grid,
-                 img_shape,
                  color_map=COLOR_MAP,
                  thickness_map=THINKNESS_MAP ):
         
@@ -25,7 +24,6 @@ class sheetOverView():
         self.side = side
         self.sheet_shape = sheet_shape
         self.sheet_grid = sheet_grid
-        self.img_shape = img_shape
         
         self.color_map = color_map
         self.thickness_map = thickness_map
@@ -133,6 +131,7 @@ class sheetOverView():
     #    
     #______________________________________________________________________________________________________________________________
     def draw_pointer(self,img, pt):
+        self.update_real_imgs()
         res = np.copy(img)
         x,y = pt
         print(pt)
@@ -336,7 +335,7 @@ if __name__ == '__main__':
                                side=TOP,
                                sheet_shape=(252,1260),
                                sheet_grid=(12,30),
-                               img_shape=(1920,1200))
+                               )
     
     '''
     img = sheet_view.draw_scaned(img,0)
@@ -367,7 +366,7 @@ if __name__ == '__main__':
         
         
         sheet_view.update_pointer((0.2,0.3))
-        sheet_view.update_real_imgs()
+        #sheet_view.update_real_imgs()
         real_img = sheet_view.get_real_img()
         cv2.imshow('img real', cv2.resize(real_img, None , fx=0.2, fy=0.1))
         cv2.waitKey(0)
