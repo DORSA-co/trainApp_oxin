@@ -323,7 +323,7 @@ class sheetOverView():
         py = int( (y % self.cell_shape[0]) / self.cell_shape[0] * h ) + h
         crop = res_img[ py - h//2: py + h//2 , px - w//2 : px + w//2 ]
         
-        return crop
+        return cv2.cvtColor( crop, cv2.COLOR_BGR2RGB)
             
             
     
