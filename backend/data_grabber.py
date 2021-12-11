@@ -79,12 +79,14 @@ class sheetOverView():
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
-    def update_pointer(self,pt):
+    def update_pointer(self,pt, draw=False):
+        self.update_real_imgs()
         self.pt = pt
         self.pt = int(pt[0]*self.sheet_shape[1]), int( pt[1]*self.sheet_shape[0])
         
         self.pointer_layer = self.init_img((0,0,0))
-        self.pointer_layer = self.draw_pointer(self.pointer_layer, self.pt )
+        if draw:
+            self.pointer_layer = self.draw_pointer(self.pointer_layer, self.pt )
         #return cv2.cvtColor( self.res, cv2.COLOR_BGR2RGB)
     
     #______________________________________________________________________________________________________________________________
@@ -131,7 +133,6 @@ class sheetOverView():
     #    
     #______________________________________________________________________________________________________________________________
     def draw_pointer(self,img, pt):
-        self.update_real_imgs()
         res = np.copy(img)
         x,y = pt
         print(pt)
