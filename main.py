@@ -9,9 +9,11 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 import pandas as pd
 from app_settings import Settings
+from backend import data_grabber
 # from modules import UIFunctions
 
 import cv2
+import time
 
 
 
@@ -122,46 +124,13 @@ class UI_main_window(QMainWindow, ui):
         self.up_side_technical.mouseMoveEvent = self.up_drag
         self.up_side_technical.mouseReleaseEvent = self.up_release
 
-        # self.label_position = QLabel(
-        #     self.label_132, alignment=QtCore.Qt.AlignCenter
-        # )
-    # def mousePressEvent(self, event):
-    #     if event.button() == Qt.LeftButton:
 
-    #         pen = QtGui.QPen()
-    #         pen.setWidth(3)
-    #         pen.setColor(QtGui.QColor(255, 0, 0))
+        self.sheet_view_up=data_grabber.sheetOverView(h=300,w=1812,nh=30,nw=12)
+        self.sheet_view_down=data_grabber.sheetOverView(h=300,w=1812,nh=30,nw=12)
 
-    #         brush = QtGui.QBrush()
-    #         brush.setColor(QtGui.QColor(255, 0, 0))
-    #         brush.setStyle(Qt.SolidPattern)
-    #         painter = QPainter(self)
-    #         painter.setPen(QPen(Qt.red, 2, Qt.SolidLine))
-    #         painter.drawRect(rect)
-
-    #         painter.setBrush(brush)
-    #         painter.setPen(pen)
-    #         painter.drawRect(207, 152, 409, 222)
-    #         painter.end()
-
-
-    # def mousePressEvent(self, event):
-    #     self.begin = event.pos()
-    #     self.end = event.pos()
-    #     self.update()
-
-    # def mouseMoveEvent(self, event):
-    #     self.end = event.pos()
-    #     self.update()
-
-    # def mouseReleaseEvent(self, event):
-    #     self.begin = event.pos()
-    #     self.end = event.pos()
-    #     # self.update()
-
-
-
-
+        for i in range(60):
+            self.sheet_view_up.update_line(i)
+            self.sheet_view_down.update_line(i)
 
     def up_release(self, e):
         pos = self.mapToGlobal(e.pos())
@@ -178,18 +147,24 @@ class UI_main_window(QMainWindow, ui):
         y=e.pos().y()
         if x>0 and y>0 and y<self.up_side_technical.height() and x<self.up_side_technical.width():
             self.label_3.setText("UP Side Draging (%d, %d)" % (x, y))
+            QApplication.setOverrideCursor(Qt.ClosedHandCursor)
             # return False
         # self.label_134.setText(f"x: {pos.x()}, y: {pos.y()}")
             # self.label_133.setToolTip("This is a text")
             self.label_3.setStyleSheet("color: rgb(15,84,5);")
-            input_image = cv2.imread('1.jpg')
-            image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
-            self.crop_image_up.setPixmap(QPixmap.fromImage(image))
-            QApplication.setOverrideCursor(Qt.ClosedHandCursor)
-            input_image = cv2.imread('2.jpg')
-            image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
-            self.crop_image_down.setPixmap(QPixmap.fromImage(image))
-            QApplication.setOverrideCursor(Qt.ClosedHandCursor)
+            x=x/self.up_side_technical.width()
+            y=y/self.up_side_technical.height()
+            if time.time()%3==0:
+                self.sheet_view_up.update_pointer((x,y))
+                # print(x,y)
+                img = self.sheet_view_up.get_img()
+                # print(img)
+                # cv2.imshow('img',img)
+                # cv2.waitKey(10)
+                # img= cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+                image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
+                self.up_side_technical.setPixmap(QPixmap.fromImage(image))    
+                    
 
         else :
             self.label_3.setText("Out of Band")
@@ -211,20 +186,27 @@ class UI_main_window(QMainWindow, ui):
         y=e.pos().y()
         if x>0 and y>0 and y<self.up_side_technical_2.height() and x<self.up_side_technical_2.width():
             self.label_3.setText("Down Side Draging (%d, %d)" % (x, y))
+            QApplication.setOverrideCursor(Qt.ClosedHandCursor)
             # return False
         # self.label_134.setText(f"x: {pos.x()}, y: {pos.y()}")
             # self.label_133.setToolTip("This is a text")
             self.label_3.setStyleSheet("color: rgb(15,84,5);")
-            input_image = cv2.imread('2.jpg')
-            image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
-            self.crop_image_up.setPixmap(QPixmap.fromImage(image))
-            input_image = cv2.imread('3.jpg')
-            image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
-            self.crop_image_down.setPixmap(QPixmap.fromImage(image))
-            QApplication.setOverrideCursor(Qt.ClosedHandCursor)
-            print(self.up_side_technical.width())
-            print(self.up_side_technical.height())
+            # input_image = cv2.imread('2.jpg')
+            # image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
+            # self.crop_image_up.setPixmap(QPixmap.fromImage(image))
+            # print(self.up_side_technical_2.width())
+            # print(self.up_side_technical_2.height())
+            x=x/self.up_side_technical_2.width()
+            y=y/self.up_side_technical_2.height()
+            self.sheet_view_down.update_pointer((x,y))
+            # print(self.sheet_view_down.cell_h)
+            # print(self.sheet_view_down.cell_w)
+            img = self.sheet_view_down.get_img()
+            image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
+            self.up_side_technical_2.setPixmap(QPixmap.fromImage(image))
 
+            # self.up_side_technical_2.addWidget(scroll)
+            # cv2.waitKey(30)
         else :
             self.label_3.setText("Out of Band")
             self.label_3.setStyleSheet("color: red;")
@@ -316,7 +298,10 @@ class UI_main_window(QMainWindow, ui):
         self.group.addAnimation(self.left_box)
         # self.group.addAnimation(self.right_box)
         self.group.start()
- 
+
+        
+
+
  
     # TOGGLE Yes_defect
     # /////////////////////////////////////////////////////////////// 
@@ -468,8 +453,10 @@ class UI_main_window(QMainWindow, ui):
         sys.exit()
 
     def maxmize_minimize(self):
+        
         if self.isMaximized():
             self.showNormal()
+            # self.sheet_view_down=data_grabber.sheetOverView(h=129,w=1084,nh=12,nw=30)
         else:
             self.showMaximized()
 
