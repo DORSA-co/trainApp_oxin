@@ -37,7 +37,7 @@ class sheetOverView():
         self.defect_layer = self.init_img((0,0,0))
         self.select_layer = self.init_img((0,0,0))
         self.pointer_layer = self.init_img((0,0,0))
-        
+        self.result_img = self.init_img((0,0,0))
         
         self.n=0
         
@@ -54,7 +54,7 @@ class sheetOverView():
     
     def init_img(self, color):
         img = np.ones((self.sheet_shape[0], self.sheet_shape[1], 3), dtype=np.uint8)
-        img[:,:] = self.__rgb2bgr__( color )
+        img[:,:] *= np.array(self.__rgb2bgr__( color ), np.uint8)
         return img
     #______________________________________________________________________________________________________________________________
     #    
@@ -64,6 +64,7 @@ class sheetOverView():
         self.sheet_layer = self.draw_scaned(self.sheet_layer, n)
         self.line_layer = self.draw_sline(self.line_layer,n+1)
         #return cv2.cvtColor( self.img, cv2.COLOR_BGR2RGB)
+        self.result_img = self.update_result_img()
     
     #______________________________________________________________________________________________________________________________
     #    
@@ -73,21 +74,16 @@ class sheetOverView():
             self.defect_layer = self.draw_defect(self.defect_layer, coordinate, pt1, pt2)
         #self.res = np.copy( self.img )
         #return cv2.cvtColor( self.img, cv2.COLOR_BGR2RGB)
+        self.result_img = self.update_result_img()
     
         
 
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
-    def update_pointer(self,pt, draw=False):
+    def update_pointer(self,pt):
         self.update_real_imgs()
-        self.pt = pt
         self.pt = int(pt[0]*self.sheet_shape[1]), int( pt[1]*self.sheet_shape[0])
-        
-        self.pointer_layer = self.init_img((0,0,0))
-        if draw:
-            self.pointer_layer = self.draw_pointer(self.pointer_layer, self.pt )
-        #return cv2.cvtColor( self.res, cv2.COLOR_BGR2RGB)
     
     #______________________________________________________________________________________________________________________________
     #    
@@ -97,14 +93,19 @@ class sheetOverView():
         for s in selecteds:
             self.select_layer = self.draw_selected(self.select_layer, s) 
         #return cv2.cvtColor( self.res, cv2.COLOR_BGR2RGB)
-        
-    def get_sheet_img(self):
+        self.result_img = self.update_result_img()
+    
+    
+    def update_result_img(self):
         res = self.__add__(self.sheet_layer, self.defect_layer)
         res = cv2.addWeighted(res,0.7,self.select_layer,0.3,1)
         res = self.__add__(res, self.line_layer)
-        # res = self.__add__(res, self.pointer_layer)
+        return res
         
-        return cv2.cvtColor( res, cv2.COLOR_BGR2RGB)
+    def get_sheet_img(self):
+        res = self.draw_pointer(np.copy(self.result_img), self.pt )
+        return res
+        return cv2.cvtColor( self.result_img, cv2.COLOR_BGR2RGB)
         
     
     #______________________________________________________________________________________________________________________________
@@ -132,10 +133,8 @@ class sheetOverView():
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
-    def draw_pointer(self,img, pt):
-        res = np.copy(img)
+    def pointer2rect(self, pt):
         x,y = pt
-        print(pt)
         xmin = x - self.cell_shape[1] // 2
         xmax = x + self.cell_shape[1] // 2
         ymin = y - self.cell_shape[0] // 2
@@ -159,16 +158,34 @@ class sheetOverView():
             ymin = ymin - (ymax - self.sheet_shape[0] + 1) 
             ymax = self.sheet_shape[0] - 1
             #print('4',xmin,xmax,ymin,ymax)
-            
         
-        res = cv2.rectangle(res,
-                            (xmin,ymin),
-                            (xmax, ymax),
+        return (xmin,ymin),(xmax, ymax)
+    #______________________________________________________________________________________________________________________________
+    #    
+    #______________________________________________________________________________________________________________________________
+    def draw_pointer(self,img, pt):
+        #res = np.copy(img)
+        corner1,corner2 = self.pointer2rect(pt)  
+        res = cv2.rectangle(img,
+                            corner1,
+                            corner2,
                             self.__rgb2bgr__( self.color_map['pointer']), 
                             self.thickness_map['pointer'])
-        
         return res
     
+    #______________________________________________________________________________________________________________________________
+    #    
+    #______________________________________________________________________________________________________________________________
+    def clean_pointer(self,img, pt):
+        res = np.copy(img)
+        corner1,corner2 = self.pointer2rect(pt)  
+        res = cv2.rectangle(res,
+                            corner1,
+                            corner2,
+                            (0,0,0), 
+                            thickness=-1)
+        
+        return res
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
