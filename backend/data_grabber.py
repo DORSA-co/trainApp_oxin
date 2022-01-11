@@ -102,7 +102,7 @@ class sheetOverView():
         res = self.__add__(self.sheet_layer, self.defect_layer)
         res = cv2.addWeighted(res,0.7,self.select_layer,0.3,1)
         res = self.__add__(res, self.line_layer)
-        res = self.__add__(res, self.pointer_layer)
+        # res = self.__add__(res, self.pointer_layer)
         
         return cv2.cvtColor( res, cv2.COLOR_BGR2RGB)
         

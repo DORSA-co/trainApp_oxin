@@ -341,3 +341,41 @@
 #     app.aboutToQuit.connect(app.deleteLater)
 #     sys.exit(app.exec_())
 
+# import cv2
+
+# dim = (1024,768)
+# up = cv2.imread('1.jpg')
+# left=cv2.resize(up,dim,interpolation = cv2.INTER_AREA)
+# down = cv2.imread('2.jpg')
+# dwon = cv2.resize(down,dim,interpolation=cv2.INTER_AREA)
+
+# images=[]
+# images.append(up)
+# images.append(down)
+# cv2.imshow('Panorama',down)
+# cv2.waitKey()
+# cv2.destroyAllWindows()
+
+# stitcher = cv2.Stitcher.create()
+# ret,pano = stitcher.stitch(images)
+
+# if ret==cv2.STITCHER_OK:
+#     cv2.imshow('Panorama',pano)
+#     cv2.waitKey()
+#     cv2.destroyAllWindows()
+# else:
+#     print("Error during Stitching")
+
+
+import cv2
+import numpy as np
+stitcher =cv2.Stitcher.create()
+foo = cv2.imread("1.jpg")
+bar = cv2.imread("2.jpg")
+stitcher = cv2.Stitcher.create(mode = 1)
+result = stitcher.stitch((foo,bar))
+print(result)
+# result=np.ascontiguousarray(result)
+# cv2.imshow('asdw',result)
+cv2.waitKey(0)
+# cv2.imwrite("D:/result.jpg", result[1])
