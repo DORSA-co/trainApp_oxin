@@ -100,6 +100,11 @@ class UI_main_window(QMainWindow, ui):
        # login btn
         self.login_btn.clicked.connect(self.buttonClick) 
         self.setting_btn.clicked.connect(self.buttonClick) 
+
+        # labeling
+
+        self.polygon_btn.clicked.connect(self.buttonClick) 
+        self.bounding_btn.clicked.connect(self.buttonClick) 
         # QPixmap pixmapTarget = QPixmap(":/icons/images/icons/2png);
         # pixmapTarget = pixmapTarget.scaled(size-5, size-5, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         # ui->label_image_power->setPixmap(pixmapTarget );
@@ -126,6 +131,10 @@ class UI_main_window(QMainWindow, ui):
         self.up_side_technical.mouseMoveEvent = self.up_drag
         self.up_side_technical.mouseReleaseEvent = self.up_release
 
+        self.image.mouseMoveEvent = self.image_drag
+        self.image.mouseReleaseEvent = self.image_release
+
+
 
         # self.sheet_view_up=data_grabber.sheetOverView(h=300,w=1812,nh=30,nw=12)
         # self.sheet_view_down=data_grabber.sheetOverView(h=300,w=1812,nh=30,nw=12)
@@ -138,7 +147,7 @@ class UI_main_window(QMainWindow, ui):
                                side=data_grabber.TOP,
                                sheet_shape=(300,1812),
                                sheet_grid=(12,30))
-        self.Data_auquzation_btn.setCursor(Qt.UpArrowCursor)
+
         for i in range(60):
             self.sheet_view_up.update_line(i)
             self.sheet_view_down.update_line(i)
@@ -151,8 +160,8 @@ class UI_main_window(QMainWindow, ui):
         print('up Realese mouse')
         self.label_3.setText("Start Draging")
         self.label_3.setStyleSheet("color: black;")
-        QApplication.setOverrideCursor(Qt.ArrowCursor)
-        self.Data_auquzation_btn.setCursor(Qt.UpArrowCursor)
+        # QApplication.setOverrideCursor(Qt.ArrowCursor)
+        # self.Data_auquzation_btn.setCursor(Qt.UpArrowCursor)
         # QApplication.restoreOverrideCursor()
         return super().mouseReleaseEvent(e)
 
@@ -163,9 +172,9 @@ class UI_main_window(QMainWindow, ui):
         y=e.pos().y()
         if x>0 and y>0 and y<self.up_side_technical.height() and x<self.up_side_technical.width():
             self.label_3.setText("UP Side Draging (%d, %d)" % (x, y))
-            pixmap = QPixmap("Rectangle.png")
-            cursor = QCursor(pixmap, 5,5)
-            QApplication.setOverrideCursor(cursor)
+            # pixmap = QPixmap("Rectangle.png")
+            # cursor = QCursor(pixmap, 5,5)
+            self.up_side_technical.setCursor(Qt.ArrowCursor)
             # return False
         # self.label_134.setText(f"x: {pos.x()}, y: {pos.y()}")
             # self.label_133.setToolTip("This is a text")
@@ -192,7 +201,7 @@ class UI_main_window(QMainWindow, ui):
         else :
             self.label_3.setText("Out of Band")
             self.label_3.setStyleSheet("color: red;")
-            QApplication.setOverrideCursor(Qt.ForbiddenCursor)
+            self.up_side_technical.setCursor(Qt.ArrowCursor)
         # return super().mouseMoveEvent(e)
 
     def get_pic_up(self,x,y):
@@ -213,7 +222,7 @@ class UI_main_window(QMainWindow, ui):
         print('Realese mouse')
         self.label_3.setText("Start Draging")
         self.label_3.setStyleSheet("color: black;")
-        QApplication.setOverrideCursor(Qt.ArrowCursor)
+        # QApplication.setOverrideCursor(Qt.ArrowCursor)
         return super().mouseReleaseEvent(e)
 
     def down_drag(self, e):
@@ -223,22 +232,24 @@ class UI_main_window(QMainWindow, ui):
         y=e.pos().y()
         if x>0 and y>0 and y<self.down_side_technical.height() and x<self.down_side_technical.width():
             self.label_3.setText("UP Side Draging (%d, %d)" % (x, y))
-            pixmap = QPixmap("Rectangle.png")
-            cursor = QCursor(pixmap, 5,5)
-            QApplication.setOverrideCursor(cursor)
+            # pixmap = QPixmap("Rectangle.png")
+            # cursor = QCursor(pixmap, 5,5)
+            self.down_side_technical.setCursor(Qt.ArrowCursor)
+            # QApplication.setOverrideCursor(cursor)
             # return False
         # self.label_134.setText(f"x: {pos.x()}, y: {pos.y()}")
             # self.label_133.setToolTip("This is a text")
-            self.label_3.setStyleSheet("color: rgb(15,84,5);")
+            # self.label_3.setStyleSheet("color: rgb(15,84,5);")
             x=x/self.down_side_technical.width()
             y=y/self.down_side_technical.height()
             # self.sheet_view_up.update_pointer((x,y))
             # print(x,y)
             # img = self.sheet_view_up.get_img()
-            timer = QTimer(self)
-            timer.timeout.connect(self.get_pic_down(x,y))
-            timer.start(170)
-            time_2=time.time()
+            # timer = QTimer(self)
+            # timer.timeout.connect(self.get_pic_down(x,y))
+            # timer.start(170)
+            # time_2=time.time()
+            self.get_pic_down(x,y)
             # print(time_2-time_1)
             # print(img)
             # cv2.imshow('img',img)
@@ -252,19 +263,20 @@ class UI_main_window(QMainWindow, ui):
         else :
             self.label_3.setText("Out of Band")
             self.label_3.setStyleSheet("color: red;")
-            QApplication.setOverrideCursor(Qt.ForbiddenCursor)
+            self.down_side_technical.setCursor(Qt.ArrowCursor)
         return super().mouseMoveEvent(e)
     
     def get_pic_down(self,x,y):
-        self.sheet_view_down.update_pointer((x,y),draw=True)
+        self.sheet_view_down.update_pointer((x,y))
         img = self.sheet_view_down.get_sheet_img()
+        img=cv2.rotate(img,cv2.ROTATE_90_CLOCKWISE)
         image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
         self.down_side_technical.setPixmap(QPixmap.fromImage(image))    
         # x=data_grabber.sheet_view.update_real_imgs()
-        # img = self.sheet_view_down.get_real_img()
+        img = self.sheet_view_down.get_real_img()
         # # print(img.shape)
-        # image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
-        # self.crop_image_up.setPixmap(QPixmap.fromImage(image))        
+        image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
+        self.crop_image_up.setPixmap(QPixmap.fromImage(image))        
  
     #/////////////////// end
 
@@ -526,6 +538,7 @@ class UI_main_window(QMainWindow, ui):
 
     def test(self):
         input_image = cv2.imread('1.jpg')
+        self.input_image=input_image
         image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
         self.image.setPixmap(QPixmap.fromImage(image))
         input_image = cv2.imread('2.jpg')
@@ -558,11 +571,42 @@ class UI_main_window(QMainWindow, ui):
         print('asd')
 
 
-
+#--------- label page
     def bounding_box(self):
-        self.tabWidget_defect.setCurrentWidget(self.tabwidget.findChild(QWidget, tab_2))
+        print('bounding_box')
+        self.image.setCursor(Qt.CrossCursor)
 
 
+    def polygon(self):
+        print('polygon')
+        pixmap = QPixmap("images/icons8-cursor-24.png")
+        cursor = QCursor(pixmap, 5,5)
+        # QApplication.setOverrideCursor(cursor)
+        self.image.setCursor(cursor)
+
+    def image_drag(self, e):
+        print(self.input_image.shape)
+        x=e.pos().x()
+        y=e.pos().y()
+        print(self.image.height())
+        print(self.image.width())
+        sacle_height=self.image.height()/self.input_image.shape[1]
+        sacle_width=self.image.width()/self.input_image.shape[0]
+
+        real_height=x/sacle_height
+        real_width=y/sacle_width
+
+        print('real_width',real_width,real_height)
+
+
+
+        # print(x,y)
+
+    def image_release(self, e):
+        x=e.pos().x()
+        y=e.pos().y()
+        
+        print(x,y)
 
 
 
@@ -652,8 +696,18 @@ class UI_main_window(QMainWindow, ui):
         if btnName =='setting_btn':
             self.setting_win()
 
+        if btnName =='polygon_btn':
+            self.polygon()
+
+        if btnName =='bounding_btn':
+            self.bounding_box()
+
+
+
         if self.extraLeftBox.width()!=0:
             self.hi()
+
+        
 
 
 
