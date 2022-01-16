@@ -1,3 +1,5 @@
+from tkinter import HORIZONTAL, VERTICAL
+from matplotlib.pyplot import draw
 import numpy as np
 import cv2
 import os 
@@ -8,6 +10,8 @@ THINKNESS_MAP = {'pointer':2, 'sline':1}
 
 TOP = -1
 BOTTOM=-1
+HORIZONTAL=3
+VERTICAL=4
 
 class sheetOverView():
     
@@ -17,32 +21,28 @@ class sheetOverView():
                  side,
                  sheet_shape,
                  sheet_grid,
+                 actives_camera=(0,12), 
                  color_map=COLOR_MAP,
-                 thickness_map=THINKNESS_MAP ):
+                 thickness_map=THINKNESS_MAP,
+                 oriation=VERTICAL):
         
         self.path = path
         self.side = side
         self.sheet_shape = sheet_shape
         self.sheet_grid = sheet_grid
-        
+        self.actives_camera = actives_camera
+        self.oriation = oriation
         self.color_map = color_map
         self.thickness_map = thickness_map
         
         self.cell_shape = (int(self.sheet_shape[0] / self.sheet_grid[0]) , 
                            int(self.sheet_shape[1] / self.sheet_grid[1]))
+
         
-        
-        self.sheet_layer = self.init_img(self.color_map['none'])
-        self.line_layer  = self.init_img((0,0,0))
-        self.defect_layer = self.init_img((0,0,0))
-        self.select_layer = self.init_img((0,0,0))
-        self.pointer_layer = self.init_img((0,0,0))
-        self.result_img = self.init_img((0,0,0))
         
         self.n=0
         
-        self.img = self.init_img(self.color_map['none'])
-        self.res = np.copy(self.img)
+        
         
         
         self.pt = (0,0)
@@ -50,6 +50,11 @@ class sheetOverView():
         self.real_idxs=[]
         self.real_res=0
         
+        self.sheet_img = self.init_img(self.color_map['sheet'])
+        self.result_img = self.init_img(self.color_map['sheet'])
+        self.sheet_img = self.draw_slines(self.sheet_img,-1)
+        self.sheet_img = self.draw_discamera(self.sheet_img, self.actives_camera)
+        self.result_img = np.copy( self.sheet_img)
     
     
     def init_img(self, color):
@@ -60,12 +65,11 @@ class sheetOverView():
     #    
     #______________________________________________________________________________________________________________________________
     def update_line(self,n):
-        self.n = n + 1
-        self.sheet_layer = self.draw_scaned(self.sheet_layer, n)
-        self.line_layer = self.draw_sline(self.line_layer,n+1)
-        #return cv2.cvtColor( self.img, cv2.COLOR_BGR2RGB)
-        self.result_img = self.update_result_img()
-    
+        if n==-1:
+            self.n+=1
+        else:
+            self.n = n
+        self.result_img = self.draw_noscaned(self.result_img,self.n)
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
@@ -82,7 +86,7 @@ class sheetOverView():
     #    
     #______________________________________________________________________________________________________________________________
     def update_pointer(self,pt):
-        self.update_real_imgs()
+        #self.update_real_imgs()
         self.pt = int(pt[0]*self.sheet_shape[1]), int( pt[1]*self.sheet_shape[0])
     
     #______________________________________________________________________________________________________________________________
@@ -97,9 +101,9 @@ class sheetOverView():
     
     
     def update_result_img(self):
-        res = self.__add__(self.sheet_layer, self.defect_layer)
-        res = cv2.addWeighted(res,0.7,self.select_layer,0.3,1)
-        res = self.__add__(res, self.line_layer)
+        #res = self.__add__(self.sheet_layer, self.selec)
+        res = cv2.addWeighted(self.sheet_img,0.7,self.select_layer,0.3,1)
+        #res = self.__add__(res, self.line_layer)
         return res
         
     def get_sheet_img(self):
@@ -194,80 +198,119 @@ class sheetOverView():
         DASH_N = 30
         res = np.copy(img)
         if n == -1:
-            n= (self.sheet_shape[1] // self.sheet_grid[1]) + 1
-        for i in range(1,n):
-            #x1 = i * self.cell_shape[1]
-            #x2 = i * self.cell_shape[1]
-            #y1 = 0 
-            #y2 = self.sheet_shape[0]
-            
-            for j in range(0,DASH_N+1,2):
+            if  self.oriation == HORIZONTAL:
+                n= (self.sheet_shape[1] // self.cell_shape[1]) + 1
+            if self.oriation == VERTICAL:
+                n= (self.sheet_shape[0] // self.cell_shape[0]) + 1
+        
+        if self.oriation==HORIZONTAL:
+            for i in range(1,n):
+                x1 = self.cell_shape[1] * i
+                x2 = self.cell_shape[1] * i
+                y1 = 0
+                y2 = self.sheet_shape[0] 
                 
-                x1 = i * self.cell_shape[1]
-                x2 = i * self.cell_shape[1]
-                y1 = j * ( self.sheet_shape[0] // DASH_N )
-                y2 = (j+1) * ( self.sheet_shape[0] // DASH_N )
-                res = cv2.line(res,
-                            (x1,y1),
-                            (x2,y2),
-                            self.__rgb2bgr__(self.color_map['sline']),
-                            thickness=self.thickness_map['sline'],
-                            lineType=cv2.LINE_AA)
+                self.draw_dline(img, (x1,y1), (x2,y2))
+        
+        if self.oriation==VERTICAL:
+            for i in range(1,n):
+                x1 = 0
+                x2 = self.sheet_shape[1]
+                y1 = self.cell_shape[0] * i
+                y2 = self.cell_shape[0] * i
                 
-    
-        return res
+                self.draw_dline(img, (x1,y1), (x2,y2))
+
+        return img
     
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
-    def draw_sline(self, img, n):
-        DASH_N = 30
-        res = np.copy(img)         
-        for j in range(0,DASH_N+1,3):
+    def draw_dline(self, img, pt1,pt2):
+        dash_size = 5   
+        x1,y1=pt1
+        x2,y2=pt2
+                
+        if self.oriation==VERTICAL:
             
-            x1 = n * self.cell_shape[1] - self.thickness_map['sline'] // 2
-            x2 = n * self.cell_shape[1] - self.thickness_map['sline'] // 2
-            y1 = j * ( self.sheet_shape[0] // DASH_N )
-            y2 = (j+1) * ( self.sheet_shape[0] // DASH_N )
-            res = cv2.line(res,
-                        (x1,y1),
-                        (x2,y2),
+            for i in range(x1,x2,dash_size*2):
+                img = cv2.line(img,
+                        (i,y1),
+                        (i+dash_size,y2),
                         self.__rgb2bgr__(self.color_map['sline']),
                         thickness=self.thickness_map['sline'],
                         lineType=cv2.LINE_AA)
                 
-    
-        return res
+            
+        if self.oriation==HORIZONTAL:
+            for i in range(y1,y2,dash_size*2):
+                img = cv2.line(img,
+                        (x1,i),
+                        (x2,i+dash_size),
+                        self.__rgb2bgr__(self.color_map['sline']),
+                        thickness=self.thickness_map['sline'],
+                        lineType=cv2.LINE_AA)
+        return img
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
-    def draw_scaned(self,img,n):
-        res = np.copy(img)
-        x1 = n * self.cell_shape[1]
-        x2 = (n+1) * self.cell_shape[1]
-        res[:, x1:x2] = np.array(self.__rgb2bgr__( self.color_map['sheet'] ))
-        return res
+    def draw_discamera(self,img,avtive_grids):
+        s,e = avtive_grids
+        if self.oriation==VERTICAL:
+            s *= self.cell_shape[1]
+            e *= self.cell_shape[1]
+            img[:,:s]=self.color_map['none']
+            img[:,e:]=self.color_map['none']
+        
+    
+        if self.oriation==HORIZONTAL:
+            s *= self.cell_shape[0]
+            e *= self.cell_shape[0]
+            img[:s]=self.color_map['none']
+            img[e:]=self.color_map['none']
+        return img
     
     
+    #______________________________________________________________________________________________________________________________
+    #    
+    #______________________________________________________________________________________________________________________________       
+    def draw_noscaned(self, img, scanned_frame):
+        if self.oriation==VERTICAL:
+            s = scanned_frame * self.cell_shape[0]
+            img[s:,]=self.color_map['none']
+        
+    
+        if self.oriation==HORIZONTAL:
+            s = scanned_frame * self.cell_shape[1]
+            img[:,s:]=self.color_map['none']
+        return img  
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
     def draw_selected(self,img,coordinate):
         i,j = coordinate
-        xmin = i * self.cell_shape[1] 
-        xmax = (i+1) * self.cell_shape[1]
-        ymin = j * self.cell_shape[0]
-        ymax = (j+1) * self.cell_shape[0]
+        if self.oriation == HORIZONTAL:
+            xmin = i * self.cell_shape[1] 
+            xmax = (i+1) * self.cell_shape[1]
+            ymin = j * self.cell_shape[0]
+            ymax = (j+1) * self.cell_shape[0]
         
-        select_img = np.copy(img)
-        select_img = cv2.rectangle(select_img,
+        if self.oriation == VERTICAL:
+            xmin = i * self.cell_shape[1] 
+            xmax = (i+1) * self.cell_shape[1]
+            ymin = j * self.cell_shape[0]
+            ymax = (j+1) * self.cell_shape[0]
+            
+        
+        #select_img = np.copy(img)
+        img = cv2.rectangle(img,
                                    (xmin,ymin),
                                    (xmax,ymax),
                                    self.__rgb2bgr__( self.color_map['select']),
                                    thickness=-1)
         
         #res = cv2.addWeighted(img, 0.7, select_img, 0.3, 1)
-        return select_img
+        return img
     
     #_____________________________________________________________________________________________________________________________
     #
@@ -348,50 +391,61 @@ class sheetOverView():
         
 if __name__ == '__main__':
     
-    img = np.zeros((252,1260,3), dtype=np.uint8)
+    img = np.zeros((1260,252, 3), dtype=np.uint8)
+    
     sheet_view = sheetOverView(path='110',
                                side=TOP,
                                sheet_shape=(252,1260),
                                sheet_grid=(12,30),
+                               oriation=HORIZONTAL
                                )
     
+    sheet_view= sheetOverView(path='110',
+                               side=TOP,
+                               sheet_shape=(int(252*2.76),252),
+                               sheet_grid=(30,12),
+                               oriation=VERTICAL,
+                               actives_camera=(0,8)
+                               )
+    
+    selected = [[0,0],[1,1],[2,2]]
+    sheet_view.update_selected(selected)
+    selected = [[0,0],[1,1]]
+    sheet_view.update_selected(selected)
+    
+    sheet_view.update_line(6)
+    
+    
+    cv2.imshow('res', sheet_view.result_img )
+    cv2.waitKey(0)
     '''
-    img = sheet_view.draw_scaned(img,0)
-    img = sheet_view.draw_scaned(img,1)
-    
-    img = sheet_view.draw_defect(img, (0,2), (0.2,0.3), (0.5, 0.6))
-    img = sheet_view.draw_defect(img, (1,4), (0.3,0.4), (0.6, 0.9))
-    
-    img = sheet_view.draw_selected(img,(1,4))
-    img = sheet_view.draw_selected(img,(0,2))
-    
     img = sheet_view.draw_sline(img,1)
     img = sheet_view.draw_pointer(img, (100,200))
     '''
-    import time
-    all_t = 0
-    for _ in range(100):
-        t = time.time()
-        sheet_view.update_line(0)
-        sheet_view.update_line(1)
-        sheet_view.update_line(2)
+    # import time
+    # all_t = 0
+    # for _ in range(100):
+    #     t = time.time()
+    #     sheet_view.update_line(0)
+    #     sheet_view.update_line(1)
+    #     sheet_view.update_line(2)
         
-        sheet_view.update_defect([[(0,2), (0.2,0.3), (0.5,0.6)]])
-        #img = sheet_view.update_line(2)
+    #     sheet_view.update_defect([[(11,2), (0.2,0.3), (0.5,0.6)]])
+    #     #img = sheet_view.update_line(2)
+    #     sheet_view.update_line()
+    #     selected = [[1,4],[0,0],[1,2]]
+    #     sheet_view.update_selected(selected)
         
-        selected = [[1,4],[0,0],[1,2]]
-        sheet_view.update_selected(selected)
         
+    #     sheet_view.update_pointer((0.2,0.3))
+    #     #sheet_view.update_real_imgs()
+    #     real_img = sheet_view.get_real_img()
+    #     cv2.imshow('img real', cv2.resize(real_img, None , fx=0.2, fy=0.1))
+    #     cv2.waitKey(0)
+    #     img = sheet_view.get_sheet_img()
+    #     t = time.time() - t
+    #     all_t+=t
         
-        sheet_view.update_pointer((0.2,0.3))
-        #sheet_view.update_real_imgs()
-        real_img = sheet_view.get_real_img()
-        cv2.imshow('img real', cv2.resize(real_img, None , fx=0.2, fy=0.1))
-        cv2.waitKey(0)
-        img = sheet_view.get_sheet_img()
-        t = time.time() - t
-        all_t+=t
-        
-    print(all_t/100)
-    cv2.imshow('res', cv2.cvtColor( img, cv2.COLOR_RGB2BGR))
-    cv2.waitKey(0)
+    # print(all_t/100)
+    # cv2.imshow('res', cv2.cvtColor( img, cv2.COLOR_RGB2BGR))
+    # cv2.waitKey(0)
