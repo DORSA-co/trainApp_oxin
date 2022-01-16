@@ -8,8 +8,8 @@ import os
 COLOR_MAP = { 'sheet':(200,200,200), 'none':(20,20,20), 'pointer':(255,0,0), 'sline':(0,0,255), 'select':(0,255,0), 'defect':(200,20,0) }
 THINKNESS_MAP = {'pointer':2, 'sline':1}
 
-TOP = -1
-BOTTOM=-1
+UP = "UP"
+DOWN="DOWN"
 HORIZONTAL=3
 VERTICAL=4
 
@@ -86,7 +86,7 @@ class sheetOverView():
     #    
     #______________________________________________________________________________________________________________________________
     def update_pointer(self,pt):
-        #self.update_real_imgs()
+        self.update_real_imgs()
         self.pt = int(pt[0]*self.sheet_shape[1]), int( pt[1]*self.sheet_shape[0])
     
     #______________________________________________________________________________________________________________________________
@@ -340,13 +340,21 @@ class sheetOverView():
     #_____________________________________________________________________________________________________________________________
     def update_real_imgs(self):
         x,y = self.pt
-        nx,ny = x//self.cell_shape[1] , y//self.cell_shape[0]
+        #nx,ny = x//self.cell_shape[1] , y//self.cell_shape[0]
+        if self.oriation == VERTICAL:
+            ncam = x//self.cell_shape[1]
+            nframe = y//self.cell_shape[0]
+        
+        if self.oriation == HORIZONTAL:
+            ncam = y//self.cell_shape[0]
+            nframe = x//self.cell_shape[1]
+
         
         
         new_idxs=[]
         new_imgs=[]
-        for i in range( nx-1, nx+2 ):
-            for j in range(ny-1, ny+2):
+        for i in range( ncam-1, ncam+2 ):
+            for j in range(nframe-1, nframe+2):
                 
                 idx=(i,j)
                 new_idxs.append(idx)
@@ -356,8 +364,15 @@ class sheetOverView():
                     new_imgs.append( self.real_imgs[list_idx] )
                 
                 else:
-                    img_name = '{},{},{}'.format(i,j,self.side) + '.jpg'
-                    img = cv2.imread( os.path.join( self.path, img_name),0 )    
+                    # img_name = '{},{},{}'.format(i,j,self.side) + '.jpg'
+                    res_path = os.path.join(
+                        self.path,
+                        self.side,
+                        str(ncam),
+                        str(nframe) + '.jpg'
+                    )
+                    img = cv2.imread( res_path,0 )
+                    # print('imggggggggg',res_path)    
                     new_imgs.append( img )
         self.real_idxs = new_idxs     
         self.real_imgs = new_imgs

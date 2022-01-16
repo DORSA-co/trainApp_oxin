@@ -28,3 +28,19 @@ from . ui_functions import *
 
 # APP FUNCTIONS
 from . app_functions import *
+
+import sys
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import *
+from pyqt5_plugins import *
+from PySide6.QtCharts import *
+from PySide6.QtCore import *
+from PySide6.QtUiTools import loadUiType
+from PySide6.QtWidgets import *
+from PyQt5.QtGui import QPainter
+import pandas as pd
+from app_settings import Settings
+from backend import data_grabber
+import detect_lenguage
+import setting
+

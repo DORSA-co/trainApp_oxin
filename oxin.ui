@@ -2269,7 +2269,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>1</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -2525,7 +2525,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
 }</string>
                             </property>
                             <property name="currentIndex">
-                             <number>0</number>
+                             <number>1</number>
                             </property>
                             <widget class="QWidget" name="tab_5">
                              <attribute name="title">
@@ -2940,6 +2940,12 @@ QPushButton:hover {
                                  <height>16777215</height>
                                 </size>
                                </property>
+                               <property name="verticalScrollBarPolicy">
+                                <enum>Qt::ScrollBarAsNeeded</enum>
+                               </property>
+                               <property name="horizontalScrollBarPolicy">
+                                <enum>Qt::ScrollBarAlwaysOff</enum>
+                               </property>
                                <property name="widgetResizable">
                                 <bool>true</bool>
                                </property>
@@ -2948,8 +2954,8 @@ QPushButton:hover {
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>204</width>
-                                  <height>17</height>
+                                  <width>209</width>
+                                  <height>558</height>
                                  </rect>
                                 </property>
                                 <layout class="QVBoxLayout" name="verticalLayout_77">
@@ -3050,8 +3056,8 @@ QPushButton:hover {
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>204</width>
-                                  <height>17</height>
+                                  <width>208</width>
+                                  <height>558</height>
                                  </rect>
                                 </property>
                                 <layout class="QHBoxLayout" name="horizontalLayout_90">
@@ -9764,7 +9770,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>222</width>
+                                 <width>283</width>
                                  <height>222</height>
                                 </rect>
                                </property>

@@ -12,6 +12,7 @@ from app_settings import Settings
 from backend import data_grabber
 import detect_lenguage
 import setting
+import api
 
 # from modules import UIFunctions
 
@@ -76,7 +77,7 @@ class UI_main_window(QMainWindow, ui):
         self.btn_software_setting.clicked.connect(self.buttonClick)
         
         
-
+        self.x,self.y,self.status,self.widget_name=-1,-1,'',''
         # #left bar click
         self.Data_auquzation_btn.clicked.connect(self.buttonClick)
         self.label_btn.clicked.connect(self.buttonClick)
@@ -122,89 +123,34 @@ class UI_main_window(QMainWindow, ui):
         
 
 
-        self.down_side_technical.mouseMoveEvent = self.down_drag
-        self.down_side_technical.mouseReleaseEvent = self.down_release
-    # def mouseMoveEvent(self, e):
-    #     pos = self.mapToGlobal(e.pos())
-    #     self.label_132.setText(f"x: {pos.x()}, y: {pos.y()}")
-    #     return super().mouseMoveEvent(e)
-        # self.video_label = QtWidgets.QLabel()
-        self.up_side_technical.mouseMoveEvent = self.up_drag
-        self.up_side_technical.mouseReleaseEvent = self.up_release
+        # self.down_side_technical.mouseMoveEvent = self.mouseevent(self.down_side_technical,'drag')
+        # self.down_side_technical.mouseReleaseEvent = self.mouseevent(self.down_side_technical,'release')
 
-        self.image.mouseMoveEvent = self.imageMoveEvent
-        self.image.mouseReleaseEvent = self.imageReleaseEvent
-        self.image.mousePressEvent = self.imagePressEvent
+        # self.up_side_technical.mouseMoveEvent = self.mouseevent(self.up_side_technical,'drag')
+        # self.up_side_technical.mouseReleaseEvent = self.mouseevent(self.up_side_technical,'release')
 
 
 
-        # self.sheet_view_up=data_grabber.sheetOverView(h=300,w=1812,nh=30,nw=12)
-        # self.sheet_view_down=data_grabber.sheetOverView(h=300,w=1812,nh=30,nw=12)
-        self.sheet_view_up=data_grabber.sheetOverView(path='backend/110',
-                               side=data_grabber.TOP,
-                               sheet_shape=(300,1812),
-                               sheet_grid=(12,30))
 
-        self.sheet_view_down=data_grabber.sheetOverView(path='backend/110',
-                               side=data_grabber.TOP,
-                               sheet_shape=(300,1812),
-                               sheet_grid=(12,30))
-        self.begin = QtCore.QPoint()
-        self.end = QtCore.QPoint()
-        self.show()
-        for i in range(60):
-            self.sheet_view_up.update_line(i)
-            self.sheet_view_down.update_line(i)
+    #///////////////////// mouseevent
+    # def mouseevent(self,widget,status):
+    #     def func(e):
+    #         x = e.pos().x() / widget.width()
+    #         y = e.pos().y() / widget.height()
+    #         x = min(max(x,0),1)
+    #         y = min(max(y,0),1)
+    #         self.x=x
+    #         self.y=y
+    #         self.status = status
+    #         self.widget_name = widget.objectName()
+    #         print(self.x,self.y,self.widget_name,self.status)
 
-        self.pix = QPixmap(self.rect().size())
-        self.pix.fill(Qt.white)
+    #     return func
 
-        self.begin, self.destination = QPoint(), QPoint()
-        self.pos1 = [0,0]
-        self.pos2 = [0,0]
-        # self.tabWidget_defect.addTab(self.tabWidget_defect, "name")
-        # self.set_language()
-    def paintEvent(self, event):
-        width = self.pos2[0] - self.pos1[0]
-        height = self.pos2[1] - self.pos1[1]
-
-        painter = QPainter()
-        painter.begin(self)
-
-        rect = QRect(self.pos1[0], self.pos1[1], width, height)
-
-        startAngle = 0
-        arLength = 360 * 16
-        painter.drawArc(rect, startAngle, arLength)
-        painter.end()
-
-    def imagePressEvent(self, event):
-
-
-        # self.pixmap_image = QtGui.QPixmap(image)
-        # self.painterInstance = QtGui.QPainter(self.pixmap_imagege)
-        # # set rectangle color and thickness
-        # # self.penRectangle = QPen(QtCore.Qt.red)
-        # self.penRectangle.setWidth(3)
-        # # draw rectangle on painter
-        # self.painterInstance.setPen(self.penRectangle)
-        # self.painterInstance.drawRect((50,50),100,100)
-        # self.ui.image.setPixmap(self.pixmap_image)
-        # self.ui.image.show()
-        if event.buttons() & Qt.MouseButton.LeftButton:
-            self.pos1[0], self.pos1[1] = self.pos().x(), self.pos().y()
-
-    def imageMoveEvent(self, event):
-        if event.buttons() & Qt.LeftButton:		
-            print('Point 2')	
-            self.destination = event.pos()
-            self.update()
-            
-
-    def imageReleaseEvent(self, event):
-        self.pos2[0], self.pos2[1] = self.pos().x(), self.pos().y()
-
-        self.update()
+    def ret_mouse(self):
+        x,y,widget_name,status = self.x,self.y,self.widget_name,self.status
+        self.x,self.y,self.widget_name,self.status = -1,-1,'',''
+        return (x,y),widget_name,status
 
 
 
@@ -216,132 +162,21 @@ class UI_main_window(QMainWindow, ui):
             detect_lenguage.main_window(self)
     
     
-    
-    #//////////////////// image show up & dwon
-    def up_release(self, e):
-        pos = self.mapToGlobal(e.pos())
-        self.location = pos.x(), pos.y()
-        print('up Realese mouse')
-        self.label_3.setText("Start Draging")
-        self.label_3.setStyleSheet("color: black;")
-        # QApplication.setOverrideCursor(Qt.ArrowCursor)
-        # self.Data_auquzation_btn.setCursor(Qt.UpArrowCursor)
-        # QApplication.restoreOverrideCursor()
-        return super().mouseReleaseEvent(e)
+    def set_img_sheet(self,img,side):
+        if side=="up":
+            image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_BGR888 )
+            self.up_side_technical.setPixmap(QPixmap.fromImage(image))
+        if side=="down":
+            image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_BGR888 )
+            self.down_side_technical.setPixmap(QPixmap.fromImage(image))
 
-    def up_drag(self, e):
-        time_1=time.time()
-        # pos = self.mapToGlobal(e.pos())
-        x=e.pos().x()
-        y=e.pos().y()
-        if x>0 and y>0 and y<self.up_side_technical.height() and x<self.up_side_technical.width():
-            self.label_3.setText("UP Side Draging (%d, %d)" % (x, y))
-            # pixmap = QPixmap("Rectangle.png")
-            # cursor = QCursor(pixmap, 5,5)
-            self.up_side_technical.setCursor(Qt.ArrowCursor)
-            # return False
-        # self.label_134.setText(f"x: {pos.x()}, y: {pos.y()}")
-            # self.label_133.setToolTip("This is a text")
-            self.label_3.setStyleSheet("color: rgb(15,84,5);")
-            x=x/self.up_side_technical.width()
-            y=y/self.up_side_technical.height()
-            # self.sheet_view_up.update_pointer((x,y))
-            # print(x,y)
-            # img = self.sheet_view_up.get_img()
-            timer = QTimer(self)
-            timer.timeout.connect(self.get_pic_up(x,y))
-            timer.start(170)
-            time_2=time.time()
-            # print(time_2-time_1)
-            # print(img)
-            # cv2.imshow('img',img)
-            # cv2.waitKey(10)
-            # img= cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-            # image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
-            # self.up_side_technical.setPixmap(QPixmap.fromImage(image))    
+    def set_crop_image(self,img):
+
+        image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_BGR888 )
+        self.crop_image_up.setPixmap(QPixmap.fromImage(image))
+        # cv2.waitKey(200)
 
 
-
-        else :
-            self.label_3.setText("Out of Band")
-            self.label_3.setStyleSheet("color: red;")
-            self.up_side_technical.setCursor(Qt.ArrowCursor)
-        # return super().mouseMoveEvent(e)
-
-    def get_pic_up(self,x,y):
-        self.sheet_view_up.update_pointer((x,y),draw=True)
-        img = self.sheet_view_up.get_sheet_img()
-        image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
-        self.up_side_technical.setPixmap(QPixmap.fromImage(image))    
-        # x=data_grabber.sheet_view.update_real_imgs()
-        img = self.sheet_view_up.get_real_img()
-        # print(img.shape)
-        image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
-        self.crop_image_up.setPixmap(QPixmap.fromImage(image))        
-
-
-    def down_release(self, e):
-        pos = self.mapToGlobal(e.pos())
-        self.location = pos.x(), pos.y()
-        print('Realese mouse')
-        self.label_3.setText("Start Draging")
-        self.label_3.setStyleSheet("color: black;")
-        # QApplication.setOverrideCursor(Qt.ArrowCursor)
-        return super().mouseReleaseEvent(e)
-
-    def down_drag(self, e):
-        time_1=time.time()
-        # pos = self.mapToGlobal(e.pos())
-        x=e.pos().x()
-        y=e.pos().y()
-        if x>0 and y>0 and y<self.down_side_technical.height() and x<self.down_side_technical.width():
-            self.label_3.setText("UP Side Draging (%d, %d)" % (x, y))
-            # pixmap = QPixmap("Rectangle.png")
-            # cursor = QCursor(pixmap, 5,5)
-            self.down_side_technical.setCursor(Qt.ArrowCursor)
-            # QApplication.setOverrideCursor(cursor)
-            # return False
-        # self.label_134.setText(f"x: {pos.x()}, y: {pos.y()}")
-            # self.label_133.setToolTip("This is a text")
-            # self.label_3.setStyleSheet("color: rgb(15,84,5);")
-            x=x/self.down_side_technical.width()
-            y=y/self.down_side_technical.height()
-            # self.sheet_view_up.update_pointer((x,y))
-            # print(x,y)
-            # img = self.sheet_view_up.get_img()
-            # timer = QTimer(self)
-            # timer.timeout.connect(self.get_pic_down(x,y))
-            # timer.start(170)
-            # time_2=time.time()
-            self.get_pic_down(x,y)
-            # print(time_2-time_1)
-            # print(img)
-            # cv2.imshow('img',img)
-            # cv2.waitKey(10)
-            # img= cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-            # image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
-            # self.up_side_technical.setPixmap(QPixmap.fromImage(image))    
-
-
-
-        else :
-            self.label_3.setText("Out of Band")
-            self.label_3.setStyleSheet("color: red;")
-            self.down_side_technical.setCursor(Qt.ArrowCursor)
-        # return super().mouseMoveEvent(e)
-    
-    def get_pic_down(self,x,y):
-        self.sheet_view_down.update_pointer((x,y))
-        img = self.sheet_view_down.get_sheet_img()
-        img=cv2.rotate(img,cv2.ROTATE_90_CLOCKWISE)
-        image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
-        self.down_side_technical.setPixmap(QPixmap.fromImage(image))    
-        # x=data_grabber.sheet_view.update_real_imgs()
-        img = self.sheet_view_down.get_real_img()
-        # # print(img.shape)
-        image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_RGB888 )
-        self.crop_image_up.setPixmap(QPixmap.fromImage(image))        
- 
     #/////////////////// end
 
 
@@ -530,17 +365,7 @@ class UI_main_window(QMainWindow, ui):
             # self.group.addAnimation(self.right_box)
             self.group.start()    
             print('no ani')           
-        # else :
-        #     self.left_box = QPropertyAnimation(self.frame_login, b"maximumHeight")
-        #     self.left_box.setDuration(Settings.TIME_ANIMATION)
-        #     self.left_box.setStartValue(height)
-        #     self.left_box.setEndValue(0)
-        #     self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
-        #     print('close')
-        #     self.group = QParallelAnimationGroup()
-        #     self.group.addAnimation(self.left_box)
-        #     # self.group.addAnimation(self.right_box)
-        #     self.group.start()        
+        
 
     # IMPORT THEMES FILES QSS/CSS
     # ///////////////////////////////////////////////////////////////
@@ -648,34 +473,10 @@ class UI_main_window(QMainWindow, ui):
         # QApplication.setOverrideCursor(cursor)
         self.image.setCursor(cursor)
 
-    def image_drag(self, e):
-        # x=widht
-        x=e.pos().x()
-        y=e.pos().y()
-        print('x,y',x,y)
-        print(self.input_image.shape)
-        height_image_norm=y/self.image.height()
-        width_image_norm=x/self.image.width()
-        print('height_image_norm',height_image_norm,width_image_norm)
-        # y=y/self.down_side_technical.height()
-        real_height=height_image_norm*self.input_image.shape[0]
-        real_width=width_image_norm*self.input_image.shape[1]
-
-
-        print('real_width',real_width,real_height)
-
-
 
 
 
         # print(x,y)
-
-    def image_release(self, e):
-        x=e.pos().x()
-        y=e.pos().y()
-        
-        print(x,y)
-
 
 
     def buttonClick(self):
@@ -791,10 +592,10 @@ class UI_main_window(QMainWindow, ui):
 
     # MOUSE CLICK EVENTS
     # ///////////////////////////////////////////////////////////////
-    def mousePressEvent(self, event):
+    def mouseMoveEvent(self, event):
         # SET DRAG POS WINDOW
         self.dragPos = event.globalPos()
-
+        print(self.ret_mouse())
         # PRINT MOUSE EVENTS
         if event.buttons() == Qt.LeftButton:
             print('Mouse click: LEFT CLICK')
@@ -827,6 +628,7 @@ class UI_main_window(QMainWindow, ui):
 if __name__ == "__main__":
     app = QApplication()
     win = UI_main_window()
+    api = api.API(win)
     win.show()
     sys.exit(app.exec())
     

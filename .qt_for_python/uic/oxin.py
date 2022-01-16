@@ -1579,10 +1579,12 @@ class Ui_MainWindow(object):
         self.scrollArea_4 = QScrollArea(self.frame_3)
         self.scrollArea_4.setObjectName(u"scrollArea_4")
         self.scrollArea_4.setMaximumSize(QSize(300, 16777215))
+        self.scrollArea_4.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scrollArea_4.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 204, 17))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 209, 558))
         self.verticalLayout_77 = QVBoxLayout(self.scrollAreaWidgetContents_4)
         self.verticalLayout_77.setSpacing(5)
         self.verticalLayout_77.setObjectName(u"verticalLayout_77")
@@ -1623,7 +1625,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 204, 17))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 208, 558))
         self.horizontalLayout_90 = QHBoxLayout(self.scrollAreaWidgetContents_2)
         self.horizontalLayout_90.setObjectName(u"horizontalLayout_90")
         self.horizontalLayout_90.setContentsMargins(0, 0, 0, 0)
@@ -5355,7 +5357,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 222, 222))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 283, 222))
         self.scrollAreaWidgetContents.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -5739,8 +5741,8 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(0)
+        self.tabWidget_2.setCurrentIndex(1)
         self.stackedWidget_defect.setCurrentIndex(1)
         self.tabWidget_defect.setCurrentIndex(1)
         self.stackedWidget_pbt.setCurrentIndex(0)
