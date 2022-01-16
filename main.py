@@ -6,18 +6,19 @@ from PySide6.QtCharts import *
 from PySide6.QtCore import *
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
-from PySide6.QtGui import *
+from PyQt5.QtGui import QPainter
 import pandas as pd
 from app_settings import Settings
 from backend import data_grabber
+import detect_lenguage
+import setting
 
-import mouse_set
 # from modules import UIFunctions
 
 import cv2
 import time
 
-
+from PyQt5.QtGui import QPainter
 
 ui, _ = loadUiType("oxin.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
@@ -51,7 +52,10 @@ class UI_main_window(QMainWindow, ui):
         self.setWindowTitle(title)
         # widgets.titleRightInfo.setText(description)
         self.test()
-
+        
+        # SET LANGUAGE
+        #//////////////////////////////////////////////
+        self.set_language()
 
         # self.toggleButton.clicked.connect(self.toggleMenu(True))
 
@@ -67,6 +71,11 @@ class UI_main_window(QMainWindow, ui):
             # SET HACKS
             self.setThemeHack()
 
+
+        #/////////Setting
+        self.btn_software_setting.clicked.connect(self.buttonClick)
+        
+        
 
         # #left bar click
         self.Data_auquzation_btn.clicked.connect(self.buttonClick)
@@ -110,17 +119,9 @@ class UI_main_window(QMainWindow, ui):
         # ui->label_image_power->setPixmap(pixmapTarget );
         self.classification_class_list_table()
 
-        # self.label_136.mousePressEvent = self.mouseMoveEvent
-        # mouse tracking
-        # self.label_133.setMouseTracking(True)
+        
 
-        # self.pushButton_2.setStyleSheet("background-color:Transparent;QToolTip { color: #ffffff; background-color: #000000; border: 0px; }")
-    # def mouse(self, e):
-    #     pos = self.mapToGlobal(e.pos())
-    #     self.location = pos.x(), pos.y()
-    #     print(self.location)
-    #     return super().mouseReleaseEvent(e)
-    #     print('ASDW')
+
         self.down_side_technical.mouseMoveEvent = self.down_drag
         self.down_side_technical.mouseReleaseEvent = self.down_release
     # def mouseMoveEvent(self, e):
@@ -131,8 +132,9 @@ class UI_main_window(QMainWindow, ui):
         self.up_side_technical.mouseMoveEvent = self.up_drag
         self.up_side_technical.mouseReleaseEvent = self.up_release
 
-        self.image.mouseMoveEvent = self.image_drag
-        self.image.mouseReleaseEvent = self.image_release
+        self.image.mouseMoveEvent = self.imageMoveEvent
+        self.image.mouseReleaseEvent = self.imageReleaseEvent
+        self.image.mousePressEvent = self.imagePressEvent
 
 
 
@@ -147,12 +149,74 @@ class UI_main_window(QMainWindow, ui):
                                side=data_grabber.TOP,
                                sheet_shape=(300,1812),
                                sheet_grid=(12,30))
-
+        self.begin = QtCore.QPoint()
+        self.end = QtCore.QPoint()
+        self.show()
         for i in range(60):
             self.sheet_view_up.update_line(i)
             self.sheet_view_down.update_line(i)
 
+        self.pix = QPixmap(self.rect().size())
+        self.pix.fill(Qt.white)
+
+        self.begin, self.destination = QPoint(), QPoint()
+        self.pos1 = [0,0]
+        self.pos2 = [0,0]
         # self.tabWidget_defect.addTab(self.tabWidget_defect, "name")
+        # self.set_language()
+    def paintEvent(self, event):
+        width = self.pos2[0] - self.pos1[0]
+        height = self.pos2[1] - self.pos1[1]
+
+        painter = QPainter()
+        painter.begin(self)
+
+        rect = QRect(self.pos1[0], self.pos1[1], width, height)
+
+        startAngle = 0
+        arLength = 360 * 16
+        painter.drawArc(rect, startAngle, arLength)
+        painter.end()
+
+    def imagePressEvent(self, event):
+
+
+        # self.pixmap_image = QtGui.QPixmap(image)
+        # self.painterInstance = QtGui.QPainter(self.pixmap_imagege)
+        # # set rectangle color and thickness
+        # # self.penRectangle = QPen(QtCore.Qt.red)
+        # self.penRectangle.setWidth(3)
+        # # draw rectangle on painter
+        # self.painterInstance.setPen(self.penRectangle)
+        # self.painterInstance.drawRect((50,50),100,100)
+        # self.ui.image.setPixmap(self.pixmap_image)
+        # self.ui.image.show()
+        if event.buttons() & Qt.MouseButton.LeftButton:
+            self.pos1[0], self.pos1[1] = self.pos().x(), self.pos().y()
+
+    def imageMoveEvent(self, event):
+        if event.buttons() & Qt.LeftButton:		
+            print('Point 2')	
+            self.destination = event.pos()
+            self.update()
+            
+
+    def imageReleaseEvent(self, event):
+        self.pos2[0], self.pos2[1] = self.pos().x(), self.pos().y()
+
+        self.update()
+
+
+
+    #///////////////////// LANGUAGE
+    def set_language(self):
+        print(detect_lenguage.language())
+        if detect_lenguage.language()=='Persian(فارسی)':
+            print('salam')
+            detect_lenguage.main_window(self)
+    
+    
+    
     #//////////////////// image show up & dwon
     def up_release(self, e):
         pos = self.mapToGlobal(e.pos())
@@ -264,7 +328,7 @@ class UI_main_window(QMainWindow, ui):
             self.label_3.setText("Out of Band")
             self.label_3.setStyleSheet("color: red;")
             self.down_side_technical.setCursor(Qt.ArrowCursor)
-        return super().mouseMoveEvent(e)
+        # return super().mouseMoveEvent(e)
     
     def get_pic_down(self,x,y):
         self.sheet_view_down.update_pointer((x,y))
@@ -585,18 +649,22 @@ class UI_main_window(QMainWindow, ui):
         self.image.setCursor(cursor)
 
     def image_drag(self, e):
-        print(self.input_image.shape)
+        # x=widht
         x=e.pos().x()
         y=e.pos().y()
-        print(self.image.height())
-        print(self.image.width())
-        sacle_height=self.image.height()/self.input_image.shape[1]
-        sacle_width=self.image.width()/self.input_image.shape[0]
+        print('x,y',x,y)
+        print(self.input_image.shape)
+        height_image_norm=y/self.image.height()
+        width_image_norm=x/self.image.width()
+        print('height_image_norm',height_image_norm,width_image_norm)
+        # y=y/self.down_side_technical.height()
+        real_height=height_image_norm*self.input_image.shape[0]
+        real_width=width_image_norm*self.input_image.shape[1]
 
-        real_height=x/sacle_height
-        real_width=y/sacle_width
 
         print('real_width',real_width,real_height)
+
+
 
 
 
@@ -702,6 +770,12 @@ class UI_main_window(QMainWindow, ui):
         if btnName =='bounding_btn':
             self.bounding_box()
 
+        if btnName =='btn_software_setting':
+            print('asdqwdwqd')
+            # self.bounding_box()
+            self.stackedWidget.setCurrentWidget(self.page_software_setting)
+            setting.language(self)
+            # self.stackedWidget.setCurrentWidget(self.page_software_setting)
 
 
         if self.extraLeftBox.width()!=0:
