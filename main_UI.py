@@ -13,6 +13,9 @@ from backend import data_grabber
 import detect_lenguage
 import setting
 import api
+from trainApp_loader.data_loader import UI_data_loader
+from PIL import ImageQt
+import numpy as np
 
 # from modules import UIFunctions
 
@@ -56,9 +59,18 @@ class UI_main_window(QMainWindow, ui):
         
         # SET LANGUAGE
         #//////////////////////////////////////////////
-        self.set_language()
+        # self.set_language()
 
         # self.toggleButton.clicked.connect(self.toggleMenu(True))
+
+
+
+        # CONNECTED WINDOWS
+        #//////////////////////////////////////////////
+        self.win=UI_data_loader()
+
+
+
 
 
         useCustomTheme = False
@@ -120,32 +132,21 @@ class UI_main_window(QMainWindow, ui):
         # ui->label_image_power->setPixmap(pixmapTarget );
         self.classification_class_list_table()
 
+
+        #data aquization page
+        self.load_coil_btn.clicked.connect(self.buttonClick)
+        self.label_btn_2.clicked.connect(self.buttonClick)
+        self.next_coil_btn.clicked.connect(self.buttonClick)
+        self.prev_coil_btn.clicked.connect(self.buttonClick)
+
         
 
+        
+        
+        
+        
+        
 
-        # self.down_side_technical.mouseMoveEvent = self.mouseevent(self.down_side_technical,'drag')
-        # self.down_side_technical.mouseReleaseEvent = self.mouseevent(self.down_side_technical,'release')
-
-        # self.up_side_technical.mouseMoveEvent = self.mouseevent(self.up_side_technical,'drag')
-        # self.up_side_technical.mouseReleaseEvent = self.mouseevent(self.up_side_technical,'release')
-
-
-
-
-    #///////////////////// mouseevent
-    # def mouseevent(self,widget,status):
-    #     def func(e):
-    #         x = e.pos().x() / widget.width()
-    #         y = e.pos().y() / widget.height()
-    #         x = min(max(x,0),1)
-    #         y = min(max(y,0),1)
-    #         self.x=x
-    #         self.y=y
-    #         self.status = status
-    #         self.widget_name = widget.objectName()
-    #         print(self.x,self.y,self.widget_name,self.status)
-
-    #     return func
 
     def ret_mouse(self):
         x,y,widget_name,status = self.x,self.y,self.widget_name,self.status
@@ -475,6 +476,11 @@ class UI_main_window(QMainWindow, ui):
 
 
 
+    def data_loader_win(self):
+        print('show loader win')
+        self.win.show()
+
+
 
         # print(x,y)
 
@@ -578,14 +584,32 @@ class UI_main_window(QMainWindow, ui):
             setting.language(self)
             # self.stackedWidget.setCurrentWidget(self.page_software_setting)
 
+        if btnName =='load_coil_btn':
+            # print('asdqwdwqd')
+            self.data_loader_win()
+
+        if btnName =='next_coil_btn':
+            # print('asdqwdwqd')
+            api.next_coil()
+
+        if btnName =='prev_coil_btn':
+            # print('asdqwdwqd')
+            api.prev_coil()
+
+        if btnName =='label_btn_2':
+            self.stackedWidget.setCurrentWidget(self.page_label)
+            image = ImageQt.fromqpixmap(self.crop_image_up.pixmap())
+            image=np.ascontiguousarray(image)
+            self.fs = QImage(image,image.shape[1], image.shape[0],image.strides[0], QImage.Format_BGR888 )           
+            self.image.setPixmap(QPixmap.fromImage(self.fs)) 
+
+
+
+
+
 
         if self.extraLeftBox.width()!=0:
             self.hi()
-
-        
-
-
-
 
         # PRINT BTN NAME
         print(f'Button "{btnName}" pressed!')

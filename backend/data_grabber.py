@@ -1,4 +1,3 @@
-from tkinter import HORIZONTAL, VERTICAL
 from matplotlib.pyplot import draw
 import numpy as np
 import cv2
@@ -12,6 +11,8 @@ UP = "UP"
 DOWN="DOWN"
 HORIZONTAL=3
 VERTICAL=4
+
+IMAGE_SHAPE = (1200,1920)
 
 class sheetOverView():
     
@@ -99,19 +100,16 @@ class sheetOverView():
         #return cv2.cvtColor( self.res, cv2.COLOR_BGR2RGB)
         self.result_img = self.update_result_img()
     
-    
+    #_____________________________________________________________________________________________________________________________
+    #
+    #_____________________________________________________________________________________________________________________________
     def update_result_img(self):
         #res = self.__add__(self.sheet_layer, self.selec)
         res = cv2.addWeighted(self.sheet_img,0.7,self.select_layer,0.3,1)
         #res = self.__add__(res, self.line_layer)
         return res
         
-    def get_sheet_img(self):
-        res = self.draw_pointer(np.copy(self.result_img), self.pt )
-        return res
-        return cv2.cvtColor( self.result_img, cv2.COLOR_BGR2RGB)
-        
-    
+
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
@@ -120,12 +118,16 @@ class sheetOverView():
             r,g,b = inpt
             return (b,g,r)
     
-    
+    #_____________________________________________________________________________________________________________________________
+    #
+    #_____________________________________________________________________________________________________________________________
     def __get_mask__(self,img):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY )
         return cv2.threshold(gray, 0,255,cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     
-    
+    #_____________________________________________________________________________________________________________________________
+    #
+    #_____________________________________________________________________________________________________________________________
     def __add__(self,img1,img2):
         msk2 = self.__get_mask__(img2)
         msk1 = 255 - msk2
@@ -339,69 +341,148 @@ class sheetOverView():
     #
     #_____________________________________________________________________________________________________________________________
     def update_real_imgs(self):
-        x,y = self.pt
-        #nx,ny = x//self.cell_shape[1] , y//self.cell_shape[0]
-        if self.oriation == VERTICAL:
-            ncam = x//self.cell_shape[1]
-            nframe = y//self.cell_shape[0]
-        
-        if self.oriation == HORIZONTAL:
-            ncam = y//self.cell_shape[0]
-            nframe = x//self.cell_shape[1]
+        try:
+            x,y = self.pt
+            max_frame = -1
+            #nx,ny = x//self.cell_shape[1] , y//self.cell_shape[0]
+            if self.oriation == VERTICAL:
+                ncam = x//self.cell_shape[1]
+                nframe = y//self.cell_shape[0]
 
-        
-        
-        new_idxs=[]
-        new_imgs=[]
-        for i in range( ncam-1, ncam+2 ):
-            for j in range(nframe-1, nframe+2):
-                
-                idx=(i,j)
-                new_idxs.append(idx)
-                
-                if idx in self.real_idxs:
-                    list_idx = self.real_idxs.index(idx)
-                    new_imgs.append( self.real_imgs[list_idx] )
-                
-                else:
-                    # img_name = '{},{},{}'.format(i,j,self.side) + '.jpg'
-                    res_path = os.path.join(
-                        self.path,
-                        self.side,
-                        str(ncam),
-                        str(nframe) + '.jpg'
-                    )
-                    img = cv2.imread( res_path,0 )
-                    # print('imggggggggg',res_path)    
-                    new_imgs.append( img )
-        self.real_idxs = new_idxs     
-        self.real_imgs = new_imgs
+                max_frame = self.sheet_grid[0]
+            
+            if self.oriation == HORIZONTAL:
+                ncam = y//self.cell_shape[0]
+                nframe = x//self.cell_shape[1]
+
+                max_frame = self.sheet_grid[1]
+
+            
+            new_idxs=[]
+            new_imgs=[]
+            
+            
+            low_nc,up_nc,low_nf,up_nf=0,0,0,0
+
+            low_nc = ncam-1
+            up_nc = ncam+1
+            low_nf = nframe-1
+            up_nf = nframe+1
+
+            #-------------------------------------------
+            if low_nc <= self.actives_camera[0]:
+                low_nc = self.actives_camera[0]
+                up_nc = min( low_nc + 2 , self.actives_camera[1])
+
+            if up_nc >= self.actives_camera[1]:
+                up_nc = self.actives_camera[1]
+                low_nc = max(up_nc-2 , self.actives_camera[0] )
+            #-------------------------------------------
+            if low_nf <=0:
+                low_nf = 0
+                up_nf = low_nf + 2
+            if up_nf>= max_frame:
+                up_nf = max_frame
+                low_nf = max_frame - 2
+            
+            for nc in range( low_nc, up_nc+1 ):
+                for nf in range(low_nf, up_nf+1):
+                    idx=(nc,nf)
+                    new_idxs.append(idx)
+                    
+                    if idx in self.real_idxs and False:
+                        list_idx = self.real_idxs.index(idx)
+                        new_imgs.append( self.real_imgs[list_idx] )
+                    
+                    else:
+                        res_path = os.path.join(
+                            self.path,
+                            self.side,
+                            str(nc+1),
+                            str(nf) + '.jpg'
+                        )
+                        img = cv2.imread( res_path,0 )
+                        if img is None:
+                            print('*'*100)
+                            # print(res_path)
+                            print('cant load image {},{}'.format(nf, nc))
+                            print('-'*100)
+                            img = np.zeros(IMAGE_SHAPE, np.uint8)
+                        new_imgs.append(img )
+            
+            
+            self.real_idxs = new_idxs     
+            self.real_imgs = new_imgs 
+        except:
+            print('eror load image')
+
     #_____________________________________________________________________________________________________________________________
     #
     #_____________________________________________________________________________________________________________________________
     def get_real_img(self):
         h,w=self.real_imgs[0].shape[:2]
-        gridn = int( len(self.real_imgs)**0.5 )
+        gridn = int( len(self.real_imgs)**0.5 )  #9 images are 3x3
         res_h, res_w = h * gridn, w * gridn
         res_img = np.zeros((res_h,res_w,3), np.uint8)
         
         for n in range(len(self.real_imgs)):
-            j = n//gridn
-            i = n - gridn * j
-            #print(res_img[ j * res_h: (j+1)*res_h, i * res_w: (i+1)*res_w, 1].shape)
-            res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 0] = self.real_imgs[n]
-            res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 1] = self.real_imgs[n]
-            res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 2] = self.real_imgs[n]
+            if self.oriation == VERTICAL:
+                i = n//gridn
+                j = n - gridn * i
+                #print(res_img[ j * res_h: (j+1)*res_h, i * res_w: (i+1)*res_w, 1].shape)
+                res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 0] = self.real_imgs[n]
+                res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 1] = self.real_imgs[n]
+                res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 2] = self.real_imgs[n]
 
         
         x,y = self.pt
-        px = int( (x % self.cell_shape[1]) / self.cell_shape[1] * w ) + w
-        py = int( (y % self.cell_shape[0]) / self.cell_shape[0] * h ) + h
-        crop = res_img[ py - h//2: py + h//2 , px - w//2 : px + w//2 ]
+    
+        px = x / self.cell_shape[1]
+        py = y / self.cell_shape[0]
+        idxs = np.array( self.real_idxs)
+        if self.oriation == VERTICAL:
+            min_x,min_y = idxs.min(axis=0)
+        elif self.oriation == HORIZONTAL:
+            min_y,min_x = idxs.min(axis=0)
         
+        px = px - min_x
+        py = py - min_y
+
+        px = int(px * w)
+        py = int(py * h)
+
+        x1,x2 = px - w//2, px + w//2
+        y1,y2 = py - h//2 , py + h//2
+        
+        if x1<=0:
+            x2 += abs(x1)
+            x1=0
+
+        elif x2>=res_w:
+            x1 -= (x2 - res_w)
+            x2 = res_w
+        
+        if y1<=0:
+            y2 += abs(y1)
+            y1=0
+        elif y2>= res_h:
+            y1 -= (y2-res_h)
+            y2 = res_h
+
+        crop = res_img[y1:y2, x1:x2]
+        #crop = cv2.resize(res_img, (1920,1200))
         return cv2.cvtColor( crop, cv2.COLOR_BGR2RGB)
-            
-            
+
+
+    #_____________________________________________________________________________________________________________________________
+    #
+    #_____________________________________________________________________________________________________________________________
+    def get_sheet_img(self):
+        res = self.draw_pointer(np.copy(self.result_img), self.pt )
+        return res
+        return cv2.cvtColor( self.result_img, cv2.COLOR_BGR2RGB)
+        
+      
     
         
 if __name__ == '__main__':
