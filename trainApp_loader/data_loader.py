@@ -81,7 +81,7 @@ class UI_data_loader(QMainWindow, ui):
     def next_coil(self):
 
             print("*"*50,self.counter,len(self.selected_list))
-            if self.counter<=len(self.selected_list):
+            if self.counter<len(self.selected_list):
                 self.counter+=1
                 self.selected=self.selected_list[self.counter]
                 self.load_images()
@@ -89,7 +89,8 @@ class UI_data_loader(QMainWindow, ui):
             print('list end')
     def prev_coil(self):
         # try:
-            if self.counter>=len(self.selected_list):
+            print("*"*50,self.counter,len(self.selected_list))
+            if self.counter>=0:
                 self.counter-=1
                 self.selected=self.selected_list[self.counter]
                 self.load_images()
@@ -98,7 +99,9 @@ class UI_data_loader(QMainWindow, ui):
 
 
     def load_images(self):
+        
         self.path=os.path.join(self.par_path,str(self.records[self.selected][0]))
+        print('new_path',self.path)
         self.id=str(self.records[self.selected][0])
         self.heat_no=str(self.records[self.selected][1])
         self.psn=str(self.records[self.selected][2])

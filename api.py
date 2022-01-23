@@ -178,7 +178,7 @@ class API:
     def load_path(self):
         path=self.ui.win.path
 
-        print(path)
+        print('path',path)
         self.load_sheet(path)
         self.ui.details_label.setText(str(self.ui.win.details))
     
