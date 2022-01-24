@@ -2275,7 +2275,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>1</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -2737,8 +2737,8 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>242</width>
-                                         <height>27</height>
+                                         <width>283</width>
+                                         <height>28</height>
                                         </rect>
                                        </property>
                                        <layout class="QHBoxLayout" name="horizontalLayout_92">
@@ -2791,7 +2791,7 @@ QPushButton:hover {
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QLabel" name="crop_image_up">
+                                  <widget class="QLabel" name="crop_image">
                                    <property name="minimumSize">
                                     <size>
                                      <width>125</width>
@@ -3247,7 +3247,7 @@ QPushButton:hover {
                                   <x>0</x>
                                   <y>0</y>
                                   <width>280</width>
-                                  <height>28</height>
+                                  <height>528</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -3414,7 +3414,7 @@ QPushButton:hover {
                                   <x>0</x>
                                   <y>0</y>
                                   <width>280</width>
-                                  <height>28</height>
+                                  <height>528</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -10295,7 +10295,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>222</width>
+                                 <width>283</width>
                                  <height>222</height>
                                 </rect>
                                </property>

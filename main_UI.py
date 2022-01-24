@@ -173,7 +173,7 @@ class UI_main_window(QMainWindow, ui):
     def set_crop_image(self,img):
 
         image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_BGR888 )
-        self.crop_image_up.setPixmap(QPixmap.fromImage(image))
+        self.crop_image.setPixmap(QPixmap.fromImage(image))
         # cv2.waitKey(200)
 
 
@@ -636,7 +636,7 @@ class UI_main_window(QMainWindow, ui):
 
         if btnName =='label_btn_2':
             self.stackedWidget.setCurrentWidget(self.page_label)
-            image = ImageQt.fromqpixmap(self.crop_image_up.pixmap())
+            image = ImageQt.fromqpixmap(self.crop_image.pixmap())
             image=np.ascontiguousarray(image)
             self.fs = QImage(image,image.shape[1], image.shape[0],image.strides[0], QImage.Format_BGR888 )           
             self.image.setPixmap(QPixmap.fromImage(self.fs)) 

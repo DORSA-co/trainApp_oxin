@@ -34,6 +34,10 @@ class API:
 
         self.ui.up_side_technical.mouseMoveEvent = self.mouseevent(self.ui.up_side_technical)
         self.ui.up_side_technical.mouseReleaseEvent = self.mouseevent(self.ui.up_side_technical)
+        
+        
+        
+        self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
 
         
         self.t = 0
@@ -64,7 +68,9 @@ class API:
        
 
 
-        self.load_sheet('G:\oxin_image_grabber/1')
+        self.load_sheet('G:\oxin_image_grabber/1',20)
+        self.x=0
+        self.y=0
     
     def mouseevent(self,widget):
         # print('yes')
@@ -113,6 +119,16 @@ class API:
 
         return func
 
+    def fit_image(self,event):
+        print('yes',event.x(),event.y())
+        x = event.x() / self.ui.crop_image.width()
+        y = event.y() / self.ui.crop_image.height()
+        x = min(max(x,0),1)
+        y = min(max(y,0),1)
+        print(x,y)
+
+
+
 
     def update_sheet_real_img(self,side,pt):
         if side=="down":
@@ -130,11 +146,14 @@ class API:
 
 
 
-    def load_sheet(self,path):
+    def load_sheet(self,path,lenght=20):
 
         try:
             lenght=self.ui.win.lenght
             lenght=int(float(lenght))+1
+        except:
+            print('no_len')
+        try:
             print("*"*100,lenght)
         # 'G:\oxin_image_grabber/001'
             self.obj_sheet_up=data_grabber.sheetOverView(path,
@@ -178,7 +197,7 @@ class API:
         print(path)
         # item = QListWidgetItem("Item %i" % i)
         user='admin'
-        image = ImageQt.fromqpixmap(self.ui.crop_image_up.pixmap())
+        image = ImageQt.fromqpixmap(self.ui.crop_image.pixmap())
         # image=np.ascontiguousarray(image)
         x =datetime.now()
         x=x.strftime("%Y"+"-"+"%m"+"-"+"%d"+"-"+"%H"+"-"+"%M"+"-"+"%S")
@@ -199,7 +218,7 @@ class API:
         self.ui.listWidget_logs.clear()
     
     def append(self):
-        image = ImageQt.fromqpixmap(self.ui.crop_image_up.pixmap())
+        image = ImageQt.fromqpixmap(self.ui.crop_image.pixmap())
         x =datetime.now()
         x=x.strftime("%Y"+"-"+"%m"+"-"+"%d"+"-"+"%H"+"-"+"%M"+"-"+"%S")
         # x=str(x)+" "+str(user)
@@ -239,21 +258,21 @@ class API:
         elif arrow=='left':
             self.x=self.x-0.02
         elif arrow=='up':
-            self.y=self.y-0.002
+            self.y=self.y-0.01
         elif arrow=='down':
-            self.y=self.y+0.002
+            self.y=self.y+0.01
         elif arrow=='right_up':
             self.x=self.x+0.02
-            self.y=self.y-0.002
+            self.y=self.y-0.01
         elif arrow=='right_down':
             self.x=self.x+0.02
-            self.y=self.y+0.002
+            self.y=self.y+0.01
         elif arrow=='left_up':
-            self.x=self.x-0.002
-            self.y=self.y-0.002
+            self.x=self.x-0.02
+            self.y=self.y-0.01
         elif arrow=='left_down':
             self.x=self.x-0.02
-            self.y=self.y+0.002
+            self.y=self.y+0.01
         if self.widget_name == 'down_side_technical':
             self.update_sheet_real_img('down',(self.x,self.y))
         elif self.widget_name == 'up_side_technical':
