@@ -1469,7 +1469,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 283, 28))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 242, 27))
         self.horizontalLayout_92 = QHBoxLayout(self.scrollAreaWidgetContents_4)
         self.horizontalLayout_92.setSpacing(0)
         self.horizontalLayout_92.setObjectName(u"horizontalLayout_92")
@@ -1709,7 +1709,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 280, 528))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 280, 28))
         self.scrollAreaWidgetContents_2.setMinimumSize(QSize(280, 0))
         self.scrollAreaWidgetContents_2.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_90 = QHBoxLayout(self.scrollAreaWidgetContents_2)
@@ -1768,7 +1768,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 280, 528))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 280, 28))
         self.scrollAreaWidgetContents_3.setMinimumSize(QSize(280, 0))
         self.scrollAreaWidgetContents_3.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_91 = QHBoxLayout(self.scrollAreaWidgetContents_3)
@@ -2565,20 +2565,59 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_22.addWidget(self.label_21)
 
-        self.comboBox_3 = QComboBox(self.frame_15)
-        self.comboBox_3.setObjectName(u"comboBox_3")
+        self.comboBox_labels = QComboBox(self.frame_15)
+        self.comboBox_labels.setObjectName(u"comboBox_labels")
+        self.comboBox_labels.setStyleSheet(u"background-color: rgb(246,180,28);\n"
+"color: black;")
 
-        self.horizontalLayout_22.addWidget(self.comboBox_3)
+        self.horizontalLayout_22.addWidget(self.comboBox_labels)
+
+        self.add_label = QPushButton(self.frame_15)
+        self.add_label.setObjectName(u"add_label")
+        self.add_label.setMaximumSize(QSize(20, 20))
+        self.add_label.setCursor(QCursor(Qt.PointingHandCursor))
+        self.add_label.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-medical-cross.png);")
+
+        self.horizontalLayout_22.addWidget(self.add_label)
 
 
         self.verticalLayout_35.addWidget(self.frame_15)
 
-        self.frame_16 = QFrame(self.page_yes)
-        self.frame_16.setObjectName(u"frame_16")
-        self.frame_16.setFrameShape(QFrame.StyledPanel)
-        self.frame_16.setFrameShadow(QFrame.Raised)
+        self.frame_add_label = QFrame(self.page_yes)
+        self.frame_add_label.setObjectName(u"frame_add_label")
+        self.frame_add_label.setMinimumSize(QSize(0, 0))
+        self.frame_add_label.setMaximumSize(QSize(16777215, 0))
+        self.frame_add_label.setCursor(QCursor(Qt.ArrowCursor))
+        self.frame_add_label.setFrameShape(QFrame.Panel)
+        self.frame_add_label.setFrameShadow(QFrame.Sunken)
+        self.frame_add_label.setLineWidth(2)
+        self.horizontalLayout_113 = QHBoxLayout(self.frame_add_label)
+        self.horizontalLayout_113.setObjectName(u"horizontalLayout_113")
+        self.horizontalLayout_113.setContentsMargins(0, 0, 0, 0)
+        self.add_label_text = QLineEdit(self.frame_add_label)
+        self.add_label_text.setObjectName(u"add_label_text")
+        self.add_label_text.setMaximumSize(QSize(200, 16777215))
 
-        self.verticalLayout_35.addWidget(self.frame_16)
+        self.horizontalLayout_113.addWidget(self.add_label_text)
+
+        self.horizontalSpacer_11 = QSpacerItem(40, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_113.addItem(self.horizontalSpacer_11)
+
+        self.add_label_btn = QPushButton(self.frame_add_label)
+        self.add_label_btn.setObjectName(u"add_label_btn")
+        self.add_label_btn.setMinimumSize(QSize(30, 0))
+        self.add_label_btn.setMaximumSize(QSize(30, 16777215))
+        self.add_label_btn.setStyleSheet(u"    background: Transparent;")
+        icon17 = QIcon()
+        icon17.addFile(u"images/rounded-adjust-button-with-plus-and-minus.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.add_label_btn.setIcon(icon17)
+        self.add_label_btn.setIconSize(QSize(25, 25))
+
+        self.horizontalLayout_113.addWidget(self.add_label_btn)
+
+
+        self.verticalLayout_35.addWidget(self.frame_add_label)
 
         self.stackedWidget_defect.addWidget(self.page_yes)
         self.page_no = QWidget()
@@ -5432,9 +5471,9 @@ class Ui_MainWindow(object):
         self.pushButton.setFont(font)
         self.pushButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.pushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
-        icon17 = QIcon()
-        icon17.addFile(u":/icons/images/icons/cil-folder-open.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.pushButton.setIcon(icon17)
+        icon18 = QIcon()
+        icon18.addFile(u":/icons/images/icons/cil-folder-open.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.pushButton.setIcon(icon18)
 
         self.gridLayout.addWidget(self.pushButton, 0, 1, 1, 1)
 
@@ -5557,9 +5596,9 @@ class Ui_MainWindow(object):
         self.commandLinkButton.setObjectName(u"commandLinkButton")
         self.commandLinkButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.commandLinkButton.setStyleSheet(u"")
-        icon18 = QIcon()
-        icon18.addFile(u":/icons/images/icons/cil-link.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.commandLinkButton.setIcon(icon18)
+        icon19 = QIcon()
+        icon19.addFile(u":/icons/images/icons/cil-link.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.commandLinkButton.setIcon(icon19)
 
         self.gridLayout_2.addWidget(self.commandLinkButton, 1, 6, 1, 1)
 
@@ -5893,7 +5932,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         self.tabWidget_2.setCurrentIndex(1)
         self.stackedWidget_defect.setCurrentIndex(0)
         self.tabWidget_defect.setCurrentIndex(0)
@@ -6021,6 +6060,8 @@ class Ui_MainWindow(object):
         self.tabWidget_defect.setTabText(self.tabWidget_defect.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Mask", None))
         self.tabWidget_defect.setTabText(self.tabWidget_defect.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Bounding Box", None))
         self.label_21.setText(QCoreApplication.translate("MainWindow", u"Labels :", None))
+        self.add_label.setText("")
+        self.add_label_btn.setText("")
         self.label_22.setText(QCoreApplication.translate("MainWindow", u"Image has no Defect", None))
         self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Save", None))
         self.load_dataset_pbt.setText(QCoreApplication.translate("MainWindow", u"Load Dataset", None))

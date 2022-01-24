@@ -2275,7 +2275,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>0</number>
+                      <number>1</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -2737,8 +2737,8 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>283</width>
-                                         <height>28</height>
+                                         <width>242</width>
+                                         <height>27</height>
                                         </rect>
                                        </property>
                                        <layout class="QHBoxLayout" name="horizontalLayout_92">
@@ -3247,7 +3247,7 @@ QPushButton:hover {
                                   <x>0</x>
                                   <y>0</y>
                                   <width>280</width>
-                                  <height>528</height>
+                                  <height>28</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -3414,7 +3414,7 @@ QPushButton:hover {
                                   <x>0</x>
                                   <y>0</y>
                                   <width>280</width>
-                                  <height>528</height>
+                                  <height>28</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -4708,19 +4708,133 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QComboBox" name="comboBox_3"/>
+                                  <widget class="QComboBox" name="comboBox_labels">
+                                   <property name="styleSheet">
+                                    <string notr="true">background-color: rgb(246,180,28);
+color: black;</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QPushButton" name="add_label">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>20</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                   <property name="cursor">
+                                    <cursorShape>PointingHandCursor</cursorShape>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">background-image: url(:/icons/images/icons/cil-medical-cross.png);</string>
+                                   </property>
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                  </widget>
                                  </item>
                                 </layout>
                                </widget>
                               </item>
                               <item>
-                               <widget class="QFrame" name="frame_16">
+                               <widget class="QFrame" name="frame_add_label">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>0</width>
+                                  <height>0</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>16777215</width>
+                                  <height>0</height>
+                                 </size>
+                                </property>
+                                <property name="cursor">
+                                 <cursorShape>ArrowCursor</cursorShape>
+                                </property>
                                 <property name="frameShape">
-                                 <enum>QFrame::StyledPanel</enum>
+                                 <enum>QFrame::Panel</enum>
                                 </property>
                                 <property name="frameShadow">
-                                 <enum>QFrame::Raised</enum>
+                                 <enum>QFrame::Sunken</enum>
                                 </property>
+                                <property name="lineWidth">
+                                 <number>2</number>
+                                </property>
+                                <layout class="QHBoxLayout" name="horizontalLayout_113">
+                                 <property name="leftMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="topMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="rightMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="bottomMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <item>
+                                  <widget class="QLineEdit" name="add_label_text">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>200</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <spacer name="horizontalSpacer_11">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                   <property name="sizeType">
+                                    <enum>QSizePolicy::Fixed</enum>
+                                   </property>
+                                   <property name="sizeHint" stdset="0">
+                                    <size>
+                                     <width>40</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                  </spacer>
+                                 </item>
+                                 <item>
+                                  <widget class="QPushButton" name="add_label_btn">
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>30</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>30</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">    background: Transparent;</string>
+                                   </property>
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                   <property name="icon">
+                                    <iconset>
+                                     <normaloff>images/rounded-adjust-button-with-plus-and-minus.png</normaloff>images/rounded-adjust-button-with-plus-and-minus.png</iconset>
+                                   </property>
+                                   <property name="iconSize">
+                                    <size>
+                                     <width>25</width>
+                                     <height>25</height>
+                                    </size>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
                                </widget>
                               </item>
                              </layout>

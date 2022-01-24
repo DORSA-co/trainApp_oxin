@@ -10,6 +10,9 @@ import os
 from datetime import date, time, datetime
 from PyQt5.QtWidgets import QListWidget
 from PyQt5.QtGui import QPixmap,QImage
+from backend import add_remove_label
+
+
 
 EVENTS_TYPE={
 
@@ -44,6 +47,10 @@ class API:
         self.cache_path='G:/oxin_image_grabber/cache'
         self.ui.append_btn.clicked.connect(self.append)
         self.ui.clear_cache.clicked.connect(self.clear_cache_fun)
+
+
+
+        self.set_labels()
 
 
 
@@ -200,6 +207,21 @@ class API:
     def prev_coil(self):
         self.ui.win.prev_coil()
         self.load_path()
+    
+    def add_remove_label(self):
+        print('add')
+        print(self.ui.add_label_text.text())
+        add_remove_label.add_remove_label(self.ui.add_label_text.text())
+        self.set_labels()
+    
+    def set_labels(self):
+        labels=add_remove_label.catch_labels()
+
+        self.ui.comboBox_labels.clear()      
+        self.ui.comboBox_labels.addItems(labels)       
+
+
+
 
     # def label(self):
     #     self.ui.stackedWidget.setCurrentWidget(self.ui.page_label)

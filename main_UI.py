@@ -127,6 +127,9 @@ class UI_main_window(QMainWindow, ui):
 
         self.polygon_btn.clicked.connect(self.buttonClick) 
         self.bounding_btn.clicked.connect(self.buttonClick) 
+        self.add_label.clicked.connect(self.buttonClick) 
+        self.add_label_btn.clicked.connect(self.buttonClick) 
+
         # QPixmap pixmapTarget = QPixmap(":/icons/images/icons/2png);
         # pixmapTarget = pixmapTarget.scaled(size-5, size-5, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         # ui->label_image_power->setPixmap(pixmapTarget );
@@ -366,6 +369,39 @@ class UI_main_window(QMainWindow, ui):
             # self.group.addAnimation(self.right_box)
             self.group.start()    
             print('no ani')           
+    # add label   ////////////////////////////////////
+    def show_frame_label(self):
+        height=self.frame_add_label.height()
+        # self.stackedWidget_defect.setCurrentWidget(self.page_no)
+        # self.stackedWidget_defect.setMaximumHeight(60)
+        # x=self.stackedWidget_defect.height()
+        print('height',height)
+        if height ==0:
+            self.left_box = QPropertyAnimation(self.frame_add_label, b"maximumHeight")
+            self.left_box.setDuration(Settings.TIME_ANIMATION)
+            self.left_box.setStartValue(0)
+            self.left_box.setEndValue(33)
+            self.left_box.setEasingCurve(QEasingCurve.InOutQuart) 
+            self.group = QParallelAnimationGroup()
+            self.group.addAnimation(self.left_box)
+            self.add_label.setStyleSheet("background-image: url(:/icons/images/icons/cil-level-up.png);")
+  
+            # self.group.addAnimation(self.right_box)
+            self.group.start()    
+            print('no ani')
+        elif height ==33:
+            self.left_box = QPropertyAnimation(self.frame_add_label, b"maximumHeight")
+            self.left_box.setDuration(Settings.TIME_ANIMATION)
+            self.left_box.setStartValue(33)
+            self.left_box.setEndValue(0)
+            self.left_box.setEasingCurve(QEasingCurve.InOutQuart) 
+            self.group = QParallelAnimationGroup()
+            self.group.addAnimation(self.left_box)
+            # self.group.addAnimation(self.right_box)
+            self.group.start()  
+            self.add_label.setStyleSheet("background-image: url(:/icons/images/icons/cil-medical-cross.png);")
+    
+            print('no ani')           
         
 
     # IMPORT THEMES FILES QSS/CSS
@@ -576,6 +612,12 @@ class UI_main_window(QMainWindow, ui):
 
         if btnName =='bounding_btn':
             self.bounding_box()
+
+        if btnName =='add_label':
+            self.show_frame_label()
+
+        if btnName =='add_label_btn':
+            api.add_remove_label()
 
         if btnName =='btn_software_setting':
             print('asdqwdwqd')
