@@ -13,7 +13,7 @@ from backend import data_grabber
 import detect_lenguage
 import setting
 import api
-from trainApp_loader.data_loader import UI_data_loader
+# from trainApp_loader.data_loader import UI_data_loader
 from PIL import ImageQt
 import numpy as np
 
@@ -67,7 +67,7 @@ class UI_main_window(QMainWindow, ui):
 
         # CONNECTED WINDOWS
         #//////////////////////////////////////////////
-        self.win=UI_data_loader()
+        # self.win=UI_data_loader()
 
 
 
@@ -510,7 +510,7 @@ class UI_main_window(QMainWindow, ui):
 
     def data_loader_win(self):
         print('show loader win')
-        self.win.show()
+        # self.win.show()
 
 
 
