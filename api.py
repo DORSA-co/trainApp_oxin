@@ -11,7 +11,7 @@ from datetime import date, time, datetime
 from PyQt5.QtWidgets import QListWidget
 from PyQt5.QtGui import QPixmap,QImage
 from backend import add_remove_label
-
+from PyQt5 import QtCore
 
 
 EVENTS_TYPE={
@@ -34,6 +34,8 @@ class API:
 
         self.ui.up_side_technical.mouseMoveEvent = self.mouseevent(self.ui.up_side_technical)
         self.ui.up_side_technical.mouseReleaseEvent = self.mouseevent(self.ui.up_side_technical)
+
+        
         self.t = 0
         #-------------------------------------
 
@@ -52,18 +54,22 @@ class API:
 
         self.set_labels()
 
+        
+
+     
+            # self.deleteLater()
+        # elif e.key() == QtCore.Qt.Key_Enter:
+        #     self.proceed()
+        # e.accept()
+       
 
 
-
-
-
-
-        # self.load_sheet('G:\oxin_image_grabber/1')
+        self.load_sheet('G:\oxin_image_grabber/1')
     
     def mouseevent(self,widget):
-
+        # print('yes')
         def func(e):
-            
+            # print('yes')
             x = e.x() / widget.width()
             y = e.y() / widget.height()
             x = min(max(x,0),1)
@@ -221,26 +227,36 @@ class API:
         self.ui.comboBox_labels.addItems(labels)       
 
 
-
-
-    # def label(self):
-    #     self.ui.stackedWidget.setCurrentWidget(self.ui.page_label)
-    #     # image = ImageQt.fromqpixmap(self.ui.crop_image_up.pixmap())
-    #     # image=np.ascontiguousarray(image)
-    #     # image = QImage(image,image.shape[1], image.shape[0],image.strides[0], QImage.Format_BGR888 )
-    #     # self.ui.image.setPixmap(QPixmap.fromImage(image))
-    #     image = ImageQt.fromqpixmap(self.ui.crop_image_up.pixmap())
-    #     image=np.ascontiguousarray(image)
-    #     # self.stackedWidget.setCurrentWidget(self.page_fullscreen_2)
-    #     # self.fs_cam_name.setText(self.dataset_cam_4_name.text())
-    #     # self.fs_pause_sign.setText('')
-    #     self.fs = QImage(image,image.shape[1], image.shape[0],image.strides[0], QImage.Format_BGR888 )
-        
-    #     self.ui.image.setPixmap(QPixmap.fromImage(self.fs)) 
     def clear_cache_fun(self):
         dir = self.cache_path
         for f in os.listdir(dir):
             os.remove(os.path.join(dir, f))
         self.ui.listWidget_logs.addItem('Cache Cleared')
+
+    def change_with_key(self,arrow):
+        if arrow=='right':
+            self.x=self.x+0.02
+        elif arrow=='left':
+            self.x=self.x-0.02
+        elif arrow=='up':
+            self.y=self.y-0.002
+        elif arrow=='down':
+            self.y=self.y+0.002
+        elif arrow=='right_up':
+            self.x=self.x+0.02
+            self.y=self.y-0.002
+        elif arrow=='right_down':
+            self.x=self.x+0.02
+            self.y=self.y+0.002
+        elif arrow=='left_up':
+            self.x=self.x-0.002
+            self.y=self.y-0.002
+        elif arrow=='left_down':
+            self.x=self.x-0.02
+            self.y=self.y+0.002
+        if self.widget_name == 'down_side_technical':
+            self.update_sheet_real_img('down',(self.x,self.y))
+        elif self.widget_name == 'up_side_technical':
+            self.update_sheet_real_img('up',(self.x,self.y))
 
  

@@ -145,10 +145,6 @@ class UI_main_window(QMainWindow, ui):
         
 
         
-        
-        
-        
-        
 
 
     def ret_mouse(self):
@@ -649,7 +645,6 @@ class UI_main_window(QMainWindow, ui):
 
 
 
-
         if self.extraLeftBox.width()!=0:
             self.hi()
 
@@ -661,15 +656,34 @@ class UI_main_window(QMainWindow, ui):
     def mouseMoveEvent(self, event):
         # SET DRAG POS WINDOW
         self.dragPos = event.globalPos()
+        self.x_pos=event.x()
         print(self.ret_mouse())
         # PRINT MOUSE EVENTS
         if event.buttons() == Qt.LeftButton:
             print('Mouse click: LEFT CLICK')
         if event.buttons() == Qt.RightButton:
             print('Mouse click: RIGHT CLICK')
+        return event.x()
 
 
 
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_6:
+            api.change_with_key('right')
+        if event.key() == Qt.Key_8:
+            api.change_with_key('up')
+        if event.key() == Qt.Key_2:
+            api.change_with_key('down')
+        if event.key() == Qt.Key_4:
+            api.change_with_key('left')
+        if event.key() == Qt.Key_7:
+            api.change_with_key('left_up')
+        if event.key() == Qt.Key_9:
+            api.change_with_key('right_up')
+        if event.key() == Qt.Key_1:
+            api.change_with_key('left_down')
+        if event.key() == Qt.Key_3:
+            api.change_with_key('right_down')
 
 
 
