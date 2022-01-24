@@ -477,6 +477,38 @@ class sheetOverView():
     #_____________________________________________________________________________________________________________________________
     #
     #_____________________________________________________________________________________________________________________________
+    def fit(self,pt):
+        
+        #decode (x,y) to pointer rect area to know where we are in sheet over view
+        real_x,real_y = pt[0] * self.cell_shape[1] , pt[1] * self.cell_shape[0]   
+        
+        #beacust self.pt is center of pointer rectangle
+        relative_real_X = real_x - self.cell_shape[1]//2
+        relative_real_y = real_y - self.cell_shape[0]//2
+        
+        x,y = self.pt
+        x+= relative_real_X
+        y+= relative_real_y
+        
+        idx_x = x//self.cell_shape[1]
+        idx_y = y//self.cell_shape[0]
+        
+        new_x = idx_x * self.cell_shape[1]  +  self.cell_shape[1]//2
+        new_y = idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2
+        
+        self.pt = (new_x, new_y)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    #_____________________________________________________________________________________________________________________________
+    #
+    #_____________________________________________________________________________________________________________________________
     def get_sheet_img(self):
         res = self.draw_pointer(np.copy(self.result_img), self.pt )
         return res
