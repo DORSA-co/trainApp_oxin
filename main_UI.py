@@ -336,6 +336,7 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.left_box)
             # self.group.addAnimation(self.right_box)
             self.group.start()
+            
 
     def setting_win(self):
         height=self.frame_settin2.height()

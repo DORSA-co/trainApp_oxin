@@ -44,7 +44,7 @@ class API:
         #-------------------------------------
 
         #data loader////////////////////
-        self.ui.win.load_btn.clicked.connect(self.load_path)
+        # self.ui.win.load_btn.clicked.connect(self.load_path)
         #-------------------------------------
 
         #technical view btns//////////////
@@ -101,7 +101,9 @@ class API:
                 if self.t%5==0:
                     self.t=1
                     self.update_sheet_real_img('down',(self.x,self.y))
+                    self.ui.up_side_technical.setDisabled(True)
                     # self.cursur_show(e)
+                    self.ui.show_side.setText(str(self.widget_name))
 
                 else:
                     self.t+=1
@@ -111,10 +113,16 @@ class API:
                 if self.t%5==0:
                     self.t=1
                     self.update_sheet_real_img('up',(self.x,self.y))
+                    self.ui.down_side_technical.setDisabled(True)
                     # self.cursur_show(e)
+                    self.ui.show_side.setText(str(self.widget_name))
 
                 else:
                     self.t+=1
+            if self.status=="mouse_release":
+                
+                self.ui.down_side_technical.setDisabled(False)
+                self.ui.up_side_technical.setDisabled(False)
 
 
         return func
@@ -125,23 +133,50 @@ class API:
         y = event.y() / self.ui.crop_image.height()
         x = min(max(x,0),1)
         y = min(max(y,0),1)
-        print(x,y)
+
+        if self.widget_name == 'down_side_technical':
+            self.obj_sheet_down.fit((x,y))
+            real_img = self.obj_sheet_down.get_real_img()
+            self.ui.set_crop_image(real_img)
+            print(self.obj_sheet_down.is_fit)
+
+        if self.widget_name == 'up_side_technical':
+            self.obj_sheet_up.fit((x,y))
+            real_img = self.obj_sheet_up.get_real_img()
+            self.ui.set_crop_image(real_img)
+            print(self.obj_sheet_up.is_fit)
+        if (self.obj_sheet_down.is_fit and  self.widget_name == 'down_side_technical') or (self.obj_sheet_up.is_fit and self.widget_name == 'up_side_technical'):
+            self.ui.append_btn.setDisabled(False)
+        else:
+            self.ui.append_btn.setDisabled(True)              
+        
+        self.update_sheet_img()
+        
 
 
 
 
     def update_sheet_real_img(self,side,pt):
+        self.ui.append_btn.setDisabled(True) 
+
         if side=="down":
             self.obj_sheet_down.update_pointer(pt)
             real_img = self.obj_sheet_down.get_real_img()
             self.update_sheet_img()
             self.ui.set_crop_image(real_img)
+            print(self.obj_sheet_down.is_fit)
+            # self.ui.up_side_technical.setDisabled(True)
+           
             cv2.waitKey(5)
         if side=="up":
             self.obj_sheet_up.update_pointer(pt)
             real_img = self.obj_sheet_up.get_real_img()
             self.update_sheet_img()
             self.ui.set_crop_image(real_img)
+            
+            print(self.obj_sheet_up.is_fit)
+            # self.ui.down_side_technical.setDisabled(True)
+            # print(self.ui.crop_image.width(),self.ui.crop_image.height())
             cv2.waitKey(5)
 
 

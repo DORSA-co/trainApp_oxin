@@ -56,7 +56,7 @@ class sheetOverView():
         self.sheet_img = self.draw_slines(self.sheet_img,-1)
         self.sheet_img = self.draw_discamera(self.sheet_img, self.actives_camera)
         self.result_img = np.copy( self.sheet_img)
-    
+        self.is_fit=False
     
     def init_img(self, color):
         img = np.ones((self.sheet_shape[0], self.sheet_shape[1], 3), dtype=np.uint8)
@@ -87,6 +87,7 @@ class sheetOverView():
     #    
     #______________________________________________________________________________________________________________________________
     def update_pointer(self,pt):
+        self.is_fit=False
         self.update_real_imgs()
         self.pt = int(pt[0]*self.sheet_shape[1]), int( pt[1]*self.sheet_shape[0])
     
@@ -493,11 +494,17 @@ class sheetOverView():
         idx_x = x//self.cell_shape[1]
         idx_y = y//self.cell_shape[0]
         
-        new_x = idx_x * self.cell_shape[1]  +  self.cell_shape[1]//2
-        new_y = idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2
+        print(idx_x * self.cell_shape[1]  +  self.cell_shape[1]//2)
+        print(idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2)
+
+
+        new_x = int(idx_x * self.cell_shape[1]  +  self.cell_shape[1]//2)
+        new_y = int(idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2)
         
         self.pt = (new_x, new_y)
-        
+
+        self.is_fit=True
+
         
         
         
