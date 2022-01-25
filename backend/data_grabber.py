@@ -165,24 +165,24 @@ class sheetOverView():
         ymin = y - self.cell_shape[0] // 2
         ymax = y + self.cell_shape[0] // 2
         
-        #print('0',xmin,xmax,ymin,ymax, self.sheet_shape[1], self.sheet_shape[0])
+        ##print('0',xmin,xmax,ymin,ymax, self.sheet_shape[1], self.sheet_shape[0])
         if xmin < 0:
             xmax = abs(xmin) + xmax
             xmin = 0
-            #print('1',xmin,xmax,ymin,ymax)
+            ##print('1',xmin,xmax,ymin,ymax)
         if xmax >= self.n*self.cell_shape[1]:
             xmin = xmin - (xmax - self.n*self.cell_shape[1] + 1) 
             xmax = self.n*self.cell_shape[1] - 1
-            #print('2',xmin,xmax,ymin,ymax)
+            ##print('2',xmin,xmax,ymin,ymax)
             
         if ymin < 0:
             ymax = abs(ymin) + ymax
             ymin = 0
-            #print('3',xmin,xmax,ymin,ymax)
+            ##print('3',xmin,xmax,ymin,ymax)
         if ymax >= self.sheet_shape[0]:
             ymin = ymin - (ymax - self.sheet_shape[0] + 1) 
             ymax = self.sheet_shape[0] - 1
-            #print('4',xmin,xmax,ymin,ymax)
+            ##print('4',xmin,xmax,ymin,ymax)
         
         return (xmin,ymin),(xmax, ymax)
     #______________________________________________________________________________________________________________________________
@@ -422,10 +422,10 @@ class sheetOverView():
                         )
                         img = cv2.imread( res_path,0 )
                         if img is None:
-                            print('*'*100)
-                            # print(res_path)
-                            print('cant load image {},{}'.format(nf, nc))
-                            print('-'*100)
+                            #print('*'*100)
+                            # #print(res_path)
+                            #print('cant load image {},{}'.format(nf, nc))
+                            #print('-'*100)
                             img = np.zeros(IMAGE_SHAPE, np.uint8)
                         new_imgs.append(img )
             
@@ -448,7 +448,7 @@ class sheetOverView():
             if self.oriation == VERTICAL:
                 i = n//gridn
                 j = n - gridn * i
-                #print(res_img[ j * res_h: (j+1)*res_h, i * res_w: (i+1)*res_w, 1].shape)
+                ##print(res_img[ j * res_h: (j+1)*res_h, i * res_w: (i+1)*res_w, 1].shape)
                 res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 0] = self.real_imgs[n]
                 res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 1] = self.real_imgs[n]
                 res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 2] = self.real_imgs[n]
@@ -456,7 +456,7 @@ class sheetOverView():
         
         x,y = self.pt
 
-        print('x',x,y)
+        #print('x',x,y)
         px = x / self.cell_shape[1]
         py = y / self.cell_shape[0]
         idxs = np.array( self.real_idxs)
@@ -467,7 +467,7 @@ class sheetOverView():
         
         px = px - min_x
         py = py - min_y
-        print('px',px,py,min_x,min_y)
+        #print('px',px,py,min_x,min_y)
         
         px = int(px * w)
         py = int(py * h)
@@ -496,6 +496,7 @@ class sheetOverView():
         return cv2.cvtColor( crop, cv2.COLOR_BGR2RGB)
 
 
+
     #_____________________________________________________________________________________________________________________________
     #
     #_____________________________________________________________________________________________________________________________
@@ -515,15 +516,15 @@ class sheetOverView():
         idx_x = x//self.cell_shape[1]
         idx_y = y//self.cell_shape[0]
         
-        print(idx_x * self.cell_shape[1]  +  self.cell_shape[1]//2)
-        print(idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2)
+        #print(idx_x * self.cell_shape[1]  +  self.cell_shape[1]//2)
+        #print(idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2)
 
 
         new_x = int(idx_x * int(self.cell_shape[1])  +  self.cell_shape[1]//2)
         new_y = int(idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2)
-        print('new_x,new_y',new_x,new_y,"*"*10)
-        print('cell_shape',self.cell_shape)
-        print('idx_x',idx_x,idx_y)
+        #print('new_x,new_y',new_x,new_y,"*"*10)
+        #print('cell_shape',self.cell_shape)
+        #print('idx_x',idx_x,idx_y)
         self.pt = (new_x, new_y)
 
         self.is_fit=True
@@ -604,6 +605,6 @@ if __name__ == '__main__':
     #     t = time.time() - t
     #     all_t+=t
         
-    # print(all_t/100)
+    # #print(all_t/100)
     # cv2.imshow('res', cv2.cvtColor( img, cv2.COLOR_RGB2BGR))
     # cv2.waitKey(0)

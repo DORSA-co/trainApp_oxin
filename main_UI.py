@@ -1,3 +1,4 @@
+from cgitb import enable
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import *
@@ -84,7 +85,7 @@ class UI_main_window(QMainWindow, ui):
             # SET HACKS
             self.setThemeHack()
 
-
+        self.label_dorsa_open(enable=True)
         #/////////Setting
         self.btn_software_setting.clicked.connect(self.buttonClick)
         
@@ -266,8 +267,35 @@ class UI_main_window(QMainWindow, ui):
         # self.group.addAnimation(self.right_box)
         self.group.start()
 
-        
+    # Label Dorsa
+    # ///////////////////////////////////////////////     
+    def label_dorsa_open(self, enable):
+        if enable:
+            # GET WIDTH
+            width = self.label_dorsa.width()
+            maxExtend = 150
+            standard = 0
 
+            # SET MAX WIDTH
+            if width == 0:
+                print('OPEN')
+                # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
+                widthExtended = maxExtend
+                print(widthExtended)
+            else:
+                # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
+                print('Close')
+                widthExtended = standard
+                print(widthExtended)
+
+            # ANIMATION
+            self.animation = QPropertyAnimation(self.label_dorsa, b"minimumWidth")
+            self.animation.setDuration(Settings.TIME_ANIMATION)
+            self.animation.setStartValue(width)
+            self.animation.setEndValue(widthExtended)
+            self.animation.setEasingCurve(QEasingCurve.InOutQuart)
+            self.animation.start()
+ 
 
  
     # TOGGLE Yes_defect
@@ -336,7 +364,7 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.left_box)
             # self.group.addAnimation(self.right_box)
             self.group.start()
-            
+
 
     def setting_win(self):
         height=self.frame_settin2.height()

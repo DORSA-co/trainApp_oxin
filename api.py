@@ -166,7 +166,7 @@ class API:
             real_img = self.obj_sheet_down.get_real_img()
             self.update_sheet_img()
             self.ui.set_crop_image(real_img)
-            print(self.obj_sheet_down.is_fit)
+            # print(self.obj_sheet_down.is_fit)
             # self.ui.up_side_technical.setDisabled(True)
             print('pt', self.obj_sheet_down.pt)
 
@@ -177,7 +177,7 @@ class API:
             self.update_sheet_img()
             self.ui.set_crop_image(real_img)
             
-            print(self.obj_sheet_up.is_fit)
+            # print(self.obj_sheet_up.is_fit)
             # self.ui.down_side_technical.setDisabled(True)
             # print(self.ui.crop_image.width(),self.ui.crop_image.height())
             # cv2.waitKey(5)
@@ -192,14 +192,14 @@ class API:
         except:
             print('no_len')
         try:
-            print("*"*100,lenght)
+            # print("*"*100,lenght)
         # 'G:\oxin_image_grabber/001'
             self.obj_sheet_up=data_grabber.sheetOverView(path,
-                                                    data_grabber.UP,(50*lenght,160),(lenght,12),actives_camera=(0,12),
+                                                    data_grabber.UP,(50*lenght,576),(lenght,12),actives_camera=(0,12),
                                                     oriation=data_grabber.VERTICAL)
 
             self.obj_sheet_down=data_grabber.sheetOverView(path,
-                                                    data_grabber.DOWN,(50*lenght,160),(lenght,12),actives_camera=(0,12),
+                                                    data_grabber.DOWN,(50*lenght,576),(lenght,12),actives_camera=(0,12),
                                                     oriation=data_grabber.VERTICAL)
 
             self.obj_sheet_down.update_line(int(lenght))
@@ -230,9 +230,9 @@ class API:
     
     def save_img(self,user='admin'):
         # listWidget = QListWidget()
-        print(self.ui.win.path)
+        # print(self.ui.win.path)
         path=os.path.join(self.ui.win.path,'save_imgs')
-        print(path)
+        # print(path)
         # item = QListWidgetItem("Item %i" % i)
         user='admin'
         image = ImageQt.fromqpixmap(self.ui.crop_image.pixmap())
@@ -248,7 +248,7 @@ class API:
     def load_path(self):
         path=self.ui.win.path
 
-        print('path',path)
+        # print('path',path)
         self.load_sheet(path)
         self.ui.details_label.setText(str(self.ui.win.details))
     
