@@ -36,6 +36,9 @@ class sheetOverView():
         self.color_map = color_map
         self.thickness_map = thickness_map
         
+
+        assert self.sheet_shape[0] / self.sheet_grid[0] == int(self.sheet_shape[0] / self.sheet_grid[0]) , "eror must be int"   
+        
         self.cell_shape = (int(self.sheet_shape[0] / self.sheet_grid[0]) , 
                            int(self.sheet_shape[1] / self.sheet_grid[1]))
 
@@ -88,9 +91,24 @@ class sheetOverView():
     #______________________________________________________________________________________________________________________________
     def update_pointer(self,pt):
         self.is_fit=False
+        
+        x,y = int(pt[0]*(self.sheet_shape[1]-1)), int( pt[1]*(self.sheet_shape[0]-1))
+
+
+        if self.cell_shape[1]%2==0:
+            x=min(max(x,self.cell_shape[1]//2),  self.sheet_shape[1]-self.cell_shape[1]//2)
+        else:
+            x=min(max(x,(self.cell_shape[1]//2)+1),  self.sheet_shape[1]-self.cell_shape[1]//2)
+
+
+
+        if self.cell_shape[0]%2==0:
+            y=min(max(y,self.cell_shape[0]//2),  self.sheet_shape[0]-self.cell_shape[0]//2)
+        else:
+            y=min(max(y,self.cell_shape[0]//2),  self.sheet_shape[0]-self.cell_shape[0]//2)
+
+        self.pt=(x,y)
         self.update_real_imgs()
-        self.pt = int(pt[0]*self.sheet_shape[1]), int( pt[1]*self.sheet_shape[0])
-    
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
@@ -437,7 +455,8 @@ class sheetOverView():
 
         
         x,y = self.pt
-    
+
+        print('x',x,y)
         px = x / self.cell_shape[1]
         py = y / self.cell_shape[0]
         idxs = np.array( self.real_idxs)
@@ -448,13 +467,15 @@ class sheetOverView():
         
         px = px - min_x
         py = py - min_y
-
+        print('px',px,py,min_x,min_y)
+        
         px = int(px * w)
         py = int(py * h)
 
         x1,x2 = px - w//2, px + w//2
         y1,y2 = py - h//2 , py + h//2
-        
+
+
         if x1<=0:
             x2 += abs(x1)
             x1=0
@@ -498,9 +519,11 @@ class sheetOverView():
         print(idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2)
 
 
-        new_x = int(idx_x * self.cell_shape[1]  +  self.cell_shape[1]//2)
+        new_x = int(idx_x * int(self.cell_shape[1])  +  self.cell_shape[1]//2)
         new_y = int(idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2)
-        
+        print('new_x,new_y',new_x,new_y,"*"*10)
+        print('cell_shape',self.cell_shape)
+        print('idx_x',idx_x,idx_y)
         self.pt = (new_x, new_y)
 
         self.is_fit=True

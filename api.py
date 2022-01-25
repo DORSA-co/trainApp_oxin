@@ -139,6 +139,7 @@ class API:
             real_img = self.obj_sheet_down.get_real_img()
             self.ui.set_crop_image(real_img)
             print(self.obj_sheet_down.is_fit)
+            print('pt', self.obj_sheet_down.pt)
 
         if self.widget_name == 'up_side_technical':
             self.obj_sheet_up.fit((x,y))
@@ -157,6 +158,7 @@ class API:
 
 
     def update_sheet_real_img(self,side,pt):
+
         self.ui.append_btn.setDisabled(True) 
 
         if side=="down":
@@ -166,8 +168,9 @@ class API:
             self.ui.set_crop_image(real_img)
             print(self.obj_sheet_down.is_fit)
             # self.ui.up_side_technical.setDisabled(True)
-           
-            cv2.waitKey(5)
+            print('pt', self.obj_sheet_down.pt)
+
+            # cv2.waitKey(5)
         if side=="up":
             self.obj_sheet_up.update_pointer(pt)
             real_img = self.obj_sheet_up.get_real_img()
@@ -177,7 +180,7 @@ class API:
             print(self.obj_sheet_up.is_fit)
             # self.ui.down_side_technical.setDisabled(True)
             # print(self.ui.crop_image.width(),self.ui.crop_image.height())
-            cv2.waitKey(5)
+            # cv2.waitKey(5)
 
 
 
@@ -192,11 +195,11 @@ class API:
             print("*"*100,lenght)
         # 'G:\oxin_image_grabber/001'
             self.obj_sheet_up=data_grabber.sheetOverView(path,
-                                                    data_grabber.UP,(50*lenght,280),(lenght,12),actives_camera=(0,12),
+                                                    data_grabber.UP,(50*lenght,160),(lenght,12),actives_camera=(0,12),
                                                     oriation=data_grabber.VERTICAL)
 
             self.obj_sheet_down=data_grabber.sheetOverView(path,
-                                                    data_grabber.DOWN,(50*lenght,280),(lenght,12),actives_camera=(0,12),
+                                                    data_grabber.DOWN,(50*lenght,160),(lenght,12),actives_camera=(0,12),
                                                     oriation=data_grabber.VERTICAL)
 
             self.obj_sheet_down.update_line(int(lenght))
