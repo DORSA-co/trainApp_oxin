@@ -14,6 +14,7 @@ from backend import add_remove_label
 from PyQt5 import QtCore
 
 
+
 EVENTS_TYPE={
 
     QEvent.Type.MouseMove : 'mouse_move',
