@@ -144,7 +144,7 @@ class UI_main_window(QMainWindow, ui):
         self.prev_coil_btn.clicked.connect(self.buttonClick)
 
         
-
+        self.show_tools_btn.clicked.connect(self.buttonClick)
         
 
 
@@ -290,7 +290,7 @@ class UI_main_window(QMainWindow, ui):
 
             # ANIMATION
             self.animation = QPropertyAnimation(self.label_dorsa, b"minimumWidth")
-            self.animation.setDuration(Settings.TIME_ANIMATION)
+            self.animation.setDuration(1200)
             self.animation.setStartValue(width)
             self.animation.setEndValue(widthExtended)
             self.animation.setEasingCurve(QEasingCurve.InOutQuart)
@@ -394,38 +394,39 @@ class UI_main_window(QMainWindow, ui):
             # self.group.addAnimation(self.right_box)
             self.group.start()    
             print('no ani')           
-    # add label   ////////////////////////////////////
-    def show_frame_label(self):
-        height=self.frame_add_label.height()
+    # frame tools   ////////////////////////////////////
+    def show_frame_tools(self):
+        height=self.frame_tools_technical.height()
+        height=self.frame_tools_technical.height()
         # self.stackedWidget_defect.setCurrentWidget(self.page_no)
         # self.stackedWidget_defect.setMaximumHeight(60)
         # x=self.stackedWidget_defect.height()
         print('height',height)
         if height ==0:
-            self.left_box = QPropertyAnimation(self.frame_add_label, b"maximumHeight")
+            self.left_box = QPropertyAnimation(self.frame_tools_technical, b"maximumHeight")
             self.left_box.setDuration(Settings.TIME_ANIMATION)
             self.left_box.setStartValue(0)
-            self.left_box.setEndValue(33)
+            self.left_box.setEndValue(149)
             self.left_box.setEasingCurve(QEasingCurve.InOutQuart) 
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
-            self.add_label.setStyleSheet("background-image: url(:/icons/images/icons/cil-level-up.png);")
-  
+            rMyIcon = QPixmap("images\icons\cil-arrow-bottom.png")
+            self.show_tools_btn.setIcon(QIcon(rMyIcon))
             # self.group.addAnimation(self.right_box)
             self.group.start()    
             print('no ani')
-        elif height ==33:
-            self.left_box = QPropertyAnimation(self.frame_add_label, b"maximumHeight")
+        elif height ==149:
+            self.left_box = QPropertyAnimation(self.frame_tools_technical, b"maximumHeight")
             self.left_box.setDuration(Settings.TIME_ANIMATION)
-            self.left_box.setStartValue(33)
+            self.left_box.setStartValue(149)
             self.left_box.setEndValue(0)
             self.left_box.setEasingCurve(QEasingCurve.InOutQuart) 
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
+            rMyIcon = QPixmap("images\icons\cil-arrow-top.png")
+            self.show_tools_btn.setIcon(QIcon(rMyIcon))
             # self.group.addAnimation(self.right_box)
-            self.group.start()  
-            self.add_label.setStyleSheet("background-image: url(:/icons/images/icons/cil-medical-cross.png);")
-    
+            self.group.start()    
             print('no ani')           
         
 
@@ -638,8 +639,7 @@ class UI_main_window(QMainWindow, ui):
         if btnName =='bounding_btn':
             self.bounding_box()
 
-        if btnName =='add_label':
-            self.show_frame_label()
+
 
         if btnName =='add_label_btn':
             api.add_remove_label()
@@ -662,7 +662,9 @@ class UI_main_window(QMainWindow, ui):
         if btnName =='prev_coil_btn':
             # print('asdqwdwqd')
             api.prev_coil()
-
+        if btnName == "show_tools_btn":
+            self.show_frame_tools()
+            print('adqwd')
         if btnName =='label_btn_2':
             self.stackedWidget.setCurrentWidget(self.page_label)
             image = ImageQt.fromqpixmap(self.crop_image.pixmap())
@@ -697,22 +699,24 @@ class UI_main_window(QMainWindow, ui):
 
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_6:
-            api.change_with_key('right')
-        if event.key() == Qt.Key_8:
-            api.change_with_key('up')
-        if event.key() == Qt.Key_2:
-            api.change_with_key('down')
-        if event.key() == Qt.Key_4:
-            api.change_with_key('left')
-        if event.key() == Qt.Key_7:
-            api.change_with_key('left_up')
-        if event.key() == Qt.Key_9:
-            api.change_with_key('right_up')
-        if event.key() == Qt.Key_1:
-            api.change_with_key('left_down')
-        if event.key() == Qt.Key_3:
-            api.change_with_key('right_down')
+        # print(self.stackedWidget.currentIndex())
+        if self.stackedWidget.currentIndex()==0 :
+            if event.key() == Qt.Key_6:
+                api.change_with_key('right')
+            if event.key() == Qt.Key_8:
+                api.change_with_key('up')
+            if event.key() == Qt.Key_2:
+                api.change_with_key('down')
+            if event.key() == Qt.Key_4:
+                api.change_with_key('left')
+            if event.key() == Qt.Key_7:
+                api.change_with_key('left_up')
+            if event.key() == Qt.Key_9:
+                api.change_with_key('right_up')
+            if event.key() == Qt.Key_1:
+                api.change_with_key('left_down')
+            if event.key() == Qt.Key_3:
+                api.change_with_key('right_down')
 
 
 

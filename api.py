@@ -71,6 +71,7 @@ class API:
         self.load_sheet('G:\oxin_image_grabber/1',20)
         self.x=0
         self.y=0
+        self.lenght=50
     
     def mouseevent(self,widget):
         # print('yes')
@@ -131,6 +132,7 @@ class API:
         print('yes',event.x(),event.y())
         x = event.x() / self.ui.crop_image.width()
         y = event.y() / self.ui.crop_image.height()
+        self.show_current_pos((x,y))
         x = min(max(x,0),1)
         y = min(max(y,0),1)
 
@@ -138,20 +140,24 @@ class API:
             self.obj_sheet_down.fit((x,y))
             real_img = self.obj_sheet_down.get_real_img()
             self.ui.set_crop_image(real_img)
-            print(self.obj_sheet_down.is_fit)
-            print('pt', self.obj_sheet_down.pt)
+            # print(self.obj_sheet_down.is_fit)
+            # print('pt', self.obj_sheet_down.pt)
+            # self.show_current_pos((x,y))
 
         if self.widget_name == 'up_side_technical':
             self.obj_sheet_up.fit((x,y))
             real_img = self.obj_sheet_up.get_real_img()
             self.ui.set_crop_image(real_img)
-            print(self.obj_sheet_up.is_fit)
+            # self.show_current_pos(self.obj_sheet_up.pt)
+            # print(self.obj_sheet_up.is_fit)
         if (self.obj_sheet_down.is_fit and  self.widget_name == 'down_side_technical') or (self.obj_sheet_up.is_fit and self.widget_name == 'up_side_technical'):
             self.ui.append_btn.setDisabled(False)
         else:
             self.ui.append_btn.setDisabled(True)              
         
         self.update_sheet_img()
+        
+        
         
 
 
@@ -160,15 +166,15 @@ class API:
     def update_sheet_real_img(self,side,pt):
 
         self.ui.append_btn.setDisabled(True) 
-
+        self.show_current_pos(pt)
         if side=="down":
             self.obj_sheet_down.update_pointer(pt)
             real_img = self.obj_sheet_down.get_real_img()
             self.update_sheet_img()
             self.ui.set_crop_image(real_img)
+            
             # print(self.obj_sheet_down.is_fit)
             # self.ui.up_side_technical.setDisabled(True)
-            print('pt', self.obj_sheet_down.pt)
 
             # cv2.waitKey(5)
         if side=="up":
@@ -189,6 +195,7 @@ class API:
         try:
             lenght=self.ui.win.lenght
             lenght=int(float(lenght))+1
+            self.lenght=lenght
         except:
             print('no_len')
         try:
@@ -207,7 +214,8 @@ class API:
             self.update_sheet_img()
             self.ui.listWidget_logs.addItem('Coil {} Selected'.format(self.ui.win.id))
         except:
-            self.ui.listWidget_logs.addItem('Cant load coil')
+            print('eror')
+            # self.ui.listWidget_logs_2.addItem('Cant load coil')
 
         
 
@@ -218,6 +226,7 @@ class API:
         self.ui.set_img_sheet(img,"down")
         img=self.obj_sheet_up.get_sheet_img()
         self.ui.set_img_sheet(img,"up")
+        
 
 
     def sheet_top_img():
@@ -316,4 +325,19 @@ class API:
         elif self.widget_name == 'up_side_technical':
             self.update_sheet_real_img('up',(self.x,self.y))
 
- 
+
+    def show_current_pos(self,pt):
+        if self.widget_name == 'down_side_technical':
+            x,y=self.obj_sheet_down.get_pos()
+
+            self.ui.current_pos_x.setText(str(int(x*280)))  # zarbar arz varagh ya arzesh pixel
+            
+
+            self.ui.current_pos_y.setText(str(round(y*self.lenght,2)))  # zarbar arz varagh ya arzesh pixel
+        if self.widget_name == 'up_side_technical':
+            x,y=self.obj_sheet_up.get_pos()
+
+            self.ui.current_pos_x.setText(str(int(x*280)))  # zarbar arz varagh ya arzesh pixel
+            
+
+            self.ui.current_pos_y.setText(str(round(y*self.lenght,2)))  # zarbar arz varagh ya arzesh pixel

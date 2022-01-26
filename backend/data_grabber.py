@@ -544,6 +544,13 @@ class sheetOverView():
         res = self.draw_pointer(np.copy(self.result_img), self.pt )
         return res
         return cv2.cvtColor( self.result_img, cv2.COLOR_BGR2RGB)
+
+
+    def get_pos(self):
+        pt_norm_x=self.pt[0]/self.sheet_shape[1]
+        pt_norm_y=self.pt[1]/self.sheet_shape[0]
+
+        return (pt_norm_x,pt_norm_y)
         
       
     
