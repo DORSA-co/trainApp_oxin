@@ -191,7 +191,8 @@ class UI_main_window(QMainWindow, ui):
         self.crop_image.setPixmap(QPixmap.fromImage(image))
         # cv2.waitKey(200)
 
-
+    def set_enabel(self, widget, status):
+        widget.setDisabled( not(status)) 
     #/////////////////// end
 
 

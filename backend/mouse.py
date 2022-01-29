@@ -4,7 +4,8 @@ EVENTS_TYPE={
 
     QEvent.Type.MouseMove : 'mouse_move',
     QEvent.Type.MouseButtonPress : 'mouse_press',
-    QEvent.Type.MouseButtonRelease : 'mouse_release'
+    QEvent.Type.MouseButtonRelease : 'mouse_release',
+    QEvent.Type.MouseButtonDblClick: 'mouse_dclick'
 }
 
 
@@ -23,7 +24,7 @@ class mouse:
         self.rx = 0
         self.ry = 0
 
-    def mouseevent(self, widget, function):
+    def mouse_event(self, widget, function):
         def func(e):
             
             self.x, self.y = e.x(), e.y()
@@ -40,10 +41,12 @@ class mouse:
 
 
     def connet(self, widget, function):
-        widget.mouseMoveEvent = self.mouseevent(widget, function)
+        widget.mouseMoveEvent = self.mouse_event(widget, function)
 
         #return func
 
+    def connet_dbclick(self, widget, function):
+        widget.mouseDoubleClickEvent = self.mouse_event(widget, function)
 
 
     def get_position(self):

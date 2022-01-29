@@ -15,6 +15,7 @@ from backend import add_remove_label
 from PyQt5 import QtCore
 from trainApp_loader import get_data
 #MUST BE CHANGED
+#MUST BE DELETE
 
 EVENTS_TYPE={
 
@@ -38,17 +39,16 @@ class API:
 
 
         #self.technical_backend = {'top': data_grabber()}
-        technicala_backend = {}
-        for _,technical_widget in self.ui.get_technical().items():
-            self.mouse.connet( technical_widget, self.thechnical )
-
-        
-        self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
+        self.thechnicals_backend = {}
+        #self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
         self.t = 0
+        self.current_technical_widget = ''
+        #self.load_data() #MUST BE DELETE
         #-------------------------------------
-
         #connet buttons to correspondings functions in API               ////////////////////
-        self.buttonConnector()
+        self.button_connector()
+        #connet mouse event to correspondings functions in API
+        self.mouse_connector()
         #-------------------------------------
 
         #technical view btns                                             ///////////////////
@@ -57,17 +57,21 @@ class API:
         self.cache_path='G:/oxin_image_grabber/cache'
         self.ui.append_btn.clicked.connect(self.append)
         self.ui.clear_cache.clicked.connect(self.clear_cache_fun)
-
+    
 
 
     #----------------------------------------------------------------------------------------
     # 
     #---------------------------------------------------------------------------------------- 
-    def buttonConnector(self):
+    def button_connector(self):
         self.ui.win.load_btn.clicked.connect(self.load_data)
 
 
+    def mouse_connector(self):
+        for _,technical_widget in self.ui.get_technical().items():
+            self.mouse.connet( technical_widget, self.thechnical )
 
+        self.mouse.connet_dbclick( self.ui.crop_image, self.fit_image)
     #----------------------------------------------------------------------------------------
     # 
     #---------------------------------------------------------------------------------------- 
@@ -81,7 +85,6 @@ class API:
     # 
     #---------------------------------------------------------------------------------------- 
     def load_sheet(self,path,nframe=20):
-
         try:
             self.thechnicals_backend = {}
             for side,technical_widget in self.ui.get_technical(name=False).items():
@@ -96,8 +99,7 @@ class API:
             #MUST BE CHANGED
             self.ui.show_coil_loaded(self.win.id)
         except:
-            print('Error!')
-
+            print('Error!: load_sheet() in API')
 
     #----------------------------------------------------------------------------------------
     # 
@@ -109,6 +111,9 @@ class API:
     # 
     #----------------------------------------------------------------------------------------     
     def thechnical(self, widget_name):
+        self.current_technical_widget = widget_name
+        self.ui.set_enabel(self.ui.append_btn, False)
+
         if self.t%5==0:
             self.t=1
 
@@ -124,38 +129,18 @@ class API:
             self.t+=1
     
    
-
-    def fit_image(self,event):
-        print('yes',event.x(),event.y())
-        x = event.x() / self.ui.crop_image.width()
-        y = event.y() / self.ui.crop_image.height()
-        self.show_current_pos((x,y))
-        x = min(max(x,0),1)
-        y = min(max(y,0),1)
-
-        if self.widget_name == 'down_side_technical':
-            self.obj_sheet_down.fit((x,y))
-            real_img = self.obj_sheet_down.get_real_img()
-            self.ui.set_crop_image(real_img)
-            # print(self.obj_sheet_down.is_fit)
-            # print('pt', self.obj_sheet_down.pt)
-            # self.show_current_pos((x,y))
-
-        if self.widget_name == 'up_side_technical':
-            self.obj_sheet_up.fit((x,y))
-            real_img = self.obj_sheet_up.get_real_img()
-            self.ui.set_crop_image(real_img)
-            # self.show_current_pos(self.obj_sheet_up.pt)
-            # print(self.obj_sheet_up.is_fit)
-        if (self.obj_sheet_down.is_fit and  self.widget_name == 'down_side_technical') or (self.obj_sheet_up.is_fit and self.widget_name == 'up_side_technical'):
-            self.ui.append_btn.setDisabled(False)
-        else:
-            self.ui.append_btn.setDisabled(True)              
+    #----------------------------------------------------------------------------------------
+    # 
+    #----------------------------------------------------------------------------------------   
+    def fit_image(self, widget_name):
+        self.thechnicals_backend[self.current_technical_widget].fit(  self.mouse.get_relative_position()  )
+        real_img = self.thechnicals_backend[self.current_technical_widget].get_real_img()
+        self.ui.set_crop_image(real_img)
+        self.ui.set_enabel(self.ui.append_btn, True)
         
-        self.update_sheet_img()
-  
-        
-     
+    #----------------------------------------------------------------------------------------
+    # 
+    #----------------------------------------------------------------------------------------   
     def save_img(self,user='admin'):
         # listWidget = QListWidget()
         # print(self.ui.win.path)
