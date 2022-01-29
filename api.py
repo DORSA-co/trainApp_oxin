@@ -1,6 +1,7 @@
 
 from PySide6.QtCore import *
 from backend import data_grabber
+from backend.mouse import mouse
 import cv2
 import threading
 import time
@@ -12,8 +13,8 @@ from PyQt5.QtWidgets import QListWidget
 from PyQt5.QtGui import QPixmap,QImage
 from backend import add_remove_label
 from PyQt5 import QtCore
-
-
+from trainApp_loader import get_data
+#MUST BE CHANGED
 
 EVENTS_TYPE={
 
@@ -23,32 +24,34 @@ EVENTS_TYPE={
 }
 
 
+
+WIDTH_TECHNICAL_SIDE = 144 * 4
+HEIGHT_FRAME_SIZE = 50
+
+
 class API:
 
     def __init__(self,ui):
         self.ui = ui
-        
-        #mouse up-down////////////////////
+        self.mouse = mouse()
+        self.db = get_data.database()
 
-        self.ui.down_side_technical.mouseMoveEvent = self.mouseevent(self.ui.down_side_technical)
-        self.ui.down_side_technical.mouseReleaseEvent = self.mouseevent(self.ui.down_side_technical)
 
-        self.ui.up_side_technical.mouseMoveEvent = self.mouseevent(self.ui.up_side_technical)
-        self.ui.up_side_technical.mouseReleaseEvent = self.mouseevent(self.ui.up_side_technical)
-        
-        
+        #self.technical_backend = {'top': data_grabber()}
+        technicala_backend = {}
+        for _,technical_widget in self.ui.get_technical().items():
+            self.mouse.connet( technical_widget, self.thechnical )
+
         
         self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
-
-        
         self.t = 0
         #-------------------------------------
 
-        #data loader////////////////////
-        # self.ui.win.load_btn.clicked.connect(self.load_path)
+        #connet buttons to correspondings functions in API               ////////////////////
+        self.buttonConnector()
         #-------------------------------------
 
-        #technical view btns//////////////
+        #technical view btns                                             ///////////////////
         self.ui.save_btn.clicked.connect(self.save_img)
         self.ui.clear_all_btn.clicked.connect(self.clear_list)
         self.cache_path='G:/oxin_image_grabber/cache'
@@ -57,77 +60,70 @@ class API:
 
 
 
-        self.set_labels()
-
-        
-
-     
-            # self.deleteLater()
-        # elif e.key() == QtCore.Qt.Key_Enter:
-        #     self.proceed()
-        # e.accept()
-       
+    #----------------------------------------------------------------------------------------
+    # 
+    #---------------------------------------------------------------------------------------- 
+    def buttonConnector(self):
+        self.ui.win.load_btn.clicked.connect(self.load_data)
 
 
-        self.load_sheet('G:\oxin_image_grabber/1',20)
-        self.x=0
-        self.y=0
-        self.lenght=50
+
+    #----------------------------------------------------------------------------------------
+    # 
+    #---------------------------------------------------------------------------------------- 
+    def load_data(self):
+        path=self.db.get_sheet_path(2)                #MUST BE CHANGED
+        self.load_sheet(path)
+        self.ui.details_label.setText(str(self.ui.win.details))
     
-    def mouseevent(self,widget):
-        # print('yes')
-        def func(e):
-            # print('yes')
-            x = e.x() / widget.width()
-            y = e.y() / widget.height()
-            x = min(max(x,0),1)
-            y = min(max(y,0),1)
-            self.x=x
-            self.y=y
-            self.status = EVENTS_TYPE[e.type()]
-            self.widget_name = widget.objectName()
-            # print(self.x,self.y,self.widget_name,self.status)
+
+    #----------------------------------------------------------------------------------------
+    # 
+    #---------------------------------------------------------------------------------------- 
+    def load_sheet(self,path,nframe=20):
+
+        try:
+            self.thechnicals_backend = {}
+            for side,technical_widget in self.ui.get_technical(name=False).items():
+                self.thechnicals_backend[technical_widget.objectName()] = data_grabber.sheetOverView(path,
+                                                                                                     side,
+                                                                                                     (HEIGHT_FRAME_SIZE*nframe,WIDTH_TECHNICAL_SIDE),
+                                                                                                     (nframe,12),
+                                                                                                     actives_camera=(0,12),
+                                                                                                     oriation=data_grabber.VERTICAL)
+
+            self.update_sheet_img()
+            #MUST BE CHANGED
+            self.ui.show_coil_loaded(self.win.id)
+        except:
+            print('Error!')
 
 
-            # if self.widget_name=="down_side_technical" and self.status=="mouse_move":
-            #     if time.time() - self.t >0.15:
-            #         self.t = time.time()
-            #         self.update_sheet_real_img('down',(self.x,self.y))
-            #print(self.t)
+    #----------------------------------------------------------------------------------------
+    # 
+    #---------------------------------------------------------------------------------------- 
+    def update_sheet_img(self, name):
+        img=self.thechnicals_backend[name].get_sheet_img()
+        self.ui.set_img_sheet(img, name)
+    #----------------------------------------------------------------------------------------
+    # 
+    #----------------------------------------------------------------------------------------     
+    def thechnical(self, widget_name):
+        if self.t%5==0:
+            self.t=1
 
-            # if self.status=="mouse_move":
+            pt = self.mouse.get_relative_position() #get mouse position (x,y) that x,y are in [0,1] range
+            self.thechnicals_backend[widget_name].update_pointer(pt) #update corespond backend mouse position
+            self.thechnicals_backend[widget_name].update_sheet_img() #update technical image
+            img = self.thechnicals_backend[widget_name].get_real_img() #get image of sheet corespond to mouse position
+            self.ui.set_crop_image(img)#show image in UI
+            self.update_sheet_img(widget_name)
+            self.ui.show_selected_side(widget_name)
 
-
-
-            if self.widget_name=="down_side_technical" and self.status=="mouse_move":
-                if self.t%5==0:
-                    self.t=1
-                    self.update_sheet_real_img('down',(self.x,self.y))
-                    self.ui.up_side_technical.setDisabled(True)
-                    # self.cursur_show(e)
-                    self.ui.show_side.setText(str(self.widget_name))
-
-                else:
-                    self.t+=1
-
-
-            if self.widget_name=="up_side_technical" and self.status=="mouse_move":
-                if self.t%5==0:
-                    self.t=1
-                    self.update_sheet_real_img('up',(self.x,self.y))
-                    self.ui.down_side_technical.setDisabled(True)
-                    # self.cursur_show(e)
-                    self.ui.show_side.setText(str(self.widget_name))
-
-                else:
-                    self.t+=1
-            if self.status=="mouse_release":
-                
-                self.ui.down_side_technical.setDisabled(False)
-                self.ui.up_side_technical.setDisabled(False)
-
-
-        return func
+        else:
+            self.t+=1
+    
+   
 
     def fit_image(self,event):
         print('yes',event.x(),event.y())
@@ -157,87 +153,9 @@ class API:
             self.ui.append_btn.setDisabled(True)              
         
         self.update_sheet_img()
+  
         
-        
-        
-
-
-
-
-    def update_sheet_real_img(self,side,pt):
-
-        self.ui.append_btn.setDisabled(True) 
-        self.show_current_pos(pt)
-        if side=="down":
-            self.obj_sheet_down.update_pointer(pt)
-            real_img = self.obj_sheet_down.get_real_img()
-            self.update_sheet_img()
-            self.ui.set_crop_image(real_img)
-            
-            # print(self.obj_sheet_down.is_fit)
-            # self.ui.up_side_technical.setDisabled(True)
-
-            # cv2.waitKey(5)
-        if side=="up":
-            self.obj_sheet_up.update_pointer(pt)
-            real_img = self.obj_sheet_up.get_real_img()
-            self.update_sheet_img()
-            self.ui.set_crop_image(real_img)
-            
-            # print(self.obj_sheet_up.is_fit)
-            # self.ui.down_side_technical.setDisabled(True)
-            # print(self.ui.crop_image.width(),self.ui.crop_image.height())
-            # cv2.waitKey(5)
-
-
-
-    def load_sheet(self,path,lenght=20):
-
-        try:
-            lenght=self.ui.win.lenght
-            lenght=int(float(lenght))+1
-            self.lenght=lenght
-        except:
-            print('no_len')
-        try:
-            # print("*"*100,lenght)
-        # 'G:\oxin_image_grabber/001'
-            self.obj_sheet_up=data_grabber.sheetOverView(path,
-                                                    data_grabber.UP,(50*lenght,576),(lenght,12),actives_camera=(0,12),
-                                                    oriation=data_grabber.VERTICAL)
-
-            self.obj_sheet_down=data_grabber.sheetOverView(path,
-                                                    data_grabber.DOWN,(50*lenght,576),(lenght,12),actives_camera=(0,12),
-                                                    oriation=data_grabber.VERTICAL)
-
-            self.obj_sheet_down.update_line(int(lenght))
-            self.obj_sheet_up.update_line(int(lenght))
-            self.update_sheet_img()
-            self.ui.listWidget_logs.addItem('Coil {} Selected'.format(self.ui.win.id))
-        except:
-            print('eror')
-            # self.ui.listWidget_logs_2.addItem('Cant load coil')
-
-        
-
-
-    def update_sheet_img(self):
-        #threading.Timer(0.1, self.update_sheet_img).start()
-        img=self.obj_sheet_down.get_sheet_img()
-        self.ui.set_img_sheet(img,"down")
-        img=self.obj_sheet_up.get_sheet_img()
-        self.ui.set_img_sheet(img,"up")
-        
-
-
-    def sheet_top_img():
-        pass
-
-    def cursur_show(self,e):
-        
-        self.ui.cursor_status.setText(str(e.x()))
-
-    
+     
     def save_img(self,user='admin'):
         # listWidget = QListWidget()
         # print(self.ui.win.path)
@@ -247,21 +165,15 @@ class API:
         user='admin'
         image = ImageQt.fromqpixmap(self.ui.crop_image.pixmap())
         # image=np.ascontiguousarray(image)
+
+        # cv2.imshow('img',image)
+        # cv2.waitKey(0)
         x =datetime.now()
         x=x.strftime("%Y"+"-"+"%m"+"-"+"%d"+"-"+"%H"+"-"+"%M"+"-"+"%S")
         x=str(x)+" "+str(user)
         image.save('{}/{}.jpg'.format(path,x))
         self.ui.listWidget_logs.addItem('Image Saved : '+'{}/{}.jpg'.format(path,x))
-        # cv2.imshow('img',image)
-        # cv2.waitKey(0)
 
-    def load_path(self):
-        path=self.ui.win.path
-
-        # print('path',path)
-        self.load_sheet(path)
-        self.ui.details_label.setText(str(self.ui.win.details))
-    
     def clear_list(self):
         self.ui.listWidget_logs.clear()
     
@@ -275,24 +187,18 @@ class API:
 
     def next_coil(self):
         self.ui.win.next_coil()
-        self.load_path()
+        self.load_data()
 
     def prev_coil(self):
         self.ui.win.prev_coil()
-        self.load_path()
+        self.load_data()
     
     def add_remove_label(self):
         print('add')
         print(self.ui.add_label_text.text())
         add_remove_label.add_remove_label(self.ui.add_label_text.text())
         self.set_labels()
-    
-    def set_labels(self):
-        labels=add_remove_label.catch_labels()
-
-        self.ui.comboBox_labels.clear()      
-        self.ui.comboBox_labels.addItems(labels)       
-
+ 
 
     def clear_cache_fun(self):
         dir = self.cache_path

@@ -18,13 +18,13 @@ from PyQt5.QtGui import QPainter
 
 ui, _ = loadUiType("trainApp_loader\data_loader.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
-class UI_data_loader(QMainWindow, ui):
+class data_loader(QMainWindow, ui):
     global widgets
     widgets = ui
     x=0
 
     def __init__(self):
-        super(UI_data_loader, self).__init__()
+        super(data_loader, self).__init__()
         self.setupUi(self)
         flags = Qt.WindowFlags(Qt.FramelessWindowHint)
         self.pos_ = self.pos()
@@ -205,7 +205,7 @@ class UI_data_loader(QMainWindow, ui):
 
 if __name__ == "__main__":
     app = QApplication()
-    win = UI_data_loader()
+    win = data_loader()
     win.show()
     sys.exit(app.exec())
     

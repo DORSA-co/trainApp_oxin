@@ -60,6 +60,10 @@ class sheetOverView():
         self.sheet_img = self.draw_discamera(self.sheet_img, self.actives_camera)
         self.result_img = np.copy( self.sheet_img)
         self.is_fit=False
+
+
+        self.update_line(self.sheet_grid[0])
+        self.select_layer = self.init_img((0,0,0))
     
     def init_img(self, color):
         img = np.ones((self.sheet_shape[0], self.sheet_shape[1], 3), dtype=np.uint8)
@@ -122,7 +126,7 @@ class sheetOverView():
     #_____________________________________________________________________________________________________________________________
     #
     #_____________________________________________________________________________________________________________________________
-    def update_result_img(self):
+    def update_sheet_img(self):
         #res = self.__add__(self.sheet_layer, self.selec)
         res = cv2.addWeighted(self.sheet_img,0.7,self.select_layer,0.3,1)
         #res = self.__add__(res, self.line_layer)

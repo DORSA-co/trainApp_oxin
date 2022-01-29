@@ -14,7 +14,7 @@ from backend import data_grabber
 import detect_lenguage
 import setting
 import api
-# from trainApp_loader.data_loader import UI_data_loader
+from trainApp_loader.data_loader import data_loader
 from PIL import ImageQt
 import numpy as np
 
@@ -68,7 +68,7 @@ class UI_main_window(QMainWindow, ui):
 
         # CONNECTED WINDOWS
         #//////////////////////////////////////////////
-        # self.win=UI_data_loader()
+        self.win=data_loader()
 
 
 
@@ -148,6 +148,20 @@ class UI_main_window(QMainWindow, ui):
         
 
 
+        # self.down_side_technical.mouseMoveEvent = self.mouseevent(self.ui.down_side_technical)
+
+
+    def get_technical(self, name=True):
+        if name:
+            return {self.up_side_technical.objectName(): self.up_side_technical ,
+                    self.down_side_technical.objectName(): self.down_side_technical}
+        
+        else:
+            return {'up': self.up_side_technical ,
+                    'down':  self.down_side_technical }
+
+
+
     def ret_mouse(self):
         x,y,widget_name,status = self.x,self.y,self.widget_name,self.status
         self.x,self.y,self.widget_name,self.status = -1,-1,'',''
@@ -164,10 +178,10 @@ class UI_main_window(QMainWindow, ui):
     
     
     def set_img_sheet(self,img,side):
-        if side=="up":
+        if side=="up" or side == self.up_side_technical.objectName():
             image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_BGR888 )
             self.up_side_technical.setPixmap(QPixmap.fromImage(image))
-        if side=="down":
+        if side=="down" or  side == self.down_side_technical.objectName():
             image = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_BGR888 )
             self.down_side_technical.setPixmap(QPixmap.fromImage(image))
 
@@ -523,6 +537,27 @@ class UI_main_window(QMainWindow, ui):
         print('asd')
 
 
+
+
+
+
+#--------- aquization page
+    def show_coil_loaded(self,name):
+        self.listWidget_logs.addItem('Coil {} Selected'.format(name))
+
+    def show_selected_side(self,name):
+        self.show_side.setText(name)
+        
+        # self.get_technical()[name].setDisabled(False)
+        # for key,technincal in self.get_technical().items():
+        #     print(key)
+        #     if not key == name:
+        #         print(key)
+        #         self.get_technical()[name].setDisabled(True)
+    
+
+
+
 #--------- label page
     def bounding_box(self):
         print('bounding_box')
@@ -540,7 +575,7 @@ class UI_main_window(QMainWindow, ui):
 
     def data_loader_win(self):
         print('show loader win')
-        # self.win.show()
+        self.win.show()
 
 
 
