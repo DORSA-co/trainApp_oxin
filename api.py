@@ -36,6 +36,7 @@ class API:
         self.ui = ui
         self.mouse = mouse()
         self.db = get_data.database()
+        self.ui.up_side_technical.keyPressEvent = self.on_key
 
 
         #self.technical_backend = {'top': data_grabber()}
@@ -59,7 +60,8 @@ class API:
         self.ui.clear_cache.clicked.connect(self.clear_cache_fun)
     
 
-
+    def on_key(self,e):
+        print('sssssssss')
     #----------------------------------------------------------------------------------------
     # 
     #---------------------------------------------------------------------------------------- 

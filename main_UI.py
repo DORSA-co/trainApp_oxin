@@ -739,7 +739,7 @@ class UI_main_window(QMainWindow, ui):
         if self.stackedWidget.currentIndex()==0 :
             if event.key() == Qt.Key_6:
                 api.change_with_key('right')
-            if event.key() == Qt.Key_8:
+            if event.key() == Qt. Key_8:
                 api.change_with_key('up')
             if event.key() == Qt.Key_2:
                 api.change_with_key('down')
