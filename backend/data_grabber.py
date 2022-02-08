@@ -93,11 +93,26 @@ class sheetOverView():
     #______________________________________________________________________________________________________________________________
     #    
     #______________________________________________________________________________________________________________________________
-    def update_pointer(self,pt):
+    def update_pointer_keyboard(self, key):
+        self.update_pointer( None, key=key)
+    #______________________________________________________________________________________________________________________________
+    #    
+    #______________________________________________________________________________________________________________________________
+    def update_pointer(self,pt, key=None):
         self.is_fit=False
-        
-        x,y = int(pt[0]*(self.sheet_shape[1]-1)), int( pt[1]*(self.sheet_shape[0]-1))
-
+        x,y = 0,0
+        if pt is None and key is not None:
+            movments = {'up':(0, -0.3),
+                        'left':(-0.2, 0),
+                        'down':(0, 0.3),
+                        'right':(0.2, 0),}
+            x,y = self.pt
+            x += int(self.cell_shape[0] * movments[key][0] )
+            y += int(self.cell_shape[1] * movments[key][1] )
+            
+            
+        else:
+             x,y = int(pt[0]*(self.sheet_shape[1]-1)), int( pt[1]*(self.sheet_shape[0]-1))
 
         if self.cell_shape[1]%2==0:
             x=min(max(x,self.cell_shape[1]//2),  self.sheet_shape[1]-self.cell_shape[1]//2)

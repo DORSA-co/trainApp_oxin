@@ -25,6 +25,9 @@ import time
 
 from PyQt5.QtGui import QPainter
 
+from consts.keyboards_keys import KEYS
+from consts.pages_indexs import PAGES_IDX
+
 ui, _ = loadUiType("oxin.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 class UI_main_window(QMainWindow, ui):
@@ -33,7 +36,10 @@ class UI_main_window(QMainWindow, ui):
     x=0
 
     def __init__(self):
+
         super(UI_main_window, self).__init__()
+
+
         self.setupUi(self)
         flags = Qt.WindowFlags(Qt.FramelessWindowHint)
         self.pos_ = self.pos()
@@ -145,10 +151,14 @@ class UI_main_window(QMainWindow, ui):
 
         
         self.show_tools_btn.clicked.connect(self.buttonClick)
-        
+
+        self.keyboard_connections = {}
 
 
-        # self.down_side_technical.mouseMoveEvent = self.mouseevent(self.ui.down_side_technical)
+
+
+
+
 
 
     def get_technical(self, name=True):
@@ -734,25 +744,43 @@ class UI_main_window(QMainWindow, ui):
 
 
 
+    def connet_keyboard(self, keys,functions, page_name):
+        for key in keys:
+            self.keyboard_connections[ key ] = (page_name, functions)
+
+    def do_keyboard(self, key):
+        connections  = self.keyboard_connections.get(key)
+        if connections is None:
+            return -1
+        else:
+            page_name, funcs = connections
+            if page_name == PAGES_IDX.get( self.stackedWidget.currentIndex() ) or page_name==None:
+                for func in funcs:
+                    func(key)
+                return 1
+            return -1
+
     def keyPressEvent(self, event):
-        # print(self.stackedWidget.currentIndex())
-        if self.stackedWidget.currentIndex()==0 :
-            if event.key() == Qt.Key_6:
-                api.change_with_key('right')
-            if event.key() == Qt. Key_8:
-                api.change_with_key('up')
-            if event.key() == Qt.Key_2:
-                api.change_with_key('down')
-            if event.key() == Qt.Key_4:
-                api.change_with_key('left')
-            if event.key() == Qt.Key_7:
-                api.change_with_key('left_up')
-            if event.key() == Qt.Key_9:
-                api.change_with_key('right_up')
-            if event.key() == Qt.Key_1:
-                api.change_with_key('left_down')
-            if event.key() == Qt.Key_3:
-                api.change_with_key('right_down')
+        self.do_keyboard( KEYS.get( event.key() ) )
+        return KEYS.get( event.key() )
+        # #print(self.stackedWidget.currentIndex())
+        # if self.stackedWidget.currentIndex()==0 :
+        #     if event.key() == Qt.Key_6:
+        #          api.change_with_key('right')
+        #     if event.key() == Qt. Key_8:
+        #         api.change_with_key('up')
+        #     if event.key() == Qt.Key_2:
+        #         api.change_with_key('down')
+        #     if event.key() == Qt.Key_4:
+        #         api.change_with_key('left')
+        #     if event.key() == Qt.Key_7:
+        #         api.change_with_key('left_up')
+        #     if event.key() == Qt.Key_9:
+        #         api.change_with_key('right_up')
+        #     if event.key() == Qt.Key_1:
+        #         api.change_with_key('left_down')
+        #     if event.key() == Qt.Key_3:
+        #         api.change_with_key('right_down')
 
 
 

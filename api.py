@@ -1,7 +1,8 @@
 
 from PySide6.QtCore import *
 from backend import data_grabber
-from backend.mouse import mouse
+from backend.mouse import Mouse
+from backend.keyboard import Keyboard
 import cv2
 import threading
 import time
@@ -34,10 +35,10 @@ class API:
 
     def __init__(self,ui):
         self.ui = ui
-        self.mouse = mouse()
+        self.mouse = Mouse()
+        self.keyboard = Keyboard()
         self.db = get_data.database()
-        self.ui.up_side_technical.keyPressEvent = self.on_key
-
+#
 
         #self.technical_backend = {'top': data_grabber()}
         self.thechnicals_backend = {}
@@ -50,6 +51,8 @@ class API:
         self.button_connector()
         #connet mouse event to correspondings functions in API
         self.mouse_connector()
+        #connet keyboard event to correspondings functions in API
+        self.keyboard_connector()
         #-------------------------------------
 
         #technical view btns                                             ///////////////////
@@ -59,9 +62,6 @@ class API:
         self.ui.append_btn.clicked.connect(self.append)
         self.ui.clear_cache.clicked.connect(self.clear_cache_fun)
     
-
-    def on_key(self,e):
-        print('sssssssss')
     #----------------------------------------------------------------------------------------
     # 
     #---------------------------------------------------------------------------------------- 
@@ -71,9 +71,18 @@ class API:
 
     def mouse_connector(self):
         for _,technical_widget in self.ui.get_technical().items():
-            self.mouse.connet( technical_widget, self.thechnical )
+            self.mouse.connet( technical_widget, self.update_technical_pointer_mouse )
 
         self.mouse.connet_dbclick( self.ui.crop_image, self.fit_image)
+
+
+    def keyboard_connector(self):
+        self.keyboard.connet( self.ui, ['left','right','up','down'], [self.update_technical_pointer_keyboard], 'Technical View' )
+        #self.keyboard.connet( self.ui, ['left','right','up','down'], [self.test], None )
+
+
+
+        
     #----------------------------------------------------------------------------------------
     # 
     #---------------------------------------------------------------------------------------- 
@@ -111,26 +120,31 @@ class API:
         self.ui.set_img_sheet(img, name)
     #----------------------------------------------------------------------------------------
     # 
-    #----------------------------------------------------------------------------------------     
-    def thechnical(self, widget_name):
-        self.current_technical_widget = widget_name
-        self.ui.set_enabel(self.ui.append_btn, False)
+    #----------------------------------------------------------------------------------------
+    def update_technical_pointer_keyboard(self,key):
+        self.thechnicals_backend[ self.current_technical_widget ].update_pointer_keyboard(key)    
+        self.refresh_thechnical(fp=1)
 
-        if self.t%5==0:
+    def update_technical_pointer_mouse(self,widget_name):
+        self.current_technical_widget = widget_name
+        pt = self.mouse.get_relative_position() #get mouse position (x,y) that x,y are in [0,1] range
+        self.thechnicals_backend[widget_name].update_pointer(pt) #update corespond backend mouse position
+        self.refresh_thechnical(fp=5)
+        
+    def refresh_thechnical(self,fp):
+        if self.t%fp==0:
             self.t=1
 
-            pt = self.mouse.get_relative_position() #get mouse position (x,y) that x,y are in [0,1] range
-            self.thechnicals_backend[widget_name].update_pointer(pt) #update corespond backend mouse position
-            self.thechnicals_backend[widget_name].update_sheet_img() #update technical image
-            img = self.thechnicals_backend[widget_name].get_real_img() #get image of sheet corespond to mouse position
+            self.thechnicals_backend[self.current_technical_widget].update_sheet_img() #update technical image
+            img = self.thechnicals_backend[self.current_technical_widget].get_real_img() #get image of sheet corespond to mouse position
             self.ui.set_crop_image(img)#show image in UI
-            self.update_sheet_img(widget_name)
-            self.ui.show_selected_side(widget_name)
+            self.update_sheet_img(self.current_technical_widget)
+            self.ui.show_selected_side(self.current_technical_widget)
 
         else:
             self.t+=1
     
-   
+    
     #----------------------------------------------------------------------------------------
     # 
     #----------------------------------------------------------------------------------------   
@@ -193,31 +207,6 @@ class API:
             os.remove(os.path.join(dir, f))
         self.ui.listWidget_logs.addItem('Cache Cleared')
 
-    def change_with_key(self,arrow):
-        if arrow=='right':
-            self.x=self.x+0.02
-        elif arrow=='left':
-            self.x=self.x-0.02
-        elif arrow=='up':
-            self.y=self.y-0.01
-        elif arrow=='down':
-            self.y=self.y+0.01
-        elif arrow=='right_up':
-            self.x=self.x+0.02
-            self.y=self.y-0.01
-        elif arrow=='right_down':
-            self.x=self.x+0.02
-            self.y=self.y+0.01
-        elif arrow=='left_up':
-            self.x=self.x-0.02
-            self.y=self.y-0.01
-        elif arrow=='left_down':
-            self.x=self.x-0.02
-            self.y=self.y+0.01
-        if self.widget_name == 'down_side_technical':
-            self.update_sheet_real_img('down',(self.x,self.y))
-        elif self.widget_name == 'up_side_technical':
-            self.update_sheet_real_img('up',(self.x,self.y))
 
 
     def show_current_pos(self,pt):

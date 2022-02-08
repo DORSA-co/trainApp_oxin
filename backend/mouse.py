@@ -1,12 +1,6 @@
 from PySide6.QtCore import *
+from consts.mouse_events import EVENTS_TYPE
 
-EVENTS_TYPE={
-
-    QEvent.Type.MouseMove : 'mouse_move',
-    QEvent.Type.MouseButtonPress : 'mouse_press',
-    QEvent.Type.MouseButtonRelease : 'mouse_release',
-    QEvent.Type.MouseButtonDblClick: 'mouse_dclick'
-}
 
 
 
@@ -15,7 +9,7 @@ WIDGET_NAME = {'down_side_technical', 'down',
 
 
 
-class mouse:
+class Mouse:
 
     def __init__(self):
         self.status = ''
