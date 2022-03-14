@@ -1392,6 +1392,7 @@ class Ui_MainWindow(object):
         self.tab_6.setObjectName(u"tab_6")
         self.tab_6.setMinimumSize(QSize(0, 0))
         self.verticalLayout_84 = QVBoxLayout(self.tab_6)
+        self.verticalLayout_84.setSpacing(0)
         self.verticalLayout_84.setObjectName(u"verticalLayout_84")
         self.verticalLayout_84.setContentsMargins(1, 1, 1, 1)
         self.frame_44 = QFrame(self.tab_6)
@@ -1399,6 +1400,7 @@ class Ui_MainWindow(object):
         self.frame_44.setFrameShape(QFrame.StyledPanel)
         self.frame_44.setFrameShadow(QFrame.Raised)
         self.verticalLayout_85 = QVBoxLayout(self.frame_44)
+        self.verticalLayout_85.setSpacing(6)
         self.verticalLayout_85.setObjectName(u"verticalLayout_85")
         self.verticalLayout_85.setContentsMargins(7, 8, 7, 1)
         self.frame_59 = QFrame(self.frame_44)
@@ -1470,7 +1472,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 267, 28))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 277, 28))
         self.horizontalLayout_92 = QHBoxLayout(self.scrollAreaWidgetContents_4)
         self.horizontalLayout_92.setSpacing(0)
         self.horizontalLayout_92.setObjectName(u"horizontalLayout_92")
@@ -1526,7 +1528,7 @@ class Ui_MainWindow(object):
         self.line_30.setFrameShadow(QFrame.Raised)
         self.line_30.setFrameShape(QFrame.HLine)
 
-        self.verticalLayout_85.addWidget(self.line_30, 0, Qt.AlignHCenter)
+        self.verticalLayout_85.addWidget(self.line_30)
 
         self.frame_62 = QFrame(self.frame_44)
         self.frame_62.setObjectName(u"frame_62")
@@ -1535,6 +1537,7 @@ class Ui_MainWindow(object):
         self.frame_62.setFrameShape(QFrame.StyledPanel)
         self.frame_62.setFrameShadow(QFrame.Raised)
         self.horizontalLayout_117 = QHBoxLayout(self.frame_62)
+        self.horizontalLayout_117.setSpacing(6)
         self.horizontalLayout_117.setObjectName(u"horizontalLayout_117")
         self.horizontalLayout_117.setContentsMargins(0, 0, 0, 0)
         self.show_tools_btn = QPushButton(self.frame_62)
@@ -1555,10 +1558,11 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_117.addItem(self.horizontalSpacer_15)
 
-        self.label_131 = QLabel(self.frame_62)
-        self.label_131.setObjectName(u"label_131")
+        self.warning_data_page = QLabel(self.frame_62)
+        self.warning_data_page.setObjectName(u"warning_data_page")
+        self.warning_data_page.setMaximumSize(QSize(16777215, 16))
 
-        self.horizontalLayout_117.addWidget(self.label_131)
+        self.horizontalLayout_117.addWidget(self.warning_data_page)
 
         self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -1782,12 +1786,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_88.addWidget(self.line_33)
 
-        self.listWidget_logs_2 = QListView(self.groupBox)
-        self.listWidget_logs_2.setObjectName(u"listWidget_logs_2")
-        self.listWidget_logs_2.setStyleSheet(u" border: 1px solid gray;\n"
+        self.listWidget_append_img_list = QListView(self.groupBox)
+        self.listWidget_append_img_list.setObjectName(u"listWidget_append_img_list")
+        self.listWidget_append_img_list.setStyleSheet(u" border: 1px solid gray;\n"
 " border-radius: 0px;")
 
-        self.verticalLayout_88.addWidget(self.listWidget_logs_2)
+        self.verticalLayout_88.addWidget(self.listWidget_append_img_list)
 
         self.verticalSpacer_7 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -1981,24 +1985,55 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setSpacing(1)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.verticalLayout_4.setContentsMargins(1, 0, 1, 0)
-        self.label_6 = QLabel(self.frame_2)
+        self.frame_65 = QFrame(self.frame_2)
+        self.frame_65.setObjectName(u"frame_65")
+        self.frame_65.setMinimumSize(QSize(0, 25))
+        self.frame_65.setMaximumSize(QSize(16777215, 36))
+        self.frame_65.setFrameShape(QFrame.StyledPanel)
+        self.frame_65.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_119 = QHBoxLayout(self.frame_65)
+        self.horizontalLayout_119.setObjectName(u"horizontalLayout_119")
+        self.horizontalLayout_119.setContentsMargins(0, 0, 0, 0)
+        self.frame_66 = QFrame(self.frame_65)
+        self.frame_66.setObjectName(u"frame_66")
+        self.frame_66.setMaximumSize(QSize(108, 16777215))
+        self.frame_66.setFrameShape(QFrame.StyledPanel)
+        self.frame_66.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_93 = QVBoxLayout(self.frame_66)
+        self.verticalLayout_93.setObjectName(u"verticalLayout_93")
+        self.verticalLayout_93.setContentsMargins(0, 0, 0, 0)
+        self.label_129 = QLabel(self.frame_66)
+        self.label_129.setObjectName(u"label_129")
+        self.label_129.setFont(font)
+
+        self.verticalLayout_93.addWidget(self.label_129)
+
+        self.label_131 = QLabel(self.frame_66)
+        self.label_131.setObjectName(u"label_131")
+        self.label_131.setMaximumSize(QSize(23, 8))
+        self.label_131.setPixmap(QPixmap(u"images/pngaaa.com-4780825.png"))
+        self.label_131.setScaledContents(True)
+
+        self.verticalLayout_93.addWidget(self.label_131)
+
+
+        self.horizontalLayout_119.addWidget(self.frame_66)
+
+        self.label_6 = QLabel(self.frame_65)
         self.label_6.setObjectName(u"label_6")
+        font5 = QFont()
+        font5.setFamilies([u"Segoe UI"])
+        font5.setPointSize(10)
+        font5.setBold(True)
+        font5.setItalic(False)
+        self.label_6.setFont(font5)
+        self.label_6.setStyleSheet(u"font-weight: bold; \n"
+"font-size: 30%;")
 
-        self.verticalLayout_4.addWidget(self.label_6, 0, Qt.AlignHCenter)
+        self.horizontalLayout_119.addWidget(self.label_6)
 
-        self.label_7 = QLabel(self.frame_2)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setFont(font)
 
-        self.verticalLayout_4.addWidget(self.label_7)
-
-        self.label_29 = QLabel(self.frame_2)
-        self.label_29.setObjectName(u"label_29")
-        self.label_29.setMaximumSize(QSize(23, 8))
-        self.label_29.setPixmap(QPixmap(u"images/pngaaa.com-4780825.png"))
-        self.label_29.setScaledContents(True)
-
-        self.verticalLayout_4.addWidget(self.label_29)
+        self.verticalLayout_4.addWidget(self.frame_65)
 
         self.scrollArea_up_side = QScrollArea(self.frame_2)
         self.scrollArea_up_side.setObjectName(u"scrollArea_up_side")
@@ -2008,7 +2043,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 528))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 549))
         self.scrollAreaWidgetContents_2.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_2.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_90 = QHBoxLayout(self.scrollAreaWidgetContents_2)
@@ -2041,24 +2076,50 @@ class Ui_MainWindow(object):
         self.verticalLayout_87.setSpacing(1)
         self.verticalLayout_87.setObjectName(u"verticalLayout_87")
         self.verticalLayout_87.setContentsMargins(1, 0, 1, 0)
-        self.label_119 = QLabel(self.frame_16)
-        self.label_119.setObjectName(u"label_119")
-
-        self.verticalLayout_87.addWidget(self.label_119, 0, Qt.AlignHCenter)
-
-        self.label_124 = QLabel(self.frame_16)
+        self.frame_60 = QFrame(self.frame_16)
+        self.frame_60.setObjectName(u"frame_60")
+        self.frame_60.setMinimumSize(QSize(0, 25))
+        self.frame_60.setMaximumSize(QSize(16777215, 36))
+        self.frame_60.setFrameShape(QFrame.StyledPanel)
+        self.frame_60.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_118 = QHBoxLayout(self.frame_60)
+        self.horizontalLayout_118.setObjectName(u"horizontalLayout_118")
+        self.horizontalLayout_118.setContentsMargins(0, 0, 0, 0)
+        self.frame_64 = QFrame(self.frame_60)
+        self.frame_64.setObjectName(u"frame_64")
+        self.frame_64.setMaximumSize(QSize(108, 16777215))
+        self.frame_64.setFrameShape(QFrame.StyledPanel)
+        self.frame_64.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_92 = QVBoxLayout(self.frame_64)
+        self.verticalLayout_92.setObjectName(u"verticalLayout_92")
+        self.verticalLayout_92.setContentsMargins(0, 0, 0, 0)
+        self.label_124 = QLabel(self.frame_64)
         self.label_124.setObjectName(u"label_124")
         self.label_124.setFont(font)
 
-        self.verticalLayout_87.addWidget(self.label_124)
+        self.verticalLayout_92.addWidget(self.label_124)
 
-        self.label_125 = QLabel(self.frame_16)
+        self.label_125 = QLabel(self.frame_64)
         self.label_125.setObjectName(u"label_125")
         self.label_125.setMaximumSize(QSize(23, 8))
         self.label_125.setPixmap(QPixmap(u"images/pngaaa.com-4780825.png"))
         self.label_125.setScaledContents(True)
 
-        self.verticalLayout_87.addWidget(self.label_125)
+        self.verticalLayout_92.addWidget(self.label_125)
+
+
+        self.horizontalLayout_118.addWidget(self.frame_64)
+
+        self.label_119 = QLabel(self.frame_60)
+        self.label_119.setObjectName(u"label_119")
+        self.label_119.setFont(font5)
+        self.label_119.setStyleSheet(u"font-weight: bold; \n"
+"font-size: 30%;")
+
+        self.horizontalLayout_118.addWidget(self.label_119)
+
+
+        self.verticalLayout_87.addWidget(self.frame_60)
 
         self.scrollArea_up_side_3 = QScrollArea(self.frame_16)
         self.scrollArea_up_side_3.setObjectName(u"scrollArea_up_side_3")
@@ -2068,7 +2129,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 288, 528))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 288, 549))
         self.scrollAreaWidgetContents_5.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_5.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_114 = QHBoxLayout(self.scrollAreaWidgetContents_5)
@@ -5849,7 +5910,7 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 222, 222))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 218, 218))
         self.scrollAreaWidgetContents.setStyleSheet(u" QScrollBar:vertical {\n"
 "	border: none;\n"
 "    background: rgb(52, 59, 72);\n"
@@ -5938,10 +5999,10 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         if (self.tableWidget.rowCount() < 16):
             self.tableWidget.setRowCount(16)
-        font5 = QFont()
-        font5.setFamilies([u"Segoe UI"])
+        font6 = QFont()
+        font6.setFamilies([u"Segoe UI"])
         __qtablewidgetitem4 = QTableWidgetItem()
-        __qtablewidgetitem4.setFont(font5);
+        __qtablewidgetitem4.setFont(font6);
         self.tableWidget.setVerticalHeaderItem(0, __qtablewidgetitem4)
         __qtablewidgetitem5 = QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(1, __qtablewidgetitem5)
@@ -6193,11 +6254,11 @@ class Ui_MainWindow(object):
         self.creditsLabel = QLabel(self.bottomBar)
         self.creditsLabel.setObjectName(u"creditsLabel")
         self.creditsLabel.setMaximumSize(QSize(16777215, 16))
-        font6 = QFont()
-        font6.setFamilies([u"Segoe UI"])
-        font6.setBold(False)
-        font6.setItalic(False)
-        self.creditsLabel.setFont(font6)
+        font7 = QFont()
+        font7.setFamilies([u"Segoe UI"])
+        font7.setBold(False)
+        font7.setItalic(False)
+        self.creditsLabel.setFont(font7)
         self.creditsLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
 
         self.horizontalLayout_5.addWidget(self.creditsLabel)
@@ -6307,7 +6368,7 @@ class Ui_MainWindow(object):
         self.show_side.setText("")
         self.crop_image.setText("")
         self.show_tools_btn.setText("")
-        self.label_131.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
+        self.warning_data_page.setText("")
         self.groupBox_2.setTitle("")
         self.clear_cache.setText(QCoreApplication.translate("MainWindow", u"Clear All", None))
         self.save_btn.setText(QCoreApplication.translate("MainWindow", u"Save", None))
@@ -6328,19 +6389,19 @@ class Ui_MainWindow(object):
         self.current_pos_y.setText(QCoreApplication.translate("MainWindow", u"0", None))
         self.label_130.setText(QCoreApplication.translate("MainWindow", u"cm", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_6), QCoreApplication.translate("MainWindow", u"Technical View", None))
+        self.label_129.setText(QCoreApplication.translate("MainWindow", u"40  cm", None))
+        self.label_131.setText("")
 #if QT_CONFIG(tooltip)
         self.label_6.setToolTip(QCoreApplication.translate("MainWindow", u"UP Side Technical View", None))
 #endif // QT_CONFIG(tooltip)
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"USTV", None))
-        self.label_7.setText(QCoreApplication.translate("MainWindow", u"40  cm", None))
-        self.label_29.setText("")
         self.up_side_technical.setText("")
+        self.label_124.setText(QCoreApplication.translate("MainWindow", u"40  cm", None))
+        self.label_125.setText("")
 #if QT_CONFIG(tooltip)
         self.label_119.setToolTip(QCoreApplication.translate("MainWindow", u"UP Side Technical View", None))
 #endif // QT_CONFIG(tooltip)
         self.label_119.setText(QCoreApplication.translate("MainWindow", u"DSTV", None))
-        self.label_124.setText(QCoreApplication.translate("MainWindow", u"40  cm", None))
-        self.label_125.setText("")
         self.down_side_technical.setText("")
 #if QT_CONFIG(statustip)
         self.pushButton_28.setStatusTip("")

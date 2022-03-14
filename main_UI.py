@@ -1,6 +1,8 @@
 from cgitb import enable
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import * 
+from PyQt5.QtGui import * 
 from PyQt5.QtGui import *
 from pyqt5_plugins import *
 from PySide6.QtCharts import *
@@ -14,10 +16,10 @@ from backend import data_grabber
 import detect_lenguage
 import setting
 import api
-from trainApp_loader.data_loader import data_loader
+from Sheet_loader_win.data_loader_UI import data_loader
 from PIL import ImageQt
 import numpy as np
-
+import threading
 # from modules import UIFunctions
 
 import cv2
@@ -28,7 +30,7 @@ from PyQt5.QtGui import QPainter
 from consts.keyboards_keys import KEYS
 from consts.pages_indexs import PAGES_IDX
 
-ui, _ = loadUiType("oxin.ui")
+ui, _ = loadUiType("UI/oxin.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 class UI_main_window(QMainWindow, ui):
     global widgets
@@ -62,11 +64,16 @@ class UI_main_window(QMainWindow, ui):
         # APPLY TEXTS
         self.setWindowTitle(title)
         # widgets.titleRightInfo.setText(description)
-        self.test()
+        # self.test()
         
         # SET LANGUAGE
         #//////////////////////////////////////////////
         # self.set_language()
+
+
+        # SET FONT & SIZE
+        #/////////////////////////////////////////////
+        self.label_6.setFont(QFont('Arial', 10))
 
         # self.toggleButton.clicked.connect(self.toggleMenu(True))
 
@@ -74,7 +81,7 @@ class UI_main_window(QMainWindow, ui):
 
         # CONNECTED WINDOWS
         #//////////////////////////////////////////////
-        self.win=data_loader()
+        self.load_sheets_win=data_loader()
 
 
 
@@ -156,7 +163,21 @@ class UI_main_window(QMainWindow, ui):
 
 
 
+        self._old_pos = None
 
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self._old_pos = event.pos()
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self._old_pos = None
+
+    def mouseMoveEvent(self, event):
+        if not self._old_pos:
+            return
+        delta = event.pos() - self._old_pos
+        self.move(self.pos() + delta)
 
 
 
@@ -183,7 +204,6 @@ class UI_main_window(QMainWindow, ui):
     def set_language(self):
         print(detect_lenguage.language())
         if detect_lenguage.language()=='Persian(فارسی)':
-            print('salam')
             detect_lenguage.main_window(self)
     
     
@@ -217,15 +237,15 @@ class UI_main_window(QMainWindow, ui):
 
             # SET MAX WIDTH
             if width == 60:
-                print('OPEN')
+                #print('OPEN')
                 self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
                 widthExtended = maxExtend
-                print(widthExtended)
+                #print(widthExtended)
             else:
                 self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
-                print('Close')
+                #print('Close')
                 widthExtended = standard
-                print(widthExtended)
+                #print(widthExtended)
 
             # ANIMATION
             self.animation = QPropertyAnimation(self.leftMenuBg, b"minimumWidth")
@@ -238,7 +258,6 @@ class UI_main_window(QMainWindow, ui):
     # TOGGLE LEFT BOX
     # ///////////////////////////////////////////////////////////////
     def hi(self):
-        print('asdw')
         # GET WIDTH
         width = self.extraLeftBox.width()
         widthRightBox = 0
@@ -279,14 +298,14 @@ class UI_main_window(QMainWindow, ui):
             right_width = 240
         else:
             right_width = 0       
-        print('ok')
+        #print('ok')
         # ANIMATION LEFT BOX        
         self.left_box = QPropertyAnimation(self.extraLeftBox, b"minimumWidth")
         self.left_box.setDuration(Settings.TIME_ANIMATION)
         self.left_box.setStartValue(left_box_width)
         self.left_box.setEndValue(left_width)
         self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
-        print('ok',left_width)
+        #print('ok',left_width)
         self.group = QParallelAnimationGroup()
         self.group.addAnimation(self.left_box)
         # self.group.addAnimation(self.right_box)
@@ -303,15 +322,15 @@ class UI_main_window(QMainWindow, ui):
 
             # SET MAX WIDTH
             if width == 0:
-                print('OPEN')
+                #print('OPEN')
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
                 widthExtended = maxExtend
-                print(widthExtended)
+                #print(widthExtended)
             else:
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
-                print('Close')
+                #print('Close')
                 widthExtended = standard
-                print(widthExtended)
+                #print(widthExtended)
 
             # ANIMATION
             self.animation = QPropertyAnimation(self.label_dorsa, b"minimumWidth")
@@ -330,7 +349,7 @@ class UI_main_window(QMainWindow, ui):
         self.stackedWidget_defect.setMaximumHeight(166666)
         x=self.stackedWidget_defect.height()
         if x <70:
-            print('x',x)
+            #print('x',x)
             self.left_box = QPropertyAnimation(self.stackedWidget_defect, b"maximumHeight")
             self.left_box.setDuration(Settings.TIME_ANIMATION)
             self.left_box.setStartValue(60)
@@ -347,7 +366,7 @@ class UI_main_window(QMainWindow, ui):
         self.stackedWidget_defect.setCurrentWidget(self.page_no)
         self.stackedWidget_defect.setMaximumHeight(60)
         x=self.stackedWidget_defect.height()
-        print('height',x)
+        #print('height',x)
         # if x ==400:
         self.left_box = QPropertyAnimation(self.stackedWidget_defect, b"maximumHeight")
         self.left_box.setDuration(Settings.TIME_ANIMATION)
@@ -358,7 +377,7 @@ class UI_main_window(QMainWindow, ui):
         self.group.addAnimation(self.left_box)
         # self.group.addAnimation(self.right_box)
         self.group.start()    
-        print('no ani')   
+        #print('no ani')   
 
  
     # TOGGLE LOGIN & setting
@@ -366,7 +385,7 @@ class UI_main_window(QMainWindow, ui):
 
     def show_login(self):
         width=self.frame_login.width()
-        print('width',width)
+        #print('width',width)
         if width==0:
             self.left_box = QPropertyAnimation(self.frame_login, b"maximumWidth")
             self.left_box.setDuration(Settings.TIME_ANIMATION)
@@ -375,7 +394,7 @@ class UI_main_window(QMainWindow, ui):
             self.left_box.setEasingCurve(QEasingCurve.InOutQuart)  
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
-            print('open')
+            #print('open')
             # self.group.addAnimation(self.right_box)
             self.group.start()       
         else :
@@ -384,7 +403,7 @@ class UI_main_window(QMainWindow, ui):
             self.left_box.setStartValue(width)
             self.left_box.setEndValue(0)
             self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
-            print('close')
+            #print('close')
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
             # self.group.addAnimation(self.right_box)
@@ -396,7 +415,7 @@ class UI_main_window(QMainWindow, ui):
         # self.stackedWidget_defect.setCurrentWidget(self.page_no)
         # self.stackedWidget_defect.setMaximumHeight(60)
         # x=self.stackedWidget_defect.height()
-        print('height',height)
+        #print('height',height)
         if height ==0:
             self.left_box = QPropertyAnimation(self.frame_settin2, b"maximumHeight")
             self.left_box.setDuration(Settings.TIME_ANIMATION)
@@ -407,7 +426,7 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.left_box)
             # self.group.addAnimation(self.right_box)
             self.group.start()    
-            print('no ani')
+            #print('no ani')
         elif height ==40:
             self.left_box = QPropertyAnimation(self.frame_settin2, b"maximumHeight")
             self.left_box.setDuration(Settings.TIME_ANIMATION)
@@ -418,7 +437,7 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.left_box)
             # self.group.addAnimation(self.right_box)
             self.group.start()    
-            print('no ani')           
+            #print('no ani')           
     # frame tools   ////////////////////////////////////
     def show_frame_tools(self):
         height=self.frame_tools_technical.height()
@@ -426,7 +445,7 @@ class UI_main_window(QMainWindow, ui):
         # self.stackedWidget_defect.setCurrentWidget(self.page_no)
         # self.stackedWidget_defect.setMaximumHeight(60)
         # x=self.stackedWidget_defect.height()
-        print('height',height)
+        #print('height',height)
         if height ==0:
             self.left_box = QPropertyAnimation(self.frame_tools_technical, b"maximumHeight")
             self.left_box.setDuration(Settings.TIME_ANIMATION)
@@ -439,7 +458,7 @@ class UI_main_window(QMainWindow, ui):
             self.show_tools_btn.setIcon(QIcon(rMyIcon))
             # self.group.addAnimation(self.right_box)
             self.group.start()    
-            print('no ani')
+            #print('no ani')
         elif height ==149:
             self.left_box = QPropertyAnimation(self.frame_tools_technical, b"maximumHeight")
             self.left_box.setDuration(Settings.TIME_ANIMATION)
@@ -452,7 +471,7 @@ class UI_main_window(QMainWindow, ui):
             self.show_tools_btn.setIcon(QIcon(rMyIcon))
             # self.group.addAnimation(self.right_box)
             self.group.start()    
-            print('no ani')           
+            #print('no ani')           
         
 
     # IMPORT THEMES FILES QSS/CSS
@@ -464,7 +483,7 @@ class UI_main_window(QMainWindow, ui):
 
 
     def setThemeHack(self):
-        print('asdaw')
+        #print('asdaw')
         Settings.BTN_LEFT_BOX_COLOR = "background-color: #495474;"
         Settings.BTN_RIGHT_BOX_COLOR = "background-color: #495474;"
         Settings.MENU_SELECTED_STYLESHEET = MENU_SELECTED_STYLESHEET = """
@@ -482,7 +501,6 @@ class UI_main_window(QMainWindow, ui):
         self.horizontalScrollBar.setStyleSheet("background-color: #6272a4;")
         self.verticalScrollBar.setStyleSheet("background-color: #6272a4;")
         # self.leftMenuFrame.setStyleSheet("color: #ff79c6;")
-        print('asdaw')
 
     def activate_(self):
         self.closeButton.clicked.connect(self.close_win)
@@ -524,7 +542,7 @@ class UI_main_window(QMainWindow, ui):
         input_image = cv2.imread('3.jpg')
         image = QImage(input_image,input_image.shape[1], input_image.shape[0],input_image.strides[0], QImage.Format_BGR888 )
         self.p_image.setPixmap(QPixmap.fromImage(image))
-        print(image)
+        #print(image)
 
 
     def classification_class_list_table(self):
@@ -544,9 +562,6 @@ class UI_main_window(QMainWindow, ui):
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
 
-    def table_classification_select_class(self):
-        print('asd')
-
 
 
 
@@ -556,27 +571,28 @@ class UI_main_window(QMainWindow, ui):
     def show_coil_loaded(self,name):
         self.listWidget_logs.addItem('Coil {} Selected'.format(name))
 
+    def add_append_image(self,name):
+        self.listWidget_append_img_list.addItem('Coil {} Selected'.format(name))
+
     def show_selected_side(self,name):
-        self.show_side.setText(name)
+        if name=='up_side_technical':
+            self.show_side.setText('UP Side Technical')
         
-        # self.get_technical()[name].setDisabled(False)
-        # for key,technincal in self.get_technical().items():
-        #     print(key)
-        #     if not key == name:
-        #         print(key)
-        #         self.get_technical()[name].setDisabled(True)
-    
+        if name=='down_side_technical':
+            self.show_side.setText('DOWN Side Technical')
+        
+
 
 
 
 #--------- label page
     def bounding_box(self):
-        print('bounding_box')
+        #print('bounding_box')
         self.image.setCursor(Qt.CrossCursor)
 
 
     def polygon(self):
-        print('polygon')
+        #print('polygon')
         pixmap = QPixmap("images/icons8-cursor-24.png")
         cursor = QCursor(pixmap, 5,5)
         # QApplication.setOverrideCursor(cursor)
@@ -584,13 +600,55 @@ class UI_main_window(QMainWindow, ui):
 
 
 
-    def data_loader_win(self):
-        print('show loader win')
-        self.win.show()
+    def data_loader_win_show(self):
+        #print('show loader win')
+        self.load_sheets_win.show()
 
 
 
         # print(x,y)
+
+
+
+    def show_sheet_details(self,details):
+
+        text='  id: '+str(details['id'])+' || heat_number: '+str(details['heat_number'])+' || width: '+str(details['width'])+' || lenght: '+str(details['lenght'])
+
+        self.details_label.setText(text)
+
+
+    def set_warning_data_page(self,text,name,level=1):
+        waring_labels = {
+            'data_auquzation': self.warning_data_page
+        }
+
+        if text !=None:
+
+            if level==2:
+                waring_labels[name].setText(' Warning: '+text)
+                waring_labels[name].setStyleSheet('background-color:#FDFFA9;border-radius:2px;color:black')
+            
+            if level==3:
+                waring_labels[name].setText(' Warning: '+text)
+                waring_labels[name].setStyleSheet('background-color:#D9534F;border-radius:2px;color:black')
+
+
+            threading.Timer(2,self.set_warning_data_page,args=(None,name)).start()
+
+
+
+
+        else:
+            waring_labels[name].setText('')
+
+
+            
+
+
+    def show_current_position(self, pt):
+        self.current_pos_x.setText(str(pt[0]))
+        self.current_pos_y.setText(str(pt[1]))
+
 
 
     def buttonClick(self):
@@ -691,7 +749,6 @@ class UI_main_window(QMainWindow, ui):
             api.add_remove_label()
 
         if btnName =='btn_software_setting':
-            print('asdqwdwqd')
             # self.bounding_box()
             self.stackedWidget.setCurrentWidget(self.page_software_setting)
             setting.language(self)
@@ -699,18 +756,22 @@ class UI_main_window(QMainWindow, ui):
 
         if btnName =='load_coil_btn':
             # print('asdqwdwqd')
-            self.data_loader_win()
+            self.data_loader_win_show()
 
-        if btnName =='next_coil_btn':
-            # print('asdqwdwqd')
-            api.next_coil()
+        # if btnName =='next_coil_btn':
+        #     # print('asdqwdwqd')
+        #     api.next_coil()
 
-        if btnName =='prev_coil_btn':
-            # print('asdqwdwqd')
-            api.prev_coil()
+        #     # self.show_details()
+
+        # if btnName =='prev_coil_btn':
+        #     # print('asdqwdwqd')
+        #     api.prev_coil()
+
+            # self.show_details()
+
         if btnName == "show_tools_btn":
             self.show_frame_tools()
-            print('adqwd')
         if btnName =='label_btn_2':
             self.stackedWidget.setCurrentWidget(self.page_label)
             image = ImageQt.fromqpixmap(self.crop_image.pixmap())
@@ -726,21 +787,21 @@ class UI_main_window(QMainWindow, ui):
             self.hi()
 
         # PRINT BTN NAME
-        print(f'Button "{btnName}" pressed!')
+        #print(f'Button "{btnName}" pressed!')
 
     # MOUSE CLICK EVENTS
     # ///////////////////////////////////////////////////////////////
-    def mouseMoveEvent(self, event):
-        # SET DRAG POS WINDOW
-        self.dragPos = event.globalPos()
-        self.x_pos=event.x()
-        print(self.ret_mouse())
-        # PRINT MOUSE EVENTS
-        if event.buttons() == Qt.LeftButton:
-            print('Mouse click: LEFT CLICK')
-        if event.buttons() == Qt.RightButton:
-            print('Mouse click: RIGHT CLICK')
-        return event.x()
+    # def mouseMoveEvent(self, event):
+    #     # SET DRAG POS WINDOW
+    #     self.dragPos = event.globalPos()
+    #     self.x_pos=event.x()
+    #     print(self.ret_mouse())
+    #     # PRINT MOUSE EVENTS
+    #     if event.buttons() == Qt.LeftButton:
+    #         print('Mouse click: LEFT CLICK')
+    #     if event.buttons() == Qt.RightButton:
+    #         print('Mouse click: RIGHT CLICK')
+    #     return event.x()
 
 
 
@@ -763,29 +824,16 @@ class UI_main_window(QMainWindow, ui):
     def keyPressEvent(self, event):
         self.do_keyboard( KEYS.get( event.key() ) )
         return KEYS.get( event.key() )
-        # #print(self.stackedWidget.currentIndex())
-        # if self.stackedWidget.currentIndex()==0 :
-        #     if event.key() == Qt.Key_6:
-        #          api.change_with_key('right')
-        #     if event.key() == Qt. Key_8:
-        #         api.change_with_key('up')
-        #     if event.key() == Qt.Key_2:
-        #         api.change_with_key('down')
-        #     if event.key() == Qt.Key_4:
-        #         api.change_with_key('left')
-        #     if event.key() == Qt.Key_7:
-        #         api.change_with_key('left_up')
-        #     if event.key() == Qt.Key_9:
-        #         api.change_with_key('right_up')
-        #     if event.key() == Qt.Key_1:
-        #         api.change_with_key('left_down')
-        #     if event.key() == Qt.Key_3:
-        #         api.change_with_key('right_down')
 
 
 
 
-
+    def get_label_type(self):
+        if self.tabWidget_defect.currentTabText() =='Mask':
+            return 'mask'
+        
+        elif self.tabWidget_defect.currentTabText() == 'Bounding Box':
+            return 'bbox'
 
 
 

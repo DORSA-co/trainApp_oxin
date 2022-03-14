@@ -63,7 +63,9 @@ class sheetOverView():
 
 
         self.update_line(self.sheet_grid[0])
+        
         self.select_layer = self.init_img((0,0,0))
+        self.update_pointer((0,0))
     
     def init_img(self, color):
         img = np.ones((self.sheet_shape[0], self.sheet_shape[1], 3), dtype=np.uint8)
@@ -136,7 +138,7 @@ class sheetOverView():
         for s in selecteds:
             self.select_layer = self.draw_selected(self.select_layer, s) 
         #return cv2.cvtColor( self.res, cv2.COLOR_BGR2RGB)
-        self.result_img = self.update_result_img()
+        self.result_img = self.update_sheet_img()
     
     #_____________________________________________________________________________________________________________________________
     #
@@ -570,7 +572,28 @@ class sheetOverView():
         pt_norm_y=self.pt[1]/self.sheet_shape[0]
 
         return (pt_norm_x,pt_norm_y)
-        
+    
+
+    def get_current_img(self):
+        if self.is_fit:
+            x,y = self.pt
+            if self.oriation == VERTICAL:
+                x -= self.cell_shape[0]//2
+                y -= self.cell_shape[1]//2
+                cam = x // self.cell_shape[0]
+                frame = y // self.cell_shape[1]
+                print(x,y,frame,cam)
+                return cam,frame
+            
+            else:
+                frame = x // self.cell_shape[0]
+                cam = y // self.cell_shape[1]
+                return cam,frame
+        return -1,-1
+
+
+    def get_side(self):
+        return self.side.lower()
       
     
         

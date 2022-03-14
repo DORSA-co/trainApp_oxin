@@ -7,7 +7,7 @@ import numpy as np
 # list_side=[delattr]
 ncam = 13
 nframe=50
-for cnt in range(995,997):
+for cnt in range(995,998):
     path = 'G:\oxin_image_grabber\{}'.format(cnt)
     if not os.path.exists(path):
         os.makedirs(path)

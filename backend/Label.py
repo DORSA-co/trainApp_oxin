@@ -1,7 +1,6 @@
 import numpy as np
 import cv2 as cv2
-from pygame import image
-
+ 
 
 TEST = 'bbox'  #'bbox' , 'mask
 
@@ -370,129 +369,129 @@ class bboxLbl:
 
 
 
+if __name__ == '__main__':
 
+    if TEST == 'bbox':
+        # mouse callback function
+        status,gx,gy=0,0,0
 
-if TEST == 'bbox':
-    # mouse callback function
-    status,gx,gy=0,0,0
-
-    def draw_circle(event,x,y,flags,param):
-        global status,gx,gy
-        if event == cv2.EVENT_LBUTTONDOWN:
-            status = 'lc'
-        if event == cv2.EVENT_LBUTTONUP:
-            status = 'lcn'
-        
-        if event == cv2.EVENT_RBUTTONDOWN:
-            status = 'rc'
-        if event == cv2.EVENT_RBUTTONUP:
-            status = ''    
+        def draw_circle(event,x,y,flags,param):
+            global status,gx,gy
+            if event == cv2.EVENT_LBUTTONDOWN:
+                status = 'lc'
+            if event == cv2.EVENT_LBUTTONUP:
+                status = 'lcn'
             
-        gx,gy = x,y
-        
-        
-    # Create a black image, a window and bind the function to window
-    img = np.zeros((512,700,3), np.uint8)
-    img+=200
-    cv2.namedWindow('image')
-    cv2.setMouseCallback('image',draw_circle)
-    bbox_lbl = bboxLbl((512,700), {'a1':(0,0,255), 'a2':(0,120,150)})
-
-    res = np.copy(img)
-    while(1):
-        cv2.imshow('image',res)
-        if status=='lc':
-            bbox_lbl.click((gx,gy))
-            bboxs_img = bbox_lbl.draw_bboxs()
-            res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
+            if event == cv2.EVENT_RBUTTONDOWN:
+                status = 'rc'
+            if event == cv2.EVENT_RBUTTONUP:
+                status = ''    
                 
-        if status =='lcn':
-            bbox_lbl.save_bbox(np.random.choice(['a1','a2']))
-            bboxs_img = bbox_lbl.draw_bboxs()
-            res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
-            
-            #status = ''
-        
-        if status =='rc':
-            bbox_lbl.delete_bbox((gx,gy))
-            bboxs_img = bbox_lbl.draw_bboxs()
-            res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
-            #mask_label.delete_point_or_mask((gx,gy))
-            #mask = mask_label.draw_mask()
-            #res = cv2.addWeighted(img,0.5, mask,0.5,1)
-            status = ''
-        if cv2.waitKey(8) & 0xFF == 27:
-            break
-    cv2.destroyAllWindows()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if TEST == 'mask':
-    # mouse callback function
-    status,gx,gy=0,0,0
-
-    def draw_circle(event,x,y,flags,param):
-        global status,gx,gy
-        if event == cv2.EVENT_LBUTTONDOWN:
-            status = 'lc'
-        if event == cv2.EVENT_LBUTTONUP:
-            status = 'lcn'
-        
-        if event == cv2.EVENT_RBUTTONDOWN:
-            status = 'rc'
-        if event == cv2.EVENT_RBUTTONUP:
-            status = ''    
-            
-        gx,gy = x,y
-        
-        
-    # Create a black image, a window and bind the function to window
-    img = np.zeros((512,700,3), np.uint8)
-    cv2.namedWindow('image')
-    cv2.setMouseCallback('image',draw_circle)
-    mask_label = maskLbl((512,700), {'a1':(0,0,255), 'a2':(0,120,150)})
-
-    res = np.copy(img)
-    while(1):
-        cv2.imshow('image',res)
-        
-        if status=='lc':
-            mask_label.click((gx,gy))
+            gx,gy = x,y
             
             
+        # Create a black image, a window and bind the function to window
+        img = np.zeros((512,700,3), np.uint8)
+        img+=200
+        cv2.namedWindow('image')
+        cv2.setMouseCallback('image',draw_circle)
+        bbox_lbl = bboxLbl((512,700), {'a1':(0,0,255), 'a2':(0,120,150)})
+
+        res = np.copy(img)
+        while(1):
+            cv2.imshow('image',res)
+            if status=='lc':
+                bbox_lbl.click((gx,gy))
+                bboxs_img = bbox_lbl.draw_bboxs()
+                res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
+                    
+            if status =='lcn':
+                bbox_lbl.save_bbox(np.random.choice(['a1','a2']))
+                bboxs_img = bbox_lbl.draw_bboxs()
+                res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
+                
+                #status = ''
             
-            #status = ''
-            if mask_label.is_drawing_finish():
-                mask_label.save_mask(np.random.choice(['a1','a2']))
-            mask = mask_label.draw_mask()
-            res = cv2.addWeighted(img,0.5, mask,0.5,1)
-        
-        
-        if status=='lcn':
-            #print(mask_label.is_drawing_finish())
-            mask_label.release()
+            if status =='rc':
+                bbox_lbl.delete_bbox((gx,gy))
+                bboxs_img = bbox_lbl.draw_bboxs()
+                res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
+                #mask_label.delete_point_or_mask((gx,gy))
+                #mask = mask_label.draw_mask()
+                #res = cv2.addWeighted(img,0.5, mask,0.5,1)
+                status = ''
+            if cv2.waitKey(8) & 0xFF == 27:
+                break
+        cv2.destroyAllWindows()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if TEST == 'mask':
+        # mouse callback function
+        status,gx,gy=0,0,0
+
+        def draw_circle(event,x,y,flags,param):
+            global status,gx,gy
+            if event == cv2.EVENT_LBUTTONDOWN:
+                status = 'lc'
+            if event == cv2.EVENT_LBUTTONUP:
+                status = 'lcn'
             
-        
-        if status =='rc':
-            mask_label.delete_point_or_mask((gx,gy))
-            mask = mask_label.draw_mask()
-            res = cv2.addWeighted(img,0.5, mask,0.5,1)
-            status = ''
-        if cv2.waitKey(8) & 0xFF == 27:
-            break
-    cv2.destroyAllWindows()
+            if event == cv2.EVENT_RBUTTONDOWN:
+                status = 'rc'
+            if event == cv2.EVENT_RBUTTONUP:
+                status = ''    
+                
+            gx,gy = x,y
+            
+            
+        # Create a black image, a window and bind the function to window
+        img = np.zeros((512,700,3), np.uint8)
+        cv2.namedWindow('image')
+        cv2.setMouseCallback('image',draw_circle)
+        mask_label = maskLbl((512,700), {'a1':(0,0,255), 'a2':(0,120,150)})
+
+        res = np.copy(img)
+        while(1):
+            cv2.imshow('image',res)
+            
+            if status=='lc':
+                mask_label.click((gx,gy))
+                
+                
+                
+                #status = ''
+                if mask_label.is_drawing_finish():
+                    mask_label.save_mask(np.random.choice(['a1','a2']))
+                mask = mask_label.draw_mask()
+                res = cv2.addWeighted(img,0.5, mask,0.5,1)
+            
+            
+            if status=='lcn':
+                #print(mask_label.is_drawing_finish())
+                mask_label.release()
+                
+            
+            if status =='rc':
+                mask_label.delete_point_or_mask((gx,gy))
+                mask = mask_label.draw_mask()
+                res = cv2.addWeighted(img,0.5, mask,0.5,1)
+                status = ''
+            if cv2.waitKey(8) & 0xFF == 27:
+                break
+        cv2.destroyAllWindows()
