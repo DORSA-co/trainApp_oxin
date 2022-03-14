@@ -5,7 +5,7 @@ from Sheet import Sheet
 class dataBaseUtils():
     def __init__(self) :
         self.db=database.dataBase('root','Dorsa1400@','localhost','saba_database')
-        self.sheets_info_tabel = 'coils_info'
+        self.sheets_info_tabel = 'sheets_info'
 
     #________________________________________________________________
     #
