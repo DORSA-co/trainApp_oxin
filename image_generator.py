@@ -7,10 +7,16 @@ import numpy as np
 # list_side=[delattr]
 ncam = 13
 nframe=50
-for cnt in range(18):
-    path = 'G:\oxin_image_grabber/{}'.format(cnt)
+for cnt in range(995,997):
+    path = 'G:\oxin_image_grabber\{}'.format(cnt)
+    if not os.path.exists(path):
+        os.makedirs(path)
     for side in ['UP', 'DOWN']:
+        if not os.path.exists(os.path.join( path, side )):
+            os.makedirs(os.path.join( path, side ))
         for n in range(ncam):
+            if not os.path.exists(os.path.join( path, side, str(n))):
+                os.makedirs(os.path.join( path, side, str(n)))
             for f in range(nframe):
                 img = np.zeros((1200,1920), dtype=np.uint8)
                 img[:,:] = np.random.randint(0,150)
