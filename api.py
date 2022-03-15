@@ -41,9 +41,9 @@ EVENTS_TYPE={
 
 
 
-WIDTH_TECHNICAL_SIDE = 144 * 4
-HEIGHT_FRAME_SIZE = 50
-
+WIDTH_TECHNICAL_SIDE = 49*12
+HEIGHT_FRAME_SIZE = 51
+NCAMERA = 12
 
 
 class API:
@@ -119,9 +119,15 @@ class API:
         sheets_id = self.ui.load_sheets_win.get_selected_sheetid()
         self.move_on_list.add(sheets_id, 'sheets_id')
         self.ui.load_sheets_win.close()
+
+        self.selected_images_for_label = {}
         for id in sheets_id:
-            self.selected_images_for_label[id] = {'pos':[]}
-        
+            temp_dict = {}
+            for side,technical_widget in self.ui.get_technical(name=False).items():
+                print(side)
+                temp_dict[technical_widget.objectName() ] = []
+            self.selected_images_for_label[id] = temp_dict
+        print(self.selected_images_for_label)
         self.load_sheet()
         #selceted_sheets_id = self.move_on_list.get_current('sheets_id')#get current value on list that corespond to "coils_id" name 
         #self.sheet = self.db.load_sheet( selceted_sheets_id )
@@ -137,12 +143,15 @@ class API:
         selceted_sheets_id = self.move_on_list.get_current('sheets_id')#get current value on list that corespond to "coils_id" name 
         self.sheet = self.db.load_sheet( selceted_sheets_id )#load inference of Sheet class from database by sheet id
         self.build_sheet_technical( self.sheet  ) #build technical sheet 
-        
 
-        
-
+        print(self.selected_images_for_label)
+        for side,selecteds in self.selected_images_for_label[ str(self.sheet.get_id())].items():
+            print(selecteds)
+            self.thechnicals_backend[side].update_selected(selecteds)
+            self.current_technical_widget = side
+            self.refresh_thechnical(fp=1)
+            
         self.ui.show_sheet_details(self.sheet.get_info_dict())   # show sheet details in UI.details_label
-
         # return self.sheet
          
         # path=2
@@ -174,7 +183,7 @@ class API:
                 self.thechnicals_backend[technical_widget.objectName()] = data_grabber.sheetOverView(sheet.get_path(), #main path of coil images that contain to folder for top and bottom images
                                                                                                      side, #side of sheet that is UO
                                                                                                      (HEIGHT_FRAME_SIZE*sheet.get_nframe(),WIDTH_TECHNICAL_SIDE),
-                                                                                                     sheet.get_grade_shape(),
+                                                                                                     (self.sheet.get_nframe(), NCAMERA),#sheet.get_grade_shape(),
                                                                                                      actives_camera=sheet.get_cameras(),
                                                                                                     oriation=data_grabber.VERTICAL)
                 
@@ -270,11 +279,13 @@ class API:
 
             side = self.thechnicals_backend[self.current_technical_widget].get_side()
             main_path=self.sheet.get_path()
-            self.selected_images_for_label[ self.move_on_list.get_current('sheets_id') ]['pos'].append([cam,frame]) 
+            self.selected_images_for_label[ self.move_on_list.get_current('sheets_id') ][self.current_technical_widget].append([cam,frame]) 
             self.thechnicals_backend[self.current_technical_widget].update_selected(
-                                                                                        self.selected_images_for_label[ self.move_on_list.get_current('sheets_id') ]['pos']
+                                                                                        self.selected_images_for_label[ self.move_on_list.get_current('sheets_id') ][self.current_technical_widget]
                                                                                     )
             self.refresh_thechnical(fp=1)
+
+            self.ui.add_selected_image(cam,frame)
                                                                                 
     #----------------------------------------------------------------------------------------
     # 

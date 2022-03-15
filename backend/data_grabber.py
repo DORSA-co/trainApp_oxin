@@ -37,12 +37,14 @@ class sheetOverView():
         self.thickness_map = thickness_map
         
 
-        assert self.sheet_shape[0] / self.sheet_grid[0] == int(self.sheet_shape[0] / self.sheet_grid[0]) , "eror must be int"   
+        assert self.sheet_shape[0] / self.sheet_grid[0] == int(self.sheet_shape[0] / self.sheet_grid[0]) , "eror thechnical grid sheep doesn't match with shape"   
+        assert self.sheet_shape[1] / self.sheet_grid[1] == int(self.sheet_shape[1] / self.sheet_grid[1]) , "eror thechnical grid sheep doesn't match with shape"   
         
         self.cell_shape = (int(self.sheet_shape[0] / self.sheet_grid[0]) , 
                            int(self.sheet_shape[1] / self.sheet_grid[1]))
 
         
+        assert self.cell_shape[0]%2==1 and self.cell_shape[1]%2 ==1 , "cell shape should be odd"
         
         self.n=0
         
@@ -181,30 +183,21 @@ class sheetOverView():
     #______________________________________________________________________________________________________________________________
     def pointer2rect(self, pt):
         x,y = pt
+        cell_h, cell_w = self.cell_shape
+        first_cam,last_cam = self.actives_camera
+        start = first_cam * cell_w
+        end =  last_cam * cell_w
+        
+        #x = min( max(x, cell_w // 2) , w - cell_w//2 - 1 )
+        #y = min( max(y, cell_h // 2) , h - cell_h//2 - 1 )
+        x = min( max(x, start + cell_w // 2) , end - cell_w//2 - 1 )
+        y = min( max(y, start + cell_h // 2) , end - cell_h//2 - 1 )
+
         xmin = x - self.cell_shape[1] // 2
         xmax = x + self.cell_shape[1] // 2
         ymin = y - self.cell_shape[0] // 2
         ymax = y + self.cell_shape[0] // 2
-        
-        ##print('0',xmin,xmax,ymin,ymax, self.sheet_shape[1], self.sheet_shape[0])
-        if xmin < 0:
-            xmax = abs(xmin) + xmax
-            xmin = 0
-            ##print('1',xmin,xmax,ymin,ymax)
-        if xmax >= self.n*self.cell_shape[1]:
-            xmin = xmin - (xmax - self.n*self.cell_shape[1] + 1) 
-            xmax = self.n*self.cell_shape[1] - 1
-            ##print('2',xmin,xmax,ymin,ymax)
-            
-        if ymin < 0:
-            ymax = abs(ymin) + ymax
-            ymin = 0
-            ##print('3',xmin,xmax,ymin,ymax)
-        if ymax >= self.sheet_shape[0]:
-            ymin = ymin - (ymax - self.sheet_shape[0] + 1) 
-            ymax = self.sheet_shape[0] - 1
-            ##print('4',xmin,xmax,ymin,ymax)
-        
+
         return (xmin,ymin),(xmax, ymax)
     #______________________________________________________________________________________________________________________________
     #    
