@@ -29,7 +29,7 @@ from PyQt5.QtGui import QPainter
 
 from consts.keyboards_keys import KEYS
 from consts.pages_indexs import PAGES_IDX
-
+import texts
 ui, _ = loadUiType("UI/oxin.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 class UI_main_window(QMainWindow, ui):
@@ -69,7 +69,7 @@ class UI_main_window(QMainWindow, ui):
         # SET LANGUAGE
         #//////////////////////////////////////////////
         # self.set_language()
-
+        self.language = 'en'
 
         # SET FONT & SIZE
         #/////////////////////////////////////////////
@@ -162,6 +162,10 @@ class UI_main_window(QMainWindow, ui):
         self.keyboard_connections = {}
 
 
+        self.img=cv2.imread('images\dorsa-logo.png')
+        self.set_crop_image(self.img)
+
+
 
         self._old_pos = None
 
@@ -190,6 +194,15 @@ class UI_main_window(QMainWindow, ui):
         else:
             return {'up': self.up_side_technical ,
                     'down':  self.down_side_technical }
+
+
+    def get_technical_wgt_side(self, wgt_name):
+        if wgt_name  == self.down_side_technical.objectName():
+            return 'down'
+        
+        elif wgt_name == self.up_side_technical.objectName():
+            return 'up'
+
 
 
 
@@ -568,11 +581,32 @@ class UI_main_window(QMainWindow, ui):
 
 
 #--------- aquization page
-    def show_coil_loaded(self,name):
-        self.listWidget_logs.addItem('Coil {} Selected'.format(name))
+    # def show_coil_loaded(self,name):
+    #     self.listWidget_logs.addItem('Sheet {} Selected'.format(name))
 
-    def add_append_image(self,name):
-        self.listWidget_append_img_list.addItem('Coil {} Selected'.format(name))
+    # def add_selected_image(self,selected):
+
+        # for i in range(len(selected)):
+
+        #     self.listWidget_append_img_list.addItem(texts.MESSEGES['SELECT_IMAGE'][self.language].format(selected[i]))
+
+
+    def add_selected_image(self,records):
+
+        for row,string in enumerate(records):
+            # for i in range(11):
+                # print(i)
+
+                table_item = QTableWidgetItem(str(string))
+                # if i ==0:
+                table_item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+                table_item.setCheckState(Qt.CheckState.Unchecked)
+                table_item.setData(Qt.DisplayRole, str(string[0]))
+        # self.listWidget_append_img_list.addItem(texts.MESSEGES['SELECT_IMAGE'][self.language].format(cam,frame)
+
+    # def remove_selected_image(self):
+
+        
 
     def show_selected_side(self,name):
         if name=='up_side_technical':
@@ -581,6 +615,7 @@ class UI_main_window(QMainWindow, ui):
         if name=='down_side_technical':
             self.show_side.setText('DOWN Side Technical')
         
+    
 
 
 
@@ -648,6 +683,15 @@ class UI_main_window(QMainWindow, ui):
     def show_current_position(self, pt):
         self.current_pos_x.setText(str(pt[0]))
         self.current_pos_y.setText(str(pt[1]))
+
+
+
+
+    def append(self,text):
+
+        print('asd')
+        
+
 
 
 

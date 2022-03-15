@@ -26,18 +26,9 @@ import database_utils
 from utils import *
 from utils.move_on_list import moveOnList
 
-import texts              #eror and warnings texts
+import texts #eror and warnings texts
+from utils import tempMemory
 
-
-#MUST BE CHANGED
-#MUST BE DELETE
-
-EVENTS_TYPE={
-
-    QEvent.Type.MouseMove : 'mouse_move',
-    QEvent.Type.MouseButtonPress : 'mouse_press',
-    QEvent.Type.MouseButtonRelease : 'mouse_release'
-}
 
 
 
@@ -45,7 +36,9 @@ WIDTH_TECHNICAL_SIDE = 49*12
 HEIGHT_FRAME_SIZE = 51
 NCAMERA = 12
 
+TECHNICAL_WGT_NAME_TO_SIDE = {'up_side_technical', 'top', 'bottom'}
 
+#down_side_technical     ,   up_side_technical
 class API:
 
     def __init__(self,ui):
@@ -61,8 +54,8 @@ class API:
         self.thechnicals_backend = {}
         #self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
         self.t = 0
-        self.current_technical_widget = ''
-        self.selected_images_for_label = {}
+        self.current_technical_side = ''
+        self.selected_images_for_label = tempMemory.manageSelectedImage()
 
         self.language='en' 
 
@@ -107,7 +100,6 @@ class API:
 
     def keyboard_connector(self):
         self.keyboard.connet( self.ui, ['left','right','up','down'], [self.update_technical_pointer_keyboard], 'Technical View' )
-        #self.keyboard.connet( self.ui, ['left','right','up','down'], [self.test], None )
 
 
 
@@ -116,48 +108,50 @@ class API:
     #get id of sheets that user select in load_sheet_win and load first one
     #---------------------------------------------------------------------------------------- 
     def load_sheets(self): 
+        
         sheets_id = self.ui.load_sheets_win.get_selected_sheetid()
         self.move_on_list.add(sheets_id, 'sheets_id')
+        self.selected_images_for_label.clear()
         self.ui.load_sheets_win.close()
-
-        self.selected_images_for_label = {}
-        for id in sheets_id:
-            temp_dict = {}
-            for side,technical_widget in self.ui.get_technical(name=False).items():
-                print(side)
-                temp_dict[technical_widget.objectName() ] = []
-            self.selected_images_for_label[id] = temp_dict
-        print(self.selected_images_for_label)
-        self.load_sheet()
-        #selceted_sheets_id = self.move_on_list.get_current('sheets_id')#get current value on list that corespond to "coils_id" name 
-        #self.sheet = self.db.load_sheet( selceted_sheets_id )
-        #self.load_sheet( self.sheet  ) #build technical sheet 
-        x=0
-        
+        self.load_sheet()        
     
     #----------------------------------------------------------------------------------------
     #load sheet by its id in software
     #---------------------------------------------------------------------------------------- 
     def load_sheet(self): 
-        #print('%'*100)
         selceted_sheets_id = self.move_on_list.get_current('sheets_id')#get current value on list that corespond to "coils_id" name 
         self.sheet = self.db.load_sheet( selceted_sheets_id )#load inference of Sheet class from database by sheet id
-        self.build_sheet_technical( self.sheet  ) #build technical sheet 
-
-        print(self.selected_images_for_label)
-        for side,selecteds in self.selected_images_for_label[ str(self.sheet.get_id())].items():
-            print(selecteds)
-            self.thechnicals_backend[side].update_selected(selecteds)
-            self.current_technical_widget = side
-            self.refresh_thechnical(fp=1)
-            
+        self.build_sheet_technical( self.sheet  ) #build technical sheet          
         self.ui.show_sheet_details(self.sheet.get_info_dict())   # show sheet details in UI.details_label
-        # return self.sheet
-         
-        # path=2
-        # path=self.db.get_sheet_path(path)                #MUST BE CHANGED
-        # self.load_sheet(path)
-        # self.ui.details_label.setText(str(self.ui.win.details))
+
+    #----------------------------------------------------------------------------------------
+    #
+    #---------------------------------------------------------------------------------------- 
+    def build_sheet_technical(self,sheet):
+        #try:
+            self.thechnicals_backend = {}
+            for side,_ in self.ui.get_technical(name=False).items():
+                self.thechnicals_backend[side] = data_grabber.sheetOverView(sheet.get_path(), #main path of coil images that contain to folder for top and bottom images
+                                                                                                     side, #side of sheet that is UO
+                                                                                                     (HEIGHT_FRAME_SIZE*sheet.get_nframe(),WIDTH_TECHNICAL_SIDE),
+                                                                                                     (self.sheet.get_nframe(), NCAMERA),#sheet.get_grade_shape(),
+                                                                                                     actives_camera=sheet.get_cameras(),
+                                                                                                    oriation=data_grabber.VERTICAL)
+                
+
+                selecteds = self.selected_images_for_label.get_sheet_side_selections( 
+                                                                                    str(self.sheet.get_id()),
+                                                                                    side
+                                                                                        )
+
+                self.thechnicals_backend[side].update_selected(selecteds)
+                self.current_technical_side = side
+                self.refresh_thechnical(fp=1) #
+            #MUST BE CHANGED
+            #self.ui.show_coil_loaded(self.load_coil_win.id)
+            
+        #except:
+        #    print('Error!: load_sheet() in API')
     #----------------------------------------------------------------------------------------
     #when next next_coil_btn clicked this function move on next coil id and load it
     #----------------------------------------------------------------------------------------
@@ -172,29 +166,7 @@ class API:
     def prev_sheet(self):
         self.move_on_list.prev_on_list('sheets_id')#move next on list that corespond to "coils_id" name
         self.load_sheet()# laod current coil id 
-    #----------------------------------------------------------------------------------------
-    #
-    #---------------------------------------------------------------------------------------- 
-    def build_sheet_technical(self,sheet):
-        #try:
-            self.thechnicals_backend = {}
-            for side,technical_widget in self.ui.get_technical(name=False).items():
-                #print(side, technical_widget.objectName())
-                self.thechnicals_backend[technical_widget.objectName()] = data_grabber.sheetOverView(sheet.get_path(), #main path of coil images that contain to folder for top and bottom images
-                                                                                                     side, #side of sheet that is UO
-                                                                                                     (HEIGHT_FRAME_SIZE*sheet.get_nframe(),WIDTH_TECHNICAL_SIDE),
-                                                                                                     (self.sheet.get_nframe(), NCAMERA),#sheet.get_grade_shape(),
-                                                                                                     actives_camera=sheet.get_cameras(),
-                                                                                                    oriation=data_grabber.VERTICAL)
-                
-
-                self.current_technical_widget = technical_widget.objectName()
-                self.refresh_thechnical(fp=1) #load technical image and real images
-            #MUST BE CHANGED
-            #self.ui.show_coil_loaded(self.load_coil_win.id)
-            
-        #except:
-        #    print('Error!: load_sheet() in API')
+    
 
     #----------------------------------------------------------------------------------------
     # 
@@ -206,7 +178,7 @@ class API:
     #
     #----------------------------------------------------------------------------------------
     def show_pointer_position(self):
-        x,y = self.thechnicals_backend[ self.current_technical_widget ].get_pos()#get mouse position normilized between [0,1]
+        x,y = self.thechnicals_backend[ self.current_technical_side ].get_pos()#get mouse position normilized between [0,1]
         x*=self.sheet.get_width()
         y*=self.sheet.get_lenght()
         y = np.round(y,1)
@@ -216,7 +188,7 @@ class API:
 
 
     def update_technical_pointer_keyboard(self,key):
-        self.thechnicals_backend[ self.current_technical_widget ].update_pointer_keyboard(key)    
+        self.thechnicals_backend[ self.current_technical_side ].update_pointer_keyboard(key)    
         self.refresh_thechnical(fp=1)
         self.show_pointer_position()
 
@@ -225,9 +197,9 @@ class API:
             self.ui.set_warning_data_page(texts.WARNINGS['NO_SHEET'][self.language],'data_auquzation',level=2)
         
         else:
-            self.current_technical_widget = widget_name
+            self.current_technical_side = self.ui.get_technical_wgt_side( widget_name )
             pt = self.mouse.get_relative_position() #get mouse position (x,y) that x,y are in [0,1] range
-            self.thechnicals_backend[widget_name].update_pointer(pt) #update corespond backend mouse position
+            self.thechnicals_backend[self.current_technical_side].update_pointer(pt) #update corespond backend mouse position
             self.refresh_thechnical(fp=5)
             self.show_pointer_position()
         
@@ -235,11 +207,11 @@ class API:
         if self.t%fp==0:
             self.t=1
 
-            self.thechnicals_backend[self.current_technical_widget].update_sheet_img() #update technical image
-            img = self.thechnicals_backend[self.current_technical_widget].get_real_img() #get image of sheet corespond to mouse position
+            self.thechnicals_backend[self.current_technical_side].update_sheet_img() #update technical image
+            img = self.thechnicals_backend[self.current_technical_side].get_real_img() #get image of sheet corespond to mouse position
             self.ui.set_crop_image(img)#show image in UI
-            self.update_sheet_img(self.current_technical_widget)
-            self.ui.show_selected_side(self.current_technical_widget)
+            self.update_sheet_img(self.current_technical_side)
+            self.ui.show_selected_side(self.current_technical_side)
 
         else:
             self.t+=1
@@ -249,9 +221,9 @@ class API:
     # 
     #----------------------------------------------------------------------------------------   
     def fit_image(self, widget_name):
-        self.thechnicals_backend[self.current_technical_widget].fit(  self.mouse.get_relative_position()  )
+        self.thechnicals_backend[self.current_technical_side].fit(  self.mouse.get_relative_position()  )
         self.refresh_thechnical(1)
-        real_img = self.thechnicals_backend[self.current_technical_widget].get_real_img()
+        real_img = self.thechnicals_backend[self.current_technical_side].get_real_img()
         self.ui.set_crop_image(real_img)
         self.ui.set_enabel(self.ui.append_btn, True)
         self.show_pointer_position()
@@ -271,21 +243,24 @@ class API:
     # 
     #---------------------------------------------------------------------------------------- 
     def append_select_img(self):
-        cam, frame = self.thechnicals_backend[self.current_technical_widget].get_current_img_position()
+        cam, frame = self.thechnicals_backend[self.current_technical_side].get_current_img_position()
         # print(cam,frame, '^'*20)
         if (frame <0 )or (cam<0):
             self.ui.set_warning_data_page(texts.WARNINGS['FIT'][self.language],'data_auquzation',level=2)
         else:
 
-            side = self.thechnicals_backend[self.current_technical_widget].get_side()
+            side = self.thechnicals_backend[self.current_technical_side].get_side()
             main_path=self.sheet.get_path()
-            self.selected_images_for_label[ self.move_on_list.get_current('sheets_id') ][self.current_technical_widget].append([cam,frame]) 
-            self.thechnicals_backend[self.current_technical_widget].update_selected(
-                                                                                        self.selected_images_for_label[ self.move_on_list.get_current('sheets_id') ][self.current_technical_widget]
+            self.selected_images_for_label.add( self.move_on_list.get_current('sheets_id'), self.current_technical_side, (cam,frame) ) 
+            self.thechnicals_backend[self.current_technical_side].update_selected(
+                                                                                        self.selected_images_for_label.get_sheet_side_selections( 
+                                                                                            self.move_on_list.get_current('sheets_id'),
+                                                                                            self.current_technical_side
+                                                                                        )
                                                                                     )
             self.refresh_thechnical(fp=1)
 
-            self.ui.add_selected_image(cam,frame)
+            #self.ui.add_selected_image(cam,frame)
                                                                                 
     #----------------------------------------------------------------------------------------
     # 
