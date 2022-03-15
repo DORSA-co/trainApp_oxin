@@ -11,6 +11,12 @@ class moveOnList:
         self.lists[name] = mylist
         self.idxs [name] = 0
 
+    
+    def check(self,name):
+        if name in self.lists.keys():
+            return True
+        return False
+
     def build_next_func(self, name):   
         def next_on_list():
             self.idxs[name]+=1

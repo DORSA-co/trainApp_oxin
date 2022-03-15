@@ -128,7 +128,7 @@ class API:
     #
     #---------------------------------------------------------------------------------------- 
     def build_sheet_technical(self,sheet):
-        #try:
+        try:
             self.thechnicals_backend = {}
             for side,_ in self.ui.get_technical(name=False).items():
                 self.thechnicals_backend[side] = data_grabber.sheetOverView(sheet.get_path(), #main path of coil images that contain to folder for top and bottom images
@@ -147,25 +147,28 @@ class API:
                 self.thechnicals_backend[side].update_selected(selecteds)
                 self.current_technical_side = side
                 self.refresh_thechnical(fp=1) #
-            #MUST BE CHANGED
-            #self.ui.show_coil_loaded(self.load_coil_win.id)
             
-        #except:
-        #    print('Error!: load_sheet() in API')
+        except:
+            print('Error!: load_sheet() in API')
     #----------------------------------------------------------------------------------------
     #when next next_coil_btn clicked this function move on next coil id and load it
     #----------------------------------------------------------------------------------------
     def next_sheet(self):
-        self.move_on_list.next_on_list('sheets_id')#move previous on list that corespond to "coils_id" name
-        self.load_sheet()# laod current coil id 
+        if self.move_on_list.check('sheets_id'):
+            self.move_on_list.next_on_list('sheets_id')#move previous on list that corespond to "coils_id" name
+            self.load_sheet()# laod current coil id 
         
-
+        else:
+            self.ui.set_warning_data_page(texts.WARNINGS['NO_SHEET'][self.language],'data_auquzation',level=2)
     #----------------------------------------------------------------------------------------
     #when next next_coil_btn clicked this function move on privous coil id and load it
     #----------------------------------------------------------------------------------------
     def prev_sheet(self):
-        self.move_on_list.prev_on_list('sheets_id')#move next on list that corespond to "coils_id" name
-        self.load_sheet()# laod current coil id 
+        if self.move_on_list.check('sheets_id'):
+            self.move_on_list.prev_on_list('sheets_id')#move next on list that corespond to "coils_id" name
+            self.load_sheet()# laod current coil id 
+        else:
+            self.ui.set_warning_data_page(texts.WARNINGS['NO_SHEET'][self.language],'data_auquzation',level=2)
     
 
     #----------------------------------------------------------------------------------------
