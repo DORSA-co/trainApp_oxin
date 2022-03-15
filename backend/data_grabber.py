@@ -1,11 +1,11 @@
+from pickle import NONE
 from matplotlib.pyplot import draw
 import numpy as np
 import cv2
 import os 
+from consts.consts import MOVEMENTS_KEYS, THINKNESS_MAP, COLOR_MAP
 
 
-COLOR_MAP = { 'sheet':(200,200,200), 'none':(20,20,20), 'pointer':(255,0,0), 'sline':(0,0,255), 'select':(0,255,0), 'defect':(200,20,0) }
-THINKNESS_MAP = {'pointer':2, 'sline':1}
 
 UP = "UP"
 DOWN="DOWN"
@@ -105,32 +105,27 @@ class sheetOverView():
     def update_pointer(self,pt, key=None):
         self.is_fit=False
         x,y = 0,0
-        if pt is None and key is not None:
-            movments = {'up':(0, -0.3),
-                        'left':(-0.2, 0),
-                        'down':(0, 0.3),
-                        'right':(0.2, 0),}
+        if pt is None and key is not None: #for keyboard press keys event
             x,y = self.pt
-            x += int(self.cell_shape[0] * movments[key][0] )
-            y += int(self.cell_shape[1] * movments[key][1] )
+            x += int(self.cell_shape[0] * MOVEMENTS_KEYS[key][0] )
+            y += int(self.cell_shape[1] * MOVEMENTS_KEYS[key][1] )
             
-            
-        else:
+        else: #for mouse drag event
              x,y = int(pt[0]*(self.sheet_shape[1]-1)), int( pt[1]*(self.sheet_shape[0]-1))
 
-        if self.cell_shape[1]%2==0:
-            x=min(max(x,self.cell_shape[1]//2),  self.sheet_shape[1]-self.cell_shape[1]//2)
-        else:
-            x=min(max(x,(self.cell_shape[1]//2)+1),  self.sheet_shape[1]-self.cell_shape[1]//2)
-
-
-
-        if self.cell_shape[0]%2==0:
-            y=min(max(y,self.cell_shape[0]//2),  self.sheet_shape[0]-self.cell_shape[0]//2)
-        else:
-            y=min(max(y,self.cell_shape[0]//2),  self.sheet_shape[0]-self.cell_shape[0]//2)
+        cell_h, cell_w = self.cell_shape
+        first_cam,last_cam = self.actives_camera
+        
+        start_w = first_cam * cell_w
+        end_w =  last_cam * cell_w - 1
+        start_h = 0
+        end_h  = self.sheet_shape[0] - 1
+        
+        x = min( max(x, start_w + cell_w // 2 ) , end_w - cell_w//2 )
+        y = min( max(y, start_h + cell_h // 2 ) , end_h - cell_h//2 )
 
         self.pt=(x,y)
+
         self.update_real_imgs()
     #______________________________________________________________________________________________________________________________
     #    
@@ -183,21 +178,10 @@ class sheetOverView():
     #______________________________________________________________________________________________________________________________
     def pointer2rect(self, pt):
         x,y = pt
-        cell_h, cell_w = self.cell_shape
-        first_cam,last_cam = self.actives_camera
-        start = first_cam * cell_w
-        end =  last_cam * cell_w
-        
-        #x = min( max(x, cell_w // 2) , w - cell_w//2 - 1 )
-        #y = min( max(y, cell_h // 2) , h - cell_h//2 - 1 )
-        x = min( max(x, start + cell_w // 2) , end - cell_w//2 - 1 )
-        y = min( max(y, start + cell_h // 2) , end - cell_h//2 - 1 )
-
         xmin = x - self.cell_shape[1] // 2
         xmax = x + self.cell_shape[1] // 2
         ymin = y - self.cell_shape[0] // 2
         ymax = y + self.cell_shape[0] // 2
-
         return (xmin,ymin),(xmax, ymax)
     #______________________________________________________________________________________________________________________________
     #    
@@ -376,54 +360,33 @@ class sheetOverView():
     def update_real_imgs(self):
         try:
             x,y = self.pt
-            max_frame = -1
-            #nx,ny = x//self.cell_shape[1] , y//self.cell_shape[0]
-            if self.oriation == VERTICAL:
-                ncam = x//self.cell_shape[1]
-                nframe = y//self.cell_shape[0]
-
-                max_frame = self.sheet_grid[0]
             
-            if self.oriation == HORIZONTAL:
-                ncam = y//self.cell_shape[0]
-                nframe = x//self.cell_shape[1]
-
-                max_frame = self.sheet_grid[1]
-
+            center_cam = x//self.cell_shape[1]
+            center_frame = y//self.cell_shape[0]            
             
+            start_cam = center_cam - 1
+            end_cam = center_cam + 1
+            #-----------
+            start_frame = center_frame - 1
+            end_frame = center_frame + 1
+            #-------------------------------------------
+            #-------------------------------------------
+            start_cam = min( max( start_cam, self.actives_camera[0] ), self.actives_camera[1] - 2)
+            end_cam   = min( max( end_cam, start_cam + 2  ), self.actives_camera[1] )
+            #-----------
+            start_frame = min( max( start_frame, 0 ), self.sheet_grid[1] - 3 ) 
+            end_frame   = min( max( end_frame, start_frame + 2), self.sheet_grid[1] - 1)
+            #-------------------------------------------
+            #-------------------------------------------
+
             new_idxs=[]
             new_imgs=[]
-            
-            
-            low_nc,up_nc,low_nf,up_nf=0,0,0,0
-
-            low_nc = ncam-1
-            up_nc = ncam+1
-            low_nf = nframe-1
-            up_nf = nframe+1
-
-            #-------------------------------------------
-            if low_nc <= self.actives_camera[0]:
-                low_nc = self.actives_camera[0]
-                up_nc = min( low_nc + 2 , self.actives_camera[1])
-
-            if up_nc >= self.actives_camera[1]:
-                up_nc = self.actives_camera[1]
-                low_nc = max(up_nc-2 , self.actives_camera[0] )
-            #-------------------------------------------
-            if low_nf <=0:
-                low_nf = 0
-                up_nf = low_nf + 2
-            if up_nf>= max_frame:
-                up_nf = max_frame
-                low_nf = max_frame - 2
-            
-            for nc in range( low_nc, up_nc+1 ):
-                for nf in range(low_nf, up_nf+1):
-                    idx=(nc,nf)
+            for idx_cam in range( start_cam, end_cam + 1 ):
+                for idx_frame in range( start_frame, end_frame + 1):
+                    idx=(idx_cam,idx_frame)
                     new_idxs.append(idx)
                     
-                    if idx in self.real_idxs and False:
+                    if idx in self.real_idxs: #if image corespond to this idx loaded befor, 
                         list_idx = self.real_idxs.index(idx)
                         new_imgs.append( self.real_imgs[list_idx] )
                     
@@ -431,19 +394,15 @@ class sheetOverView():
                         res_path = os.path.join(
                             self.path,
                             self.side,
-                            str(nc+1),
-                            str(nf) + '.jpg'
+                            str(idx_cam),
+                            str(idx_frame) + '.jpg'
                         )
                         img = cv2.imread( res_path,0 )
-                        if img is None:
-                            #print('*'*100)
-                            # #print(res_path)
-                            #print('cant load image {},{}'.format(nf, nc))
-                            #print('-'*100)
+                        if img is None:#if image doesnt exist, black image substitute
                             img = np.zeros(IMAGE_SHAPE, np.uint8)
                         new_imgs.append(img )
             
-            
+            #print(new_idxs)
             self.real_idxs = new_idxs     
             self.real_imgs = new_imgs 
         except:
@@ -453,60 +412,40 @@ class sheetOverView():
     #
     #_____________________________________________________________________________________________________________________________
     def get_real_img(self):
-        h,w=self.real_imgs[0].shape[:2]
+        h_img, w_img = self.real_imgs[0].shape[:2]
         gridn = int( len(self.real_imgs)**0.5 )  #9 images are 3x3
-        res_h, res_w = h * gridn, w * gridn
-        res_img = np.zeros((res_h,res_w,3), np.uint8)
-        
+        res_h, res_w = h_img * gridn, w_img * gridn
+
+        #merge images together
+        res_img = np.zeros((res_h, res_w, 3), np.uint8)
         for n in range(len(self.real_imgs)):
-            if self.oriation == VERTICAL:
-                i = n//gridn
-                j = n - gridn * i
-                ##print(res_img[ j * res_h: (j+1)*res_h, i * res_w: (i+1)*res_w, 1].shape)
-                res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 0] = self.real_imgs[n]
-                res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 1] = self.real_imgs[n]
-                res_img[ j * h: (j+1)*h, i * w: (i+1)*w, 2] = self.real_imgs[n]
+            i = n//gridn
+            j = n - gridn * i
+            res_img[ j * h_img: (j+1) * h_img,
+                     i * w_img: (i+1) * w_img] = cv2.merge( (self.real_imgs[n], self.real_imgs[n], self.real_imgs[n] ))
 
-        
         x,y = self.pt
-
-        #print('x',x,y)
-        px = x / self.cell_shape[1]
-        py = y / self.cell_shape[0]
-        idxs = np.array( self.real_idxs)
-        if self.oriation == VERTICAL:
-            min_x,min_y = idxs.min(axis=0)
-        elif self.oriation == HORIZONTAL:
-            min_y,min_x = idxs.min(axis=0)
+        start_x_idx, start_y_idx = np.array( self.real_idxs ).min(axis=0) #start idx_x and idx_y of images that concatinate in res_img
         
-        px = px - min_x
-        py = py - min_y
-        #print('px',px,py,min_x,min_y)
-        
-        px = int(px * w)
-        py = int(py * h)
+        #conver position of mouse in technical sheet image to normalized position of mouse in res_img
+        px = (x%self.cell_shape[1]) / (self.cell_shape[1]-1) + x //self.cell_shape[1] - start_x_idx
+        py = (y%self.cell_shape[0]) / (self.cell_shape[0]-1) + y //self.cell_shape[0] - start_y_idx
 
-        x1,x2 = px - w//2, px + w//2
-        y1,y2 = py - h//2 , py + h//2
+        #denormalized position of mouse in res_img
+        px = int(px * w_img)
+        py = int(py * h_img)
 
+        #calc ROI on res_img
+        x1, y1 = px - w_img//2, py - h_img//2
 
-        if x1<=0:
-            x2 += abs(x1)
-            x1=0
+        x1 = min ( max( x1,0), res_w - w_img)
+        y1 = min ( max( y1,0), res_h - h_img)
 
-        elif x2>=res_w:
-            x1 -= (x2 - res_w)
-            x2 = res_w
-        
-        if y1<=0:
-            y2 += abs(y1)
-            y1=0
-        elif y2>= res_h:
-            y1 -= (y2-res_h)
-            y2 = res_h
+        y2 = y1 + h_img
+        x2 = x1 + w_img
 
         crop = res_img[y1:y2, x1:x2]
-        #crop = cv2.resize(res_img, (1920,1200))
+        #-------------------
         return cv2.cvtColor( crop, cv2.COLOR_BGR2RGB)
 
 
@@ -515,32 +454,24 @@ class sheetOverView():
     #
     #_____________________________________________________________________________________________________________________________
     def fit(self,pt):
-        
-        #decode (x,y) to pointer rect area to know where we are in sheet over view
-        real_x,real_y = pt[0] * self.cell_shape[1] , pt[1] * self.cell_shape[0]   
-        
-        #beacust self.pt is center of pointer rectangle
-        relative_real_X = real_x - self.cell_shape[1]//2
-        relative_real_y = real_y - self.cell_shape[0]//2
-        
+
+        real_img_x, real_img_y = pt[0], pt[1] #normalize position of  mouse clicl event in real_img_window
+        real_img_x, real_img_y = real_img_x - 0.5, real_img_y - 0.5
+
         x,y = self.pt
-        x+= relative_real_X
-        y+= relative_real_y
-        
-        idx_x = x//self.cell_shape[1]
-        idx_y = y//self.cell_shape[0]
-        
-        #print(idx_x * self.cell_shape[1]  +  self.cell_shape[1]//2)
-        #print(idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2)
+        cx = x/(self.cell_shape[1] - 1 )
+        cy = y/(self.cell_shape[0] - 1 )
 
+        cx = cx + real_img_x
+        cy = cy + real_img_y
 
-        new_x = int(idx_x * int(self.cell_shape[1])  +  self.cell_shape[1]//2)
-        new_y = int(idx_y * self.cell_shape[0]  +  self.cell_shape[0]//2)
-        #print('new_x,new_y',new_x,new_y,"*"*10)
-        #print('cell_shape',self.cell_shape)
-        #print('idx_x',idx_x,idx_y)
+        idx_x = int(cx)
+        idx_y = int(cy)
+
+        new_x = int(idx_x * (self.cell_shape[1] )  +  self.cell_shape[1]//2   )
+        new_y = int(idx_y * (self.cell_shape[0] )  +  self.cell_shape[0]//2   )
+
         self.pt = (new_x, new_y)
-
         self.is_fit=True
 
         
@@ -567,21 +498,14 @@ class sheetOverView():
         return (pt_norm_x,pt_norm_y)
     
 
-    def get_current_img(self):
+    def get_current_img_position(self):
         if self.is_fit:
             x,y = self.pt
-            if self.oriation == VERTICAL:
-                x -= self.cell_shape[0]//2
-                y -= self.cell_shape[1]//2
-                cam = x // self.cell_shape[0]
-                frame = y // self.cell_shape[1]
-                print(x,y,frame,cam)
-                return cam,frame
+            cam = x // self.cell_shape[1]
+            frame = y // self.cell_shape[0]
+            return cam,frame
             
-            else:
-                frame = x // self.cell_shape[0]
-                cam = y // self.cell_shape[1]
-                return cam,frame
+
         return -1,-1
 
 

@@ -271,7 +271,7 @@ class API:
     # 
     #---------------------------------------------------------------------------------------- 
     def append_select_img(self):
-        cam, frame = self.thechnicals_backend[self.current_technical_widget].get_current_img()
+        cam, frame = self.thechnicals_backend[self.current_technical_widget].get_current_img_position()
         # print(cam,frame, '^'*20)
         if (frame <0 )or (cam<0):
             self.ui.set_warning_data_page(texts.WARNINGS['FIT'][self.language],'data_auquzation',level=2)
