@@ -86,7 +86,8 @@ class API:
     #---------------------------------------------------------------------------------------- 
     def button_connector(self):
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
-        self.ui.append_btn.clicked.connect(partial(self.append_select_img))
+        self.ui.add_btn_SI.clicked.connect(partial(self.append_select_img))
+        self.ui.remove_btn_SI.clicked.connect(partial(self.remove_select_img))
         self.ui.load_coil_btn.clicked.connect(partial(self.show_sheet_loader))
         self.ui.next_coil_btn.clicked.connect(partial(self.next_sheet))
         self.ui.prev_coil_btn.clicked.connect(partial(self.prev_sheet))
@@ -228,7 +229,7 @@ class API:
         self.refresh_thechnical(1)
         real_img = self.thechnicals_backend[self.current_technical_side].get_real_img()
         self.ui.set_crop_image(real_img)
-        self.ui.set_enabel(self.ui.append_btn, True)
+        self.ui.set_enabel(self.ui.add_btn_SI, True)
         self.show_pointer_position()
 
 
@@ -249,7 +250,7 @@ class API:
         cam, frame = self.thechnicals_backend[self.current_technical_side].get_current_img_position()
         # print(cam,frame, '^'*20)
         if (frame <0 )or (cam<0):
-            self.ui.set_warning_data_page(texts.WARNINGS['FIT'][self.language],'data_auquzation',level=2)
+            self.ui.set_warning_data_page(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language],'data_auquzation',level=2)
         else:
 
             side = self.thechnicals_backend[self.current_technical_side].get_side()
@@ -263,8 +264,22 @@ class API:
                                                                                     )
             self.refresh_thechnical(fp=1)
 
-            #self.ui.add_selected_image(cam,frame)
-                                                                                
+            self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
+
+
+
+    def remove_select_img(self):
+
+        selected_img_for_remove=self.ui.get_selected_img()
+        if len(selected_img_for_remove):
+            self.selected_images_for_label.remove_by_index(selected_img_for_remove)
+            self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
+        else:
+            self.ui.set_warning_data_page(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language],'data_auquzation',level=2)
+
+
+
+
     #----------------------------------------------------------------------------------------
     # 
     #---------------------------------------------------------------------------------------- 

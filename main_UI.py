@@ -593,20 +593,45 @@ class UI_main_window(QMainWindow, ui):
 
     def add_selected_image(self,records):
 
-        for row,string in enumerate(records):
+        self.clear_table()
+
+        print(records)
+        header = self.listWidget_append_img_list.horizontalHeader()
+        # header.setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.listWidget_append_img_list.setRowCount(len(records))
+
+        for row,record in enumerate(records):
             # for i in range(11):
                 # print(i)
-
-                table_item = QTableWidgetItem(str(string))
+                record = '{} - {} - {}'.format(record[0],record[1],(record[2]))
+                table_item = QTableWidgetItem(str(record))
                 # if i ==0:
                 table_item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
                 table_item.setCheckState(Qt.CheckState.Unchecked)
-                table_item.setData(Qt.DisplayRole, str(string[0]))
-        # self.listWidget_append_img_list.addItem(texts.MESSEGES['SELECT_IMAGE'][self.language].format(cam,frame)
+                table_item.setData(Qt.DisplayRole, record)
+                self.listWidget_append_img_list.setItem(row,0,table_item)
+                print(table_item)
 
-    # def remove_selected_image(self):
+    def get_selected_img(self):
+        selected_list=[]
+        for i in range(self.listWidget_append_img_list.rowCount()):
+            if self.listWidget_append_img_list.item(i, 0).checkState() == QtCore.Qt.Checked:
+                selected_list.append(i)
 
-        
+        return selected_list
+
+
+
+
+
+    def clear_table(self):
+    
+        for i in range(self.listWidget_append_img_list.rowCount()):
+            self.listWidget_append_img_list.removeRow(0)      
+
+
+
+
 
     def show_selected_side(self,name):
         if name=='up_side_technical':

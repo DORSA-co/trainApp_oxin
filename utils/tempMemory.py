@@ -29,7 +29,8 @@ class manageSelectedImage:
         
         #side = self.__check_side__(side)
         selection = tuple( selection )
-        self.selects_list.append( [sheet_id, side, selection] )
+        if [sheet_id, side, selection] not in self.selects_list:
+            self.selects_list.append( [sheet_id, side, selection] )
 
         self.selects_dict[sheet_id][side] += [selection]
         self.selects_dict[sheet_id][side] = list(dict.fromkeys(self.selects_dict[sheet_id][side]))
@@ -46,11 +47,12 @@ class manageSelectedImage:
         return self.selects_dict.get(sheet_id, {}).get(side, [] )
         
 
-    def remove_by_index(self,idx):
-        subject = self.selects_list[idx]
-        
-        self.selects_dict[subject[0]][subject[1]].remove(subject[2])
-        self.selects_list.remove( subject )
+    def remove_by_index(self,idxs):
+        for idx in idxs:
+            subject = self.selects_list[idx]
+            
+            self.selects_dict[subject[0]][subject[1]].remove(subject[2])
+            self.selects_list.remove( subject )
 
 
 

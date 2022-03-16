@@ -18,11 +18,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplication, QCheckBox,
     QComboBox, QCommandLinkButton, QFontComboBox, QFrame,
     QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
-    QLabel, QLineEdit, QListView, QMainWindow,
-    QPlainTextEdit, QPushButton, QRadioButton, QScrollArea,
-    QScrollBar, QSizePolicy, QSlider, QSpacerItem,
-    QSpinBox, QStackedWidget, QTabWidget, QTableWidget,
-    QTableWidgetItem, QToolButton, QVBoxLayout, QWidget)
+    QLabel, QLineEdit, QMainWindow, QPlainTextEdit,
+    QPushButton, QRadioButton, QScrollArea, QScrollBar,
+    QSizePolicy, QSlider, QSpacerItem, QSpinBox,
+    QStackedWidget, QTabWidget, QTableWidget, QTableWidgetItem,
+    QToolButton, QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
@@ -1689,14 +1689,14 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_93.addWidget(self.groupBox_2)
 
-        self.horizontalSpacer_14 = QSpacerItem(20, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer_14 = QSpacerItem(42, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_93.addItem(self.horizontalSpacer_14)
 
         self.groupBox = QGroupBox(self.frame_tools_technical)
         self.groupBox.setObjectName(u"groupBox")
         self.groupBox.setMinimumSize(QSize(137, 0))
-        self.groupBox.setMaximumSize(QSize(50, 16777215))
+        self.groupBox.setMaximumSize(QSize(250, 16777215))
         self.groupBox.setStyleSheet(u" background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
 "                                   stop: 0 #E0E0E0, stop: 1 #FFFFFF);\n"
 " border: 2px solid gray;\n"
@@ -1714,27 +1714,37 @@ class Ui_MainWindow(object):
         self.horizontalLayout_91 = QHBoxLayout()
         self.horizontalLayout_91.setSpacing(0)
         self.horizontalLayout_91.setObjectName(u"horizontalLayout_91")
-        self.append_btn = QPushButton(self.groupBox)
-        self.append_btn.setObjectName(u"append_btn")
-        self.append_btn.setMinimumSize(QSize(30, 30))
-        self.append_btn.setMaximumSize(QSize(30, 30))
-        self.append_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        self.append_btn.setMouseTracking(False)
-        self.append_btn.setStyleSheet(u" background-color: Transparent;\n"
+        self.horizontalSpacer_17 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_91.addItem(self.horizontalSpacer_17)
+
+        self.checkBox_2 = QCheckBox(self.groupBox)
+        self.checkBox_2.setObjectName(u"checkBox_2")
+        self.checkBox_2.setStyleSheet(u"border:None;")
+
+        self.horizontalLayout_91.addWidget(self.checkBox_2)
+
+        self.add_btn_SI = QPushButton(self.groupBox)
+        self.add_btn_SI.setObjectName(u"add_btn_SI")
+        self.add_btn_SI.setMinimumSize(QSize(30, 30))
+        self.add_btn_SI.setMaximumSize(QSize(30, 30))
+        self.add_btn_SI.setCursor(QCursor(Qt.PointingHandCursor))
+        self.add_btn_SI.setMouseTracking(False)
+        self.add_btn_SI.setStyleSheet(u" background-color: Transparent;\n"
 " border: 0px solid gray;\n"
 " border-radius: 0px;\n"
 " margin-top: 1ex; /* leave space at the top for the title */")
         icon9 = QIcon()
         icon9.addFile(u"images/plus.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.append_btn.setIcon(icon9)
-        self.append_btn.setIconSize(QSize(26, 26))
+        self.add_btn_SI.setIcon(icon9)
+        self.add_btn_SI.setIconSize(QSize(26, 26))
 
-        self.horizontalLayout_91.addWidget(self.append_btn)
+        self.horizontalLayout_91.addWidget(self.add_btn_SI)
 
         self.label_2 = QLabel(self.groupBox)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setMinimumSize(QSize(49, 24))
-        self.label_2.setMaximumSize(QSize(72, 16777215))
+        self.label_2.setMinimumSize(QSize(72, 24))
+        self.label_2.setMaximumSize(QSize(81, 16777215))
         font4 = QFont()
         font4.setFamilies([u"Segoe UI"])
         font4.setPointSize(10)
@@ -1757,21 +1767,25 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_91.addWidget(self.label_2)
 
-        self.append_btn_remove = QPushButton(self.groupBox)
-        self.append_btn_remove.setObjectName(u"append_btn_remove")
-        self.append_btn_remove.setMinimumSize(QSize(30, 30))
-        self.append_btn_remove.setMaximumSize(QSize(30, 30))
-        self.append_btn_remove.setCursor(QCursor(Qt.PointingHandCursor))
-        self.append_btn_remove.setStyleSheet(u" background-color: Transparent;\n"
+        self.remove_btn_SI = QPushButton(self.groupBox)
+        self.remove_btn_SI.setObjectName(u"remove_btn_SI")
+        self.remove_btn_SI.setMinimumSize(QSize(30, 30))
+        self.remove_btn_SI.setMaximumSize(QSize(30, 30))
+        self.remove_btn_SI.setCursor(QCursor(Qt.PointingHandCursor))
+        self.remove_btn_SI.setStyleSheet(u" background-color: Transparent;\n"
 " border: 0px solid gray;\n"
 " border-radius: 0px;\n"
 " margin-top: 1ex; /* leave space at the top for the title */")
         icon10 = QIcon()
         icon10.addFile(u"images/minus.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.append_btn_remove.setIcon(icon10)
-        self.append_btn_remove.setIconSize(QSize(26, 26))
+        self.remove_btn_SI.setIcon(icon10)
+        self.remove_btn_SI.setIconSize(QSize(26, 26))
 
-        self.horizontalLayout_91.addWidget(self.append_btn_remove)
+        self.horizontalLayout_91.addWidget(self.remove_btn_SI)
+
+        self.horizontalSpacer_18 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_91.addItem(self.horizontalSpacer_18)
 
 
         self.verticalLayout_77.addLayout(self.horizontalLayout_91)
@@ -1786,10 +1800,18 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_88.addWidget(self.line_33)
 
-        self.listWidget_append_img_list = QListView(self.groupBox)
+        self.listWidget_append_img_list = QTableWidget(self.groupBox)
+        if (self.listWidget_append_img_list.columnCount() < 1):
+            self.listWidget_append_img_list.setColumnCount(1)
         self.listWidget_append_img_list.setObjectName(u"listWidget_append_img_list")
-        self.listWidget_append_img_list.setStyleSheet(u" border: 1px solid gray;\n"
-" border-radius: 0px;")
+        self.listWidget_append_img_list.setStyleSheet(u"border:None;")
+        self.listWidget_append_img_list.setRowCount(0)
+        self.listWidget_append_img_list.setColumnCount(1)
+        self.listWidget_append_img_list.horizontalHeader().setVisible(False)
+        self.listWidget_append_img_list.horizontalHeader().setCascadingSectionResizes(False)
+        self.listWidget_append_img_list.horizontalHeader().setDefaultSectionSize(200)
+        self.listWidget_append_img_list.horizontalHeader().setProperty("showSortIndicator", False)
+        self.listWidget_append_img_list.verticalHeader().setVisible(False)
 
         self.verticalLayout_88.addWidget(self.listWidget_append_img_list)
 
@@ -1803,6 +1825,10 @@ class Ui_MainWindow(object):
         self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_93.addItem(self.horizontalSpacer_9)
+
+        self.horizontalSpacer_16 = QSpacerItem(750, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_93.addItem(self.horizontalSpacer_16)
 
         self.groupBox_3 = QGroupBox(self.frame_tools_technical)
         self.groupBox_3.setObjectName(u"groupBox_3")
@@ -1988,7 +2014,6 @@ class Ui_MainWindow(object):
         self.frame_65 = QFrame(self.frame_2)
         self.frame_65.setObjectName(u"frame_65")
         self.frame_65.setMinimumSize(QSize(0, 25))
-        self.frame_65.setMaximumSize(QSize(16777215, 36))
         self.frame_65.setFrameShape(QFrame.StyledPanel)
         self.frame_65.setFrameShadow(QFrame.Raised)
         self.horizontalLayout_119 = QHBoxLayout(self.frame_65)
@@ -2079,7 +2104,6 @@ class Ui_MainWindow(object):
         self.frame_60 = QFrame(self.frame_16)
         self.frame_60.setObjectName(u"frame_60")
         self.frame_60.setMinimumSize(QSize(0, 25))
-        self.frame_60.setMaximumSize(QSize(16777215, 36))
         self.frame_60.setFrameShape(QFrame.StyledPanel)
         self.frame_60.setFrameShadow(QFrame.Raised)
         self.horizontalLayout_118 = QHBoxLayout(self.frame_60)
@@ -6361,7 +6385,7 @@ class Ui_MainWindow(object):
         self.pushButton_16.setText(QCoreApplication.translate("MainWindow", u"Database Setting", None))
         self.pushButton_17.setText(QCoreApplication.translate("MainWindow", u"Storage Setting", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_5), QCoreApplication.translate("MainWindow", u"LIVE", None))
-        self.load_coil_btn.setText(QCoreApplication.translate("MainWindow", u"Load Coil", None))
+        self.load_coil_btn.setText(QCoreApplication.translate("MainWindow", u"Load Sheet", None))
         self.next_coil_btn.setText("")
         self.prev_coil_btn.setText("")
         self.details_label.setText("")
@@ -6375,9 +6399,10 @@ class Ui_MainWindow(object):
         self.label_btn_2.setText(QCoreApplication.translate("MainWindow", u"Label", None))
         self.clear_all_btn.setText(QCoreApplication.translate("MainWindow", u"Clear List", None))
         self.groupBox.setTitle("")
-        self.append_btn.setText("")
+        self.checkBox_2.setText("")
+        self.add_btn_SI.setText("")
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Append", None))
-        self.append_btn_remove.setText("")
+        self.remove_btn_SI.setText("")
         self.groupBox_3.setTitle("")
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Current Position", None))
         self.label_30.setText("")
@@ -6394,14 +6419,14 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(tooltip)
         self.label_6.setToolTip(QCoreApplication.translate("MainWindow", u"UP Side Technical View", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"USTV", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"TOP Side", None))
         self.up_side_technical.setText("")
         self.label_124.setText(QCoreApplication.translate("MainWindow", u"40  cm", None))
         self.label_125.setText("")
 #if QT_CONFIG(tooltip)
         self.label_119.setToolTip(QCoreApplication.translate("MainWindow", u"UP Side Technical View", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_119.setText(QCoreApplication.translate("MainWindow", u"DSTV", None))
+        self.label_119.setText(QCoreApplication.translate("MainWindow", u"BOTTOM Side", None))
         self.down_side_technical.setText("")
 #if QT_CONFIG(statustip)
         self.pushButton_28.setStatusTip("")
