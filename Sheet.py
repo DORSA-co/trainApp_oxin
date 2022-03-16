@@ -1,11 +1,13 @@
 from ast import Return
 import datetime
 import os
-
+from backend import pathStructure
 class Sheet:
     def __init__(self,
-                id=None,
+                id = None,
+                sheet_id=None,
                 main_path=None,
+                image_format=None,
                 heat_number=None,
                 ps_number=None,
                 pdl_number=None,
@@ -19,9 +21,10 @@ class Sheet:
                 cameras=[],
                 ):
 
-
         self.id = id
-        self.path = main_path
+        self.sheet_id = sheet_id
+        self.main_path = main_path
+        self.image_format = image_format
         self.heat_number = heat_number
         self.ps_number = ps_number #product scechule number
         self.pdl_number = pdl_number #product d??? number
@@ -36,8 +39,8 @@ class Sheet:
 
     #---------------------------------------------------------------------------------
     #---------------------------------------------------------------------------------
-    def set_id(self,id):
-        self.id = id
+    def set_id(self,sheet_id):
+        self.sheet_id = sheet_id
 
     def set_heatnumber(self, heat_num):
         self.heat_number = heat_num
@@ -72,7 +75,7 @@ class Sheet:
         self.user = name
 
     def set_path(self,path):
-        self.path = path
+        self.main_path = path
 
     def set_nframe(self, n):
         self.nframe = n
@@ -80,10 +83,16 @@ class Sheet:
     def set_cameras(self, start , end):
         self.cameras = [start, end]
     
+    def set_image_format(self,fromat):
+        if '.' in fromat:
+            self.image_format = fromat
+        else:
+            self.image_format = '.' + fromat
+    
     #---------------------------------------------------------------------------------
     #---------------------------------------------------------------------------------
     def get_id(self):
-        return self.id
+        return self.sheet_id
 
     def get_heatnumber(self):
         return self.heat_number
@@ -116,10 +125,10 @@ class Sheet:
         return self.user
 
     def get_path(self):
-        return os.path.join( self.path ,str( self.id ))
+        return pathStructure.sheet_path(self.main_path,self.sheet_id)
 
     def get_main_path(self):
-        return self.path
+        return self.main_path
 
     def get_nframe(self):
         return self.nframe
@@ -132,10 +141,14 @@ class Sheet:
         nc = self.cameras[1] - self.cameras[0] + 1
         return nf,nc
 
+    def get_image_format(self):
+        return self.image_format
+
+
     
     def get_info_dict(self):
         return {
-            'id':self.id,
+            'sheet_id':self.sheet_id,
             'heat_number': self.heat_number,
             'lenght': self.lenght,
             'width' : self.width

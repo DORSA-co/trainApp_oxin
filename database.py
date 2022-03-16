@@ -103,6 +103,32 @@ class dataBase:
             return False
 
 
+    #--------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
+
+    def update_record(self,table_name,col_name,value,id,id_value):
+        
+
+        if self.check_connection:
+            cursor,connection=self.connect()
+
+            mySql_insert_query = """UPDATE {} 
+                                    SET {} = {}
+                                    WHERE {} ={} """.format(table_name,col_name,("'"+value+"'"),id,id_value)
+            print(mySql_insert_query)
+            cursor.execute(mySql_insert_query)
+            # mySql_insert_query=(mySql_insert_query,data)
+            # self.execute_quary(mySql_insert_query, cursor, connection, close=False,need_data=True )
+            connection.commit()
+            print(cursor.rowcount, "Record Updated successfully ")
+            cursor.close()
+            return True
+
+        else:
+            return False
+
+
+
     def remove_record(self, id, table_name):
         if self.check_connection:
             cursor,connection=self.connect()

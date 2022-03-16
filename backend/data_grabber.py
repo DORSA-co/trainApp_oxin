@@ -4,11 +4,11 @@ import numpy as np
 import cv2
 import os 
 from consts.consts import MOVEMENTS_KEYS, THINKNESS_MAP, COLOR_MAP
+from backend import pathStructure
 
 
-
-UP = "UP"
-DOWN="DOWN"
+# UP = "UP"
+# DOWN="DOWN"
 HORIZONTAL=3
 VERTICAL=4
 
@@ -18,7 +18,7 @@ class sheetOverView():
     
     
     def __init__(self,
-                 path,
+                 sheet,
                  side,
                  sheet_shape,
                  sheet_grid,
@@ -27,7 +27,9 @@ class sheetOverView():
                  thickness_map=THINKNESS_MAP,
                  oriation=VERTICAL):
         
-        self.path = path
+        self.sheet = sheet   
+        #self.sheet.get_main_path() = path
+        #self.sheet_id = sheet_id
         self.side = side
         self.sheet_shape = sheet_shape
         self.sheet_grid = sheet_grid
@@ -391,13 +393,19 @@ class sheetOverView():
                         new_imgs.append( self.real_imgs[list_idx] )
                     
                     else:
-                        res_path = os.path.join(
-                            self.path,
-                            self.side,
-                            str(idx_cam),
-                            str(idx_frame) + '.jpg'
-                        )
-                        img = cv2.imread( res_path,0 )
+                        # res_path = os.path.join(
+                        #     self.sheet.get_main_path(),
+                        #     self.side,
+                        #     str(idx_cam),
+                        #     str(idx_frame) + '.jpg'
+                        # )
+                        img_path = pathStructure.sheet_image_path(self.sheet.get_main_path(),
+                                                                  self.sheet.get_id(),
+                                                                  self.side,
+                                                                  idx_cam,
+                                                                  idx_frame,
+                                                                  self.sheet.get_image_format()  )
+                        img = cv2.imread( img_path,0 )
                         if img is None:#if image doesnt exist, black image substitute
                             img = np.zeros(IMAGE_SHAPE, np.uint8)
                         new_imgs.append(img )

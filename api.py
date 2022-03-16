@@ -20,15 +20,13 @@ from PyQt5 import QtCore
 from Sheet_loader_win import get_data
 from functools import partial
 
-from Sheet_loader_win.data_loader_UI import data_loader
 
 import database_utils
 from utils import *
 from utils.move_on_list import moveOnList
 
 import texts #eror and warnings texts
-from utils import tempMemory
-
+from utils import tempMemory, Utils
 
 
 
@@ -69,12 +67,8 @@ class API:
         self.keyboard_connector()
         #-------------------------------------
 
-        #technical view btns                                             ///////////////////
-        self.ui.save_btn.clicked.connect(self.save_img)
-        self.ui.clear_all_btn.clicked.connect(self.clear_list)
-        self.cache_path='G:/oxin_image_grabber/cache'
-        #self.ui.append_btn.clicked.connect(self.append)
-        self.ui.clear_cache.clicked.connect(self.clear_cache_fun)
+        
+
 
 
         
@@ -91,6 +85,7 @@ class API:
         self.ui.load_coil_btn.clicked.connect(partial(self.show_sheet_loader))
         self.ui.next_coil_btn.clicked.connect(partial(self.next_sheet))
         self.ui.prev_coil_btn.clicked.connect(partial(self.prev_sheet))
+        self.ui.save_btn_SI.clicked.connect(partial(self.save_temp_img_ds))
 
     def mouse_connector(self):
         for _,technical_widget in self.ui.get_technical().items():
@@ -132,12 +127,12 @@ class API:
         try:
             self.thechnicals_backend = {}
             for side,_ in self.ui.get_technical(name=False).items():
-                self.thechnicals_backend[side] = data_grabber.sheetOverView(sheet.get_path(), #main path of coil images that contain to folder for top and bottom images
-                                                                                                     side, #side of sheet that is UO
-                                                                                                     (HEIGHT_FRAME_SIZE*sheet.get_nframe(),WIDTH_TECHNICAL_SIDE),
-                                                                                                     (self.sheet.get_nframe(), NCAMERA),#sheet.get_grade_shape(),
-                                                                                                     actives_camera=sheet.get_cameras(),
-                                                                                                    oriation=data_grabber.VERTICAL)
+                self.thechnicals_backend[side] = data_grabber.sheetOverView(sheet,
+                                                                            side, #side of sheet that is UO
+                                                                            (HEIGHT_FRAME_SIZE*sheet.get_nframe(),WIDTH_TECHNICAL_SIDE),
+                                                                            (self.sheet.get_nframe(), NCAMERA),#sheet.get_grade_shape(),
+                                                                            actives_camera=sheet.get_cameras(),
+                                                                            oriation=data_grabber.VERTICAL)
                 
 
                 selecteds = self.selected_images_for_label.get_sheet_side_selections( 
@@ -278,30 +273,37 @@ class API:
             self.ui.set_warning_data_page(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language],'data_auquzation',level=2)
 
 
-
-
+    #----------------------------------------------------------------------------------------
+    # 
+    #---------------------------------------------------------------------------------------- 
+    def save_temp_img_ds(self,):
+        selected_imgs = self.selected_images_for_label.get_all_selections_list()
+        selected_idxs = self.ui.get_selected_img()
+        filtered_selected = Utils.get_selected_value( selected_imgs, selected_idxs )
+        print(self.db.get_path_sheet_image(filtered_selected))
+        # print(filtered_selected)
     #----------------------------------------------------------------------------------------
     # 
     #---------------------------------------------------------------------------------------- 
 
 
-    def save_img(self,user='admin'):
-        # listWidget = QListWidget()
-        # print(self.ui.win.path)
-        path=os.path.join(self.ui.win.path,'save_imgs')
-        # print(path)
-        # item = QListWidgetItem("Item %i" % i)
-        user='admin'
-        image = ImageQt.fromqpixmap(self.ui.crop_image.pixmap())
-        # image=np.ascontiguousarray(image)
+    # def save_img(self,user='admin'):
+    #     # listWidget = QListWidget()
+    #     # print(self.ui.win.path)
+    #     path=os.path.join(self.ui.win.path,'save_imgs')
+    #     # print(path)
+    #     # item = QListWidgetItem("Item %i" % i)
+    #     user='admin'
+    #     image = ImageQt.fromqpixmap(self.ui.crop_image.pixmap())
+    #     # image=np.ascontiguousarray(image)
 
-        # cv2.imshow('img',image)
-        # cv2.waitKey(0)
-        x =datetime.now()
-        x=x.strftime("%Y"+"-"+"%m"+"-"+"%d"+"-"+"%H"+"-"+"%M"+"-"+"%S")
-        x=str(x)+" "+str(user)
-        image.save('{}/{}.jpg'.format(path,x))
-        self.ui.listWidget_logs.addItem('Image Saved : '+'{}/{}.jpg'.format(path,x))
+    #     # cv2.imshow('img',image)
+    #     # cv2.waitKey(0)
+    #     x =datetime.now()
+    #     x=x.strftime("%Y"+"-"+"%m"+"-"+"%d"+"-"+"%H"+"-"+"%M"+"-"+"%S")
+    #     x=str(x)+" "+str(user)
+    #     image.save('{}/{}.jpg'.format(path,x))
+    #     self.ui.listWidget_logs.addItem('Image Saved : '+'{}/{}.jpg'.format(path,x))
 
     def clear_list(self):
         self.ui.listWidget_logs.clear()

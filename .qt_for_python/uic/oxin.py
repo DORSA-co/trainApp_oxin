@@ -1402,7 +1402,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_85 = QVBoxLayout(self.frame_44)
         self.verticalLayout_85.setSpacing(6)
         self.verticalLayout_85.setObjectName(u"verticalLayout_85")
-        self.verticalLayout_85.setContentsMargins(7, 8, 7, 1)
+        self.verticalLayout_85.setContentsMargins(0, 8, 0, 1)
         self.frame_59 = QFrame(self.frame_44)
         self.frame_59.setObjectName(u"frame_59")
         self.frame_59.setMinimumSize(QSize(400, 0))
@@ -1472,7 +1472,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 277, 28))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 291, 28))
         self.horizontalLayout_92 = QHBoxLayout(self.scrollAreaWidgetContents_4)
         self.horizontalLayout_92.setSpacing(0)
         self.horizontalLayout_92.setObjectName(u"horizontalLayout_92")
@@ -1528,7 +1528,7 @@ class Ui_MainWindow(object):
         self.line_30.setFrameShadow(QFrame.Raised)
         self.line_30.setFrameShape(QFrame.HLine)
 
-        self.verticalLayout_85.addWidget(self.line_30)
+        self.verticalLayout_85.addWidget(self.line_30, 0, Qt.AlignHCenter|Qt.AlignVCenter)
 
         self.frame_62 = QFrame(self.frame_44)
         self.frame_62.setObjectName(u"frame_62")
@@ -1573,8 +1573,8 @@ class Ui_MainWindow(object):
 
         self.frame_tools_technical = QFrame(self.frame_44)
         self.frame_tools_technical.setObjectName(u"frame_tools_technical")
-        self.frame_tools_technical.setMinimumSize(QSize(0, 0))
-        self.frame_tools_technical.setMaximumSize(QSize(16777215, 184))
+        self.frame_tools_technical.setMinimumSize(QSize(0, 220))
+        self.frame_tools_technical.setMaximumSize(QSize(16777215, 220))
         self.frame_tools_technical.setFrameShape(QFrame.Panel)
         self.frame_tools_technical.setFrameShadow(QFrame.Raised)
         self.frame_tools_technical.setLineWidth(2)
@@ -1599,12 +1599,12 @@ class Ui_MainWindow(object):
         self.verticalLayout_90.setSpacing(2)
         self.verticalLayout_90.setObjectName(u"verticalLayout_90")
         self.verticalLayout_90.setContentsMargins(2, 3, 2, 2)
-        self.clear_cache = QPushButton(self.groupBox_2)
-        self.clear_cache.setObjectName(u"clear_cache")
-        self.clear_cache.setMinimumSize(QSize(80, 25))
-        self.clear_cache.setMaximumSize(QSize(130, 30))
-        self.clear_cache.setCursor(QCursor(Qt.PointingHandCursor))
-        self.clear_cache.setStyleSheet(u"QPushButton {\n"
+        self.save_btn_SI = QPushButton(self.groupBox_2)
+        self.save_btn_SI.setObjectName(u"save_btn_SI")
+        self.save_btn_SI.setMinimumSize(QSize(81, 25))
+        self.save_btn_SI.setMaximumSize(QSize(120, 30))
+        self.save_btn_SI.setCursor(QCursor(Qt.PointingHandCursor))
+        self.save_btn_SI.setStyleSheet(u"QPushButton {\n"
 "background-color: rgb(100,100,100);\n"
 "	color: rgb(0,0,0);\n"
 "	border: none;\n"
@@ -1617,27 +1617,7 @@ class Ui_MainWindow(object):
 "	background-color:  rgb(197 , 195,196);\n"
 "}")
 
-        self.verticalLayout_90.addWidget(self.clear_cache)
-
-        self.save_btn = QPushButton(self.groupBox_2)
-        self.save_btn.setObjectName(u"save_btn")
-        self.save_btn.setMinimumSize(QSize(81, 25))
-        self.save_btn.setMaximumSize(QSize(120, 30))
-        self.save_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        self.save_btn.setStyleSheet(u"QPushButton {\n"
-"background-color: rgb(100,100,100);\n"
-"	color: rgb(0,0,0);\n"
-"	border: none;\n"
-"\n"
-"	text-align: center;\n"
-"\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"	background-color:  rgb(197 , 195,196);\n"
-"}")
-
-        self.verticalLayout_90.addWidget(self.save_btn)
+        self.verticalLayout_90.addWidget(self.save_btn_SI)
 
         self.label_btn_2 = QPushButton(self.groupBox_2)
         self.label_btn_2.setObjectName(u"label_btn_2")
@@ -1659,32 +1639,9 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_90.addWidget(self.label_btn_2)
 
-        self.clear_all_btn = QPushButton(self.groupBox_2)
-        self.clear_all_btn.setObjectName(u"clear_all_btn")
-        self.clear_all_btn.setMinimumSize(QSize(81, 25))
-        self.clear_all_btn.setMaximumSize(QSize(130, 30))
-        self.clear_all_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        self.clear_all_btn.setStyleSheet(u"QPushButton {\n"
-"background-color: rgb(100,100,100);\n"
-"	color: rgb(0,0,0);\n"
-"	border: none;\n"
-"\n"
-"	text-align: center;\n"
-"\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"	background-color:  rgb(197 , 195,196);\n"
-"}")
+        self.verticalSpacer_9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.verticalLayout_90.addWidget(self.clear_all_btn)
-
-        self.line_40 = QFrame(self.groupBox_2)
-        self.line_40.setObjectName(u"line_40")
-        self.line_40.setFrameShape(QFrame.HLine)
-        self.line_40.setFrameShadow(QFrame.Sunken)
-
-        self.verticalLayout_90.addWidget(self.line_40)
+        self.verticalLayout_90.addItem(self.verticalSpacer_9)
 
 
         self.horizontalLayout_93.addWidget(self.groupBox_2)
@@ -1695,7 +1652,7 @@ class Ui_MainWindow(object):
 
         self.groupBox = QGroupBox(self.frame_tools_technical)
         self.groupBox.setObjectName(u"groupBox")
-        self.groupBox.setMinimumSize(QSize(137, 0))
+        self.groupBox.setMinimumSize(QSize(168, 0))
         self.groupBox.setMaximumSize(QSize(250, 16777215))
         self.groupBox.setStyleSheet(u" background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
 "                                   stop: 0 #E0E0E0, stop: 1 #FFFFFF);\n"
@@ -1709,21 +1666,12 @@ class Ui_MainWindow(object):
         self.verticalLayout_88.setObjectName(u"verticalLayout_88")
         self.verticalLayout_88.setContentsMargins(2, 3, 2, 2)
         self.verticalLayout_77 = QVBoxLayout()
+        self.verticalLayout_77.setSpacing(1)
         self.verticalLayout_77.setObjectName(u"verticalLayout_77")
         self.verticalLayout_77.setContentsMargins(0, -1, -1, -1)
         self.horizontalLayout_91 = QHBoxLayout()
         self.horizontalLayout_91.setSpacing(0)
         self.horizontalLayout_91.setObjectName(u"horizontalLayout_91")
-        self.horizontalSpacer_17 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_91.addItem(self.horizontalSpacer_17)
-
-        self.checkBox_2 = QCheckBox(self.groupBox)
-        self.checkBox_2.setObjectName(u"checkBox_2")
-        self.checkBox_2.setStyleSheet(u"border:None;")
-
-        self.horizontalLayout_91.addWidget(self.checkBox_2)
-
         self.add_btn_SI = QPushButton(self.groupBox)
         self.add_btn_SI.setObjectName(u"add_btn_SI")
         self.add_btn_SI.setMinimumSize(QSize(30, 30))
@@ -1783,22 +1731,64 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_91.addWidget(self.remove_btn_SI)
 
-        self.horizontalSpacer_18 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_91.addItem(self.horizontalSpacer_18)
-
 
         self.verticalLayout_77.addLayout(self.horizontalLayout_91)
+
+        self.line_41 = QFrame(self.groupBox)
+        self.line_41.setObjectName(u"line_41")
+        self.line_41.setFrameShape(QFrame.HLine)
+        self.line_41.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_77.addWidget(self.line_41)
+
+        self.frame_63 = QFrame(self.groupBox)
+        self.frame_63.setObjectName(u"frame_63")
+        self.frame_63.setMinimumSize(QSize(0, 28))
+        self.frame_63.setStyleSheet(u"border:None;\n"
+"background-color:rgb(200,200,200);")
+        self.frame_63.setFrameShape(QFrame.StyledPanel)
+        self.frame_63.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_120 = QHBoxLayout(self.frame_63)
+        self.horizontalLayout_120.setObjectName(u"horizontalLayout_120")
+        self.horizontalLayout_120.setContentsMargins(0, 0, 0, 0)
+        self.horizontalSpacer_17 = QSpacerItem(8, 13, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_120.addItem(self.horizontalSpacer_17)
+
+        self.checkBox_select = QCheckBox(self.frame_63)
+        self.checkBox_select.setObjectName(u"checkBox_select")
+        self.checkBox_select.setStyleSheet(u"QCheckBox::indicator {\n"
+"    border: 3px solid rgb(52, 59, 72);\n"
+"	width: 10px;\n"
+"	height: 10px;\n"
+"	border-radius: 0px;\n"
+"    background: rgb(44, 49, 60);\n"
+"}\n"
+"QCheckBox::indicator:hover {\n"
+"    border: 3px solid rgb(58, 66, 81);\n"
+"}\n"
+"QCheckBox::indicator:checked {\n"
+"    background: 3px solid rgb(52, 59, 72);\n"
+"	border: 3px solid rgb(52, 59, 72);	\n"
+"	background-image: url(:/icons/images/icons/cil-check-alt.png);\n"
+"	height: 13px;\n"
+"}\n"
+"")
+
+        self.horizontalLayout_120.addWidget(self.checkBox_select)
+
+
+        self.verticalLayout_77.addWidget(self.frame_63)
 
 
         self.verticalLayout_88.addLayout(self.verticalLayout_77)
 
-        self.line_33 = QFrame(self.groupBox)
-        self.line_33.setObjectName(u"line_33")
-        self.line_33.setFrameShape(QFrame.HLine)
-        self.line_33.setFrameShadow(QFrame.Sunken)
+        self.line_32 = QFrame(self.groupBox)
+        self.line_32.setObjectName(u"line_32")
+        self.line_32.setFrameShape(QFrame.HLine)
+        self.line_32.setFrameShadow(QFrame.Sunken)
 
-        self.verticalLayout_88.addWidget(self.line_33)
+        self.verticalLayout_88.addWidget(self.line_32)
 
         self.listWidget_append_img_list = QTableWidget(self.groupBox)
         if (self.listWidget_append_img_list.columnCount() < 1):
@@ -1832,8 +1822,8 @@ class Ui_MainWindow(object):
 
         self.groupBox_3 = QGroupBox(self.frame_tools_technical)
         self.groupBox_3.setObjectName(u"groupBox_3")
-        self.groupBox_3.setMinimumSize(QSize(156, 0))
-        self.groupBox_3.setMaximumSize(QSize(106, 16777215))
+        self.groupBox_3.setMinimumSize(QSize(156, 146))
+        self.groupBox_3.setMaximumSize(QSize(106, 146))
         self.groupBox_3.setStyleSheet(u" background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
 "                                   stop: 0 #E0E0E0, stop: 1 #FFFFFF);\n"
 " border: 2px solid gray;\n"
@@ -1986,7 +1976,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_91.addWidget(self.frame_61)
 
 
-        self.horizontalLayout_93.addWidget(self.groupBox_3)
+        self.horizontalLayout_93.addWidget(self.groupBox_3, 0, Qt.AlignBottom)
 
 
         self.verticalLayout_89.addLayout(self.horizontalLayout_93)
@@ -6394,15 +6384,13 @@ class Ui_MainWindow(object):
         self.show_tools_btn.setText("")
         self.warning_data_page.setText("")
         self.groupBox_2.setTitle("")
-        self.clear_cache.setText(QCoreApplication.translate("MainWindow", u"Clear All", None))
-        self.save_btn.setText(QCoreApplication.translate("MainWindow", u"Save", None))
+        self.save_btn_SI.setText(QCoreApplication.translate("MainWindow", u"Save", None))
         self.label_btn_2.setText(QCoreApplication.translate("MainWindow", u"Label", None))
-        self.clear_all_btn.setText(QCoreApplication.translate("MainWindow", u"Clear List", None))
         self.groupBox.setTitle("")
-        self.checkBox_2.setText("")
         self.add_btn_SI.setText("")
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Append", None))
         self.remove_btn_SI.setText("")
+        self.checkBox_select.setText(QCoreApplication.translate("MainWindow", u"Select All", None))
         self.groupBox_3.setTitle("")
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Current Position", None))
         self.label_30.setText("")

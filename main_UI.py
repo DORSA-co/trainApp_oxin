@@ -155,6 +155,7 @@ class UI_main_window(QMainWindow, ui):
         self.label_btn_2.clicked.connect(self.buttonClick)
         self.next_coil_btn.clicked.connect(self.buttonClick)
         self.prev_coil_btn.clicked.connect(self.buttonClick)
+        self.checkBox_select.clicked.connect(self.buttonClick)
 
         
         self.show_tools_btn.clicked.connect(self.buttonClick)
@@ -454,37 +455,37 @@ class UI_main_window(QMainWindow, ui):
     # frame tools   ////////////////////////////////////
     def show_frame_tools(self):
         height=self.frame_tools_technical.height()
-        height=self.frame_tools_technical.height()
-        # self.stackedWidget_defect.setCurrentWidget(self.page_no)
-        # self.stackedWidget_defect.setMaximumHeight(60)
-        # x=self.stackedWidget_defect.height()
-        #print('height',height)
         if height ==0:
-            self.left_box = QPropertyAnimation(self.frame_tools_technical, b"maximumHeight")
-            self.left_box.setDuration(Settings.TIME_ANIMATION)
-            self.left_box.setStartValue(0)
-            self.left_box.setEndValue(149)
-            self.left_box.setEasingCurve(QEasingCurve.InOutQuart) 
             self.group = QParallelAnimationGroup()
-            self.group.addAnimation(self.left_box)
+            for f in ([b"minimumHeight", b"maximumHeight"]):
+                left_box = QPropertyAnimation(self.frame_tools_technical, f)
+                left_box.setDuration(Settings.TIME_ANIMATION)
+                left_box.setStartValue(0)
+                left_box.setEndValue(220)
+                left_box.setEasingCurve(QEasingCurve.InOutQuart) 
+
+                self.group.addAnimation(left_box)
+
             rMyIcon = QPixmap("images\icons\cil-arrow-bottom.png")
             self.show_tools_btn.setIcon(QIcon(rMyIcon))
-            # self.group.addAnimation(self.right_box)
+
             self.group.start()    
-            #print('no ani')
-        elif height ==149:
-            self.left_box = QPropertyAnimation(self.frame_tools_technical, b"maximumHeight")
-            self.left_box.setDuration(Settings.TIME_ANIMATION)
-            self.left_box.setStartValue(149)
-            self.left_box.setEndValue(0)
-            self.left_box.setEasingCurve(QEasingCurve.InOutQuart) 
+            
+        elif height ==220:
             self.group = QParallelAnimationGroup()
-            self.group.addAnimation(self.left_box)
+            for f in ([b"minimumHeight", b"maximumHeight"]):
+                left_box = QPropertyAnimation(self.frame_tools_technical, f)
+                left_box.setDuration(Settings.TIME_ANIMATION)
+                left_box.setStartValue(220)
+                left_box.setEndValue(0)
+                left_box.setEasingCurve(QEasingCurve.InOutQuart) 
+
+                self.group.addAnimation(left_box)
+
             rMyIcon = QPixmap("images\icons\cil-arrow-top.png")
             self.show_tools_btn.setIcon(QIcon(rMyIcon))
-            # self.group.addAnimation(self.right_box)
-            self.group.start()    
-            #print('no ani')           
+
+            self.group.start()           
         
 
     # IMPORT THEMES FILES QSS/CSS
@@ -593,12 +594,13 @@ class UI_main_window(QMainWindow, ui):
 
     def add_selected_image(self,records):
 
-        self.clear_table()
+        self.checkBox_select.setChecked(False)                              #set check statet false
 
-        print(records)
-        header = self.listWidget_append_img_list.horizontalHeader()
-        # header.setSectionResizeMode(QHeaderView.ResizeToContents)
-        self.listWidget_append_img_list.setRowCount(len(records))
+        self.clear_table()                                                  #cleare table
+
+        self.listWidget_append_img_list.setRowCount(len(records))           #set row count
+
+
 
         for row,record in enumerate(records):
             # for i in range(11):
@@ -616,7 +618,8 @@ class UI_main_window(QMainWindow, ui):
         selected_list=[]
         for i in range(self.listWidget_append_img_list.rowCount()):
             if self.listWidget_append_img_list.item(i, 0).checkState() == QtCore.Qt.Checked:
-                selected_list.append(i)
+                if i>=0:
+                    selected_list.append(i)
 
         return selected_list
 
@@ -628,6 +631,17 @@ class UI_main_window(QMainWindow, ui):
     
         for i in range(self.listWidget_append_img_list.rowCount()):
             self.listWidget_append_img_list.removeRow(0)      
+
+
+
+    def select_unselect_all(self):
+        if self.checkBox_select.isChecked():
+            for i in range(self.listWidget_append_img_list.rowCount()):
+                self.listWidget_append_img_list.item(i, 0).setCheckState(Qt.CheckState.Checked)
+
+        else:
+            for i in range(self.listWidget_append_img_list.rowCount()):
+                self.listWidget_append_img_list.item(i, 0).setCheckState(Qt.CheckState.Unchecked)
 
 
 
@@ -672,7 +686,7 @@ class UI_main_window(QMainWindow, ui):
 
     def show_sheet_details(self,details):
 
-        text='  id: '+str(details['id'])+' || heat_number: '+str(details['heat_number'])+' || width: '+str(details['width'])+' || lenght: '+str(details['lenght'])
+        text='  id: '+str(details['sheet_id'])+' || heat_number: '+str(details['heat_number'])+' || width: '+str(details['width'])+' || lenght: '+str(details['lenght'])
 
         self.details_label.setText(text)
 
@@ -827,17 +841,11 @@ class UI_main_window(QMainWindow, ui):
             # print('asdqwdwqd')
             self.data_loader_win_show()
 
-        # if btnName =='next_coil_btn':
-        #     # print('asdqwdwqd')
-        #     api.next_coil()
+        if btnName =='checkBox_select':
+            # print('asdqwdwqd')
+            
+            self.select_unselect_all()
 
-        #     # self.show_details()
-
-        # if btnName =='prev_coil_btn':
-        #     # print('asdqwdwqd')
-        #     api.prev_coil()
-
-            # self.show_details()
 
         if btnName == "show_tools_btn":
             self.show_frame_tools()
