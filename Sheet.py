@@ -115,11 +115,14 @@ class Sheet:
     def get_dimentions(self):
         return self.width, self.lenght, self.thickness
 
-    def get_date(self):
-        return self.date
+    def get_date_string(self):
+        return str(self.date.strftime('%Y/%m/%d'))
 
     def get_time(self):
         return self.time
+
+    def get_time_string(self):
+        return str(self.time.strftime('%H:%M'))
         
     def get_user(self):
         return self.user

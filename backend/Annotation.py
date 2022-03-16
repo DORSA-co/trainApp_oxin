@@ -205,7 +205,11 @@ class Annotation():
             file = json.load(jfile)
         return file
         
-    
+
+    def write(self,path):    
+        with open(path, 'w') as f:
+            json.dump(self.annotation, f)
+
     def __init__(self,):
         self.annotation = {}
 
@@ -219,11 +223,11 @@ class Annotation():
         self.annotation['sheet_id'] = id
 
     def set_date(self, date):
-        assert type(date) == str(), "date should be string"
+        assert type(date) == str, "date should be string"
         self.annotation['date'] = date
 
     def set_time(self, time):
-        assert type(time) == str(), "date should be string"
+        assert type(time) == str, "date should be string"
         self.annotation['time'] = time
 
     def set_user(self, user):

@@ -1,6 +1,7 @@
 
 
 import database
+import datetime
 from Sheet import Sheet
 import os
 from backend import pathStructure
@@ -15,7 +16,8 @@ class dataBaseUtils():
     #
     #________________________________________________________________
     def build_sheet(self,record):
-        print(record)
+        y,m,d = record['date'].split('/')
+        hh,mm = record['time'].split(':')
         sheet_obj = Sheet(
             id          = record['id'],
             sheet_id    = record['sheet_id'],
@@ -27,8 +29,8 @@ class dataBaseUtils():
             width       = record['width'],
             lenght      = record['lenght'],
             thickness   = record['thickness'],
-            date        = record['date'],
-            time        = record['time'],
+            date        = datetime.date(int(y),int(m),int(d)),
+            time        = datetime.time(int(hh),int(mm)),
             user        = record['user'],
             nframe      = record['nframe'],
             cameras     = [int( record['cameras'].split('-')[0] ) , int( record['cameras'].split('-')[1] )]
@@ -46,10 +48,18 @@ class dataBaseUtils():
     #________________________________________________________________
     #
     #________________________________________________________________
+    def load_sheets(self,ids):
+        sheets = []
+        for id in ids:
+            record = self.db.search( self.sheets_info_tabel , 'sheet_id', id )[0]
+            sheets.append( self.build_sheet(record) )
+        return sheets
+    #________________________________________________________________
+    #
+    #________________________________________________________________
     def get_camera_setting(self):
         x=self.db.report_last('camera_settings','id','0')
 
-        print(x)
 
         # cam_setting = self.db.search( 'camera_settings', 'id', id )[0]
 
@@ -74,14 +84,13 @@ class dataBaseUtils():
 
     def get_dataset_path(self):
         record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
-        return record['parent_path']
+        return record['path_dataset']
 
 
    
 
     def get_path_sheet_image(self,filtered_selected):
         paths = []
-        print(filtered_selected)
         for sheet_id, side, (ncam, nframe) in filtered_selected:
             sheet = self.load_sheet(sheet_id)
             path = pathStructure.sheet_image_path(
@@ -96,6 +105,9 @@ class dataBaseUtils():
             paths.append( path )
         
         return paths
+
+
+    # def get_sheet()
             
             #record =self.db.search(table_name=self.sheets_info_tabel,param_name='sheet_id',value=sheet_id)[0 ]
             
@@ -116,8 +128,8 @@ if __name__ == '__main__':
     db = dataBaseUtils()
     # records = db.load_coil_info(996)
     # db.get_camera_setting()
-    # db.set_dataset_path('G:/datasdet/')
-    print(db.get_dataset_path())
+    db.set_dataset_path('G:/dataset/')
+    # print(db.get_dataset_path())
 
-    db.get_path(['997', 'up', (5, 5)])
-    pass
+    # db.get_path(['997', 'up', (5, 5)])
+    # pass

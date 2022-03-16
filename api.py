@@ -1,5 +1,4 @@
 
-from ast import Pass
 # from logging import _Level
 from PySide6.QtCore import *
 from backend import data_grabber
@@ -28,7 +27,7 @@ from utils.move_on_list import moveOnList
 import texts #eror and warnings texts
 from utils import tempMemory, Utils
 
-
+from backend.Dataset import Dataset
 
 WIDTH_TECHNICAL_SIDE = 49*12
 HEIGHT_FRAME_SIZE = 51
@@ -44,8 +43,8 @@ class API:
         self.mouse = Mouse()
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
-
         self.db = database_utils.dataBaseUtils()
+        self.ds = Dataset(self.db.get_dataset_path())
         #Label.bbox_lbl()
 
         #self.technical_backend = {'top': data_grabber()}
@@ -280,8 +279,13 @@ class API:
         selected_imgs = self.selected_images_for_label.get_all_selections_list()
         selected_idxs = self.ui.get_selected_img()
         filtered_selected = Utils.get_selected_value( selected_imgs, selected_idxs )
-        print(self.db.get_path_sheet_image(filtered_selected))
+        paths = self.db.get_path_sheet_image(filtered_selected)
+        sheets = []
+        for select_img in filtered_selected:
+            sheets.append( self.db.load_sheet(select_img[0]) )
+        self.ds.save_to_temp( paths , sheets)
         # print(filtered_selected)
+        # self.create
     #----------------------------------------------------------------------------------------
     # 
     #---------------------------------------------------------------------------------------- 
