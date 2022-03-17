@@ -19,10 +19,10 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplicat
     QComboBox, QCommandLinkButton, QFontComboBox, QFrame,
     QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
     QLabel, QLineEdit, QMainWindow, QPlainTextEdit,
-    QPushButton, QRadioButton, QScrollArea, QScrollBar,
-    QSizePolicy, QSlider, QSpacerItem, QSpinBox,
-    QStackedWidget, QTabWidget, QTableWidget, QTableWidgetItem,
-    QToolButton, QVBoxLayout, QWidget)
+    QProgressBar, QPushButton, QRadioButton, QScrollArea,
+    QScrollBar, QSizePolicy, QSlider, QSpacerItem,
+    QSpinBox, QStackedWidget, QTabWidget, QTableWidget,
+    QTableWidgetItem, QToolButton, QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
@@ -1564,6 +1564,14 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_117.addWidget(self.warning_data_page)
 
+        self.progressBar_SI = QProgressBar(self.frame_62)
+        self.progressBar_SI.setObjectName(u"progressBar_SI")
+        self.progressBar_SI.setMaximumSize(QSize(0, 16777215))
+        self.progressBar_SI.setValue(0)
+        self.progressBar_SI.setTextVisible(False)
+
+        self.horizontalLayout_117.addWidget(self.progressBar_SI)
+
         self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_117.addItem(self.horizontalSpacer_10)
@@ -1584,9 +1592,21 @@ class Ui_MainWindow(object):
         self.horizontalLayout_93 = QHBoxLayout()
         self.horizontalLayout_93.setSpacing(3)
         self.horizontalLayout_93.setObjectName(u"horizontalLayout_93")
-        self.groupBox_2 = QGroupBox(self.frame_tools_technical)
+        self.horizontalSpacer_14 = QSpacerItem(42, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_93.addItem(self.horizontalSpacer_14)
+
+        self.frame_67 = QFrame(self.frame_tools_technical)
+        self.frame_67.setObjectName(u"frame_67")
+        self.frame_67.setMinimumSize(QSize(80, 0))
+        self.frame_67.setFrameShape(QFrame.StyledPanel)
+        self.frame_67.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_94 = QVBoxLayout(self.frame_67)
+        self.verticalLayout_94.setObjectName(u"verticalLayout_94")
+        self.verticalLayout_94.setContentsMargins(0, 0, 0, 0)
+        self.groupBox_2 = QGroupBox(self.frame_67)
         self.groupBox_2.setObjectName(u"groupBox_2")
-        self.groupBox_2.setMinimumSize(QSize(91, 0))
+        self.groupBox_2.setMinimumSize(QSize(78, 0))
         self.groupBox_2.setMaximumSize(QSize(50, 16777215))
         self.groupBox_2.setStyleSheet(u" background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
 "                                   stop: 0 #E0E0E0, stop: 1 #FFFFFF);\n"
@@ -1598,10 +1618,10 @@ class Ui_MainWindow(object):
         self.verticalLayout_90 = QVBoxLayout(self.groupBox_2)
         self.verticalLayout_90.setSpacing(2)
         self.verticalLayout_90.setObjectName(u"verticalLayout_90")
-        self.verticalLayout_90.setContentsMargins(2, 3, 2, 2)
+        self.verticalLayout_90.setContentsMargins(2, 1, 2, 3)
         self.save_btn_SI = QPushButton(self.groupBox_2)
         self.save_btn_SI.setObjectName(u"save_btn_SI")
-        self.save_btn_SI.setMinimumSize(QSize(81, 25))
+        self.save_btn_SI.setMinimumSize(QSize(68, 25))
         self.save_btn_SI.setMaximumSize(QSize(120, 30))
         self.save_btn_SI.setCursor(QCursor(Qt.PointingHandCursor))
         self.save_btn_SI.setStyleSheet(u"QPushButton {\n"
@@ -1619,12 +1639,12 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_90.addWidget(self.save_btn_SI)
 
-        self.label_btn_2 = QPushButton(self.groupBox_2)
-        self.label_btn_2.setObjectName(u"label_btn_2")
-        self.label_btn_2.setMinimumSize(QSize(80, 25))
-        self.label_btn_2.setMaximumSize(QSize(130, 30))
-        self.label_btn_2.setCursor(QCursor(Qt.PointingHandCursor))
-        self.label_btn_2.setStyleSheet(u"QPushButton {\n"
+        self.label_btn_SI = QPushButton(self.groupBox_2)
+        self.label_btn_SI.setObjectName(u"label_btn_SI")
+        self.label_btn_SI.setMinimumSize(QSize(68, 25))
+        self.label_btn_SI.setMaximumSize(QSize(130, 30))
+        self.label_btn_SI.setCursor(QCursor(Qt.PointingHandCursor))
+        self.label_btn_SI.setStyleSheet(u"QPushButton {\n"
 "background-color: rgb(100,100,100);\n"
 "	color: rgb(0,0,0);\n"
 "	border: none;\n"
@@ -1637,18 +1657,17 @@ class Ui_MainWindow(object):
 "	background-color:  rgb(197 , 195,196);\n"
 "}")
 
-        self.verticalLayout_90.addWidget(self.label_btn_2)
+        self.verticalLayout_90.addWidget(self.label_btn_SI)
+
+
+        self.verticalLayout_94.addWidget(self.groupBox_2)
 
         self.verticalSpacer_9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.verticalLayout_90.addItem(self.verticalSpacer_9)
+        self.verticalLayout_94.addItem(self.verticalSpacer_9)
 
 
-        self.horizontalLayout_93.addWidget(self.groupBox_2)
-
-        self.horizontalSpacer_14 = QSpacerItem(42, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_93.addItem(self.horizontalSpacer_14)
+        self.horizontalLayout_93.addWidget(self.frame_67)
 
         self.groupBox = QGroupBox(self.frame_tools_technical)
         self.groupBox.setObjectName(u"groupBox")
@@ -1976,7 +1995,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_91.addWidget(self.frame_61)
 
 
-        self.horizontalLayout_93.addWidget(self.groupBox_3, 0, Qt.AlignBottom)
+        self.horizontalLayout_93.addWidget(self.groupBox_3, 0, Qt.AlignTop)
 
 
         self.verticalLayout_89.addLayout(self.horizontalLayout_93)
@@ -2277,14 +2296,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_28.addWidget(self.line_34)
 
-        self.pushButton_10 = QPushButton(self.frame_7)
-        self.pushButton_10.setObjectName(u"pushButton_10")
-        self.pushButton_10.setMinimumSize(QSize(37, 0))
-        self.pushButton_10.setCursor(QCursor(Qt.PointingHandCursor))
+        self.next_img_label_btn = QPushButton(self.frame_7)
+        self.next_img_label_btn.setObjectName(u"next_img_label_btn")
+        self.next_img_label_btn.setMinimumSize(QSize(37, 0))
+        self.next_img_label_btn.setCursor(QCursor(Qt.PointingHandCursor))
 #if QT_CONFIG(tooltip)
-        self.pushButton_10.setToolTip(u"Next")
+        self.next_img_label_btn.setToolTip(u"Next")
 #endif // QT_CONFIG(tooltip)
-        self.pushButton_10.setStyleSheet(u"QPushButton {\n"
+        self.next_img_label_btn.setStyleSheet(u"QPushButton {\n"
 "background-color:transparent;\n"
 "border:0px\n"
 "}\n"
@@ -2304,19 +2323,19 @@ class Ui_MainWindow(object):
 "")
         icon13 = QIcon()
         icon13.addFile(u"images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.pushButton_10.setIcon(icon13)
-        self.pushButton_10.setIconSize(QSize(24, 31))
+        self.next_img_label_btn.setIcon(icon13)
+        self.next_img_label_btn.setIconSize(QSize(24, 31))
 
-        self.verticalLayout_28.addWidget(self.pushButton_10)
+        self.verticalLayout_28.addWidget(self.next_img_label_btn)
 
-        self.pushButton_11 = QPushButton(self.frame_7)
-        self.pushButton_11.setObjectName(u"pushButton_11")
-        self.pushButton_11.setMinimumSize(QSize(37, 0))
-        self.pushButton_11.setCursor(QCursor(Qt.PointingHandCursor))
+        self.prev_img_label_btn = QPushButton(self.frame_7)
+        self.prev_img_label_btn.setObjectName(u"prev_img_label_btn")
+        self.prev_img_label_btn.setMinimumSize(QSize(37, 0))
+        self.prev_img_label_btn.setCursor(QCursor(Qt.PointingHandCursor))
 #if QT_CONFIG(tooltip)
-        self.pushButton_11.setToolTip(u"Previous")
+        self.prev_img_label_btn.setToolTip(u"Previous")
 #endif // QT_CONFIG(tooltip)
-        self.pushButton_11.setStyleSheet(u"QPushButton {\n"
+        self.prev_img_label_btn.setStyleSheet(u"QPushButton {\n"
 "background-color:transparent;\n"
 "border:0px\n"
 "}\n"
@@ -2336,10 +2355,10 @@ class Ui_MainWindow(object):
 "")
         icon14 = QIcon()
         icon14.addFile(u"images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.pushButton_11.setIcon(icon14)
-        self.pushButton_11.setIconSize(QSize(24, 31))
+        self.prev_img_label_btn.setIcon(icon14)
+        self.prev_img_label_btn.setIconSize(QSize(24, 31))
 
-        self.verticalLayout_28.addWidget(self.pushButton_11)
+        self.verticalLayout_28.addWidget(self.prev_img_label_btn)
 
         self.line_35 = QFrame(self.frame_7)
         self.line_35.setObjectName(u"line_35")
@@ -2571,6 +2590,7 @@ class Ui_MainWindow(object):
         self.image.setFrameShape(QFrame.NoFrame)
         self.image.setFrameShadow(QFrame.Plain)
         self.image.setLineWidth(2)
+        self.image.setPixmap(QPixmap(u"../images/image.png"))
         self.image.setScaledContents(True)
         self.image.setMargin(0)
         self.image.setIndent(0)
@@ -6308,7 +6328,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         self.tabWidget_2.setCurrentIndex(1)
         self.stackedWidget_defect.setCurrentIndex(0)
         self.tabWidget_defect.setCurrentIndex(0)
@@ -6385,7 +6405,7 @@ class Ui_MainWindow(object):
         self.warning_data_page.setText("")
         self.groupBox_2.setTitle("")
         self.save_btn_SI.setText(QCoreApplication.translate("MainWindow", u"Save", None))
-        self.label_btn_2.setText(QCoreApplication.translate("MainWindow", u"Label", None))
+        self.label_btn_SI.setText(QCoreApplication.translate("MainWindow", u"Label", None))
         self.groupBox.setTitle("")
         self.add_btn_SI.setText("")
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Append", None))
@@ -6424,15 +6444,15 @@ class Ui_MainWindow(object):
         self.pushButton_2.setStatusTip("")
 #endif // QT_CONFIG(statustip)
         self.pushButton_2.setText("")
-        self.pushButton_10.setText("")
-        self.pushButton_11.setText("")
+        self.next_img_label_btn.setText("")
+        self.prev_img_label_btn.setText("")
         self.pushButton_12.setText("")
         self.pushButton_13.setText("")
         self.polygon_btn.setText("")
         self.bounding_btn.setText("")
         self.pushButton_14.setText("")
         self.n_image.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
-        self.image.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
+        self.image.setText("")
         self.p_image.setText(QCoreApplication.translate("MainWindow", u"prev ima", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Date :", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Coil number :", None))

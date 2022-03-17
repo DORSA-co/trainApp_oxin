@@ -37,6 +37,7 @@ class maskLbl:
     #
     #______________________________________________________________________________________________________
     def click(self,pt):
+        pt = int(pt[0] * self.img_size[1]), int(pt[1] * self.img_size[0])
         x,y = pt 
         if self.status == 'none':
             self.status = 'drawing'

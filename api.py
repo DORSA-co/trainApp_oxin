@@ -1,5 +1,6 @@
 
 # from logging import _Level
+from ast import Try
 from PySide6.QtCore import *
 from backend import data_grabber
 from backend.mouse import Mouse
@@ -18,7 +19,7 @@ from PyQt5.QtGui import QPixmap,QImage
 from PyQt5 import QtCore
 from Sheet_loader_win import get_data
 from functools import partial
-
+from backend import Label
 
 import database_utils
 from utils import *
@@ -34,6 +35,7 @@ HEIGHT_FRAME_SIZE = 51
 NCAMERA = 12
 
 TECHNICAL_WGT_NAME_TO_SIDE = {'up_side_technical', 'top', 'bottom'}
+LABEL_COLOR = {'1':(0,0,255)}
 
 #down_side_technical     ,   up_side_technical
 class API:
@@ -45,6 +47,7 @@ class API:
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
         self.ds = Dataset(self.db.get_dataset_path())
+        self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         #Label.bbox_lbl()
 
         #self.technical_backend = {'top': data_grabber()}
@@ -85,11 +88,16 @@ class API:
         self.ui.next_coil_btn.clicked.connect(partial(self.next_sheet))
         self.ui.prev_coil_btn.clicked.connect(partial(self.prev_sheet))
         self.ui.save_btn_SI.clicked.connect(partial(self.save_temp_img_ds))
+        self.ui.label_btn_SI.clicked.connect(partial(self.label_selected_img))
+
+        self.ui.next_img_label_btn.clicked.connect(partial(self.next_label_img))
+        self.ui.prev_img_label_btn.clicked.connect(partial(self.prev_label_img))
 
     def mouse_connector(self):
         for _,technical_widget in self.ui.get_technical().items():
             self.mouse.connet( technical_widget, self.update_technical_pointer_mouse )
 
+        self.mouse.connect_click(self.ui.image, self.label_image_mouse)
         self.mouse.connet_dbclick( self.ui.crop_image, self.fit_image)
 
 
@@ -281,16 +289,84 @@ class API:
         filtered_selected = Utils.get_selected_value( selected_imgs, selected_idxs )
         paths = self.db.get_path_sheet_image(filtered_selected)
         sheets = []
+        self.ui.progressBar_SI.setMaximumWidth(150)
         for select_img in filtered_selected:
             sheets.append( self.db.load_sheet(select_img[0]) )
+            self.ui.progressBar.setValue(100)
         self.ds.save_to_temp( paths , sheets)
         # print(filtered_selected)
         # self.create
+
+        self.ui.progressBar_SI.setMaximumWidth(0)
     #----------------------------------------------------------------------------------------
     # 
     #---------------------------------------------------------------------------------------- 
+    def label_selected_img(self):
+        selected_imgs = self.selected_images_for_label.get_all_selections_list()
+        selected_idxs = self.ui.get_selected_img()
+        filtered_selected = Utils.get_selected_value( selected_imgs, selected_idxs )
+        paths = self.db.get_path_sheet_image(filtered_selected)
+        sheets = []
+        for select_img in filtered_selected:
+            sheets.append( self.db.load_sheet(select_img[0]) )
+        
+        self.move_on_list.add( list(zip(sheets, selected_imgs, paths)), 'selected_imgs_for_label')
+        self.ui.show_label_page()
+        self.load_image_to_label_page()
+        
+
+    #----------------------------------------------------------------------------------------
+    # 
+    #---------------------------------------------------------------------------------------- 
+    def load_image_to_label_page(self):
+        sheet, selected_img, img_path = self.move_on_list.get_current('selected_imgs_for_label')    
+        img = Utils.read_image( img_path, 'color')
+        self.ui.show_image_in_label(img)
 
 
+    def next_label_img(self):
+        self.move_on_list.next_on_list('selected_imgs_for_label')
+        self.load_image_to_label_page()
+    
+
+    def prev_label_img(self):
+        self.move_on_list.prev_on_list('selected_imgs_for_label')
+        self.load_image_to_label_page()
+
+    #----------------------------------------------------------------------------------------
+    # 
+    #---------------------------------------------------------------------------------------- 
+    def label_image_mouse(self, wgt_name):
+        
+        label_type=self.ui.get_label_type()
+
+        if label_type == 'mask':
+            if self.mouse.get_button() == 'left_btn':
+                pt = self.mouse.get_relative_position()
+                print('mmmm')
+                self.mask_label_backend.click(pt)
+
+                if self.mask_label_backend.is_drawing_finish():
+                    self.mask_label_backend.save_mask('1')
+                    print('mmmm444444444444')
+
+            elif self.mouse.get_status() == 'mouse_release':
+                self.mask_label_backend.release()
+
+        
+            
+
+            elif self.mouse.get_status() == '':
+                self.mask_label_backend.delete_point_or_mask(pt)
+                mask = self.mask_label_backend.draw_mask()
+
+            
+            mask_layer_img = self.mask_label_backend.draw_mask()
+            self.ui.show_image_in_label(mask_layer_img)
+    
+    #----------------------------------------------------------------------------------------
+    # 
+    #---------------------------------------------------------------------------------------- 
     # def save_img(self,user='admin'):
     #     # listWidget = QListWidget()
     #     # print(self.ui.win.path)

@@ -1,5 +1,7 @@
+from tkinter import W
 from PySide6.QtCore import *
-from consts.mouse_events import EVENTS_TYPE
+from matplotlib.widgets import Widget
+from consts.mouse_events import EVENTS_TYPE, BUTTONS
 
 
 
@@ -17,9 +19,12 @@ class Mouse:
         self.y = 0
         self.rx = 0
         self.ry = 0
+        self.btn = ''
 
-    def mouse_event(self, widget, function):
+    def mouse_event(self, widget, function, button=None):
         def func(e):
+            
+            self.btn =  BUTTONS[e.button()]
             
             self.x, self.y = e.x(), e.y()
             self.rx, self.ry = self.x /  widget.width() , self.y /  widget.height() 
@@ -42,6 +47,9 @@ class Mouse:
     def connet_dbclick(self, widget, function):
         widget.mouseDoubleClickEvent = self.mouse_event(widget, function)
 
+    def connect_click(self, widget, function ):
+        widget.mousePressEvent =self.mouse_event(widget , function)
+
 
     def get_position(self):
         return self.x, self.y
@@ -51,3 +59,6 @@ class Mouse:
     
     def get_status(self):
         return self.status
+
+    def get_button(self):
+        return self.btn

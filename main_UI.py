@@ -152,13 +152,14 @@ class UI_main_window(QMainWindow, ui):
 
         #data aquization page
         self.load_coil_btn.clicked.connect(self.buttonClick)
-        self.label_btn_2.clicked.connect(self.buttonClick)
+
         self.next_coil_btn.clicked.connect(self.buttonClick)
         self.prev_coil_btn.clicked.connect(self.buttonClick)
         self.checkBox_select.clicked.connect(self.buttonClick)
 
         
         self.show_tools_btn.clicked.connect(self.buttonClick)
+        
 
         self.keyboard_connections = {}
 
@@ -562,15 +563,7 @@ class UI_main_window(QMainWindow, ui):
     def classification_class_list_table(self):
         self.hh_Labels=['No', 'Date', 'Name', 'Short name','ID','Is Defect','Group','Level','Color','Number','Percentage']
         self.class_list.setHorizontalHeaderLabels(self.hh_Labels)
-        # self.class_list.setColumnWidth(0,90)
-        # self.class_list.setColumnWidth(1,70)
-        # self.class_list.setColumnWidth(2,300)
-        # self.class_list.setColumnWidth(3,50)
-        # self.class_list.setColumnWidth(4,50)
-        # self.class_list.setColumnWidth(5,50)
-        # self.class_list.setColumnWidth(6,50)
-        # self.class_list.setColumnWidth(7,150)
-        # self.class_list.setColumnWidth(8,280)
+
         header = self.class_list.horizontalHeader()       
         header = self.class_list.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
@@ -578,6 +571,13 @@ class UI_main_window(QMainWindow, ui):
 
 
 
+
+    def get_label_type(self):
+        return self.label_type
+
+    def get_size_label_image(self):
+
+        return self.image.height(),self.image.width()
 
 
 
@@ -663,14 +663,17 @@ class UI_main_window(QMainWindow, ui):
     def bounding_box(self):
         #print('bounding_box')
         self.image.setCursor(Qt.CrossCursor)
+        self.label_type='bbox'
 
 
     def polygon(self):
         #print('polygon')
-        pixmap = QPixmap("images/icons8-cursor-24.png")
-        cursor = QCursor(pixmap, 5,5)
-        # QApplication.setOverrideCursor(cursor)
-        self.image.setCursor(cursor)
+        # pixmap = QPixmap("images/icons8-cursor-24.png")
+        # cursor = QCursor(pixmap, 5,5)
+        # # QApplication.setOverrideCursor(cursor)
+        # self.image.setCursor(cursor)
+
+        self.label_type='mask'
 
 
 
@@ -726,10 +729,18 @@ class UI_main_window(QMainWindow, ui):
 
 
 
-    def append(self,text):
+    def show_label_page(self):
+        self.left_bar_clear()
+        self.label_btn.setStyleSheet("background-image: url(:/icons/images/icons/label.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
+        self.stackedWidget.setCurrentWidget(self.page_label)
 
-        print('asd')
+    def show_image_in_label(self, img):
+        self.fs = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_BGR888 )           
+        self.image.setPixmap(QPixmap.fromImage(self.fs)) 
         
+
+
+
 
 
 
@@ -746,7 +757,8 @@ class UI_main_window(QMainWindow, ui):
             self.left_bar_clear()
             self.Data_auquzation_btn.setStyleSheet("background-image: url(:/icons/images/icons/graber.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
             self.stackedWidget.setCurrentWidget(self.page_data_auquzation)
-        if btnName =='label_btn':
+        if btnName =='label_btn' or btnName=='label_btn_SI':
+            print('asdasdasd')
             self.left_bar_clear()
             self.label_btn.setStyleSheet("background-image: url(:/icons/images/icons/label.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
             self.stackedWidget.setCurrentWidget(self.page_label)
@@ -905,12 +917,12 @@ class UI_main_window(QMainWindow, ui):
 
 
 
-    def get_label_type(self):
-        if self.tabWidget_defect.currentTabText() =='Mask':
-            return 'mask'
+    # def get_label_type(self):
+    #     if self.tabWidget_defect.currentTabText() =='Mask':
+    #         return 'mask'
         
-        elif self.tabWidget_defect.currentTabText() == 'Bounding Box':
-            return 'bbox'
+    #     elif self.tabWidget_defect.currentTabText() == 'Bounding Box':
+    #         return 'bbox'
 
 
 
