@@ -1,6 +1,7 @@
 
 # from logging import _Level
 from ast import Try
+from email import utils
 from PySide6.QtCore import *
 from backend import data_grabber
 from backend.mouse import Mouse
@@ -37,6 +38,11 @@ NCAMERA = 12
 TECHNICAL_WGT_NAME_TO_SIDE = {'up_side_technical', 'top', 'bottom'}
 LABEL_COLOR = {'1':(0,0,255)}
 
+
+
+
+
+
 #down_side_technical     ,   up_side_technical
 class API:
 
@@ -48,8 +54,8 @@ class API:
         self.db = database_utils.dataBaseUtils()
         self.ds = Dataset(self.db.get_dataset_path())
         #self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
-        self.mask_label_backend = Label.maskLbl((600,800), LABEL_COLOR)
-        self.bbox_label_backend = Label.bboxLbl((600,800), LABEL_COLOR)
+        self.mask_label_backend = Label.maskLbl((1200,1920), LABEL_COLOR)
+        self.bbox_label_backend = Label.bboxLbl((1200,1920), LABEL_COLOR)
         #Label.bbox_lbl()
 
         #self.technical_backend = {'top': data_grabber()}
@@ -71,12 +77,35 @@ class API:
         self.keyboard_connector()
         #-------------------------------------
 
-        
+        #DEBUG_FUNCTIONS
+        #-------------------------------------
+        self.__debug_load_sheet__(['996','997'])
+        self._debug_select_random__()
 
 
 
-        
-        
+    def __debug_load_sheet__(self,ids):
+        self.move_on_list.add(ids, 'sheets_id')
+        self.selected_images_for_label.clear()
+        self.load_sheet()
+    
+    def _debug_select_random__(self,):
+        for id in range(self.move_on_list.get_count('sheets_id')):
+            self.next_sheet()
+            for side in ['up','down']:
+                for _ in range( np.random.randint(0,5)):
+                    cam = np.random.randint( self.sheet.get_cameras()[0],  self.sheet.get_cameras()[1] +1)
+                    frame = np.random.randint(0, self.sheet.get_nframe()+1)
+                    self.selected_images_for_label.add( self.move_on_list.get_current('sheets_id'), side, (cam,frame) ) 
+                    self.thechnicals_backend[side].update_selected(
+                                                                self.selected_images_for_label.get_sheet_side_selections( 
+                                                                                                                        self.move_on_list.get_current('sheets_id'),
+                                                                                                                        side
+                                                                                                                        )
+                    )
+        self.refresh_thechnical(fp=1)
+        self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
+
 
     
     #----------------------------------------------------------------------------------------
@@ -345,12 +374,18 @@ class API:
         mouse_button = self.mouse.get_button()
         mouse_pt = self.mouse.get_relative_position()
 
+        sheet, selected_img, img_path = self.move_on_list.get_current('selected_imgs_for_label')    
+        img = Utils.read_image( img_path, 'color')
+
         if label_type == 'mask':
             self.mask_label_backend.mouse_event(mouse_status, mouse_button, mouse_pt )
             if self.mask_label_backend.is_drawing_finish():
                 self.mask_label_backend.save_mask('1')
             
             mask = self.mask_label_backend.draw_mask()
+            #res = Utils.add_layer_to_img(img,mask,opacity=0.7 )
+            #cv2.imshow('img',res)
+            #cv2.waitKey(10)
             self.ui.show_image_in_label( mask )
 
         if label_type == 'bbox':
