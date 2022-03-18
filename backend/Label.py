@@ -5,10 +5,10 @@ import cv2 as cv2
 TEST = 'bbox'  #'bbox' , 'mask
 
 COLOR_MAP_MASK = { 'line':(255,0,0),'point':(0,255,0), 'fill':(255,255,0) }
-THINKNESS_MAP_MASK = {'point':-1, 'line':2}
+THINKNESS_MAP_MASK = {'point':-1, 'line':4}
 
 COLOR_MAP_BBOX = { 'rect':(255,0,0),'bbox':(0,255,0), 'gline':(255,255,0), 'point':(0,0,255)}
-THINKNESS_MAP_BBOX = {'rect':2, 'gline':2, 'bbox':2}
+THINKNESS_MAP_BBOX = {'rect':4, 'gline':4, 'bbox':4}
 
 class maskLbl:
     #______________________________________________________________________________________________________
@@ -25,6 +25,7 @@ class maskLbl:
         self.edit_mask_idx = -1
         self.edit_point_idx = -1
         self.accept_new_point = True
+        self.radius = 10
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
@@ -49,7 +50,7 @@ class maskLbl:
             for idex,(lbl,cnt) in enumerate(self.masks):
                 for i,corner in enumerate(cnt):
                     corner = corner[0] #beacuse shape of cnt is (n,1,2)
-                    if ( (x-corner[0])**2 + (y-corner[1])**2)**0.5 < 10:
+                    if ( (x-corner[0])**2 + (y-corner[1])**2)**0.5 < 20:
                         self.status = 'editing'
                         self.edit_mask_idx = idex
                         self.edit_point_idx = i
@@ -107,7 +108,7 @@ class maskLbl:
             x1,y1 = first_pts
             x2,y2 = pt
             dis = ((x2-x1)**2 + (y1-y2)**2)**0.5
-            if dis < 10:
+            if dis < 30:
                 pt = (x1,y1)
                 self.status = 'none'
                 
@@ -143,7 +144,7 @@ class maskLbl:
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
-    def save_mask(self, label):
+    def save(self, label):
         #last point is same as first point so we ignore it
         cnt = np.array(self.points[:-1]).reshape((-1,1,2))
         self.masks.append([label,cnt])
@@ -161,7 +162,7 @@ class maskLbl:
 
 
         for pt in self.points:
-            cv2.circle(mask, pt, 5, self.color_map['point'], thickness=self.thickness_map['point'] )
+            cv2.circle(mask, pt, self.radius, self.color_map['point'], thickness=self.thickness_map['point'] )
 
         return mask
     #______________________________________________________________________________________________________
@@ -174,14 +175,14 @@ class maskLbl:
         return mask
     
     
-    def draw_mask(self):
+    def draw(self):
         masks_img = self.mask_init()
         
         for lbl, cnt in self.masks:
             cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=-1)
             for corner in cnt:
                 corner = tuple(corner[0])
-                cv2.circle( masks_img, corner, 5, color=self.color_map['point'], thickness=-1)
+                cv2.circle( masks_img, corner, self.radius, color=self.color_map['point'], thickness=-1)
             
         if len(self.points)>2 and self.points[0]==self.points[-1]:
             masks_img = self.draw_c(masks_img)
@@ -243,6 +244,7 @@ class bboxLbl:
         self.edit_bbox_idex = -1
         self.edit_x_idex = -1
         self.edit_y_idex = -1
+        self.radius = 10
         
     #______________________________________________________________________________________________________
     #
@@ -340,7 +342,7 @@ class bboxLbl:
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
-    def save_bbox(self, label):
+    def save(self, label):
         if len(self.points)==2 and self.status =='finish':
             
             #first corner should be top-left and second corner shoud be bottom right
@@ -391,7 +393,7 @@ class bboxLbl:
     #______________________________________________________________________________________________________
     
     
-    def draw_bboxs(self):
+    def draw(self):
         bbox_img = self.image_init()
         
         for lbl, bbox in self.bboxs:
@@ -401,7 +403,7 @@ class bboxLbl:
             #draw corner points
             for x in bbox[:,0]:
                 for y in bbox[:,1]:
-                    cv2.circle(bbox_img, (x,y),5, color=self.color_map['point'],thickness=-1)
+                    cv2.circle(bbox_img, (x,y),self.radius, color=self.color_map['point'],thickness=-1)
             
         if len(self.points)==2:
             bbox_img = self.draw_nc(bbox_img)
@@ -466,7 +468,7 @@ if __name__ == '__main__':
                 res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
                     
             if status =='lcn':
-                bbox_lbl.save_bbox(np.random.choice(['a1','a2']))
+                bbox_lbl.save(np.random.choice(['a1','a2']))
                 bboxs_img = bbox_lbl.draw_bboxs()
                 res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
                 
@@ -537,8 +539,8 @@ if __name__ == '__main__':
                 
                 #status = ''
                 if mask_label.is_drawing_finish():
-                    mask_label.save_mask(np.random.choice(['a1','a2']))
-                mask = mask_label.draw_mask()
+                    mask_label.save(np.random.choice(['a1','a2']))
+                mask = mask_label.draw()
                 res = cv2.addWeighted(img,0.5, mask,0.5,1)
             
             
@@ -549,7 +551,7 @@ if __name__ == '__main__':
             
             if status =='rc':
                 mask_label.delete_point_or_mask((gx,gy))
-                mask = mask_label.draw_mask()
+                mask = mask_label.draw()
                 res = cv2.addWeighted(img,0.5, mask,0.5,1)
                 status = ''
             if cv2.waitKey(8) & 0xFF == 27:

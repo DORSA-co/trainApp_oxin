@@ -54,8 +54,12 @@ class API:
         self.db = database_utils.dataBaseUtils()
         self.ds = Dataset(self.db.get_dataset_path())
         #self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
-        self.mask_label_backend = Label.maskLbl((1200,1920), LABEL_COLOR)
-        self.bbox_label_backend = Label.bboxLbl((1200,1920), LABEL_COLOR)
+        self.label_bakcend = {
+                            'mask': Label.maskLbl((1200,1920), LABEL_COLOR),
+                            'bbox': Label.bboxLbl((1200,1920), LABEL_COLOR)
+                            }
+        
+        
         #Label.bbox_lbl()
 
         #self.technical_backend = {'top': data_grabber()}
@@ -80,7 +84,9 @@ class API:
         #DEBUG_FUNCTIONS
         #-------------------------------------
         self.__debug_load_sheet__(['996','997'])
-        self._debug_select_random__()
+        self.__debug_select_random__()
+        self.__debug_select_for_label()
+
 
 
 
@@ -89,7 +95,7 @@ class API:
         self.selected_images_for_label.clear()
         self.load_sheet()
     
-    def _debug_select_random__(self,):
+    def __debug_select_random__(self,):
         for id in range(self.move_on_list.get_count('sheets_id')):
             self.next_sheet()
             for side in ['up','down']:
@@ -107,6 +113,10 @@ class API:
         self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
 
 
+    def __debug_select_for_label(self):
+        self.ui.checkBox_select.setChecked(True)
+        self.ui.select_unselect_all()
+        self.label_selected_img()
     
     #----------------------------------------------------------------------------------------
     # 
@@ -335,16 +345,31 @@ class API:
     def label_selected_img(self):
         selected_imgs = self.selected_images_for_label.get_all_selections_list()
         selected_idxs = self.ui.get_selected_img()
-        filtered_selected = Utils.get_selected_value( selected_imgs, selected_idxs )
-        paths = self.db.get_path_sheet_image(filtered_selected)
-        sheets = []
-        for select_img in filtered_selected:
-            sheets.append( self.db.load_sheet(select_img[0]) )
+        if len(selected_idxs) > 0:
+
+            filtered_selected = Utils.get_selected_value( selected_imgs, selected_idxs )
+            paths = self.db.get_path_sheet_image(filtered_selected)
+            sheets = []
+            for select_img in filtered_selected:
+                sheets.append( self.db.load_sheet(select_img[0]) )
+            
+            self.move_on_list.add( list(zip(sheets, selected_imgs, paths)), 'selected_imgs_for_label')
+            self.ui.show_label_page()
+            self.load_image_to_label_page()
         
-        self.move_on_list.add( list(zip(sheets, selected_imgs, paths)), 'selected_imgs_for_label')
-        self.ui.show_label_page()
-        self.load_image_to_label_page()
-        
+        else:
+            self.ui.set_warning_data_page(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language],'data_auquzation',level=2)
+
+    #----------------------------------------------------------------------------------------
+    # 
+    #---------------------------------------------------------------------------------------- 
+    def refresh_label_img(self,img, fp=5):
+        if self.t%fp==0:
+            self.t=1
+            self.ui.show_image_in_label(img)
+
+        else:
+            self.t+=1
 
     #----------------------------------------------------------------------------------------
     # 
@@ -377,24 +402,37 @@ class API:
         sheet, selected_img, img_path = self.move_on_list.get_current('selected_imgs_for_label')    
         img = Utils.read_image( img_path, 'color')
 
-        if label_type == 'mask':
-            self.mask_label_backend.mouse_event(mouse_status, mouse_button, mouse_pt )
-            if self.mask_label_backend.is_drawing_finish():
-                self.mask_label_backend.save_mask('1')
+        self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt )
+        if self.label_bakcend[label_type].is_drawing_finish():
+            self.label_bakcend[label_type].save('1')
+        
+        label_img = self.label_bakcend[label_type].draw()
+        img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5 )
+        self.ui.show_image_in_label( img )
             
-            mask = self.mask_label_backend.draw_mask()
-            #res = Utils.add_layer_to_img(img,mask,opacity=0.7 )
-            #cv2.imshow('img',res)
-            #cv2.waitKey(10)
-            self.ui.show_image_in_label( mask )
 
-        if label_type == 'bbox':
-            self.bbox_label_backend.mouse_event(mouse_status, mouse_button, mouse_pt )
-            if self.bbox_label_backend.is_drawing_finish():
-                self.bbox_label_backend.save_bbox('1')
 
-            bbox = self.bbox_label_backend.draw_bboxs()
-            self.ui.show_image_in_label( bbox )
+        # if label_type == 'mask':
+        #     self.mask_label_backend.mouse_event(mouse_status, mouse_button, mouse_pt )
+        #     if self.mask_label_backend.is_drawing_finish():
+        #         self.mask_label_backend.save_mask('1')
+            
+        #     mask = self.mask_label_backend.draw_mask()
+        #     img = Utils.add_layer_to_img(img,mask,opacity=0.4, compress=0.5 )
+
+        # if label_type == 'bbox':
+        #     self.bbox_label_backend.mouse_event(mouse_status, mouse_button, mouse_pt )
+        #     if self.bbox_label_backend.is_drawing_finish():
+        #         self.bbox_label_backend.save_bbox('1')
+
+        #     bbox = self.bbox_label_backend.draw_bboxs()
+        #     img = Utils.add_layer_to_img(img,bbox,opacity=0.4, compress=0.5 )
+        
+        # self.ui.show_image_in_label( img )
+        # if mouse_status == 'mouse_move':
+        #     self.refresh_label_img(img, fp=3)
+        # else:
+        #     self.refresh_label_img(img, fp=1)
     
     #----------------------------------------------------------------------------------------
     # 

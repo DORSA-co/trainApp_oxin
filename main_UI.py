@@ -162,7 +162,7 @@ class UI_main_window(QMainWindow, ui):
         
 
         self.keyboard_connections = {}
-
+        self.label_type = 'mask'
 
         self.img=cv2.imread('images\dorsa-logo.png')
         self.set_crop_image(self.img)
