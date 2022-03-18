@@ -68,6 +68,13 @@ class moveOnList:
         idx = self.idxs[name]
         return mylist[idx]
 
+    def get_list(self,name):
+        mylist = self.lists[ name ] 
+        return mylist
+
+    def get_count(self,name):
+        mylist = self.lists[ name ] 
+        return len( mylist )
 
 
 
