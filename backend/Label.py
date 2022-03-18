@@ -31,15 +31,19 @@ class maskLbl:
     def mask_init(self):
         return np.zeros(self.img_size + (3,), dtype=np.uint8)
     
-    
+    #______________________________________________________________________________________________________
+    #
+    #______________________________________________________________________________________________________
+    def __denormal_pt__(self,pt):
+        return int(pt[0] * self.img_size[1]), int(pt[1] * self.img_size[0])
     
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
     def click(self,pt):
-        pt = int(pt[0] * self.img_size[1]), int(pt[1] * self.img_size[0])
+        pt = self.__denormal_pt__(pt)
         x,y = pt 
-        if self.status == 'none':
+        if self.status == 'none': #this codition is for draw new mask
             self.status = 'drawing'
             #check if pt is near to a rect corner mode should be 'editing' and store bbox idx and x and y idx
             for idex,(lbl,cnt) in enumerate(self.masks):
@@ -52,7 +56,7 @@ class maskLbl:
                         break
                     
                     
-        if self.status=='drawing' and self.accept_new_point:
+        if self.status=='drawing' and self.accept_new_point:#this condition is for drawing mask ( add point )
             self.add_points(pt)
             self.accept_new_point = False
         
@@ -77,6 +81,7 @@ class maskLbl:
     #
     #______________________________________________________________________________________________________
     def delete_point_or_mask(self,pt):
+        pt = self.__denormal_pt__(pt)
         if len(self.points)>0 and  self.status=='drawing':
             self.points.pop()
             if len(self.points)==0:
@@ -140,9 +145,7 @@ class maskLbl:
     #______________________________________________________________________________________________________
     def save_mask(self, label):
         #last point is same as first point so we ignore it
-        print(len(self.points))
         cnt = np.array(self.points[:-1]).reshape((-1,1,2))
-        print(cnt.shape)
         self.masks.append([label,cnt])
         self.status = 'none'
         self.points = []
@@ -191,6 +194,25 @@ class maskLbl:
 
 
 
+    #______________________________________________________________________________________________________
+    #check mouse event and doing coresponding Task
+    #______________________________________________________________________________________________________
+    def mouse_event(self, status, button, pt):
+            if button == 'left_btn' and status in ( 'mouse_press', 'mouse_move'):
+                self.click(pt)
+            
+            elif button == 'right_btn' and status == 'mouse_press':
+                self.delete_point_or_mask(pt)
+
+
+            elif status == 'mouse_release':
+                self.release()
+
+
+            
+                
+
+    
 
 
 

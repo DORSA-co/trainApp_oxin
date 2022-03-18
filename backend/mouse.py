@@ -24,8 +24,8 @@ class Mouse:
     def mouse_event(self, widget, function, button=None):
         def func(e):
             
-            self.btn =  BUTTONS[e.button()]
-            
+            self.btn =  BUTTONS.get(e.button(), self.btn )
+
             self.x, self.y = e.x(), e.y()
             self.rx, self.ry = self.x /  widget.width() , self.y /  widget.height() 
 
@@ -49,6 +49,11 @@ class Mouse:
 
     def connect_click(self, widget, function ):
         widget.mousePressEvent =self.mouse_event(widget , function)
+
+    def connect_all(self, widget, function ):
+        widget.mousePressEvent =self.mouse_event(widget , function)
+        widget.mouseReleaseEvent =self.mouse_event(widget , function)
+        widget.mouseMoveEvent = self.mouse_event(widget, function)
 
 
     def get_position(self):

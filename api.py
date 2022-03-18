@@ -47,7 +47,8 @@ class API:
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
         self.ds = Dataset(self.db.get_dataset_path())
-        self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
+        #self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
+        self.mask_label_backend=Label.maskLbl((600,800), LABEL_COLOR)
         #Label.bbox_lbl()
 
         #self.technical_backend = {'top': data_grabber()}
@@ -97,7 +98,7 @@ class API:
         for _,technical_widget in self.ui.get_technical().items():
             self.mouse.connet( technical_widget, self.update_technical_pointer_mouse )
 
-        self.mouse.connect_click(self.ui.image, self.label_image_mouse)
+        self.mouse.connect_all(self.ui.image, self.label_image_mouse)
         self.mouse.connet_dbclick( self.ui.crop_image, self.fit_image)
 
 
@@ -339,30 +340,17 @@ class API:
     def label_image_mouse(self, wgt_name):
         
         label_type=self.ui.get_label_type()
+        mouse_status = self.mouse.get_status()
+        mouse_button = self.mouse.get_button()
+        mouse_pt = self.mouse.get_relative_position()
 
         if label_type == 'mask':
-            if self.mouse.get_button() == 'left_btn':
-                pt = self.mouse.get_relative_position()
-                print('mmmm')
-                self.mask_label_backend.click(pt)
-
-                if self.mask_label_backend.is_drawing_finish():
-                    self.mask_label_backend.save_mask('1')
-                    print('mmmm444444444444')
-
-            elif self.mouse.get_status() == 'mouse_release':
-                self.mask_label_backend.release()
-
-        
+            self.mask_label_backend.mouse_event(mouse_status, mouse_button, mouse_pt )
+            if self.mask_label_backend.is_drawing_finish():
+                self.mask_label_backend.save_mask('1')
             
-
-            elif self.mouse.get_status() == '':
-                self.mask_label_backend.delete_point_or_mask(pt)
-                mask = self.mask_label_backend.draw_mask()
-
-            
-            mask_layer_img = self.mask_label_backend.draw_mask()
-            self.ui.show_image_in_label(mask_layer_img)
+            mask = self.mask_label_backend.draw_mask()
+            self.ui.show_image_in_label( mask )
     
     #----------------------------------------------------------------------------------------
     # 
