@@ -48,7 +48,8 @@ class API:
         self.db = database_utils.dataBaseUtils()
         self.ds = Dataset(self.db.get_dataset_path())
         #self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
-        self.mask_label_backend=Label.maskLbl((600,800), LABEL_COLOR)
+        self.mask_label_backend = Label.maskLbl((600,800), LABEL_COLOR)
+        self.bbox_label_backend = Label.bboxLbl((600,800), LABEL_COLOR)
         #Label.bbox_lbl()
 
         #self.technical_backend = {'top': data_grabber()}
@@ -351,6 +352,14 @@ class API:
             
             mask = self.mask_label_backend.draw_mask()
             self.ui.show_image_in_label( mask )
+
+        if label_type == 'bbox':
+            self.bbox_label_backend.mouse_event(mouse_status, mouse_button, mouse_pt )
+            if self.bbox_label_backend.is_drawing_finish():
+                self.bbox_label_backend.save_bbox('1')
+
+            bbox = self.bbox_label_backend.draw_bboxs()
+            self.ui.show_image_in_label( bbox )
     
     #----------------------------------------------------------------------------------------
     # 
