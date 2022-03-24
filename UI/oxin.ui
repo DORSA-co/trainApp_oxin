@@ -5173,21 +5173,21 @@ QToolTip {
                                 <item>
                                  <layout class="QVBoxLayout" name="verticalLayout_25">
                                   <item>
-                                   <widget class="QLabel" name="label_13">
+                                   <widget class="QLabel" name="plabel_date_txt">
                                     <property name="text">
                                      <string>TextLabel</string>
                                     </property>
                                    </widget>
                                   </item>
                                   <item>
-                                   <widget class="QLabel" name="label_11">
+                                   <widget class="QLabel" name="plabel_coil_num_txt">
                                     <property name="text">
                                      <string>TextLabel</string>
                                     </property>
                                    </widget>
                                   </item>
                                   <item>
-                                   <widget class="QLabel" name="label_12">
+                                   <widget class="QLabel" name="plabel_cam_txt">
                                     <property name="text">
                                      <string>TextLabel</string>
                                     </property>
