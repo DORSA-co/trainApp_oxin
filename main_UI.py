@@ -164,8 +164,17 @@ class UI_main_window(QMainWindow, ui):
         self.keyboard_connections = {}
         self.label_type = 'mask'
 
-        self.img=cv2.imread('images\dorsa-logo.png')
+        self.img=cv2.imread('images/dorsa-logo.png')
         self.set_crop_image(self.img)
+
+
+        #Training_page
+
+        self.init_training_page()
+
+
+
+
 
 
 
@@ -738,6 +747,63 @@ class UI_main_window(QMainWindow, ui):
         self.fs = QImage(img,img.shape[1], img.shape[0],img.strides[0], QImage.Format_BGR888 )           
         self.image.setPixmap(QPixmap.fromImage(self.fs)) 
         
+
+
+######## Training Page
+
+    def init_training_page(self):
+
+        b_algorithms=['xBC','rBe']    #Must change
+
+        self.b_algorithms.addItems(b_algorithms) 
+
+        self.set_default_parms()
+
+        # self.b_algorithms.setCurrentText(str(records[0][0]))   #Must change
+
+    def set_default_parms(self):
+
+        b_parms={'batch_size':'64',
+        'image_path':'asdsa'}   #Must change
+
+        self.b_batch.setText(b_parms['batch_size'])
+
+        l_parms={'batch_size':'64',
+        'image_path':'asdsa'}   #Must change
+
+        self.l_batch.setText(l_parms['batch_size'])
+
+
+    def get_binary_parms(self):
+        binary_algorithm_name=self.b_algorithms.currentText()
+        binary_epoch=self.b_ecpochs.text()
+        binary_batch=self.b_batch.text()
+        binary_lr=self.b_lr.text()
+        binary_te=self.b_te.text()
+        binary_vs=self.b_vs.text()
+        binary_ip=self.b_ip.text()
+        binary_lp=self.b_lp.text()
+
+        return (binary_algorithm_name,binary_epoch,binary_batch,binary_lr,binary_te,binary_vs,binary_ip,binary_lp)
+
+
+    def get_localization_parms(self):
+        localization_algorithm_name=self.l_algorithms.currentText()
+        localization_epoch=self.l_ecpochs.text()
+        localization_batch=self.l_batch.text()
+        localization_lr=self.l_lr.text()
+        localization_te=self.l_te.text()
+        localization_vs=self.l_vs.text()
+        localization_ip=self.l_ip.text()
+        localization_lp=self.l_lp.text()
+
+        return (localization_algorithm_name,localization_epoch,localization_batch,localization_lr,localization_te,localization_vs,localization_ip,localization_lp)
+
+
+
+
+
+
 
 
 

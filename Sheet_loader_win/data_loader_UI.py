@@ -17,7 +17,7 @@ import api
 
 from PyQt5.QtGui import QPainter
 
-ui, _ = loadUiType("Sheet_loader_win\data_loader.ui")
+ui, _ = loadUiType("Sheet_loader_win/data_loader.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 class data_loader(QMainWindow, ui):
     global widgets

@@ -4,8 +4,7 @@
 from struct import pack
 
 from cv2 import add
-from soupsieve import select
-from sqlalchemy import true
+
 
 
 class manageSelectedImage:

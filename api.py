@@ -29,7 +29,7 @@ from utils.move_on_list import moveOnList
 import texts #eror and warnings texts
 from utils import tempMemory, Utils
 
-from backend.Dataset import Dataset
+from backend.dataset import Dataset
 
 WIDTH_TECHNICAL_SIDE = 49*12
 HEIGHT_FRAME_SIZE = 51
@@ -132,7 +132,14 @@ class API:
         self.ui.label_btn_SI.clicked.connect(partial(self.label_selected_img))
 
         self.ui.next_img_label_btn.clicked.connect(partial(self.next_label_img))
+        self.ui.binary_train.clicked.connect(partial(self.set_b_parms))
+        self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
+
+
+        #trainig
+
         self.ui.prev_img_label_btn.clicked.connect(partial(self.prev_label_img))
+
 
     def mouse_connector(self):
         for _,technical_widget in self.ui.get_technical().items():
@@ -412,67 +419,11 @@ class API:
             
 
 
-        # if label_type == 'mask':
-        #     self.mask_label_backend.mouse_event(mouse_status, mouse_button, mouse_pt )
-        #     if self.mask_label_backend.is_drawing_finish():
-        #         self.mask_label_backend.save_mask('1')
-            
-        #     mask = self.mask_label_backend.draw_mask()
-        #     img = Utils.add_layer_to_img(img,mask,opacity=0.4, compress=0.5 )
-
-        # if label_type == 'bbox':
-        #     self.bbox_label_backend.mouse_event(mouse_status, mouse_button, mouse_pt )
-        #     if self.bbox_label_backend.is_drawing_finish():
-        #         self.bbox_label_backend.save_bbox('1')
-
-        #     bbox = self.bbox_label_backend.draw_bboxs()
-        #     img = Utils.add_layer_to_img(img,bbox,opacity=0.4, compress=0.5 )
-        
-        # self.ui.show_image_in_label( img )
-        # if mouse_status == 'mouse_move':
-        #     self.refresh_label_img(img, fp=3)
-        # else:
-        #     self.refresh_label_img(img, fp=1)
-    
-    #----------------------------------------------------------------------------------------
-    # 
-    #---------------------------------------------------------------------------------------- 
-    # def save_img(self,user='admin'):
-    #     # listWidget = QListWidget()
-    #     # print(self.ui.win.path)
-    #     path=os.path.join(self.ui.win.path,'save_imgs')
-    #     # print(path)
-    #     # item = QListWidgetItem("Item %i" % i)
-    #     user='admin'
-    #     image = ImageQt.fromqpixmap(self.ui.crop_image.pixmap())
-    #     # image=np.ascontiguousarray(image)
-
-    #     # cv2.imshow('img',image)
-    #     # cv2.waitKey(0)
-    #     x =datetime.now()
-    #     x=x.strftime("%Y"+"-"+"%m"+"-"+"%d"+"-"+"%H"+"-"+"%M"+"-"+"%S")
-    #     x=str(x)+" "+str(user)
-    #     image.save('{}/{}.jpg'.format(path,x))
-    #     self.ui.listWidget_logs.addItem('Image Saved : '+'{}/{}.jpg'.format(path,x))
 
     def clear_list(self):
         self.ui.listWidget_logs.clear()
     
-    # def append(self):
-    #     image = ImageQt.fromqpixmap(self.ui.crop_image.pixmap())
-    #     x =datetime.now()
-    #     x=x.strftime("%Y"+"-"+"%m"+"-"+"%d"+"-"+"%H"+"-"+"%M"+"-"+"%S")
-    #     # x=str(x)+" "+str(user)
-    #     image.save('{}/{}.jpg'.format(self.cache_path,x))        
-    #     self.ui.listWidget_logs.addItem('Image Append to cache storage : '+'{}/{}.jpg'.format(self.cache_path,x))
 
-
-    
-    # def add_remove_label(self):
-    #     #print('add')
-    #     #print(self.ui.add_label_text.text())
-    #     add_remove_label.add_remove_label(self.ui.add_label_text.text())
-    #     self.set_labels()
  
 
     def clear_cache_fun(self):
@@ -509,3 +460,16 @@ class API:
         return parent_path
 
     
+
+    def set_b_parms(self):
+
+        b_parms=self.ui.get_binary_parms()
+
+        print(b_parms)
+
+    def set_l_parms(self):
+
+        l_parms=self.ui.get_localization_parms()
+
+        print(l_parms)      
+
