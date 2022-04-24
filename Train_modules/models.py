@@ -7,7 +7,11 @@ from tensorflow.keras.layers import *
 from tensorflow.keras.optimizers import *
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 #from tensorflow.keras import backend as keras
+<<<<<<< HEAD
 from deep_utils import metrics
+=======
+from Train_modules.deep_utils import metrics
+>>>>>>> r_abtahi
 from tensorflow.keras import layers 
 import segmentation_models as sm
 sm.set_framework('tf.keras')
@@ -271,7 +275,15 @@ def resnet_unet(input_size,lr=1e-3, num_class=1, mode=BINARY):
 #_____________________________________________________________________________________________________________
 def resnet_cnn(input_size,lr=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
     preprocess_input = tf.keras.applications.resnet_v2.preprocess_input
+<<<<<<< HEAD
     base_model = tf.keras.applications.ResNet50V2(include_top=False, weights='imagenet', input_shape=input_size)
+=======
+
+    base_model = tf.keras.applications.ResNet50V2(include_top=False, weights=None, input_shape=input_size)
+    base_model.load_weights(
+        '/home/reyhane/PycharmProjects/pythonProject2/resnet50v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
+
+>>>>>>> r_abtahi
     base_model.trainable = False
 
     inpt = tf.keras.Input(shape=input_size) 
@@ -315,7 +327,15 @@ def resnet_cnn(input_size,lr=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1,
 #_____________________________________________________________________________________________________________________________
 def xception_cnn(input_size,lr=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
     preprocess_input = tf.keras.applications.xception.preprocess_input
+<<<<<<< HEAD
     base_model = tf.keras.applications.Xception(include_top=False, weights='imagenet', input_shape=input_size)
+=======
+
+    base_model = tf.keras.applications.Xception(include_top=False, weights=None, input_shape=input_size)
+    base_model.load_weights(
+        '/home/reyhane/PycharmProjects/pythonProject2/xception_weights_tf_dim_ordering_tf_kernels_notop.h5')
+
+>>>>>>> r_abtahi
     base_model.trainable = False
 
     inpt = tf.keras.Input(shape=input_size) 

@@ -1,6 +1,10 @@
 import os
 from turtle import pos
+<<<<<<< HEAD
 # from typing_extensions import Annotated
+=======
+from typing_extensions import Annotated
+>>>>>>> r_abtahi
 import numpy as np
 import cv2
 from numpy.core.fromnumeric import reshape

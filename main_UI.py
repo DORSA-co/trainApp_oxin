@@ -171,7 +171,13 @@ class UI_main_window(QMainWindow, ui):
         #Training_page
 
         self.init_training_page()
+<<<<<<< HEAD
 
+=======
+        self.input_size1.valueChanged.connect(self.split_value_change)
+        self.input_size2.valueChanged.connect(self.split_value_change)
+        self.b_dp.textChanged.connect(self.split_value_change)
+>>>>>>> r_abtahi
 
 
 
@@ -191,7 +197,11 @@ class UI_main_window(QMainWindow, ui):
     def mouseMoveEvent(self, event):
         if not self._old_pos:
             return
+<<<<<<< HEAD
         delta = event.pos() - self._old_pos
+=======
+        delta = event.pos() - self._old_pos 
+>>>>>>> r_abtahi
         self.move(self.pos() + delta)
 
 
@@ -703,9 +713,17 @@ class UI_main_window(QMainWindow, ui):
         self.details_label.setText(text)
 
 
+<<<<<<< HEAD
     def set_warning_data_page(self,text,name,level=1):
         waring_labels = {
             'data_auquzation': self.warning_data_page
+=======
+    def set_warning(self,text,name,level=1):
+        waring_labels = {
+            'data_auquzation': self.warning_data_page,
+            'label': self.warning_label_page,
+            'train': self.warning_train_page
+>>>>>>> r_abtahi
         }
 
         if text !=None:
@@ -719,13 +737,21 @@ class UI_main_window(QMainWindow, ui):
                 waring_labels[name].setStyleSheet('background-color:#D9534F;border-radius:2px;color:black')
 
 
+<<<<<<< HEAD
             threading.Timer(2,self.set_warning_data_page,args=(None,name)).start()
+=======
+            threading.Timer(2, self.set_warning, args=(None, name)).start()
+>>>>>>> r_abtahi
 
 
 
 
         else:
             waring_labels[name].setText('')
+<<<<<<< HEAD
+=======
+            waring_labels[name].setStyleSheet('')
+>>>>>>> r_abtahi
 
 
             
@@ -753,26 +779,44 @@ class UI_main_window(QMainWindow, ui):
 
     def init_training_page(self):
 
+<<<<<<< HEAD
         b_algorithms=['xBC','rBe']    #Must change
 
         self.b_algorithms.addItems(b_algorithms) 
 
+=======
+        b_algorithms=['Xbc', 'Rbe']    #Must change
+        self.b_algorithms.addItems(b_algorithms)
+>>>>>>> r_abtahi
         self.set_default_parms()
 
         # self.b_algorithms.setCurrentText(str(records[0][0]))   #Must change
 
     def set_default_parms(self):
 
+<<<<<<< HEAD
         b_parms={'batch_size':'64',
         'image_path':'asdsa'}   #Must change
 
         self.b_batch.setText(b_parms['batch_size'])
+=======
+        b_parms={'algorithm_name': 'Xbc', 'epochs': '2', 'batch_size':'8',
+        'learning_rate': '1e-3', 'tuning_epochs':'1', 'validation_split': '20'}
+
+        self.b_algorithms.setCurrentText(b_parms['algorithm_name'])
+        self.b_epochs.setText(b_parms['epochs'])
+        self.b_batch.setText(b_parms['batch_size'])
+        self.b_lr.setText(b_parms['learning_rate'])
+        self.b_te.setText(b_parms['tuning_epochs'])
+        self.b_vs.setText(b_parms['validation_split'])
+>>>>>>> r_abtahi
 
         l_parms={'batch_size':'64',
         'image_path':'asdsa'}   #Must change
 
         self.l_batch.setText(l_parms['batch_size'])
 
+<<<<<<< HEAD
 
     def get_binary_parms(self):
         binary_algorithm_name=self.b_algorithms.currentText()
@@ -785,6 +829,25 @@ class UI_main_window(QMainWindow, ui):
         binary_lp=self.b_lp.text()
 
         return (binary_algorithm_name,binary_epoch,binary_batch,binary_lr,binary_te,binary_vs,binary_ip,binary_lp)
+=======
+    def set_default_db_parms(self, binary_path, split_size):
+        self.input_size1.setValue(split_size[0])
+        self.input_size2.setValue(split_size[1])
+        self.b_dp.setText(binary_path)
+
+    def get_binary_parms(self):
+        binary_algorithm_name=self.b_algorithms.currentText()
+        binary_input_size = tuple((self.input_size1.value(), self.input_size2.value()))
+        binary_epoch=int(float(self.b_epochs.text()))
+        binary_batch=int(float(self.b_batch.text()))
+        binary_lr=float(self.b_lr.text())
+        binary_te=int(float(self.b_te.text()))
+        binary_vs=float(self.b_vs.text()) / 100
+        if binary_vs > 0.5: binary_vs = 0.5
+        binary_dp=self.b_dp.text()
+
+        return (binary_algorithm_name, binary_input_size, binary_epoch,binary_batch,binary_lr,binary_te,binary_vs,binary_dp)
+>>>>>>> r_abtahi
 
 
     def get_localization_parms(self):
@@ -980,8 +1043,13 @@ class UI_main_window(QMainWindow, ui):
         self.do_keyboard( KEYS.get( event.key() ) )
         return KEYS.get( event.key() )
 
+<<<<<<< HEAD
 
 
+=======
+    def split_value_change(self):
+        self.progressBar_split.setValue(0)
+>>>>>>> r_abtahi
 
     # def get_label_type(self):
     #     if self.tabWidget_defect.currentTabText() =='Mask':

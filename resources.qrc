@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <RCC>
   <qresource prefix="images">
     <file>images/images/PyDracula.png</file>
@@ -277,3 +278,6 @@
     <file>images/icons/t2.png</file>
   </qresource>
 </RCC>
+=======
+<RCC/>
+>>>>>>> r_abtahi
