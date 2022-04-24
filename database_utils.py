@@ -8,7 +8,7 @@ from backend import pathStructure
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','password','localhost','saba_database')
+        self.db=database.dataBase('root','root','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
 

@@ -1,6 +1,6 @@
 import os
 from turtle import pos
-from typing_extensions import Annotated
+# from typing_extensions import Annotated
 import numpy as np
 import cv2
 from numpy.core.fromnumeric import reshape

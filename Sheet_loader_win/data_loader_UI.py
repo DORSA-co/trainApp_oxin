@@ -113,7 +113,7 @@ class data_loader(QMainWindow, ui):
         print(row)
 
 
-    def set_parent_path(self,path='G:/oxin_image_grabber'):
+    def set_parent_path(self,path='D:/oxin_image_grabber'):
        # api.set_parent_path()
          self.par_path=path
         

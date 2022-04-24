@@ -426,6 +426,7 @@ QComboBox{
 	border: 2px solid rgb(33, 37, 43);
 	padding: 5px;
 	padding-left: 10px;
+	color:white;
 }
 QComboBox:hover{
 	border: 2px solid rgb(64, 71, 88);
@@ -2275,7 +2276,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>0</number>
+                      <number>1</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -6357,7 +6358,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_binary">
                          <property name="currentIndex">
-                          <number>1</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_binary_list">
                           <widget class="QLabel" name="label_20">
@@ -6551,7 +6552,7 @@ QPushButton:hover {
                                    <item>
                                     <widget class="QLabel" name="label_143">
                                      <property name="text">
-                                      <string>Image Path :</string>
+                                      <string>Defect Path :</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -6572,33 +6573,12 @@ QPushButton:hover {
                                    <item>
                                     <widget class="QLabel" name="label_144">
                                      <property name="text">
-                                      <string>Label Path :</string>
+                                      <string>Perfect Path :</string>
                                      </property>
                                     </widget>
                                    </item>
                                    <item>
                                     <widget class="QLineEdit" name="lineEdit_58">
-                                     <property name="maximumSize">
-                                      <size>
-                                       <width>100</width>
-                                       <height>16777215</height>
-                                      </size>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                  </layout>
-                                 </item>
-                                 <item>
-                                  <layout class="QHBoxLayout" name="horizontalLayout_107">
-                                   <item>
-                                    <widget class="QLabel" name="label_145">
-                                     <property name="text">
-                                      <string>TextLabel</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <widget class="QLineEdit" name="lineEdit_59">
                                      <property name="maximumSize">
                                       <size>
                                        <width>100</width>
@@ -11124,7 +11104,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>218</width>
+                                 <width>311</width>
                                  <height>218</height>
                                 </rect>
                                </property>
