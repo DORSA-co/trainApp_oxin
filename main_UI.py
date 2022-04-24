@@ -193,7 +193,7 @@ class UI_main_window(QMainWindow, ui):
     def mouseMoveEvent(self, event):
         if not self._old_pos:
             return
-        delta = event.pos() - self._old_pos
+        delta = event.pos() - self._old_pos 
         self.move(self.pos() + delta)
 
 

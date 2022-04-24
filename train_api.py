@@ -8,11 +8,15 @@ import numpy as np
 import cv2
 import os
 
+DEBUG=False
+
 ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Rleu', 'Llu', 'uln'], 'classification': ['Xcc', 'Rce']}
 
-gpu = tf.config.list_physical_devices('GPU')
-cpu = tf.config.list_physical_devices('CPU')
-tf.config.experimental.set_memory_growth(gpu[0], True)
+if DEBUG:
+
+    gpu = tf.config.list_physical_devices('GPU')
+    cpu = tf.config.list_physical_devices('CPU')
+    tf.config.experimental.set_memory_growth(gpu[0], True)
 
 data_gen_args = dict(rotation_range=0.2,
                      width_shift_range=0.05,
