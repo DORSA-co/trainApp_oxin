@@ -996,6 +996,13 @@ class UI_main_window(QMainWindow, ui):
     def split_value_change(self):
         self.progressBar_split.setValue(0)
 
+
+
+    def show_image_info_lable_page(self, sheet,pos):
+        self.plabel_coil_num_txt.setText(str(sheet.get_id()))
+        self.plabel_date_txt.setText( str( sheet.get_date_string() ))
+        self.plabel_cam_txt.setText(str(pos[-1][0]))
+
     # def get_label_type(self):
     #     if self.tabWidget_defect.currentTabText() =='Mask':
     #         return 'mask'

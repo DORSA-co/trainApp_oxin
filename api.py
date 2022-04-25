@@ -32,6 +32,12 @@ from backend.dataset import Dataset
 from image_splitter import ImageCrops
 import train_api
 
+from labeling import labeling_UI
+
+from PySide2 import QtGui
+
+from pynput.mouse import Button, Controller
+
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
 NCAMERA = 12
@@ -57,14 +63,14 @@ class API:
         }
 
         # Label.bbox_lbl()
-
+        self.label_memory = tempMemory.manageLabel()
         # self.technical_backend = {'top': data_grabber()}
         self.thechnicals_backend = {}
         # self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
         self.t = 0
         self.current_technical_side = ''
         self.selected_images_for_label = tempMemory.manageSelectedImage()
-
+        self.finish_draw=0
         self.language = 'en'
         self.size = self.db.get_split_size()
 
@@ -79,11 +85,19 @@ class API:
         self.keyboard_connector()
         # -------------------------------------
 
+        # Create labeling window
+        # -------------------------------------
+
+        self.labaling_UI=labeling_UI.labeling()
+
+        self.mouse_controll = Controller()
+
+
         # DEBUG_FUNCTIONS
         # -------------------------------------
-        # self.__debug_load_sheet__(['996','997'])
-        # self.__debug_select_random__()
-        # self.__debug_select_for_label()
+        self.__debug_load_sheet__(['996','997'])
+        self.__debug_select_random__()
+        self.__debug_select_for_label()
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, 'sheets_id')
@@ -130,7 +144,7 @@ class API:
         self.ui.prev_img_label_btn.clicked.connect(partial(self.prev_label_img))
         self.ui.binary_train.clicked.connect(partial(self.set_b_parms))
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
-        self.ui.save_dataset_btn.clicked.connect(partial(self.create_train_ds))
+        self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
 
         # trainig
         self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
@@ -374,10 +388,22 @@ class API:
     # 
     # ----------------------------------------------------------------------------------------
     def load_image_to_label_page(self):
-        sheet, selected_img, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        self.img = Utils.read_image(img_path, 'color')
+        sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label') 
+        label_type=self.ui.get_label_type()
+        self.img = Utils.read_image( img_path, 'color')
+        label = self.label_memory.get_label(label_type, img_path)
+        self.label_bakcend[label_type].load(label)
+        print(label, img_path)
+        
+        label_img = self.label_bakcend[label_type].draw()
+        self.img = Utils.add_layer_to_img(self.img, label_img, opacity=0.4, compress=0.5 )
+        self.ui.show_image_in_label( self.img )
+
+        
         self.ui.show_image_in_label(self.img)
 
+        self.ui.show_image_info_lable_page(sheet,selected_img_pos)
+        
     def next_label_img(self):
         self.move_on_list.next_on_list('selected_imgs_for_label')
         self.load_image_to_label_page()
@@ -389,26 +415,37 @@ class API:
     # ----------------------------------------------------------------------------------------
     # 
     # ----------------------------------------------------------------------------------------
-    def label_image_mouse(self, wgt_name):
-
-        label_type = self.ui.get_label_type()
+    def label_image_mouse(self, wgt_name=''):
+        
+        label_type=self.ui.get_label_type()
         mouse_status = self.mouse.get_status()
         mouse_button = self.mouse.get_button()
         mouse_pt = self.mouse.get_relative_position()
 
-        sheet, selected_img, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        img = Utils.read_image(img_path, 'color')
+        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')    
+        img = Utils.read_image( img_path, 'color')
 
-        self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt)
+        self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt )
         if self.label_bakcend[label_type].is_drawing_finish():
             self.label_bakcend[label_type].save('1')
-
+        
         label_img = self.label_bakcend[label_type].draw()
-        img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
-        self.ui.show_image_in_label(img)
+        img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5 )
+        self.ui.show_image_in_label( img )
+            
+        
+        self.label_memory.add(  img_path,
+                                self.label_bakcend[label_type].get(),
+                                label_type )
 
-    def clear_list(self):
-        self.ui.listWidget_logs.clear()
+
+    def show_labeling(self,label_type):
+
+            current_mouse_position = self.mouse_controll.position
+            print(current_mouse_position)
+            self.labaling_UI.win_set_geometry(left=current_mouse_position[0],top=current_mouse_position[1])
+            self.labaling_UI.show()
+            self.label_bakcend[label_type].save('1')
 
     def clear_cache_fun(self):
         dir = self.cache_path
@@ -449,12 +486,34 @@ class API:
 
         print(l_parms)
 
-    def create_train_ds(self):
+
+
+    def save_to_dataset(self):
+        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')    
+        self.ds.save(
+            img_path=img_path,
+            pos = pos,
+            sheet= sheet,
+            masks= self.label_bakcend['mask'].get(),
+            bboxes=self.label_bakcend['bbox'].get()
+
+        )
+
+    def save_train_ds(self):
         try:
-            sheet, selected_img, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+            sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+            self.ds.save(
+                img_path=img_path,
+                pos = pos,
+                sheet= sheet,
+                masks= self.label_bakcend['mask'].get(),
+                bboxes=self.label_bakcend['bbox'].get()
+
+                )
+    
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
-            return
+            # return
 
         if self.ui.no_defect.isChecked():
             self.ds.save_to_perfect(img_path)
@@ -468,6 +527,8 @@ class API:
 
         else:
             self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
+
+
 
     def split_binary_dataset(self):
         if self.ui.progressBar_split.value() == 100:
