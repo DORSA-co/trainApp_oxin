@@ -17,6 +17,8 @@ import detect_lenguage
 import setting
 import api
 from Sheet_loader_win.data_loader_UI import data_loader
+from labeling.labeling_UI import labeling
+from labeling import labeling_api
 from PIL import ImageQt
 import numpy as np
 import threading
@@ -82,6 +84,9 @@ class UI_main_window(QMainWindow, ui):
         # CONNECTED WINDOWS
         #//////////////////////////////////////////////
         self.load_sheets_win=data_loader()
+
+        self.labeling_win=labeling()
+        labeling_api.labeling_API(self.labeling_win)
 
 
 
@@ -696,6 +701,10 @@ class UI_main_window(QMainWindow, ui):
 
         # print(x,y)
 
+
+    def labeling_win_show(self):
+        
+        self.labeling_win.show()
 
 
     def show_sheet_details(self,details):

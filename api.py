@@ -32,11 +32,15 @@ from backend.dataset import Dataset
 from image_splitter import ImageCrops
 import train_api
 
-from labeling import labeling_UI
+# from labeling import labeling_UI
 
-from PySide2 import QtGui
+# from PySide2 import QtGui
 
+
+from labeling import labeling_api
 from pynput.mouse import Button, Controller
+
+
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
@@ -76,6 +80,17 @@ class API:
 
         self.ui.set_default_db_parms(self.ds.binary_path, self.size)
 
+
+        # Create labeling window
+        # -------------------------------------
+
+        # self.labaling_UI=labeling_UI.labeling()
+
+        self.mouse_controll = Controller()
+
+
+        # self.defects_name,self.defects_info=self.db.get_defects()
+
         # -------------------------------------
         # connet buttons to correspondings functions in API               ////////////////////
         self.button_connector()
@@ -85,12 +100,7 @@ class API:
         self.keyboard_connector()
         # -------------------------------------
 
-        # Create labeling window
-        # -------------------------------------
 
-        self.labaling_UI=labeling_UI.labeling()
-
-        self.mouse_controll = Controller()
 
 
         # DEBUG_FUNCTIONS
@@ -148,6 +158,12 @@ class API:
 
         # trainig
         self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
+
+
+        # labeling
+
+        # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
+
 
     def mouse_connector(self):
         for _, technical_widget in self.ui.get_technical().items():
@@ -427,8 +443,9 @@ class API:
 
         self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt )
         if self.label_bakcend[label_type].is_drawing_finish():
-            self.label_bakcend[label_type].save('1')
-        
+            print('asdwqdqwd')
+            # self.label_bakcend[label_type].save('1')
+            self.show_labeling(label_type)
         label_img = self.label_bakcend[label_type].draw()
         img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5 )
         self.ui.show_image_in_label( img )
@@ -443,9 +460,23 @@ class API:
 
             current_mouse_position = self.mouse_controll.position
             print(current_mouse_position)
-            self.labaling_UI.win_set_geometry(left=current_mouse_position[0],top=current_mouse_position[1])
-            self.labaling_UI.show()
+            # nameself.defects=self.db.get_defects()
+            # print(self.defects['name'])
+            # self.labaling_UI.set_combobox(self.defects_name)
+            self.ui.labeling_win.win_set_geometry(left=current_mouse_position[0],top=current_mouse_position[1])
+            self.ui.labeling_win_show()
+            
+
+
+
+            
+
+    def set_label(self):
+
+            # self.labaling_UI.
+
             self.label_bakcend[label_type].save('1')
+
 
     def clear_cache_fun(self):
         dir = self.cache_path

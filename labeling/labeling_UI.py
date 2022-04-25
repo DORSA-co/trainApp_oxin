@@ -12,7 +12,8 @@ from PyQt5.QtGui import QPainter
 import pandas as pd
 
 from PyQt5.QtGui import QPainter
-
+from labeling import labeling_api
+# import labeling_api
 ui, _ = loadUiType("UI/labeling.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 class labeling(QMainWindow, ui):
@@ -68,11 +69,8 @@ class labeling(QMainWindow, ui):
 
         self.comboBox_defects.addItems(defects_list)
 
-        self.comboBox_defects.currentTextChanged.connect(self.updte_table)
         
-
-    
-
+        
 
     def updte_table(self,records):
 
@@ -98,6 +96,11 @@ class labeling(QMainWindow, ui):
         except:
 
             print('eror')
+
+
+    def get_label_name(self):
+
+        return self.comboBox_defects.currentText()
 
 
     def buttonClick(self):
@@ -127,13 +130,14 @@ class labeling(QMainWindow, ui):
 
 
 
-
+#api = labeling_api.labeling_API(win)
 
 
 
 if __name__ == "__main__":
     app = QApplication()
     win = labeling()
+    api = labeling_api.labeling_API(win)
     win.show()
     sys.exit(app.exec())
     

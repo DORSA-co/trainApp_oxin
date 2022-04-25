@@ -51,11 +51,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.save_btn = QPushButton(self.frame)
         self.save_btn.setObjectName(u"save_btn")
+        self.save_btn.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.horizontalLayout.addWidget(self.save_btn)
 
         self.cancel_btn = QPushButton(self.frame)
         self.cancel_btn.setObjectName(u"cancel_btn")
+        self.cancel_btn.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.horizontalLayout.addWidget(self.cancel_btn)
 
