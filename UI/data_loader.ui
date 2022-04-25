@@ -777,13 +777,9 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                      </property>
                      <property name="font">
                       <font>
-<<<<<<< HEAD
                        <family>Segoe UI</family>
                        <pointsize>10</pointsize>
                        <weight>50</weight>
-=======
-                       <pointsize>10</pointsize>
->>>>>>> r_abtahi
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -822,13 +818,9 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                      </property>
                      <property name="font">
                       <font>
-<<<<<<< HEAD
                        <family>Segoe UI</family>
                        <pointsize>10</pointsize>
                        <weight>50</weight>
-=======
-                       <pointsize>10</pointsize>
->>>>>>> r_abtahi
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -851,13 +843,9 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                      </property>
                      <property name="font">
                       <font>
-<<<<<<< HEAD
                        <family>Segoe UI</family>
                        <pointsize>10</pointsize>
                        <weight>50</weight>
-=======
-                       <pointsize>10</pointsize>
->>>>>>> r_abtahi
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -889,11 +877,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
   </widget>
  </widget>
  <resources>
-<<<<<<< HEAD
   <include location="../trainApp_oxin/resources.qrc"/>
-=======
-  <include location="../resources.qrc"/>
->>>>>>> r_abtahi
  </resources>
  <connections/>
 </ui>

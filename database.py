@@ -154,12 +154,9 @@ class dataBase:
             records = cursor.fetchall()
             print("Total number of rows in table: ", cursor.rowcount)
             print(records)
-<<<<<<< HEAD
             connection.close()
             cursor.close()
             print("MySQL connection is closed")
-=======
->>>>>>> r_abtahi
 
             field_names = [col[0] for col in cursor.description]
             res = []
@@ -169,13 +166,6 @@ class dataBase:
                         record_dict[ field_names[i] ] = record[i]
                     res.append( record_dict )
 
-<<<<<<< HEAD
-=======
-            connection.close()
-            cursor.close()
-            print("MySQL connection is closed")
-
->>>>>>> r_abtahi
             return res
 
 

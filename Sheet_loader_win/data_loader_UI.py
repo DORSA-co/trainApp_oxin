@@ -113,12 +113,8 @@ class data_loader(QMainWindow, ui):
         print(row)
 
 
-<<<<<<< HEAD
     def set_parent_path(self,path='D:/oxin_image_grabber'):
-=======
-    def set_parent_path(self,path='G:/oxin_image_grabber'):
->>>>>>> r_abtahi
-       # api.set_parent_path()
+           # api.set_parent_path()
          self.par_path=path
         
 

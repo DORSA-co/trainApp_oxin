@@ -3,25 +3,15 @@ import shutil
 from backend import Annotation
 import string
 import random
-<<<<<<< HEAD
-class Dataset:
-
-
-    def __init__(self, dataset_path):
-=======
 import cv2
 class Dataset:
 
 
     def __init__(self, dataset_path, weights_path):
->>>>>>> r_abtahi
         self.images_temp_folder = 'temp_images'
         self.annotations_temp_folder = 'temp_annotations'
         self.images_folder = 'images'
         self.annotations_folder = 'annotations'
-<<<<<<< HEAD
-        self.dataset_path = dataset_path
-=======
         self.binary_folder = 'binary'
         self.defect_folder = 'defect'
         self.perfect_folder = 'perfect'
@@ -29,7 +19,6 @@ class Dataset:
         self.perfect_splitted_folder = 'perfect_splitted'
         self.dataset_path = dataset_path
         self.weights_path = weights_path
->>>>>>> r_abtahi
         self.format_image = '.jpg'
 
         # print(self.dataset_path)
@@ -49,10 +38,6 @@ class Dataset:
         self.annotations_temp_path = os.path.join( self.dataset_path, self.annotations_temp_folder )
         self.images_path = os.path.join( self.dataset_path, self.images_folder )
         self.annotations_path = os.path.join( self.dataset_path, self.annotations_folder )
-<<<<<<< HEAD
-        # print(self.annotations_folder)
-        self.__creat_path__(self.dataset_path)
-=======
         self.binary_path = os.path.join( self.dataset_path, self.binary_folder )
         self.defect_path = os.path.join( self.binary_path, self.defect_folder )
         self.perfect_path = os.path.join( self.binary_path, self.perfect_folder )
@@ -62,22 +47,16 @@ class Dataset:
         # print(self.annotations_folder)
         self.__creat_path__(self.dataset_path)
         self.__creat_path__(self.weights_path)
->>>>>>> r_abtahi
         self.__creat_path__(self.images_temp_path)
         self.__creat_path__(self.annotations_temp_path)
         self.__creat_path__(self.images_path)
         self.__creat_path__(self.annotations_path)
-<<<<<<< HEAD
-
-
-=======
         self.__creat_path__(self.binary_path)
         self.__creat_path__(self.defect_path)
         self.__creat_path__(self.perfect_path)
         self.__creat_path__(self.defect_splitted_path)
         self.__creat_path__(self.perfect_splitted_path)
         self.__creat_path__(self.weights_binary_path)
->>>>>>> r_abtahi
 
 
     def __random_name__(self, length):
@@ -111,8 +90,6 @@ class Dataset:
         annotation.write(json_path)
 
 
-<<<<<<< HEAD
-=======
     def save_to_defect(self, img_path):
         # image_name = os.path.split(img_path)[-1]
         image_name = self.__random_name__(10) + self.format_image
@@ -159,7 +136,6 @@ class Dataset:
             shutil.rmtree(perfect_splitted_path)
         self.__creat_path__(defect_splitted_path)
         self.__creat_path__(perfect_splitted_path)
->>>>>>> r_abtahi
 
 if __name__ == '__main__':
     ds = Dataset('a')

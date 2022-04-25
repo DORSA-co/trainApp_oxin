@@ -86,10 +86,6 @@ class dataBaseUtils():
         record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
         return record['path_dataset']
 
-<<<<<<< HEAD
-
-   
-=======
     def set_weights_path(self,path):
         #  update_record(self,data,table_name,col_name,value,id,id_value):
         self.db.update_record(table_name= self.setting_tabel,col_name='path_weights',value=path,id='id',id_value=0)
@@ -104,7 +100,6 @@ class dataBaseUtils():
     def get_split_size(self):
         record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
         return eval(record['split_size'])
->>>>>>> r_abtahi
 
     def get_path_sheet_image(self,filtered_selected):
         paths = []
