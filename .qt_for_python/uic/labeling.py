@@ -16,8 +16,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QHBoxLayout,
-    QListWidget, QListWidgetItem, QMainWindow, QPushButton,
-    QSizePolicy, QVBoxLayout, QWidget)
+    QHeaderView, QMainWindow, QPushButton, QSizePolicy,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -42,10 +42,13 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addWidget(self.comboBox_defects)
 
-        self.listWidget_defect = QListWidget(self.frame)
-        self.listWidget_defect.setObjectName(u"listWidget_defect")
+        self.tableWidget_defects = QTableWidget(self.frame)
+        if (self.tableWidget_defects.columnCount() < 5):
+            self.tableWidget_defects.setColumnCount(5)
+        self.tableWidget_defects.setObjectName(u"tableWidget_defects")
+        self.tableWidget_defects.setColumnCount(5)
 
-        self.verticalLayout_2.addWidget(self.listWidget_defect)
+        self.verticalLayout_2.addWidget(self.tableWidget_defects)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")

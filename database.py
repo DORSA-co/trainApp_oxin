@@ -187,6 +187,7 @@ class dataBase:
                 #print("Total number of rows in table: ", cursor.rowcount)
                 #print(len(records),records)
                 #----------------------------
+                # print(records)
                 
                 field_names = [col[0] for col in cursor.description]
                 res = []

@@ -5,7 +5,7 @@ from PySide6.QtCore import *
 from backend import data_grabber
 from backend.mouse import Mouse
 from backend.keyboard import Keyboard
-from backend import Label
+# from backend import Label
 import cv2
 import threading
 import time
@@ -32,11 +32,8 @@ from backend.dataset import Dataset
 from image_splitter import ImageCrops
 import train_api
 
-# from labeling import labeling_UI
 
-# from PySide2 import QtGui
-
-
+from labeling.labeling_UI import labeling
 from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
@@ -47,7 +44,7 @@ HEIGHT_FRAME_SIZE = 51
 NCAMERA = 12
 
 TECHNICAL_WGT_NAME_TO_SIDE = {'up_side_technical', 'top', 'bottom'}
-LABEL_COLOR = {'1': (0, 0, 255)}
+
 
 
 # down_side_technical     ,   up_side_technical
@@ -60,10 +57,11 @@ class API:
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
         self.ds = Dataset(self.db.get_dataset_path(), self.db.get_weights_path())
+        self.create_label_color()
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
-            'mask': Label.maskLbl((1200, 1920), LABEL_COLOR),
-            'bbox': Label.bboxLbl((1200, 1920), LABEL_COLOR)
+            'mask': Label.maskLbl((1200, 1920), self.LABEL_COLOR),
+            'bbox': Label.bboxLbl((1200, 1920), self.LABEL_COLOR)
         }
 
         # Label.bbox_lbl()
@@ -85,8 +83,10 @@ class API:
         # -------------------------------------
 
         # self.labaling_UI=labeling_UI.labeling()
-
+        # self.labeling_win=labeling()
         self.mouse_controll = Controller()
+
+        self.get_defects()
 
 
         # self.defects_name,self.defects_info=self.db.get_defects()
@@ -160,9 +160,7 @@ class API:
         self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
 
 
-        # labeling
 
-        # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
 
 
     def mouse_connector(self):
@@ -431,6 +429,28 @@ class API:
     # ----------------------------------------------------------------------------------------
     # 
     # ----------------------------------------------------------------------------------------
+ 
+    def create_label_color(self):
+        self.LABEL_COLOR = {'black': (0, 0,0)} 
+        defect_name,defect_info=self.get_defects()
+        # print(len(defect_info),defect_info)
+        for i in range(len(defect_info)):
+
+            print(defect_name[i],defect_info[i]['color'])
+
+            hex_color=defect_info[i]['color'].lstrip('#')
+
+            rgb_color=tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+            # print(rgb_color)
+            
+            self.LABEL_COLOR.update({defect_name[i]:rgb_color})
+
+
+
+        print(self.LABEL_COLOR)
+ 
+ 
     def label_image_mouse(self, wgt_name=''):
         
         label_type=self.ui.get_label_type()
@@ -444,8 +464,12 @@ class API:
         self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt )
         if self.label_bakcend[label_type].is_drawing_finish():
             print('asdwqdqwd')
+            self.finish_draw+=1
+            if self.finish_draw==2:
+                self.finish_draw=0
+
             # self.label_bakcend[label_type].save('1')
-            self.show_labeling(label_type)
+                self.show_labeling(label_type)
         label_img = self.label_bakcend[label_type].draw()
         img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5 )
         self.ui.show_image_in_label( img )
@@ -455,27 +479,56 @@ class API:
                                 self.label_bakcend[label_type].get(),
                                 label_type )
 
+    def get_defects(self):
+        self.defects_name,self.defects_info=self.db.get_defects()
+
+        return self.defects_name,self.defects_info
+
 
     def show_labeling(self,label_type):
 
             current_mouse_position = self.mouse_controll.position
             print(current_mouse_position)
-            # nameself.defects=self.db.get_defects()
-            # print(self.defects['name'])
-            # self.labaling_UI.set_combobox(self.defects_name)
+
+            sign_defect_table=self.db.ret_sign_defect_table()
+            print('sign_defect_table',sign_defect_table)
+            if sign_defect_table==0:
+                
+                print('nochange')
+            
+            else:
+                print('change')
+                self.defects_name,self.defects_info=self.db.get_defects()
+
+            # self.create_labeling()
+            labeling_win=self.ui.ret_create_labeling()
+            self.labeling_api=labeling_api.labeling_API(labeling_win,self.defects_name,self.defects_info)
             self.ui.labeling_win.win_set_geometry(left=current_mouse_position[0],top=current_mouse_position[1])
-            self.ui.labeling_win_show()
-            
+            self.ui.labeling_win.save_btn.clicked.connect(partial(self.set_label))
+            self.ui.labeling_win.show()
 
+            print('end show_labeling')
 
-
-            
 
     def set_label(self):
 
             # self.labaling_UI.
+            selected_label=self.labeling_api.ret_selcted_label()
+            label_type=self.ui.get_label_type()
 
-            self.label_bakcend[label_type].save('1')
+
+
+            self.label_bakcend[label_type].save(str(selected_label))
+
+            print('end set_label',selected_label)
+
+            self.ui.labeling_win.close_win()
+            self.ui.labeling_win = None
+
+
+    def get_sign_table_defect(self,table_name):
+        sign=sign_defect=self.db.get_sign()
+
 
 
     def clear_cache_fun(self):

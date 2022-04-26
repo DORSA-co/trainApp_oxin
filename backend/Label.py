@@ -145,6 +145,8 @@ class maskLbl:
     #
     #______________________________________________________________________________________________________
     def save(self, label):
+
+        print('label',label)
         #last point is same as first point so we ignore it
         cnt = np.array(self.points[:-1]).reshape((-1,1,2))
         self.masks.append([label,cnt])
@@ -193,8 +195,11 @@ class maskLbl:
     
     def draw(self):
         masks_img = self.mask_init()
-        
+        # print('color lbl',self.label_color[0])
         for lbl, cnt in self.masks:
+
+            print('lastcolor',self.label_color[lbl])
+            
             cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=-1)
             for corner in cnt:
                 corner = tuple(corner[0])
@@ -365,6 +370,8 @@ class bboxLbl:
             (x1,y1), (x2,y2) = self.points
             xmin, xmax = min(x1,x2) , max(x1,x2)
             ymin, ymax = min(y1,y2) , max(y1,y2)
+
+            print('label',label)
             
             #only add enough big bbox
             if xmax-xmin>5 and ymax-ymin>5:

@@ -70,32 +70,38 @@ class labeling(QMainWindow, ui):
         self.comboBox_defects.addItems(defects_list)
 
         
-        
+    def set_on_top(self):
+        # self.setWindowFlags(Qt.WindowStaysOnTopHint)
+
+        flags = Qt.WindowFlags(Qt.FramelessWindowHint|Qt.WindowStaysOnTopHint)
+        self.pos_ = self.pos()
+        self.setWindowFlags(flags)
+        # self.show()
+        print('set_on_top')
 
     def updte_table(self,records):
 
-        try:
+      
 
-            self.clear_table()                                                  #cleare table
+        # self.clear_table()                                                  #cleare table
 
-            self.listWidget_defect.setRowCount(len(records))           #set row count
+        self.tableWidget_defects.setRowCount(1)           #set row count
+
+        self.hh_Labels=['name', 'defect_ID', 'is_defect', 'group','level']
+        self.tableWidget_defects.setHorizontalHeaderLabels(self.hh_Labels)
+        table_item = QTableWidgetItem(str(records))
+
+        print('roeasdawd',records[self.hh_Labels[1]])
+
+        for row in range(len(self.hh_Labels)):
+            
+            table_item = QTableWidgetItem(records[self.hh_Labels[row]])
+            # table_item.setData(Qt.DisplayRole, record)
+            self.tableWidget_defects.setItem(0,row,table_item)
 
 
 
-            for row,record in enumerate(records):
-                # for i in range(11):
-                    # print(i)
-                    record = '{} - {} - {}'.format(record[0],record[1],(record[2]))
-                    table_item = QTableWidgetItem(str(record))
-                    # if i ==0:
-                    table_item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
-                    table_item.setCheckState(Qt.CheckState.Unchecked)
-                    table_item.setData(Qt.DisplayRole, record)
-                    self.listWidget_defect.setItem(row,0,table_item)
-                    print(table_item)
-        except:
-
-            print('eror')
+        #     print('eror')
 
 
     def get_label_name(self):

@@ -85,8 +85,8 @@ class UI_main_window(QMainWindow, ui):
         #//////////////////////////////////////////////
         self.load_sheets_win=data_loader()
 
-        self.labeling_win=labeling()
-        labeling_api.labeling_API(self.labeling_win)
+        # self.labeling_win=labeling()
+        # labeling_api.labeling_API(self.labeling_win)
 
 
 
@@ -694,17 +694,17 @@ class UI_main_window(QMainWindow, ui):
 
 
     def data_loader_win_show(self):
-        #print('show loader win')
         self.load_sheets_win.show()
 
 
 
         # print(x,y)
 
+    def ret_create_labeling(self):
+        self.labeling_win=labeling()
+        return self.labeling_win
+        # self.labeling_win_show()
 
-    def labeling_win_show(self):
-        
-        self.labeling_win.show()
 
 
     def show_sheet_details(self,details):
