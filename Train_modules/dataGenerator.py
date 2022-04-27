@@ -36,7 +36,7 @@ aug_dict = dict(rotation_range=15,
 def get_binarygenerator(path, target_size, defective_folder, perfect_folder,aug_dict , batch_size=8, validation_split=0.2):
     
     trainGen = ImageDataGenerator(**aug_dict, validation_split=validation_split)
-    valGen = ImageDataGenerator(validation_split=validation_split)
+    # valGen = ImageDataGenerator(validation_split=validation_split)
     
     
     train_dataset = trainGen.flow_from_directory(
@@ -55,7 +55,7 @@ def get_binarygenerator(path, target_size, defective_folder, perfect_folder,aug_
         class_mode='binary',
         classes=[perfect_folder, defective_folder],
         seed=42,
-        subset='validation') # set as training data
+        subset='validation') # set as validation data
 
     return train_dataset, val_dataset
 

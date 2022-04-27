@@ -16,8 +16,8 @@ cpu = tf.config.list_physical_devices('CPU')
 tf.config.experimental.set_memory_growth(gpu[0], True)
 
 
-batch = 8
-epochs = 2
+batch = 32
+epochs = 10
 fine_tune_epochs=1
 dataset_path = 'J:/dataset_oxin/data/binary'
 input_size = (128,800,3)
@@ -37,7 +37,7 @@ data_gen_args = dict(rotation_range=0.2,
 
 
 
-trainGen, testGen = dataGenerator.get_binarygenerator( dataset_path,
+trainGen, valGen = dataGenerator.get_binarygenerator( dataset_path,
                                                         (128,800),
                                                         'defective',
                                                         'perfect',
@@ -46,19 +46,21 @@ trainGen, testGen = dataGenerator.get_binarygenerator( dataset_path,
                                                         validation_split=0.2)
 
 
-model = models.xception_cnn(input_size, num_class=1, mode=models.BINARY)
+model = models.efficientnetb2_cnn(input_size, num_class=1, mode=models.BINARY)
 my_callback = callbacks.CustomCallback('models/checkpoint_bin.h5')
-
-
+mc = tf.keras.callbacks.ModelCheckpoint('models/best_model.h5', monitor='val_loss', save_best_only=True, verbose=1)
+# val_accuracy
 inpt = input('Do you want to train? y/n \n')
 if inpt in ['Y','y']:
     history = model.fit(  trainGen,
             steps_per_epoch=trainGen.n//batch + 1,
             epochs=epochs-fine_tune_epochs,
             callbacks=[my_callback ],
-            validation_data=testGen,
-            validation_steps=testGen.n//batch + 1, 
+            # validation_split=0.2,
+            validation_data=valGen,
+            validation_steps=valGen.n//batch + 1, 
             initial_epoch=0)
+
     print(history.history.keys())
     figure(figsize=(8, 6))
     plt.plot(history.history['accuracy'])
@@ -84,15 +86,15 @@ if inpt in ['Y','y']:
 inpt = input('Do you want to fine tune? y/n \n')
 if inpt in ['Y','y']:
     
-    model = models.xception_cnn(input_size, num_class=1, mode=models.CATEGORICAL, fine_tune_layer=120, weights='models/checkpoint_bin.h5')
+    model = models.efficientnetb2_cnn(input_size, num_class=1, mode=models.CATEGORICAL, fine_tune_layer=120, weights='models/checkpoint_bin.h5')
     my_callback = callbacks.CustomCallback('models/checkpoint.h5')
-
+    mc = callbacks.ModelCheckpoint('models/best_model_FineTune.h5', monitor='val_loss', save_best_only=True, verbose=1)
     history = model.fit(  trainGen,
                 steps_per_epoch=trainGen.n//batch + 1,
                 epochs=epochs,
-                callbacks=[my_callback ],
-                validation_data=testGen,
-                validation_steps=testGen.n//batch + 1, 
+                callbacks=[my_callback,mc ],
+                validation_data=valGen,
+                validation_steps=valGen.n//batch + 1, 
                 initial_epoch=epochs-fine_tune_epochs)
 
     print(history.history.keys())

@@ -10,4 +10,4 @@ class CustomCallback(keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         keys = list(logs.keys())
         self.model.save( self.out_path)
-        print("End epoch {} of training; got log keys: {}".format(epoch, keys))
+        print("--End epoch {} of training; got log keys: {}".format(epoch, keys))
