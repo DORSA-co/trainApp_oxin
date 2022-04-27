@@ -25,7 +25,11 @@ WARNINGS={
                  'en': ' No image loaded '},
 
         'DATASET_FORMAT': {'fa': ' قالب مجموعه داده صحیح نیست ',
-                 'en': ' Dataset format is incorrect '}
+                 'en': ' Dataset format is incorrect '},
+
+        'IMAGE_SAVE_SUCCESSFULLY':{'fa': 'موفقیت ذخیره شد',
+                 'en': ' Image Saved '}
+
 
 }
 

@@ -82,6 +82,10 @@ class maskLbl:
     #
     #______________________________________________________________________________________________________
     def delete_point_or_mask(self,pt):
+
+
+        # print('delet')
+
         pt = self.__denormal_pt__(pt)
         if len(self.points)>0 and  self.status=='drawing':
             self.points.pop()
@@ -153,6 +157,8 @@ class maskLbl:
         self.status = 'none'
         self.points = []
 
+        # self.masks_name.append(label)
+
     
     #______________________________________________________________________________________________________
     #
@@ -169,6 +175,10 @@ class maskLbl:
     #______________________________________________________________________________________________________
     def get(self):
         return  list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,2)], self.masks))
+    
+    def get_labels(self):
+        return   self.masks
+    
     #______________________________________________________________________________________________________
     #draw no complete mask
     #______________________________________________________________________________________________________
@@ -198,7 +208,7 @@ class maskLbl:
         # print('color lbl',self.label_color[0])
         for lbl, cnt in self.masks:
 
-            print('lastcolor',self.label_color[lbl])
+            # print('lastcolor',self.label_color[lbl])
             
             cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=-1)
             for corner in cnt:
@@ -235,12 +245,6 @@ class maskLbl:
                 
 
     
-
-
-
-
-
-
 
 
 
@@ -370,8 +374,6 @@ class bboxLbl:
             (x1,y1), (x2,y2) = self.points
             xmin, xmax = min(x1,x2) , max(x1,x2)
             ymin, ymax = min(y1,y2) , max(y1,y2)
-
-            print('label',label)
             
             #only add enough big bbox
             if xmax-xmin>5 and ymax-ymin>5:
@@ -449,21 +451,9 @@ class bboxLbl:
                 #self.save_bbox('1')
                 self.finish_drawing()
 
-
-    
-    #______________________________________________________________________________________________________
-    #
-    #______________________________________________________________________________________________________
-    def load(self, bboxs):
-        bboxs = np.array(bboxs)
-        self.bboxs = list(bboxs)
-        self.status ='none'
-        self.points = []
-
-    
     def get(self):
-        return self.bboxs
-
+        return  list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,2)], self.bboxs))
+    #____
 
 
 

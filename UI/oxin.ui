@@ -5331,13 +5331,13 @@ QToolTip {
                         <widget class="QFrame" name="frame_11">
                          <property name="minimumSize">
                           <size>
-                           <width>350</width>
+                           <width>239</width>
                            <height>0</height>
                           </size>
                          </property>
                          <property name="maximumSize">
                           <size>
-                           <width>350</width>
+                           <width>150</width>
                            <height>16777215</height>
                           </size>
                          </property>
@@ -5596,70 +5596,32 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                                     <attribute name="title">
                                      <string>Mask</string>
                                     </attribute>
+                                    <layout class="QVBoxLayout" name="verticalLayout_95">
+                                     <item>
+                                      <widget class="QTableWidget" name="mask_table_widget">
+                                       <property name="columnCount">
+                                        <number>1</number>
+                                       </property>
+                                       <column/>
+                                      </widget>
+                                     </item>
+                                    </layout>
                                    </widget>
                                    <widget class="QWidget" name="tab_2">
                                     <attribute name="title">
                                      <string>Bounding Box</string>
                                     </attribute>
+                                    <layout class="QVBoxLayout" name="verticalLayout_83">
+                                     <item>
+                                      <widget class="QTableWidget" name="bbox_table_widget">
+                                       <property name="columnCount">
+                                        <number>1</number>
+                                       </property>
+                                       <column/>
+                                      </widget>
+                                     </item>
+                                    </layout>
                                    </widget>
-                                  </widget>
-                                 </item>
-                                </layout>
-                               </widget>
-                              </item>
-                              <item>
-                               <widget class="QFrame" name="frame_15">
-                                <property name="minimumSize">
-                                 <size>
-                                  <width>0</width>
-                                  <height>54</height>
-                                 </size>
-                                </property>
-                                <property name="frameShape">
-                                 <enum>QFrame::Box</enum>
-                                </property>
-                                <property name="frameShadow">
-                                 <enum>QFrame::Raised</enum>
-                                </property>
-                                <layout class="QHBoxLayout" name="horizontalLayout_22">
-                                 <item>
-                                  <widget class="QLabel" name="label_21">
-                                   <property name="maximumSize">
-                                    <size>
-                                     <width>70</width>
-                                     <height>16777215</height>
-                                    </size>
-                                   </property>
-                                   <property name="text">
-                                    <string>Labels :</string>
-                                   </property>
-                                  </widget>
-                                 </item>
-                                 <item>
-                                  <widget class="QComboBox" name="comboBox_labels">
-                                   <property name="styleSheet">
-                                    <string notr="true">background-color: rgb(246,180,28);
-color: black;</string>
-                                   </property>
-                                  </widget>
-                                 </item>
-                                 <item>
-                                  <widget class="QPushButton" name="add_label">
-                                   <property name="maximumSize">
-                                    <size>
-                                     <width>20</width>
-                                     <height>20</height>
-                                    </size>
-                                   </property>
-                                   <property name="cursor">
-                                    <cursorShape>PointingHandCursor</cursorShape>
-                                   </property>
-                                   <property name="styleSheet">
-                                    <string notr="true">background-image: url(:/icons/images/icons/cil-medical-cross.png);</string>
-                                   </property>
-                                   <property name="text">
-                                    <string/>
-                                   </property>
                                   </widget>
                                  </item>
                                 </layout>
@@ -5807,7 +5769,7 @@ color: black;</string>
                              <enum>QFrame::Raised</enum>
                             </property>
                             <layout class="QVBoxLayout" name="verticalLayout_39">
-                             <item>
+                             <item alignment="Qt::AlignHCenter">
                               <widget class="QLabel" name="warning_label_page">
                                <property name="text">
                                 <string/>
@@ -11075,7 +11037,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>311</width>
+                                 <width>218</width>
                                  <height>218</height>
                                 </rect>
                                </property>

@@ -30,7 +30,7 @@ class labeling_API:
         # print('asd.,',e)
 
         record=self.defects_info[e]
-        print('record',record)
+        # print('record',record)
         self.ui.updte_table(record)
 
     def ret_selcted_label(self):

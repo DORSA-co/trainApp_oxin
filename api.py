@@ -435,21 +435,11 @@ class API:
         defect_name,defect_info=self.get_defects()
         # print(len(defect_info),defect_info)
         for i in range(len(defect_info)):
-
             print(defect_name[i],defect_info[i]['color'])
-
             hex_color=defect_info[i]['color'].lstrip('#')
-
             rgb_color=tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
-
-            # print(rgb_color)
-            
-            self.LABEL_COLOR.update({defect_name[i]:rgb_color})
-
-
-
-        print(self.LABEL_COLOR)
- 
+            rgb=(rgb_color[2],rgb_color[1],rgb_color[0])
+            self.LABEL_COLOR.update({defect_name[i]:rgb})
  
     def label_image_mouse(self, wgt_name=''):
         
@@ -463,12 +453,15 @@ class API:
 
         self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt )
         if self.label_bakcend[label_type].is_drawing_finish():
-            print('asdwqdqwd')
-            self.finish_draw+=1
-            if self.finish_draw==2:
-                self.finish_draw=0
+            if label_type=='mask':
+                # print('asdwqdqwd')
+                self.finish_draw+=1
+                if self.finish_draw==2:
+                    self.finish_draw=0
 
-            # self.label_bakcend[label_type].save('1')
+                # self.label_bakcend[label_type].save('1')
+                    self.show_labeling(label_type)
+            elif self.ui.labeling_win==None:
                 self.show_labeling(label_type)
         label_img = self.label_bakcend[label_type].draw()
         img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5 )
@@ -493,43 +486,46 @@ class API:
             sign_defect_table=self.db.ret_sign_defect_table()
             print('sign_defect_table',sign_defect_table)
             if sign_defect_table==0:
-                
                 print('nochange')
-            
             else:
                 print('change')
-                self.defects_name,self.defects_info=self.db.get_defects()
-
+                try:
+                    self.defects_name,self.defects_info=self.db.get_defects()
+                    self.db.update_sign_table('defects_info','0')
+                except:
+                    pass
             # self.create_labeling()
             labeling_win=self.ui.ret_create_labeling()
             self.labeling_api=labeling_api.labeling_API(labeling_win,self.defects_name,self.defects_info)
             self.ui.labeling_win.win_set_geometry(left=current_mouse_position[0],top=current_mouse_position[1])
             self.ui.labeling_win.save_btn.clicked.connect(partial(self.set_label))
+            self.ui.labeling_win.cancel_btn.clicked.connect(partial(self.close_labeling))
             self.ui.labeling_win.show()
-
             print('end show_labeling')
 
 
     def set_label(self):
 
-            # self.labaling_UI.
             selected_label=self.labeling_api.ret_selcted_label()
             label_type=self.ui.get_label_type()
-
-
-
             self.label_bakcend[label_type].save(str(selected_label))
-
             print('end set_label',selected_label)
-
             self.ui.labeling_win.close_win()
             self.ui.labeling_win = None
+            print(label_type)
+            # label_type_dict=['masks','bboxs']
+
+            labels=self.label_bakcend[label_type].get()
+            # print(labels[1])
+
+            self.ui.show_labels(labels,label_type)
+    
+                 
 
 
-    def get_sign_table_defect(self,table_name):
-        sign=sign_defect=self.db.get_sign()
 
-
+    def close_labeling(self):
+        self.ui.labeling_win = None
 
     def clear_cache_fun(self):
         dir = self.cache_path
@@ -594,23 +590,32 @@ class API:
                 bboxes=self.label_bakcend['bbox'].get()
 
                 )
-    
+
+            if self.ui.no_defect.isChecked():
+                self.ds.save_to_perfect(img_path)
+                crops = ImageCrops(self.img, self.size)
+                self.ds.save_to_perfect_splitted(crops)
+                self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
+                print('no')
+
+            elif self.ui.yes_defect.isChecked():
+                self.ds.save_to_defect(img_path)
+                crops = ImageCrops(self.img, self.size)
+                self.ds.save_to_defect_splitted(crops)
+                self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
+                print('yes')
+            else:
+                self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
+
+            # self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
+
+            # return
+
+
+
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
             # return
-
-        if self.ui.no_defect.isChecked():
-            self.ds.save_to_perfect(img_path)
-            crops = ImageCrops(self.img, self.size)
-            self.ds.save_to_perfect_splitted(crops)
-
-        elif self.ui.yes_defect.isChecked():
-            self.ds.save_to_defect(img_path)
-            crops = ImageCrops(self.img, self.size)
-            self.ds.save_to_defect_splitted(crops)
-
-        else:
-            self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
 
 
 

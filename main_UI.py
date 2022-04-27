@@ -87,7 +87,7 @@ class UI_main_window(QMainWindow, ui):
 
         # self.labeling_win=labeling()
         # labeling_api.labeling_API(self.labeling_win)
-
+        self.labeling_win=None
 
 
 
@@ -146,7 +146,7 @@ class UI_main_window(QMainWindow, ui):
 
         self.polygon_btn.clicked.connect(self.buttonClick) 
         self.bounding_btn.clicked.connect(self.buttonClick) 
-        self.add_label.clicked.connect(self.buttonClick) 
+        # self.add_label.clicked.connect(self.buttonClick) 
         self.add_label_btn.clicked.connect(self.buttonClick) 
 
         # QPixmap pixmapTarget = QPixmap(":/icons/images/icons/2png);
@@ -681,6 +681,8 @@ class UI_main_window(QMainWindow, ui):
         self.image.setCursor(Qt.CrossCursor)
         self.label_type='bbox'
 
+        self.tabWidget_defect.setCurrentIndex(1)
+
 
     def polygon(self):
         #print('polygon')
@@ -690,6 +692,8 @@ class UI_main_window(QMainWindow, ui):
         # self.image.setCursor(cursor)
 
         self.label_type='mask'
+
+        self.tabWidget_defect.setCurrentIndex(0)
 
 
 
@@ -704,6 +708,22 @@ class UI_main_window(QMainWindow, ui):
         self.labeling_win=labeling()
         return self.labeling_win
         # self.labeling_win_show()
+
+    def show_labels(self,labels,label_type):
+
+        LABEL_TABLE={'mask':self.mask_table_widget,'bbox':self.bbox_table_widget}
+
+        print('labe',label_type)
+
+        self.clear_table()                                                  #cleare table
+
+        LABEL_TABLE[label_type].setRowCount(len(labels))           #set row count
+
+        for row in range(len(labels)):
+
+            table_item = QTableWidgetItem(str(labels[row][0]))
+            LABEL_TABLE[label_type].setItem(row,0,table_item)
+
 
 
 
@@ -720,8 +740,13 @@ class UI_main_window(QMainWindow, ui):
             'label': self.warning_label_page,
             'train': self.warning_train_page
         }
-
+        # print('set_warning')
         if text !=None:
+
+            if level==1:
+                waring_labels[name].setText(' '+text+' ')
+                waring_labels[name].setStyleSheet('background-color:#20a740;border-radius:10px;color:white')
+            
 
             if level==2:
                 waring_labels[name].setText(' Warning: '+text)
