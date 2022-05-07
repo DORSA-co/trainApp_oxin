@@ -71,7 +71,7 @@ inpt = input('do you want to fine tune? y/n \n')
 if inpt in ['Y','y']:
     
     model = models.xception_cnn(input_size, num_class=1, mode=models.CATEGORICAL, fine_tune_layer=120, weights='checkpoint_bin.h5')
-    my_callback = callbacks.CustomCallback('checkpoint.h5')
+    my_callback = callbacks.CustomCallback('checkpoint_bin2.h5')
 
     model.fit(  trainGen,
                 steps_per_epoch=trainGen.n//batch + 1,
