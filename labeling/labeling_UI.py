@@ -70,7 +70,6 @@ class labeling(QMainWindow, ui):
         self.comboBox_defects.addItems(defects_list)
 
         
-<<<<<<< HEAD
     def set_on_top(self):
         # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
@@ -103,34 +102,6 @@ class labeling(QMainWindow, ui):
 
 
         #     print('eror')
-=======
-        
-
-    def updte_table(self,records):
-
-        try:
-
-            self.clear_table()                                                  #cleare table
-
-            self.listWidget_defect.setRowCount(len(records))           #set row count
-
-
-
-            for row,record in enumerate(records):
-                # for i in range(11):
-                    # print(i)
-                    record = '{} - {} - {}'.format(record[0],record[1],(record[2]))
-                    table_item = QTableWidgetItem(str(record))
-                    # if i ==0:
-                    table_item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
-                    table_item.setCheckState(Qt.CheckState.Unchecked)
-                    table_item.setData(Qt.DisplayRole, record)
-                    self.listWidget_defect.setItem(row,0,table_item)
-                    print(table_item)
-        except:
-
-            print('eror')
->>>>>>> r_abtahi
 
 
     def get_label_name(self):

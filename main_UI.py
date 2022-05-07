@@ -94,7 +94,7 @@ class UI_main_window(QMainWindow, ui):
 
 
         self.labeling_win = labeling()
-        labeling_api.labeling_API(self.labeling_win)
+        # labeling_api.labeling_API(self.labeling_win)
 
         useCustomTheme = False
         themeFile = "themes\py_dracula_light.qss"
@@ -149,7 +149,7 @@ class UI_main_window(QMainWindow, ui):
 
         self.polygon_btn.clicked.connect(self.buttonClick)
         self.bounding_btn.clicked.connect(self.buttonClick)
-        self.add_label.clicked.connect(self.buttonClick)
+        # self.add_label.clicked.connect(self.buttonClick)
         self.add_label_btn.clicked.connect(self.buttonClick)
 
         # QPixmap pixmapTarget = QPixmap(":/icons/images/icons/2png);

@@ -5689,7 +5689,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                                     <attribute name="title">
                                      <string>Bounding Box</string>
                                     </attribute>
-                                    <layout class="QVBoxLayout" name="verticalLayout_83">
+                                    <layout class="QVBoxLayout" name="verticalLayout_831">
                                      <item>
                                       <widget class="QTableWidget" name="bbox_table_widget">
                                        <property name="columnCount">

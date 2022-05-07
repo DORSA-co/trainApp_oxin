@@ -45,7 +45,7 @@ WARNINGS={
                  'en': ' Dataset format is incorrect '},
 
         'IMAGE_SAVE_SUCCESSFULLY':{'fa': 'موفقیت ذخیره شد',
-                 'en': ' Image Saved '}
+                 'en': ' Image Saved '},
 
         'DATASET_NUMBER': {'fa': ' شماره ی مجموعه داده خارج از محدوده است ',
                  'en': ' Dataset number is out of range '},
