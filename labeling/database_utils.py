@@ -2,21 +2,17 @@
 
 import database
 import datetime
-from Sheet import Sheet
+# from Sheet import Sheet
 import os
-from backend import pathStructure
+# from backend import pathStructure
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','root','localhost','saba_database')
+        self.db=database.dataBase('root','','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
         self.defects_table = 'defects_info'
-<<<<<<< HEAD
-        self.sign_tables='sign_tables'
-=======
->>>>>>> r_abtahi
 
     #________________________________________________________________
     #
@@ -92,14 +88,6 @@ class dataBaseUtils():
         record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
         return record['path_dataset']
 
-    def set_dataset_path_user(self,path):
-        #  update_record(self,data,table_name,col_name,value,id,id_value):
-        self.db.update_record(table_name= self.setting_tabel,col_name='path_dataset_user',value=path,id='id',id_value=0)
-
-    def get_dataset_path_uesr(self):
-        record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
-        return record['path_dataset_user']
-
     def set_weights_path(self,path):
         #  update_record(self,data,table_name,col_name,value,id,id_value):
         self.db.update_record(table_name= self.setting_tabel,col_name='path_weights',value=path,id='id',id_value=0)
@@ -145,17 +133,6 @@ class dataBaseUtils():
         return name_list,defects_info            
 
 
-    def ret_sign_defect_table(self):
-
-        sign=self.db.search(self.sign_tables, 'id', '0')
-
-        return sign[0]['defects_info']
-
-
-    def update_sign_table(self,col_name,value,id='id',id_value=0):
-
-        self.db.update_record(self.sign_tables, col_name, value, id, id_value)
-
 
 
 
@@ -164,25 +141,13 @@ if __name__ == '__main__':
     db = dataBaseUtils()
     # records = db.load_coil_info(996)
     # db.get_camera_setting()
-    # db.set_dataset_path('G:/dataset/')
+    db.set_dataset_path('G:/dataset/')
     # print(db.get_dataset_path())
 
-<<<<<<< HEAD
-    # name,defects=db.get_defects()
-    # print('name',name)
-    # print('defe',defects)
-
-    # x=db.get_sign('defects_info')
-
-    db.update_sign_table('defects_info','4')
-
-    # print(x)
-=======
     name,defects=db.get_defects()
     print('name',name)
     print('defe',defects)
 
->>>>>>> r_abtahi
 
     # db.get_path(['997', 'up', (5, 5)])
     # pass

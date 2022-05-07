@@ -30,9 +30,9 @@ data_gen_args = dict(rotation_range=0.2,
                      )
 
 
-def train_binary(binary_algorithm_name, binary_input_size, binary_epoch, binary_batch,binary_lr, binary_te, binary_vs, binary_dp, weights_path, resize=False):
-    if resize:
-        trainGen, testGen = dataGenerator.get_binarygenerator(binary_dp,
+def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch,binary_lr, binary_te, binary_vs, binary_dp, weights_path):
+    if not binary_input_type:
+        trainGen, testGen, train_n, test_n = dataGenerator.get_binarygenerator(binary_dp,
                                                               binary_input_size,
                                                               'defect',
                                                               'perfect',
@@ -40,7 +40,7 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_epoch, binary_
                                                               batch_size=binary_batch,
                                                               validation_split=binary_vs)
     else:
-        trainGen, testGen = dataGenerator.get_binarygenerator(binary_dp,
+        trainGen, testGen, train_n, test_n = dataGenerator.get_binarygenerator(binary_dp,
                                                               binary_input_size,
                                                               'defect_splitted',
                                                               'perfect_splitted',
@@ -55,11 +55,11 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_epoch, binary_
     my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint_bin.h5'))
 
     model.fit(trainGen,
-              steps_per_epoch=trainGen.n // binary_batch + 1,
+              steps_per_epoch=train_n// binary_batch + 1,
               epochs=binary_epoch - binary_te,
               callbacks=[my_callback],
               validation_data=testGen,
-              validation_steps=testGen.n // binary_batch + 1,
+              validation_steps=test_n // binary_batch + 1,
               initial_epoch=0)
 
     model.save(os.path.join(weights_path, 'binary_model.h5'))
@@ -75,11 +75,11 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_epoch, binary_
     my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint.h5'))
 
     model.fit(trainGen,
-              steps_per_epoch=trainGen.n // binary_batch + 1,
+              steps_per_epoch=train_n // binary_batch + 1,
               epochs=binary_epoch,
               callbacks=[my_callback],
               validation_data=testGen,
-              validation_steps=testGen.n // binary_batch + 1,
+              validation_steps=test_n // binary_batch + 1,
               initial_epoch=binary_epoch - binary_te)
 
     model.save(os.path.join(weights_path, 'binary_model.h5'))

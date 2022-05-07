@@ -23,9 +23,7 @@
   <widget class="QWidget" name="styleSheet">
    <property name="font">
     <font>
-     <family>Segoe UI</family>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
@@ -280,6 +278,23 @@ QLineEdit:hover {
 	border: 2px solid rgb(64, 71, 88);
 }
 QLineEdit:focus {
+	border: 2px solid rgb(91, 101, 124);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+TextEdit */
+QTextEdit {
+	background-color: rgb(210,210,150);
+	border-radius: 5px;
+	border: 2px solid rgb(33, 37, 43);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+QTextEdit:hover {
+	border: 2px solid rgb(64, 71, 88);
+}
+QTextEdit:focus {
 	border: 2px solid rgb(91, 101, 124);
 }
 
@@ -686,9 +701,7 @@ Button */
               </property>
               <property name="font">
                <font>
-                <family>Segoe UI</family>
                 <pointsize>10</pointsize>
-                <weight>50</weight>
                 <italic>false</italic>
                 <bold>false</bold>
                </font>
@@ -718,9 +731,7 @@ Button */
              </property>
              <property name="font">
               <font>
-               <family>Segoe UI Semibold</family>
                <pointsize>12</pointsize>
-               <weight>7</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -749,9 +760,7 @@ Button */
              </property>
              <property name="font">
               <font>
-               <family>Segoe UI</family>
                <pointsize>8</pointsize>
-               <weight>50</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -835,9 +844,7 @@ Button */
                   </property>
                   <property name="font">
                    <font>
-                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -872,9 +879,7 @@ Button */
                   </property>
                   <property name="font">
                    <font>
-                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -909,9 +914,7 @@ Button */
                   </property>
                   <property name="font">
                    <font>
-                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -953,9 +956,7 @@ Button */
                   </property>
                   <property name="font">
                    <font>
-                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -990,9 +991,7 @@ Button */
                   </property>
                   <property name="font">
                    <font>
-                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1055,9 +1054,7 @@ color : rgb(220,220,220);</string>
                   </property>
                   <property name="font">
                    <font>
-                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1515,9 +1512,7 @@ text-align:left;</string>
                   </property>
                   <property name="font">
                    <font>
-                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1830,7 +1825,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="resources.qrc">
+                   <iconset resource="../resources.qrc">
                     <normaloff>:/icons/images/icons/icon_settings.png</normaloff>:/icons/images/icons/icon_settings.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -1865,7 +1860,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="resources.qrc">
+                   <iconset resource="../resources.qrc">
                     <normaloff>:/icons/images/icons/icon_minimize.png</normaloff>:/icons/images/icons/icon_minimize.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -1892,9 +1887,7 @@ QPushButton:hover {
                   </property>
                   <property name="font">
                    <font>
-                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <stylestrategy>PreferDefault</stylestrategy>
@@ -1910,7 +1903,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="resources.qrc">
+                   <iconset resource="../resources.qrc">
                     <normaloff>:/icons/images/icons/icon_maximize.png</normaloff>:/icons/images/icons/icon_maximize.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -2276,7 +2269,11 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
+<<<<<<< HEAD
                       <number>1</number>
+=======
+                      <number>4</number>
+>>>>>>> r_abtahi
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -2328,8 +2325,8 @@ QPushButton:hover {
                              </brush>
                             </colorrole>
                             <colorrole role="PlaceholderText">
-                             <brush brushstyle="NoBrush">
-                              <color alpha="128">
+                             <brush brushstyle="SolidPattern">
+                              <color alpha="255">
                                <red>20</red>
                                <green>20</green>
                                <blue>20</blue>
@@ -2366,8 +2363,8 @@ QPushButton:hover {
                              </brush>
                             </colorrole>
                             <colorrole role="PlaceholderText">
-                             <brush brushstyle="NoBrush">
-                              <color alpha="128">
+                             <brush brushstyle="SolidPattern">
+                              <color alpha="255">
                                <red>20</red>
                                <green>20</green>
                                <blue>20</blue>
@@ -2404,8 +2401,8 @@ QPushButton:hover {
                              </brush>
                             </colorrole>
                             <colorrole role="PlaceholderText">
-                             <brush brushstyle="NoBrush">
-                              <color alpha="128">
+                             <brush brushstyle="SolidPattern">
+                              <color alpha="255">
                                <red>20</red>
                                <green>20</green>
                                <blue>20</blue>
@@ -2578,13 +2575,13 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                                   <number>6</number>
                                  </property>
                                  <property name="leftMargin">
-                                  <number>7</number>
+                                  <number>0</number>
                                  </property>
                                  <property name="topMargin">
                                   <number>8</number>
                                  </property>
                                  <property name="rightMargin">
-                                  <number>7</number>
+                                  <number>0</number>
                                  </property>
                                  <property name="bottomMargin">
                                   <number>1</number>
@@ -2651,7 +2648,7 @@ QPushButton:hover {
 }</string>
                                       </property>
                                       <property name="text">
-                                       <string>Load Coil</string>
+                                       <string>Load Sheet</string>
                                       </property>
                                      </widget>
                                     </item>
@@ -2747,7 +2744,7 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>277</width>
+                                         <width>291</width>
                                          <height>28</height>
                                         </rect>
                                        </property>
@@ -2850,7 +2847,7 @@ QPushButton:hover {
                                    </property>
                                   </widget>
                                  </item>
-                                 <item>
+                                 <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                                   <widget class="Line" name="line_30">
                                    <property name="sizePolicy">
                                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2964,6 +2961,22 @@ QPushButton:hover {
                                      </widget>
                                     </item>
                                     <item>
+                                     <widget class="QProgressBar" name="progressBar_SI">
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>0</width>
+                                        <height>16777215</height>
+                                       </size>
+                                      </property>
+                                      <property name="value">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="textVisible">
+                                       <bool>false</bool>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                    <item>
                                      <spacer name="horizontalSpacer_10">
                                       <property name="orientation">
                                        <enum>Qt::Horizontal</enum>
@@ -2984,13 +2997,13 @@ QPushButton:hover {
                                    <property name="minimumSize">
                                     <size>
                                      <width>0</width>
-                                     <height>0</height>
+                                     <height>220</height>
                                     </size>
                                    </property>
                                    <property name="maximumSize">
                                     <size>
                                      <width>16777215</width>
-                                     <height>184</height>
+                                     <height>220</height>
                                     </size>
                                    </property>
                                    <property name="frameShape">
@@ -3021,232 +3034,196 @@ QPushButton:hover {
                                        <number>3</number>
                                       </property>
                                       <item>
-                                       <widget class="QGroupBox" name="groupBox_2">
-                                        <property name="minimumSize">
-                                         <size>
-                                          <width>91</width>
-                                          <height>0</height>
-                                         </size>
-                                        </property>
-                                        <property name="maximumSize">
-                                         <size>
-                                          <width>50</width>
-                                          <height>16777215</height>
-                                         </size>
-                                        </property>
-                                        <property name="styleSheet">
-                                         <string notr="true"> background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                   stop: 0 #E0E0E0, stop: 1 #FFFFFF);
- border: 2px solid gray;
- border-radius: 5px;
- margin-top: 1ex; /* leave space at the top for the title */</string>
-                                        </property>
-                                        <property name="title">
-                                         <string/>
-                                        </property>
-                                        <property name="flat">
-                                         <bool>false</bool>
-                                        </property>
-                                        <property name="checkable">
-                                         <bool>false</bool>
-                                        </property>
-                                        <layout class="QVBoxLayout" name="verticalLayout_90">
-                                         <property name="spacing">
-                                          <number>2</number>
-                                         </property>
-                                         <property name="leftMargin">
-                                          <number>2</number>
-                                         </property>
-                                         <property name="topMargin">
-                                          <number>3</number>
-                                         </property>
-                                         <property name="rightMargin">
-                                          <number>2</number>
-                                         </property>
-                                         <property name="bottomMargin">
-                                          <number>2</number>
-                                         </property>
-                                         <item>
-                                          <widget class="QPushButton" name="clear_cache">
-                                           <property name="minimumSize">
-                                            <size>
-                                             <width>80</width>
-                                             <height>25</height>
-                                            </size>
-                                           </property>
-                                           <property name="maximumSize">
-                                            <size>
-                                             <width>130</width>
-                                             <height>30</height>
-                                            </size>
-                                           </property>
-                                           <property name="cursor">
-                                            <cursorShape>PointingHandCursor</cursorShape>
-                                           </property>
-                                           <property name="styleSheet">
-                                            <string notr="true">QPushButton {
-background-color: rgb(100,100,100);
-	color: rgb(0,0,0);
-	border: none;
-
-	text-align: center;
-
-}
-
-QPushButton:hover {
-	background-color:  rgb(197 , 195,196);
-}</string>
-                                           </property>
-                                           <property name="text">
-                                            <string>Clear All</string>
-                                           </property>
-                                          </widget>
-                                         </item>
-                                         <item>
-                                          <widget class="QPushButton" name="save_btn">
-                                           <property name="minimumSize">
-                                            <size>
-                                             <width>81</width>
-                                             <height>25</height>
-                                            </size>
-                                           </property>
-                                           <property name="maximumSize">
-                                            <size>
-                                             <width>120</width>
-                                             <height>30</height>
-                                            </size>
-                                           </property>
-                                           <property name="cursor">
-                                            <cursorShape>PointingHandCursor</cursorShape>
-                                           </property>
-                                           <property name="styleSheet">
-                                            <string notr="true">QPushButton {
-background-color: rgb(100,100,100);
-	color: rgb(0,0,0);
-	border: none;
-
-	text-align: center;
-
-}
-
-QPushButton:hover {
-	background-color:  rgb(197 , 195,196);
-}</string>
-                                           </property>
-                                           <property name="text">
-                                            <string>Save</string>
-                                           </property>
-                                          </widget>
-                                         </item>
-                                         <item>
-                                          <widget class="QPushButton" name="label_btn_2">
-                                           <property name="minimumSize">
-                                            <size>
-                                             <width>80</width>
-                                             <height>25</height>
-                                            </size>
-                                           </property>
-                                           <property name="maximumSize">
-                                            <size>
-                                             <width>130</width>
-                                             <height>30</height>
-                                            </size>
-                                           </property>
-                                           <property name="cursor">
-                                            <cursorShape>PointingHandCursor</cursorShape>
-                                           </property>
-                                           <property name="styleSheet">
-                                            <string notr="true">QPushButton {
-background-color: rgb(100,100,100);
-	color: rgb(0,0,0);
-	border: none;
-
-	text-align: center;
-
-}
-
-QPushButton:hover {
-	background-color:  rgb(197 , 195,196);
-}</string>
-                                           </property>
-                                           <property name="text">
-                                            <string>Label</string>
-                                           </property>
-                                          </widget>
-                                         </item>
-                                         <item>
-                                          <widget class="QPushButton" name="clear_all_btn">
-                                           <property name="minimumSize">
-                                            <size>
-                                             <width>81</width>
-                                             <height>25</height>
-                                            </size>
-                                           </property>
-                                           <property name="maximumSize">
-                                            <size>
-                                             <width>130</width>
-                                             <height>30</height>
-                                            </size>
-                                           </property>
-                                           <property name="cursor">
-                                            <cursorShape>PointingHandCursor</cursorShape>
-                                           </property>
-                                           <property name="styleSheet">
-                                            <string notr="true">QPushButton {
-background-color: rgb(100,100,100);
-	color: rgb(0,0,0);
-	border: none;
-
-	text-align: center;
-
-}
-
-QPushButton:hover {
-	background-color:  rgb(197 , 195,196);
-}</string>
-                                           </property>
-                                           <property name="text">
-                                            <string>Clear List</string>
-                                           </property>
-                                          </widget>
-                                         </item>
-                                         <item>
-                                          <widget class="Line" name="line_40">
-                                           <property name="orientation">
-                                            <enum>Qt::Horizontal</enum>
-                                           </property>
-                                          </widget>
-                                         </item>
-                                        </layout>
-                                       </widget>
-                                      </item>
-                                      <item>
                                        <spacer name="horizontalSpacer_14">
                                         <property name="orientation">
                                          <enum>Qt::Horizontal</enum>
                                         </property>
                                         <property name="sizeType">
-                                         <enum>QSizePolicy::Fixed</enum>
+                                         <enum>QSizePolicy::Expanding</enum>
                                         </property>
                                         <property name="sizeHint" stdset="0">
                                          <size>
-                                          <width>20</width>
+                                          <width>42</width>
                                           <height>20</height>
                                          </size>
                                         </property>
                                        </spacer>
                                       </item>
                                       <item>
+                                       <widget class="QFrame" name="frame_67">
+                                        <property name="minimumSize">
+                                         <size>
+                                          <width>80</width>
+                                          <height>0</height>
+                                         </size>
+                                        </property>
+                                        <property name="frameShape">
+                                         <enum>QFrame::StyledPanel</enum>
+                                        </property>
+                                        <property name="frameShadow">
+                                         <enum>QFrame::Raised</enum>
+                                        </property>
+                                        <layout class="QVBoxLayout" name="verticalLayout_94">
+                                         <property name="leftMargin">
+                                          <number>0</number>
+                                         </property>
+                                         <property name="topMargin">
+                                          <number>0</number>
+                                         </property>
+                                         <property name="rightMargin">
+                                          <number>0</number>
+                                         </property>
+                                         <property name="bottomMargin">
+                                          <number>0</number>
+                                         </property>
+                                         <item>
+                                          <widget class="QGroupBox" name="groupBox_2">
+                                           <property name="minimumSize">
+                                            <size>
+                                             <width>78</width>
+                                             <height>0</height>
+                                            </size>
+                                           </property>
+                                           <property name="maximumSize">
+                                            <size>
+                                             <width>50</width>
+                                             <height>16777215</height>
+                                            </size>
+                                           </property>
+                                           <property name="styleSheet">
+                                            <string notr="true"> background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                   stop: 0 #E0E0E0, stop: 1 #FFFFFF);
+ border: 2px solid gray;
+ border-radius: 5px;
+ margin-top: 1ex; /* leave space at the top for the title */</string>
+                                           </property>
+                                           <property name="title">
+                                            <string/>
+                                           </property>
+                                           <property name="flat">
+                                            <bool>false</bool>
+                                           </property>
+                                           <property name="checkable">
+                                            <bool>false</bool>
+                                           </property>
+                                           <layout class="QVBoxLayout" name="verticalLayout_90">
+                                            <property name="spacing">
+                                             <number>2</number>
+                                            </property>
+                                            <property name="leftMargin">
+                                             <number>2</number>
+                                            </property>
+                                            <property name="topMargin">
+                                             <number>1</number>
+                                            </property>
+                                            <property name="rightMargin">
+                                             <number>2</number>
+                                            </property>
+                                            <property name="bottomMargin">
+                                             <number>3</number>
+                                            </property>
+                                            <item>
+                                             <widget class="QPushButton" name="save_btn_SI">
+                                              <property name="minimumSize">
+                                               <size>
+                                                <width>68</width>
+                                                <height>25</height>
+                                               </size>
+                                              </property>
+                                              <property name="maximumSize">
+                                               <size>
+                                                <width>120</width>
+                                                <height>30</height>
+                                               </size>
+                                              </property>
+                                              <property name="cursor">
+                                               <cursorShape>PointingHandCursor</cursorShape>
+                                              </property>
+                                              <property name="styleSheet">
+                                               <string notr="true">QPushButton {
+background-color: rgb(100,100,100);
+	color: rgb(0,0,0);
+	border: none;
+
+	text-align: center;
+
+}
+
+QPushButton:hover {
+	background-color:  rgb(197 , 195,196);
+}</string>
+                                              </property>
+                                              <property name="text">
+                                               <string>Save</string>
+                                              </property>
+                                             </widget>
+                                            </item>
+                                            <item>
+                                             <widget class="QPushButton" name="label_btn_SI">
+                                              <property name="minimumSize">
+                                               <size>
+                                                <width>68</width>
+                                                <height>25</height>
+                                               </size>
+                                              </property>
+                                              <property name="maximumSize">
+                                               <size>
+                                                <width>130</width>
+                                                <height>30</height>
+                                               </size>
+                                              </property>
+                                              <property name="cursor">
+                                               <cursorShape>PointingHandCursor</cursorShape>
+                                              </property>
+                                              <property name="styleSheet">
+                                               <string notr="true">QPushButton {
+background-color: rgb(100,100,100);
+	color: rgb(0,0,0);
+	border: none;
+
+	text-align: center;
+
+}
+
+QPushButton:hover {
+	background-color:  rgb(197 , 195,196);
+}</string>
+                                              </property>
+                                              <property name="text">
+                                               <string>Label</string>
+                                              </property>
+                                             </widget>
+                                            </item>
+                                           </layout>
+                                          </widget>
+                                         </item>
+                                         <item>
+                                          <spacer name="verticalSpacer_9">
+                                           <property name="orientation">
+                                            <enum>Qt::Vertical</enum>
+                                           </property>
+                                           <property name="sizeHint" stdset="0">
+                                            <size>
+                                             <width>20</width>
+                                             <height>40</height>
+                                            </size>
+                                           </property>
+                                          </spacer>
+                                         </item>
+                                        </layout>
+                                       </widget>
+                                      </item>
+                                      <item>
                                        <widget class="QGroupBox" name="groupBox">
                                         <property name="minimumSize">
                                          <size>
-                                          <width>137</width>
+                                          <width>168</width>
                                           <height>0</height>
                                          </size>
                                         </property>
                                         <property name="maximumSize">
                                          <size>
-                                          <width>50</width>
+                                          <width>250</width>
                                           <height>16777215</height>
                                          </size>
                                         </property>
@@ -3284,6 +3261,9 @@ QPushButton:hover {
                                          </property>
                                          <item>
                                           <layout class="QVBoxLayout" name="verticalLayout_77">
+                                           <property name="spacing">
+                                            <number>1</number>
+                                           </property>
                                            <property name="leftMargin">
                                             <number>0</number>
                                            </property>
@@ -3293,7 +3273,7 @@ QPushButton:hover {
                                               <number>0</number>
                                              </property>
                                              <item>
-                                              <widget class="QPushButton" name="append_btn">
+                                              <widget class="QPushButton" name="add_btn_SI">
                                                <property name="minimumSize">
                                                 <size>
                                                  <width>30</width>
@@ -3310,7 +3290,7 @@ QPushButton:hover {
                                                 <cursorShape>PointingHandCursor</cursorShape>
                                                </property>
                                                <property name="mouseTracking">
-                                                <bool>false</bool>
+                                                <bool>true</bool>
                                                </property>
                                                <property name="styleSheet">
                                                 <string notr="true"> background-color: Transparent;
@@ -3337,21 +3317,19 @@ QPushButton:hover {
                                               <widget class="QLabel" name="label_2">
                                                <property name="minimumSize">
                                                 <size>
-                                                 <width>49</width>
+                                                 <width>72</width>
                                                  <height>24</height>
                                                 </size>
                                                </property>
                                                <property name="maximumSize">
                                                 <size>
-                                                 <width>72</width>
+                                                 <width>81</width>
                                                  <height>16777215</height>
                                                 </size>
                                                </property>
                                                <property name="font">
                                                 <font>
-                                                 <family>Segoe UI</family>
                                                  <pointsize>10</pointsize>
-                                                 <weight>50</weight>
                                                  <italic>false</italic>
                                                  <bold>false</bold>
                                                  <stylestrategy>PreferDefault</stylestrategy>
@@ -3387,7 +3365,7 @@ color:white;</string>
                                               </widget>
                                              </item>
                                              <item>
-                                              <widget class="QPushButton" name="append_btn_remove">
+                                              <widget class="QPushButton" name="remove_btn_SI">
                                                <property name="minimumSize">
                                                 <size>
                                                  <width>30</width>
@@ -3426,17 +3404,126 @@ color:white;</string>
                                              </item>
                                             </layout>
                                            </item>
+                                           <item>
+                                            <widget class="Line" name="line_41">
+                                             <property name="orientation">
+                                              <enum>Qt::Horizontal</enum>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="QFrame" name="frame_63">
+                                             <property name="minimumSize">
+                                              <size>
+                                               <width>0</width>
+                                               <height>28</height>
+                                              </size>
+                                             </property>
+                                             <property name="styleSheet">
+                                              <string notr="true">border:None;
+background-color:rgb(200,200,200);</string>
+                                             </property>
+                                             <property name="frameShape">
+                                              <enum>QFrame::StyledPanel</enum>
+                                             </property>
+                                             <property name="frameShadow">
+                                              <enum>QFrame::Raised</enum>
+                                             </property>
+                                             <layout class="QHBoxLayout" name="horizontalLayout_120">
+                                              <property name="leftMargin">
+                                               <number>0</number>
+                                              </property>
+                                              <property name="topMargin">
+                                               <number>0</number>
+                                              </property>
+                                              <property name="rightMargin">
+                                               <number>0</number>
+                                              </property>
+                                              <property name="bottomMargin">
+                                               <number>0</number>
+                                              </property>
+                                              <item>
+                                               <spacer name="horizontalSpacer_17">
+                                                <property name="orientation">
+                                                 <enum>Qt::Horizontal</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                 <enum>QSizePolicy::Fixed</enum>
+                                                </property>
+                                                <property name="sizeHint" stdset="0">
+                                                 <size>
+                                                  <width>8</width>
+                                                  <height>13</height>
+                                                 </size>
+                                                </property>
+                                               </spacer>
+                                              </item>
+                                              <item>
+                                               <widget class="QCheckBox" name="checkBox_select">
+                                                <property name="styleSheet">
+                                                 <string notr="true">QCheckBox::indicator {
+    border: 3px solid rgb(52, 59, 72);
+	width: 10px;
+	height: 10px;
+	border-radius: 0px;
+    background: rgb(44, 49, 60);
+}
+QCheckBox::indicator:hover {
+    border: 3px solid rgb(58, 66, 81);
+}
+QCheckBox::indicator:checked {
+    background: 3px solid rgb(52, 59, 72);
+	border: 3px solid rgb(52, 59, 72);	
+	background-image: url(:/icons/images/icons/cil-check-alt.png);
+	height: 13px;
+}
+</string>
+                                                </property>
+                                                <property name="text">
+                                                 <string>Select All</string>
+                                                </property>
+                                               </widget>
+                                              </item>
+                                             </layout>
+                                            </widget>
+                                           </item>
                                           </layout>
                                          </item>
                                          <item>
-                                          <widget class="Line" name="line_33">
+                                          <widget class="Line" name="line_32">
                                            <property name="orientation">
                                             <enum>Qt::Horizontal</enum>
                                            </property>
                                           </widget>
                                          </item>
                                          <item>
-                                          <widget class="QListWidget" name="listWidget"/>
+                                          <widget class="QTableWidget" name="listWidget_append_img_list">
+                                           <property name="styleSheet">
+                                            <string notr="true">border:None;</string>
+                                           </property>
+                                           <property name="rowCount">
+                                            <number>0</number>
+                                           </property>
+                                           <property name="columnCount">
+                                            <number>1</number>
+                                           </property>
+                                           <attribute name="horizontalHeaderVisible">
+                                            <bool>false</bool>
+                                           </attribute>
+                                           <attribute name="horizontalHeaderCascadingSectionResizes">
+                                            <bool>false</bool>
+                                           </attribute>
+                                           <attribute name="horizontalHeaderDefaultSectionSize">
+                                            <number>200</number>
+                                           </attribute>
+                                           <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                                            <bool>false</bool>
+                                           </attribute>
+                                           <attribute name="verticalHeaderVisible">
+                                            <bool>false</bool>
+                                           </attribute>
+                                           <column/>
+                                          </widget>
                                          </item>
                                          <item>
                                           <spacer name="verticalSpacer_7">
@@ -3468,17 +3555,33 @@ color:white;</string>
                                        </spacer>
                                       </item>
                                       <item>
+                                       <spacer name="horizontalSpacer_16">
+                                        <property name="orientation">
+                                         <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                         <enum>QSizePolicy::Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                         <size>
+                                          <width>750</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </spacer>
+                                      </item>
+                                      <item alignment="Qt::AlignTop">
                                        <widget class="QGroupBox" name="groupBox_3">
                                         <property name="minimumSize">
                                          <size>
                                           <width>156</width>
-                                          <height>0</height>
+                                          <height>146</height>
                                          </size>
                                         </property>
                                         <property name="maximumSize">
                                          <size>
                                           <width>106</width>
-                                          <height>16777215</height>
+                                          <height>146</height>
                                          </size>
                                         </property>
                                         <property name="styleSheet">
@@ -3514,9 +3617,7 @@ color:white;</string>
                                            </property>
                                            <property name="font">
                                             <font>
-                                             <family>Segoe UI</family>
                                              <pointsize>10</pointsize>
-                                             <weight>50</weight>
                                              <italic>false</italic>
                                              <bold>false</bold>
                                              <stylestrategy>PreferDefault</stylestrategy>
@@ -3850,12 +3951,6 @@ color:black;</string>
                                  <height>25</height>
                                 </size>
                                </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>16777215</width>
-                                 <height>36</height>
-                                </size>
-                               </property>
                                <property name="frameShape">
                                 <enum>QFrame::StyledPanel</enum>
                                </property>
@@ -3906,9 +4001,7 @@ color:black;</string>
                                     <widget class="QLabel" name="label_129">
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -3944,9 +4037,7 @@ color:black;</string>
                                  <widget class="QLabel" name="label_6">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>75</weight>
                                     <italic>false</italic>
                                     <bold>true</bold>
                                    </font>
@@ -3959,7 +4050,7 @@ color:black;</string>
 font-size: 30%;</string>
                                   </property>
                                   <property name="text">
-                                   <string>USTV</string>
+                                   <string>TOP Side</string>
                                   </property>
                                  </widget>
                                 </item>
@@ -3992,7 +4083,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>549</height>
+                                  <height>550</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -4099,12 +4190,6 @@ font-size: 30%;</string>
                                  <height>25</height>
                                 </size>
                                </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>16777215</width>
-                                 <height>36</height>
-                                </size>
-                               </property>
                                <property name="frameShape">
                                 <enum>QFrame::StyledPanel</enum>
                                </property>
@@ -4155,9 +4240,7 @@ font-size: 30%;</string>
                                     <widget class="QLabel" name="label_124">
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -4193,9 +4276,7 @@ font-size: 30%;</string>
                                  <widget class="QLabel" name="label_119">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>75</weight>
                                     <italic>false</italic>
                                     <bold>true</bold>
                                    </font>
@@ -4208,7 +4289,7 @@ font-size: 30%;</string>
 font-size: 30%;</string>
                                   </property>
                                   <property name="text">
-                                   <string>DSTV</string>
+                                   <string>BOTTOM Side</string>
                                   </property>
                                  </widget>
                                 </item>
@@ -4241,7 +4322,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>549</height>
+                                  <height>550</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -4492,7 +4573,7 @@ QToolTip {
                                  </widget>
                                 </item>
                                 <item>
-                                 <widget class="QPushButton" name="pushButton_10">
+                                 <widget class="QPushButton" name="next_img_label_btn">
                                   <property name="minimumSize">
                                    <size>
                                     <width>37</width>
@@ -4541,7 +4622,7 @@ QToolTip {
                                  </widget>
                                 </item>
                                 <item>
-                                 <widget class="QPushButton" name="pushButton_11">
+                                 <widget class="QPushButton" name="prev_img_label_btn">
                                   <property name="minimumSize">
                                    <size>
                                     <width>37</width>
@@ -5027,7 +5108,10 @@ QToolTip {
                                       <number>2</number>
                                      </property>
                                      <property name="text">
-                                      <string>TextLabel</string>
+                                      <string/>
+                                     </property>
+                                     <property name="pixmap">
+                                      <pixmap>../images/image.png</pixmap>
                                      </property>
                                      <property name="scaledContents">
                                       <bool>true</bool>
@@ -5160,21 +5244,21 @@ QToolTip {
                                 <item>
                                  <layout class="QVBoxLayout" name="verticalLayout_25">
                                   <item>
-                                   <widget class="QLabel" name="label_13">
+                                   <widget class="QLabel" name="plabel_date_txt">
                                     <property name="text">
                                      <string>TextLabel</string>
                                     </property>
                                    </widget>
                                   </item>
                                   <item>
-                                   <widget class="QLabel" name="label_11">
+                                   <widget class="QLabel" name="plabel_coil_num_txt">
                                     <property name="text">
                                      <string>TextLabel</string>
                                     </property>
                                    </widget>
                                   </item>
                                   <item>
-                                   <widget class="QLabel" name="label_12">
+                                   <widget class="QLabel" name="plabel_cam_txt">
                                     <property name="text">
                                      <string>TextLabel</string>
                                     </property>
@@ -5758,8 +5842,15 @@ color: black;</string>
                              <enum>QFrame::Raised</enum>
                             </property>
                             <layout class="QVBoxLayout" name="verticalLayout_39">
+                             <item>
+                              <widget class="QLabel" name="warning_label_page">
+                               <property name="text">
+                                <string/>
+                               </property>
+                              </widget>
+                             </item>
                              <item alignment="Qt::AlignHCenter">
-                              <widget class="QPushButton" name="pushButton_3">
+                              <widget class="QPushButton" name="save_dataset_btn">
                                <property name="minimumSize">
                                 <size>
                                  <width>200</width>
@@ -5771,6 +5862,9 @@ color: black;</string>
                                  <width>150</width>
                                  <height>16777215</height>
                                 </size>
+                               </property>
+                               <property name="cursor">
+                                <cursorShape>PointingHandCursor</cursorShape>
                                </property>
                                <property name="styleSheet">
                                 <string notr="true">QPushButton {
@@ -6453,12 +6547,18 @@ QPushButton:hover {
                               <property name="bottomMargin">
                                <number>0</number>
                               </property>
-                              <item alignment="Qt::AlignLeft">
+                              <item>
                                <widget class="QFrame" name="frame_48">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
                                 <property name="minimumSize">
                                  <size>
                                   <width>0</width>
-                                  <height>50</height>
+                                  <height>80</height>
                                  </size>
                                 </property>
                                 <property name="frameShape">
@@ -6468,15 +6568,6 @@ QPushButton:hover {
                                  <enum>QFrame::Raised</enum>
                                 </property>
                                 <layout class="QVBoxLayout" name="verticalLayout_82">
-                                 <property name="spacing">
-                                  <number>4</number>
-                                 </property>
-                                 <property name="leftMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="topMargin">
-                                  <number>0</number>
-                                 </property>
                                  <item>
                                   <layout class="QHBoxLayout" name="horizontalLayout_99">
                                    <item alignment="Qt::AlignLeft">
@@ -6487,7 +6578,111 @@ QPushButton:hover {
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QComboBox" name="comboBox_9"/>
+                                    <widget class="QComboBox" name="b_algorithms"/>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_106">
+                                   <item>
+                                    <widget class="QLabel" name="label_144">
+                                     <property name="text">
+                                      <string>Input size :</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QSpinBox" name="input_size1">
+                                     <property name="minimum">
+                                      <number>100</number>
+                                     </property>
+                                     <property name="maximum">
+                                      <number>1200</number>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QSpinBox" name="input_size2">
+                                     <property name="minimum">
+                                      <number>100</number>
+                                     </property>
+                                     <property name="maximum">
+                                      <number>1920</number>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_81">
+                                   <item>
+                                    <widget class="QLabel" name="label_7">
+                                     <property name="text">
+                                      <string>Input type</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QRadioButton" name="input_type_resize">
+                                     <property name="styleSheet">
+                                      <string notr="true">QRadioButton {
+    background-color:       Transparent;
+    color:                  Black;
+	border: none;
+
+}
+
+QRadioButton::indicator {
+    width:                  10px;
+    height:                 10px;
+    border-radius:          7px;
+}
+
+QRadioButton::indicator:checked {
+	background-color:       black;
+    border:                 2px solid black;
+}
+
+QRadioButton::indicator:unchecked {
+    background-color:      White;
+    border:                 2px solid white;
+}</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>resize</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QRadioButton" name="input_type_split">
+                                     <property name="styleSheet">
+                                      <string notr="true">QRadioButton {
+    background-color:       Transparent;
+    color:                  Black;
+	border: none;
+
+}
+
+QRadioButton::indicator {
+    width:                  10px;
+    height:                 10px;
+    border-radius:          7px;
+}
+
+QRadioButton::indicator:checked {
+    background-color:       black;
+    border:                 2px solid black;
+}
+
+QRadioButton::indicator:unchecked {
+    background-color:      White;
+    border:                 2px solid white;
+}</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>split</string>
+                                     </property>
+                                    </widget>
                                    </item>
                                   </layout>
                                  </item>
@@ -6501,7 +6696,7 @@ QPushButton:hover {
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QLineEdit" name="lineEdit_52">
+                                    <widget class="QLineEdit" name="b_epochs">
                                      <property name="maximumSize">
                                       <size>
                                        <width>100</width>
@@ -6522,7 +6717,7 @@ QPushButton:hover {
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QLineEdit" name="lineEdit_53">
+                                    <widget class="QLineEdit" name="b_batch">
                                      <property name="maximumSize">
                                       <size>
                                        <width>100</width>
@@ -6543,7 +6738,7 @@ QPushButton:hover {
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QLineEdit" name="lineEdit_54">
+                                    <widget class="QLineEdit" name="b_lr">
                                      <property name="maximumSize">
                                       <size>
                                        <width>100</width>
@@ -6564,7 +6759,7 @@ QPushButton:hover {
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QLineEdit" name="lineEdit_55">
+                                    <widget class="QLineEdit" name="b_te">
                                      <property name="maximumSize">
                                       <size>
                                        <width>100</width>
@@ -6585,7 +6780,7 @@ QPushButton:hover {
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QLineEdit" name="lineEdit_56">
+                                    <widget class="QLineEdit" name="b_vs">
                                      <property name="maximumSize">
                                       <size>
                                        <width>100</width>
@@ -6601,59 +6796,95 @@ QPushButton:hover {
                                    <item>
                                     <widget class="QLabel" name="label_143">
                                      <property name="text">
-                                      <string>Image Path :</string>
+                                      <string>Dataset Path :</string>
                                      </property>
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QLineEdit" name="lineEdit_57">
-                                     <property name="maximumSize">
+                                    <spacer name="horizontalSpacer_18">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
                                       <size>
-                                       <width>100</width>
-                                       <height>16777215</height>
+                                       <width>40</width>
+                                       <height>20</height>
                                       </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="b_select_dp">
+                                     <property name="text">
+                                      <string>choose dataset</string>
                                      </property>
                                     </widget>
                                    </item>
                                   </layout>
                                  </item>
                                  <item>
-                                  <layout class="QHBoxLayout" name="horizontalLayout_106">
-                                   <item>
-                                    <widget class="QLabel" name="label_144">
-                                     <property name="text">
-                                      <string>Label Path :</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <widget class="QLineEdit" name="lineEdit_58">
-                                     <property name="maximumSize">
-                                      <size>
-                                       <width>100</width>
-                                       <height>16777215</height>
-                                      </size>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                  </layout>
+                                  <widget class="QTextEdit" name="b_dp">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>230</width>
+                                     <height>50</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>240</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true"/>
+                                   </property>
+                                  </widget>
                                  </item>
                                  <item>
                                   <layout class="QHBoxLayout" name="horizontalLayout_107">
+                                   <property name="sizeConstraint">
+                                    <enum>QLayout::SetDefaultConstraint</enum>
+                                   </property>
                                    <item>
-                                    <widget class="QLabel" name="label_145">
-                                     <property name="text">
-                                      <string>TextLabel</string>
+                                    <widget class="QLineEdit" name="lineEdit_8">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>120</width>
+                                       <height>16777215</height>
+                                      </size>
                                      </property>
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QLineEdit" name="lineEdit_59">
+                                    <widget class="QPushButton" name="pushButton_8">
                                      <property name="maximumSize">
                                       <size>
-                                       <width>100</width>
+                                       <width>50</width>
                                        <height>16777215</height>
                                       </size>
+                                     </property>
+                                     <property name="text">
+                                      <string>Edit</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="pushButton_3">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>50</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
+                                     <property name="text">
+                                      <string>Delete</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -6664,194 +6895,77 @@ QPushButton:hover {
                               </item>
                               <item>
                                <widget class="QFrame" name="frame_49">
-                                <property name="cursor">
-                                 <cursorShape>ArrowCursor</cursorShape>
-                                </property>
                                 <property name="frameShape">
-                                 <enum>QFrame::Box</enum>
+                                 <enum>QFrame::StyledPanel</enum>
                                 </property>
                                 <property name="frameShadow">
                                  <enum>QFrame::Raised</enum>
                                 </property>
                                 <layout class="QVBoxLayout" name="verticalLayout_83">
-                                 <property name="spacing">
-                                  <number>3</number>
-                                 </property>
-                                 <property name="leftMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="topMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="rightMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="bottomMargin">
-                                  <number>0</number>
-                                 </property>
                                  <item>
-                                  <widget class="QLabel" name="label_146">
-                                   <property name="minimumSize">
+                                  <widget class="QLineEdit" name="lineEdit_9">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="maximumSize">
                                     <size>
-                                     <width>100</width>
-                                     <height>0</height>
+                                     <width>240</width>
+                                     <height>16777215</height>
                                     </size>
                                    </property>
-                                   <property name="styleSheet">
-                                    <string notr="true">text-align: center;</string>
-                                   </property>
-                                   <property name="text">
-                                    <string>Select Class</string>
-                                   </property>
-                                   <property name="alignment">
-                                    <set>Qt::AlignCenter</set>
-                                   </property>
-                                  </widget>
-                                 </item>
-                                 <item>
-                                  <widget class="QTableWidget" name="table_classification_select_class_4">
-                                   <property name="rowCount">
-                                    <number>20</number>
-                                   </property>
-                                   <property name="columnCount">
-                                    <number>3</number>
-                                   </property>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <row/>
-                                   <column/>
-                                   <column/>
-                                   <column/>
                                   </widget>
                                  </item>
                                  <item>
                                   <layout class="QHBoxLayout" name="horizontalLayout_108">
                                    <item>
-                                    <widget class="QLabel" name="label_147">
+                                    <widget class="QPushButton" name="pushButton_10">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>90</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
                                      <property name="text">
-                                      <string>Total Classes:</string>
+                                      <string>Edit</string>
                                      </property>
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QLabel" name="label_148">
-                                     <property name="text">
-                                      <string>0</string>
+                                    <widget class="QPushButton" name="pushButton_11">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>90</width>
+                                       <height>16777215</height>
+                                      </size>
                                      </property>
-                                     <property name="alignment">
-                                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                                     <property name="text">
+                                      <string>Cancel</string>
                                      </property>
                                     </widget>
                                    </item>
                                   </layout>
-                                 </item>
-                                 <item>
-                                  <layout class="QHBoxLayout" name="horizontalLayout_109">
-                                   <item>
-                                    <widget class="QLabel" name="label_149">
-                                     <property name="text">
-                                      <string>Selected Classes:</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <widget class="QLabel" name="label_150">
-                                     <property name="text">
-                                      <string>0</string>
-                                     </property>
-                                     <property name="alignment">
-                                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                  </layout>
-                                 </item>
-                                 <item>
-                                  <layout class="QHBoxLayout" name="horizontalLayout_110">
-                                   <item>
-                                    <widget class="QLabel" name="label_151">
-                                     <property name="text">
-                                      <string>Total Images :</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <widget class="QLabel" name="label_152">
-                                     <property name="text">
-                                      <string>0</string>
-                                     </property>
-                                     <property name="alignment">
-                                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                  </layout>
-                                 </item>
-                                 <item>
-                                  <layout class="QHBoxLayout" name="horizontalLayout_111">
-                                   <item>
-                                    <widget class="QLabel" name="label_153">
-                                     <property name="text">
-                                      <string>Selected Images :</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <widget class="QLabel" name="label_154">
-                                     <property name="text">
-                                      <string>0</string>
-                                     </property>
-                                     <property name="alignment">
-                                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                  </layout>
-                                 </item>
-                                 <item alignment="Qt::AlignHCenter">
-                                  <widget class="QPushButton" name="pushButton_24">
-                                   <property name="minimumSize">
-                                    <size>
-                                     <width>110</width>
-                                     <height>25</height>
-                                    </size>
-                                   </property>
-                                   <property name="maximumSize">
-                                    <size>
-                                     <width>110</width>
-                                     <height>30</height>
-                                    </size>
-                                   </property>
-                                   <property name="cursor">
-                                    <cursorShape>PointingHandCursor</cursorShape>
-                                   </property>
-                                   <property name="text">
-                                    <string>Save</string>
-                                   </property>
-                                  </widget>
                                  </item>
                                 </layout>
                                </widget>
                               </item>
+                              <item>
+                               <spacer name="verticalSpacer_10">
+                                <property name="orientation">
+                                 <enum>Qt::Vertical</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                 <size>
+                                  <width>20</width>
+                                  <height>40</height>
+                                 </size>
+                                </property>
+                               </spacer>
+                              </item>
                               <item alignment="Qt::AlignHCenter">
-                               <widget class="QPushButton" name="pushButton_25">
+                               <widget class="QPushButton" name="binary_train">
                                 <property name="minimumSize">
                                  <size>
                                   <width>180</width>
@@ -6869,6 +6983,13 @@ QPushButton:hover {
                                 </property>
                                 <property name="text">
                                  <string>TRAIN</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QLabel" name="warning_train_page">
+                                <property name="text">
+                                 <string/>
                                 </property>
                                </widget>
                               </item>
@@ -6961,9 +7082,7 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -6983,9 +7102,7 @@ QPushButton:hover {
                                  <widget class="QLabel" name="label_79">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -6999,9 +7116,7 @@ QPushButton:hover {
                                  <widget class="QPushButton" name="request_btn_2">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7035,9 +7150,7 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7053,9 +7166,7 @@ QPushButton:hover {
                                    <widget class="QLineEdit" name="lineEdit_id_8">
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7066,9 +7177,7 @@ QPushButton:hover {
                                    <widget class="QPushButton" name="search_id_btn_3">
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7095,9 +7204,7 @@ QPushButton:hover {
                                  <widget class="QLabel" name="label_81">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7121,9 +7228,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7143,9 +7248,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7166,9 +7269,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7188,9 +7289,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7211,9 +7310,7 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7242,9 +7339,7 @@ QPushButton:hover {
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
                                   <italic>false</italic>
                                   <bold>false</bold>
                                  </font>
@@ -7268,9 +7363,7 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7290,9 +7383,7 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7313,9 +7404,7 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7335,9 +7424,7 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7367,9 +7454,7 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7393,9 +7478,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7421,9 +7504,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7444,9 +7525,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7466,9 +7545,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7483,9 +7560,7 @@ QPushButton:hover {
                                  <widget class="QPushButton" name="search_id_btn_6">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7661,9 +7736,7 @@ QPushButton:hover {
                             </property>
                             <property name="font">
                              <font>
-                              <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
@@ -7830,7 +7903,7 @@ QPushButton:hover {
                                        </widget>
                                       </item>
                                       <item>
-                                       <widget class="QComboBox" name="comboBox_7"/>
+                                       <widget class="QComboBox" name="l_alghorithms"/>
                                       </item>
                                      </layout>
                                     </item>
@@ -7844,7 +7917,7 @@ QPushButton:hover {
                                        </widget>
                                       </item>
                                       <item>
-                                       <widget class="QLineEdit" name="lineEdit_36">
+                                       <widget class="QLineEdit" name="l_epochs">
                                         <property name="maximumSize">
                                          <size>
                                           <width>100</width>
@@ -7865,7 +7938,7 @@ QPushButton:hover {
                                        </widget>
                                       </item>
                                       <item>
-                                       <widget class="QLineEdit" name="lineEdit_37">
+                                       <widget class="QLineEdit" name="l_batch">
                                         <property name="maximumSize">
                                          <size>
                                           <width>100</width>
@@ -7886,7 +7959,7 @@ QPushButton:hover {
                                        </widget>
                                       </item>
                                       <item>
-                                       <widget class="QLineEdit" name="lineEdit_38">
+                                       <widget class="QLineEdit" name="l_lr">
                                         <property name="maximumSize">
                                          <size>
                                           <width>100</width>
@@ -7907,7 +7980,7 @@ QPushButton:hover {
                                        </widget>
                                       </item>
                                       <item>
-                                       <widget class="QLineEdit" name="lineEdit_39">
+                                       <widget class="QLineEdit" name="l_te">
                                         <property name="maximumSize">
                                          <size>
                                           <width>100</width>
@@ -7928,7 +8001,7 @@ QPushButton:hover {
                                        </widget>
                                       </item>
                                       <item>
-                                       <widget class="QLineEdit" name="lineEdit_40">
+                                       <widget class="QLineEdit" name="l_vs">
                                         <property name="maximumSize">
                                          <size>
                                           <width>100</width>
@@ -7949,7 +8022,7 @@ QPushButton:hover {
                                        </widget>
                                       </item>
                                       <item>
-                                       <widget class="QLineEdit" name="lineEdit_41">
+                                       <widget class="QLineEdit" name="l_ip">
                                         <property name="maximumSize">
                                          <size>
                                           <width>100</width>
@@ -7970,28 +8043,7 @@ QPushButton:hover {
                                        </widget>
                                       </item>
                                       <item>
-                                       <widget class="QLineEdit" name="lineEdit_42">
-                                        <property name="maximumSize">
-                                         <size>
-                                          <width>100</width>
-                                          <height>16777215</height>
-                                         </size>
-                                        </property>
-                                       </widget>
-                                      </item>
-                                     </layout>
-                                    </item>
-                                    <item>
-                                     <layout class="QHBoxLayout" name="horizontalLayout_81">
-                                      <item>
-                                       <widget class="QLabel" name="label_109">
-                                        <property name="text">
-                                         <string>TextLabel</string>
-                                        </property>
-                                       </widget>
-                                      </item>
-                                      <item>
-                                       <widget class="QLineEdit" name="lineEdit_43">
+                                       <widget class="QLineEdit" name="l_lp">
                                         <property name="maximumSize">
                                          <size>
                                           <width>100</width>
@@ -8194,7 +8246,7 @@ QPushButton:hover {
                                   </widget>
                                  </item>
                                  <item alignment="Qt::AlignHCenter">
-                                  <widget class="QPushButton" name="pushButton_19">
+                                  <widget class="QPushButton" name="localization_train">
                                    <property name="minimumSize">
                                     <size>
                                      <width>180</width>
@@ -8307,9 +8359,7 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8329,9 +8379,7 @@ QPushButton:hover {
                                  <widget class="QLabel" name="label_61">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8345,9 +8393,7 @@ QPushButton:hover {
                                  <widget class="QPushButton" name="request_btn_3">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8381,9 +8427,7 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8399,9 +8443,7 @@ QPushButton:hover {
                                    <widget class="QLineEdit" name="lineEdit_id_15">
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8412,9 +8454,7 @@ QPushButton:hover {
                                    <widget class="QPushButton" name="search_id_btn_7">
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8441,9 +8481,7 @@ QPushButton:hover {
                                  <widget class="QLabel" name="label_92">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8467,9 +8505,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8489,9 +8525,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8512,9 +8546,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8534,9 +8566,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8557,9 +8587,7 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8588,9 +8616,7 @@ QPushButton:hover {
                                 </property>
                                 <property name="font">
                                  <font>
-                                  <family>Segoe UI</family>
                                   <pointsize>10</pointsize>
-                                  <weight>50</weight>
                                   <italic>false</italic>
                                   <bold>false</bold>
                                  </font>
@@ -8614,9 +8640,7 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8636,9 +8660,7 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8659,9 +8681,7 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8681,9 +8701,7 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8713,9 +8731,7 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8739,9 +8755,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8761,9 +8775,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8784,9 +8796,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8806,9 +8816,7 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
-                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8823,9 +8831,7 @@ QPushButton:hover {
                                  <widget class="QPushButton" name="search_id_btn_9">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -9001,9 +9007,7 @@ QPushButton:hover {
                             </property>
                             <property name="font">
                              <font>
-                              <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
@@ -9165,9 +9169,7 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -10291,9 +10293,7 @@ color : rgb(0,0,0);</string>
                                      </property>
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10313,9 +10313,7 @@ color : rgb(0,0,0);</string>
                                     <widget class="QLabel" name="label_46">
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10329,9 +10327,7 @@ color : rgb(0,0,0);</string>
                                     <widget class="QPushButton" name="request_btn">
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10365,9 +10361,7 @@ color : rgb(0,0,0);</string>
                                      </property>
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10383,9 +10377,7 @@ color : rgb(0,0,0);</string>
                                       <widget class="QLineEdit" name="lineEdit_id">
                                        <property name="font">
                                         <font>
-                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
-                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10396,9 +10388,7 @@ color : rgb(0,0,0);</string>
                                       <widget class="QPushButton" name="search_id_btn">
                                        <property name="font">
                                         <font>
-                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
-                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10425,9 +10415,7 @@ color : rgb(0,0,0);</string>
                                     <widget class="QLabel" name="label_48">
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10451,9 +10439,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
-                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10473,9 +10459,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
-                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10496,9 +10480,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
-                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10518,9 +10500,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
-                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10541,9 +10521,7 @@ color : rgb(0,0,0);</string>
                                      </property>
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10572,9 +10550,7 @@ color : rgb(0,0,0);</string>
                                    </property>
                                    <property name="font">
                                     <font>
-                                     <family>Segoe UI</family>
                                      <pointsize>10</pointsize>
-                                     <weight>50</weight>
                                      <italic>false</italic>
                                      <bold>false</bold>
                                     </font>
@@ -10598,9 +10574,7 @@ color : rgb(0,0,0);</string>
                                        </property>
                                        <property name="font">
                                         <font>
-                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
-                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10620,9 +10594,7 @@ color : rgb(0,0,0);</string>
                                        </property>
                                        <property name="font">
                                         <font>
-                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
-                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10643,9 +10615,7 @@ color : rgb(0,0,0);</string>
                                        </property>
                                        <property name="font">
                                         <font>
-                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
-                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10665,9 +10635,7 @@ color : rgb(0,0,0);</string>
                                        </property>
                                        <property name="font">
                                         <font>
-                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
-                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10697,9 +10665,7 @@ color : rgb(0,0,0);</string>
                                      </property>
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10723,9 +10689,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
-                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10745,9 +10709,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
-                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10768,9 +10730,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
-                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10790,9 +10750,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
-                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10807,9 +10765,7 @@ color : rgb(0,0,0);</string>
                                     <widget class="QPushButton" name="search_id_btn_4">
                                      <property name="font">
                                       <font>
-                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10976,9 +10932,7 @@ color : rgb(0,0,0);</string>
                                  <widget class="QLabel" name="labelBoxBlenderInstalation">
                                   <property name="font">
                                    <font>
-                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
-                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -11037,9 +10991,7 @@ color : rgb(0,0,0);</string>
                                     </property>
                                     <property name="font">
                                      <font>
-                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
-                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -11054,7 +11006,7 @@ color : rgb(0,0,0);</string>
                                      <string>Open</string>
                                     </property>
                                     <property name="icon">
-                                     <iconset resource="resources.qrc">
+                                     <iconset resource="../resources.qrc">
                                       <normaloff>:/icons/images/icons/cil-folder-open.png</normaloff>:/icons/images/icons/cil-folder-open.png</iconset>
                                     </property>
                                    </widget>
@@ -11174,7 +11126,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>218</width>
+                                 <width>303</width>
                                  <height>218</height>
                                 </rect>
                                </property>
@@ -11209,9 +11161,7 @@ color : rgb(0,0,0);</string>
                              <widget class="QComboBox" name="comboBox">
                               <property name="font">
                                <font>
-                                <family>Segoe UI</family>
                                 <pointsize>10</pointsize>
-                                <weight>50</weight>
                                 <italic>false</italic>
                                 <bold>false</bold>
                                </font>
@@ -11277,7 +11227,7 @@ color : rgb(0,0,0);</string>
                                <string>Link Button</string>
                               </property>
                               <property name="icon">
-                               <iconset resource="resources.qrc">
+                               <iconset resource="../resources.qrc">
                                 <normaloff>:/icons/images/icons/cil-link.png</normaloff>:/icons/images/icons/cil-link.png</iconset>
                               </property>
                               <property name="description">
@@ -11398,9 +11348,9 @@ color : rgb(0,0,0);</string>
                                <colorrole role="PlaceholderText">
                                 <brush brushstyle="SolidPattern">
                                  <color alpha="255">
-                                  <red>221</red>
-                                  <green>221</green>
-                                  <blue>221</blue>
+                                  <red>20</red>
+                                  <green>20</green>
+                                  <blue>20</blue>
                                  </color>
                                 </brush>
                                </colorrole>
@@ -11463,9 +11413,9 @@ color : rgb(0,0,0);</string>
                                <colorrole role="PlaceholderText">
                                 <brush brushstyle="SolidPattern">
                                  <color alpha="255">
-                                  <red>221</red>
-                                  <green>221</green>
-                                  <blue>221</blue>
+                                  <red>20</red>
+                                  <green>20</green>
+                                  <blue>20</blue>
                                  </color>
                                 </brush>
                                </colorrole>
@@ -11528,9 +11478,9 @@ color : rgb(0,0,0);</string>
                                <colorrole role="PlaceholderText">
                                 <brush brushstyle="SolidPattern">
                                  <color alpha="255">
-                                  <red>221</red>
-                                  <green>221</green>
-                                  <blue>221</blue>
+                                  <red>20</red>
+                                  <green>20</green>
+                                  <blue>20</blue>
                                  </color>
                                 </brush>
                                </colorrole>
@@ -11593,9 +11543,7 @@ color : rgb(0,0,0);</string>
                               <string>New Row</string>
                              </property>
                              <property name="font">
-                              <font>
-                               <family>Segoe UI</family>
-                              </font>
+                              <font/>
                              </property>
                             </row>
                             <row>
@@ -11926,9 +11874,7 @@ color : rgb(0,0,0);</string>
                            </property>
                            <property name="font">
                             <font>
-                             <family>Segoe UI</family>
                              <pointsize>10</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -11963,9 +11909,7 @@ color : rgb(0,0,0);</string>
                            </property>
                            <property name="font">
                             <font>
-                             <family>Segoe UI</family>
                              <pointsize>10</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -12000,9 +11944,7 @@ color : rgb(0,0,0);</string>
                            </property>
                            <property name="font">
                             <font>
-                             <family>Segoe UI</family>
                              <pointsize>10</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -12079,9 +12021,7 @@ color : rgb(0,0,0);</string>
                   </property>
                   <property name="font">
                    <font>
-                    <family>Segoe UI</family>
                     <pointsize>-1</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -12142,7 +12082,7 @@ color : rgb(0,0,0);</string>
   </widget>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources.qrc"/>
  </resources>
  <connections/>
 </ui>

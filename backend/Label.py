@@ -157,8 +157,11 @@ class maskLbl:
         self.status = 'none'
         self.points = []
 
+<<<<<<< HEAD
         # self.masks_name.append(label)
 
+=======
+>>>>>>> r_abtahi
     
     #______________________________________________________________________________________________________
     #
@@ -175,10 +178,13 @@ class maskLbl:
     #______________________________________________________________________________________________________
     def get(self):
         return  list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,2)], self.masks))
+<<<<<<< HEAD
     
     def get_labels(self):
         return   self.masks
     
+=======
+>>>>>>> r_abtahi
     #______________________________________________________________________________________________________
     #draw no complete mask
     #______________________________________________________________________________________________________
@@ -451,9 +457,27 @@ class bboxLbl:
                 #self.save_bbox('1')
                 self.finish_drawing()
 
+<<<<<<< HEAD
     def get(self):
         return  list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,2)], self.bboxs))
     #____
+=======
+
+    
+    #______________________________________________________________________________________________________
+    #
+    #______________________________________________________________________________________________________
+    def load(self, bboxs):
+        bboxs = np.array(bboxs)
+        self.bboxs = list(bboxs)
+        self.status ='none'
+        self.points = []
+
+    
+    def get(self):
+        return self.bboxs
+
+>>>>>>> r_abtahi
 
 
 

@@ -44,6 +44,7 @@ color: black;</string>
         <widget class="QComboBox" name="comboBox_defects"/>
        </item>
        <item>
+<<<<<<< HEAD
         <widget class="QTableWidget" name="tableWidget_defects">
          <property name="columnCount">
           <number>5</number>
@@ -54,6 +55,9 @@ color: black;</string>
          <column/>
          <column/>
         </widget>
+=======
+        <widget class="QListWidget" name="listWidget_defect"/>
+>>>>>>> r_abtahi
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
