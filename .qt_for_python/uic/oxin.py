@@ -24,6 +24,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QAbstractScrollArea, QApplicat
     QSpinBox, QStackedWidget, QTabWidget, QTableWidget,
     QTableWidgetItem, QToolButton, QVBoxLayout, QWidget)
 import resources_rc
+import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -34,7 +35,6 @@ class Ui_MainWindow(object):
         self.styleSheet = QWidget(MainWindow)
         self.styleSheet.setObjectName(u"styleSheet")
         font = QFont()
-        font.setFamilies([u"Segoe UI"])
         font.setPointSize(10)
         font.setBold(False)
         font.setItalic(False)
@@ -610,7 +610,6 @@ class Ui_MainWindow(object):
         self.titleLeftApp.setObjectName(u"titleLeftApp")
         self.titleLeftApp.setGeometry(QRect(70, 8, 160, 20))
         font1 = QFont()
-        font1.setFamilies([u"Segoe UI Semibold"])
         font1.setPointSize(12)
         font1.setBold(False)
         font1.setItalic(False)
@@ -621,7 +620,6 @@ class Ui_MainWindow(object):
         self.titleLeftDescription.setGeometry(QRect(70, 27, 160, 16))
         self.titleLeftDescription.setMaximumSize(QSize(16777215, 16))
         font2 = QFont()
-        font2.setFamilies([u"Segoe UI"])
         font2.setPointSize(8)
         font2.setBold(False)
         font2.setItalic(False)
@@ -1063,7 +1061,6 @@ class Ui_MainWindow(object):
         self.maxiButton.setMinimumSize(QSize(28, 28))
         self.maxiButton.setMaximumSize(QSize(28, 28))
         font3 = QFont()
-        font3.setFamilies([u"Segoe UI"])
         font3.setPointSize(10)
         font3.setBold(False)
         font3.setItalic(False)
@@ -1707,7 +1704,6 @@ class Ui_MainWindow(object):
         self.label_2.setMinimumSize(QSize(72, 24))
         self.label_2.setMaximumSize(QSize(81, 16777215))
         font4 = QFont()
-        font4.setFamilies([u"Segoe UI"])
         font4.setPointSize(10)
         font4.setBold(False)
         font4.setItalic(False)
@@ -2050,7 +2046,6 @@ class Ui_MainWindow(object):
         self.label_6 = QLabel(self.frame_65)
         self.label_6.setObjectName(u"label_6")
         font5 = QFont()
-        font5.setFamilies([u"Segoe UI"])
         font5.setPointSize(10)
         font5.setBold(True)
         font5.setItalic(False)
@@ -3056,7 +3051,11 @@ class Ui_MainWindow(object):
         self.warning_label_page = QLabel(self.frame_17)
         self.warning_label_page.setObjectName(u"warning_label_page")
 
+<<<<<<< HEAD
         self.verticalLayout_39.addWidget(self.warning_label_page, 0, Qt.AlignHCenter)
+=======
+        self.verticalLayout_39.addWidget(self.warning_label_page)
+>>>>>>> r_abtahi
 
         self.save_dataset_btn = QPushButton(self.frame_17)
         self.save_dataset_btn.setObjectName(u"save_dataset_btn")
@@ -6207,7 +6206,6 @@ class Ui_MainWindow(object):
         self.creditsLabel.setObjectName(u"creditsLabel")
         self.creditsLabel.setMaximumSize(QSize(16777215, 16))
         font7 = QFont()
-        font7.setFamilies([u"Segoe UI"])
         font7.setBold(False)
         font7.setItalic(False)
         self.creditsLabel.setFont(font7)
@@ -6615,9 +6613,13 @@ class Ui_MainWindow(object):
         self.version.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))
     # retranslateUi
 
+<<<<<<< HEAD
 lewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
         ___qtablewidgetitem7 = self.tableWidget.verticalHeaderItem(3)
         ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
+=======
+New Row", None));
+>>>>>>> r_abtahi
         ___qtablewidgetitem8 = self.tableWidget.verticalHeaderItem(4)
         ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
         ___qtablewidgetitem9 = self.tableWidget.verticalHeaderItem(5)
