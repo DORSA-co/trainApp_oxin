@@ -598,42 +598,20 @@ class API:
         )
 
     def save_train_ds(self):
-        try:
+                try:
             sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
             self.ds.save(
                 img_path=img_path,
-                pos = pos,
-                sheet= sheet,
-                masks= self.label_bakcend['mask'].get(),
+                pos=pos,
+                sheet=sheet,
+                masks=self.label_bakcend['mask'].get(),
                 bboxes=self.label_bakcend['bbox'].get()
 
-                )
-
-            if self.ui.no_defect.isChecked():
-                self.ds.save_to_perfect(img_path)
-                crops = ImageCrops(self.img, self.size)
-                self.ds.save_to_perfect_splitted(crops)
-                self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
-                print('no')
-
-            elif self.ui.yes_defect.isChecked():
-                self.ds.save_to_defect(img_path)
-                crops = ImageCrops(self.img, self.size)
-                self.ds.save_to_defect_splitted(crops)
-                self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
-                print('yes')
-            else:
-                self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
-
-            # self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
-
-            # return
-
-
+            )
 
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
-            # return
+            return
 
         saved_perfect = self.ds.check_saved_perfect(pos=pos)
         saved_defect = self.ds.check_saved_defect(pos=pos)
@@ -643,7 +621,8 @@ class API:
                 self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
                 return
             if saved_defect:
-                t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language], texts.WARNINGS['ALREADY_SAVED_DEFECT'][self.language])
+                t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
+                                          texts.WARNINGS['ALREADY_SAVED_DEFECT'][self.language])
                 if not t:
                     return
                 else:
@@ -653,6 +632,7 @@ class API:
             self.ds.save_to_perfect(img_path=img_path, pos=pos)
             crops = ImageCrops(self.img, self.size)
             self.ds.save_to_perfect_splitted(crops, pos=pos)
+            self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
 
         elif self.ui.yes_defect.isChecked():
             if saved_defect:
@@ -669,6 +649,7 @@ class API:
             self.ds.save_to_defect(img_path=img_path, pos=pos)
             crops = ImageCrops(self.img, self.size)
             self.ds.save_to_defect_splitted(crops, pos=pos)
+            self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
 
         elif (not saved_defect) and (not saved_perfect):
             self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
