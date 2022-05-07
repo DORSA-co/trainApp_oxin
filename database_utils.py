@@ -13,10 +13,7 @@ class dataBaseUtils():
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
         self.defects_table = 'defects_info'
-<<<<<<< HEAD
         self.sign_tables='sign_tables'
-=======
->>>>>>> r_abtahi
 
     #________________________________________________________________
     #
@@ -167,7 +164,6 @@ if __name__ == '__main__':
     # db.set_dataset_path('G:/dataset/')
     # print(db.get_dataset_path())
 
-<<<<<<< HEAD
     # name,defects=db.get_defects()
     # print('name',name)
     # print('defe',defects)
@@ -177,12 +173,10 @@ if __name__ == '__main__':
     db.update_sign_table('defects_info','4')
 
     # print(x)
-=======
     name,defects=db.get_defects()
     print('name',name)
     print('defe',defects)
 
->>>>>>> r_abtahi
 
     # db.get_path(['997', 'up', (5, 5)])
     # pass

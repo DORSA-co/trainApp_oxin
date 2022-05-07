@@ -84,7 +84,6 @@ class UI_main_window(QMainWindow, ui):
         # self.toggleButton.clicked.connect(self.toggleMenu(True))
 
         # CONNECTED WINDOWS
-<<<<<<< HEAD
         #//////////////////////////////////////////////
         self.load_sheets_win=data_loader()
 
@@ -93,10 +92,6 @@ class UI_main_window(QMainWindow, ui):
         self.labeling_win=None
 
 
-=======
-        # //////////////////////////////////////////////
-        self.load_sheets_win = data_loader()
->>>>>>> r_abtahi
 
         self.labeling_win = labeling()
         labeling_api.labeling_API(self.labeling_win)
@@ -152,17 +147,10 @@ class UI_main_window(QMainWindow, ui):
 
         # labeling
 
-<<<<<<< HEAD
-        self.polygon_btn.clicked.connect(self.buttonClick) 
-        self.bounding_btn.clicked.connect(self.buttonClick) 
-        # self.add_label.clicked.connect(self.buttonClick) 
-        self.add_label_btn.clicked.connect(self.buttonClick) 
-=======
         self.polygon_btn.clicked.connect(self.buttonClick)
         self.bounding_btn.clicked.connect(self.buttonClick)
         self.add_label.clicked.connect(self.buttonClick)
         self.add_label_btn.clicked.connect(self.buttonClick)
->>>>>>> r_abtahi
 
         # QPixmap pixmapTarget = QPixmap(":/icons/images/icons/2png);
         # pixmapTarget = pixmapTarget.scaled(size-5, size-5, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -645,14 +633,10 @@ class UI_main_window(QMainWindow, ui):
     def bounding_box(self):
         # print('bounding_box')
         self.image.setCursor(Qt.CrossCursor)
-<<<<<<< HEAD
         self.label_type='bbox'
 
         self.tabWidget_defect.setCurrentIndex(1)
 
-=======
-        self.label_type = 'bbox'
->>>>>>> r_abtahi
 
     def polygon(self):
         # print('polygon')
@@ -661,7 +645,6 @@ class UI_main_window(QMainWindow, ui):
         # # QApplication.setOverrideCursor(cursor)
         # self.image.setCursor(cursor)
 
-<<<<<<< HEAD
         self.label_type='mask'
 
         self.tabWidget_defect.setCurrentIndex(0)
@@ -669,17 +652,12 @@ class UI_main_window(QMainWindow, ui):
 
 
     def data_loader_win_show(self):
-=======
         self.label_type = 'mask'
 
-    def data_loader_win_show(self):
-        # print('show loader win')
->>>>>>> r_abtahi
         self.load_sheets_win.show()
 
         # print(x,y)
 
-<<<<<<< HEAD
     def ret_create_labeling(self):
         self.labeling_win=labeling()
         return self.labeling_win
@@ -701,9 +679,6 @@ class UI_main_window(QMainWindow, ui):
             LABEL_TABLE[label_type].setItem(row,0,table_item)
 
 
-=======
-    def labeling_win_show(self):
->>>>>>> r_abtahi
 
         self.labeling_win.show()
 
@@ -720,7 +695,6 @@ class UI_main_window(QMainWindow, ui):
             'label': self.warning_label_page,
             'train': self.warning_train_page
         }
-<<<<<<< HEAD
         # print('set_warning')
         if text !=None:
 
@@ -731,13 +705,6 @@ class UI_main_window(QMainWindow, ui):
 
             if level==2:
                 waring_labels[name].setText(' Warning: '+text)
-=======
-
-        if text != None:
-
-            if level == 2:
-                waring_labels[name].setText(' Warning: ' + text)
->>>>>>> r_abtahi
                 waring_labels[name].setStyleSheet('background-color:#FDFFA9;border-radius:2px;color:black')
 
             if level == 3:

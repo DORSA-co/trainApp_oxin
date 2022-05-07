@@ -37,26 +37,15 @@ from backend.dataset import Dataset
 from image_splitter import ImageCrops
 import train_api
 
-<<<<<<< HEAD
 
 from labeling.labeling_UI import labeling
-from labeling import labeling_api
-from pynput.mouse import Button, Controller
 
-
-
-=======
 from FileDialog import FileDialog
 
-# from labeling import labeling_UI
-
-# from PySide2 import QtGui
-
 
 from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
->>>>>>> r_abtahi
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
 NCAMERA = 12
@@ -74,12 +63,8 @@ class API:
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
-<<<<<<< HEAD
-        self.ds = Dataset(self.db.get_dataset_path(), self.db.get_weights_path())
         self.create_label_color()
-=======
         self.ds = Dataset(self.db.get_dataset_path(), self.db.get_dataset_path_uesr(), self.db.get_weights_path())
->>>>>>> r_abtahi
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
             'mask': Label.maskLbl((1200, 1920), self.LABEL_COLOR),
@@ -94,36 +79,23 @@ class API:
         self.t = 0
         self.current_technical_side = ''
         self.selected_images_for_label = tempMemory.manageSelectedImage()
-<<<<<<< HEAD
-        self.finish_draw=0
-=======
         self.finish_draw = 0
->>>>>>> r_abtahi
         self.language = 'en'
         self.size = self.db.get_split_size()
 
         self.ui.set_default_db_parms(self.ds.binary_path, self.size)
 
-<<<<<<< HEAD
 
-=======
->>>>>>> r_abtahi
         # Create labeling window
         # -------------------------------------
 
         # self.labaling_UI=labeling_UI.labeling()
-<<<<<<< HEAD
         # self.labeling_win=labeling()
         self.mouse_controll = Controller()
 
         self.get_defects()
 
 
-=======
-
-        self.mouse_controll = Controller()
-
->>>>>>> r_abtahi
         # self.defects_name,self.defects_info=self.db.get_defects()
 
         # -------------------------------------
@@ -173,11 +145,8 @@ class API:
     
     #----------------------------------------------------------------------------------------
     # 
-<<<<<<< HEAD
     #---------------------------------------------------------------------------------------- 
-=======
     # ----------------------------------------------------------------------------------------
->>>>>>> r_abtahi
 
     def button_connector(self):
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
@@ -449,7 +418,6 @@ class API:
     # 
     # ----------------------------------------------------------------------------------------
     def load_image_to_label_page(self):
-<<<<<<< HEAD
         sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label') 
         label_type=self.ui.get_label_type()
         self.img = Utils.read_image( img_path, 'color')
@@ -466,23 +434,6 @@ class API:
 
         self.ui.show_image_info_lable_page(sheet,selected_img_pos)
         
-=======
-        sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        label_type = self.ui.get_label_type()
-        self.img = Utils.read_image(img_path, 'color')
-        label = self.label_memory.get_label(label_type, img_path)
-        self.label_bakcend[label_type].load(label)
-        print(label, img_path)
-
-        label_img = self.label_bakcend[label_type].draw()
-        self.img = Utils.add_layer_to_img(self.img, label_img, opacity=0.4, compress=0.5)
-        self.ui.show_image_in_label(self.img)
-
-        self.ui.show_image_in_label(self.img)
-
-        self.ui.show_image_info_lable_page(sheet, selected_img_pos)
-
->>>>>>> r_abtahi
     def next_label_img(self):
         self.move_on_list.next_on_list('selected_imgs_for_label')
         self.load_image_to_label_page()
@@ -494,7 +445,6 @@ class API:
     # ----------------------------------------------------------------------------------------
     # 
     # ----------------------------------------------------------------------------------------
-<<<<<<< HEAD
  
     def create_label_color(self):
         self.LABEL_COLOR = {'black': (0, 0,0)} 
@@ -510,26 +460,15 @@ class API:
     def label_image_mouse(self, wgt_name=''):
         
         label_type=self.ui.get_label_type()
-=======
-    def label_image_mouse(self, wgt_name=''):
-
-        label_type = self.ui.get_label_type()
->>>>>>> r_abtahi
         mouse_status = self.mouse.get_status()
         mouse_button = self.mouse.get_button()
         mouse_pt = self.mouse.get_relative_position()
 
-<<<<<<< HEAD
         sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')    
         img = Utils.read_image( img_path, 'color')
-=======
-        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        img = Utils.read_image(img_path, 'color')
->>>>>>> r_abtahi
 
         self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt )
         if self.label_bakcend[label_type].is_drawing_finish():
-<<<<<<< HEAD
             if label_type=='mask':
                 # print('asdwqdqwd')
                 self.finish_draw+=1
@@ -540,11 +479,6 @@ class API:
                     self.show_labeling(label_type)
             elif self.ui.labeling_win==None:
                 self.show_labeling(label_type)
-=======
-            print('asdwqdqwd')
-            # self.label_bakcend[label_type].save('1')
-            self.show_labeling(label_type)
->>>>>>> r_abtahi
         label_img = self.label_bakcend[label_type].draw()
         img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5 )
         self.ui.show_image_in_label( img )
@@ -554,7 +488,6 @@ class API:
                                 self.label_bakcend[label_type].get(),
                                 label_type )
 
-<<<<<<< HEAD
     def get_defects(self):
         self.defects_name,self.defects_info=self.db.get_defects()
 
@@ -609,27 +542,6 @@ class API:
 
     def close_labeling(self):
         self.ui.labeling_win = None
-=======
-        self.label_memory.add(img_path,
-                              self.label_bakcend[label_type].get(),
-                              label_type)
-
-    def show_labeling(self, label_type):
-
-        current_mouse_position = self.mouse_controll.position
-        print(current_mouse_position)
-        # nameself.defects=self.db.get_defects()
-        # print(self.defects['name'])
-        # self.labaling_UI.set_combobox(self.defects_name)
-        self.ui.labeling_win.win_set_geometry(left=current_mouse_position[0], top=current_mouse_position[1])
-        self.ui.labeling_win_show()
-
-    def set_label(self):
-
-        # self.labaling_UI.
-
-        self.label_bakcend[label_type].save('1')
->>>>>>> r_abtahi
 
     def clear_cache_fun(self):
         dir = self.cache_path
@@ -672,7 +584,6 @@ class API:
 
         print(l_parms)
 
-<<<<<<< HEAD
 
 
     def save_to_dataset(self):
@@ -682,15 +593,6 @@ class API:
             pos = pos,
             sheet= sheet,
             masks= self.label_bakcend['mask'].get(),
-=======
-    def save_to_dataset(self):
-        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        self.ds.save(
-            img_path=img_path,
-            pos=pos,
-            sheet=sheet,
-            masks=self.label_bakcend['mask'].get(),
->>>>>>> r_abtahi
             bboxes=self.label_bakcend['bbox'].get()
 
         )
@@ -700,7 +602,6 @@ class API:
             sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
             self.ds.save(
                 img_path=img_path,
-<<<<<<< HEAD
                 pos = pos,
                 sheet= sheet,
                 masks= self.label_bakcend['mask'].get(),
@@ -729,22 +630,11 @@ class API:
             # return
 
 
-=======
-                pos=pos,
-                sheet=sheet,
-                masks=self.label_bakcend['mask'].get(),
-                bboxes=self.label_bakcend['bbox'].get()
-
-            )
->>>>>>> r_abtahi
 
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
             # return
 
-<<<<<<< HEAD
-
-=======
         saved_perfect = self.ds.check_saved_perfect(pos=pos)
         saved_defect = self.ds.check_saved_defect(pos=pos)
 
@@ -782,7 +672,6 @@ class API:
 
         elif (not saved_defect) and (not saved_perfect):
             self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
->>>>>>> r_abtahi
 
     def split_binary_dataset(self, paths, size):
         for path in paths:

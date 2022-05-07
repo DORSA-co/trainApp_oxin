@@ -256,20 +256,13 @@ class dataBase:
                 records = cursor.fetchall()
                 print("Total number of rows in table: ", cursor.rowcount)
                 print(records)
-<<<<<<< HEAD
-=======
 
                 field_names = [col[0] for col in cursor.description]
 
->>>>>>> r_abtahi
                 connection.close()
                 cursor.close()
                 print("MySQL connection is closed")
 
-<<<<<<< HEAD
-                field_names = [col[0] for col in cursor.description]
-=======
->>>>>>> r_abtahi
                 res = []
                 for record in records:
                         record_dict = {}

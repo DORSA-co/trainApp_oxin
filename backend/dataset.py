@@ -61,28 +61,16 @@ class Dataset:
         letters = string.ascii_lowercase + string.digits + string.ascii_uppercase
         return ''.join(random.choice(letters) for i in range(length))
 
-<<<<<<< HEAD
     
     def __file_name__(self, pos):
         name = ''
         pos = list(map(lambda x:str(x), pos))
         name = ''.join(pos)
         name = name.replace(',','_')
-=======
-    def __file_name__(self, pos):
-        name = ''
-        pos = list(map(lambda x: str(x), pos))
-        name = ''.join(pos)
-        name = name.replace(',', '_')
->>>>>>> r_abtahi
         name = name.replace(' ', '')
         name = name.replace('(', '')
         name = name.replace(')', '')
         return name
-<<<<<<< HEAD
-        
-=======
->>>>>>> r_abtahi
 
     def save_to_temp(self, imgs_path, sheets):
         for img_path, sheet in zip(imgs_path, sheets):
@@ -97,7 +85,6 @@ class Dataset:
         shutil.copyfile(img_path, res_path)
         self.create_annotation_to_ds(sheet, masks, bboxes, image_name, pos[-1])
 
-<<<<<<< HEAD
     def save(self, img_path , pos, sheet, masks, bboxes):
             image_name = self.__file_name__(pos) + self.format_image
             res_path = os.path.join(  self.images_path, image_name )
@@ -107,10 +94,6 @@ class Dataset:
 
     def create_annotation_to_temp(self,sheet,fname):
         image_path = os.path.join(  self.images_temp_path, fname  )
-=======
-    def create_annotation_to_temp(self, sheet, fname):
-        image_path = os.path.join(self.images_temp_path, fname)
->>>>>>> r_abtahi
 
         json_name = fname.split('.')[0] + '.json'
         json_path = os.path.join(self.annotations_temp_path, json_name)
@@ -128,24 +111,23 @@ class Dataset:
     def create_annotation_to_ds(self, sheet, masks, bboxes, fname, pos):
         image_path = os.path.join(self.images_path, fname)
 
-<<<<<<< HEAD
-    def create_annotation_to_ds(self,sheet,masks, bboxes, fname,pos):
-            image_path = os.path.join(  self.images_path, fname  )
+    # def create_annotation_to_ds(self,sheet,masks, bboxes, fname,pos):
+    #         image_path = os.path.join(  self.images_path, fname  )
 
-            json_name = fname.split('.')[0] + '.json'
-            json_path = os.path.join(self.annotations_path, json_name)
+    #         json_name = fname.split('.')[0] + '.json'
+    #         json_path = os.path.join(self.annotations_path, json_name)
 
-            annotation=Annotation.Annotation()
-            annotation.set_fname(fname)
-            annotation.set_sheet_id(sheet.get_id())
-            annotation.set_date(sheet.get_date_string())
-            annotation.set_time(sheet.get_time_string())
-            annotation.set_user(sheet.get_user())
-            annotation.set_pos(pos)
-            annotation.set_path(image_path)
-            annotation.set_masks(masks)
-            annotation.set_bboxes(bboxes)
-            annotation.write(json_path)
+    #         annotation=Annotation.Annotation()
+    #         annotation.set_fname(fname)
+    #         annotation.set_sheet_id(sheet.get_id())
+    #         annotation.set_date(sheet.get_date_string())
+    #         annotation.set_time(sheet.get_time_string())
+    #         annotation.set_user(sheet.get_user())
+    #         annotation.set_pos(pos)
+    #         annotation.set_path(image_path)
+    #         annotation.set_masks(masks)
+    #         annotation.set_bboxes(bboxes)
+    #         annotation.write(json_path)
 
 
 
@@ -155,7 +137,6 @@ class Dataset:
     def save_to_defect(self, img_path):
         # image_name = os.path.split(img_path)[-1]
         image_name = self.__random_name__(10) + self.format_image
-=======
         json_name = fname.split('.')[0] + '.json'
         json_path = os.path.join(self.annotations_path, json_name)
 
@@ -189,7 +170,6 @@ class Dataset:
 
     def save_to_defect(self, img_path, pos):
         image_name = self.__file_name__(pos) + self.format_image
->>>>>>> r_abtahi
         res_path = os.path.join(self.defect_path, image_name)
         shutil.copyfile(img_path, res_path)
 
@@ -260,10 +240,7 @@ class Dataset:
         self.__creat_path__(perfect_splitted_path)
     # ---------------------------------------------------
 
-<<<<<<< HEAD
 
-=======
->>>>>>> r_abtahi
 
 if __name__ == '__main__':
     ds = Dataset('a')

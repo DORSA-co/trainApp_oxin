@@ -44,17 +44,14 @@ WARNINGS={
         'DATASET_FORMAT': {'fa': ' قالب مجموعه داده صحیح نیست ',
                  'en': ' Dataset format is incorrect '},
 
-<<<<<<< HEAD
         'IMAGE_SAVE_SUCCESSFULLY':{'fa': 'موفقیت ذخیره شد',
                  'en': ' Image Saved '}
 
-=======
         'DATASET_NUMBER': {'fa': ' شماره ی مجموعه داده خارج از محدوده است ',
                  'en': ' Dataset number is out of range '},
 
         'DATASET_EXIST': {'fa': ' آدرس وارد شده وجود دارد ',
                  'en': ' Address already exist '}
->>>>>>> r_abtahi
 
 }
 

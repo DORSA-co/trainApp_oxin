@@ -6788,8 +6788,7 @@ class Ui_MainWindow(object):
         self.version.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))
     # retranslateUi
 
-<<<<<<< HEAD
-lewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
+        lewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
         ___qtablewidgetitem7 = self.tableWidget.verticalHeaderItem(3)
         ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
         ___qtablewidgetitem8 = self.tableWidget.verticalHeaderItem(4)
@@ -6837,5 +6836,3 @@ lewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"New Row", None)
         self.version.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))
     # retranslateUi
 
-=======
->>>>>>> r_abtahi
