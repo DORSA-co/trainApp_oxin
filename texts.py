@@ -24,10 +24,36 @@ WARNINGS={
         'NO_IMAGE_LOADED': {'fa': ' تصویری بارگذاری نشده است ',
                  'en': ' No image loaded '},
 
+        'ALREADY_SAVED': {'fa': ' تصویر قبلا ذخیره شده است ',
+                 'en': ' Image already saved '},
+
+        'ALREADY_SAVED_TITLE': {'fa': ' اخطار ',
+                 'en': ' Warning '},
+
+        'ALREADY_SAVED_DEFECT': {'fa': ' تصویر قبلا با وضعیت عیب "بله" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "خیر" ذخیره کنید؟ ',
+                 'en': 'Image already saved with defect status "Yes". Are you sure you want to save it with defect '
+                       'status "No" '},
+
+        'ALREADY_SAVED_PERFECT': {'fa': ' تصویر قبلا با وضعیت عیب "خیر" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "بله" ذخیره کنید؟ ',
+                 'en': 'Image already saved with defect status "No". Are you sure you want to save it with defect '
+                       'status "Yes" '},
+
+        'INVALID_DATASET': {'fa': ' آدرس مجموعه داده معتبر نیست ',
+                 'en': ' Dataset address is invalid '},
+
         'DATASET_FORMAT': {'fa': ' قالب مجموعه داده صحیح نیست ',
-                 'en': ' Dataset format is incorrect '}
+                 'en': ' Dataset format is incorrect '},
+
+        'DATASET_NUMBER': {'fa': ' شماره ی مجموعه داده خارج از محدوده است ',
+                 'en': ' Dataset number is out of range '},
+
+        'DATASET_EXIST': {'fa': ' آدرس وارد شده وجود دارد ',
+                 'en': ' Address already exist '}
 
 }
+
+
+
 
 
 MESSEGES = {

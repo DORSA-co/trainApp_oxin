@@ -1,7 +1,12 @@
 # from logging import _Level
+import re
+import sys
 from ast import Try
 from email import utils
 from PySide6.QtCore import *
+from PySide6.QtWidgets import QFileDialog
+
+from app_settings import Settings
 from backend import data_grabber
 from backend.mouse import Mouse
 from backend.keyboard import Keyboard
@@ -13,10 +18,10 @@ from PIL import ImageQt
 import numpy as np
 import os
 from datetime import date, time, datetime
-from PyQt5.QtWidgets import QListWidget
+from PyQt5.QtWidgets import QListWidget, QApplication, QMessageBox
 from PyQt5.QtGui import QPixmap, QImage
 # from backend import add_remove_label
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
 from backend import Label
@@ -31,6 +36,16 @@ from utils import tempMemory, Utils
 from backend.dataset import Dataset
 from image_splitter import ImageCrops
 import train_api
+
+from FileDialog import FileDialog
+
+# from labeling import labeling_UI
+
+# from PySide2 import QtGui
+
+
+from labeling import labeling_api
+from pynput.mouse import Button, Controller
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
@@ -49,7 +64,7 @@ class API:
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
-        self.ds = Dataset(self.db.get_dataset_path(), self.db.get_weights_path())
+        self.ds = Dataset(self.db.get_dataset_path(), self.db.get_dataset_path_uesr(), self.db.get_weights_path())
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
             'mask': Label.maskLbl((1200, 1920), LABEL_COLOR),
@@ -57,18 +72,27 @@ class API:
         }
 
         # Label.bbox_lbl()
-
+        self.label_memory = tempMemory.manageLabel()
         # self.technical_backend = {'top': data_grabber()}
         self.thechnicals_backend = {}
         # self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
         self.t = 0
         self.current_technical_side = ''
         self.selected_images_for_label = tempMemory.manageSelectedImage()
-
+        self.finish_draw = 0
         self.language = 'en'
         self.size = self.db.get_split_size()
 
         self.ui.set_default_db_parms(self.ds.binary_path, self.size)
+
+        # Create labeling window
+        # -------------------------------------
+
+        # self.labaling_UI=labeling_UI.labeling()
+
+        self.mouse_controll = Controller()
+
+        # self.defects_name,self.defects_info=self.db.get_defects()
 
         # -------------------------------------
         # connet buttons to correspondings functions in API               ////////////////////
@@ -115,6 +139,7 @@ class API:
     # ----------------------------------------------------------------------------------------
     # 
     # ----------------------------------------------------------------------------------------
+
     def button_connector(self):
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
         self.ui.add_btn_SI.clicked.connect(partial(self.append_select_img))
@@ -128,11 +153,19 @@ class API:
         self.ui.next_img_label_btn.clicked.connect(partial(self.next_label_img))
         self.ui.prev_img_label_btn.clicked.connect(partial(self.prev_label_img))
         self.ui.binary_train.clicked.connect(partial(self.set_b_parms))
+        # self.ui.binary_train_stop.clicked.connect(partial(self.set_b_parms))
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
-        self.ui.save_dataset_btn.clicked.connect(partial(self.create_train_ds))
+        self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
 
         # trainig
-        self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
+        self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
+        self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
+        self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
+        # self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
+
+        # labeling
+
+        # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
 
     def mouse_connector(self):
         for _, technical_widget in self.ui.get_technical().items():
@@ -373,9 +406,20 @@ class API:
     # 
     # ----------------------------------------------------------------------------------------
     def load_image_to_label_page(self):
-        sheet, selected_img, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+        sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+        label_type = self.ui.get_label_type()
         self.img = Utils.read_image(img_path, 'color')
+        label = self.label_memory.get_label(label_type, img_path)
+        self.label_bakcend[label_type].load(label)
+        print(label, img_path)
+
+        label_img = self.label_bakcend[label_type].draw()
+        self.img = Utils.add_layer_to_img(self.img, label_img, opacity=0.4, compress=0.5)
         self.ui.show_image_in_label(self.img)
+
+        self.ui.show_image_in_label(self.img)
+
+        self.ui.show_image_info_lable_page(sheet, selected_img_pos)
 
     def next_label_img(self):
         self.move_on_list.next_on_list('selected_imgs_for_label')
@@ -388,26 +432,44 @@ class API:
     # ----------------------------------------------------------------------------------------
     # 
     # ----------------------------------------------------------------------------------------
-    def label_image_mouse(self, wgt_name):
+    def label_image_mouse(self, wgt_name=''):
 
         label_type = self.ui.get_label_type()
         mouse_status = self.mouse.get_status()
         mouse_button = self.mouse.get_button()
         mouse_pt = self.mouse.get_relative_position()
 
-        sheet, selected_img, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
         img = Utils.read_image(img_path, 'color')
 
         self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt)
         if self.label_bakcend[label_type].is_drawing_finish():
-            self.label_bakcend[label_type].save('1')
-
+            print('asdwqdqwd')
+            # self.label_bakcend[label_type].save('1')
+            self.show_labeling(label_type)
         label_img = self.label_bakcend[label_type].draw()
         img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
         self.ui.show_image_in_label(img)
 
-    def clear_list(self):
-        self.ui.listWidget_logs.clear()
+        self.label_memory.add(img_path,
+                              self.label_bakcend[label_type].get(),
+                              label_type)
+
+    def show_labeling(self, label_type):
+
+        current_mouse_position = self.mouse_controll.position
+        print(current_mouse_position)
+        # nameself.defects=self.db.get_defects()
+        # print(self.defects['name'])
+        # self.labaling_UI.set_combobox(self.defects_name)
+        self.ui.labeling_win.win_set_geometry(left=current_mouse_position[0], top=current_mouse_position[1])
+        self.ui.labeling_win_show()
+
+    def set_label(self):
+
+        # self.labaling_UI.
+
+        self.label_bakcend[label_type].save('1')
 
     def clear_cache_fun(self):
         dir = self.cache_path
@@ -439,8 +501,10 @@ class API:
     def set_b_parms(self):
 
         b_parms = self.ui.get_binary_parms()
+        # ('Xbc', (300, 300), True, 2, 8, 0.001, 1, 0.2, ['/home/reyhane/PycharmProjects/trainApp_oxin1/dataset/binary', '/home/reyhane/PycharmProjects/trainApp_oxin1/dataset_user/binary'])
+        if b_parms[2]:
+            self.split_binary_dataset(b_parms[-1], b_parms[1])
         train_api.train_binary(*b_parms, self.ds.weights_binary_path)
-        print(b_parms)
 
     def set_l_parms(self):
 
@@ -448,58 +512,171 @@ class API:
 
         print(l_parms)
 
-    def create_train_ds(self):
+    def save_to_dataset(self):
+        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+        self.ds.save(
+            img_path=img_path,
+            pos=pos,
+            sheet=sheet,
+            masks=self.label_bakcend['mask'].get(),
+            bboxes=self.label_bakcend['bbox'].get()
+
+        )
+
+    def save_train_ds(self):
         try:
-            sheet, selected_img, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+            sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+            self.ds.save(
+                img_path=img_path,
+                pos=pos,
+                sheet=sheet,
+                masks=self.label_bakcend['mask'].get(),
+                bboxes=self.label_bakcend['bbox'].get()
+
+            )
+
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
             return
 
+        saved_perfect = self.ds.check_saved_perfect(pos=pos)
+        saved_defect = self.ds.check_saved_defect(pos=pos)
+
         if self.ui.no_defect.isChecked():
-            self.ds.save_to_perfect(img_path)
+            if saved_perfect:
+                self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
+                return
+            if saved_defect:
+                t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language], texts.WARNINGS['ALREADY_SAVED_DEFECT'][self.language])
+                if not t:
+                    return
+                else:
+                    self.ds.delete_from_defect(pos)
+                    self.ds.delete_from_defect_splitted(pos)
+
+            self.ds.save_to_perfect(img_path=img_path, pos=pos)
             crops = ImageCrops(self.img, self.size)
-            self.ds.save_to_perfect_splitted(crops)
+            self.ds.save_to_perfect_splitted(crops, pos=pos)
 
         elif self.ui.yes_defect.isChecked():
-            self.ds.save_to_defect(img_path)
+            if saved_defect:
+                self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
+                return
+            if saved_perfect:
+                t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
+                                          texts.WARNINGS['ALREADY_SAVED_PERFECT'][self.language])
+                if not t:
+                    return
+                else:
+                    self.ds.delete_from_perfect(pos)
+                    self.ds.delete_from_perfect_splitted(pos)
+            self.ds.save_to_defect(img_path=img_path, pos=pos)
             crops = ImageCrops(self.img, self.size)
-            self.ds.save_to_defect_splitted(crops)
+            self.ds.save_to_defect_splitted(crops, pos=pos)
 
-        else:
+        elif (not saved_defect) and (not saved_perfect):
             self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
 
-    def split_binary_dataset(self):
-        if self.ui.progressBar_split.value() == 100:
-            return 
-
-        b_parms = self.ui.get_binary_parms()
-        if b_parms[-1] == self.ds.binary_path and b_parms[1] == self.size:
-            self.ui.progressBar_split.setValue(100)
-        else:
-            if b_parms[-1] == self.ds.binary_path:
-                self.size = b_parms[1]
-                self.db.set_split_size(self.size)
-            if self.ds.check_binary_dataset(b_parms[-1]):
-                self.ds.create_split_folder(b_parms[-1])
-
-                s = os.path.join(b_parms[-1], self.ds.defect_folder)
-                d = os.path.join(b_parms[-1], self.ds.defect_splitted_folder)
-                imgs = os.listdir(s)
-                for i in imgs:
-                    img = Utils.read_image(os.path.join(s, i), color='color')
-                    crops = ImageCrops(img, b_parms[1])
-                    self.ds.save_to_defect_splitted(crops, d)
-                    self.ui.progressBar_split.setValue(self.ui.progressBar_split.value() + 50/len(imgs))
-
-                s = os.path.join(b_parms[-1], self.ds.perfect_folder)
-                d = os.path.join(b_parms[-1], self.ds.perfect_splitted_folder)
-                imgs = os.listdir(s)
-                for i in imgs:
-                    img = Utils.read_image(os.path.join(s, i), color='color')
-                    crops = ImageCrops(img, b_parms[1])
-                    self.ds.save_to_perfect_splitted(crops, d)
-                    self.ui.progressBar_split.setValue(self.ui.progressBar_split.value() + 50 / len(imgs))
-                self.ui.progressBar_split.setValue(100)
+    def split_binary_dataset(self, paths, size):
+        for path in paths:
+            if path == self.ds.binary_path and size == self.size:
+                continue
             else:
-                self.ui.set_warning(texts.WARNINGS['DATASET_FORMAT'][self.language], 'train', level=2)
-                return
+                if path == self.ds.binary_path:
+                    self.size = size
+                    self.db.set_split_size(self.size)
+                if self.ds.check_binary_dataset(path):
+                    self.ds.create_split_folder(path)
+
+                    s = os.path.join(path, self.ds.defect_folder)
+                    d = os.path.join(path, self.ds.defect_splitted_folder)
+                    imgs = os.listdir(s)
+                    for i in imgs:
+                        img = Utils.read_image(os.path.join(s, i), color='color')
+                        crops = ImageCrops(img, size)
+                        self.ds.save_to_defect_splitted(crops, d, name=i.split('.')[0])
+
+                    s = os.path.join(path, self.ds.perfect_folder)
+                    d = os.path.join(path, self.ds.perfect_splitted_folder)
+                    imgs = os.listdir(s)
+                    for i in imgs:
+                        img = Utils.read_image(os.path.join(s, i), color='color')
+                        crops = ImageCrops(img, size)
+                        self.ds.save_to_perfect_splitted(crops, d, i.split('.')[0])
+                else:
+                    self.ui.set_warning(texts.WARNINGS['DATASET_FORMAT'][self.language], 'train', level=2)
+                    return
+
+    def select_binary_dataset(self):
+        self.select_ds_dialog = FileDialog('Select a directory', self.ds.dataset_path_user)
+        selected = self.select_ds_dialog.exec()
+
+        if selected:
+            dname = self.select_ds_dialog.selectedFiles()[0]
+        else:
+            return
+        if dname == '':
+            return
+        if not self.ds.check_binary_dataset(dname):
+            self.ui.set_warning(texts.WARNINGS['DATASET_FORMAT'][self.language], 'train', level=2)
+            return
+        text = self.ui.b_dp.toPlainText()
+        pattern = r'[0-9]+. '
+        datasets = [s.rstrip() for s in re.split(pattern, text)[1:]]
+
+        if dname in datasets:
+            self.ui.set_warning(texts.WARNINGS['DATASET_EXIST'][self.language], 'train', level=2)
+            return
+
+        n = len(datasets) + 1
+        if text != '': text += ' \n'
+        self.ui.b_dp.setPlainText(text + str(n) + '. ' + dname)
+
+    def delete_binary_dataset(self):
+        ds_n = self.ui.b_ds_num.value() - 1
+        text = self.ui.b_dp.toPlainText()
+        pattern = r'[0-9]+. '
+        datasets = [s.rstrip() for s in re.split(pattern, text)[1:]]
+        if ds_n >= len(datasets):
+            self.ui.set_warning(texts.WARNINGS['DATASET_NUMBER'][self.language], 'train', level=2)
+            return
+        datasets.pop(ds_n)
+        text = ''
+        for i in range(len(datasets)):
+            text += str(i + 1) + '. ' + datasets[i]
+            if i != len(datasets) - 1:
+                text += '\n'
+
+        self.ui.b_dp.setPlainText(text)
+
+    def ok_add_binary_ds(self):
+        path = self.ui.b_add_ds_lineedit.text().lstrip()
+        if not os.path.exists(path):
+            self.ui.set_warning(texts.WARNINGS['INVALID_DATASET'][self.language], 'train', level=2)
+            return
+        elif not self.ds.check_binary_dataset(path):
+            self.ui.set_warning(texts.WARNINGS['DATASET_FORMAT'][self.language], 'train', level=2)
+            return
+
+        text = self.ui.b_dp.toPlainText()
+        pattern = r'[0-9]+. '
+
+        datasets = [s.rstrip() for s in re.split(pattern, text)[1:]]
+        if path in datasets:
+            self.ui.set_warning(texts.WARNINGS['DATASET_EXIST'][self.language], 'train', level=2)
+        else:
+            n = len(datasets) + 1
+            if text != '': text += ' \n'
+            self.ui.b_dp.setPlainText(text + str(n) + '. ' + path)
+        self.ui.b_add_ds_lineedit.setText('')
+
+        height = self.ui.b_add_ds_frame.height()
+        if height == 67:
+            self.left_box = QPropertyAnimation(self.ui.b_add_ds_frame, b"maximumHeight")
+            self.left_box.setDuration(Settings.TIME_ANIMATION)
+            self.left_box.setStartValue(100)
+            self.left_box.setEndValue(0)
+            self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
+            self.group = QParallelAnimationGroup()
+            self.group.addAnimation(self.left_box)
+            self.group.start()

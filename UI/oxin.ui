@@ -11,9 +11,15 @@
     <height>705</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="minimumSize">
    <size>
-    <width>940</width>
+    <width>20</width>
     <height>560</height>
    </size>
   </property>
@@ -278,6 +284,23 @@ QLineEdit:hover {
 	border: 2px solid rgb(64, 71, 88);
 }
 QLineEdit:focus {
+	border: 2px solid rgb(91, 101, 124);
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////////////
+TextEdit */
+QTextEdit {
+	background-color: rgb(210,210,150);
+	border-radius: 5px;
+	border: 2px solid rgb(33, 37, 43);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+QTextEdit:hover {
+	border: 2px solid rgb(64, 71, 88);
+}
+QTextEdit:focus {
 	border: 2px solid rgb(91, 101, 124);
 }
 
@@ -1807,7 +1830,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="resources.qrc">
+                   <iconset resource="../resources.qrc">
                     <normaloff>:/icons/images/icons/icon_settings.png</normaloff>:/icons/images/icons/icon_settings.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -1842,7 +1865,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="resources.qrc">
+                   <iconset resource="../resources.qrc">
                     <normaloff>:/icons/images/icons/icon_minimize.png</normaloff>:/icons/images/icons/icon_minimize.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -1885,7 +1908,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="resources.qrc">
+                   <iconset resource="../resources.qrc">
                     <normaloff>:/icons/images/icons/icon_maximize.png</normaloff>:/icons/images/icons/icon_maximize.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -2247,6 +2270,12 @@ QPushButton:hover {
                    </property>
                    <item>
                     <widget class="QStackedWidget" name="stackedWidget">
+                     <property name="acceptDrops">
+                      <bool>false</bool>
+                     </property>
+                     <property name="toolTipDuration">
+                      <number>-1</number>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
@@ -2722,7 +2751,7 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>242</width>
+                                         <width>291</width>
                                          <height>28</height>
                                         </rect>
                                        </property>
@@ -4061,7 +4090,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>28</height>
+                                  <height>550</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -4300,7 +4329,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>28</height>
+                                  <height>550</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -6451,9 +6480,24 @@ QPushButton:hover {
                           <layout class="QHBoxLayout" name="horizontalLayout_85">
                            <item>
                             <widget class="QFrame" name="frame_47">
+                             <property name="enabled">
+                              <bool>true</bool>
+                             </property>
+                             <property name="sizePolicy">
+                              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                               <horstretch>0</horstretch>
+                               <verstretch>0</verstretch>
+                              </sizepolicy>
+                             </property>
+                             <property name="minimumSize">
+                              <size>
+                               <width>320</width>
+                               <height>50</height>
+                              </size>
+                             </property>
                              <property name="maximumSize">
                               <size>
-                               <width>250</width>
+                               <width>130</width>
                                <height>16777215</height>
                               </size>
                              </property>
@@ -6464,23 +6508,17 @@ QPushButton:hover {
                               <enum>QFrame::Raised</enum>
                              </property>
                              <layout class="QVBoxLayout" name="verticalLayout_81">
-                              <property name="leftMargin">
-                               <number>0</number>
-                              </property>
-                              <property name="topMargin">
-                               <number>0</number>
-                              </property>
-                              <property name="rightMargin">
-                               <number>0</number>
-                              </property>
-                              <property name="bottomMargin">
-                               <number>0</number>
-                              </property>
-                              <item alignment="Qt::AlignLeft">
+                              <item>
                                <widget class="QFrame" name="frame_48">
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
                                 <property name="minimumSize">
                                  <size>
-                                  <width>0</width>
+                                  <width>300</width>
                                   <height>50</height>
                                  </size>
                                 </property>
@@ -6491,15 +6529,6 @@ QPushButton:hover {
                                  <enum>QFrame::Raised</enum>
                                 </property>
                                 <layout class="QVBoxLayout" name="verticalLayout_82">
-                                 <property name="spacing">
-                                  <number>4</number>
-                                 </property>
-                                 <property name="leftMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="topMargin">
-                                  <number>0</number>
-                                 </property>
                                  <item>
                                   <layout class="QHBoxLayout" name="horizontalLayout_99">
                                    <item alignment="Qt::AlignLeft">
@@ -6540,6 +6569,79 @@ QPushButton:hover {
                                      </property>
                                      <property name="maximum">
                                       <number>1920</number>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_81">
+                                   <item>
+                                    <widget class="QLabel" name="label_7">
+                                     <property name="text">
+                                      <string>Input type</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QRadioButton" name="input_type_resize">
+                                     <property name="styleSheet">
+                                      <string notr="true">QRadioButton {
+    background-color:       Transparent;
+    color:                  Black;
+	border: none;
+
+}
+
+QRadioButton::indicator {
+    width:                  10px;
+    height:                 10px;
+    border-radius:          7px;
+}
+
+QRadioButton::indicator:checked {
+	background-color:       black;
+    border:                 2px solid black;
+}
+
+QRadioButton::indicator:unchecked {
+    background-color:      White;
+    border:                 2px solid white;
+}</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>resize</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QRadioButton" name="input_type_split">
+                                     <property name="styleSheet">
+                                      <string notr="true">QRadioButton {
+    background-color:       Transparent;
+    color:                  Black;
+	border: none;
+
+}
+
+QRadioButton::indicator {
+    width:                  10px;
+    height:                 10px;
+    border-radius:          7px;
+}
+
+QRadioButton::indicator:checked {
+    background-color:       black;
+    border:                 2px solid black;
+}
+
+QRadioButton::indicator:unchecked {
+    background-color:      White;
+    border:                 2px solid white;
+}</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>split</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -6660,12 +6762,96 @@ QPushButton:hover {
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QLineEdit" name="b_dp">
+                                    <spacer name="horizontalSpacer_18">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="b_select_dp">
+                                     <property name="text">
+                                      <string>Select dataset</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="QTextEdit" name="b_dp">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>20</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>280</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true"/>
+                                   </property>
+                                   <property name="readOnly">
+                                    <bool>true</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_107">
+                                   <property name="sizeConstraint">
+                                    <enum>QLayout::SetDefaultConstraint</enum>
+                                   </property>
+                                   <item>
+                                    <widget class="QSpinBox" name="b_ds_num">
                                      <property name="maximumSize">
                                       <size>
-                                       <width>100</width>
+                                       <width>120</width>
                                        <height>16777215</height>
                                       </size>
+                                     </property>
+                                     <property name="minimum">
+                                      <number>1</number>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="b_delete_ds">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>55</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
+                                     <property name="text">
+                                      <string>Delete</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="b_add_ds">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>55</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
+                                     <property name="text">
+                                      <string>Add</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -6675,32 +6861,82 @@ QPushButton:hover {
                                </widget>
                               </item>
                               <item>
-                               <widget class="QPushButton" name="split_dataset">
-                                <property name="minimumSize">
-                                 <size>
-                                  <width>180</width>
-                                  <height>30</height>
-                                 </size>
-                                </property>
+                               <widget class="QFrame" name="b_add_ds_frame">
                                 <property name="maximumSize">
                                  <size>
                                   <width>16777215</width>
-                                  <height>16777215</height>
+                                  <height>0</height>
                                  </size>
                                 </property>
-                                <property name="cursor">
-                                 <cursorShape>PointingHandCursor</cursorShape>
+                                <property name="frameShape">
+                                 <enum>QFrame::StyledPanel</enum>
                                 </property>
-                                <property name="text">
-                                 <string>Split Dataset</string>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
                                 </property>
-                               </widget>
-                              </item>
-                              <item>
-                               <widget class="QProgressBar" name="progressBar_split">
-                                <property name="value">
-                                 <number>0</number>
-                                </property>
+                                <layout class="QVBoxLayout" name="verticalLayout_83">
+                                 <item>
+                                  <widget class="QLineEdit" name="b_add_ds_lineedit">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>280</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="placeholderText">
+                                    <string>Dataset address</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_108">
+                                   <item>
+                                    <widget class="QPushButton" name="b_add_ok">
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>0</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>90</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
+                                     <property name="text">
+                                      <string>Ok</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="b_add_cancel">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>90</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
+                                     <property name="text">
+                                      <string>Cancel</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                </layout>
                                </widget>
                               </item>
                               <item>
@@ -6716,8 +6952,17 @@ QPushButton:hover {
                                 </property>
                                </spacer>
                               </item>
-                              <item alignment="Qt::AlignHCenter">
+                              <item>
                                <widget class="QPushButton" name="binary_train">
+                                <property name="enabled">
+                                 <bool>true</bool>
+                                </property>
+                                <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                                  <horstretch>0</horstretch>
+                                  <verstretch>0</verstretch>
+                                 </sizepolicy>
+                                </property>
                                 <property name="minimumSize">
                                  <size>
                                   <width>180</width>
@@ -6733,23 +6978,25 @@ QPushButton:hover {
                                 <property name="cursor">
                                  <cursorShape>PointingHandCursor</cursorShape>
                                 </property>
+                                <property name="acceptDrops">
+                                 <bool>false</bool>
+                                </property>
+                                <property name="toolTipDuration">
+                                 <number>-1</number>
+                                </property>
+                                <property name="styleSheet">
+                                 <string notr="true">alignment=QtCore.Qt.AlignCenter</string>
+                                </property>
                                 <property name="text">
                                  <string>TRAIN</string>
                                 </property>
+                                <property name="autoDefault">
+                                 <bool>false</bool>
+                                </property>
+                                <property name="default">
+                                 <bool>false</bool>
+                                </property>
                                </widget>
-                              </item>
-                              <item>
-                               <spacer name="verticalSpacer_11">
-                                <property name="orientation">
-                                 <enum>Qt::Vertical</enum>
-                                </property>
-                                <property name="sizeHint" stdset="0">
-                                 <size>
-                                  <width>20</width>
-                                  <height>40</height>
-                                 </size>
-                                </property>
-                               </spacer>
                               </item>
                               <item>
                                <widget class="QLabel" name="warning_train_page">
@@ -10771,7 +11018,7 @@ color : rgb(0,0,0);</string>
                                      <string>Open</string>
                                     </property>
                                     <property name="icon">
-                                     <iconset resource="resources.qrc">
+                                     <iconset resource="../resources.qrc">
                                       <normaloff>:/icons/images/icons/cil-folder-open.png</normaloff>:/icons/images/icons/cil-folder-open.png</iconset>
                                     </property>
                                    </widget>
@@ -10992,7 +11239,7 @@ color : rgb(0,0,0);</string>
                                <string>Link Button</string>
                               </property>
                               <property name="icon">
-                               <iconset resource="resources.qrc">
+                               <iconset resource="../resources.qrc">
                                 <normaloff>:/icons/images/icons/cil-link.png</normaloff>:/icons/images/icons/cil-link.png</iconset>
                               </property>
                               <property name="description">
@@ -11848,7 +12095,6 @@ color : rgb(0,0,0);</string>
  </widget>
  <resources>
   <include location="../resources.qrc"/>
-  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

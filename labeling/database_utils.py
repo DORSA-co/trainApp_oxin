@@ -2,9 +2,9 @@
 
 import database
 import datetime
-from Sheet import Sheet
+# from Sheet import Sheet
 import os
-from backend import pathStructure
+# from backend import pathStructure
 
 class dataBaseUtils():
     def __init__(self) :
@@ -87,14 +87,6 @@ class dataBaseUtils():
     def get_dataset_path(self):
         record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
         return record['path_dataset']
-
-    def set_dataset_path_user(self,path):
-        #  update_record(self,data,table_name,col_name,value,id,id_value):
-        self.db.update_record(table_name= self.setting_tabel,col_name='path_dataset_user',value=path,id='id',id_value=0)
-
-    def get_dataset_path_uesr(self):
-        record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
-        return record['path_dataset_user']
 
     def set_weights_path(self,path):
         #  update_record(self,data,table_name,col_name,value,id,id_value):
