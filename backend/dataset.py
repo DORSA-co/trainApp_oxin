@@ -129,29 +129,6 @@ class Dataset:
     #         annotation.set_bboxes(bboxes)
     #         annotation.write(json_path)
 
-
-
-    # Mrs Abtahi-------------------------------------
-
-
-    def save_to_defect(self, img_path):
-        # image_name = os.path.split(img_path)[-1]
-        image_name = self.__random_name__(10) + self.format_image
-        json_name = fname.split('.')[0] + '.json'
-        json_path = os.path.join(self.annotations_path, json_name)
-
-        annotation = Annotation.Annotation()
-        annotation.set_fname(fname)
-        annotation.set_sheet_id(sheet.get_id())
-        annotation.set_date(sheet.get_date_string())
-        annotation.set_time(sheet.get_time_string())
-        annotation.set_user(sheet.get_user())
-        annotation.set_pos(pos)
-        annotation.set_path(image_path)
-        annotation.set_masks(masks)
-        annotation.set_bboxes(bboxes)
-        annotation.write(json_path)
-
     # Miss Abtahi-------------------------------------
 
     def check_saved_defect(self, pos):
