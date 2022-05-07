@@ -2746,7 +2746,7 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>291</width>
+                                         <width>242</width>
                                          <height>28</height>
                                         </rect>
                                        </property>
@@ -4093,7 +4093,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>549</height>
+                                  <height>28</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -4336,7 +4336,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>549</height>
+                                  <height>28</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -4968,6 +4968,55 @@ QToolTip {
                                    </size>
                                   </property>
                                  </spacer>
+                                </item>
+                                <item>
+                                 <widget class="QPushButton" name="bounding_btn_2">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>69</width>
+                                    <height>38</height>
+                                   </size>
+                                  </property>
+                                  <property name="cursor">
+                                   <cursorShape>PointingHandCursor</cursorShape>
+                                  </property>
+                                  <property name="toolTip">
+                                   <string notr="true" extracomment="zdvsdvsfbfd">Bounding Box</string>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">QPushButton {
+background-color:transparent;
+border:0px
+}
+QToolTip {
+	color: rgb(0,0,0);
+	background-color: rgb(255,255,255);
+	border: 1px solid rgb(44, 49, 58);
+	background-image: none;
+	background-position: left center;
+    background-repeat: no-repeat;
+	border: none;
+	border-left: 2px solid rgb(180,180,180);
+	text-align: left;
+	padding-left: 8px;
+	margin: 0px;
+}
+</string>
+                                  </property>
+                                  <property name="text">
+                                   <string/>
+                                  </property>
+                                  <property name="icon">
+                                   <iconset>
+                                    <normaloff>../images/EnglishLanguage_Flag2_26089 (4).png</normaloff>../images/EnglishLanguage_Flag2_26089 (4).png</iconset>
+                                  </property>
+                                  <property name="iconSize">
+                                   <size>
+                                    <width>31</width>
+                                    <height>29</height>
+                                   </size>
+                                  </property>
+                                 </widget>
                                 </item>
                                </layout>
                               </widget>

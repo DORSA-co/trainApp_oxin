@@ -4862,6 +4862,55 @@ QToolTip {
                                  </widget>
                                 </item>
                                 <item>
+                                 <widget class="QPushButton" name="pushButton_14">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>37</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="cursor">
+                                   <cursorShape>PointingHandCursor</cursorShape>
+                                  </property>
+                                  <property name="toolTip">
+                                   <string notr="true" extracomment="zdvsdvsfbfd">Delete Rec</string>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">QPushButton {
+background-color:transparent;
+border:0px
+}
+QToolTip {
+	color: rgb(0,0,0);
+	background-color: rgb(255,255,255);
+	border: 1px solid rgb(44, 49, 58);
+	background-image: none;
+	background-position: left center;
+    background-repeat: no-repeat;
+	border: none;
+	border-left: 2px solid rgb(180,180,180);
+	text-align: left;
+	padding-left: 8px;
+	margin: 0px;
+}
+</string>
+                                  </property>
+                                  <property name="text">
+                                   <string/>
+                                  </property>
+                                  <property name="icon">
+                                   <iconset>
+                                    <normaloff>images/EnglishLanguage_Flag2_26089 (4).png</normaloff>images/EnglishLanguage_Flag2_26089 (4).png</iconset>
+                                  </property>
+                                  <property name="iconSize">
+                                   <size>
+                                    <width>22</width>
+                                    <height>27</height>
+                                   </size>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
                                  <spacer name="verticalSpacer_2">
                                   <property name="orientation">
                                    <enum>Qt::Vertical</enum>
