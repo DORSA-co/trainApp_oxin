@@ -3051,11 +3051,7 @@ class Ui_MainWindow(object):
         self.warning_label_page = QLabel(self.frame_17)
         self.warning_label_page.setObjectName(u"warning_label_page")
 
-<<<<<<< HEAD
         self.verticalLayout_39.addWidget(self.warning_label_page, 0, Qt.AlignHCenter)
-=======
-        self.verticalLayout_39.addWidget(self.warning_label_page)
->>>>>>> r_abtahi
 
         self.save_dataset_btn = QPushButton(self.frame_17)
         self.save_dataset_btn.setObjectName(u"save_dataset_btn")
@@ -6613,13 +6609,9 @@ class Ui_MainWindow(object):
         self.version.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))
     # retranslateUi
 
-<<<<<<< HEAD
 lewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
         ___qtablewidgetitem7 = self.tableWidget.verticalHeaderItem(3)
         ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
-=======
-New Row", None));
->>>>>>> r_abtahi
         ___qtablewidgetitem8 = self.tableWidget.verticalHeaderItem(4)
         ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"New Row", None));
         ___qtablewidgetitem9 = self.tableWidget.verticalHeaderItem(5)
