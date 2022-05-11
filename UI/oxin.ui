@@ -2304,7 +2304,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>1</number>
+                      <number>4</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -2775,8 +2775,8 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>291</width>
-                                         <height>28</height>
+                                         <width>242</width>
+                                         <height>27</height>
                                         </rect>
                                        </property>
                                        <layout class="QHBoxLayout" name="horizontalLayout_92">
@@ -4122,7 +4122,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>550</height>
+                                  <height>17</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -4365,7 +4365,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>550</height>
+                                  <height>17</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -7000,49 +7000,89 @@ QRadioButton::indicator:unchecked {
                                </spacer>
                               </item>
                               <item>
-                               <widget class="QPushButton" name="binary_train">
-                                <property name="enabled">
-                                 <bool>true</bool>
+                               <widget class="QFrame" name="frame_15">
+                                <property name="frameShape">
+                                 <enum>QFrame::StyledPanel</enum>
                                 </property>
-                                <property name="sizePolicy">
-                                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                                  <horstretch>0</horstretch>
-                                  <verstretch>0</verstretch>
-                                 </sizepolicy>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
                                 </property>
-                                <property name="minimumSize">
-                                 <size>
-                                  <width>180</width>
-                                  <height>30</height>
-                                 </size>
-                                </property>
-                                <property name="maximumSize">
-                                 <size>
-                                  <width>180</width>
-                                  <height>16777215</height>
-                                 </size>
-                                </property>
-                                <property name="cursor">
-                                 <cursorShape>PointingHandCursor</cursorShape>
-                                </property>
-                                <property name="acceptDrops">
-                                 <bool>false</bool>
-                                </property>
-                                <property name="toolTipDuration">
-                                 <number>-1</number>
-                                </property>
-                                <property name="styleSheet">
-                                 <string notr="true">alignment=QtCore.Qt.AlignCenter</string>
-                                </property>
-                                <property name="text">
-                                 <string>TRAIN</string>
-                                </property>
-                                <property name="autoDefault">
-                                 <bool>false</bool>
-                                </property>
-                                <property name="default">
-                                 <bool>false</bool>
-                                </property>
+                                <layout class="QHBoxLayout" name="horizontalLayout_22">
+                                 <property name="spacing">
+                                  <number>20</number>
+                                 </property>
+                                 <property name="leftMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="topMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="rightMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="bottomMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <item>
+                                  <widget class="QPushButton" name="binary_train">
+                                   <property name="enabled">
+                                    <bool>true</bool>
+                                   </property>
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>120</width>
+                                     <height>30</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>180</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="cursor">
+                                    <cursorShape>PointingHandCursor</cursorShape>
+                                   </property>
+                                   <property name="acceptDrops">
+                                    <bool>false</bool>
+                                   </property>
+                                   <property name="toolTipDuration">
+                                    <number>-1</number>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">alignment=QtCore.Qt.AlignCenter</string>
+                                   </property>
+                                   <property name="text">
+                                    <string>TRAIN</string>
+                                   </property>
+                                   <property name="autoDefault">
+                                    <bool>false</bool>
+                                   </property>
+                                   <property name="default">
+                                    <bool>false</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QCheckBox" name="binary_chart_checkbox">
+                                   <property name="enabled">
+                                    <bool>false</bool>
+                                   </property>
+                                   <property name="cursor">
+                                    <cursorShape>PointingHandCursor</cursorShape>
+                                   </property>
+                                   <property name="text">
+                                    <string>Chart Full View</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
                                </widget>
                               </item>
                               <item>
@@ -7056,19 +7096,113 @@ QRadioButton::indicator:unchecked {
                             </widget>
                            </item>
                            <item>
-                            <widget class="Line" name="line_29">
-                             <property name="orientation">
-                              <enum>Qt::Vertical</enum>
-                             </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QFrame" name="frame_42">
+                            <widget class="QFrame" name="frame_49">
                              <property name="frameShape">
                               <enum>QFrame::StyledPanel</enum>
                              </property>
                              <property name="frameShadow">
                               <enum>QFrame::Raised</enum>
+                             </property>
+                             <layout class="QVBoxLayout" name="verticalLayout_96">
+                              <item>
+                               <widget class="QFrame" name="frame_42">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>16777215</width>
+                                  <height>16777215</height>
+                                 </size>
+                                </property>
+                                <property name="frameShape">
+                                 <enum>QFrame::StyledPanel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
+                                </property>
+                                <layout class="QGridLayout" name="gridLayout_3">
+                                 <property name="leftMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="topMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="rightMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="bottomMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <item row="2" column="0">
+                                  <widget class="QFrame" name="binary_chart_recall_frame">
+                                   <property name="frameShape">
+                                    <enum>QFrame::Panel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Raised</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="0" column="0">
+                                  <widget class="QFrame" name="binary_chart_loss_frame">
+                                   <property name="styleSheet">
+                                    <string notr="true"/>
+                                   </property>
+                                   <property name="frameShape">
+                                    <enum>QFrame::Panel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Raised</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="0" column="1">
+                                  <widget class="QFrame" name="binary_chart_acc_frame">
+                                   <property name="styleSheet">
+                                    <string notr="true"/>
+                                   </property>
+                                   <property name="frameShape">
+                                    <enum>QFrame::Panel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Raised</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="2" column="1">
+                                  <widget class="QFrame" name="binary_chart_prec_frame">
+                                   <property name="frameShape">
+                                    <enum>QFrame::Panel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Raised</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QScrollBar" name="binary_chart_scrollbar">
+                                <property name="cursor">
+                                 <cursorShape>OpenHandCursor</cursorShape>
+                                </property>
+                                <property name="maximum">
+                                 <number>0</number>
+                                </property>
+                                <property name="pageStep">
+                                 <number>1</number>
+                                </property>
+                                <property name="orientation">
+                                 <enum>Qt::Horizontal</enum>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="Line" name="line_29">
+                             <property name="orientation">
+                              <enum>Qt::Vertical</enum>
                              </property>
                             </widget>
                            </item>

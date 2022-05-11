@@ -5,6 +5,7 @@ from ast import Try
 from email import utils
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QFileDialog
+from cv2 import log
 
 from app_settings import Settings
 from backend import data_grabber
@@ -24,7 +25,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
-from backend import Label
+from backend import Label, chart_funcs
 
 import database_utils
 from utils import *
@@ -570,13 +571,37 @@ class API:
         # print('asdqwdf')
         return parent_path
 
-    def set_b_parms(self):
 
+    def set_b_parms(self):
+        
         b_parms = self.ui.get_binary_parms()
         # ('Xbc', (300, 300), True, 2, 8, 0.001, 1, 0.2, ['/home/reyhane/PycharmProjects/trainApp_oxin1/dataset/binary', '/home/reyhane/PycharmProjects/trainApp_oxin1/dataset_user/binary'])
         if b_parms[2]:
             self.split_binary_dataset(b_parms[-1], b_parms[1])
-        train_api.train_binary(*b_parms, self.ds.weights_binary_path)
+        # update chart axes given train data
+        self.update_b_chart_axes(b_parms[3])
+        #
+        train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
+
+
+    def update_b_chart_axes(self, nepoch):
+        for chart_postfix in self.ui.chart_names:
+            eval('self.ui.axisX_%s' % chart_postfix).setRange(0, nepoch)
+            if self.ui.binary_chart_checkbox.isChecked():
+                eval('self.ui.axisX_%s' % chart_postfix).setTickCount(nepoch+1)
+            else:
+                eval('self.ui.axisX_%s' % chart_postfix).setTickCount(chart_funcs.axisX_range+1)
+        chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
+        chart_funcs.clear_series_date(ui_obj=self.ui, chart_postfixes=self.ui.chart_names)
+        self.ui.binary_chart_checkbox.setEnabled(True)
+        #self.ui.binary_chart_checkbox.setChecked(True)
+    
+
+    def assign_new_value_to_b_chart(self, last_epoch, logs):
+        print('here', last_epoch, logs)
+        chart_funcs.update_chart(ui_obj=self.ui, chart_postfixes=self.ui.chart_names, last_epoch=last_epoch, logs=logs)
+        
+        
 
     def set_l_parms(self):
 

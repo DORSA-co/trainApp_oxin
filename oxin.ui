@@ -2764,7 +2764,7 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>242</width>
+                                         <width>291</width>
                                          <height>28</height>
                                         </rect>
                                        </property>
@@ -4111,7 +4111,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>28</height>
+                                  <height>549</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -4354,7 +4354,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>28</height>
+                                  <height>549</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -6098,7 +6098,7 @@ QPushButton:hover {
                           </size>
                          </property>
                          <property name="currentIndex">
-                          <number>2</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_pipeline">
                           <layout class="QVBoxLayout" name="verticalLayout_80">
@@ -6533,7 +6533,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_binary">
                          <property name="currentIndex">
-                          <number>0</number>
+                          <number>1</number>
                          </property>
                          <widget class="QWidget" name="page_binary_list">
                           <widget class="QLabel" name="label_20">
@@ -7043,6 +7043,7 @@ QRadioButton::indicator:unchecked {
                              <property name="frameShadow">
                               <enum>QFrame::Raised</enum>
                              </property>
+                             <layout class="QVBoxLayout" name="verticalLayout_95"/>
                             </widget>
                            </item>
                           </layout>
@@ -11306,7 +11307,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>218</width>
+                                 <width>311</width>
                                  <height>218</height>
                                 </rect>
                                </property>
