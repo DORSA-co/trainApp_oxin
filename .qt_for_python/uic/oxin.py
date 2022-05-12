@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'oxin.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.2.4
+## Created by: Qt User Interface Compiler version 6.2.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -1492,7 +1492,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 291, 28))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 242, 27))
         self.horizontalLayout_92 = QHBoxLayout(self.scrollAreaWidgetContents_4)
         self.horizontalLayout_92.setSpacing(0)
         self.horizontalLayout_92.setObjectName(u"horizontalLayout_92")
@@ -2097,7 +2097,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 550))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 17))
         self.scrollAreaWidgetContents_2.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_2.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_90 = QHBoxLayout(self.scrollAreaWidgetContents_2)
@@ -2182,7 +2182,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 288, 550))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 288, 17))
         self.scrollAreaWidgetContents_5.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_5.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_114 = QHBoxLayout(self.scrollAreaWidgetContents_5)
@@ -3762,7 +3762,15 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_81.addItem(self.verticalSpacer_10)
 
-        self.binary_train = QPushButton(self.frame_47)
+        self.frame_15 = QFrame(self.frame_47)
+        self.frame_15.setObjectName(u"frame_15")
+        self.frame_15.setFrameShape(QFrame.StyledPanel)
+        self.frame_15.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_22 = QHBoxLayout(self.frame_15)
+        self.horizontalLayout_22.setSpacing(20)
+        self.horizontalLayout_22.setObjectName(u"horizontalLayout_22")
+        self.horizontalLayout_22.setContentsMargins(0, 0, 0, 0)
+        self.binary_train = QPushButton(self.frame_15)
         self.binary_train.setObjectName(u"binary_train")
         self.binary_train.setEnabled(True)
         sizePolicy8 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
@@ -3770,7 +3778,7 @@ class Ui_MainWindow(object):
         sizePolicy8.setVerticalStretch(0)
         sizePolicy8.setHeightForWidth(self.binary_train.sizePolicy().hasHeightForWidth())
         self.binary_train.setSizePolicy(sizePolicy8)
-        self.binary_train.setMinimumSize(QSize(180, 30))
+        self.binary_train.setMinimumSize(QSize(120, 30))
         self.binary_train.setMaximumSize(QSize(180, 16777215))
         self.binary_train.setCursor(QCursor(Qt.PointingHandCursor))
         self.binary_train.setAcceptDrops(False)
@@ -3778,7 +3786,17 @@ class Ui_MainWindow(object):
         self.binary_train.setStyleSheet(u"alignment=QtCore.Qt.AlignCenter")
         self.binary_train.setAutoDefault(False)
 
-        self.verticalLayout_81.addWidget(self.binary_train)
+        self.horizontalLayout_22.addWidget(self.binary_train)
+
+        self.binary_chart_checkbox = QCheckBox(self.frame_15)
+        self.binary_chart_checkbox.setObjectName(u"binary_chart_checkbox")
+        self.binary_chart_checkbox.setEnabled(False)
+        self.binary_chart_checkbox.setCursor(QCursor(Qt.PointingHandCursor))
+
+        self.horizontalLayout_22.addWidget(self.binary_chart_checkbox)
+
+
+        self.verticalLayout_81.addWidget(self.frame_15)
 
         self.warning_train_page = QLabel(self.frame_47)
         self.warning_train_page.setObjectName(u"warning_train_page")
@@ -3788,19 +3806,71 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_85.addWidget(self.frame_47)
 
+        self.frame_49 = QFrame(self.page_binary_training)
+        self.frame_49.setObjectName(u"frame_49")
+        self.frame_49.setFrameShape(QFrame.StyledPanel)
+        self.frame_49.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_96 = QVBoxLayout(self.frame_49)
+        self.verticalLayout_96.setObjectName(u"verticalLayout_96")
+        self.frame_42 = QFrame(self.frame_49)
+        self.frame_42.setObjectName(u"frame_42")
+        self.frame_42.setMaximumSize(QSize(16777215, 16777215))
+        self.frame_42.setFrameShape(QFrame.StyledPanel)
+        self.frame_42.setFrameShadow(QFrame.Raised)
+        self.gridLayout_3 = QGridLayout(self.frame_42)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.binary_chart_recall_frame = QFrame(self.frame_42)
+        self.binary_chart_recall_frame.setObjectName(u"binary_chart_recall_frame")
+        self.binary_chart_recall_frame.setFrameShape(QFrame.Panel)
+        self.binary_chart_recall_frame.setFrameShadow(QFrame.Raised)
+
+        self.gridLayout_3.addWidget(self.binary_chart_recall_frame, 2, 0, 1, 1)
+
+        self.binary_chart_loss_frame = QFrame(self.frame_42)
+        self.binary_chart_loss_frame.setObjectName(u"binary_chart_loss_frame")
+        self.binary_chart_loss_frame.setStyleSheet(u"")
+        self.binary_chart_loss_frame.setFrameShape(QFrame.Panel)
+        self.binary_chart_loss_frame.setFrameShadow(QFrame.Raised)
+
+        self.gridLayout_3.addWidget(self.binary_chart_loss_frame, 0, 0, 1, 1)
+
+        self.binary_chart_acc_frame = QFrame(self.frame_42)
+        self.binary_chart_acc_frame.setObjectName(u"binary_chart_acc_frame")
+        self.binary_chart_acc_frame.setStyleSheet(u"")
+        self.binary_chart_acc_frame.setFrameShape(QFrame.Panel)
+        self.binary_chart_acc_frame.setFrameShadow(QFrame.Raised)
+
+        self.gridLayout_3.addWidget(self.binary_chart_acc_frame, 0, 1, 1, 1)
+
+        self.binary_chart_prec_frame = QFrame(self.frame_42)
+        self.binary_chart_prec_frame.setObjectName(u"binary_chart_prec_frame")
+        self.binary_chart_prec_frame.setFrameShape(QFrame.Panel)
+        self.binary_chart_prec_frame.setFrameShadow(QFrame.Raised)
+
+        self.gridLayout_3.addWidget(self.binary_chart_prec_frame, 2, 1, 1, 1)
+
+
+        self.verticalLayout_96.addWidget(self.frame_42)
+
+        self.binary_chart_scrollbar = QScrollBar(self.frame_49)
+        self.binary_chart_scrollbar.setObjectName(u"binary_chart_scrollbar")
+        self.binary_chart_scrollbar.setCursor(QCursor(Qt.OpenHandCursor))
+        self.binary_chart_scrollbar.setMaximum(0)
+        self.binary_chart_scrollbar.setPageStep(1)
+        self.binary_chart_scrollbar.setOrientation(Qt.Horizontal)
+
+        self.verticalLayout_96.addWidget(self.binary_chart_scrollbar)
+
+
+        self.horizontalLayout_85.addWidget(self.frame_49)
+
         self.line_29 = QFrame(self.page_binary_training)
         self.line_29.setObjectName(u"line_29")
         self.line_29.setFrameShape(QFrame.VLine)
         self.line_29.setFrameShadow(QFrame.Sunken)
 
         self.horizontalLayout_85.addWidget(self.line_29)
-
-        self.frame_42 = QFrame(self.page_binary_training)
-        self.frame_42.setObjectName(u"frame_42")
-        self.frame_42.setFrameShape(QFrame.StyledPanel)
-        self.frame_42.setFrameShadow(QFrame.Raised)
-
-        self.horizontalLayout_85.addWidget(self.frame_42)
 
         self.stackedWidget_binary.addWidget(self.page_binary_training)
         self.page_binary_history = QWidget()
@@ -6417,7 +6487,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(4)
         self.tabWidget_2.setCurrentIndex(1)
         self.stackedWidget_defect.setCurrentIndex(0)
         self.tabWidget_defect.setCurrentIndex(0)
@@ -6598,6 +6668,7 @@ class Ui_MainWindow(object):
         self.b_add_ok.setText(QCoreApplication.translate("MainWindow", u"Ok", None))
         self.b_add_cancel.setText(QCoreApplication.translate("MainWindow", u"Cancel", None))
         self.binary_train.setText(QCoreApplication.translate("MainWindow", u"TRAIN", None))
+        self.binary_chart_checkbox.setText(QCoreApplication.translate("MainWindow", u"Chart Full View", None))
         self.warning_train_page.setText("")
         self.label_78.setText(QCoreApplication.translate("MainWindow", u"Search Tab", None))
         self.spinBox_tedad_2.setPrefix("")

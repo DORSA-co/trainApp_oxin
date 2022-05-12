@@ -30,7 +30,7 @@ data_gen_args = dict(rotation_range=0.2,
                      )
 
 
-def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch,binary_lr, binary_te, binary_vs, binary_dp, weights_path):
+def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch,binary_lr, binary_te, binary_vs, binary_dp, weights_path, api_obj):
     if not binary_input_type:
         trainGen, testGen, train_n, test_n = dataGenerator.get_binarygenerator(binary_dp,
                                                               binary_input_size,
@@ -52,8 +52,8 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
     elif binary_algorithm_name == ALGORITHM_NAMES['binary'][1]:
         model = models.resnet_cnn(input_size=binary_input_size + (3,), lr=binary_lr, num_class=1, mode=models.BINARY)
 
-    my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint_bin.h5'))
-
+    my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint_bin.h5'), model_type='binary', api_obj=api_obj)
+    
     model.fit(trainGen,
               steps_per_epoch=train_n// binary_batch + 1,
               epochs=binary_epoch - binary_te,
@@ -72,7 +72,7 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         model = models.resnet_cnn(binary_input_size + (3,), lr=binary_lr, num_class=1, mode=models.CATEGORICAL, fine_tune_layer=120,
                                     weights=os.path.join(weights_path, 'checkpoint_bin.h5'))
 
-    my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint.h5'))
+    my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint.h5'), model_type='binary', api_obj=api_obj)
 
     model.fit(trainGen,
               steps_per_epoch=train_n // binary_batch + 1,

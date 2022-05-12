@@ -12,10 +12,13 @@ from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 from PyQt5.QtGui import QPainter
 import pandas as pd
+from functools import partial
+
+from pytools import F
 
 from FileDialog import FileDialog
 from app_settings import Settings
-from backend import data_grabber
+from backend import data_grabber, chart_funcs
 import detect_lenguage
 import setting
 import api
@@ -179,6 +182,31 @@ class UI_main_window(QMainWindow, ui):
         self.b_add_cancel.clicked.connect(self.buttonClick)
 
         self._old_pos = None
+
+
+        # charts ---------------------------------------------------------------------------------------------
+        self.chart_names = ['loss','accuracy', 'recall', 'precision']
+        # binary chart
+        # accuracy
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_loss_frame, chart_postfix=self.chart_names[0],
+                                                chart_title='Loss', legend_train='Train', legend_val='Validation',
+                                                axisX_title='Epoch', axisY_title='Loss', checkbox_obj=self.binary_chart_checkbox, legend_visible=True, axisY_set_range=False)
+
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_acc_frame, chart_postfix=self.chart_names[1],
+                                                chart_title='Accuracy', legend_train='Train', legend_val='Validation',
+                                                axisX_title='Epoch', axisY_title='Accuracy', checkbox_obj=self.binary_chart_checkbox)
+        # precission
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_prec_frame, chart_postfix=self.chart_names[2],
+                                                chart_title='Precision', legend_train='Train', legend_val='Validation',
+                                                axisX_title='Epoch', axisY_title='Precision', checkbox_obj=self.binary_chart_checkbox)
+        # recall
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_recall_frame, chart_postfix=self.chart_names[3],
+                                                chart_title='Recall', legend_train='Train', legend_val='Validation',
+                                                axisX_title='Epoch', axisY_title='Recall', checkbox_obj=self.binary_chart_checkbox, axisX_visible=True)
+
+        # ----------------------------------------------------------------------------------------------------
+
+
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
