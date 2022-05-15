@@ -8,10 +8,10 @@ import numpy as np
 ncam = 13
 nframe=50
 for cnt in range(995,998):
-    path = 'G:\oxin_image_grabber\{}'.format(cnt)
+    path = 'D:\oxin_image_grabber\{}'.format(cnt)
     if not os.path.exists(path):
         os.makedirs(path)
-    for side in ['UP', 'DOWN']:
+    for side in ['TOP', 'BOTTOM']:
         if not os.path.exists(os.path.join( path, side )):
             os.makedirs(os.path.join( path, side ))
         for n in range(ncam):

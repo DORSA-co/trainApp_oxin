@@ -82,6 +82,10 @@ class maskLbl:
     #
     #______________________________________________________________________________________________________
     def delete_point_or_mask(self,pt):
+
+
+        # print('delet')
+
         pt = self.__denormal_pt__(pt)
         if len(self.points)>0 and  self.status=='drawing':
             self.points.pop()
@@ -145,12 +149,36 @@ class maskLbl:
     #
     #______________________________________________________________________________________________________
     def save(self, label):
+
+        print('label',label)
         #last point is same as first point so we ignore it
         cnt = np.array(self.points[:-1]).reshape((-1,1,2))
         self.masks.append([label,cnt])
         self.status = 'none'
         self.points = []
-        
+
+        # self.masks_name.append(label)
+
+    
+    #______________________________________________________________________________________________________
+    #
+    #______________________________________________________________________________________________________
+    def load(self, masks):
+        #last point is same as first point so we ignore it
+        cnt = np.array(self.points[:-1]).reshape((-1,1,2))
+        self.masks = list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,1,2)], masks))
+        self.status = 'none'
+        self.points = []
+
+    #______________________________________________________________________________________________________
+    #
+    #______________________________________________________________________________________________________
+    def get(self):
+        return  list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,2)], self.masks))
+    
+    def get_labels(self):
+        return   self.masks
+    
     #______________________________________________________________________________________________________
     #draw no complete mask
     #______________________________________________________________________________________________________
@@ -177,8 +205,11 @@ class maskLbl:
     
     def draw(self):
         masks_img = self.mask_init()
-        
+        # print('color lbl',self.label_color[0])
         for lbl, cnt in self.masks:
+
+            # print('lastcolor',self.label_color[lbl])
+            
             cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=-1)
             for corner in cnt:
                 corner = tuple(corner[0])
@@ -214,12 +245,6 @@ class maskLbl:
                 
 
     
-
-
-
-
-
-
 
 
 
@@ -426,7 +451,23 @@ class bboxLbl:
                 #self.save_bbox('1')
                 self.finish_drawing()
 
+    # def get(self):
+    #     return  list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,2)], self.bboxs))
+    # #____
 
+    
+    #______________________________________________________________________________________________________
+    #
+    #______________________________________________________________________________________________________
+    def load(self, bboxs):
+        bboxs = np.array(bboxs)
+        self.bboxs = list(bboxs)
+        self.status ='none'
+        self.points = []
+
+    
+    def get(self):
+        return self.bboxs
 
 
 

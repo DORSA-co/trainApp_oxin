@@ -234,7 +234,7 @@ class Annotation():
         self.annotation['user'] = user
 
     def set_pos(self, pos):
-        self.annotation['pos'] = pos
+        self.annotation['pos'] = list(pos)
 
     def set_path(self, path):
         self.annotation['path'] = path
@@ -247,7 +247,7 @@ class Annotation():
         for class_id,mask in masks:
             mask_dict = {}
             mask_dict['class'] = class_id
-            mask_dict['mask'] = mask
+            mask_dict['mask'] = mask.tolist()
             ms.append( mask_dict)
         
         self.annotation['obj_masks'] = ms
@@ -258,10 +258,10 @@ class Annotation():
         for class_id,bbox in bboxes:
             box_dict = {}
             box_dict['class'] = class_id
-            box_dict['bbox'] = bbox
+            box_dict['bbox'] = bbox.tolist()
             bs.append( box_dict)
         
-        self.annotation['obj_masks'] = bs
+        self.annotation['obj_bboxes'] = bs
 
     #--------------------------------------------------------
     #
@@ -309,7 +309,7 @@ class Annotation():
         assert self.have_object(), "There is no object"
         assert self.is_lbl_mask(), "Label type is not mask"
 
-        labels = self.annotation['labels']
+        labels = self.annotation['obj_masks']
         mask_list = []
         for lbl in labels:
             refrenced_size = self.get_img_size()
@@ -324,7 +324,7 @@ class Annotation():
         assert self.is_lbl_bbox(), "Label type is not bounding box"
         
         bbox_list = list()
-        lables = self.annotation['labels']
+        lables = self.annotation['obj_bboxes']
 
         for label in lables:
             bbox = BBOX(
