@@ -409,6 +409,8 @@ def efficientnetb2_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, 
     x = tf.keras.layers.Dense(512, activation='tanh')(x)
     x = tf.keras.layers.Dropout(0.1)(x)
     x = tf.keras.layers.Dense(256, activation='tanh')(x)
+    x = tf.keras.layers.Dropout(0.1)(x)
+    x = tf.keras.layers.Dense(256, activation='tanh')(x)
     out = tf.keras.layers.Dense(num_class, activation= __activation__[mode] )(x)
     model = tf.keras.Model(inpt, out)
     
@@ -432,11 +434,52 @@ def efficientnetb2_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, 
                  )
     return model
 
+def efficientnetb2_base_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
+    preprocess_input = tf.keras.applications.efficientnet.preprocess_input
+    base_model = tf.keras.applications.EfficientNetB2(include_top=False, weights=None, input_shape=input_size)
+    base_model.trainable = True
+
+    inpt = tf.keras.Input(shape=input_size) 
+    inpt_pre = preprocess_input(inpt)
+    #--------------------------------------------
+    out_base = base_model(inpt_pre)
+    #--------------------------------------------
+    x = tf.keras.layers.GlobalAveragePooling2D()(out_base)
+    # x = tf.keras.layers.Dropout(0.1)(x)
+    # x = tf.keras.layers.Dense(512, activation='tanh')(x)
+    # x = tf.keras.layers.Dropout(0.1)(x)
+    # x = tf.keras.layers.Dense(256, activation='tanh')(x)
+    # x = tf.keras.layers.Dropout(0.1)(x)
+    # x = tf.keras.layers.Dense(256, activation='tanh')(x)
+    out = tf.keras.layers.Dense(num_class, activation= __activation__[mode] )(x)
+    model = tf.keras.Model(inpt, out)
+    
+    #--------------------------------------------
+    if weights is not None:
+        model.load_weights(weights)
+    # --------------------------------------------
+    if fine_tune_layer>0:
+        base_model = model.layers[3]
+        base_model.trainable = True
+        for i in range(fine_tune_layer):
+            base_model.layers[i].trainable = False
+    # --------------------------------------------
+    
+    model.compile(optimizer = Adam(learning_rate = learning_rate),
+                  loss = __loss__[mode],
+                  metrics = ['accuracy',
+                             tf.keras.metrics.Precision(name='Precision'),
+                             tf.keras.metrics.Recall(name='Recall')
+                             ]
+                 )
+    model.summary()
+    return model
+
 #_____________________________________________________________________________________________________________________________
 #
 #_____________________________________________________________________________________________________________________________
 
 if __name__=='__main__':
     # model = resnet_cnn( (128,800,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
-    model = efficientnetb2_cnn( (128,800,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
+    model = efficientnetb2_base_cnn( (128,800,3), num_class=1, mode=BINARY )
     end = True

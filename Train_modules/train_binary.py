@@ -16,8 +16,8 @@ cpu = tf.config.list_physical_devices('CPU')
 tf.config.experimental.set_memory_growth(gpu[0], True)
 
 
-batch = 32
-epochs = 10
+batch = 10
+epochs = 20
 fine_tune_epochs=1
 dataset_path = 'J:/dataset_oxin/data/binary'
 input_size = (128,800,3)
@@ -46,16 +46,16 @@ trainGen, valGen = dataGenerator.get_binarygenerator( dataset_path,
                                                         validation_split=0.2)
 
 
-model = models.efficientnetb2_cnn(input_size, num_class=1, mode=models.BINARY)
-my_callback = callbacks.CustomCallback('models/checkpoint_bin.h5')
-mc = tf.keras.callbacks.ModelCheckpoint('models/best_model.h5', monitor='val_loss', save_best_only=True, verbose=1)
+model = models.resnet_cnn(input_size, num_class=1, mode=models.BINARY)
+save_each_epoch_callback = callbacks.CustomCallback('models/checkpoint_bin.h5')
+save_best_model_callback = tf.keras.callbacks.ModelCheckpoint('models/best_model.h5', monitor='val_loss', save_best_only=True, verbose=1)
 # val_accuracy
 inpt = input('Do you want to train? y/n \n')
 if inpt in ['Y','y']:
     history = model.fit(  trainGen,
             steps_per_epoch=trainGen.n//batch + 1,
             epochs=epochs-fine_tune_epochs,
-            callbacks=[my_callback ],
+            callbacks=[save_each_epoch_callback,save_best_model_callback ],
             # validation_split=0.2,
             validation_data=valGen,
             validation_steps=valGen.n//batch + 1, 
@@ -86,13 +86,13 @@ if inpt in ['Y','y']:
 inpt = input('Do you want to fine tune? y/n \n')
 if inpt in ['Y','y']:
     
-    model = models.efficientnetb2_cnn(input_size, num_class=1, mode=models.CATEGORICAL, fine_tune_layer=120, weights='models/checkpoint_bin.h5')
-    my_callback = callbacks.CustomCallback('models/checkpoint.h5')
-    mc = callbacks.ModelCheckpoint('models/best_model_FineTune.h5', monitor='val_loss', save_best_only=True, verbose=1)
+    model = models.resnet_cnn(input_size, num_class=1, mode=models.BINARY, fine_tune_layer=120, weights='models/binary_model.h5')
+    save_each_epoch_callback = callbacks.CustomCallback('models/checkpoint.h5')
+    # save_best_model_callback = callbacks.ModelCheckpoint('models/best_model_FineTune.h5', monitor='val_loss', save_best_only=True, verbose=1)
     history = model.fit(  trainGen,
                 steps_per_epoch=trainGen.n//batch + 1,
                 epochs=epochs,
-                callbacks=[my_callback,mc ],
+                callbacks=[save_each_epoch_callback,save_best_model_callback ],
                 validation_data=valGen,
                 validation_steps=valGen.n//batch + 1, 
                 initial_epoch=epochs-fine_tune_epochs)
@@ -105,7 +105,7 @@ if inpt in ['Y','y']:
     plt.ylabel('accuracy')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
+    plt.savefig('models/last.png')
     plt.show()
 
-
-    model.save('models/binary_model.h5')
+    model.save('models/binary_finetune_model.h5')
