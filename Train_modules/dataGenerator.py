@@ -62,15 +62,6 @@ def get_binarygenerator(paths, target_size, defective_folder, perfect_folder,aug
             seed=42,
             subset='validation') # set as validation data
 
-        val_dataset = trainGen.flow_from_directory(
-                path,
-                target_size=target_size,
-                batch_size=batch_size,
-                class_mode='binary',
-                classes=[perfect_folder, defective_folder],
-                seed=42,
-                subset='validation')  # set as training data
-
         train_datasets.append(train_dataset)
         val_datasets.append(val_dataset)
 
