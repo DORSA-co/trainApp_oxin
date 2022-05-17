@@ -17,6 +17,7 @@ import threading
 import time
 from PIL import ImageQt
 import numpy as np
+import math
 import os
 from datetime import date, time, datetime
 from PyQt5.QtWidgets import QListWidget, QApplication, QMessageBox
@@ -25,7 +26,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
-from backend import Label, chart_funcs
+from backend import Label, chart_funcs, binary_model_funcs
 
 import database_utils
 from utils import *
@@ -83,6 +84,10 @@ class API:
         self.finish_draw = 0
         self.language = 'en'
         self.size = self.db.get_split_size()
+        # iterator for binary-model history tabel
+        self.bmodel_tabel_itr = 1
+        self.bmodel_count = 0
+        self.filter_mode = False
 
         self.ui.set_default_db_parms(self.ds.binary_path, self.size)
 
@@ -107,6 +112,9 @@ class API:
         # connet keyboard event to correspondings functions in API
         self.keyboard_connector()
         # -------------------------------------
+
+
+        self.refresh_binary_models_table(get_count=True)
 
 
 
@@ -176,9 +184,14 @@ class API:
 
         # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
 
-
-
-
+        # binary-model
+        self.ui.binary_tabel_prev.clicked.connect(partial(lambda: self.binary_model_tabel_nextorprev(next=False)))
+        self.ui.binary_tabel_next.clicked.connect(partial(lambda: self.binary_model_tabel_nextorprev(next=True)))
+        self.ui.Binary_btn.clicked.connect(partial(self.refresh_binary_models_table))
+        self.ui.binary_history.clicked.connect(partial(self.refresh_binary_models_table))
+        self.ui.binary_filter_btn.clicked.connect(partial(lambda: self.refresh_binary_models_table(filter_mode=True)))
+        self.ui.binary_clearfilter_btn.clicked.connect(partial(self.clear_filters))
+        
 
     def mouse_connector(self):
         for _, technical_widget in self.ui.get_technical().items():
@@ -581,7 +594,8 @@ class API:
         # update chart axes given train data
         self.update_b_chart_axes(b_parms[3])
         #
-        train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
+        bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
+        binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
 
 
     def update_b_chart_axes(self, nepoch):
@@ -598,7 +612,7 @@ class API:
     
 
     def assign_new_value_to_b_chart(self, last_epoch, logs):
-        print('here', last_epoch, logs)
+        #print('here', last_epoch, logs)
         chart_funcs.update_chart(ui_obj=self.ui, chart_postfixes=self.ui.chart_names, last_epoch=last_epoch, logs=logs)
         
         
@@ -801,3 +815,111 @@ class API:
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
             self.group.start()
+
+    
+    #_________________________________________________________________________________________________
+    # binary-model page functions
+
+    def refresh_binary_models_table(self, nextorprev=False, get_count=False, filter_mode=False):
+        if get_count:
+            self.bmodel_count = binary_model_funcs.get_binary_models_from_db(db_obj=self.db, count=get_count)[0]['count(*)']
+            self.binary_model_tabel_nextorprev(check=True)
+            return
+        
+
+        if filter_mode:
+            res = self.filter_binary_models(filter_signal=True, count=True)
+            if res[0]:
+                self.bmodel_count = res[1][0]['count(*)']
+                self.binary_model_tabel_nextorprev(check=True)
+                #print('count',self.bmodel_count)
+                
+                res = self.filter_binary_models(filter_signal=True)
+                if res[0]:
+                    bmodels_list = res[1]
+                else:
+                    self.refresh_binary_models_table(get_count=True)
+                    bmodels_list = binary_model_funcs.get_binary_models_from_db(db_obj=self.db)
+            else:
+                self.refresh_binary_models_table(get_count=True)
+                bmodels_list = binary_model_funcs.get_binary_models_from_db(db_obj=self.db)
+
+        else:
+            if not nextorprev:
+                bmodels_list = binary_model_funcs.get_binary_models_from_db(db_obj=self.db)
+            else:
+                if not self.filter_mode:
+                    bmodels_list = binary_model_funcs.get_binary_models_from_db(db_obj=self.db,
+                                                                                min=(self.bmodel_tabel_itr-1)*binary_model_funcs.binary_table_nrows,
+                                                                                max=(self.bmodel_tabel_itr)*binary_model_funcs.binary_table_nrows)
+                else:
+                    res = self.filter_binary_models(min=(self.bmodel_tabel_itr-1)*binary_model_funcs.binary_table_nrows,
+                                                    max=(self.bmodel_tabel_itr)*binary_model_funcs.binary_table_nrows)
+                    bmodels_list = res[1]
+        
+        
+        if len(bmodels_list) == 0 and nextorprev:
+            return False
+            
+        else:
+            binary_model_funcs.set_bmodels_on_ui_tabel(ui_obj=self.ui, bmodels_list=bmodels_list)
+            return True
+        
+    
+
+    def binary_model_tabel_nextorprev(self, next=True, check=False):
+        if check: 
+            page_max = int(math.ceil(self.bmodel_count/binary_model_funcs.binary_table_nrows))
+            if self.bmodel_tabel_itr >= page_max:
+                self.ui.binary_tabel_next.setEnabled(False)
+            else:
+                self.ui.binary_tabel_next.setEnabled(True)
+            #
+            if self.bmodel_tabel_itr > 1:
+                self.ui.binary_tabel_prev.setEnabled(True)
+            else:
+                self.ui.binary_tabel_prev.setEnabled(False)
+        
+            return
+
+
+        if next:
+            self.bmodel_tabel_itr += 1
+
+        elif self.bmodel_tabel_itr > 1:
+            self.bmodel_tabel_itr -= 1
+
+
+        res = self.refresh_binary_models_table(nextorprev=True)
+
+        self.binary_model_tabel_nextorprev(check=True)
+
+        self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
+
+    
+    def filter_binary_models(self, min=0, max=binary_model_funcs.binary_table_nrows, filter_signal=False, count=False):
+        if filter_signal:
+            self.filter_params = binary_model_funcs.get_binary_model_filter_info_from_ui(ui_obj=self.ui)
+        #
+        res = binary_model_funcs.get_filtered_binary_models_from_db(ui_obj=self.ui, db_obj=self.db, filter_params=self.filter_params, min=min, max=max, count=count)
+        if res[0] == 'error':
+            self.filter_mode = False
+            return False, res[1]
+        if res[0] == 'all':
+            self.filter_mode = False
+            return False, res[1]
+        else:
+            self.filter_mode = True
+            return True, res[1]
+    
+
+    def clear_filters(self):
+        self.filter_mode = False
+        self.refresh_binary_models_table(get_count=True)
+        self.refresh_binary_models_table()
+
+    
+    
+    
+
+    
