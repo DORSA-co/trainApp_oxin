@@ -3,14 +3,20 @@ import re
 import sys
 from ast import Try
 from email import utils
-from PySide6.QtCore import *
-from PySide6.QtWidgets import QFileDialog
 
+from PySide6 import QtGui
+from PySide6.QtCharts import QPieSeries, QPieSlice, QChart, QChartView
+from PySide6.QtCore import *
+from PySide6.QtGui import QPen, QPainter
+from PySide6.QtWidgets import QFileDialog
+from matplotlib import pyplot as plt
+
+from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap_bbox
 from app_settings import Settings
 from backend import data_grabber
 from backend.mouse import Mouse
 from backend.keyboard import Keyboard
-from backend import Label
+# from backend import Label
 import cv2
 import threading
 import time
@@ -37,11 +43,10 @@ from backend.dataset import Dataset
 from image_splitter import ImageCrops
 import train_api
 
+
+from labeling.labeling_UI import labeling
+
 from FileDialog import FileDialog
-
-# from labeling import labeling_UI
-
-# from PySide2 import QtGui
 
 
 from labeling import labeling_api
@@ -52,7 +57,7 @@ HEIGHT_FRAME_SIZE = 51
 NCAMERA = 12
 
 TECHNICAL_WGT_NAME_TO_SIDE = {'up_side_technical', 'top', 'bottom'}
-LABEL_COLOR = {'1': (0, 0, 255)}
+
 
 
 # down_side_technical     ,   up_side_technical
@@ -64,33 +69,45 @@ class API:
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
+        self.create_label_color()
         self.ds = Dataset(self.db.get_dataset_path(), self.db.get_dataset_path_uesr(), self.db.get_weights_path())
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
-            'mask': Label.maskLbl((1200, 1920), LABEL_COLOR),
-            'bbox': Label.bboxLbl((1200, 1920), LABEL_COLOR)
+            'mask': Label.maskLbl((1200, 1920), self.LABEL_COLOR),
+            'bbox': Label.bboxLbl((1200, 1920), self.LABEL_COLOR)
         }
 
         # Label.bbox_lbl()
         self.label_memory = tempMemory.manageLabel()
         # self.technical_backend = {'top': data_grabber()}
         self.thechnicals_backend = {}
+        self.detect_bboxs_imgs = []
         # self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
         self.t = 0
+        self.scale = 1
+        self.position = [0, 0]
+        self.pressed = None
         self.current_technical_side = ''
         self.selected_images_for_label = tempMemory.manageSelectedImage()
         self.finish_draw = 0
         self.language = 'en'
         self.size = self.db.get_split_size()
+        self.img = None
+        self.n_imgs = []
 
         self.ui.set_default_db_parms(self.ds.binary_path, self.size)
+
 
         # Create labeling window
         # -------------------------------------
 
         # self.labaling_UI=labeling_UI.labeling()
-
+        # self.labeling_win=labeling()
         self.mouse_controll = Controller()
+
+        self.get_defects()
+        self.binary_pieChart()
+
 
         # self.defects_name,self.defects_info=self.db.get_defects()
 
@@ -102,6 +119,9 @@ class API:
         # connet keyboard event to correspondings functions in API
         self.keyboard_connector()
         # -------------------------------------
+
+
+
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -136,8 +156,9 @@ class API:
         self.ui.select_unselect_all()
         self.label_selected_img()
 
-    # ----------------------------------------------------------------------------------------
+    #----------------------------------------------------------------------------------------
     # 
+    #----------------------------------------------------------------------------------------
     # ----------------------------------------------------------------------------------------
 
     def button_connector(self):
@@ -156,6 +177,7 @@ class API:
         # self.ui.binary_train_stop.clicked.connect(partial(self.set_b_parms))
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
+        self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
 
         # trainig
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
@@ -167,6 +189,10 @@ class API:
 
         # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
 
+
+
+
+
     def mouse_connector(self):
         for _, technical_widget in self.ui.get_technical().items():
             self.mouse.connet(technical_widget, self.update_technical_pointer_mouse)
@@ -174,9 +200,39 @@ class API:
         self.mouse.connect_all(self.ui.image, self.label_image_mouse)
         self.mouse.connet_dbclick(self.ui.crop_image, self.fit_image)
 
+        self.mouse.connet_dbclick(self.ui.image_up_left, self.enlarge_neighbour_image)
+        self.mouse.connet_dbclick(self.ui.image_up, self.enlarge_neighbour_image)
+        self.mouse.connet_dbclick(self.ui.image_up_right, self.enlarge_neighbour_image)
+        self.mouse.connet_dbclick(self.ui.image_left, self.enlarge_neighbour_image)
+        self.mouse.connet_dbclick(self.ui.image_right, self.enlarge_neighbour_image)
+        self.mouse.connet_dbclick(self.ui.image_bottom_left, self.enlarge_neighbour_image)
+        self.mouse.connet_dbclick(self.ui.image_bottom, self.enlarge_neighbour_image)
+        self.mouse.connet_dbclick(self.ui.image_bottom_right, self.enlarge_neighbour_image)
+
     def keyboard_connector(self):
         self.keyboard.connet(self.ui, ['left', 'right', 'up', 'down'], [self.update_technical_pointer_keyboard],
                              'Technical View')
+
+    def enlarge_neighbour_image(self, widget_name):
+        if self.n_imgs == []:
+            self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
+            return
+        if widget_name == 'image_up_left':
+            self.ui.show_neighbouring(self.n_imgs[0])
+        if widget_name == 'image_up':
+            self.ui.show_neighbouring(self.n_imgs[1])
+        if widget_name == 'image_up_right':
+            self.ui.show_neighbouring(self.n_imgs[2])
+        if widget_name == 'image_left':
+            self.ui.show_neighbouring(self.n_imgs[3])
+        if widget_name == 'image_right':
+            self.ui.show_neighbouring(self.n_imgs[4])
+        if widget_name == 'image_bottom_left':
+            self.ui.show_neighbouring(self.n_imgs[5])
+        if widget_name == 'image_bottom':
+            self.ui.show_neighbouring(self.n_imgs[6])
+        if widget_name == 'image_bottom_right':
+            self.ui.show_neighbouring(self.n_imgs[7])
 
     # ----------------------------------------------------------------------------------------
     # get id of sheets that user select in load_sheet_win and load first one
@@ -405,21 +461,74 @@ class API:
     # ----------------------------------------------------------------------------------------
     # 
     # ----------------------------------------------------------------------------------------
+    def find_bboxs(self, img_path):
+        if img_path not in self.detect_bboxs_imgs:
+            bboxs = SSI(self.img, block_size='Medium', defect_th=0, noise_th=7, noise=True, heatmap=False)
+            for bbox in bboxs:
+                t = self.label_bakcend['bbox'].get()
+                label = ['oil', np.array(bbox)]
+                t.append(label)
+                self.label_memory.add(img_path,
+                                      t,
+                                      'bbox')
+            self.detect_bboxs_imgs.append(img_path)
+
     def load_image_to_label_page(self):
         sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        label_type = self.ui.get_label_type()
-        self.img = Utils.read_image(img_path, 'color')
+        label_type=self.ui.get_label_type()
+        self.img = Utils.read_image( img_path, 'color')
+        self.find_bboxs(img_path)
         label = self.label_memory.get_label(label_type, img_path)
         self.label_bakcend[label_type].load(label)
-        print(label, img_path)
 
         label_img = self.label_bakcend[label_type].draw()
-        self.img = Utils.add_layer_to_img(self.img, label_img, opacity=0.4, compress=0.5)
-        self.ui.show_image_in_label(self.img)
+        self.img = Utils.add_layer_to_img(self.img, label_img, opacity=0.4, compress=0.5 )
+        self.ui.show_image_in_label( self.img )
 
-        self.ui.show_image_in_label(self.img)
+        print(self.label_bakcend[label_type].get())
+        print(label, img_path)
 
-        self.ui.show_image_info_lable_page(sheet, selected_img_pos)
+        self.load_neighbour_images(selected_img_pos)
+
+        self.ui.show_image_info_lable_page(sheet,selected_img_pos)
+
+        self.ui.image.setScaledContents(True)
+        self.scale = 1
+        self.position = [0, 0]
+
+    def load_neighbour_images(self, selected_img_pos):
+        c = selected_img_pos[-1][0]
+        f = selected_img_pos[-1][1]
+        neighbours = []
+        n_up_left = [selected_img_pos[0], selected_img_pos[1], (c-1, f-1)]
+        neighbours.append(n_up_left)
+        n_up = [selected_img_pos[0], selected_img_pos[1], (c, f-1)]
+        neighbours.append(n_up)
+        n_up_right = [selected_img_pos[0], selected_img_pos[1], (c+1, f-1)]
+        neighbours.append(n_up_right)
+        n_left = [selected_img_pos[0], selected_img_pos[1], (c-1, f)]
+        neighbours.append(n_left)
+        n_right = [selected_img_pos[0], selected_img_pos[1], (c+1, f)]
+        neighbours.append(n_right)
+        n_down_left = [selected_img_pos[0], selected_img_pos[1], (c-1, f+1)]
+        neighbours.append(n_down_left)
+        n_down = [selected_img_pos[0], selected_img_pos[1], (c, f+1)]
+        neighbours.append(n_down)
+        n_down_right = [selected_img_pos[0], selected_img_pos[1], (c+1, f+1)]
+        neighbours.append(n_down_right)
+
+        paths = self.db.get_path_sheet_image(neighbours)
+
+        self.n_imgs = []
+        label_type = self.ui.get_label_type()
+        for path in paths:
+            if os.path.exists(path):
+                img = Utils.read_image(path, 'color')
+            else:
+                img = np.zeros((160, 100))
+            self.n_imgs.append(img)
+
+        self.ui.show_image_in_neighbour_labels(self.n_imgs)
 
     def next_label_img(self):
         self.move_on_list.next_on_list('selected_imgs_for_label')
@@ -432,44 +541,144 @@ class API:
     # ----------------------------------------------------------------------------------------
     # 
     # ----------------------------------------------------------------------------------------
+
+    def create_label_color(self):
+        self.LABEL_COLOR = {'black': (0, 0,0)}
+        defect_name,defect_info=self.get_defects()
+        # print(len(defect_info),defect_info)
+        for i in range(len(defect_info)):
+            print(defect_name[i],defect_info[i]['color'])
+            hex_color=defect_info[i]['color'].lstrip('#')
+            rgb_color=tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+            rgb=(rgb_color[2],rgb_color[1],rgb_color[0])
+            self.LABEL_COLOR.update({defect_name[i]:rgb})
+
     def label_image_mouse(self, wgt_name=''):
 
-        label_type = self.ui.get_label_type()
+        label_type=self.ui.get_label_type()
         mouse_status = self.mouse.get_status()
         mouse_button = self.mouse.get_button()
         mouse_pt = self.mouse.get_relative_position()
 
-        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        img = Utils.read_image(img_path, 'color')
+        if self.ui.get_zoom_type() is None:
+            try:
+                sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+                img = Utils.read_image( img_path, 'color')
+                self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt)
+                if self.label_bakcend[label_type].is_drawing_finish():
+                    if label_type=='mask':
+                        # print('asdwqdqwd')
+                        self.finish_draw+=1
+                        if self.finish_draw==2:
+                            self.finish_draw=0
 
-        self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt)
-        if self.label_bakcend[label_type].is_drawing_finish():
-            print('asdwqdqwd')
-            # self.label_bakcend[label_type].save('1')
-            self.show_labeling(label_type)
-        label_img = self.label_bakcend[label_type].draw()
-        img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
-        self.ui.show_image_in_label(img)
+                        # self.label_bakcend[label_type].save('1')
+                            self.show_labeling(label_type)
+                    elif self.ui.labeling_win==None:
+                        self.show_labeling(label_type)
+                label_img = self.label_bakcend[label_type].draw()
+                img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5 )
+                self.ui.show_image_in_label(img, self.scale, self.position)
+                self.img = img
 
-        self.label_memory.add(img_path,
-                              self.label_bakcend[label_type].get(),
-                              label_type)
+                self.label_memory.add(  img_path,
+                                        self.label_bakcend[label_type].get(),
+                                        label_type )
+            except:
+                self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
+                return
 
-    def show_labeling(self, label_type):
+        elif self.ui.get_zoom_type() != 'drag':
+            if mouse_status == 'mouse_press':
+                if self.ui.image.hasScaledContents():
+                    self.scale = 1
+                    self.position = [0, 0]
+                    self.ui.image.setScaledContents(False)
 
-        current_mouse_position = self.mouse_controll.position
-        print(current_mouse_position)
-        # nameself.defects=self.db.get_defects()
-        # print(self.defects['name'])
-        # self.labaling_UI.set_combobox(self.defects_name)
-        self.ui.labeling_win.win_set_geometry(left=current_mouse_position[0], top=current_mouse_position[1])
-        self.ui.labeling_win_show()
+                if self.ui.get_zoom_type() == 'zoom_in':
+                    self.scale *= 1.25
+                elif self.ui.get_zoom_type() == 'zoom_out':
+                    self.scale /= 1.25
+                    if self.scale < 1:
+                        self.scale = 1
+                        self.position = [0, 0]
+
+                self.position = self.ui.show_image_in_label(self.img, self.scale, self.mouse.get_position())
+
+        elif self.ui.get_zoom_type() == 'drag':
+            if self.ui.image.hasScaledContents():
+                self.scale = 1
+                self.position = [0, 0]
+            if mouse_status == 'mouse_press':
+                if self.scale != 1:
+                    self.pressed = self.mouse.get_position()
+                    self.anchor = self.position
+                    self.ui.image.setCursor(Qt.ClosedHandCursor)
+
+            if mouse_status == 'mouse_move':
+                x, y = self.mouse.get_position()
+                if self.pressed:
+                    self.ui.image.setCursor(Qt.ClosedHandCursor)
+                    dx, dy = x - self.pressed[0], y - self.pressed[1]
+                    self.position = self.anchor[0] - dx, self.anchor[1] - dy
+                    self.position = self.ui.update_image(self.position)
+
+            if mouse_status == 'mouse_release':
+                self.pressed = None
+                self.ui.image.setCursor(Qt.OpenHandCursor)
+
+
+
+    def get_defects(self):
+        self.defects_name,self.defects_info=self.db.get_defects()
+
+        return self.defects_name,self.defects_info
+
+
+    def show_labeling(self,label_type):
+
+            current_mouse_position = self.mouse_controll.position
+            print(current_mouse_position)
+
+            sign_defect_table=self.db.ret_sign_defect_table()
+            print('sign_defect_table',sign_defect_table)
+            if sign_defect_table==0:
+                print('nochange')
+            else:
+                print('change')
+                try:
+                    self.defects_name,self.defects_info=self.db.get_defects()
+                    self.db.update_sign_table('defects_info','0')
+                except:
+                    pass
+            # self.create_labeling()
+            labeling_win=self.ui.ret_create_labeling()
+            self.labeling_api=labeling_api.labeling_API(labeling_win,self.defects_name,self.defects_info)
+            self.ui.labeling_win.win_set_geometry(left=current_mouse_position[0],top=current_mouse_position[1])
+            self.ui.labeling_win.save_btn.clicked.connect(partial(self.set_label))
+            self.ui.labeling_win.cancel_btn.clicked.connect(partial(self.close_labeling))
+            self.ui.labeling_win.show()
+            print('end show_labeling')
+
 
     def set_label(self):
 
-        # self.labaling_UI.
+            selected_label=self.labeling_api.ret_selcted_label()
+            label_type=self.ui.get_label_type()
+            self.label_bakcend[label_type].save(str(selected_label))
+            print('end set_label',selected_label)
+            self.ui.labeling_win.close_win()
+            self.ui.labeling_win = None
+            print(label_type)
+            # label_type_dict=['masks','bboxs']
 
-        self.label_bakcend[label_type].save('1')
+            labels=self.label_bakcend[label_type].get()
+            # print(labels[1])
+
+            self.ui.show_labels(labels,label_type)
+
+    def close_labeling(self):
+        self.ui.labeling_win = None
 
     def clear_cache_fun(self):
         dir = self.cache_path
@@ -512,13 +721,15 @@ class API:
 
         print(l_parms)
 
+
+
     def save_to_dataset(self):
         sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
         self.ds.save(
             img_path=img_path,
-            pos=pos,
-            sheet=sheet,
-            masks=self.label_bakcend['mask'].get(),
+            pos = pos,
+            sheet= sheet,
+            masks= self.label_bakcend['mask'].get(),
             bboxes=self.label_bakcend['bbox'].get()
 
         )
@@ -532,9 +743,7 @@ class API:
                 sheet=sheet,
                 masks=self.label_bakcend['mask'].get(),
                 bboxes=self.label_bakcend['bbox'].get()
-
             )
-
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
             return
@@ -547,7 +756,8 @@ class API:
                 self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
                 return
             if saved_defect:
-                t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language], texts.WARNINGS['ALREADY_SAVED_DEFECT'][self.language])
+                t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
+                                          texts.WARNINGS['ALREADY_SAVED_DEFECT'][self.language])
                 if not t:
                     return
                 else:
@@ -557,6 +767,8 @@ class API:
             self.ds.save_to_perfect(img_path=img_path, pos=pos)
             crops = ImageCrops(self.img, self.size)
             self.ds.save_to_perfect_splitted(crops, pos=pos)
+            self.binary_pieChart()
+            self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
 
         elif self.ui.yes_defect.isChecked():
             if saved_defect:
@@ -573,9 +785,12 @@ class API:
             self.ds.save_to_defect(img_path=img_path, pos=pos)
             crops = ImageCrops(self.img, self.size)
             self.ds.save_to_defect_splitted(crops, pos=pos)
+            self.binary_pieChart()
+            self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
 
-        elif (not saved_defect) and (not saved_perfect):
+        else:
             self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
+
 
     def split_binary_dataset(self, paths, size):
         for path in paths:
@@ -651,6 +866,7 @@ class API:
 
     def ok_add_binary_ds(self):
         path = self.ui.b_add_ds_lineedit.text().lstrip()
+        path = path.rstrip()
         if not os.path.exists(path):
             self.ui.set_warning(texts.WARNINGS['INVALID_DATASET'][self.language], 'train', level=2)
             return
@@ -680,3 +896,77 @@ class API:
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
             self.group.start()
+
+    def get_image(self):
+        return self.img
+
+    def binary_pieChart(self):
+        labels = ['Yes', 'No']
+        num_yes = len(os.listdir(self.ds.defect_path))
+        num_no = len(os.listdir(self.ds.perfect_path))
+        sizes = [num_yes, num_no]
+        self.show_pieChart(labels, sizes)
+
+    def show_pieChart(self, labels, sizes):
+        if sizes != [0, 0]:
+            self.ui.pieChart.figure.clf()
+            ax = self.ui.pieChart.figure.add_subplot(111)
+            ax.pie(sizes, labels=labels, autopct='%1.1f%%',
+                   shadow=True, startangle=90)
+            # Equal aspect ratio ensures that pie is drawn as a circle
+            ax.axis('equal')
+            self.ui.pieChart.draw()
+
+    def create_mask_from_mask(self):
+        pass
+
+    def create_mask_from_bbox(self):
+        sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+        labels = self.label_memory.get_label('bbox', img_path)
+        mask = np.zeros((self.img.shape[0], self.img.shape[1]))
+        for label in labels:
+            point = label[1].flatten()
+            cv2.rectangle(mask, (point[0], point[1]), (point[2], point[3]), 255, -1)
+        return mask
+
+    def create_Heatmap(self):
+        label_type = self.ui.get_label_type()
+        if label_type == 'bbox':
+            df = self.create_mask_from_bbox()
+            hm = CreateHeatmap_bbox(self.img, df)
+            cv2.imshow('', hm)
+
+
+    # def create_piechart(self):
+    #     series = QPieSeries()
+    #     series.append("Yes", 80)
+    #     series.append("No", 50)
+    #     series.setLabelsVisible(True)
+    #
+    #     series.setLabelsPosition(QPieSlice.LabelInsideHorizontal)
+    #     for slice in series.slices():
+    #         slice.setLabel("{:.2f}%".format(100 * slice.percentage()))
+    #
+    #     # adding slice
+    #     # slice = series.slices()[2]
+    #     # slice.setExploded(True)
+    #     # slice.setLabelVisible(True)
+    #     # slice.setPen(QPen(Qt.darkGreen, 2))
+    #     # slice.setBrush(Qt.red)
+    #
+    #     chart = QChart()
+    #     chart.legend().hide()
+    #     chart.addSeries(series)
+    #     chart.createDefaultAxes()
+    #     chart.setAnimationOptions(QChart.SeriesAnimations)
+    #     chart.setMargins(QMargins(0, 0, 0, 0))
+    #
+    #     chart.legend().setVisible(True)
+    #     chart.legend().setAlignment(Qt.AlignBottom)
+    #
+    #     chart.legend().markers(series)[0].setLabel("Yes")
+    #     chart.legend().markers(series)[1].setLabel("No")
+    #
+    #     chartview = self.ui.piechart
+    #     chartview.setChart(chart)
+    #     chartview.setRenderHint(QPainter.Antialiasing)

@@ -8,11 +8,12 @@ from backend import pathStructure
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','root','localhost','saba_database')
+        self.db=database.dataBase('root','','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
         self.defects_table = 'defects_info'
+        self.sign_tables='sign_tables'
 
     #________________________________________________________________
     #
@@ -141,6 +142,17 @@ class dataBaseUtils():
         return name_list,defects_info            
 
 
+    def ret_sign_defect_table(self):
+
+        sign=self.db.search(self.sign_tables, 'id', '0')
+
+        return sign[0]['defects_info']
+
+
+    def update_sign_table(self,col_name,value,id='id',id_value=0):
+
+        self.db.update_record(self.sign_tables, col_name, value, id, id_value)
+
 
 
 
@@ -149,9 +161,18 @@ if __name__ == '__main__':
     db = dataBaseUtils()
     # records = db.load_coil_info(996)
     # db.get_camera_setting()
-    db.set_dataset_path('G:/dataset/')
+    # db.set_dataset_path('G:/dataset/')
     # print(db.get_dataset_path())
 
+    # name,defects=db.get_defects()
+    # print('name',name)
+    # print('defe',defects)
+
+    # x=db.get_sign('defects_info')
+
+    db.update_sign_table('defects_info','4')
+
+    # print(x)
     name,defects=db.get_defects()
     print('name',name)
     print('defe',defects)

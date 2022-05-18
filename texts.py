@@ -19,7 +19,7 @@ WARNINGS={
                  'en':' No sheet loaded '},
         
         'IMAGE_STATUS': {'fa': ' وضعیت عیب تصویر مشخص نشده است ',
-                 'en': ' Image defect status is not specified '},
+                 'en': ' defect status is not specified '},
 
         'NO_IMAGE_LOADED': {'fa': ' تصویری بارگذاری نشده است ',
                  'en': ' No image loaded '},
@@ -43,6 +43,9 @@ WARNINGS={
 
         'DATASET_FORMAT': {'fa': ' قالب مجموعه داده صحیح نیست ',
                  'en': ' Dataset format is incorrect '},
+
+        'IMAGE_SAVE_SUCCESSFULLY':{'fa': 'موفقیت ذخیره شد',
+                 'en': ' Image Saved '},
 
         'DATASET_NUMBER': {'fa': ' شماره ی مجموعه داده خارج از محدوده است ',
                  'en': ' Dataset number is out of range '},

@@ -61,11 +61,12 @@ class Dataset:
         letters = string.ascii_lowercase + string.digits + string.ascii_uppercase
         return ''.join(random.choice(letters) for i in range(length))
 
+    
     def __file_name__(self, pos):
         name = ''
-        pos = list(map(lambda x: str(x), pos))
+        pos = list(map(lambda x:str(x), pos))
         name = ''.join(pos)
-        name = name.replace(',', '_')
+        name = name.replace(',','_')
         name = name.replace(' ', '')
         name = name.replace('(', '')
         name = name.replace(')', '')
@@ -84,8 +85,9 @@ class Dataset:
         shutil.copyfile(img_path, res_path)
         self.create_annotation_to_ds(sheet, masks, bboxes, image_name, pos[-1])
 
-    def create_annotation_to_temp(self, sheet, fname):
-        image_path = os.path.join(self.images_temp_path, fname)
+
+    def create_annotation_to_temp(self,sheet,fname):
+        image_path = os.path.join(  self.images_temp_path, fname  )
 
         json_name = fname.split('.')[0] + '.json'
         json_path = os.path.join(self.annotations_temp_path, json_name)
@@ -100,23 +102,26 @@ class Dataset:
         annotation.set_path(image_path)
         annotation.write(json_path)
 
-    def create_annotation_to_ds(self, sheet, masks, bboxes, fname, pos):
-        image_path = os.path.join(self.images_path, fname)
+    # def create_annotation_to_ds(self, sheet, masks, bboxes, fname, pos):
+    #     image_path = os.path.join(self.images_path, fname)
 
-        json_name = fname.split('.')[0] + '.json'
-        json_path = os.path.join(self.annotations_path, json_name)
+    def create_annotation_to_ds(self,sheet,masks, bboxes, fname,pos):
+            image_path = os.path.join(  self.images_path, fname  )
 
-        annotation = Annotation.Annotation()
-        annotation.set_fname(fname)
-        annotation.set_sheet_id(sheet.get_id())
-        annotation.set_date(sheet.get_date_string())
-        annotation.set_time(sheet.get_time_string())
-        annotation.set_user(sheet.get_user())
-        annotation.set_pos(pos)
-        annotation.set_path(image_path)
-        annotation.set_masks(masks)
-        annotation.set_bboxes(bboxes)
-        annotation.write(json_path)
+            json_name = fname.split('.')[0] + '.json'
+            json_path = os.path.join(self.annotations_path, json_name)
+
+            annotation=Annotation.Annotation()
+            annotation.set_fname(fname)
+            annotation.set_sheet_id(sheet.get_id())
+            annotation.set_date(sheet.get_date_string())
+            annotation.set_time(sheet.get_time_string())
+            annotation.set_user(sheet.get_user())
+            annotation.set_pos(pos)
+            annotation.set_path(image_path)
+            annotation.set_masks(masks)
+            annotation.set_bboxes(bboxes)
+            annotation.write(json_path)
 
     # Miss Abtahi-------------------------------------
 
@@ -205,6 +210,7 @@ class Dataset:
         self.__creat_path__(defect_splitted_path)
         self.__creat_path__(perfect_splitted_path)
     # ---------------------------------------------------
+
 
 
 if __name__ == '__main__':

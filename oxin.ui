@@ -441,6 +441,7 @@ QComboBox{
 	border: 2px solid rgb(33, 37, 43);
 	padding: 5px;
 	padding-left: 10px;
+	color:white;
 }
 QComboBox:hover{
 	border: 2px solid rgb(64, 71, 88);
@@ -2268,7 +2269,11 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
+<<<<<<< HEAD
+                      <number>1</number>
+=======
                       <number>4</number>
+>>>>>>> r_abtahi
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -4938,6 +4943,55 @@ QToolTip {
                                  </widget>
                                 </item>
                                 <item>
+                                 <widget class="QPushButton" name="pushButton_14">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>37</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="cursor">
+                                   <cursorShape>PointingHandCursor</cursorShape>
+                                  </property>
+                                  <property name="toolTip">
+                                   <string notr="true" extracomment="zdvsdvsfbfd">Delete Rec</string>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">QPushButton {
+background-color:transparent;
+border:0px
+}
+QToolTip {
+	color: rgb(0,0,0);
+	background-color: rgb(255,255,255);
+	border: 1px solid rgb(44, 49, 58);
+	background-image: none;
+	background-position: left center;
+    background-repeat: no-repeat;
+	border: none;
+	border-left: 2px solid rgb(180,180,180);
+	text-align: left;
+	padding-left: 8px;
+	margin: 0px;
+}
+</string>
+                                  </property>
+                                  <property name="text">
+                                   <string/>
+                                  </property>
+                                  <property name="icon">
+                                   <iconset>
+                                    <normaloff>images/EnglishLanguage_Flag2_26089 (4).png</normaloff>images/EnglishLanguage_Flag2_26089 (4).png</iconset>
+                                  </property>
+                                  <property name="iconSize">
+                                   <size>
+                                    <width>22</width>
+                                    <height>27</height>
+                                   </size>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
                                  <spacer name="verticalSpacer_2">
                                   <property name="orientation">
                                    <enum>Qt::Vertical</enum>
@@ -6447,7 +6501,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_binary">
                          <property name="currentIndex">
-                          <number>1</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_binary_list">
                           <widget class="QLabel" name="label_20">

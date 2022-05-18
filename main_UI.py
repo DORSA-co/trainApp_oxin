@@ -8,6 +8,7 @@ from PyQt5.QtGui import *
 from pyqt5_plugins import *
 from PySide6.QtCharts import *
 from PySide6.QtCore import *
+import PySide6.QtGui as PG
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 from PyQt5.QtGui import QPainter
@@ -21,6 +22,7 @@ import setting
 import api
 from Sheet_loader_win.data_loader_UI import data_loader
 from labeling.labeling_UI import labeling
+from neighbouring_UI import neighbouring
 from labeling import labeling_api
 from PIL import ImageQt
 import numpy as np
@@ -87,8 +89,12 @@ class UI_main_window(QMainWindow, ui):
         # //////////////////////////////////////////////
         self.load_sheets_win = data_loader()
 
+        # self.labeling_win=labeling()
+        # labeling_api.labeling_API(self.labeling_win)
+        self.labeling_win = None
+
         self.labeling_win = labeling()
-        labeling_api.labeling_API(self.labeling_win)
+        # labeling_api.labeling_API(self.labeling_win)
 
         useCustomTheme = False
         themeFile = "themes\py_dracula_light.qss"
@@ -143,7 +149,10 @@ class UI_main_window(QMainWindow, ui):
 
         self.polygon_btn.clicked.connect(self.buttonClick)
         self.bounding_btn.clicked.connect(self.buttonClick)
-        self.add_label.clicked.connect(self.buttonClick)
+        self.zoomIn_btn.clicked.connect(self.buttonClick)
+        self.zoomOut_btn.clicked.connect(self.buttonClick)
+        self.drag_btn.clicked.connect(self.buttonClick)
+        # self.add_label.clicked.connect(self.buttonClick)
         self.add_label_btn.clicked.connect(self.buttonClick)
 
         # QPixmap pixmapTarget = QPixmap(":/icons/images/icons/2png);
@@ -162,6 +171,7 @@ class UI_main_window(QMainWindow, ui):
 
         self.keyboard_connections = {}
         self.label_type = 'mask'
+        self.zoom_type = None
 
         self.img = cv2.imread('images/dorsa-logo.png')
         self.set_crop_image(self.img)
@@ -517,7 +527,7 @@ class UI_main_window(QMainWindow, ui):
         sys.exit()
 
     def maxmize_minimize(self):
-
+        self.show_image_in_label()
         if self.isMaximized():
             self.showNormal()
             # self.sheet_view_down=data_grabber.sheetOverView(h=129,w=1084,nh=12,nw=30)
@@ -558,6 +568,9 @@ class UI_main_window(QMainWindow, ui):
 
     def get_label_type(self):
         return self.label_type
+
+    def get_zoom_type(self):
+        return self.zoom_type
 
     def get_size_label_image(self):
 
@@ -627,7 +640,10 @@ class UI_main_window(QMainWindow, ui):
     def bounding_box(self):
         # print('bounding_box')
         self.image.setCursor(Qt.CrossCursor)
+        self.zoom_type = None
         self.label_type = 'bbox'
+
+        self.tabWidget_defect.setCurrentIndex(1)
 
     def polygon(self):
         # print('polygon')
@@ -636,17 +652,61 @@ class UI_main_window(QMainWindow, ui):
         # # QApplication.setOverrideCursor(cursor)
         # self.image.setCursor(cursor)
 
+        self.image.setCursor(Qt.ArrowCursor)
+        self.zoom_type = None
         self.label_type = 'mask'
 
+        self.tabWidget_defect.setCurrentIndex(0)
+
+    def zoom_in(self):
+        cursor = PG.QPixmap('/home/reyhane/PycharmProjects/trainApp_oxin2/images/zoom-in_cursor.png')
+        cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
+        self.image.setCursor(PG.QCursor(cursor))
+
+        self.zoom_type = 'zoom_in'
+
+    def zoom_out(self):
+        cursor = PG.QPixmap('/home/reyhane/PycharmProjects/trainApp_oxin2/images/zoom-out_cursor.png')
+        cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
+        self.image.setCursor(PG.QCursor(cursor))
+
+        self.zoom_type = 'zoom_out'
+
+    def drag_image(self):
+        self.image.setCursor(Qt.OpenHandCursor)
+        self.zoom_type = 'drag'
+
     def data_loader_win_show(self):
-        # print('show loader win')
+        self.label_type = 'mask'
+
         self.load_sheets_win.show()
 
         # print(x,y)
 
-    def labeling_win_show(self):
+    def ret_create_labeling(self):
+        self.labeling_win = labeling()
+        return self.labeling_win
+        # self.labeling_win_show()
+
+    def show_labels(self, labels, label_type):
+
+        LABEL_TABLE = {'mask': self.mask_table_widget, 'bbox': self.bbox_table_widget}
+
+        print('labe', label_type)
+
+        self.clear_table()  # cleare table
+
+        LABEL_TABLE[label_type].setRowCount(len(labels))  # set row count
+
+        for row in range(len(labels)):
+            table_item = QTableWidgetItem(str(labels[row][0]))
+            LABEL_TABLE[label_type].setItem(row, 0, table_item)
 
         self.labeling_win.show()
+
+    def show_neighbouring(self, img):
+        self.n = neighbouring(img)
+        self.n.show()
 
     def show_sheet_details(self, details):
 
@@ -661,8 +721,12 @@ class UI_main_window(QMainWindow, ui):
             'label': self.warning_label_page,
             'train': self.warning_train_page
         }
-
+        # print('set_warning')
         if text != None:
+
+            if level == 1:
+                waring_labels[name].setText(' ' + text + ' ')
+                waring_labels[name].setStyleSheet('background-color:#20a740;border-radius:10px;color:white')
 
             if level == 2:
                 waring_labels[name].setText(' Warning: ' + text)
@@ -698,9 +762,85 @@ class UI_main_window(QMainWindow, ui):
             "background-image: url(:/icons/images/icons/label.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
         self.stackedWidget.setCurrentWidget(self.page_label)
 
-    def show_image_in_label(self, img):
+    def show_image_in_label(self, img=None, scale=1, position=(0, 0)):
+        if img is None:
+            img = api.get_image()
+            if img is None:
+                return
+        self.next_img_label_btn.setEnabled(True)
+        self.prev_img_label_btn.setEnabled(True)
+        self.zoomIn_btn.setEnabled(True)
+        self.zoomOut_btn.setEnabled(True)
+        self.drag_btn.setEnabled(True)
+        self.polygon_btn.setEnabled(True)
+        self.bounding_btn.setEnabled(True)
+        self.delete_btn.setEnabled(True)
+        self.heatmap_btn.setEnabled(True)
         self.fs = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
-        self.image.setPixmap(QPixmap.fromImage(self.fs))
+        if scale == 1:
+            self.image.setScaledContents(True)
+            self.image.setPixmap(QPixmap.fromImage(self.fs))
+        else:
+            self.fs = self.fs.scaled(self.image.size() * scale)
+            # self.image.setPixmap(QPixmap.fromImage(self.fs).scaled(self.image.size() * scale))
+            position = self.update_image(position)
+
+        return position
+
+    def show_image_in_neighbour_labels(self, imgs):
+        image_ul = imgs[0]
+        self.image_up_left.setPixmap(QPixmap.fromImage(
+            QImage(image_ul, image_ul.shape[1], image_ul.shape[0], image_ul.strides[0], QImage.Format_BGR888)))
+
+        image_u = imgs[1]
+        self.image_up.setPixmap(QPixmap.fromImage(
+            QImage(image_u, image_u.shape[1], image_u.shape[0], image_u.strides[0], QImage.Format_BGR888)))
+
+        image_ur = imgs[2]
+        self.image_up_right.setPixmap(QPixmap.fromImage(
+            QImage(image_ur, image_ur.shape[1], image_ur.shape[0], image_ur.strides[0], QImage.Format_BGR888)))
+
+        image_l = imgs[3]
+        self.image_left.setPixmap(QPixmap.fromImage(
+            QImage(image_l, image_l.shape[1], image_l.shape[0], image_l.strides[0], QImage.Format_BGR888)))
+
+        image_r = imgs[4]
+        self.image_right.setPixmap(QPixmap.fromImage(
+            QImage(image_r, image_r.shape[1], image_r.shape[0], image_r.strides[0], QImage.Format_BGR888)))
+
+        image_bl = imgs[5]
+        self.image_bottom_left.setPixmap(QPixmap.fromImage(
+            QImage(image_bl, image_bl.shape[1], image_bl.shape[0], image_bl.strides[0], QImage.Format_BGR888)))
+
+        image_b = imgs[6]
+        self.image_bottom.setPixmap(QPixmap.fromImage(
+            QImage(image_b, image_b.shape[1], image_b.shape[0], image_b.strides[0], QImage.Format_BGR888)))
+
+        image_br = imgs[7]
+        self.image_bottom_right.setPixmap(QPixmap.fromImage(
+            QImage(image_br, image_br.shape[1], image_br.shape[0], image_br.strides[0], QImage.Format_BGR888)))
+
+    def update_image(self, position):
+        pixmap = QPixmap(self.image.size())
+        px, py = position
+        px = px if (px <= self.fs.width() - self.image.width()) else (
+                self.fs.width() - self.image.width())
+        py = py if (py <= self.fs.height() - self.image.height()) else (
+                self.fs.height() - self.image.height())
+        px = px if (px >= 0) else 0
+        py = py if (py >= 0) else 0
+        position = (px, py)
+
+        painter = QPainter()
+        painter.begin(pixmap)
+        painter.drawImage(QPoint(0, 0), self.fs,
+                          QRect(position[0], position[1], self.image.width(),
+                                self.image.height()))
+        painter.end()
+
+        self.image.setPixmap(pixmap)
+
+        return position
 
     ######## Training Page
 
@@ -753,8 +893,9 @@ class UI_main_window(QMainWindow, ui):
         binary_dp = [s.rstrip() for s in re.split(pattern, text)[1:]]
 
         return (
-        binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch, binary_lr, binary_te,
-        binary_vs, binary_dp)
+            binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch, binary_lr,
+            binary_te,
+            binary_vs, binary_dp)
 
     def add_binary_dataset(self):
         height = self.b_add_ds_frame.height()
@@ -780,6 +921,7 @@ class UI_main_window(QMainWindow, ui):
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
             self.group.start()
+            self.b_add_ds_lineedit.setText('')
 
     def get_localization_parms(self):
         localization_algorithm_name = self.l_algorithms.currentText()
@@ -890,6 +1032,15 @@ class UI_main_window(QMainWindow, ui):
         if btnName == 'bounding_btn':
             self.bounding_box()
 
+        if btnName == 'zoomIn_btn':
+            self.zoom_in()
+
+        if btnName == 'zoomOut_btn':
+            self.zoom_out()
+
+        if btnName == 'drag_btn':
+            self.drag_image()
+
         if btnName == 'add_label_btn':
             api.add_remove_label()
 
@@ -962,6 +1113,11 @@ class UI_main_window(QMainWindow, ui):
     def keyPressEvent(self, event):
         self.do_keyboard(KEYS.get(event.key()))
         return KEYS.get(event.key())
+
+    def show_image_info_lable_page(self, sheet, pos):
+        self.plabel_coil_num_txt.setText(str(sheet.get_id()))
+        self.plabel_date_txt.setText(str(sheet.get_date_string()))
+        self.plabel_cam_txt.setText(str(pos[-1][0]))
 
     def show_image_info_lable_page(self, sheet, pos):
         self.plabel_coil_num_txt.setText(str(sheet.get_id()))
