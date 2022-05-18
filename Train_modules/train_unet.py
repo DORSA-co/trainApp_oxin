@@ -3,10 +3,14 @@ import models
 import dataGenerator
 from matplotlib import pyplot as plt
 from deep_utils import callbacks
+
+import os
+os.add_dll_directory("C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.0/bin")
+
 import tensorflow as tf
 import numpy as np
 import cv2
-import os
+
 
 gpu = tf.config.list_physical_devices('GPU') 
 cpu = tf.config.list_physical_devices('CPU') 
@@ -15,8 +19,8 @@ tf.config.experimental.set_memory_growth(gpu[0], True)
 
 batch = 8
 epochs = 60
-train_path = 'data/mask/train'
-test_path =  'data/mask/test'
+train_path = 'J:\\dataset_oxin\\data\\mask\\train'
+test_path =  'J:\\dataset_oxin\\data\\mask\\test'
 train_data_count = 5333
 test_data_count = 1333
 input_size = (128,800,1)

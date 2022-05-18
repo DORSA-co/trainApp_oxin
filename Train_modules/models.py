@@ -2,13 +2,16 @@ import numpy as np
 import os
 import numpy as np
 import tensorflow as tf
+# tf.compat.v1.enable_eager_execution()
 from tensorflow.keras.models import *
 from tensorflow.keras.layers import *
 from tensorflow.keras.optimizers import *
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 #from tensorflow.keras import backend as keras
 from Train_modules.deep_utils import metrics
+
 from tensorflow.keras import layers 
+
 import segmentation_models as sm
 sm.set_framework('tf.keras')
 sm.framework()
@@ -22,13 +25,13 @@ __activation__ = {CATEGORICAL:'softmax', BINARY:'sigmoid'}
 #_____________________________________________________________________________________________________________________________
 #
 #_____________________________________________________________________________________________________________________________
-def base_unet(input_size, num_class=1, lr=1e-3, mode=BINARY, pretained='imagenet', base_model='resnet34'):
+def base_unet(input_size, num_class=1, learning_rate=1e-3, mode=BINARY, pretained='imagenet', base_model='resnet34'):
     if input_size[-1]!=3:
         pretained = None
     model = sm.Unet(base_model, input_shape=input_size, classes=num_class, activation=__activation__[mode], encoder_weights=pretained)
 
     iou = metrics.iou()
-    model.compile(optimizer = Adam(learning_rate=lr),
+    model.compile(optimizer = Adam(learning_rate=learning_rate),
                   loss = __loss__[mode],
                   metrics = ['accuracy', tf.keras.metrics.Precision(name='Precision'),tf.keras.metrics.Recall(name='Recall'), iou])
     
@@ -39,7 +42,7 @@ def base_unet(input_size, num_class=1, lr=1e-3, mode=BINARY, pretained='imagenet
 #_____________________________________________________________________________________________________________________________
 #
 #_____________________________________________________________________________________________________________________________
-def unet(input_size , lr=1e-4, num_class=1, mode=BINARY, nfilter=64):
+def unet(input_size , learning_rate=1e-4, num_class=1, mode=BINARY, nfilter=64):
     assert num_class>0, 'num class could not be 0'
     if mode==CATEGORICAL:
         assert num_class>1, "for categorical out_mode, num_class should be greater than 2"
@@ -91,14 +94,14 @@ def unet(input_size , lr=1e-4, num_class=1, mode=BINARY, nfilter=64):
     iou = metrics.iou()
     '''
     initial_learning_rate = 0.001
-    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+    learning_rate_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
                                                                 initial_learning_rate,
                                                                 decay_steps=1000,
                                                                 decay_rate=0.95,
                                                                 staircase=True
                                                                 )
     '''
-    model.compile(optimizer = Adam(lr =lr),
+    model.compile(optimizer = Adam(learning_rate =learning_rate),
                   loss = __loss__[mode],
                   metrics = ['accuracy', tf.keras.metrics.Precision(name='Precision'),tf.keras.metrics.Recall(name='Recall'), iou])
     
@@ -110,7 +113,7 @@ def unet(input_size , lr=1e-4, num_class=1, mode=BINARY, nfilter=64):
 #_____________________________________________________________________________________________________________________________
 #
 #_____________________________________________________________________________________________________________________________
-def low_unet(input_size ,lr=1e-4, num_class=1, mode=BINARY):
+def low_unet(input_size ,learning_rate=1e-4, num_class=1, mode=BINARY):
     assert num_class>0, 'num class could not be 0'
     if mode==CATEGORICAL:
         assert num_class>1, "for categorical out_mode, num_class should be greater than 2"
@@ -159,7 +162,7 @@ def low_unet(input_size ,lr=1e-4, num_class=1, mode=BINARY):
     model = Model(inputs = inputs, outputs = conv10)
     iou = metrics.iou()
 
-    model.compile(optimizer = Adam(lr = lr),
+    model.compile(optimizer = Adam(learning_rate = learning_rate),
                   loss = __loss__[mode], 
                   metrics = [
                       'accuracy',
@@ -180,7 +183,7 @@ def low_unet(input_size ,lr=1e-4, num_class=1, mode=BINARY):
 #_____________________________________________________________________________________________________________________________
 #
 #_____________________________________________________________________________________________________________________________
-def resnet_unet(input_size,lr=1e-3, num_class=1, mode=BINARY):
+def resnet_unet(input_size,learning_rate=1e-3, num_class=1, mode=BINARY):
     assert num_class>0, 'num class could not be 0'
     if mode==CATEGORICAL:
         assert num_class>1, "for categorical out_mode, num_class should be greater than 2"
@@ -239,7 +242,7 @@ def resnet_unet(input_size,lr=1e-3, num_class=1, mode=BINARY):
     model = Model(inputs, outputs)
 
     iou = metrics.iou()
-    model.compile(optimizer = Adam(lr = lr),
+    model.compile(optimizer = Adam(learning_rate = learning_rate),
                   loss = __loss__[mode],
                   metrics = [
                       'accuracy', 
@@ -269,7 +272,7 @@ def resnet_unet(input_size,lr=1e-3, num_class=1, mode=BINARY):
 #_____________________________________________________________________________________________________________
 #
 #_____________________________________________________________________________________________________________
-def resnet_cnn(input_size,lr=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
+def resnet_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
     preprocess_input = tf.keras.applications.resnet_v2.preprocess_input
     base_model = tf.keras.applications.ResNet50V2(include_top=False, weights='imagenet', input_shape=input_size)
 
@@ -304,7 +307,7 @@ def resnet_cnn(input_size,lr=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1,
     
 
         
-    model.compile(optimizer = Adam(lr = lr),
+    model.compile(optimizer = Adam(learning_rate = learning_rate),
                   loss = __loss__[mode], metrics = ['accuracy',
                                                     tf.keras.metrics.Precision(name='Precision'),
                                                     tf.keras.metrics.Recall(name='Recall')
@@ -318,7 +321,7 @@ def resnet_cnn(input_size,lr=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1,
 #_____________________________________________________________________________________________________________________________
 #
 #_____________________________________________________________________________________________________________________________
-def xception_cnn(input_size,lr=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
+def xception_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
     preprocess_input = tf.keras.applications.xception.preprocess_input
     base_model = tf.keras.applications.Xception(include_top=False, weights='imagenet', input_shape=input_size)
 
@@ -351,7 +354,7 @@ def xception_cnn(input_size,lr=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-
             base_model.layers[i].trainable = False
     #--------------------------------------------
     
-    model.compile(optimizer = Adam(lr = lr),
+    model.compile(optimizer = Adam(learning_rate = learning_rate),
                   loss = __loss__[mode],
                   metrics = ['accuracy',
                              tf.keras.metrics.Precision(name='Precision'),
@@ -364,8 +367,129 @@ def xception_cnn(input_size,lr=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-
 #
 #_____________________________________________________________________________________________________________________________
 
+def efficientnetb4_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
+    preprocess_input = tf.keras.applications.efficientnet.preprocess_input
+    base_model = tf.keras.applications.EfficientNetB4(include_top=False, weights='imagenet', input_shape=input_size)
+    base_model.trainable = False
+
+    inpt = tf.keras.Input(shape=input_size) 
+    inpt_pre = preprocess_input(inpt)
+    #--------------------------------------------
+    out_base = base_model(inpt_pre)
+    #--------------------------------------------
+    x = tf.keras.layers.GlobalAveragePooling2D()(out_base)
+    x = tf.keras.layers.Dropout(0.2)(x)
+    x = tf.keras.layers.Dense(512, activation='relu')(x)
+    x = tf.keras.layers.Dense(256, activation='relu')(x)
+    out = tf.keras.layers.Dense(num_class, activation= __activation__[mode] )(x)
+    model = tf.keras.Model(inpt, out)
+    
+    #--------------------------------------------
+    if weights is not None:
+        model.load_weights(weights)
+    #--------------------------------------------
+    # if fine_tune_layer>0:
+    #     base_model = model.layers[3]
+    #     base_model.trainable = True
+    #     for i in range(fine_tune_layer):
+    #         base_model.layers[i].trainable = False
+    #--------------------------------------------
+    
+    model.compile(optimizer = Adam(learning_rate = learning_rate),
+                  loss = __loss__[mode],
+                  metrics = ['accuracy',
+                             tf.keras.metrics.Precision(name='Precision'),
+                             tf.keras.metrics.Recall(name='Recall')
+                             ]
+                 )
+    return model
+
+def efficientnetb2_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
+    preprocess_input = tf.keras.applications.efficientnet.preprocess_input
+    base_model = tf.keras.applications.EfficientNetB2(include_top=False, weights='imagenet', input_shape=input_size)
+    base_model.trainable = False
+
+    inpt = tf.keras.Input(shape=input_size) 
+    inpt_pre = preprocess_input(inpt)
+    #--------------------------------------------
+    out_base = base_model(inpt_pre)
+    #--------------------------------------------
+    x = tf.keras.layers.GlobalAveragePooling2D()(out_base)
+    x = tf.keras.layers.Dropout(0.1)(x)
+    x = tf.keras.layers.Dense(512, activation='tanh')(x)
+    x = tf.keras.layers.Dropout(0.1)(x)
+    x = tf.keras.layers.Dense(256, activation='tanh')(x)
+    x = tf.keras.layers.Dropout(0.1)(x)
+    x = tf.keras.layers.Dense(256, activation='tanh')(x)
+    out = tf.keras.layers.Dense(num_class, activation= __activation__[mode] )(x)
+    model = tf.keras.Model(inpt, out)
+    
+    #--------------------------------------------
+    if weights is not None:
+        model.load_weights(weights)
+    #--------------------------------------------
+    # if fine_tune_layer>0:
+    #     base_model = model.layers[3]
+    #     base_model.trainable = True
+    #     for i in range(fine_tune_layer):
+    #         base_model.layers[i].trainable = False
+    #--------------------------------------------
+    
+    model.compile(optimizer = Adam(learning_rate = learning_rate),
+                  loss = __loss__[mode],
+                  metrics = ['accuracy',
+                             tf.keras.metrics.Precision(name='Precision'),
+                             tf.keras.metrics.Recall(name='Recall')
+                             ]
+                 )
+    return model
+
+def efficientnetb2_base_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
+    preprocess_input = tf.keras.applications.efficientnet.preprocess_input
+    base_model = tf.keras.applications.EfficientNetB2(include_top=False, weights=None, input_shape=input_size)
+    base_model.trainable = True
+
+    inpt = tf.keras.Input(shape=input_size) 
+    inpt_pre = preprocess_input(inpt)
+    #--------------------------------------------
+    out_base = base_model(inpt_pre)
+    #--------------------------------------------
+    x = tf.keras.layers.GlobalAveragePooling2D()(out_base)
+    # x = tf.keras.layers.Dropout(0.1)(x)
+    # x = tf.keras.layers.Dense(512, activation='tanh')(x)
+    # x = tf.keras.layers.Dropout(0.1)(x)
+    # x = tf.keras.layers.Dense(256, activation='tanh')(x)
+    # x = tf.keras.layers.Dropout(0.1)(x)
+    # x = tf.keras.layers.Dense(256, activation='tanh')(x)
+    out = tf.keras.layers.Dense(num_class, activation= __activation__[mode] )(x)
+    model = tf.keras.Model(inpt, out)
+    
+    #--------------------------------------------
+    if weights is not None:
+        model.load_weights(weights)
+    # --------------------------------------------
+    if fine_tune_layer>0:
+        base_model = model.layers[3]
+        base_model.trainable = True
+        for i in range(fine_tune_layer):
+            base_model.layers[i].trainable = False
+    # --------------------------------------------
+    
+    model.compile(optimizer = Adam(learning_rate = learning_rate),
+                  loss = __loss__[mode],
+                  metrics = ['accuracy',
+                             tf.keras.metrics.Precision(name='Precision'),
+                             tf.keras.metrics.Recall(name='Recall')
+                             ]
+                 )
+    model.summary()
+    return model
+
+#_____________________________________________________________________________________________________________________________
+#
+#_____________________________________________________________________________________________________________________________
 
 if __name__=='__main__':
-    model = resnet_cnn( (128,800,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
-    
+    # model = resnet_cnn( (128,800,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
+    model = efficientnetb2_base_cnn( (128,800,3), num_class=1, mode=BINARY )
     end = True
