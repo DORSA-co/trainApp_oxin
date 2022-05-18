@@ -6628,19 +6628,6 @@ QPushButton:hover {
                                <string>Show Images</string>
                               </property>
                              </widget>
-                             <widget class="QLabel" name="label_11">
-                              <property name="geometry">
-                               <rect>
-                                <x>260</x>
-                                <y>100</y>
-                                <width>47</width>
-                                <height>13</height>
-                               </rect>
-                              </property>
-                              <property name="text">
-                               <string>TextLabel</string>
-                              </property>
-                             </widget>
                             </widget>
                            </item>
                            <item>

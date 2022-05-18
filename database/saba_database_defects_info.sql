@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
 --
 -- Host: localhost    Database: saba_database
 -- ------------------------------------------------------
--- Server version	8.0.28
+-- Server version	8.0.27
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,17 +24,16 @@ DROP TABLE IF EXISTS `defects_info`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `defects_info` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `no` int NOT NULL DEFAULT '-1',
   `name` varchar(45) DEFAULT NULL,
   `short_name` varchar(45) DEFAULT NULL,
   `defect_ID` varchar(45) DEFAULT NULL,
   `is_defect` varchar(45) DEFAULT 'Yes',
-  `group` varchar(45) DEFAULT NULL,
+  `groupp` varchar(45) DEFAULT NULL,
   `level` varchar(45) DEFAULT NULL,
   `color` varchar(45) DEFAULT NULL,
   `date` varchar(45) DEFAULT '-',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +42,7 @@ CREATE TABLE `defects_info` (
 
 LOCK TABLES `defects_info` WRITE;
 /*!40000 ALTER TABLE `defects_info` DISABLE KEYS */;
-INSERT INTO `defects_info` VALUES (1,1,'oil','oil','123','Yes','liquid','1','#446A46','1/1/1401'),(2,2,'water','wat','43','No','liquid','0','2FA4FF','1/1/1401');
+INSERT INTO `defects_info` VALUES (47,'d2','d2','2','no','1','0','#FFFFFF','7/2/1401'),(55,'d3','d3','3','yes','4','1','#05d2d2','17/02/1401'),(56,'d1','d1','1','yes','4','2','#d20505','7/2/1401'),(57,'d4','d4','4','yes','4','2','#980404','7/2/1401');
 /*!40000 ALTER TABLE `defects_info` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-26 15:58:16
+-- Dump completed on 2022-05-18 15:55:14

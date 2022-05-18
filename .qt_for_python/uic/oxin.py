@@ -3484,9 +3484,6 @@ class Ui_MainWindow(object):
         self.binary_list_show_btn = QPushButton(self.frame_33)
         self.binary_list_show_btn.setObjectName(u"binary_list_show_btn")
         self.binary_list_show_btn.setGeometry(QRect(864, 60, 131, 31))
-        self.label_11 = QLabel(self.frame_33)
-        self.label_11.setObjectName(u"label_11")
-        self.label_11.setGeometry(QRect(260, 100, 47, 13))
 
         self.verticalLayout_53.addWidget(self.frame_33)
 
@@ -7303,7 +7300,6 @@ class Ui_MainWindow(object):
         self.binary_list_dataset_btn.setText(QCoreApplication.translate("MainWindow", u"Select Dataset", None))
         self.warning_binarylist_page.setText("")
         self.binary_list_show_btn.setText(QCoreApplication.translate("MainWindow", u"Show Images", None))
-        self.label_11.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
         self.dfg.setTitle(QCoreApplication.translate("MainWindow", u"Perfect Images", None))
         self.binary_list_perfect_prev_btn.setText("")
         self.binary_list_perfect_next_btn.setText("")

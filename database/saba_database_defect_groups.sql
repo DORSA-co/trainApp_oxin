@@ -16,40 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `settings`
+-- Table structure for table `defect_groups`
 --
 
-DROP TABLE IF EXISTS `settings`;
+DROP TABLE IF EXISTS `defect_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `settings` (
-  `id` int NOT NULL,
-  `parent_path` varchar(45) DEFAULT NULL,
-  `path_dataset` varchar(45) DEFAULT NULL,
-  `font_style` varchar(45) NOT NULL DEFAULT 'Arial',
-  `font_size` int NOT NULL DEFAULT '10',
-  `window_style` varchar(45) NOT NULL DEFAULT 'Windows',
-  `window_color` varchar(45) NOT NULL DEFAULT 'blue',
-  `language` varchar(45) NOT NULL DEFAULT 'English',
-  `large_rect_area` int NOT NULL DEFAULT '0',
-  `small_rect_area` int NOT NULL DEFAULT '0',
-  `rect_accuracy` float NOT NULL DEFAULT '0.9',
-  `split_size` varchar(45) NOT NULL DEFAULT '0',
-  `n_defect_colors` int NOT NULL DEFAULT '1',
-  `path_dataset_user` varchar(45) DEFAULT NULL,
-  `path_weights` varchar(45) DEFAULT NULL,
+CREATE TABLE `defect_groups` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `defect_group_name` varchar(45) DEFAULT NULL,
+  `defect_group_id` varchar(45) DEFAULT NULL,
+  `date_created` varchar(45) NOT NULL DEFAULT '-',
+  `is_defect` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `settings`
+-- Dumping data for table `defect_groups`
 --
 
-LOCK TABLES `settings` WRITE;
-/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES (0,'oxin_image_grabber','dataset','Times New Roman',8,'Windows','#144475','English',2000,1000,0.9,'(100, 100)',6,'dataset','weights');
-/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
+LOCK TABLES `defect_groups` WRITE;
+/*!40000 ALTER TABLE `defect_groups` DISABLE KEYS */;
+INSERT INTO `defect_groups` VALUES (25,'no_defect','1','7/2/1401','no'),(28,'gp2','3','7/2/1401','no'),(29,'gp4','4','7/2/1401','yes');
+/*!40000 ALTER TABLE `defect_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -61,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-18 15:55:14
+-- Dump completed on 2022-05-18 15:55:15

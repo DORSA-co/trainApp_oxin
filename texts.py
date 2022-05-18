@@ -66,7 +66,10 @@ WARNINGS={
                  'en': ' Error while reading defect/perfect folders '},
         
         'READ_BINARYLIST_IMAGES_ERROR': {'fa': ' خطای دریافت تصاویر معیوب/سالم ',
-                 'en': ' Error while reading defect/perfect images '}
+                 'en': ' Error while reading defect/perfect images '},
+
+        'BINARYLIST_MAXIMIZE_IMAGE_ERROR': {'fa': ' خطای نمایش تصویر ',
+                 'en': ' Error while opening image '}
 
 }
 MESSEGES = {
