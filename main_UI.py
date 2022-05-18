@@ -189,7 +189,10 @@ class UI_main_window(QMainWindow, ui):
 
         
 
+        
 
+
+        
         # charts ---------------------------------------------------------------------------------------------
         self.chart_names = ['loss','accuracy', 'recall', 'precision']
         # binary chart
@@ -211,6 +214,8 @@ class UI_main_window(QMainWindow, ui):
                                                 axisX_title='Epoch', axisY_title='Recall', checkbox_obj=self.binary_chart_checkbox, axisX_visible=True)
 
         # ----------------------------------------------------------------------------------------------------
+
+    
 
 
     def create_alert_message(self, title, message):
@@ -735,7 +740,8 @@ class UI_main_window(QMainWindow, ui):
         waring_labels = {
             'data_auquzation': self.warning_data_page,
             'label': self.warning_label_page,
-            'train': self.warning_train_page
+            'train': self.warning_train_page,
+            'binarylist': self.warning_binarylist_page
         }
         # print('set_warning')
         if text !=None:

@@ -6071,7 +6071,7 @@ QPushButton:hover {
                           </size>
                          </property>
                          <property name="currentIndex">
-                          <number>2</number>
+                          <number>1</number>
                          </property>
                          <widget class="QWidget" name="page_pipeline">
                           <layout class="QVBoxLayout" name="verticalLayout_80">
@@ -6506,22 +6506,338 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_binary">
                          <property name="currentIndex">
-                          <number>2</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_binary_list">
-                          <widget class="QLabel" name="label_20">
-                           <property name="geometry">
-                            <rect>
-                             <x>150</x>
-                             <y>150</y>
-                             <width>55</width>
-                             <height>16</height>
-                            </rect>
-                           </property>
-                           <property name="text">
-                            <string>list</string>
-                           </property>
-                          </widget>
+                          <layout class="QVBoxLayout" name="verticalLayout_53">
+                           <item>
+                            <widget class="QFrame" name="frame_33">
+                             <property name="minimumSize">
+                              <size>
+                               <width>0</width>
+                               <height>200</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>200</height>
+                              </size>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::StyledPanel</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Raised</enum>
+                             </property>
+                             <widget class="QFrame" name="frame_70">
+                              <property name="geometry">
+                               <rect>
+                                <x>20</x>
+                                <y>10</y>
+                                <width>491</width>
+                                <height>61</height>
+                               </rect>
+                              </property>
+                              <property name="frameShape">
+                               <enum>QFrame::StyledPanel</enum>
+                              </property>
+                              <property name="frameShadow">
+                               <enum>QFrame::Raised</enum>
+                              </property>
+                              <layout class="QHBoxLayout" name="horizontalLayout_154">
+                               <item>
+                                <widget class="QLabel" name="label_8">
+                                 <property name="minimumSize">
+                                  <size>
+                                   <width>0</width>
+                                   <height>30</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>16777215</width>
+                                   <height>30</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>Dataset Path</string>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QTextEdit" name="binarylist_dataset_lineedit">
+                                 <property name="minimumSize">
+                                  <size>
+                                   <width>300</width>
+                                   <height>40</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>300</width>
+                                   <height>40</height>
+                                  </size>
+                                 </property>
+                                </widget>
+                               </item>
+                               <item>
+                                <widget class="QPushButton" name="binary_list_dataset_btn">
+                                 <property name="minimumSize">
+                                  <size>
+                                   <width>0</width>
+                                   <height>30</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>16777215</width>
+                                   <height>30</height>
+                                  </size>
+                                 </property>
+                                 <property name="text">
+                                  <string>Select Dataset</string>
+                                 </property>
+                                </widget>
+                               </item>
+                              </layout>
+                             </widget>
+                             <widget class="QLabel" name="warning_binarylist_page">
+                              <property name="geometry">
+                               <rect>
+                                <x>196</x>
+                                <y>110</y>
+                                <width>301</width>
+                                <height>31</height>
+                               </rect>
+                              </property>
+                              <property name="text">
+                               <string/>
+                              </property>
+                             </widget>
+                             <widget class="QPushButton" name="binary_list_show_btn">
+                              <property name="geometry">
+                               <rect>
+                                <x>864</x>
+                                <y>60</y>
+                                <width>131</width>
+                                <height>31</height>
+                               </rect>
+                              </property>
+                              <property name="text">
+                               <string>Show Images</string>
+                              </property>
+                             </widget>
+                             <widget class="QLabel" name="label_11">
+                              <property name="geometry">
+                               <rect>
+                                <x>260</x>
+                                <y>100</y>
+                                <width>47</width>
+                                <height>13</height>
+                               </rect>
+                              </property>
+                              <property name="text">
+                               <string>TextLabel</string>
+                              </property>
+                             </widget>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QGroupBox" name="dfg">
+                             <property name="minimumSize">
+                              <size>
+                               <width>0</width>
+                               <height>200</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>200</height>
+                              </size>
+                             </property>
+                             <property name="title">
+                              <string>Perfect Images</string>
+                             </property>
+                             <layout class="QHBoxLayout" name="horizontalLayout_153">
+                              <item>
+                               <widget class="QPushButton" name="binary_list_perfect_prev_btn">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                                <property name="styleSheet">
+                                 <string notr="true">background-color:Transparent;
+border:Transparent;</string>
+                                </property>
+                                <property name="text">
+                                 <string/>
+                                </property>
+                                <property name="icon">
+                                 <iconset>
+                                  <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                </property>
+                                <property name="iconSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QFrame" name="binary_list_perfect_frame">
+                                <property name="frameShape">
+                                 <enum>QFrame::Box</enum>
+                                </property>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QPushButton" name="binary_list_perfect_next_btn">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                                <property name="styleSheet">
+                                 <string notr="true">background-color:Transparent;
+border:Transparent;</string>
+                                </property>
+                                <property name="text">
+                                 <string/>
+                                </property>
+                                <property name="icon">
+                                 <iconset>
+                                  <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                </property>
+                                <property name="iconSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QGroupBox" name="dfgdr">
+                             <property name="minimumSize">
+                              <size>
+                               <width>0</width>
+                               <height>200</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>200</height>
+                              </size>
+                             </property>
+                             <property name="title">
+                              <string>Defect Images</string>
+                             </property>
+                             <layout class="QHBoxLayout" name="horizontalLayout_155">
+                              <item>
+                               <widget class="QPushButton" name="binary_list_defect_prev_btn">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                                <property name="styleSheet">
+                                 <string notr="true">background-color:Transparent;
+border:Transparent;</string>
+                                </property>
+                                <property name="text">
+                                 <string/>
+                                </property>
+                                <property name="icon">
+                                 <iconset>
+                                  <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                </property>
+                                <property name="iconSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QFrame" name="binary_list_defect_frame">
+                                <property name="frameShape">
+                                 <enum>QFrame::Box</enum>
+                                </property>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QPushButton" name="binary_list_defect_next_btn">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                                <property name="styleSheet">
+                                 <string notr="true">background-color:Transparent;
+border:Transparent;</string>
+                                </property>
+                                <property name="text">
+                                 <string/>
+                                </property>
+                                <property name="icon">
+                                 <iconset>
+                                  <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                </property>
+                                <property name="iconSize">
+                                 <size>
+                                  <width>30</width>
+                                  <height>30</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </item>
+                          </layout>
                          </widget>
                          <widget class="QWidget" name="page_binary_training">
                           <layout class="QHBoxLayout" name="horizontalLayout_85">

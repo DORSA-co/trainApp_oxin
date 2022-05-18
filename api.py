@@ -26,11 +26,11 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
-from backend import Label, chart_funcs, binary_model_funcs
+from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs
 
 import database_utils
 from utils import *
-from utils.move_on_list import moveOnList
+from utils.move_on_list import moveOnList, moveOnImagrList
 
 import texts  # eror and warnings texts
 from utils import tempMemory, Utils
@@ -89,6 +89,9 @@ class API:
         self.bmodel_count = 0
         self.filter_mode = False
 
+        # binarylist dataset parms
+        self.dataset_params = {}
+
         self.ui.set_default_db_parms(self.ds.binary_path, self.size)
 
 
@@ -114,7 +117,24 @@ class API:
         # -------------------------------------
 
 
+        # binary model start-up funcs
         self.refresh_binary_models_table(get_count=True)
+
+        # create binarylist sliders on UI
+        # perfect
+        self.binarylist_sliders_check = []
+        self.binarylist_sliders_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
+                                                                                        frame_obj=self.ui.binary_list_perfect_frame,
+                                                                                        prefix=binary_list_funcs.widjet_prefixes['perfect']))
+        # defect
+        self.binarylist_sliders_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
+                                                                                        frame_obj=self.ui.binary_list_defect_frame,
+                                                                                        prefix=binary_list_funcs.widjet_prefixes['defect']))
+        
+        # binarylist image object
+        self.binary_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
+
+
 
 
 
@@ -184,13 +204,21 @@ class API:
 
         # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
 
-        # binary-model
+        # binary-model history
         self.ui.binary_tabel_prev.clicked.connect(partial(lambda: self.binary_model_tabel_nextorprev(next=False)))
         self.ui.binary_tabel_next.clicked.connect(partial(lambda: self.binary_model_tabel_nextorprev(next=True)))
         self.ui.Binary_btn.clicked.connect(partial(self.refresh_binary_models_table))
         self.ui.binary_history.clicked.connect(partial(self.refresh_binary_models_table))
         self.ui.binary_filter_btn.clicked.connect(partial(lambda: self.refresh_binary_models_table(filter_mode=True)))
         self.ui.binary_clearfilter_btn.clicked.connect(partial(self.clear_filters))
+
+        # binary-list
+        self.ui.binary_list_dataset_btn.clicked.connect(partial(lambda: self.select_binary_dataset(page='binarylist')))
+        self.ui.binary_list_show_btn.clicked.connect(partial(self.load_binary_images_list))
+        self.ui.binary_list_perfect_prev_btn.clicked.connect(partial(lambda: self.update_binary_images_on_ui(prevornext='prev')))
+        self.ui.binary_list_perfect_next_btn.clicked.connect(partial(lambda: self.update_binary_images_on_ui(prevornext='next')))
+        self.ui.binary_list_defect_prev_btn.clicked.connect(partial(lambda: self.update_binary_images_on_ui(defect=True, prevornext='prev')))
+        self.ui.binary_list_defect_next_btn.clicked.connect(partial(lambda: self.update_binary_images_on_ui(defect=True, prevornext='next')))
         
 
     def mouse_connector(self):
@@ -742,7 +770,7 @@ class API:
                     self.ui.set_warning(texts.WARNINGS['DATASET_FORMAT'][self.language], 'train', level=2)
                     return
 
-    def select_binary_dataset(self):
+    def select_binary_dataset(self, page='train'):
         self.select_ds_dialog = FileDialog('Select a directory', self.ds.dataset_path_user)
         selected = self.select_ds_dialog.exec()
 
@@ -753,19 +781,25 @@ class API:
         if dname == '':
             return
         if not self.ds.check_binary_dataset(dname):
-            self.ui.set_warning(texts.WARNINGS['DATASET_FORMAT'][self.language], 'train', level=2)
+            self.ui.set_warning(texts.WARNINGS['DATASET_FORMAT'][self.language], page, level=2)
             return
-        text = self.ui.b_dp.toPlainText()
-        pattern = r'[0-9]+. '
-        datasets = [s.rstrip() for s in re.split(pattern, text)[1:]]
+        #
+        if page == 'train':
+            text = self.ui.b_dp.toPlainText()
+            pattern = r'[0-9]+. '
+            datasets = [s.rstrip() for s in re.split(pattern, text)[1:]]
 
-        if dname in datasets:
-            self.ui.set_warning(texts.WARNINGS['DATASET_EXIST'][self.language], 'train', level=2)
-            return
+            if dname in datasets:
+                self.ui.set_warning(texts.WARNINGS['DATASET_EXIST'][self.language], page, level=2)
+                return
 
-        n = len(datasets) + 1
-        if text != '': text += ' \n'
-        self.ui.b_dp.setPlainText(text + str(n) + '. ' + dname)
+            n = len(datasets) + 1
+            if text != '': text += ' \n'
+            self.ui.b_dp.setPlainText(text + str(n) + '. ' + dname)
+        #
+        elif page == 'binarylist':
+            self.ui.binarylist_dataset_lineedit.setPlainText(dname)
+
 
     def delete_binary_dataset(self):
         ds_n = self.ui.b_ds_num.value() - 1
@@ -818,7 +852,7 @@ class API:
 
     
     #_________________________________________________________________________________________________
-    # binary-model page functions
+    # binary-model history page functions
 
     def refresh_binary_models_table(self, nextorprev=False, get_count=False, filter_mode=False):
         if get_count:
@@ -826,7 +860,7 @@ class API:
             self.binary_model_tabel_nextorprev(check=True)
             return
         
-
+        # load filterd models
         if filter_mode:
             res = self.filter_binary_models(filter_signal=True, count=True)
             if res[0]:
@@ -860,13 +894,14 @@ class API:
         
         if len(bmodels_list) == 0 and nextorprev:
             return False
-            
+
+        # set returned models to UI table 
         else:
             binary_model_funcs.set_bmodels_on_ui_tabel(ui_obj=self.ui, bmodels_list=bmodels_list)
             return True
         
     
-
+    # next and prev buttons for binary models table functionality
     def binary_model_tabel_nextorprev(self, next=True, check=False):
         if check: 
             page_max = int(math.ceil(self.bmodel_count/binary_model_funcs.binary_table_nrows))
@@ -881,22 +916,19 @@ class API:
                 self.ui.binary_tabel_prev.setEnabled(False)
         
             return
-
-
+        #
         if next:
             self.bmodel_tabel_itr += 1
 
         elif self.bmodel_tabel_itr > 1:
             self.bmodel_tabel_itr -= 1
-
-
+        #
         res = self.refresh_binary_models_table(nextorprev=True)
-
         self.binary_model_tabel_nextorprev(check=True)
-
         self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
 
     
+    # filter function for binary models
     def filter_binary_models(self, min=0, max=binary_model_funcs.binary_table_nrows, filter_signal=False, count=False):
         if filter_signal:
             self.filter_params = binary_model_funcs.get_binary_model_filter_info_from_ui(ui_obj=self.ui)
@@ -913,10 +945,119 @@ class API:
             return True, res[1]
     
 
+    # clear filters for binary models
     def clear_filters(self):
         self.filter_mode = False
         self.refresh_binary_models_table(get_count=True)
         self.refresh_binary_models_table()
+    
+
+
+    #_________________________________________________________________________________________________
+    # binary-model history page functions
+
+    # load binary images list
+    def load_binary_images_list(self):
+        if self.binarylist_sliders_check[0] and self.binarylist_sliders_check[1]:
+            # get dataset parameters from UI
+            self.dataset_params = binary_list_funcs.get_params_from_ui(ui_obj=self.ui)
+
+            # validation
+            if len(self.dataset_params) == 0:
+                self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_PARAMS_ERROR'][self.language], 'binarylist', level=2)
+                return
+            if self.dataset_params['dataset_path'] == '':
+                self.ui.set_warning(texts.WARNINGS['DATASET_NOT_SELECTED'][self.language], 'binarylist', level=2)
+                return
+
+            # get image pathes
+            perfect_check, perfect_image_pathes, defect_check, defect_image_pathes = binary_list_funcs.get_image_pathes_list(ds_obj=self.ds, dataset_path=self.dataset_params['dataset_path'])
+            # validation
+            if not perfect_check or not defect_check:
+                print(perfect_check, defect_check)
+                self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_FOLDERS_ERROR'][self.language], 'binarylist', level=2)
+
+            # creat image list objects
+            # list obj
+            self.binary_image_list.add_sub_directory(self.dataset_params['dataset_path'])
+            # perfect dir
+            if perfect_check:
+                self.binary_image_list.add(perfect_image_pathes, name=binary_list_funcs.image_list_object_names['perfect'])
+                # create next and prev funcs
+                self.perfect_image_list_next_func = self.binary_image_list.build_next_func(name=binary_list_funcs.image_list_object_names['perfect'])
+                self.perfect_image_list_prev_func = self.binary_image_list.build_prev_func(name=binary_list_funcs.image_list_object_names['perfect'])
+                # connect next and prev buttons to funcs
+                self.ui.binary_list_perfect_prev_btn.setEnabled(True)
+                self.ui.binary_list_perfect_next_btn.setEnabled(True)
+                
+                self.update_binary_images_on_ui()
+            else:
+                self.ui.binary_list_perfect_prev_btn.setEnabled(False)
+                self.ui.binary_list_perfect_next_btn.setEnabled(False)
+            
+            # defect
+            if defect_check:
+                self.binary_image_list.add(defect_image_pathes, name=binary_list_funcs.image_list_object_names['defect'])
+                # create next and prev funcs
+                self.defect_image_list_next_func = self.binary_image_list.build_next_func(name=binary_list_funcs.image_list_object_names['defect'])
+                self.defect_image_list_prev_func = self.binary_image_list.build_prev_func(name=binary_list_funcs.image_list_object_names['defect'])
+                # connect next and prev buttons to funcs
+                self.ui.binary_list_defect_prev_btn.setEnabled(True)
+                self.ui.binary_list_defect_next_btn.setEnabled(True)
+                
+                self.update_binary_images_on_ui(defect=True)
+            else:
+                self.ui.binary_list_defect_prev_btn.setEnabled(False)
+                self.ui.binary_list_defect_next_btn.setEnabled(False)
+
+        # error in building image sliders
+        else:
+            self.ui.set_warning(texts.WARNINGS['BUILD_BINARYLIST_SLIDER_ERROR'][self.language], 'binarylist', level=2)
+
+    
+    # update slider images
+    def update_binary_images_on_ui(self, defect=False, prevornext='False'):
+        # next or prev on list
+        if prevornext == 'next':
+            if not defect:
+                self.perfect_image_list_next_func()
+            else:
+                self.defect_image_list_next_func()
+        # prev
+        elif prevornext == 'prev':
+            if not defect:
+                self.perfect_image_list_prev_func()
+            else:
+                self.defect_image_list_prev_func()
+
+        # get curent image list to set to UI
+        if not defect:
+            current_image_list = self.binary_image_list.get_n_current(name=binary_list_funcs.image_list_object_names['perfect'])
+        else:
+            current_image_list = self.binary_image_list.get_n_current(name=binary_list_funcs.image_list_object_names['defect'])
+
+        # set/update images on UI
+        if not defect:
+            res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
+                                                            sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.perfect_folder),
+                                                            image_path_list=current_image_list,
+                                                            prefix=binary_list_funcs.widjet_prefixes['perfect'])
+        else:
+            res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
+                                                            sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.defect_folder),
+                                                            image_path_list=current_image_list,
+                                                            prefix=binary_list_funcs.widjet_prefixes['defect'])
+        # validate
+        if not res:
+            self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=2)
+
+
+
+
+
+        
+    
+    
 
     
     
