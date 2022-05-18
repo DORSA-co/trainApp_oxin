@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1176</width>
+    <width>1312</width>
     <height>705</height>
    </rect>
   </property>
@@ -2304,7 +2304,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>4</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -2465,7 +2465,7 @@ QPushButton:hover {
                           <property name="bottomMargin">
                            <number>2</number>
                           </property>
-                          <item alignment="Qt::AlignTop">
+                          <item>
                            <widget class="QTabWidget" name="tabWidget_2">
                             <property name="styleSheet">
                              <string notr="true">QTabWidget::pane {
@@ -2560,12 +2560,932 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
 }</string>
                             </property>
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="tab_5">
                              <attribute name="title">
                               <string>LIVE</string>
                              </attribute>
+                             <layout class="QVBoxLayout" name="verticalLayout_97">
+                              <property name="spacing">
+                               <number>0</number>
+                              </property>
+                              <property name="leftMargin">
+                               <number>3</number>
+                              </property>
+                              <property name="topMargin">
+                               <number>3</number>
+                              </property>
+                              <property name="rightMargin">
+                               <number>3</number>
+                              </property>
+                              <property name="bottomMargin">
+                               <number>3</number>
+                              </property>
+                              <item>
+                               <widget class="QFrame" name="frame_73">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>16777215</width>
+                                  <height>96</height>
+                                 </size>
+                                </property>
+                                <property name="frameShape">
+                                 <enum>QFrame::StyledPanel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
+                                </property>
+                                <layout class="QHBoxLayout" name="horizontalLayout_111">
+                                 <property name="spacing">
+                                  <number>6</number>
+                                 </property>
+                                 <property name="leftMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="topMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="rightMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <item>
+                                  <widget class="QFrame" name="frame_75">
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>186</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>220</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="frameShape">
+                                    <enum>QFrame::StyledPanel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Raised</enum>
+                                   </property>
+                                   <layout class="QVBoxLayout" name="verticalLayout_98">
+                                    <property name="leftMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="topMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="rightMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="bottomMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <item>
+                                     <widget class="QFrame" name="frame_76">
+                                      <property name="frameShape">
+                                       <enum>QFrame::StyledPanel</enum>
+                                      </property>
+                                      <property name="frameShadow">
+                                       <enum>QFrame::Raised</enum>
+                                      </property>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_121">
+                                       <property name="leftMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="topMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="rightMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="bottomMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <item>
+                                        <widget class="QComboBox" name="comboBox_cam_select">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>70</width>
+                                           <height>25</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QComboBox{
+	background-color: rgb(200,200,200);
+	border-radius: 5px;
+	border: 1px solid rgb(33, 37, 43);
+	padding: 5px;
+	padding-left: 5px;
+}
+QComboBox:hover{
+	border: 1px solid rgb(64, 71, 188);
+}
+QComboBox::drop-down {
+	subcontrol-origin: padding;
+	subcontrol-position: top right;
+	width: 25px; 
+	border-left-width: 3px;
+	border-left-color: rgba(39, 44, 54, 150);
+	border-left-style: solid;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;	
+	background-image: url(:/icons/images/icons/cil-arrow-bottom.png);
+	background-position: center;
+	background-repeat: no-reperat;
+ }
+QComboBox QAbstractItemView {
+	color: rgb(255, 121, 198);	
+	background-color: rgb(33, 37, 43);
+	padding: 5px;
+	selection-background-color: rgb(39, 44, 54);
+}</string>
+                                         </property>
+                                         <property name="inputMethodHints">
+                                          <set>Qt::ImhNone</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QFrame" name="frame_41">
+                                         <property name="frameShape">
+                                          <enum>QFrame::StyledPanel</enum>
+                                         </property>
+                                         <property name="frameShadow">
+                                          <enum>QFrame::Raised</enum>
+                                         </property>
+                                         <layout class="QVBoxLayout" name="verticalLayout_101">
+                                          <item>
+                                           <widget class="QPushButton" name="connect_camera_btn">
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>70</width>
+                                              <height>16777215</height>
+                                             </size>
+                                            </property>
+                                            <property name="cursor">
+                                             <cursorShape>PointingHandCursor</cursorShape>
+                                            </property>
+                                            <property name="styleSheet">
+                                             <string notr="true">background-color:rgb(255,255,255);
+color:rgb(0,0,0);</string>
+                                            </property>
+                                            <property name="text">
+                                             <string>Connect</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QPushButton" name="disconnect_camera_btn">
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>70</width>
+                                              <height>16777215</height>
+                                             </size>
+                                            </property>
+                                            <property name="cursor">
+                                             <cursorShape>PointingHandCursor</cursorShape>
+                                            </property>
+                                            <property name="styleSheet">
+                                             <string notr="true">background-color:rgb(255,255,255);
+color:rgb(0,0,0);</string>
+                                            </property>
+                                            <property name="text">
+                                             <string>Disconnet</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                         </layout>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </widget>
+                                    </item>
+                                   </layout>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QFrame" name="frame_74">
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>66</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>611</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="frameShape">
+                                    <enum>QFrame::StyledPanel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Raised</enum>
+                                   </property>
+                                   <layout class="QVBoxLayout" name="verticalLayout_99">
+                                    <property name="leftMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="topMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="rightMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="bottomMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <item>
+                                     <layout class="QHBoxLayout" name="horizontalLayout_122">
+                                      <property name="spacing">
+                                       <number>20</number>
+                                      </property>
+                                      <item>
+                                       <widget class="QPushButton" name="camera1_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera2_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera3_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera4_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera5_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera6_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera7_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera8_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera9_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera10_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera11_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera12_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/camtop.png</normaloff>../../SettingApp_oxin/images/camtop.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                     </layout>
+                                    </item>
+                                    <item>
+                                     <widget class="Line" name="line_40">
+                                      <property name="orientation">
+                                       <enum>Qt::Horizontal</enum>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                    <item>
+                                     <layout class="QHBoxLayout" name="horizontalLayout_123">
+                                      <property name="spacing">
+                                       <number>20</number>
+                                      </property>
+                                      <item>
+                                       <widget class="QPushButton" name="camera13_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera14_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera15_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera16_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera17_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera18_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera19_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera20_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera21_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera22_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera23_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QPushButton" name="camera24_btn_2">
+                                        <property name="styleSheet">
+                                         <string notr="true">background-color:Transparent;
+border-color:Transparent</string>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="icon">
+                                         <iconset>
+                                          <normaloff>../../SettingApp_oxin/images/cambtm.png</normaloff>../../SettingApp_oxin/images/cambtm.png</iconset>
+                                        </property>
+                                        <property name="iconSize">
+                                         <size>
+                                          <width>20</width>
+                                          <height>20</height>
+                                         </size>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                     </layout>
+                                    </item>
+                                   </layout>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="camera_connection_msg">
+                                   <property name="text">
+                                    <string>TextLabel</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <spacer name="horizontalSpacer_20">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                   <property name="sizeHint" stdset="0">
+                                    <size>
+                                     <width>40</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                  </spacer>
+                                 </item>
+                                </layout>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QTabWidget" name="tabWidget">
+                                <property name="currentIndex">
+                                 <number>0</number>
+                                </property>
+                                <widget class="QWidget" name="tab_3">
+                                 <attribute name="title">
+                                  <string>1 x 1</string>
+                                 </attribute>
+                                 <layout class="QVBoxLayout" name="verticalLayout_100">
+                                  <property name="spacing">
+                                   <number>6</number>
+                                  </property>
+                                  <property name="leftMargin">
+                                   <number>4</number>
+                                  </property>
+                                  <property name="topMargin">
+                                   <number>7</number>
+                                  </property>
+                                  <property name="rightMargin">
+                                   <number>4</number>
+                                  </property>
+                                  <item alignment="Qt::AlignLeft">
+                                   <widget class="QFrame" name="frame_77">
+                                    <property name="maximumSize">
+                                     <size>
+                                      <width>16777214</width>
+                                      <height>24</height>
+                                     </size>
+                                    </property>
+                                    <property name="frameShape">
+                                     <enum>QFrame::StyledPanel</enum>
+                                    </property>
+                                    <property name="frameShadow">
+                                     <enum>QFrame::Raised</enum>
+                                    </property>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_124">
+                                     <property name="leftMargin">
+                                      <number>0</number>
+                                     </property>
+                                     <property name="topMargin">
+                                      <number>0</number>
+                                     </property>
+                                     <property name="rightMargin">
+                                      <number>0</number>
+                                     </property>
+                                     <property name="bottomMargin">
+                                      <number>0</number>
+                                     </property>
+                                     <item>
+                                      <widget class="QLabel" name="label_132">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>110</width>
+                                         <height>0</height>
+                                        </size>
+                                       </property>
+                                       <property name="maximumSize">
+                                        <size>
+                                         <width>110</width>
+                                         <height>23</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string>Camera Number :</string>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QComboBox" name="comboBox_connected_cams">
+                                       <property name="maximumSize">
+                                        <size>
+                                         <width>73</width>
+                                         <height>16777215</height>
+                                        </size>
+                                       </property>
+                                       <property name="styleSheet">
+                                        <string notr="true">QComboBox{
+	background-color: rgb(200,200,200);
+	border-radius: 5px;
+	border: 1px solid rgb(33, 37, 43);
+	padding: 5px;
+	padding-left: 5px;
+}
+QComboBox:hover{
+	border: 1px solid rgb(64, 71, 188);
+}
+QComboBox::drop-down {
+	subcontrol-origin: padding;
+	subcontrol-position: top right;
+	width: 25px; 
+	border-left-width: 3px;
+	border-left-color: rgba(39, 44, 54, 150);
+	border-left-style: solid;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;	
+	background-image: url(:/icons/images/icons/cil-arrow-bottom.png);
+	background-position: center;
+	background-repeat: no-reperat;
+ }
+QComboBox QAbstractItemView {
+	color: rgb(255, 121, 198);	
+	background-color: rgb(33, 37, 43);
+	padding: 5px;
+	selection-background-color: rgb(39, 44, 54);
+}</string>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                    </layout>
+                                   </widget>
+                                  </item>
+                                  <item>
+                                   <widget class="QLabel" name="label_21">
+                                    <property name="text">
+                                     <string>TextLabel</string>
+                                    </property>
+                                    <property name="scaledContents">
+                                     <bool>true</bool>
+                                    </property>
+                                   </widget>
+                                  </item>
+                                 </layout>
+                                </widget>
+                                <widget class="QWidget" name="tab_4">
+                                 <attribute name="title">
+                                  <string>3 x 2</string>
+                                 </attribute>
+                                </widget>
+                                <widget class="QWidget" name="tab_7">
+                                 <attribute name="title">
+                                  <string>12 * 2</string>
+                                 </attribute>
+                                </widget>
+                               </widget>
+                              </item>
+                             </layout>
                             </widget>
                             <widget class="QWidget" name="tab_6">
                              <property name="minimumSize">
@@ -2617,6 +3537,16 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                                  <property name="bottomMargin">
                                   <number>1</number>
                                  </property>
+                                 <item>
+                                  <widget class="QFrame" name="frame_69">
+                                   <property name="frameShape">
+                                    <enum>QFrame::StyledPanel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Raised</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
                                  <item>
                                   <widget class="QFrame" name="frame_59">
                                    <property name="minimumSize">
@@ -2775,8 +3705,8 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>242</width>
-                                         <height>27</height>
+                                         <width>1041</width>
+                                         <height>28</height>
                                         </rect>
                                        </property>
                                        <layout class="QHBoxLayout" name="horizontalLayout_92">
@@ -2878,7 +3808,7 @@ QPushButton:hover {
                                    </property>
                                   </widget>
                                  </item>
-                                 <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                                 <item>
                                   <widget class="Line" name="line_30">
                                    <property name="sizePolicy">
                                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -3943,497 +4873,17 @@ color:black;</string>
                            </widget>
                           </item>
                           <item>
-                           <widget class="QFrame" name="frame_2">
+                           <widget class="QFrame" name="frame_70">
                             <property name="minimumSize">
                              <size>
-                              <width>300</width>
+                              <width>0</width>
                               <height>0</height>
                              </size>
                             </property>
                             <property name="maximumSize">
                              <size>
-                              <width>300</width>
+                              <width>0</width>
                               <height>16777215</height>
-                             </size>
-                            </property>
-                            <property name="frameShape">
-                             <enum>QFrame::Box</enum>
-                            </property>
-                            <property name="frameShadow">
-                             <enum>QFrame::Sunken</enum>
-                            </property>
-                            <layout class="QVBoxLayout" name="verticalLayout_4">
-                             <property name="spacing">
-                              <number>1</number>
-                             </property>
-                             <property name="leftMargin">
-                              <number>1</number>
-                             </property>
-                             <property name="topMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="rightMargin">
-                              <number>1</number>
-                             </property>
-                             <property name="bottomMargin">
-                              <number>0</number>
-                             </property>
-                             <item>
-                              <widget class="QFrame" name="frame_65">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>0</width>
-                                 <height>25</height>
-                                </size>
-                               </property>
-                               <property name="frameShape">
-                                <enum>QFrame::StyledPanel</enum>
-                               </property>
-                               <property name="frameShadow">
-                                <enum>QFrame::Raised</enum>
-                               </property>
-                               <layout class="QHBoxLayout" name="horizontalLayout_119">
-                                <property name="leftMargin">
-                                 <number>0</number>
-                                </property>
-                                <property name="topMargin">
-                                 <number>0</number>
-                                </property>
-                                <property name="rightMargin">
-                                 <number>0</number>
-                                </property>
-                                <property name="bottomMargin">
-                                 <number>0</number>
-                                </property>
-                                <item>
-                                 <widget class="QFrame" name="frame_66">
-                                  <property name="maximumSize">
-                                   <size>
-                                    <width>108</width>
-                                    <height>16777215</height>
-                                   </size>
-                                  </property>
-                                  <property name="frameShape">
-                                   <enum>QFrame::StyledPanel</enum>
-                                  </property>
-                                  <property name="frameShadow">
-                                   <enum>QFrame::Raised</enum>
-                                  </property>
-                                  <layout class="QVBoxLayout" name="verticalLayout_93">
-                                   <property name="leftMargin">
-                                    <number>0</number>
-                                   </property>
-                                   <property name="topMargin">
-                                    <number>0</number>
-                                   </property>
-                                   <property name="rightMargin">
-                                    <number>0</number>
-                                   </property>
-                                   <property name="bottomMargin">
-                                    <number>0</number>
-                                   </property>
-                                   <item>
-                                    <widget class="QLabel" name="label_129">
-                                     <property name="font">
-                                      <font>
-                                       <family>Segoe UI</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>40  cm</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <widget class="QLabel" name="label_131">
-                                     <property name="maximumSize">
-                                      <size>
-                                       <width>23</width>
-                                       <height>8</height>
-                                      </size>
-                                     </property>
-                                     <property name="text">
-                                      <string/>
-                                     </property>
-                                     <property name="pixmap">
-                                      <pixmap>images/pngaaa.com-4780825.png</pixmap>
-                                     </property>
-                                     <property name="scaledContents">
-                                      <bool>true</bool>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                  </layout>
-                                 </widget>
-                                </item>
-                                <item>
-                                 <widget class="QLabel" name="label_6">
-                                  <property name="font">
-                                   <font>
-                                    <family>Segoe UI</family>
-                                    <pointsize>10</pointsize>
-                                    <weight>75</weight>
-                                    <italic>false</italic>
-                                    <bold>true</bold>
-                                   </font>
-                                  </property>
-                                  <property name="toolTip">
-                                   <string>UP Side Technical View</string>
-                                  </property>
-                                  <property name="styleSheet">
-                                   <string notr="true">font-weight: bold; 
-font-size: 30%;</string>
-                                  </property>
-                                  <property name="text">
-                                   <string>TOP Side</string>
-                                  </property>
-                                 </widget>
-                                </item>
-                               </layout>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QScrollArea" name="scrollArea_up_side">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>288</width>
-                                 <height>0</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>290</width>
-                                 <height>16777215</height>
-                                </size>
-                               </property>
-                               <property name="horizontalScrollBarPolicy">
-                                <enum>Qt::ScrollBarAlwaysOff</enum>
-                               </property>
-                               <property name="widgetResizable">
-                                <bool>true</bool>
-                               </property>
-                               <widget class="QWidget" name="scrollAreaWidgetContents_2">
-                                <property name="geometry">
-                                 <rect>
-                                  <x>0</x>
-                                  <y>0</y>
-                                  <width>288</width>
-                                  <height>17</height>
-                                 </rect>
-                                </property>
-                                <property name="minimumSize">
-                                 <size>
-                                  <width>288</width>
-                                  <height>0</height>
-                                 </size>
-                                </property>
-                                <property name="maximumSize">
-                                 <size>
-                                  <width>280</width>
-                                  <height>16777215</height>
-                                 </size>
-                                </property>
-                                <layout class="QHBoxLayout" name="horizontalLayout_90">
-                                 <property name="leftMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="topMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="rightMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="bottomMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <item>
-                                  <widget class="QLabel" name="up_side_technical">
-                                   <property name="minimumSize">
-                                    <size>
-                                     <width>288</width>
-                                     <height>0</height>
-                                    </size>
-                                   </property>
-                                   <property name="maximumSize">
-                                    <size>
-                                     <width>280</width>
-                                     <height>16777215</height>
-                                    </size>
-                                   </property>
-                                   <property name="text">
-                                    <string/>
-                                   </property>
-                                   <property name="pixmap">
-                                    <pixmap>../train/oxin/03-11-2021 09-43-52-296900__0.jpg</pixmap>
-                                   </property>
-                                   <property name="scaledContents">
-                                    <bool>true</bool>
-                                   </property>
-                                  </widget>
-                                 </item>
-                                </layout>
-                               </widget>
-                              </widget>
-                             </item>
-                            </layout>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QFrame" name="frame_16">
-                            <property name="enabled">
-                             <bool>true</bool>
-                            </property>
-                            <property name="minimumSize">
-                             <size>
-                              <width>300</width>
-                              <height>0</height>
-                             </size>
-                            </property>
-                            <property name="maximumSize">
-                             <size>
-                              <width>300</width>
-                              <height>16777215</height>
-                             </size>
-                            </property>
-                            <property name="frameShape">
-                             <enum>QFrame::Box</enum>
-                            </property>
-                            <property name="frameShadow">
-                             <enum>QFrame::Sunken</enum>
-                            </property>
-                            <layout class="QVBoxLayout" name="verticalLayout_87">
-                             <property name="spacing">
-                              <number>1</number>
-                             </property>
-                             <property name="leftMargin">
-                              <number>1</number>
-                             </property>
-                             <property name="topMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="rightMargin">
-                              <number>1</number>
-                             </property>
-                             <property name="bottomMargin">
-                              <number>0</number>
-                             </property>
-                             <item>
-                              <widget class="QFrame" name="frame_60">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>0</width>
-                                 <height>25</height>
-                                </size>
-                               </property>
-                               <property name="frameShape">
-                                <enum>QFrame::StyledPanel</enum>
-                               </property>
-                               <property name="frameShadow">
-                                <enum>QFrame::Raised</enum>
-                               </property>
-                               <layout class="QHBoxLayout" name="horizontalLayout_118">
-                                <property name="leftMargin">
-                                 <number>0</number>
-                                </property>
-                                <property name="topMargin">
-                                 <number>0</number>
-                                </property>
-                                <property name="rightMargin">
-                                 <number>0</number>
-                                </property>
-                                <property name="bottomMargin">
-                                 <number>0</number>
-                                </property>
-                                <item>
-                                 <widget class="QFrame" name="frame_64">
-                                  <property name="maximumSize">
-                                   <size>
-                                    <width>108</width>
-                                    <height>16777215</height>
-                                   </size>
-                                  </property>
-                                  <property name="frameShape">
-                                   <enum>QFrame::StyledPanel</enum>
-                                  </property>
-                                  <property name="frameShadow">
-                                   <enum>QFrame::Raised</enum>
-                                  </property>
-                                  <layout class="QVBoxLayout" name="verticalLayout_92">
-                                   <property name="leftMargin">
-                                    <number>0</number>
-                                   </property>
-                                   <property name="topMargin">
-                                    <number>0</number>
-                                   </property>
-                                   <property name="rightMargin">
-                                    <number>0</number>
-                                   </property>
-                                   <property name="bottomMargin">
-                                    <number>0</number>
-                                   </property>
-                                   <item>
-                                    <widget class="QLabel" name="label_124">
-                                     <property name="font">
-                                      <font>
-                                       <family>Segoe UI</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>40  cm</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <widget class="QLabel" name="label_125">
-                                     <property name="maximumSize">
-                                      <size>
-                                       <width>23</width>
-                                       <height>8</height>
-                                      </size>
-                                     </property>
-                                     <property name="text">
-                                      <string/>
-                                     </property>
-                                     <property name="pixmap">
-                                      <pixmap>images/pngaaa.com-4780825.png</pixmap>
-                                     </property>
-                                     <property name="scaledContents">
-                                      <bool>true</bool>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                  </layout>
-                                 </widget>
-                                </item>
-                                <item>
-                                 <widget class="QLabel" name="label_119">
-                                  <property name="font">
-                                   <font>
-                                    <family>Segoe UI</family>
-                                    <pointsize>10</pointsize>
-                                    <weight>75</weight>
-                                    <italic>false</italic>
-                                    <bold>true</bold>
-                                   </font>
-                                  </property>
-                                  <property name="toolTip">
-                                   <string>UP Side Technical View</string>
-                                  </property>
-                                  <property name="styleSheet">
-                                   <string notr="true">font-weight: bold; 
-font-size: 30%;</string>
-                                  </property>
-                                  <property name="text">
-                                   <string>BOTTOM Side</string>
-                                  </property>
-                                 </widget>
-                                </item>
-                               </layout>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QScrollArea" name="scrollArea_up_side_3">
-                               <property name="minimumSize">
-                                <size>
-                                 <width>288</width>
-                                 <height>0</height>
-                                </size>
-                               </property>
-                               <property name="maximumSize">
-                                <size>
-                                 <width>290</width>
-                                 <height>16777215</height>
-                                </size>
-                               </property>
-                               <property name="horizontalScrollBarPolicy">
-                                <enum>Qt::ScrollBarAlwaysOff</enum>
-                               </property>
-                               <property name="widgetResizable">
-                                <bool>true</bool>
-                               </property>
-                               <widget class="QWidget" name="scrollAreaWidgetContents_5">
-                                <property name="geometry">
-                                 <rect>
-                                  <x>0</x>
-                                  <y>0</y>
-                                  <width>288</width>
-                                  <height>17</height>
-                                 </rect>
-                                </property>
-                                <property name="minimumSize">
-                                 <size>
-                                  <width>288</width>
-                                  <height>0</height>
-                                 </size>
-                                </property>
-                                <property name="maximumSize">
-                                 <size>
-                                  <width>280</width>
-                                  <height>16777215</height>
-                                 </size>
-                                </property>
-                                <layout class="QHBoxLayout" name="horizontalLayout_114">
-                                 <property name="leftMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="topMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="rightMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <property name="bottomMargin">
-                                  <number>0</number>
-                                 </property>
-                                 <item>
-                                  <widget class="QLabel" name="down_side_technical">
-                                   <property name="enabled">
-                                    <bool>true</bool>
-                                   </property>
-                                   <property name="minimumSize">
-                                    <size>
-                                     <width>288</width>
-                                     <height>0</height>
-                                    </size>
-                                   </property>
-                                   <property name="maximumSize">
-                                    <size>
-                                     <width>280</width>
-                                     <height>16777215</height>
-                                    </size>
-                                   </property>
-                                   <property name="text">
-                                    <string/>
-                                   </property>
-                                   <property name="pixmap">
-                                    <pixmap>../train/oxin/03-11-2021 09-43-52-296900__0.jpg</pixmap>
-                                   </property>
-                                   <property name="scaledContents">
-                                    <bool>true</bool>
-                                   </property>
-                                  </widget>
-                                 </item>
-                                </layout>
-                               </widget>
-                              </widget>
-                             </item>
-                            </layout>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QFrame" name="frame_41">
-                            <property name="maximumSize">
-                             <size>
-                              <width>1920</width>
-                              <height>1200</height>
                              </size>
                             </property>
                             <property name="frameShape">
@@ -4442,7 +4892,7 @@ font-size: 30%;</string>
                             <property name="frameShadow">
                              <enum>QFrame::Raised</enum>
                             </property>
-                            <layout class="QHBoxLayout" name="horizontalLayout_88">
+                            <layout class="QHBoxLayout" name="horizontalLayout_110">
                              <property name="leftMargin">
                               <number>0</number>
                              </property>
@@ -4455,6 +4905,492 @@ font-size: 30%;</string>
                              <property name="bottomMargin">
                               <number>0</number>
                              </property>
+                             <item>
+                              <widget class="QFrame" name="frame_2">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>300</width>
+                                 <height>0</height>
+                                </size>
+                               </property>
+                               <property name="maximumSize">
+                                <size>
+                                 <width>300</width>
+                                 <height>16777215</height>
+                                </size>
+                               </property>
+                               <property name="frameShape">
+                                <enum>QFrame::Box</enum>
+                               </property>
+                               <property name="frameShadow">
+                                <enum>QFrame::Sunken</enum>
+                               </property>
+                               <layout class="QVBoxLayout" name="verticalLayout_4">
+                                <property name="spacing">
+                                 <number>1</number>
+                                </property>
+                                <property name="leftMargin">
+                                 <number>1</number>
+                                </property>
+                                <property name="topMargin">
+                                 <number>0</number>
+                                </property>
+                                <property name="rightMargin">
+                                 <number>1</number>
+                                </property>
+                                <property name="bottomMargin">
+                                 <number>0</number>
+                                </property>
+                                <item>
+                                 <widget class="QFrame" name="frame_65">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>0</width>
+                                    <height>25</height>
+                                   </size>
+                                  </property>
+                                  <property name="frameShape">
+                                   <enum>QFrame::StyledPanel</enum>
+                                  </property>
+                                  <property name="frameShadow">
+                                   <enum>QFrame::Raised</enum>
+                                  </property>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_119">
+                                   <property name="leftMargin">
+                                    <number>0</number>
+                                   </property>
+                                   <property name="topMargin">
+                                    <number>0</number>
+                                   </property>
+                                   <property name="rightMargin">
+                                    <number>0</number>
+                                   </property>
+                                   <property name="bottomMargin">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QFrame" name="frame_66">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>108</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
+                                     <property name="frameShape">
+                                      <enum>QFrame::StyledPanel</enum>
+                                     </property>
+                                     <property name="frameShadow">
+                                      <enum>QFrame::Raised</enum>
+                                     </property>
+                                     <layout class="QVBoxLayout" name="verticalLayout_93">
+                                      <property name="leftMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="topMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="rightMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="bottomMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <item>
+                                       <widget class="QLabel" name="label_129">
+                                        <property name="font">
+                                         <font>
+                                          <family>Segoe UI</family>
+                                          <pointsize>10</pointsize>
+                                          <weight>50</weight>
+                                          <italic>false</italic>
+                                          <bold>false</bold>
+                                         </font>
+                                        </property>
+                                        <property name="text">
+                                         <string>40  cm</string>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QLabel" name="label_131">
+                                        <property name="maximumSize">
+                                         <size>
+                                          <width>23</width>
+                                          <height>8</height>
+                                         </size>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="pixmap">
+                                         <pixmap>images/pngaaa.com-4780825.png</pixmap>
+                                        </property>
+                                        <property name="scaledContents">
+                                         <bool>true</bool>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                     </layout>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QLabel" name="label_6">
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>75</weight>
+                                       <italic>false</italic>
+                                       <bold>true</bold>
+                                      </font>
+                                     </property>
+                                     <property name="toolTip">
+                                      <string>UP Side Technical View</string>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">font-weight: bold; 
+font-size: 30%;</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>TOP Side</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QScrollArea" name="scrollArea_up_side">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>288</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>290</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="horizontalScrollBarPolicy">
+                                   <enum>Qt::ScrollBarAlwaysOff</enum>
+                                  </property>
+                                  <property name="widgetResizable">
+                                   <bool>true</bool>
+                                  </property>
+                                  <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                                   <property name="geometry">
+                                    <rect>
+                                     <x>0</x>
+                                     <y>0</y>
+                                     <width>288</width>
+                                     <height>547</height>
+                                    </rect>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>288</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>280</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <layout class="QHBoxLayout" name="horizontalLayout_90">
+                                    <property name="leftMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="topMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="rightMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="bottomMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <item>
+                                     <widget class="QLabel" name="up_side_technical">
+                                      <property name="minimumSize">
+                                       <size>
+                                        <width>288</width>
+                                        <height>0</height>
+                                       </size>
+                                      </property>
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>280</width>
+                                        <height>16777215</height>
+                                       </size>
+                                      </property>
+                                      <property name="text">
+                                       <string/>
+                                      </property>
+                                      <property name="pixmap">
+                                       <pixmap>../train/oxin/03-11-2021 09-43-52-296900__0.jpg</pixmap>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                   </layout>
+                                  </widget>
+                                 </widget>
+                                </item>
+                               </layout>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QFrame" name="frame_16">
+                               <property name="enabled">
+                                <bool>true</bool>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>300</width>
+                                 <height>0</height>
+                                </size>
+                               </property>
+                               <property name="maximumSize">
+                                <size>
+                                 <width>300</width>
+                                 <height>16777215</height>
+                                </size>
+                               </property>
+                               <property name="frameShape">
+                                <enum>QFrame::Box</enum>
+                               </property>
+                               <property name="frameShadow">
+                                <enum>QFrame::Sunken</enum>
+                               </property>
+                               <layout class="QVBoxLayout" name="verticalLayout_87">
+                                <property name="spacing">
+                                 <number>1</number>
+                                </property>
+                                <property name="leftMargin">
+                                 <number>1</number>
+                                </property>
+                                <property name="topMargin">
+                                 <number>0</number>
+                                </property>
+                                <property name="rightMargin">
+                                 <number>1</number>
+                                </property>
+                                <property name="bottomMargin">
+                                 <number>0</number>
+                                </property>
+                                <item>
+                                 <widget class="QFrame" name="frame_60">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>0</width>
+                                    <height>25</height>
+                                   </size>
+                                  </property>
+                                  <property name="frameShape">
+                                   <enum>QFrame::StyledPanel</enum>
+                                  </property>
+                                  <property name="frameShadow">
+                                   <enum>QFrame::Raised</enum>
+                                  </property>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_118">
+                                   <property name="leftMargin">
+                                    <number>0</number>
+                                   </property>
+                                   <property name="topMargin">
+                                    <number>0</number>
+                                   </property>
+                                   <property name="rightMargin">
+                                    <number>0</number>
+                                   </property>
+                                   <property name="bottomMargin">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QFrame" name="frame_64">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>108</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
+                                     <property name="frameShape">
+                                      <enum>QFrame::StyledPanel</enum>
+                                     </property>
+                                     <property name="frameShadow">
+                                      <enum>QFrame::Raised</enum>
+                                     </property>
+                                     <layout class="QVBoxLayout" name="verticalLayout_92">
+                                      <property name="leftMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="topMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="rightMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <property name="bottomMargin">
+                                       <number>0</number>
+                                      </property>
+                                      <item>
+                                       <widget class="QLabel" name="label_124">
+                                        <property name="font">
+                                         <font>
+                                          <family>Segoe UI</family>
+                                          <pointsize>10</pointsize>
+                                          <weight>50</weight>
+                                          <italic>false</italic>
+                                          <bold>false</bold>
+                                         </font>
+                                        </property>
+                                        <property name="text">
+                                         <string>40  cm</string>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                      <item>
+                                       <widget class="QLabel" name="label_125">
+                                        <property name="maximumSize">
+                                         <size>
+                                          <width>23</width>
+                                          <height>8</height>
+                                         </size>
+                                        </property>
+                                        <property name="text">
+                                         <string/>
+                                        </property>
+                                        <property name="pixmap">
+                                         <pixmap>images/pngaaa.com-4780825.png</pixmap>
+                                        </property>
+                                        <property name="scaledContents">
+                                         <bool>true</bool>
+                                        </property>
+                                       </widget>
+                                      </item>
+                                     </layout>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QLabel" name="label_119">
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>75</weight>
+                                       <italic>false</italic>
+                                       <bold>true</bold>
+                                      </font>
+                                     </property>
+                                     <property name="toolTip">
+                                      <string>UP Side Technical View</string>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">font-weight: bold; 
+font-size: 30%;</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>BOTTOM Side</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QScrollArea" name="scrollArea_up_side_3">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>288</width>
+                                    <height>0</height>
+                                   </size>
+                                  </property>
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>290</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="horizontalScrollBarPolicy">
+                                   <enum>Qt::ScrollBarAlwaysOff</enum>
+                                  </property>
+                                  <property name="widgetResizable">
+                                   <bool>true</bool>
+                                  </property>
+                                  <widget class="QWidget" name="scrollAreaWidgetContents_5">
+                                   <property name="geometry">
+                                    <rect>
+                                     <x>0</x>
+                                     <y>0</y>
+                                     <width>288</width>
+                                     <height>547</height>
+                                    </rect>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>288</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>280</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <layout class="QHBoxLayout" name="horizontalLayout_114">
+                                    <property name="leftMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="topMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="rightMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="bottomMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <item>
+                                     <widget class="QLabel" name="down_side_technical">
+                                      <property name="enabled">
+                                       <bool>true</bool>
+                                      </property>
+                                      <property name="minimumSize">
+                                       <size>
+                                        <width>288</width>
+                                        <height>0</height>
+                                       </size>
+                                      </property>
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>280</width>
+                                        <height>16777215</height>
+                                       </size>
+                                      </property>
+                                      <property name="text">
+                                       <string/>
+                                      </property>
+                                      <property name="pixmap">
+                                       <pixmap>../train/oxin/03-11-2021 09-43-52-296900__0.jpg</pixmap>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                   </layout>
+                                  </widget>
+                                 </widget>
+                                </item>
+                               </layout>
+                              </widget>
+                             </item>
                             </layout>
                            </widget>
                           </item>
@@ -7096,6 +8032,13 @@ QRadioButton::indicator:unchecked {
                             </widget>
                            </item>
                            <item>
+                            <widget class="Line" name="line_33">
+                             <property name="orientation">
+                              <enum>Qt::Vertical</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
                             <widget class="QFrame" name="frame_49">
                              <property name="frameShape">
                               <enum>QFrame::StyledPanel</enum>
@@ -7104,6 +8047,119 @@ QRadioButton::indicator:unchecked {
                               <enum>QFrame::Raised</enum>
                              </property>
                              <layout class="QVBoxLayout" name="verticalLayout_96">
+                              <property name="leftMargin">
+                               <number>9</number>
+                              </property>
+                              <property name="topMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="rightMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="bottomMargin">
+                               <number>0</number>
+                              </property>
+                              <item alignment="Qt::AlignHCenter">
+                               <widget class="QFrame" name="frame_68">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>16777215</width>
+                                  <height>20</height>
+                                 </size>
+                                </property>
+                                <property name="frameShape">
+                                 <enum>QFrame::StyledPanel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
+                                </property>
+                                <layout class="QHBoxLayout" name="horizontalLayout_109">
+                                 <property name="leftMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="topMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="rightMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <property name="bottomMargin">
+                                  <number>0</number>
+                                 </property>
+                                 <item>
+                                  <widget class="QLabel" name="label_12">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>15</width>
+                                     <height>15</height>
+                                    </size>
+                                   </property>
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                   <property name="pixmap">
+                                    <pixmap>images/train_iamge.jpg</pixmap>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_8">
+                                   <property name="font">
+                                    <font>
+                                     <family>Segoe UI</family>
+                                     <pointsize>10</pointsize>
+                                     <weight>50</weight>
+                                     <italic>false</italic>
+                                     <bold>false</bold>
+                                    </font>
+                                   </property>
+                                   <property name="text">
+                                    <string>Train</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <spacer name="horizontalSpacer_19">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                   <property name="sizeType">
+                                    <enum>QSizePolicy::Fixed</enum>
+                                   </property>
+                                   <property name="sizeHint" stdset="0">
+                                    <size>
+                                     <width>47</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                  </spacer>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_13">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>15</width>
+                                     <height>15</height>
+                                    </size>
+                                   </property>
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                   <property name="pixmap">
+                                    <pixmap>images/val_iamge.jpg</pixmap>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_11">
+                                   <property name="text">
+                                    <string>Validation</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </widget>
+                              </item>
                               <item>
                                <widget class="QFrame" name="frame_42">
                                 <property name="maximumSize">
@@ -11467,7 +12523,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>218</width>
+                                 <width>379</width>
                                  <height>218</height>
                                 </rect>
                                </property>

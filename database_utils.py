@@ -8,12 +8,13 @@ from backend import pathStructure
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','Dorsa1400@','localhost','saba_database')
+        self.db=database.dataBase('root','root','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
         self.defects_table = 'defects_info'
         self.sign_tables='sign_tables'
+        self.table_cameras = 'camera_settings'
 
     #________________________________________________________________
     #
@@ -153,7 +154,15 @@ class dataBaseUtils():
 
         self.db.update_record(self.sign_tables, col_name, value, id, id_value)
 
-
+    def load_cam_params(self, input_camera_id):
+        print('asdwa')
+        try:
+            record = self.db.search( self.table_cameras , 'id', input_camera_id )[0]
+            #print('camera info:', record)
+            # print('recor',record)
+            return record
+        except:
+            return []
 
 
 

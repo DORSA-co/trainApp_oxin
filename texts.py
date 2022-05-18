@@ -51,7 +51,21 @@ WARNINGS={
                  'en': ' Dataset number is out of range '},
 
         'DATASET_EXIST': {'fa': ' آدرس وارد شده وجود دارد ',
-                 'en': ' Address already exist '}
+                 'en': ' Address already exist '},
+
+        'Cmamera_successful':{'fa': ' دوربین متصل شد',
+                 'en': ' Cmamera Connection successfuly '},
+
+        'Cmamera_serial_eror':{'fa': ' شماره سریال متصل نیست',
+                 'en': ' This camera Serial Not Connect '},
+ 
+        'disconnect_eror':{'fa': ' خطا در قطع اتصال',
+                 'en': ' Disconnectiong Eror '},                
+ 
+        'no_connect':{'fa': ' اتصالی برقرار نمیباشد',
+                 'en': ' There is no connection '},                
+
+
 
 }
 

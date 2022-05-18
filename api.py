@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QFileDialog
 from cv2 import log
 
 from app_settings import Settings
-from backend import data_grabber
+from backend import data_grabber , camera_connection
 from backend.mouse import Mouse
 from backend.keyboard import Keyboard
 # from backend import Label
@@ -107,7 +107,12 @@ class API:
         # connet keyboard event to correspondings functions in API
         self.keyboard_connector()
         # -------------------------------------
+        # connect to camera connection
+        self.cameras=camera_connection.connect_manage_cameras()
 
+        # connecting camera
+
+        self.index_num=0
 
 
 
@@ -176,7 +181,11 @@ class API:
 
         # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
 
+        # data aquization
+        self.ui.connect_camera_btn.clicked.connect(partial(self.camera_connection_func))
+        self.ui.disconnect_camera_btn.clicked.connect(partial(self.camera_disconnection_func))
 
+        # self.ui.comboBox_cam_select.currentTextChanged.connect(self.combo_image_preccess)
 
 
 
@@ -623,7 +632,7 @@ class API:
         )
 
     def save_train_ds(self):
-                try:
+        try:
             sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
             self.ds.save(
                 img_path=img_path,
@@ -782,3 +791,102 @@ class API:
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
             self.group.start()
+
+    def get_camera_config(self,id):
+
+        cam_parms=self.db.load_cam_params(id)
+        return cam_parms
+
+
+    def camera_connection_func(self):
+
+        cam_num = self.ui.get_camera_parms()
+        print('cam num',cam_num)
+        
+        if cam_num!='All':
+
+            print('cam_num',cam_num)
+
+            cam_parms=self.get_camera_config(str(cam_num))
+
+            print('cam_parms',cam_parms)
+
+            ret=self.cameras.add_camera(str(cam_num),cam_parms)
+
+
+            if ret=='True':
+                self.ui.set_warning(texts.WARNINGS['Cmamera_successful'][self.language],'camera_connection',level=1)
+
+                self.ui.set_img_btn_camera(cam_num)
+
+            else:
+                if ret=='Camera Not Connected':
+                    self.ui.set_warning(texts.WARNINGS['Cmamera_serial_eror'][self.language],'camera_connection',level=3)
+
+                else :
+                    self.ui.set_warning('Controlled by another application Or Config Eror ','camera_connection',level=3)
+
+                self.ui.set_img_btn_camera(cam_num,status=False)
+            
+        else :
+            self.auto_connect_all_cameras()
+
+        self.set_available_caemras()
+
+
+
+    def camera_disconnection_func(self):
+
+        cam_num = self.ui.get_camera_parms()
+        cam_parms=self.get_camera_config(str(cam_num))
+
+        print('cam_num',cam_num)
+
+
+        ret=self.cameras.disconnect_camera(cam_parms['serial_number'])
+
+        if ret=='True':
+            self.ui.set_img_btn_camera(cam_num,status='Disconnect')
+            self.ui.set_warning(texts.WARNINGS['Cmamera_successful'][self.language],'camera_connection',level=1)
+        elif ret == 'no_connection':
+            self.ui.set_warning(texts.WARNINGS['no_connect'][self.language],'camera_connection',level=2)
+
+        else:
+            self.ui.set_warning(texts.WARNINGS['disconnect_eror'][self.language],'camera_connection',level=3)
+
+
+    def auto_connect_all_cameras(self,first_cam=1):
+
+        if self.index_num<24:
+            self.thread_connecting=threading.Timer(2, self.auto_connect_all_cameras).start()
+            self.ui.update_combo_box(self.ui.comboBox_cam_select, self.index_num)
+            self.camera_connection_func()
+
+            self.index_num+=1
+            print('asd')
+
+        elif self.index_num==24 :
+
+            self.index_num=0
+
+
+
+        
+
+
+    def set_available_caemras(self):
+
+        connected_cameras=self.cameras.get_connected_cameras()
+
+        sn_available=connected_cameras.keys()
+
+        self.ui.set_list_combo_boxes(self.ui.comboBox_connected_cams,sn_available)
+
+
+
+
+
+
+    def update_cameras(self):
+
+        print('asd')
