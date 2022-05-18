@@ -1,3 +1,4 @@
+from functools import partial
 from PySide6.QtWidgets import QLabel as sQLabel
 from PySide6.QtWidgets import QHBoxLayout as sQHBoxLayout
 from PySide6.QtGui import QImage as sQImage
@@ -28,6 +29,7 @@ def create_image_slider_on_ui(ui_obj, frame_obj, prefix=widjet_prefixes['perfect
         for i in range(n_images_per_row):
             label = sQLabel()
             label.setScaledContents(True)
+            label.setWhatsThis('')
             # assign label to UI with name
             eval("exec('ui_obj.%s_label_%s = label')" % (prefix, i))
             # add to layout
@@ -36,7 +38,7 @@ def create_image_slider_on_ui(ui_obj, frame_obj, prefix=widjet_prefixes['perfect
             set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, i)), image=None, no_image=True)
 
             # doble-click event for labels
-            #eval('ui_obj.%s_label_%s' % (prefix, i)).mouseDoubleClickEvent = maximize_image_on_click
+            eval('ui_obj.%s_label_%s' % (prefix, i)).mouseDoubleClickEvent = partial(maximize_image_on_click, ui_obj, eval('ui_obj.%s_label_%s' % (prefix, i)).whatsThis())
 
         # assign layout to frame
         frame_obj.setLayout(eval('ui_obj.%s_layout' % prefix))
@@ -48,11 +50,17 @@ def create_image_slider_on_ui(ui_obj, frame_obj, prefix=widjet_prefixes['perfect
 
 
 # maximize image label on click (open image in a window)
-def maximize_image_on_click(event, image_path):
-    image = image = cv2.imread(image_path)
-    window = neighbouring(image)
-    window.show()
-
+def maximize_image_on_click(ui_obj, image_path, event):
+    print('path',image_path)
+    try:
+        if image_path != '':
+            image = cv2.imread(image_path)
+            ui_obj.window = neighbouring(image)
+            ui_obj.window.show()
+    
+    except:
+        ui_obj.set_warning(texts.WARNINGS['BINARYLIST_MAXIMIZE_IMAGE_ERROR'][language], 'binarylist', level=2)
+        
 
 # set/update images to ui
 def set_image_to_ui_slider(ui_obj, sub_directory, image_path_list, prefix=widjet_prefixes['perfect']):
@@ -64,9 +72,13 @@ def set_image_to_ui_slider(ui_obj, sub_directory, image_path_list, prefix=widjet
             image = cv2.imread(os.path.join(sub_directory, image_path))
             # set to UI label
             set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, i)), image=image, no_image=False)
+            # update text (image url)
+            eval('ui_obj.%s_label_%s' % (prefix, i)).setWhatsThis(os.path.join(sub_directory, image_path))
         # set last image labels on UI as empty
         for j in range(i+1, n_images_per_row):
+            print('j',j)
             set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, j)), image=None, no_image=True)
+            eval('ui_obj.%s_label_%s' % (prefix, i)).setText(no_image_path)
         
         return True
 

@@ -189,8 +189,6 @@ class UI_main_window(QMainWindow, ui):
 
         
 
-        
-
 
         
         # charts ---------------------------------------------------------------------------------------------
@@ -214,8 +212,6 @@ class UI_main_window(QMainWindow, ui):
                                                 axisX_title='Epoch', axisY_title='Recall', checkbox_obj=self.binary_chart_checkbox, axisX_visible=True)
 
         # ----------------------------------------------------------------------------------------------------
-
-    
 
 
     def create_alert_message(self, title, message):
