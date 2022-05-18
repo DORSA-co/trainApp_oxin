@@ -9,7 +9,7 @@ from backend import pathStructure, binary_model_funcs
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','Dorsa1400@','localhost','saba_database')
+        self.db=database.dataBase('root','root','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
@@ -96,6 +96,7 @@ class dataBaseUtils():
 
     def get_dataset_path_uesr(self):
         record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
+        print('record',record)
         return record['path_dataset_user']
 
     def set_weights_path(self,path):

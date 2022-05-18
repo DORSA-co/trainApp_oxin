@@ -5,7 +5,7 @@ from matplotlib.pyplot import flag
 import mysql.connector
 from mysql.connector import Error
 from numpy import rec
-from tenacity import retry_if_exception
+# from tenacity import retry_if_exception
 
 
 TABELS_NAME = {'coils_info':'images',

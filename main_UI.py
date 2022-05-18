@@ -18,7 +18,7 @@ from PySide6.QtGui import QIntValidator as sQIntValidator
 import pandas as pd
 from functools import partial
 
-from pytools import F
+# from pytools import F
 
 from FileDialog import FileDialog
 from app_settings import Settings
