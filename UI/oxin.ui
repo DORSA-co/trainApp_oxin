@@ -8731,7 +8731,7 @@ QRadioButton::indicator:unchecked {
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QLabel" name="label_8">
+                                  <widget class="QLabel" name="label_8_2">
                                    <property name="font">
                                     <font>
                                      <family>Segoe UI</family>
@@ -9007,7 +9007,7 @@ QRadioButton::indicator:unchecked {
                                    <number>10</number>
                                   </property>
                                   <item>
-                                   <layout class="QHBoxLayout" name="horizontalLayout_111">
+                                   <layout class="QHBoxLayout" name="horizontalLayout_111_2">
                                     <item>
                                      <widget class="QLabel" name="label_82">
                                       <property name="maximumSize">
@@ -9058,7 +9058,7 @@ QRadioButton::indicator:unchecked {
                                    </layout>
                                   </item>
                                   <item>
-                                   <layout class="QHBoxLayout" name="horizontalLayout_121">
+                                   <layout class="QHBoxLayout" name="horizontalLayout_121_2">
                                     <item>
                                      <widget class="QLabel" name="label_83">
                                       <property name="maximumSize">
@@ -9127,7 +9127,7 @@ QRadioButton::indicator:unchecked {
                                </widget>
                               </item>
                               <item>
-                               <layout class="QHBoxLayout" name="horizontalLayout_122">
+                               <layout class="QHBoxLayout" name="horizontalLayout_122_2">
                                 <property name="spacing">
                                  <number>0</number>
                                 </property>
@@ -9166,7 +9166,7 @@ QRadioButton::indicator:unchecked {
                                    <number>10</number>
                                   </property>
                                   <item>
-                                   <layout class="QHBoxLayout" name="horizontalLayout_123">
+                                   <layout class="QHBoxLayout" name="horizontalLayout_123_2">
                                     <item>
                                      <widget class="QLabel" name="label_85">
                                       <property name="maximumSize">
@@ -9217,7 +9217,7 @@ QRadioButton::indicator:unchecked {
                                    </layout>
                                   </item>
                                   <item>
-                                   <layout class="QHBoxLayout" name="horizontalLayout_124">
+                                   <layout class="QHBoxLayout" name="horizontalLayout_124_2">
                                     <item>
                                      <widget class="QLabel" name="label_86">
                                       <property name="maximumSize">
@@ -9435,7 +9435,7 @@ QRadioButton::indicator:unchecked {
                                  </layout>
                                 </item>
                                 <item>
-                                 <widget class="Line" name="line_40">
+                                 <widget class="Line" name="line_40_2">
                                   <property name="orientation">
                                    <enum>Qt::Horizontal</enum>
                                   </property>
@@ -9594,7 +9594,7 @@ QRadioButton::indicator:unchecked {
                                  </layout>
                                 </item>
                                 <item>
-                                 <widget class="Line" name="line_33">
+                                 <widget class="Line" name="line_33_2">
                                   <property name="orientation">
                                    <enum>Qt::Horizontal</enum>
                                   </property>
@@ -9651,7 +9651,7 @@ QRadioButton::indicator:unchecked {
                                   <item>
                                    <layout class="QHBoxLayout" name="horizontalLayout_134">
                                     <item>
-                                     <widget class="QLabel" name="label_132">
+                                     <widget class="QLabel" name="label_132_2">
                                       <property name="maximumSize">
                                        <size>
                                         <width>16777215</width>
@@ -10480,7 +10480,7 @@ QRadioButton::indicator:unchecked {
                              <property name="frameShadow">
                               <enum>QFrame::Raised</enum>
                              </property>
-                             <layout class="QVBoxLayout" name="verticalLayout_97">
+                             <layout class="QVBoxLayout" name="verticalLayout_97_2">
                               <item>
                                <widget class="QTableWidget" name="binary_history_tabel">
                                 <property name="rowCount">
@@ -10517,14 +10517,14 @@ QRadioButton::indicator:unchecked {
                                </widget>
                               </item>
                               <item>
-                               <widget class="QFrame" name="frame_68">
+                               <widget class="QFrame" name="frame_68_2">
                                 <property name="frameShape">
                                  <enum>QFrame::StyledPanel</enum>
                                 </property>
                                 <property name="frameShadow">
                                  <enum>QFrame::Raised</enum>
                                 </property>
-                                <layout class="QHBoxLayout" name="horizontalLayout_109">
+                                <layout class="QHBoxLayout" name="horizontalLayout_109_2">
                                  <item>
                                   <widget class="QPushButton" name="binary_tabel_prev">
                                    <property name="enabled">
@@ -10633,7 +10633,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <spacer name="horizontalSpacer_20">
+                                  <spacer name="horizontalSpacer_20_2">
                                    <property name="orientation">
                                     <enum>Qt::Horizontal</enum>
                                    </property>
