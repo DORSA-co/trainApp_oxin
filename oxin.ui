@@ -2293,7 +2293,11 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
+<<<<<<< HEAD
+                      <number>1</number>
+=======
                       <number>4</number>
+>>>>>>> r_abtahi
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -6533,7 +6537,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_binary">
                          <property name="currentIndex">
-                          <number>1</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_binary_list">
                           <widget class="QLabel" name="label_20">

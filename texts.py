@@ -19,7 +19,7 @@ WARNINGS={
                  'en':' No sheet loaded '},
         
         'IMAGE_STATUS': {'fa': ' وضعیت عیب تصویر مشخص نشده است ',
-                 'en': ' Image defect status is not specified '},
+                 'en': ' defect status is not specified '},
 
         'NO_IMAGE_LOADED': {'fa': ' تصویری بارگذاری نشده است ',
                  'en': ' No image loaded '},
