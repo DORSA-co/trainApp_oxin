@@ -4,3 +4,4 @@ __pycache__/*.*
 .venv10/
 models/
 Train_modules/deep_utils/__pycache__
+.qt_for_python/

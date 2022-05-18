@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
 --
 -- Host: localhost    Database: saba_database
 -- ------------------------------------------------------
--- Server version	8.0.28
+-- Server version	8.0.27
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -31,7 +31,12 @@ CREATE TABLE `settings` (
   `window_style` varchar(45) NOT NULL DEFAULT 'Windows',
   `window_color` varchar(45) NOT NULL DEFAULT 'blue',
   `language` varchar(45) NOT NULL DEFAULT 'English',
-  `split_size` varchar(45) DEFAULT NULL,
+  `large_rect_area` int NOT NULL DEFAULT '0',
+  `small_rect_area` int NOT NULL DEFAULT '0',
+  `rect_accuracy` float NOT NULL DEFAULT '0.9',
+  `split_size` varchar(45) NOT NULL DEFAULT '0',
+  `n_defect_colors` int NOT NULL DEFAULT '1',
+  `path_dataset_user` varchar(45) DEFAULT NULL,
   `path_weights` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -43,7 +48,7 @@ CREATE TABLE `settings` (
 
 LOCK TABLES `settings` WRITE;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES (0,'D:/oxin_image_grabber','D:/dataset/','Arial',9,'Windows','#144475','English','(300, 300)','D:/weights/');
+INSERT INTO `settings` VALUES (0,'oxin_image_grabber','dataset','Times New Roman',8,'Windows','#144475','English',2000,1000,0.9,'(100, 100)',6,'dataset','weights');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +61,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-26 15:58:17
+-- Dump completed on 2022-05-18 15:55:14

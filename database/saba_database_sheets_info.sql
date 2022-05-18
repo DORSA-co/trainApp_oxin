@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
 --
 -- Host: localhost    Database: saba_database
 -- ------------------------------------------------------
--- Server version	8.0.28
+-- Server version	8.0.27
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -48,7 +48,7 @@ CREATE TABLE `sheets_info` (
 
 LOCK TABLES `sheets_info` WRITE;
 /*!40000 ALTER TABLE `sheets_info` DISABLE KEYS */;
-INSERT INTO `sheets_info` VALUES (0,'996','0','1111',2222,1000,480,NULL,'amir','12:15','1400/12/25','D:\\oxin_image_grabber\\',20,'0-12','.jpg'),(1,'997','0','1111',2222,1500,300,NULL,'milad','14:00','1400/12/25','D:\\oxin_image_grabber\\',25,'0-8','.jpg');
+INSERT INTO `sheets_info` VALUES (0,'996','0','1111',2222,1000,480,NULL,'amir','12:15','1400/12/25','oxin_image_grabber',20,'0-12','.jpg'),(1,'997','0','1111',2222,1500,300,NULL,'milad','14:00','1400/12/25','oxin_image_grabber',25,'0-8','.jpg');
 /*!40000 ALTER TABLE `sheets_info` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -61,4 +61,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-26 15:58:17
+-- Dump completed on 2022-05-18 15:55:15

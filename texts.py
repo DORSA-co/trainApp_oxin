@@ -66,13 +66,26 @@ WARNINGS={
                  'en': ' There is no connection '},                
 
 
+        
+        'DATASET_NOT_SELECTED': {'fa': ' دیتاست انتخاب نشده است ',
+                 'en': ' No dataset selected '},
+        
+        'BUILD_BINARYLIST_SLIDER_ERROR': {'fa': ' خطای ساخت اسلایدر تصاویر ',
+                 'en': ' Error while building slider(s) '},
+        
+        'READ_BINARYLIST_PARAMS_ERROR': {'fa': ' خطای دریافت اطلاعات دیتاست ',
+                 'en': ' Error while reading dataset parameters '},
+
+        'READ_BINARYLIST_FOLDERS_ERROR': {'fa': ' خطای خواندن فولدر تصاویر معیوب/سالم ',
+                 'en': ' Error while reading defect/perfect folders '},
+        
+        'READ_BINARYLIST_IMAGES_ERROR': {'fa': ' خطای دریافت تصاویر معیوب/سالم ',
+                 'en': ' Error while reading defect/perfect images '},
+
+        'BINARYLIST_MAXIMIZE_IMAGE_ERROR': {'fa': ' خطای نمایش تصویر ',
+                 'en': ' Error while opening image '}
 
 }
-
-
-
-
-
 MESSEGES = {
 
         'SELECT_IMAGE': {'fa':'دوربین: {} | فریم: {}',

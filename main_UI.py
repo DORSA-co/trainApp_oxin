@@ -12,6 +12,10 @@ import PySide6.QtGui as PG
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 from PyQt5.QtGui import QPainter
+from PySide6.QtWidgets import QMessageBox as sQMessageBox
+from PySide6.QtGui import QPixmap as sQPixmap 
+from PySide6.QtGui import QIcon as sQIcon
+from PySide6.QtGui import QIntValidator as sQIntValidator
 import pandas as pd
 from functools import partial
 
@@ -201,7 +205,10 @@ class UI_main_window(QMainWindow, ui):
 
         self._old_pos = None
 
+        
 
+
+        
         # charts ---------------------------------------------------------------------------------------------
         self.chart_names = ['loss','accuracy', 'recall', 'precision']
         # binary chart
@@ -224,6 +231,14 @@ class UI_main_window(QMainWindow, ui):
 
         # ----------------------------------------------------------------------------------------------------
 
+
+    def create_alert_message(self, title, message):
+        alert_window = sQMessageBox(sQMessageBox.Warning, title, message)
+        alert_window.setStandardButtons(sQMessageBox.Ok)
+        icon = sQIcon()
+        icon.addPixmap(sQPixmap("images/alert.png"), sQIcon.Normal)
+        alert_window.setWindowIcon(icon)
+        alert_window.exec()
 
 
     def mousePressEvent(self, event):
@@ -762,7 +777,8 @@ class UI_main_window(QMainWindow, ui):
             'data_auquzation': self.warning_data_page,
             'label': self.warning_label_page,
             'train': self.warning_train_page,
-            'camera_connection':self.camera_connection_msg
+            'camera_connection':self.camera_connection_msg,
+            'binarylist': self.warning_binarylist_page
         }
         # print('set_warning')
         if text != None:
@@ -891,6 +907,8 @@ class UI_main_window(QMainWindow, ui):
 
         b_algorithms = ['Xbc', 'Rbe']  # Must change
         self.b_algorithms.addItems(b_algorithms)
+        self.binary_name_filter_combo.addItem('All')
+        self.binary_name_filter_combo.addItems(b_algorithms)
         self.set_default_parms()
 
         # self.b_algorithms.setCurrentText(str(records[0][0]))   #Must change
@@ -1199,6 +1217,41 @@ class UI_main_window(QMainWindow, ui):
         self.plabel_coil_num_txt.setText(str(sheet.get_id()))
         self.plabel_date_txt.setText(str(sheet.get_date_string()))
         self.plabel_cam_txt.setText(str(pos[-1][0]))
+
+
+    
+    def set_qlineedit_validator(self):
+        self.onlyInt = sQIntValidator()
+        self.binary_epoch_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_epoch_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_tepoch_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_tepoch_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_batch_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_batch_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_split_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_split_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_loss_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_loss_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_acc_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_acc_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_prec_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_prec_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_rec_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_rec_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_date_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_date_max_filter_lineedit.setValidator(self.onlyInt)
+
+
+    def show_mesagges(self, label_name, text, color='green'):
+        name=label_name
+        if text!=None:
+            label_name.setText(text)
+            label_name.setStyleSheet("color:{}".format(color))       
+            threading.Timer(2,self.show_mesagges,args=(name,None)).start()
+        else:
+            label_name.setText('')
+
+
 
     # def get_label_type(self):
     #     if self.tabWidget_defect.currentTabText() =='Mask':
