@@ -1,10 +1,11 @@
 
 
+from itertools import count
 import database
 import datetime
 from Sheet import Sheet
 import os
-from backend import pathStructure
+from backend import pathStructure, binary_model_funcs
 
 class dataBaseUtils():
     def __init__(self) :
@@ -152,6 +153,47 @@ class dataBaseUtils():
     def update_sign_table(self,col_name,value,id='id',id_value=0):
 
         self.db.update_record(self.sign_tables, col_name, value, id, id_value)
+
+
+    #_____________________________________________________________________________________
+    # binary-models
+    
+    def get_binary_models(self, count=False, limit=False, limit_range=[0,20]):
+        try:
+            bmodels=self.db.get_all_content('binary_models', count=count, limit=limit, limit_range=limit_range)
+            #print('--------------------------------------------', defects)
+            return bmodels
+        except:
+            return []
+    
+
+    def add_binary_model_record(self, params):
+        #print('params:', params)
+        data = ()
+        db_headers = ''
+        for db_header in binary_model_funcs.binary_headers_db:
+            data = data + (params[db_header], )
+            db_headers = db_headers + db_header + ','
+        db_headers = '(' + db_headers[:-1] + ')'
+        #print('bmodel_record:', data, 'cols:', db_headers)
+        try:
+            self.db.add_record(data, table_name='binary_models', parametrs=db_headers, len_parameters=len(binary_model_funcs.binary_headers_db))
+            return 'True'
+        
+        except:
+            return 'Databas Eror'
+    
+
+    def search_binary_model_by_filter(self, parms, cols, limit=False, limit_range=[0,20], count=False):
+        try:
+            #print('here')
+            record = self.db.search_with_range('binary_models', cols, parms, limit=limit, limit_range=limit_range, count=count)
+            #print('asd',record)
+            return record
+
+        except:
+            return []
+
 
 
 
