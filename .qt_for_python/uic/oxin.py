@@ -1947,7 +1947,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_4 = QWidget()
         self.scrollAreaWidgetContents_4.setObjectName(u"scrollAreaWidgetContents_4")
-        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 529, 28))
+        self.scrollAreaWidgetContents_4.setGeometry(QRect(0, 0, 242, 27))
         self.horizontalLayout_92 = QHBoxLayout(self.scrollAreaWidgetContents_4)
         self.horizontalLayout_92.setSpacing(0)
         self.horizontalLayout_92.setObjectName(u"horizontalLayout_92")
@@ -2937,7 +2937,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon19 = QIcon()
-        icon19.addFile(u":/images/drag.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon19.addFile(u"images/drag3.png", QSize(), QIcon.Normal, QIcon.Off)
         self.drag_btn.setIcon(icon19)
         self.drag_btn.setIconSize(QSize(30, 22))
 
@@ -3038,7 +3038,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon22 = QIcon()
-        icon22.addFile(u":/images/heatmap.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon22.addFile(u"images/heatmap.png", QSize(), QIcon.Normal, QIcon.Off)
         self.heatmap_btn.setIcon(icon22)
         self.heatmap_btn.setIconSize(QSize(70, 30))
 
@@ -3087,38 +3087,6 @@ class Ui_MainWindow(object):
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_27_2.addItem(self.verticalSpacer_2)
-
-        self.bounding_btn_2 = QPushButton(self.frame_7)
-        self.bounding_btn_2.setObjectName(u"bounding_btn_2")
-        self.bounding_btn_2.setMinimumSize(QSize(69, 38))
-        self.bounding_btn_2.setCursor(QCursor(Qt.PointingHandCursor))
-#if QT_CONFIG(tooltip)
-        self.bounding_btn_2.setToolTip(u"Bounding Box")
-#endif // QT_CONFIG(tooltip)
-        self.bounding_btn_2.setStyleSheet(u"QPushButton {\n"
-"background-color:transparent;\n"
-"border:0px\n"
-"}\n"
-"QToolTip {\n"
-"	color: rgb(0,0,0);\n"
-"	background-color: rgb(255,255,255);\n"
-"	border: 1px solid rgb(44, 49, 58);\n"
-"	background-image: none;\n"
-"	background-position: left center;\n"
-"    background-repeat: no-repeat;\n"
-"	border: none;\n"
-"	border-left: 2px solid rgb(180,180,180);\n"
-"	text-align: left;\n"
-"	padding-left: 8px;\n"
-"	margin: 0px;\n"
-"}\n"
-"")
-        icon24 = QIcon()
-        icon24.addFile(u"../images/EnglishLanguage_Flag2_26089 (4).png", QSize(), QIcon.Normal, QIcon.Off)
-        self.bounding_btn_2.setIcon(icon24)
-        self.bounding_btn_2.setIconSize(QSize(31, 29))
-
-        self.verticalLayout_27_2.addWidget(self.bounding_btn_2)
 
 
         self.horizontalLayout_14.addWidget(self.frame_7)
@@ -3612,9 +3580,9 @@ class Ui_MainWindow(object):
         self.add_label_btn.setMinimumSize(QSize(30, 0))
         self.add_label_btn.setMaximumSize(QSize(30, 16777215))
         self.add_label_btn.setStyleSheet(u"    background: Transparent;")
-        icon25 = QIcon()
-        icon25.addFile(u"images/rounded-adjust-button-with-plus-and-minus.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.add_label_btn.setIcon(icon25)
+        icon24 = QIcon()
+        icon24.addFile(u"images/rounded-adjust-button-with-plus-and-minus.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.add_label_btn.setIcon(icon24)
         self.add_label_btn.setIconSize(QSize(25, 25))
 
         self.horizontalLayout_113.addWidget(self.add_label_btn)
@@ -5235,11 +5203,7 @@ class Ui_MainWindow(object):
         self.label_85_2 = QLabel(self.groupBox_33)
         self.label_85_2.setObjectName(u"label_85_2")
         self.label_85_2.setMaximumSize(QSize(16777215, 20))
-        font6 = QFont()
-        font6.setPointSize(10)
-        font6.setBold(False)
-        font6.setItalic(False)
-        self.label_85_2.setFont(font6)
+        self.label_85_2.setFont(font)
 
         self.horizontalLayout_123_3.addWidget(self.label_85_2)
 
@@ -5247,7 +5211,7 @@ class Ui_MainWindow(object):
         self.binary_tepoch_min_filter_lineedit.setObjectName(u"binary_tepoch_min_filter_lineedit")
         self.binary_tepoch_min_filter_lineedit.setMinimumSize(QSize(50, 0))
         self.binary_tepoch_min_filter_lineedit.setMaximumSize(QSize(50, 30))
-        self.binary_tepoch_min_filter_lineedit.setFont(font6)
+        self.binary_tepoch_min_filter_lineedit.setFont(font)
 
         self.horizontalLayout_123_3.addWidget(self.binary_tepoch_min_filter_lineedit)
 
@@ -5259,7 +5223,7 @@ class Ui_MainWindow(object):
         self.label_86 = QLabel(self.groupBox_33)
         self.label_86.setObjectName(u"label_86")
         self.label_86.setMaximumSize(QSize(16777215, 20))
-        self.label_86.setFont(font6)
+        self.label_86.setFont(font)
 
         self.horizontalLayout_124_2.addWidget(self.label_86)
 
@@ -5267,7 +5231,7 @@ class Ui_MainWindow(object):
         self.binary_tepoch_max_filter_lineedit.setObjectName(u"binary_tepoch_max_filter_lineedit")
         self.binary_tepoch_max_filter_lineedit.setMinimumSize(QSize(50, 0))
         self.binary_tepoch_max_filter_lineedit.setMaximumSize(QSize(50, 30))
-        self.binary_tepoch_max_filter_lineedit.setFont(font6)
+        self.binary_tepoch_max_filter_lineedit.setFont(font)
 
         self.horizontalLayout_124_2.addWidget(self.binary_tepoch_max_filter_lineedit)
 
@@ -5299,7 +5263,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_128.setObjectName(u"horizontalLayout_128")
         self.label_134 = QLabel(self.groupBox_33)
         self.label_134.setObjectName(u"label_134")
-        self.label_134.setFont(font6)
+        self.label_134.setFont(font)
 
         self.horizontalLayout_128.addWidget(self.label_134)
 
@@ -7786,9 +7750,9 @@ class Ui_MainWindow(object):
         self.pushButton.setFont(font)
         self.pushButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.pushButton.setStyleSheet(u"background-color: rgb(52, 59, 72);")
-        icon26 = QIcon()
-        icon26.addFile(u":/icons/images/icons/cil-folder-open.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.pushButton.setIcon(icon26)
+        icon25 = QIcon()
+        icon25.addFile(u":/icons/images/icons/cil-folder-open.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.pushButton.setIcon(icon25)
 
         self.gridLayout.addWidget(self.pushButton, 0, 1, 1, 1)
 
@@ -7911,9 +7875,9 @@ class Ui_MainWindow(object):
         self.commandLinkButton.setObjectName(u"commandLinkButton")
         self.commandLinkButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.commandLinkButton.setStyleSheet(u"")
-        icon27 = QIcon()
-        icon27.addFile(u":/icons/images/icons/cil-link.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.commandLinkButton.setIcon(icon27)
+        icon26 = QIcon()
+        icon26.addFile(u":/icons/images/icons/cil-link.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.commandLinkButton.setIcon(icon26)
 
         self.gridLayout_2.addWidget(self.commandLinkButton, 1, 6, 1, 1)
 
@@ -7952,9 +7916,9 @@ class Ui_MainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         if (self.tableWidget.rowCount() < 16):
             self.tableWidget.setRowCount(16)
-        font7 = QFont()
+        font6 = QFont()
         __qtablewidgetitem4 = QTableWidgetItem()
-        __qtablewidgetitem4.setFont(font7);
+        __qtablewidgetitem4.setFont(font6);
         self.tableWidget.setVerticalHeaderItem(0, __qtablewidgetitem4)
         __qtablewidgetitem5 = QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(1, __qtablewidgetitem5)
@@ -8201,11 +8165,11 @@ class Ui_MainWindow(object):
         self.creditsLabel = QLabel(self.bottomBar)
         self.creditsLabel.setObjectName(u"creditsLabel")
         self.creditsLabel.setMaximumSize(QSize(16777215, 16))
-        font8 = QFont()
-        font8.setFamilies([u"Segoe UI"])
-        font8.setBold(False)
-        font8.setItalic(False)
-        self.creditsLabel.setFont(font8)
+        font7 = QFont()
+        font7.setFamilies([u"Segoe UI"])
+        font7.setBold(False)
+        font7.setItalic(False)
+        self.creditsLabel.setFont(font7)
         self.creditsLabel.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignVCenter)
 
         self.horizontalLayout_5.addWidget(self.creditsLabel)
@@ -8241,7 +8205,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.stackedWidget.setCurrentIndex(1)
         self.tabWidget_2.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         self.stackedWidget_defect.setCurrentIndex(0)
@@ -8402,7 +8366,6 @@ class Ui_MainWindow(object):
         self.bounding_btn.setText("")
         self.heatmap_btn.setText("")
         self.delete_btn.setText("")
-        self.bounding_btn_2.setText("")
         self.image.setText("")
         self.image_up_left.setText("")
         self.label_29.setText(QCoreApplication.translate("MainWindow", u"Up Left", None))

@@ -52,13 +52,10 @@ WARNINGS={
 
         'DATASET_EXIST': {'fa': ' آدرس وارد شده وجود دارد ',
                  'en': ' Address already exist '},
-<<<<<<< HEAD
-=======
         
         'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
                  'en': ' Are you sure want to logout ? '},
         
->>>>>>> r_abtahi
 
         'Cmamera_successful':{'fa': ' دوربین متصل شد',
                  'en': ' Cmamera Connection successfuly '},
@@ -90,15 +87,12 @@ WARNINGS={
                  'en': ' Error while reading defect/perfect images '},
 
         'BINARYLIST_MAXIMIZE_IMAGE_ERROR': {'fa': ' خطای نمایش تصویر ',
-<<<<<<< HEAD
                  'en': ' Error while opening image '},
         
         'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
                  'en': ' Are you sure want to logout ? '}
         
-=======
-                 'en': ' Error while opening image '}
->>>>>>> r_abtahi
+                #  'en': ' Error while opening image '}
 
 }
 MESSEGES = {

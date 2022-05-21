@@ -2329,7 +2329,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>2</number>
+                      <number>1</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -3730,8 +3730,8 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>529</width>
-                                         <height>28</height>
+                                         <width>242</width>
+                                         <height>27</height>
                                         </rect>
                                        </property>
                                        <layout class="QHBoxLayout" name="horizontalLayout_92">
@@ -5832,8 +5832,8 @@ QToolTip {
                                    <string/>
                                   </property>
                                   <property name="icon">
-                                   <iconset resource="resources.qrc">
-                                    <normaloff>:/images/drag.png</normaloff>:/images/drag.png</iconset>
+                                   <iconset>
+                                    <normaloff>images/drag3.png</normaloff>images/drag3.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -5983,8 +5983,8 @@ QToolTip {
                                    <string/>
                                   </property>
                                   <property name="icon">
-                                   <iconset resource="resources.qrc">
-                                    <normaloff>:/images/heatmap.png</normaloff>:/images/heatmap.png</iconset>
+                                   <iconset>
+                                    <normaloff>images/heatmap.png</normaloff>images/heatmap.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -6065,55 +6065,6 @@ QToolTip {
                                    </size>
                                   </property>
                                  </spacer>
-                                </item>
-                                <item>
-                                 <widget class="QPushButton" name="bounding_btn_2">
-                                  <property name="minimumSize">
-                                   <size>
-                                    <width>69</width>
-                                    <height>38</height>
-                                   </size>
-                                  </property>
-                                  <property name="cursor">
-                                   <cursorShape>PointingHandCursor</cursorShape>
-                                  </property>
-                                  <property name="toolTip">
-                                   <string notr="true" extracomment="zdvsdvsfbfd">Bounding Box</string>
-                                  </property>
-                                  <property name="styleSheet">
-                                   <string notr="true">QPushButton {
-background-color:transparent;
-border:0px
-}
-QToolTip {
-	color: rgb(0,0,0);
-	background-color: rgb(255,255,255);
-	border: 1px solid rgb(44, 49, 58);
-	background-image: none;
-	background-position: left center;
-    background-repeat: no-repeat;
-	border: none;
-	border-left: 2px solid rgb(180,180,180);
-	text-align: left;
-	padding-left: 8px;
-	margin: 0px;
-}
-</string>
-                                  </property>
-                                  <property name="text">
-                                   <string/>
-                                  </property>
-                                  <property name="icon">
-                                   <iconset>
-                                    <normaloff>../images/EnglishLanguage_Flag2_26089 (4).png</normaloff>../images/EnglishLanguage_Flag2_26089 (4).png</iconset>
-                                  </property>
-                                  <property name="iconSize">
-                                   <size>
-                                    <width>31</width>
-                                    <height>29</height>
-                                   </size>
-                                  </property>
-                                 </widget>
                                 </item>
                                </layout>
                               </widget>
@@ -10008,7 +9959,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10034,7 +9987,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10055,7 +10010,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10081,7 +10038,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10117,7 +10076,9 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QLabel" name="label_134">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
