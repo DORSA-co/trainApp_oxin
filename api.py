@@ -525,7 +525,7 @@ class API:
             bboxs = SSI(self.img, block_size='Medium', defect_th=0, noise_th=7, noise=True, heatmap=False)
             for bbox in bboxs:
                 t = self.label_bakcend['bbox'].get()
-                label = ['oil', np.array(bbox)]
+                label = ['d1', np.array(bbox)]
                 t.append(label)
                 self.label_memory.add(img_path,
                                       t,
