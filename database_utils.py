@@ -140,7 +140,16 @@ class dataBaseUtils():
         for i in range(len(defects_info)):
             name_list.append(defects_info[i]['name'])
 
-        return name_list,defects_info            
+        return name_list,defects_info       
+
+
+    def search_defect_by_id(self, input_defect_id):
+        try:
+            record = self.db.search( 'defects_info' , 'defect_ID', input_defect_id)[0]
+            #print('asd',record)
+            return record
+        except:
+            return []
 
 
     def ret_sign_defect_table(self):

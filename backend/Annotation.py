@@ -15,6 +15,12 @@ CLASSIFICATION_TYPE = 1
 BINARY_TYPE = 2
 MASK_TYPE = 3
 THRESH= 80
+OBJ_BBOXS_KEY = 'obj_bboxes'
+BBOX_KEY = 'bbox'
+OBJ_MASKS_KEY = 'obj_masks'
+MASK_KEY = 'mask'
+CLASS_KEY = 'class'
+
 
 #______________________________________________________________________________________________________________________________________________
 #explain:
@@ -246,22 +252,22 @@ class Annotation():
         ms = []
         for class_id,mask in masks:
             mask_dict = {}
-            mask_dict['class'] = class_id
-            mask_dict['mask'] = mask.tolist()
+            mask_dict[CLASS_KEY] = class_id
+            mask_dict[MASK_KEY] = mask.tolist()
             ms.append( mask_dict)
         
-        self.annotation['obj_masks'] = ms
+        self.annotation[OBJ_MASKS_KEY] = ms
 
 
     def set_bboxes(self, bboxes):
         bs  = []
         for class_id,bbox in bboxes:
             box_dict = {}
-            box_dict['class'] = class_id
-            box_dict['bbox'] = bbox.tolist()
+            box_dict[CLASS_KEY] = class_id
+            box_dict[BBOX_KEY] = bbox.tolist()
             bs.append( box_dict)
         
-        self.annotation['obj_bboxes'] = bs
+        self.annotation[OBJ_BBOXS_KEY] = bs
 
     #--------------------------------------------------------
     #
@@ -302,19 +308,19 @@ class Annotation():
         classes = []
         labels = self.annotation['labels']
         for lbl in labels:
-            classes.append( int(lbl['class']) )
+            classes.append( int(lbl[CLASS_KEY]) )
         return np.array(classes)
     
     def get_masks(self):
         assert self.have_object(), "There is no object"
         assert self.is_lbl_mask(), "Label type is not mask"
 
-        labels = self.annotation['obj_masks']
+        labels = self.annotation[OBJ_MASKS_KEY]
         mask_list = []
         for lbl in labels:
             refrenced_size = self.get_img_size()
-            class_id = int(lbl['class'])
-            coded_mask = np.array( lbl['mask'] ).reshape((-1,2)).astype(np.int32)
+            class_id = int(lbl[CLASS_KEY])
+            coded_mask = np.array( lbl[MASK_KEY] ).reshape((-1,2)).astype(np.int32)
             mask_list.append( Mask( coded_mask, class_id, refrenced_size) )
         return mask_list
 
@@ -324,12 +330,12 @@ class Annotation():
         assert self.is_lbl_bbox(), "Label type is not bounding box"
         
         bbox_list = list()
-        lables = self.annotation['obj_bboxes']
+        lables = self.annotation[OBJ_BBOXS_KEY]
 
         for label in lables:
             bbox = BBOX(
-                bbox = tuple(label['bbox']),
-                class_id= label['class'],
+                bbox = tuple(label[BBOX_KEY]),
+                class_id= label[CLASS_KEY],
                 refrenced_size= self.get_img_size()
             )
 
@@ -411,11 +417,11 @@ def filter_annotations(path,filter_arg, annotations_name=None):
             annotation_dict = json.load(jfile)
         
         for filter_key, filter_values in filter_arg.items():
-            if filter_key.lower() == 'class':
+            if filter_key.lower() == CLASS_KEY:
                 classes =[]
                 labels = annotation_dict['labels']
                 for lbl in labels:
-                    classes.append( lbl['class'])
+                    classes.append( lbl[CLASS_KEY])
 
                 flag = False
                 for c in classes:

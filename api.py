@@ -124,10 +124,12 @@ class API:
         # perfect
         self.binarylist_sliders_check = []
         self.binarylist_sliders_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
+                                                                                        db_obj=self.db,
                                                                                         frame_obj=self.ui.binary_list_perfect_frame,
                                                                                         prefix=binary_list_funcs.widjet_prefixes['perfect']))
         # defect
         self.binarylist_sliders_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
+                                                                                        db_obj=self.db,
                                                                                         frame_obj=self.ui.binary_list_defect_frame,
                                                                                         prefix=binary_list_funcs.widjet_prefixes['defect']))
         
@@ -798,7 +800,8 @@ class API:
             self.ui.b_dp.setPlainText(text + str(n) + '. ' + dname)
         #
         elif page == 'binarylist':
-            self.ui.binarylist_dataset_lineedit.setPlainText(dname)
+            self.ui.binarylist_dataset_lineedit.setText(dname)
+            self.ui.binarylist_dataset_annot_lineedit.setText(dname)
 
 
     def delete_binary_dataset(self):
@@ -1040,11 +1043,13 @@ class API:
         if not defect:
             res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
                                                             sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.perfect_folder),
+                                                            annot_sub_direcotory='./dataset/annotations',
                                                             image_path_list=current_image_list,
                                                             prefix=binary_list_funcs.widjet_prefixes['perfect'])
         else:
             res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
                                                             sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.defect_folder),
+                                                            annot_sub_direcotory='./dataset/annotations',
                                                             image_path_list=current_image_list,
                                                             prefix=binary_list_funcs.widjet_prefixes['defect'])
         # validate
