@@ -15,8 +15,9 @@ class dataBaseUtils():
         self.camera_settings_table='camera_settings'
         self.defects_table = 'defects_info'
         self.sign_tables='sign_tables'
-        self.table_cameras = 'camera_settings'
         self.table_user='users'
+        self.table_cameras = 'camera_settings'
+        self.image_processing = 'image_processing'
 
     #________________________________________________________________
     #
@@ -133,6 +134,9 @@ class dataBaseUtils():
         
         return paths
 
+    def get_image_processing_params(self):
+        img_proc_info = self.db.get_all_content(self.image_processing)[0]
+        return list(img_proc_info.values())[1:]
 
     def get_defects(self):
 

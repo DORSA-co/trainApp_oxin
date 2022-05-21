@@ -161,7 +161,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../resources.qrc">
+               <iconset resource="resources.qrc">
                 <normaloff>:/icons/images/icons/icon_minimize.png</normaloff>:/icons/images/icons/icon_minimize.png</iconset>
               </property>
               <property name="iconSize">
@@ -777,9 +777,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                      </property>
                      <property name="font">
                       <font>
-                       <family>Segoe UI</family>
                        <pointsize>10</pointsize>
-                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -818,9 +816,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                      </property>
                      <property name="font">
                       <font>
-                       <family>Segoe UI</family>
                        <pointsize>10</pointsize>
-                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -843,9 +839,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                      </property>
                      <property name="font">
                       <font>
-                       <family>Segoe UI</family>
                        <pointsize>10</pointsize>
-                       <weight>50</weight>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -877,7 +871,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
   </widget>
  </widget>
  <resources>
-  <include location="../trainApp_oxin/resources.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -742,7 +742,7 @@ class UI_main_window(QMainWindow, ui):
             table_item = QTableWidgetItem(str(labels[row][0]))
             LABEL_TABLE[label_type].setItem(row, 0, table_item)
 
-        self.labeling_win.show()
+        # self.labeling_win.show()
 
     def show_neighbouring(self, img):
         self.n = neighbouring(img)
@@ -1208,6 +1208,8 @@ class UI_main_window(QMainWindow, ui):
         self.plabel_date_txt.setText(str(sheet.get_date_string()))
         self.plabel_cam_txt.setText(str(pos[-1][0]))
 
+    def show_image_btn(self,label_name,img_path):
+        label_name.setIcon(sQPixmap.fromImage(sQImage(img_path)))
 
     
     def set_qlineedit_validator(self):

@@ -1,1 +1,0 @@
-{"name": "997up4_13.jpg", "sheet_id": "997", "date": "1400/12/25", "time": "14:00", "user": "milad", "pos": [4, 13], "path": "G:/dataset/images\\997up4_13.jpg", "obj_masks": [{"class": "1", "mask": [[456, 723], [831, 1007], [758, 998], [220, 885]]}], "obj_bboxes": [{"class": "1", "bbox": [[305, 133], [1006, 547]]}]}

@@ -8,7 +8,7 @@ def get_selected_value(mylist , idxs):
 def read_image(path, color='gray'):
     if color == 'color':
         return cv2.imread(path)
-    if color == 'color':
+    if color == 'gray':
         return cv2.imread(path, 0)
 
 def add_layer_to_img(src_img, layer,opacity=0.7, compress=0.5):
