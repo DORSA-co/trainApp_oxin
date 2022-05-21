@@ -1,3 +1,10 @@
+import os
+import PyQt5
+
+qt_path= os.path.dirname(PyQt5.__file__)
+os.environ['QT_PLUGIN_PATH'] = os.path.join(qt_path, "Qt/plugins")
+
+
 import re
 from cgitb import enable
 import sys
