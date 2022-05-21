@@ -109,7 +109,7 @@ class UI_main_window(QMainWindow, ui):
         # labeling_api.labeling_API(self.labeling_win)
         self.labeling_win = None
 
-        self.labeling_win = labeling()
+        # self.labeling_win = labeling()
         # labeling_api.labeling_API(self.labeling_win)
 
         useCustomTheme = False
@@ -759,7 +759,7 @@ class UI_main_window(QMainWindow, ui):
             table_item = QTableWidgetItem(str(labels[row][0]))
             LABEL_TABLE[label_type].setItem(row, 0, table_item)
 
-        self.labeling_win.show()
+        # self.labeling_win.show()
 
     def show_neighbouring(self, img):
         self.n = neighbouring(img)
@@ -835,6 +835,7 @@ class UI_main_window(QMainWindow, ui):
         self.bounding_btn.setEnabled(True)
         self.delete_btn.setEnabled(True)
         self.heatmap_btn.setEnabled(True)
+        self.auto_defects_check.setEnabled(True)
         self.fs = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
         if scale == 1:
             self.image.setScaledContents(True)

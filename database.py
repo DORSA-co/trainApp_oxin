@@ -156,9 +156,6 @@ class dataBase:
             records = cursor.fetchall()
             print("Total number of rows in table: ", cursor.rowcount)
             print(records)
-            connection.close()
-            cursor.close()
-            print("MySQL connection is closed")
 
             field_names = [col[0] for col in cursor.description]
             res = []
