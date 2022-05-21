@@ -7,8 +7,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
+<<<<<<< HEAD
     <width>1290</width>
     <height>675</height>
+=======
+    <width>1301</width>
+    <height>794</height>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
    </rect>
   </property>
   <property name="sizePolicy">
@@ -413,7 +418,7 @@ QCheckBox::indicator {
 	width: 15px;
 	height: 15px;
 	border-radius: 10px;
-    background: rgb(44, 49, 60);
+    background: rgb(255, 255, 255);
 }
 QCheckBox::indicator:hover {
     border: 3px solid rgb(58, 66, 81);
@@ -1877,7 +1882,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../resources.qrc">
+                   <iconset resource="resources.qrc">
                     <normaloff>:/icons/images/icons/icon_settings.png</normaloff>:/icons/images/icons/icon_settings.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -1912,7 +1917,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../resources.qrc">
+                   <iconset resource="resources.qrc">
                     <normaloff>:/icons/images/icons/icon_minimize.png</normaloff>:/icons/images/icons/icon_minimize.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -1957,7 +1962,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../resources.qrc">
+                   <iconset resource="resources.qrc">
                     <normaloff>:/icons/images/icons/icon_maximize.png</normaloff>:/icons/images/icons/icon_maximize.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -3730,7 +3735,11 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
+<<<<<<< HEAD
                                          <width>529</width>
+=======
+                                         <width>431</width>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                          <height>28</height>
                                         </rect>
                                        </property>
@@ -5018,9 +5027,13 @@ color:black;</string>
                                        <widget class="QLabel" name="label_1291">
                                         <property name="font">
                                          <font>
+<<<<<<< HEAD
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
                                           <weight>50</weight>
+=======
+                                          <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -5056,9 +5069,13 @@ color:black;</string>
                                     <widget class="QLabel" name="label_6_1">
                                      <property name="font">
                                       <font>
+<<<<<<< HEAD
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
                                        <weight>75</weight>
+=======
+                                       <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                        <italic>false</italic>
                                        <bold>true</bold>
                                       </font>
@@ -5104,7 +5121,11 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
+<<<<<<< HEAD
                                      <height>517</height>
+=======
+                                     <height>637</height>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -5261,9 +5282,13 @@ font-size: 30%;</string>
                                        <widget class="QLabel" name="label_124">
                                         <property name="font">
                                          <font>
+<<<<<<< HEAD
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
                                           <weight>50</weight>
+=======
+                                          <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -5299,9 +5324,13 @@ font-size: 30%;</string>
                                     <widget class="QLabel" name="label_119">
                                      <property name="font">
                                       <font>
+<<<<<<< HEAD
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
                                        <weight>75</weight>
+=======
+                                       <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                        <italic>false</italic>
                                        <bold>true</bold>
                                       </font>
@@ -5347,7 +5376,11 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
+<<<<<<< HEAD
                                      <height>517</height>
+=======
+                                     <height>637</height>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -5464,7 +5497,7 @@ font-size: 30%;</string>
                                <property name="frameShadow">
                                 <enum>QFrame::Raised</enum>
                                </property>
-                               <layout class="QVBoxLayout" name="verticalLayout_28">
+                               <layout class="QVBoxLayout" name="verticalLayout_27">
                                 <item>
                                  <widget class="QPushButton" name="pushButton_28">
                                   <property name="minimumSize">
@@ -5832,13 +5865,13 @@ QToolTip {
                                    <string/>
                                   </property>
                                   <property name="icon">
-                                   <iconset resource="../resources.qrc">
-                                    <normaloff>:/icons/images/icons/list.png</normaloff>:/icons/images/icons/list.png</iconset>
+                                   <iconset resource="resources.qrc">
+                                    <normaloff>:/images/drag.png</normaloff>:/images/drag.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
-                                    <width>20</width>
-                                    <height>16</height>
+                                    <width>30</width>
+                                    <height>22</height>
                                    </size>
                                   </property>
                                  </widget>
@@ -5959,9 +5992,6 @@ QToolTip {
                                   <property name="enabled">
                                    <bool>false</bool>
                                   </property>
-                                  <property name="cursor">
-                                   <cursorShape>PointingHandCursor</cursorShape>
-                                  </property>
                                   <property name="styleSheet">
                                    <string notr="true">QPushButton {
 background-color:transparent;
@@ -5986,13 +6016,19 @@ QToolTip {
                                    <string/>
                                   </property>
                                   <property name="icon">
-                                   <iconset resource="../resources.qrc">
-                                    <normaloff>:/icons/images/icons/dots.png</normaloff>:/icons/images/icons/dots.png</iconset>
+                                   <iconset resource="resources.qrc">
+                                    <normaloff>:/images/heatmap.png</normaloff>:/images/heatmap.png</iconset>
+                                  </property>
+                                  <property name="iconSize">
+                                   <size>
+                                    <width>70</width>
+                                    <height>30</height>
+                                   </size>
                                   </property>
                                  </widget>
                                 </item>
                                 <item>
-                                 <widget class="Line" name="line_37">
+                                 <widget class="Line" name="line_48">
                                   <property name="orientation">
                                    <enum>Qt::Horizontal</enum>
                                   </property>
@@ -9403,9 +9439,13 @@ QRadioButton::indicator:unchecked {
                                   <widget class="QLabel" name="label_8_2">
                                    <property name="font">
                                     <font>
+<<<<<<< HEAD
                                      <family>Segoe UI</family>
                                      <pointsize>10</pointsize>
                                      <weight>50</weight>
+=======
+                                     <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                      <italic>false</italic>
                                      <bold>false</bold>
                                     </font>
@@ -9802,6 +9842,7 @@ QRadioButton::indicator:unchecked {
                                 </property>
                                 <item>
                                  <widget class="QLabel" name="label_84">
+<<<<<<< HEAD
                                   <property name="font">
                                    <font>
                                     <family>Segoe UI</family>
@@ -9961,11 +10002,176 @@ QRadioButton::indicator:unchecked {
                                 </property>
                                 <item>
                                  <widget class="QLabel" name="label_134">
+=======
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                   <property name="font">
                                    <font>
                                     <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
                                     <weight>50</weight>
+                                    <italic>false</italic>
+                                    <bold>false</bold>
+                                   </font>
+                                  </property>
+                                  <property name="text">
+<<<<<<< HEAD
+                                   <string>Batch-Size</string>
+=======
+                                   <string>Tune Epochs</string>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+<<<<<<< HEAD
+                                 <spacer name="horizontalSpacer_24">
+=======
+                                 <spacer name="horizontalSpacer_22">
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
+                                  <property name="orientation">
+                                   <enum>Qt::Horizontal</enum>
+                                  </property>
+                                  <property name="sizeHint" stdset="0">
+                                   <size>
+                                    <width>40</width>
+                                    <height>20</height>
+                                   </size>
+                                  </property>
+                                 </spacer>
+                                </item>
+                                <item>
+<<<<<<< HEAD
+                                 <layout class="QHBoxLayout" name="horizontalLayout_129">
+=======
+                                 <layout class="QHBoxLayout" name="horizontalLayout_48">
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
+                                  <property name="spacing">
+                                   <number>10</number>
+                                  </property>
+                                  <item>
+<<<<<<< HEAD
+=======
+                                   <layout class="QHBoxLayout" name="horizontalLayout_123_2">
+                                    <item>
+                                     <widget class="QLabel" name="label_85">
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>16777215</width>
+                                        <height>20</height>
+                                       </size>
+                                      </property>
+                                      <property name="font">
+                                       <font>
+                                        <pointsize>10</pointsize>
+                                        <italic>false</italic>
+                                        <bold>false</bold>
+                                       </font>
+                                      </property>
+                                      <property name="text">
+                                       <string>Min</string>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                    <item>
+                                     <widget class="QLineEdit" name="binary_tepoch_min_filter_lineedit">
+                                      <property name="minimumSize">
+                                       <size>
+                                        <width>50</width>
+                                        <height>0</height>
+                                       </size>
+                                      </property>
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>50</width>
+                                        <height>30</height>
+                                       </size>
+                                      </property>
+                                      <property name="font">
+                                       <font>
+                                        <pointsize>10</pointsize>
+                                        <italic>false</italic>
+                                        <bold>false</bold>
+                                       </font>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                   </layout>
+                                  </item>
+                                  <item>
+                                   <layout class="QHBoxLayout" name="horizontalLayout_124_2">
+                                    <item>
+                                     <widget class="QLabel" name="label_86">
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>16777215</width>
+                                        <height>20</height>
+                                       </size>
+                                      </property>
+                                      <property name="font">
+                                       <font>
+                                        <pointsize>10</pointsize>
+                                        <italic>false</italic>
+                                        <bold>false</bold>
+                                       </font>
+                                      </property>
+                                      <property name="text">
+                                       <string>Max</string>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                    <item>
+                                     <widget class="QLineEdit" name="binary_tepoch_max_filter_lineedit">
+                                      <property name="minimumSize">
+                                       <size>
+                                        <width>50</width>
+                                        <height>0</height>
+                                       </size>
+                                      </property>
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>50</width>
+                                        <height>30</height>
+                                       </size>
+                                      </property>
+                                      <property name="font">
+                                       <font>
+                                        <pointsize>10</pointsize>
+                                        <italic>false</italic>
+                                        <bold>false</bold>
+                                       </font>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                   </layout>
+                                  </item>
+                                 </layout>
+                                </item>
+                                <item>
+                                 <widget class="Line" name="line_18">
+                                  <property name="orientation">
+                                   <enum>Qt::Horizontal</enum>
+                                  </property>
+                                 </widget>
+                                </item>
+                               </layout>
+                              </item>
+                              <item>
+                               <widget class="Line" name="line_47">
+                                <property name="orientation">
+                                 <enum>Qt::Horizontal</enum>
+                                </property>
+                               </widget>
+                              </item>
+                              <item>
+                               <layout class="QHBoxLayout" name="horizontalLayout_128">
+                                <property name="spacing">
+                                 <number>0</number>
+                                </property>
+                                <item>
+                                 <widget class="QLabel" name="label_134">
+                                  <property name="font">
+                                   <font>
+                                    <pointsize>10</pointsize>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -9994,6 +10200,7 @@ QRadioButton::indicator:unchecked {
                                    <number>10</number>
                                   </property>
                                   <item>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                    <layout class="QHBoxLayout" name="horizontalLayout_130">
                                     <item>
                                      <widget class="QLabel" name="label_135">
@@ -10005,9 +10212,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10033,9 +10244,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10062,9 +10277,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10090,9 +10309,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10128,9 +10351,13 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QLabel" name="label_87">
                                   <property name="font">
                                    <font>
+<<<<<<< HEAD
                                     <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
                                     <weight>50</weight>
+=======
+                                    <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -10329,9 +10556,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10357,9 +10588,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10380,9 +10615,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10408,9 +10647,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10446,9 +10689,13 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QLabel" name="label_145">
                                   <property name="font">
                                    <font>
+<<<<<<< HEAD
                                     <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
                                     <weight>50</weight>
+=======
+                                    <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -10488,9 +10735,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10516,9 +10767,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10539,9 +10794,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10567,9 +10826,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10605,9 +10868,13 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QLabel" name="label_148">
                                   <property name="font">
                                    <font>
+<<<<<<< HEAD
                                     <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
                                     <weight>50</weight>
+=======
+                                    <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -10647,9 +10914,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10675,9 +10946,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10698,9 +10973,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10726,9 +11005,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10764,9 +11047,13 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QLabel" name="label_151">
                                   <property name="font">
                                    <font>
+<<<<<<< HEAD
                                     <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
                                     <weight>50</weight>
+=======
+                                    <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -10806,9 +11093,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10834,9 +11125,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10857,9 +11152,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10885,9 +11184,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10923,9 +11226,13 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QLabel" name="label_154">
                                   <property name="font">
                                    <font>
+<<<<<<< HEAD
                                     <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
                                     <weight>50</weight>
+=======
+                                    <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -10965,9 +11272,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -10993,9 +11304,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -11016,9 +11331,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -11044,9 +11363,13 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+<<<<<<< HEAD
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
                                         <weight>50</weight>
+=======
+                                        <pointsize>10</pointsize>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -14810,7 +15133,7 @@ color : rgb(0,0,0);</string>
                                      <string>Open</string>
                                     </property>
                                     <property name="icon">
-                                     <iconset resource="../resources.qrc">
+                                     <iconset resource="resources.qrc">
                                       <normaloff>:/icons/images/icons/cil-folder-open.png</normaloff>:/icons/images/icons/cil-folder-open.png</iconset>
                                     </property>
                                    </widget>
@@ -14930,7 +15253,11 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
+<<<<<<< HEAD
                                  <width>368</width>
+=======
+                                 <width>366</width>
+>>>>>>> ee28b2a74b289829acf3689ef4fa7f7f64271dce
                                  <height>218</height>
                                 </rect>
                                </property>
@@ -15033,7 +15360,7 @@ color : rgb(0,0,0);</string>
                                <string>Link Button</string>
                               </property>
                               <property name="icon">
-                               <iconset resource="../resources.qrc">
+                               <iconset resource="resources.qrc">
                                 <normaloff>:/icons/images/icons/cil-link.png</normaloff>:/icons/images/icons/cil-link.png</iconset>
                               </property>
                               <property name="description">
@@ -15904,7 +16231,6 @@ color : rgb(0,0,0);</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources.qrc"/>
   <include location="resources.qrc"/>
  </resources>
  <connections/>

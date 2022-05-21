@@ -59,6 +59,7 @@ def SSI(img, block_size='Small', defect_th=0, noise_th=7, noise=True, heatmap=Fa
         w += 10
         # cv2.rectangle(res, (x, y), (x + w, y + h), (205, 175, 33), 2)
         bboxs.append([[x, y], [x+w, y+h]])
+    print('algo', bboxs)
 
     # Improve heatmap based on defect mask
     if heatmap:
@@ -83,7 +84,7 @@ def SSI(img, block_size='Small', defect_th=0, noise_th=7, noise=True, heatmap=Fa
 #   defectiveMask: mask of defective blocks (np.array shape=(132, 968))
 #   heatmap: heatmap of image (np.array shape=(132, 968, 3))
 # ______________________________________________________________________________________________________________________________________________
-def FindDefectiveBlocks(gray, block_size='small', defect_th=0, noise_th=7, noise=True, heatmap=False):
+def FindDefectiveBlocks(gray, block_size='Small', defect_th=0, noise_th=7, noise=True, heatmap=False):
     # Enhance image for better defect detection
     imge = ImageEnhancement(gray)
     dim = DEFECT_BLOCKSIZE[block_size]
@@ -177,8 +178,7 @@ def CreateHeatmap(gray, img):
 
     return heatmap
 
-def CreateHeatmap_bbox(img, mask):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+def CreateHeatmap_bbox(gray, mask):
     imge = ImageEnhancement(gray)
 
     th = threshold_yen(imge)

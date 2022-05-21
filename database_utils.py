@@ -1,20 +1,23 @@
 
 
+from itertools import count
 import database
 import datetime
 from Sheet import Sheet
 import os
-from backend import pathStructure
+from backend import pathStructure, binary_model_funcs
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','root','localhost','saba_database')
+        self.db=database.dataBase('root','','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
         self.defects_table = 'defects_info'
         self.sign_tables='sign_tables'
         self.table_user='users'
+        self.table_cameras = 'camera_settings'
+        self.image_processing = 'image_processing'
 
     #________________________________________________________________
     #
@@ -96,6 +99,7 @@ class dataBaseUtils():
 
     def get_dataset_path_uesr(self):
         record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
+        print('record',record)
         return record['path_dataset_user']
 
     def set_weights_path(self,path):
@@ -130,6 +134,9 @@ class dataBaseUtils():
         
         return paths
 
+    def get_image_processing_params(self):
+        img_proc_info = self.db.get_all_content(self.image_processing)[0]
+        return list(img_proc_info.values())[1:]
 
     def get_defects(self):
 
@@ -162,6 +169,57 @@ class dataBaseUtils():
             return record
         except:
             return []
+    def load_cam_params(self, input_camera_id):
+        print('asdwa')
+        try:
+            record = self.db.search( self.table_cameras , 'id', input_camera_id )[0]
+            #print('camera info:', record)
+            # print('recor',record)
+            return record
+        except:
+            return []
+
+    #_____________________________________________________________________________________
+    # binary-models
+    
+    def get_binary_models(self, count=False, limit=False, limit_range=[0,20]):
+        try:
+            bmodels=self.db.get_all_content('binary_models', count=count, limit=limit, limit_range=limit_range)
+            #print('--------------------------------------------', defects)
+            return bmodels
+        except:
+            return []
+    
+
+    def add_binary_model_record(self, params):
+        #print('params:', params)
+        data = ()
+        db_headers = ''
+        for db_header in binary_model_funcs.binary_headers_db:
+            data = data + (params[db_header], )
+            db_headers = db_headers + db_header + ','
+        db_headers = '(' + db_headers[:-1] + ')'
+        #print('bmodel_record:', data, 'cols:', db_headers)
+        try:
+            self.db.add_record(data, table_name='binary_models', parametrs=db_headers, len_parameters=len(binary_model_funcs.binary_headers_db))
+            return 'True'
+        
+        except:
+            return 'Databas Eror'
+    
+
+    def search_binary_model_by_filter(self, parms, cols, limit=False, limit_range=[0,20], count=False):
+        try:
+            #print('here')
+            record = self.db.search_with_range('binary_models', cols, parms, limit=limit, limit_range=limit_range, count=count)
+            #print('asd',record)
+            return record
+
+        except:
+            return []
+
+
+
 
 
 

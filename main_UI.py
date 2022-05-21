@@ -14,11 +14,18 @@ from PySide6.QtGui import QPixmap as sQPixmap
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 from PyQt5.QtGui import QPainter
+from PySide6.QtWidgets import QMessageBox as sQMessageBox
+from PySide6.QtGui import QPixmap as sQPixmap 
+from PySide6.QtGui import QIcon as sQIcon
+from PySide6.QtGui import QIntValidator as sQIntValidator
 import pandas as pd
-# from PySide6.QtGui import QPixmap as sQPixmap
+from functools import partial
+
+# from pytools import F
+
 from FileDialog import FileDialog
 from app_settings import Settings
-from backend import data_grabber
+from backend import data_grabber, chart_funcs , camera_connection
 import detect_lenguage
 import setting
 import api
@@ -180,6 +187,11 @@ class UI_main_window(QMainWindow, ui):
         self.img = cv2.imread('images/dorsa-logo.png')
         self.set_crop_image(self.img)
 
+
+
+        self.set_combo_boxes()
+
+
         # Training_page
 
         self.init_training_page()
@@ -193,6 +205,42 @@ class UI_main_window(QMainWindow, ui):
 
 
         self._old_pos = None
+
+        
+
+
+        
+        # charts ---------------------------------------------------------------------------------------------
+        self.chart_names = ['loss','accuracy', 'recall', 'precision']
+        # binary chart
+        # accuracy
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_loss_frame, chart_postfix=self.chart_names[0],
+                                                chart_title='Loss', legend_train='Train', legend_val='Validation',
+                                                axisX_title='Epoch', axisY_title='Loss', checkbox_obj=self.binary_chart_checkbox, legend_visible=False, axisY_set_range=False)
+
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_acc_frame, chart_postfix=self.chart_names[1],
+                                                chart_title='Accuracy', legend_train='Train', legend_val='Validation',
+                                                axisX_title='Epoch', axisY_title='Accuracy', checkbox_obj=self.binary_chart_checkbox)
+        # precission
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_prec_frame, chart_postfix=self.chart_names[2],
+                                                chart_title='Precision', legend_train='Train', legend_val='Validation',
+                                                axisX_title='Epoch', axisY_title='Precision', checkbox_obj=self.binary_chart_checkbox)
+        # recall
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_recall_frame, chart_postfix=self.chart_names[3],
+                                                chart_title='Recall', legend_train='Train', legend_val='Validation',
+                                                axisX_title='Epoch', axisY_title='Recall', checkbox_obj=self.binary_chart_checkbox, axisX_visible=True)
+
+        # ----------------------------------------------------------------------------------------------------
+
+
+    def create_alert_message(self, title, message):
+        alert_window = sQMessageBox(sQMessageBox.Warning, title, message)
+        alert_window.setStandardButtons(sQMessageBox.Ok)
+        icon = sQIcon()
+        icon.addPixmap(sQPixmap("images/alert.png"), sQIcon.Normal)
+        alert_window.setWindowIcon(icon)
+        alert_window.exec()
+
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -696,7 +744,7 @@ class UI_main_window(QMainWindow, ui):
             table_item = QTableWidgetItem(str(labels[row][0]))
             LABEL_TABLE[label_type].setItem(row, 0, table_item)
 
-        self.labeling_win.show()
+        # self.labeling_win.show()
 
     def show_neighbouring(self, img):
         self.n = neighbouring(img)
@@ -713,11 +761,13 @@ class UI_main_window(QMainWindow, ui):
         waring_labels = {
             'data_auquzation': self.warning_data_page,
             'label': self.warning_label_page,
-            'train': self.warning_train_page
+            'train': self.warning_train_page,
+            'camera_connection':self.camera_connection_msg,
+            'binarylist': self.warning_binarylist_page
         }
         # print('set_warning')
         if text != None:
-
+    
             if level == 1:
                 waring_labels[name].setText(' ' + text + ' ')
                 waring_labels[name].setStyleSheet('background-color:#20a740;border-radius:10px;color:white')
@@ -727,7 +777,7 @@ class UI_main_window(QMainWindow, ui):
                 waring_labels[name].setStyleSheet('background-color:#FDFFA9;border-radius:2px;color:black')
 
             if level == 3:
-                waring_labels[name].setText(' Warning: ' + text)
+                waring_labels[name].setText(' EROR : ' + text)
                 waring_labels[name].setStyleSheet('background-color:#D9534F;border-radius:2px;color:black')
 
             threading.Timer(2, self.set_warning, args=(None, name)).start()
@@ -770,6 +820,7 @@ class UI_main_window(QMainWindow, ui):
         self.bounding_btn.setEnabled(True)
         self.delete_btn.setEnabled(True)
         self.heatmap_btn.setEnabled(True)
+        self.auto_defects_check.setEnabled(True)
         self.fs = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
         if scale == 1:
             self.image.setScaledContents(True)
@@ -842,6 +893,8 @@ class UI_main_window(QMainWindow, ui):
 
         b_algorithms = ['Xbc', 'Rbe']  # Must change
         self.b_algorithms.addItems(b_algorithms)
+        self.binary_name_filter_combo.addItem('All')
+        self.binary_name_filter_combo.addItems(b_algorithms)
         self.set_default_parms()
 
         # self.b_algorithms.setCurrentText(str(records[0][0]))   #Must change
@@ -929,6 +982,39 @@ class UI_main_window(QMainWindow, ui):
 
         return (localization_algorithm_name, localization_epoch, localization_batch, localization_lr, localization_te,
                 localization_vs, localization_ip, localization_lp)
+
+
+
+    # Dta aquization page add live cameras              Milad
+
+    def set_combo_boxes(self):
+    
+        strings = [str(x) for x in range(1,25)]
+        strings.append('All')
+        self.comboBox_cam_select.addItems(strings)
+        self.comboBox_cam_select.setCurrentIndex(24)
+
+        # x=['Small','Medium','Large']
+        # self.block_image_proccessing={'Small':100,'Medium':200,'Large':300}
+        # self.comboBox_block_size.addItems(x)
+        # self.comboBox_block_size.currentTextChanged.connect(self.combo_image_preccess)
+
+    def update_combo_box(self,combo_name,index):
+        combo_name.setCurrentIndex(index)
+    def set_list_combo_boxes(self,combo_name,items):
+        combo_name.clear()
+        combo_name.addItems(items)  
+    def get_camera_parms(self):
+
+        cam_num=self.comboBox_cam_select.currentText()
+
+
+        return cam_num
+
+
+
+
+
 
     def buttonClick(self):
         # GET BUTTON CLICKED
@@ -1128,12 +1214,82 @@ class UI_main_window(QMainWindow, ui):
     def show_image_btn(self,label_name,img_path):
         label_name.setIcon(sQPixmap.fromImage(sQImage(img_path)))
 
+    
+    def set_qlineedit_validator(self):
+        self.onlyInt = sQIntValidator()
+        self.binary_epoch_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_epoch_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_tepoch_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_tepoch_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_batch_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_batch_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_split_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_split_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_loss_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_loss_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_acc_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_acc_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_prec_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_prec_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_rec_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_rec_max_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_date_min_filter_lineedit.setValidator(self.onlyInt)
+        self.binary_date_max_filter_lineedit.setValidator(self.onlyInt)
+
+
+    def show_mesagges(self, label_name, text, color='green'):
+        name=label_name
+        if text!=None:
+            label_name.setText(text)
+            label_name.setStyleSheet("color:{}".format(color))       
+            threading.Timer(2,self.show_mesagges,args=(name,None)).start()
+        else:
+            label_name.setText('')
+
+
+
     # def get_label_type(self):
     #     if self.tabWidget_defect.currentTabText() =='Mask':
     #         return 'mask'
 
     #     elif self.tabWidget_defect.currentTabText() == 'Bounding Box':
     #         return 'bbox'
+
+    def set_image_label(self,label_name, img):
+        h, w, ch = img.shape
+        bytes_per_line = ch * w
+        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_RGB888)
+
+
+        label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))
+
+
+    def set_img_btn_camera(self,cam_num,status=True):
+
+        if status==True:
+            # print('avtive')
+            img_top = 'images/camtop_actived.png'
+            img_btm = 'images/cambtm_actived.png'
+
+        elif status=='Disconnect':
+            img_top = 'images/camtop.png'
+            img_btm = 'images/cambtm.png'
+
+        else:
+            img_top = 'images/camtop_deactive.png'
+            img_btm = 'images/cambtm_deactive.png'
+        if int(cam_num)<=12:
+
+            btn_name=eval('self.camera%s_btn_2'%cam_num)
+            btn_name.setIcon(QIcon(img_top))
+        
+        else :
+
+            btn_name=eval('self.camera%s_btn_2'%cam_num)
+            btn_name.setIcon(QIcon(img_btm))
+
+
+
 
 
 if __name__ == "__main__":

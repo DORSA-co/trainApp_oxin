@@ -77,7 +77,11 @@ class manageLabel:
     def add(self, img_path, labels, label_type):
         self.labels_dict[label_type][img_path] = labels
         
-    
+    def append(self, img_path, labels, label_type):
+        if not self.get_label(label_type, img_path):
+            self.add(img_path, labels, label_type)
+        else:
+            self.labels_dict[label_type][img_path] += labels
 
     def get_all(self,):
         return self.labels_dict

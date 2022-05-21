@@ -8,6 +8,8 @@ from PySide6.QtWidgets import *
 
 ui, _ = loadUiType("UI/neighbour_imgs.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
+
+
 class neighbouring(QMainWindow, ui):
     global widgets
     widgets = ui

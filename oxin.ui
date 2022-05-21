@@ -23,7 +23,9 @@
   <widget class="QWidget" name="styleSheet">
    <property name="font">
     <font>
+     <family>Segoe UI</family>
      <pointsize>10</pointsize>
+     <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
@@ -701,7 +703,9 @@ Button */
               </property>
               <property name="font">
                <font>
+                <family>Segoe UI</family>
                 <pointsize>10</pointsize>
+                <weight>50</weight>
                 <italic>false</italic>
                 <bold>false</bold>
                </font>
@@ -731,7 +735,9 @@ Button */
              </property>
              <property name="font">
               <font>
+               <family>Segoe UI Semibold</family>
                <pointsize>12</pointsize>
+               <weight>7</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -760,7 +766,9 @@ Button */
              </property>
              <property name="font">
               <font>
+               <family>Segoe UI</family>
                <pointsize>8</pointsize>
+               <weight>50</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -844,7 +852,9 @@ Button */
                   </property>
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -879,7 +889,9 @@ Button */
                   </property>
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -914,7 +926,9 @@ Button */
                   </property>
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -956,7 +970,9 @@ Button */
                   </property>
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -991,7 +1007,9 @@ Button */
                   </property>
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1054,7 +1072,9 @@ color : rgb(220,220,220);</string>
                   </property>
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1512,7 +1532,9 @@ text-align:left;</string>
                   </property>
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1825,7 +1847,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../resources.qrc">
+                   <iconset resource="resources.qrc">
                     <normaloff>:/icons/images/icons/icon_settings.png</normaloff>:/icons/images/icons/icon_settings.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -1860,7 +1882,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../resources.qrc">
+                   <iconset resource="resources.qrc">
                     <normaloff>:/icons/images/icons/icon_minimize.png</normaloff>:/icons/images/icons/icon_minimize.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -1887,7 +1909,9 @@ QPushButton:hover {
                   </property>
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>10</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <stylestrategy>PreferDefault</stylestrategy>
@@ -1903,7 +1927,7 @@ QPushButton:hover {
                    <string/>
                   </property>
                   <property name="icon">
-                   <iconset resource="../resources.qrc">
+                   <iconset resource="resources.qrc">
                     <normaloff>:/icons/images/icons/icon_maximize.png</normaloff>:/icons/images/icons/icon_maximize.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -3329,7 +3353,9 @@ QPushButton:hover {
                                                </property>
                                                <property name="font">
                                                 <font>
+                                                 <family>Segoe UI</family>
                                                  <pointsize>10</pointsize>
+                                                 <weight>50</weight>
                                                  <italic>false</italic>
                                                  <bold>false</bold>
                                                  <stylestrategy>PreferDefault</stylestrategy>
@@ -3617,7 +3643,9 @@ QCheckBox::indicator:checked {
                                            </property>
                                            <property name="font">
                                             <font>
+                                             <family>Segoe UI</family>
                                              <pointsize>10</pointsize>
+                                             <weight>50</weight>
                                              <italic>false</italic>
                                              <bold>false</bold>
                                              <stylestrategy>PreferDefault</stylestrategy>
@@ -4001,7 +4029,9 @@ color:black;</string>
                                     <widget class="QLabel" name="label_129">
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -4037,7 +4067,9 @@ color:black;</string>
                                  <widget class="QLabel" name="label_6">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>75</weight>
                                     <italic>false</italic>
                                     <bold>true</bold>
                                    </font>
@@ -4083,7 +4115,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>550</height>
+                                  <height>549</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -4240,7 +4272,9 @@ font-size: 30%;</string>
                                     <widget class="QLabel" name="label_124">
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -4276,7 +4310,9 @@ font-size: 30%;</string>
                                  <widget class="QLabel" name="label_119">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>75</weight>
                                     <italic>false</italic>
                                     <bold>true</bold>
                                    </font>
@@ -4322,7 +4358,7 @@ font-size: 30%;</string>
                                   <x>0</x>
                                   <y>0</y>
                                   <width>288</width>
-                                  <height>550</height>
+                                  <height>549</height>
                                  </rect>
                                 </property>
                                 <property name="minimumSize">
@@ -6066,7 +6102,7 @@ QPushButton:hover {
                           </size>
                          </property>
                          <property name="currentIndex">
-                          <number>2</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_pipeline">
                           <layout class="QVBoxLayout" name="verticalLayout_80">
@@ -7011,6 +7047,48 @@ QRadioButton::indicator:unchecked {
                              <property name="frameShadow">
                               <enum>QFrame::Raised</enum>
                              </property>
+                             <layout class="QVBoxLayout" name="verticalLayout_95">
+                              <item alignment="Qt::AlignTop">
+                               <widget class="QFrame" name="frame_68">
+                                <property name="frameShape">
+                                 <enum>QFrame::StyledPanel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
+                                </property>
+                                <layout class="QHBoxLayout" name="horizontalLayout_109">
+                                 <item>
+                                  <widget class="QLabel" name="label_8">
+                                   <property name="text">
+                                    <string>TextLabel</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_11">
+                                   <property name="text">
+                                    <string>sdcfsdfvd</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_12">
+                                   <property name="text">
+                                    <string>TextLabel</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_13">
+                                   <property name="text">
+                                    <string>TextLabel</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </widget>
+                              </item>
+                             </layout>
                             </widget>
                            </item>
                           </layout>
@@ -7082,7 +7160,9 @@ QRadioButton::indicator:unchecked {
                                   </property>
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7102,7 +7182,9 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QLabel" name="label_79">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7116,7 +7198,9 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QPushButton" name="request_btn_2">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7150,7 +7234,9 @@ QRadioButton::indicator:unchecked {
                                   </property>
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7166,7 +7252,9 @@ QRadioButton::indicator:unchecked {
                                    <widget class="QLineEdit" name="lineEdit_id_8">
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7177,7 +7265,9 @@ QRadioButton::indicator:unchecked {
                                    <widget class="QPushButton" name="search_id_btn_3">
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7204,7 +7294,9 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QLabel" name="label_81">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7228,7 +7320,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7248,7 +7342,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7269,7 +7365,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7289,7 +7387,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7310,7 +7410,9 @@ QRadioButton::indicator:unchecked {
                                   </property>
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7339,7 +7441,9 @@ QRadioButton::indicator:unchecked {
                                 </property>
                                 <property name="font">
                                  <font>
+                                  <family>Segoe UI</family>
                                   <pointsize>10</pointsize>
+                                  <weight>50</weight>
                                   <italic>false</italic>
                                   <bold>false</bold>
                                  </font>
@@ -7363,7 +7467,9 @@ QRadioButton::indicator:unchecked {
                                     </property>
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7383,7 +7489,9 @@ QRadioButton::indicator:unchecked {
                                     </property>
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7404,7 +7512,9 @@ QRadioButton::indicator:unchecked {
                                     </property>
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7424,7 +7534,9 @@ QRadioButton::indicator:unchecked {
                                     </property>
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -7454,7 +7566,9 @@ QRadioButton::indicator:unchecked {
                                   </property>
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7478,7 +7592,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7504,7 +7620,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7525,7 +7643,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7545,7 +7665,9 @@ QRadioButton::indicator:unchecked {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -7560,7 +7682,9 @@ QRadioButton::indicator:unchecked {
                                  <widget class="QPushButton" name="search_id_btn_6">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -7736,7 +7860,9 @@ QPushButton:hover {
                             </property>
                             <property name="font">
                              <font>
+                              <family>Segoe UI</family>
                               <pointsize>10</pointsize>
+                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
@@ -7785,7 +7911,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_localization">
                          <property name="currentIndex">
-                          <number>1</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_localization_statics">
                           <layout class="QHBoxLayout" name="horizontalLayout_60">
@@ -8359,7 +8485,9 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8379,7 +8507,9 @@ QPushButton:hover {
                                  <widget class="QLabel" name="label_61">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8393,7 +8523,9 @@ QPushButton:hover {
                                  <widget class="QPushButton" name="request_btn_3">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8427,7 +8559,9 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8443,7 +8577,9 @@ QPushButton:hover {
                                    <widget class="QLineEdit" name="lineEdit_id_15">
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8454,7 +8590,9 @@ QPushButton:hover {
                                    <widget class="QPushButton" name="search_id_btn_7">
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8481,7 +8619,9 @@ QPushButton:hover {
                                  <widget class="QLabel" name="label_92">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8505,7 +8645,9 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8525,7 +8667,9 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8546,7 +8690,9 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8566,7 +8712,9 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8587,7 +8735,9 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8616,7 +8766,9 @@ QPushButton:hover {
                                 </property>
                                 <property name="font">
                                  <font>
+                                  <family>Segoe UI</family>
                                   <pointsize>10</pointsize>
+                                  <weight>50</weight>
                                   <italic>false</italic>
                                   <bold>false</bold>
                                  </font>
@@ -8640,7 +8792,9 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8660,7 +8814,9 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8681,7 +8837,9 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8701,7 +8859,9 @@ QPushButton:hover {
                                     </property>
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -8731,7 +8891,9 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -8755,7 +8917,9 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8775,7 +8939,9 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8796,7 +8962,9 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8816,7 +8984,9 @@ QPushButton:hover {
                                       </property>
                                       <property name="font">
                                        <font>
+                                        <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
+                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -8831,7 +9001,9 @@ QPushButton:hover {
                                  <widget class="QPushButton" name="search_id_btn_9">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -9007,7 +9179,9 @@ QPushButton:hover {
                             </property>
                             <property name="font">
                              <font>
+                              <family>Segoe UI</family>
                               <pointsize>10</pointsize>
+                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
@@ -9169,7 +9343,9 @@ QPushButton:hover {
                                   </property>
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -10293,7 +10469,9 @@ color : rgb(0,0,0);</string>
                                      </property>
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10313,7 +10491,9 @@ color : rgb(0,0,0);</string>
                                     <widget class="QLabel" name="label_46">
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10327,7 +10507,9 @@ color : rgb(0,0,0);</string>
                                     <widget class="QPushButton" name="request_btn">
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10361,7 +10543,9 @@ color : rgb(0,0,0);</string>
                                      </property>
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10377,7 +10561,9 @@ color : rgb(0,0,0);</string>
                                       <widget class="QLineEdit" name="lineEdit_id">
                                        <property name="font">
                                         <font>
+                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
+                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10388,7 +10574,9 @@ color : rgb(0,0,0);</string>
                                       <widget class="QPushButton" name="search_id_btn">
                                        <property name="font">
                                         <font>
+                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
+                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10415,7 +10603,9 @@ color : rgb(0,0,0);</string>
                                     <widget class="QLabel" name="label_48">
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10439,7 +10629,9 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
+                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
+                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10459,7 +10651,9 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
+                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
+                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10480,7 +10674,9 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
+                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
+                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10500,7 +10696,9 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
+                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
+                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10521,7 +10719,9 @@ color : rgb(0,0,0);</string>
                                      </property>
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10550,7 +10750,9 @@ color : rgb(0,0,0);</string>
                                    </property>
                                    <property name="font">
                                     <font>
+                                     <family>Segoe UI</family>
                                      <pointsize>10</pointsize>
+                                     <weight>50</weight>
                                      <italic>false</italic>
                                      <bold>false</bold>
                                     </font>
@@ -10574,7 +10776,9 @@ color : rgb(0,0,0);</string>
                                        </property>
                                        <property name="font">
                                         <font>
+                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
+                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10594,7 +10798,9 @@ color : rgb(0,0,0);</string>
                                        </property>
                                        <property name="font">
                                         <font>
+                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
+                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10615,7 +10821,9 @@ color : rgb(0,0,0);</string>
                                        </property>
                                        <property name="font">
                                         <font>
+                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
+                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10635,7 +10843,9 @@ color : rgb(0,0,0);</string>
                                        </property>
                                        <property name="font">
                                         <font>
+                                         <family>Segoe UI</family>
                                          <pointsize>10</pointsize>
+                                         <weight>50</weight>
                                          <italic>false</italic>
                                          <bold>false</bold>
                                         </font>
@@ -10665,7 +10875,9 @@ color : rgb(0,0,0);</string>
                                      </property>
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10689,7 +10901,9 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
+                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
+                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10709,7 +10923,9 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
+                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
+                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10730,7 +10946,9 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
+                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
+                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10750,7 +10968,9 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="font">
                                           <font>
+                                           <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
+                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -10765,7 +10985,9 @@ color : rgb(0,0,0);</string>
                                     <widget class="QPushButton" name="search_id_btn_4">
                                      <property name="font">
                                       <font>
+                                       <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
+                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -10932,7 +11154,9 @@ color : rgb(0,0,0);</string>
                                  <widget class="QLabel" name="labelBoxBlenderInstalation">
                                   <property name="font">
                                    <font>
+                                    <family>Segoe UI</family>
                                     <pointsize>10</pointsize>
+                                    <weight>50</weight>
                                     <italic>false</italic>
                                     <bold>false</bold>
                                    </font>
@@ -10991,7 +11215,9 @@ color : rgb(0,0,0);</string>
                                     </property>
                                     <property name="font">
                                      <font>
+                                      <family>Segoe UI</family>
                                       <pointsize>10</pointsize>
+                                      <weight>50</weight>
                                       <italic>false</italic>
                                       <bold>false</bold>
                                      </font>
@@ -11006,7 +11232,7 @@ color : rgb(0,0,0);</string>
                                      <string>Open</string>
                                     </property>
                                     <property name="icon">
-                                     <iconset resource="../resources.qrc">
+                                     <iconset resource="resources.qrc">
                                       <normaloff>:/icons/images/icons/cil-folder-open.png</normaloff>:/icons/images/icons/cil-folder-open.png</iconset>
                                     </property>
                                    </widget>
@@ -11126,7 +11352,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>303</width>
+                                 <width>311</width>
                                  <height>218</height>
                                 </rect>
                                </property>
@@ -11161,7 +11387,9 @@ color : rgb(0,0,0);</string>
                              <widget class="QComboBox" name="comboBox">
                               <property name="font">
                                <font>
+                                <family>Segoe UI</family>
                                 <pointsize>10</pointsize>
+                                <weight>50</weight>
                                 <italic>false</italic>
                                 <bold>false</bold>
                                </font>
@@ -11227,7 +11455,7 @@ color : rgb(0,0,0);</string>
                                <string>Link Button</string>
                               </property>
                               <property name="icon">
-                               <iconset resource="../resources.qrc">
+                               <iconset resource="resources.qrc">
                                 <normaloff>:/icons/images/icons/cil-link.png</normaloff>:/icons/images/icons/cil-link.png</iconset>
                               </property>
                               <property name="description">
@@ -11874,7 +12102,9 @@ color : rgb(0,0,0);</string>
                            </property>
                            <property name="font">
                             <font>
+                             <family>Segoe UI</family>
                              <pointsize>10</pointsize>
+                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -11909,7 +12139,9 @@ color : rgb(0,0,0);</string>
                            </property>
                            <property name="font">
                             <font>
+                             <family>Segoe UI</family>
                              <pointsize>10</pointsize>
+                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -11944,7 +12176,9 @@ color : rgb(0,0,0);</string>
                            </property>
                            <property name="font">
                             <font>
+                             <family>Segoe UI</family>
                              <pointsize>10</pointsize>
+                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -12021,7 +12255,9 @@ color : rgb(0,0,0);</string>
                   </property>
                   <property name="font">
                    <font>
+                    <family>Segoe UI</family>
                     <pointsize>-1</pointsize>
+                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -12082,7 +12318,7 @@ color : rgb(0,0,0);</string>
   </widget>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

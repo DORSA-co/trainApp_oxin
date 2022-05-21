@@ -5,6 +5,7 @@ from matplotlib.pyplot import flag
 import mysql.connector
 from mysql.connector import Error
 from numpy import rec
+# from tenacity import retry_if_exception
 
 
 TABELS_NAME = {'coils_info':'images',
@@ -91,6 +92,7 @@ class dataBase:
             mySql_insert_query = """INSERT INTO {} {} 
                                 VALUES 
                                 {} """.format(table_name,parametrs,s)
+            #print('Q:', mySql_insert_query)                   
             cursor.execute(mySql_insert_query,data)
             # mySql_insert_query=(mySql_insert_query,data)
             # self.execute_quary(mySql_insert_query, cursor, connection, close=False,need_data=True )
@@ -115,7 +117,7 @@ class dataBase:
             mySql_insert_query = """UPDATE {} 
                                     SET {} = {}
                                     WHERE {} ={} """.format(table_name,col_name,("'"+value+"'"),id,id_value)
-            print(mySql_insert_query)
+            #print(mySql_insert_query)
             cursor.execute(mySql_insert_query)
             # mySql_insert_query=(mySql_insert_query,data)
             # self.execute_quary(mySql_insert_query, cursor, connection, close=False,need_data=True )
@@ -186,6 +188,74 @@ class dataBase:
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
 
                 records = cursor.fetchall()
+                print("Total number of rows in table: ", cursor.rowcount)
+                #print(len(records),records)
+                #----------------------------
+                # print(records)
+                
+                field_names = [col[0] for col in cursor.description]
+                res = []
+                for record in records:
+                    record_dict = {}
+                    for i in range( len(field_names) ):
+                        record_dict[ field_names[i] ] = record[i]
+                    res.append( record_dict )
+
+                return res
+            return [],[]
+
+        except:
+            print('No record Found')
+            return [],[]
+    
+
+    def search_with_range(self,table_name, col_names, values, limit=False, limit_range=[0,20], count=False):
+        # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
+        try:
+            if self.check_connection:
+                cursor,connection=self.connect()
+
+                if count:
+                    sql_select_Query = "SELECT count(*) FROM {} WHERE ".format(table_name)
+                else:
+                    sql_select_Query = "SELECT * FROM {} WHERE ".format(table_name)
+
+                # single values
+                single_cols_query = '('
+                single_vals_query = '('
+            
+                for i, col in enumerate(col_names):
+                    if len(values[i]) == 1:
+                        if i != 0:
+                            single_cols_query += ','
+                            single_vals_query += ','
+                        single_cols_query += col
+                        single_vals_query += str(values[i][0])
+                single_cols_query += ')'
+                single_vals_query += ')'
+            
+                # add single query yo main query
+                if not single_cols_query == '()' and not single_vals_query == '()':
+                    sql_select_Query = sql_select_Query + single_cols_query + '=' + single_vals_query + ' '
+
+                # range values
+                for i, col in enumerate(col_names):
+                    if len(values[i]) > 1:
+                        if i != 0:
+                            sql_select_Query += "AND "
+                        #
+                        sql_select_Query += "{} BETWEEN {} AND {} ".format(col, str(values[i][0]), str(values[i][1]))
+                
+
+                if limit:
+                    sql_select_Query += "LIMIT {},{}".format(limit_range[0], limit_range[1])
+
+
+                #print(sql_select_Query)
+
+                cursor=self.execute_quary(sql_select_Query, cursor, connection)
+
+                records = cursor.fetchall()
                 #print("Total number of rows in table: ", cursor.rowcount)
                 #print(len(records),records)
                 #----------------------------
@@ -241,18 +311,26 @@ class dataBase:
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
 
-    def get_all_content(self,table_name):
+
+    def get_all_content(self,table_name, count=False, limit=False, limit_range=[0,20]):
 
         try:
             if self.check_connection:
                 cursor,connection=self.connect()
 
-                sql_select_Query = "select * from {} ".format(table_name)
+                if count:
+                    sql_select_Query = "select count(*) from {}".format(table_name)
+                else:
+                    if not limit:
+                        sql_select_Query = "select * from {}".format(table_name)
+                    else:
+                        sql_select_Query = "select * from {} LIMIT {},{}".format(table_name, limit_range[0], limit_range[1])
+                    
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
                 # cursor.execute(sql_select_Query)
                 records = cursor.fetchall()
                 print("Total number of rows in table: ", cursor.rowcount)
-                print(records)
+                #print(records)
 
                 field_names = [col[0] for col in cursor.description]
 

@@ -1,6 +1,6 @@
 import numpy as np
 import cv2 as cv2
- 
+
 
 TEST = 'bbox'  #'bbox' , 'mask
 
@@ -31,19 +31,19 @@ class maskLbl:
     #______________________________________________________________________________________________________
     def mask_init(self):
         return np.zeros(self.img_size + (3,), dtype=np.uint8)
-    
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
     def __denormal_pt__(self,pt):
         return int(pt[0] * self.img_size[1]), int(pt[1] * self.img_size[0])
-    
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
     def click(self,pt):
         pt = self.__denormal_pt__(pt)
-        x,y = pt 
+        x,y = pt
         if self.status == 'none': #this codition is for draw new mask
             self.status = 'drawing'
             #check if pt is near to a rect corner mode should be 'editing' and store bbox idx and x and y idx
@@ -55,23 +55,23 @@ class maskLbl:
                         self.edit_mask_idx = idex
                         self.edit_point_idx = i
                         break
-                    
-                    
+
+
         if self.status=='drawing' and self.accept_new_point:#this condition is for drawing mask ( add point )
             self.add_points(pt)
             self.accept_new_point = False
-        
+
         if self.status == 'editing':
-            self.edit_mask(pt)   
-            
-            
-            
-            
+            self.edit_mask(pt)
+
+
+
+
     def release(self):
         if self.status == 'editing':
             self.status = 'none'
         self.accept_new_point = True
-    
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
@@ -91,17 +91,37 @@ class maskLbl:
             self.points.pop()
             if len(self.points)==0:
                 self.status = 'none'
-        
         else:
+            self.masks.sort(key=lambda b: cv2.contourArea(b[1]))
             for i in range(len(self.masks)):
                 cnt = self.masks[i][1]
                 if cv2.pointPolygonTest(cnt, pt, False)>=0:
                     self.masks.pop(i)
                     break
-                                    
-        
-         
-    
+
+    # ______________________________________________________________________________________________________
+    #
+    # ______________________________________________________________________________________________________
+    def update_label(self, label, pt):
+        pt = self.__denormal_pt__(pt)
+        self.masks.sort(key=lambda b: cv2.contourArea(b[1]))
+        for i in range(len(self.masks)):
+            cnt = self.masks[i][1]
+            if cv2.pointPolygonTest(cnt, pt, False) >= 0:
+                self.masks[i][0] = label
+                break
+
+    # ______________________________________________________________________________________________________
+    #
+    # ______________________________________________________________________________________________________
+    def clicked_in_defect(self, pt):
+        pt = self.__denormal_pt__(pt)
+        for i in range(len(self.masks)):
+            cnt = self.masks[i][1]
+            if cv2.pointPolygonTest(cnt, pt, False) >= 0:
+                return True
+        return False
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
@@ -115,20 +135,20 @@ class maskLbl:
             if dis < 30:
                 pt = (x1,y1)
                 self.status = 'none'
-                
-        
-        
+
+
+
         #check if new point is so near to last points , dont append it
         if len(self.points)>=1:
             last_x,last_y = self.points[-1]
             x,y = pt
             if ((x-last_x)**2 + (y-last_y)**2)**0.5 >20:
                 self.points.append(pt)
-        
-        else:   
-            self.points.append(pt) 
-    
-    
+
+        else:
+            self.points.append(pt)
+
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
@@ -136,8 +156,8 @@ class maskLbl:
         x,y = pt
         self.masks[self.edit_mask_idx][1][self.edit_point_idx][0][0] = x
         self.masks[self.edit_mask_idx][1][self.edit_point_idx][0][1] = y
-    
-    
+
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
@@ -159,7 +179,7 @@ class maskLbl:
 
         # self.masks_name.append(label)
 
-    
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
@@ -175,10 +195,10 @@ class maskLbl:
     #______________________________________________________________________________________________________
     def get(self):
         return  list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,2)], self.masks))
-    
+
     def get_labels(self):
         return   self.masks
-    
+
     #______________________________________________________________________________________________________
     #draw no complete mask
     #______________________________________________________________________________________________________
@@ -201,27 +221,27 @@ class maskLbl:
         cnt = cnt.reshape((-1,1,2))
         cv2.drawContours(mask, [cnt], 0, color=self.color_map['fill'], thickness=-1)
         return mask
-    
-    
+
+
     def draw(self):
         masks_img = self.mask_init()
         # print('color lbl',self.label_color[0])
         for lbl, cnt in self.masks:
 
             # print('lastcolor',self.label_color[lbl])
-            
+
             cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=-1)
             for corner in cnt:
                 corner = tuple(corner[0])
                 cv2.circle( masks_img, corner, self.radius, color=self.color_map['point'], thickness=-1)
-            
+
         if len(self.points)>2 and self.points[0]==self.points[-1]:
             masks_img = self.draw_c(masks_img)
-            
+
         else:
             masks_img = self.draw_nc(masks_img)
-            
-        
+
+
         return masks_img
 
 
@@ -232,7 +252,7 @@ class maskLbl:
     def mouse_event(self, status, button, pt):
             if button == 'left_btn' and status in ( 'mouse_press', 'mouse_move'):
                 self.click(pt)
-            
+
             elif button == 'right_btn' and status == 'mouse_press':
                 self.delete_point_or_mask(pt)
 
@@ -241,10 +261,10 @@ class maskLbl:
                 self.release()
 
 
-            
-                
 
-    
+
+
+
 
 
 
@@ -266,11 +286,12 @@ class bboxLbl:
         self.thickness_map = thikness_map
         self.status = 'none'
         self.bboxs = []
+        self.bbox_auto = []
         self.edit_bbox_idex = -1
         self.edit_x_idex = -1
         self.edit_y_idex = -1
         self.radius = 10
-        
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
@@ -287,7 +308,7 @@ class bboxLbl:
     #______________________________________________________________________________________________________
     def click(self,pt):
         pt = self.__denormal_pt__(pt)
-        x,y = pt 
+        x,y = pt
         if self.status == 'none':
             self.status = 'drawing'
             #check if pt is near to a rect corner mode should be 'editing' and store bbox idx and x and y idx
@@ -300,41 +321,41 @@ class bboxLbl:
                             self.edit_x_idex = i
                             self.edit_y_idex = j
                             break
-                            
+
         if self.status=='drawing':
             self.add_points(pt)
-        
+
         if self.status == 'editing':
             self.edit_rect(pt)
-            
-        
-        
-        
-        
-            
-    
+
+
+
+
+
+
+
     #______________________________________________________________________________________________________
-    #Update selected corner 
-    #______________________________________________________________________________________________________    
+    #Update selected corner
+    #______________________________________________________________________________________________________
     def edit_rect(self, pt):
         x,y = pt
         #---------[select bound box and label][only bound box][specific row][x]
         self.bboxs[self.edit_bbox_idex][1][self.edit_x_idex,0] = x
         #---------[select bound box and label][only bound box][specific row][y]
         self.bboxs[self.edit_bbox_idex][1][self.edit_y_idex,1] = y
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
     def add_points(self,pt):
         if len(self.points)<2:
             self.points.append(pt)
         else:
             self.points.pop()
             self.points.append(pt)
-        
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
@@ -349,32 +370,63 @@ class bboxLbl:
         x,y=pt
         #sort box by area beacuse if two or more boxs have intersect area, we want delete small box first
         self.bboxs.sort(key=lambda b: (b[1][1,0]-b[1][0,0]) * (b[1][1,1]-b[1][0,1]))
-        
+
         #check pt is inside of which box
         for i in range(len(self.bboxs)):
             (xmin,ymin),(xmax,ymax) = self.bboxs[i][1]
             if xmin<x<xmax and ymin<y<ymax:
                 self.bboxs.pop(i)
                 break
-    
+
+    # ______________________________________________________________________________________________________
+    #
+    # ______________________________________________________________________________________________________
+    def update_label(self, label, pt):
+        pt = self.__denormal_pt__(pt)
+        x, y = pt
+        # sort box by area beacuse if two or more boxs have intersect area, we want delete small box first
+        self.bboxs.sort(key=lambda b: (b[1][1, 0] - b[1][0, 0]) * (b[1][1, 1] - b[1][0, 1]))
+
+        # check pt is inside of which box
+        for i in range(len(self.bboxs)):
+            (xmin, ymin), (xmax, ymax) = self.bboxs[i][1]
+            if xmin < x < xmax and ymin < y < ymax:
+                self.bboxs[i][0] = label
+                break
+
+    # ______________________________________________________________________________________________________
+    #
+    # ______________________________________________________________________________________________________
+    def clicked_in_defect(self, pt):
+        pt = self.__denormal_pt__(pt)
+        x, y = pt
+        # sort box by area beacuse if two or more boxs have intersect area, we want delete small box first
+        self.bboxs.sort(key=lambda b: (b[1][1, 0] - b[1][0, 0]) * (b[1][1, 1] - b[1][0, 1]))
+
+        # check pt is inside of which box
+        for i in range(len(self.bboxs)):
+            (xmin, ymin), (xmax, ymax) = self.bboxs[i][1]
+            if xmin < x < xmax and ymin < y < ymax:
+                return True
+        return False
 
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
-    def is_drawing_finish(self):
-        pass
-                    
+    # def is_drawing_finish(self):
+    #     pass
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
     def save(self, label):
         if len(self.points)==2 and self.status =='finish':
-            
+
             #first corner should be top-left and second corner shoud be bottom right
             (x1,y1), (x2,y2) = self.points
             xmin, xmax = min(x1,x2) , max(x1,x2)
             ymin, ymax = min(y1,y2) , max(y1,y2)
-            
+
             #only add enough big bbox
             if xmax-xmin>5 and ymax-ymin>5:
                 bbox = np.array( [[xmin,ymin], [xmax, ymax]] )
@@ -388,18 +440,22 @@ class bboxLbl:
             ymin,ymax = min(y1,y2), max(y1,y2)
             self.bboxs[self.edit_bbox_idex][1][0]=[xmin,ymin]
             self.bboxs[self.edit_bbox_idex][1][1]=[xmax,ymax]
-            
+
         self.status ='none'
         self.points = []
-        
-    
+
+
 
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
     def finish_drawing(self):
-        self.status ='finish'
-        #self.points = []      
+        if len(self.points) == 2:
+            self.status ='finish'
+        else:
+            self.points = []
+            self.status ='none'
+        #self.points = []
 
     #______________________________________________________________________________________________________
     #
@@ -416,24 +472,24 @@ class bboxLbl:
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
-    
-    
+
+
     def draw(self):
         bbox_img = self.image_init()
-        
+
         for lbl, bbox in self.bboxs:
-            pt1,pt2 = bbox 
+            pt1,pt2 = bbox
             cv2.rectangle(bbox_img, tuple(pt1), tuple(pt2), color=self.label_color[lbl], thickness=self.thickness_map['bbox'])
-            
+
             #draw corner points
             for x in bbox[:,0]:
                 for y in bbox[:,1]:
                     cv2.circle(bbox_img, (x,y),self.radius, color=self.color_map['point'],thickness=-1)
-            
+
         if len(self.points)==2:
             bbox_img = self.draw_nc(bbox_img)
-            
-        
+
+
         return bbox_img
 
     #______________________________________________________________________________________________________
@@ -442,7 +498,7 @@ class bboxLbl:
     def mouse_event(self, status, button, pt):
             if button == 'left_btn' and status in ( 'mouse_press', 'mouse_move'):
                 self.click(pt)
-            
+
             elif button == 'right_btn' and status == 'mouse_press':
                 self.delete_bbox(pt)
 
@@ -455,7 +511,7 @@ class bboxLbl:
     #     return  list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,2)], self.bboxs))
     # #____
 
-    
+
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
@@ -465,7 +521,7 @@ class bboxLbl:
         self.status ='none'
         self.points = []
 
-    
+
     def get(self):
         return self.bboxs
 
@@ -484,15 +540,15 @@ if __name__ == '__main__':
                 status = 'lc'
             if event == cv2.EVENT_LBUTTONUP:
                 status = 'lcn'
-            
+
             if event == cv2.EVENT_RBUTTONDOWN:
                 status = 'rc'
             if event == cv2.EVENT_RBUTTONUP:
-                status = ''    
-                
+                status = ''
+
             gx,gy = x,y
-            
-            
+
+
         # Create a black image, a window and bind the function to window
         img = np.zeros((512,700,3), np.uint8)
         img+=200
@@ -507,14 +563,14 @@ if __name__ == '__main__':
                 bbox_lbl.click((gx,gy))
                 bboxs_img = bbox_lbl.draw_bboxs()
                 res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
-                    
+
             if status =='lcn':
                 bbox_lbl.save(np.random.choice(['a1','a2']))
                 bboxs_img = bbox_lbl.draw_bboxs()
                 res = cv2.addWeighted(img,0.5, bboxs_img,0.5,1)
-                
+
                 #status = ''
-            
+
             if status =='rc':
                 bbox_lbl.delete_bbox((gx,gy))
                 bboxs_img = bbox_lbl.draw_bboxs()
@@ -554,15 +610,15 @@ if __name__ == '__main__':
                 status = 'lc'
             if event == cv2.EVENT_LBUTTONUP:
                 status = 'lcn'
-            
+
             if event == cv2.EVENT_RBUTTONDOWN:
                 status = 'rc'
             if event == cv2.EVENT_RBUTTONUP:
-                status = ''    
-                
+                status = ''
+
             gx,gy = x,y
-            
-            
+
+
         # Create a black image, a window and bind the function to window
         img = np.zeros((512,700,3), np.uint8)
         cv2.namedWindow('image')
@@ -572,24 +628,24 @@ if __name__ == '__main__':
         res = np.copy(img)
         while(1):
             cv2.imshow('image',res)
-            
+
             if status=='lc':
                 mask_label.click((gx,gy))
-                
-                
-                
+
+
+
                 #status = ''
                 if mask_label.is_drawing_finish():
                     mask_label.save(np.random.choice(['a1','a2']))
                 mask = mask_label.draw()
                 res = cv2.addWeighted(img,0.5, mask,0.5,1)
-            
-            
+
+
             if status=='lcn':
                 #print(mask_label.is_drawing_finish())
                 mask_label.release()
-                
-            
+
+
             if status =='rc':
                 mask_label.delete_point_or_mask((gx,gy))
                 mask = mask_label.draw()
