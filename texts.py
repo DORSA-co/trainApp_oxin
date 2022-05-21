@@ -83,7 +83,11 @@ WARNINGS={
                  'en': ' Error while reading defect/perfect images '},
 
         'BINARYLIST_MAXIMIZE_IMAGE_ERROR': {'fa': ' خطای نمایش تصویر ',
-                 'en': ' Error while opening image '}
+                 'en': ' Error while opening image '},
+        
+        'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
+                 'en': ' Are you sure want to logout ? '}
+        
 
 }
 MESSEGES = {

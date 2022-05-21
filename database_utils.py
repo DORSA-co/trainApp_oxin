@@ -16,6 +16,7 @@ class dataBaseUtils():
         self.defects_table = 'defects_info'
         self.sign_tables='sign_tables'
         self.table_cameras = 'camera_settings'
+        self.table_user='users'
 
     #________________________________________________________________
     #
@@ -207,6 +208,14 @@ class dataBaseUtils():
 
 
 
+    def search_user(self,input_user_name):
+        try:
+            record = self.db.search( self.table_user , 'user_name', input_user_name )[0]
+            print(record)
+            #print('asd',record)
+            return record
+        except:
+            return []
 
 
 
