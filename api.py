@@ -751,6 +751,7 @@ class API:
         self.logged_in=False
         self.ui.show_image_btn(self.ui.login_btn,'images/icons/person.png')
         self.ui.user_name.setText('')
+        self.ui.stackedWidget.setCurrentWidget(self.ui.page_label)
 
 
     def check_login(self):
@@ -763,6 +764,7 @@ class API:
             self.ui.user_name.setText(self.login_info[1]['user_name'])
             self.ui.show_image_btn(self.ui.login_btn,'images/logout.png')
             self.logged_in=True
+            self.ui.stackedWidget.setCurrentWidget(self.ui.page_user_profile)
 
     def set_label(self):
         mouse_position = self.mouse.get_relative_position()
