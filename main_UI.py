@@ -820,7 +820,6 @@ class UI_main_window(QMainWindow, ui):
         self.bounding_btn.setEnabled(True)
         self.delete_btn.setEnabled(True)
         self.heatmap_btn.setEnabled(True)
-        self.auto_defects_check.setEnabled(True)
         self.fs = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
         if scale == 1:
             self.image.setScaledContents(True)

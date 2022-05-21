@@ -627,25 +627,25 @@ class API:
         mouse_pt = self.mouse.get_relative_position()
 
         if self.ui.get_zoom_type() is None:
-            try:
-                sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-                img = Utils.read_image(img_path, 'color')
-                self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt)
-                if self.label_bakcend[label_type].is_drawing_finish():
-                    self.label_bakcend[label_type].save('NO LABEL')
-                label_img = self.label_bakcend[label_type].draw()
-                img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
-                self.ui.show_image_in_label(img, self.scale, self.position)
-                self.img = img
+            # try:
+            sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+            img = Utils.read_image(img_path, 'color')
+            self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt)
+            if self.label_bakcend[label_type].is_drawing_finish():
+                self.label_bakcend[label_type].save('NO LABEL')
+            label_img = self.label_bakcend[label_type].draw()
+            img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
+            self.ui.show_image_in_label(img, self.scale, self.position)
+            self.img = img
 
-                labels = self.label_bakcend[label_type].get()
-                self.label_memory.add(img_path,
-                                      labels,
-                                      label_type)
-                self.ui.show_labels(labels, label_type)
-            except:
-                self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
-                return
+            labels = self.label_bakcend[label_type].get()
+            self.label_memory.add(img_path,
+                                    labels,
+                                    label_type)
+            self.ui.show_labels(labels, label_type)
+            # except:
+            #     self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
+            #     return
 
         elif self.ui.get_zoom_type() != 'drag':
             if mouse_status == 'mouse_press':

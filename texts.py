@@ -54,7 +54,7 @@ WARNINGS={
                  'en': ' Address already exist '},
         
         'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
-                 'en': ' Are you sure want to logout ? '}
+                 'en': ' Are you sure want to logout ? '},
         
 
         'Cmamera_successful':{'fa': ' دوربین متصل شد',
