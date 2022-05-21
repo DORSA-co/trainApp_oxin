@@ -173,7 +173,8 @@ def set_image_to_ui(label_name, image, no_image=False):
 
 # read annotation files and create mask
 def create_mask_from_annotation_file(db_obj, image, annotation_path):
-    #print('annot:', annotation_path)
+
+    print('annot:', annotation_path)
     # create image mask
     image_shape = image.shape
     image_mask = np.zeros((image_shape))
