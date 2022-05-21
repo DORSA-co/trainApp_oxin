@@ -52,6 +52,9 @@ from FileDialog import FileDialog
 from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
+from login_win.login_api import login_API
+
+
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
 NCAMERA = 12
@@ -97,7 +100,7 @@ class API:
 
         self.ui.set_default_db_parms(self.ds.binary_path, self.size)
 
-
+        self.logged_in=False
         # Create labeling window
         # -------------------------------------
 
@@ -183,6 +186,7 @@ class API:
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
         self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
         self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
+        self.ui.login_btn.clicked.connect(partial(self.show_login))
         # self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
 
         # labeling
@@ -660,6 +664,46 @@ class API:
             self.ui.labeling_win.show()
             print('end show_labeling')
 
+    def show_login(self):
+
+        if self.logged_in==False:
+
+            login_window=self.ui.ret_create_login()
+            self.login_api=login_API(login_window)
+            # self.login_api.button_connector()
+            login_window.login_btn.clicked.connect(partial(self.check_login))
+            print('show_ui')
+            self.ui.login_window.show()
+        else :
+            print('user_loged_in')
+            self.show_message_logout()
+        
+
+    def show_message_logout(self):
+
+            t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
+                                        texts.WARNINGS['CONFIRM_LOGOUT'][self.language])
+            if not t:
+                return
+            else:
+                self.log_out()
+       
+    def log_out(self):
+        self.logged_in=False
+        self.ui.show_image_btn(self.ui.login_btn,'images/icons/person.png')
+        self.ui.user_name.setText('')
+
+
+    def check_login(self):
+
+        self.login_info=self.login_api.check_login()
+        print('ret 0 ',self.login_info[0])
+        if self.login_info[0]==True:
+
+            print('ok')
+            self.ui.user_name.setText(self.login_info[1]['user_name'])
+            self.ui.show_image_btn(self.ui.login_btn,'images/logout.png')
+            self.logged_in=True
 
     def set_label(self):
 

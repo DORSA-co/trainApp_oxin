@@ -51,7 +51,11 @@ WARNINGS={
                  'en': ' Dataset number is out of range '},
 
         'DATASET_EXIST': {'fa': ' آدرس وارد شده وجود دارد ',
-                 'en': ' Address already exist '}
+                 'en': ' Address already exist '},
+        
+        'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
+                 'en': ' Are you sure want to logout ? '}
+        
 
 }
 

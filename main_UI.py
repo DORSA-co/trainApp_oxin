@@ -9,11 +9,13 @@ from pyqt5_plugins import *
 from PySide6.QtCharts import *
 from PySide6.QtCore import *
 import PySide6.QtGui as PG
+from PySide6.QtGui import QImage as sQImage
+from PySide6.QtGui import QPixmap as sQPixmap
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 from PyQt5.QtGui import QPainter
 import pandas as pd
-
+# from PySide6.QtGui import QPixmap as sQPixmap
 from FileDialog import FileDialog
 from app_settings import Settings
 from backend import data_grabber
@@ -37,6 +39,10 @@ from PyQt5.QtGui import QPainter
 from consts.keyboards_keys import KEYS
 from consts.pages_indexs import PAGES_IDX
 import texts
+
+from login_win.login_UI import UI_login_window
+# from login_win.login_api import 
+
 
 ui, _ = loadUiType("UI/oxin.ui")
 os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
@@ -81,20 +87,18 @@ class UI_main_window(QMainWindow, ui):
 
         # SET FONT & SIZE
         # /////////////////////////////////////////////
-        self.label_6.setFont(QFont('Arial', 10))
+        # self.label_6.setFont(QFont('Arial', 10))
 
         # self.toggleButton.clicked.connect(self.toggleMenu(True))
 
         # CONNECTED WINDOWS
         # //////////////////////////////////////////////
         self.load_sheets_win = data_loader()
+        
 
-        # self.labeling_win=labeling()
-        # labeling_api.labeling_API(self.labeling_win)
         self.labeling_win = None
-
         self.labeling_win = labeling()
-        # labeling_api.labeling_API(self.labeling_win)
+        self.login_window=UI_login_window()
 
         useCustomTheme = False
         themeFile = "themes\py_dracula_light.qss"
@@ -181,6 +185,12 @@ class UI_main_window(QMainWindow, ui):
         self.init_training_page()
         self.b_add_ds.clicked.connect(self.buttonClick)
         self.b_add_cancel.clicked.connect(self.buttonClick)
+
+        # user page
+
+        self.create_new_database.clicked.connect(self.buttonClick)
+        self.my_databases_2.clicked.connect(self.buttonClick)
+
 
         self._old_pos = None
 
@@ -395,30 +405,9 @@ class UI_main_window(QMainWindow, ui):
     # ///////////////////////////////////////////////////////////////
 
     def show_login(self):
-        width = self.frame_login.width()
-        # print('width',width)
-        if width == 0:
-            self.left_box = QPropertyAnimation(self.frame_login, b"maximumWidth")
-            self.left_box.setDuration(Settings.TIME_ANIMATION)
-            self.left_box.setStartValue(width)
-            self.left_box.setEndValue(600)
-            self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
-            self.group = QParallelAnimationGroup()
-            self.group.addAnimation(self.left_box)
-            # print('open')
-            # self.group.addAnimation(self.right_box)
-            self.group.start()
-        else:
-            self.left_box = QPropertyAnimation(self.frame_login, b"maximumWidth")
-            self.left_box.setDuration(Settings.TIME_ANIMATION)
-            self.left_box.setStartValue(width)
-            self.left_box.setEndValue(0)
-            self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
-            # print('close')
-            self.group = QParallelAnimationGroup()
-            self.group.addAnimation(self.left_box)
-            # self.group.addAnimation(self.right_box)
-            self.group.start()
+
+        self.login_window.show()
+        
 
     def setting_win(self):
         height = self.frame_settin2.height()
@@ -682,6 +671,11 @@ class UI_main_window(QMainWindow, ui):
         self.load_sheets_win.show()
 
         # print(x,y)
+
+    def ret_create_login(self):
+
+        self.login_window=UI_login_window()
+        return self.login_window
 
     def ret_create_labeling(self):
         self.labeling_win = labeling()
@@ -1021,7 +1015,8 @@ class UI_main_window(QMainWindow, ui):
             self.def_no_defect()
 
         if btnName == 'login_btn':
-            self.show_login()
+            print('click')
+            # self.show_login()
 
         if btnName == 'setting_btn':
             self.setting_win()
@@ -1077,6 +1072,12 @@ class UI_main_window(QMainWindow, ui):
         if self.extraLeftBox.width() != 0:
             self.hi()
 
+        if btnName == 'create_new_database':
+            self.stackedWidget_2.setCurrentWidget(self.create_database)
+
+        if btnName == 'my_databases_2':
+            self.stackedWidget_2.setCurrentWidget(self.my_databases)
+
         # PRINT BTN NAME
         # print(f'Button "{btnName}" pressed!')
 
@@ -1123,6 +1124,9 @@ class UI_main_window(QMainWindow, ui):
         self.plabel_coil_num_txt.setText(str(sheet.get_id()))
         self.plabel_date_txt.setText(str(sheet.get_date_string()))
         self.plabel_cam_txt.setText(str(pos[-1][0]))
+
+    def show_image_btn(self,label_name,img_path):
+        label_name.setIcon(sQPixmap.fromImage(sQImage(img_path)))
 
     # def get_label_type(self):
     #     if self.tabWidget_defect.currentTabText() =='Mask':
