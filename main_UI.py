@@ -694,14 +694,14 @@ class UI_main_window(QMainWindow, ui):
         self.tabWidget_defect.setCurrentIndex(0)
 
     def zoom_in(self):
-        cursor = PG.QPixmap('/home/reyhane/PycharmProjects/trainApp_oxin2/images/zoom-in_cursor.png')
+        cursor = PG.QPixmap('images/zoom-in_cursor.png')
         cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
         self.image.setCursor(PG.QCursor(cursor))
 
         self.zoom_type = 'zoom_in'
 
     def zoom_out(self):
-        cursor = PG.QPixmap('/home/reyhane/PycharmProjects/trainApp_oxin2/images/zoom-out_cursor.png')
+        cursor = PG.QPixmap('images/zoom-out_cursor.png')
         cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
         self.image.setCursor(PG.QCursor(cursor))
 

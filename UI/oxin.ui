@@ -5104,7 +5104,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>517</height>
+                                     <height>17</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -5347,7 +5347,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>517</height>
+                                     <height>17</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -6602,7 +6602,45 @@ QToolTip {
                                </property>
                               </widget>
                              </item>
-                             <item alignment="Qt::AlignVCenter">
+                             <item>
+                              <widget class="QRadioButton" name="no_defect">
+                               <property name="maximumSize">
+                                <size>
+                                 <width>70</width>
+                                 <height>16777215</height>
+                                </size>
+                               </property>
+                               <property name="cursor">
+                                <cursorShape>PointingHandCursor</cursorShape>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QRadioButton {
+    background-color:       Transparent;
+    color:                  Black;
+}
+
+QRadioButton::indicator {
+    width:                  10px;
+    height:                 10px;
+    border-radius:          7px;
+}
+
+QRadioButton::indicator:checked {
+    background-color:       red;
+    border:                 2px solid red;
+}
+
+QRadioButton::indicator:unchecked {
+    background-color:      White;
+    border:                 2px solid white;
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>No</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
                               <widget class="QRadioButton" name="yes_defect">
                                <property name="maximumSize">
                                 <size>
@@ -6639,44 +6677,6 @@ QRadioButton::indicator:unchecked {
                                </property>
                                <property name="text">
                                 <string>Yes</string>
-                               </property>
-                              </widget>
-                             </item>
-                             <item>
-                              <widget class="QRadioButton" name="no_defect">
-                               <property name="maximumSize">
-                                <size>
-                                 <width>70</width>
-                                 <height>16777215</height>
-                                </size>
-                               </property>
-                               <property name="cursor">
-                                <cursorShape>PointingHandCursor</cursorShape>
-                               </property>
-                               <property name="styleSheet">
-                                <string notr="true">QRadioButton {
-    background-color:       Transparent;
-    color:                  Black;
-}
-
-QRadioButton::indicator {
-    width:                  10px;
-    height:                 10px;
-    border-radius:          7px;
-}
-
-QRadioButton::indicator:checked {
-    background-color:       red;
-    border:                 2px solid red;
-}
-
-QRadioButton::indicator:unchecked {
-    background-color:      White;
-    border:                 2px solid white;
-}</string>
-                               </property>
-                               <property name="text">
-                                <string>No</string>
                                </property>
                               </widget>
                              </item>
@@ -8414,7 +8414,7 @@ QPushButton:hover {
                              <property name="frameShadow">
                               <enum>QFrame::Plain</enum>
                              </property>
-                             <layout class="QHBoxLayout" name="horizontalLayout_158">
+                             <layout class="QHBoxLayout" name="horizontalLayout_158_2">
                               <property name="spacing">
                                <number>10</number>
                               </property>
@@ -8431,14 +8431,14 @@ QPushButton:hover {
                                <number>0</number>
                               </property>
                               <item>
-                               <widget class="QFrame" name="frame_74">
+                               <widget class="QFrame" name="frame_74_2">
                                 <property name="frameShape">
                                  <enum>QFrame::Panel</enum>
                                 </property>
                                 <property name="frameShadow">
                                  <enum>QFrame::Raised</enum>
                                 </property>
-                                <layout class="QVBoxLayout" name="verticalLayout_55">
+                                <layout class="QVBoxLayout" name="verticalLayout_55_2">
                                  <property name="spacing">
                                   <number>0</number>
                                  </property>
@@ -8455,7 +8455,7 @@ QPushButton:hover {
                                   <number>10</number>
                                  </property>
                                  <item>
-                                  <widget class="QFrame" name="frame_69">
+                                  <widget class="QFrame" name="frame_69_2">
                                    <property name="minimumSize">
                                     <size>
                                      <width>720</width>
@@ -8474,7 +8474,7 @@ QPushButton:hover {
                                    <property name="frameShadow">
                                     <enum>QFrame::Raised</enum>
                                    </property>
-                                   <layout class="QVBoxLayout" name="verticalLayout_54">
+                                   <layout class="QVBoxLayout" name="verticalLayout_54_2">
                                     <property name="spacing">
                                      <number>0</number>
                                     </property>
@@ -8491,7 +8491,7 @@ QPushButton:hover {
                                      <number>0</number>
                                     </property>
                                     <item>
-                                     <widget class="QFrame" name="frame_71">
+                                     <widget class="QFrame" name="frame_71_2">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -8510,7 +8510,7 @@ QPushButton:hover {
                                       <property name="frameShadow">
                                        <enum>QFrame::Raised</enum>
                                       </property>
-                                      <layout class="QHBoxLayout" name="horizontalLayout_156">
+                                      <layout class="QHBoxLayout" name="horizontalLayout_156_2">
                                        <property name="spacing">
                                         <number>0</number>
                                        </property>
@@ -8527,7 +8527,7 @@ QPushButton:hover {
                                         <number>0</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_11">
+                                        <widget class="QLabel" name="label_11_2">
                                          <property name="minimumSize">
                                           <size>
                                            <width>110</width>
@@ -8565,7 +8565,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <spacer name="horizontalSpacer_30">
+                                        <spacer name="horizontalSpacer_30_2">
                                          <property name="orientation">
                                           <enum>Qt::Horizontal</enum>
                                          </property>
@@ -8603,7 +8603,7 @@ QPushButton:hover {
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QFrame" name="frame_72">
+                                     <widget class="QFrame" name="frame_72_2">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -8622,7 +8622,7 @@ QPushButton:hover {
                                       <property name="frameShadow">
                                        <enum>QFrame::Raised</enum>
                                       </property>
-                                      <layout class="QHBoxLayout" name="horizontalLayout_157">
+                                      <layout class="QHBoxLayout" name="horizontalLayout_157_2">
                                        <property name="spacing">
                                         <number>0</number>
                                        </property>
@@ -8639,7 +8639,7 @@ QPushButton:hover {
                                         <number>0</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_12">
+                                        <widget class="QLabel" name="label_12_2">
                                          <property name="minimumSize">
                                           <size>
                                            <width>110</width>
@@ -8758,7 +8758,7 @@ QPushButton:hover {
                                </widget>
                               </item>
                               <item>
-                               <widget class="QFrame" name="frame_73">
+                               <widget class="QFrame" name="frame_73_2">
                                 <property name="sizePolicy">
                                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                                   <horstretch>100</horstretch>
@@ -9698,7 +9698,7 @@ QRadioButton::indicator:unchecked {
                                   </widget>
                                  </item>
                                  <item>
-                                  <spacer name="horizontalSpacer_19">
+                                  <spacer name="horizontalSpacer_19_2">
                                    <property name="orientation">
                                     <enum>Qt::Horizontal</enum>
                                    </property>
@@ -15371,7 +15371,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>368</width>
+                                 <width>218</width>
                                  <height>218</height>
                                 </rect>
                                </property>
