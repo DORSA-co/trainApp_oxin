@@ -16,7 +16,7 @@ from matplotlib import pyplot as plt
 
 from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap_bbox
 from app_settings import Settings
-from backend import data_grabber, camera_connection
+from backend import classification_list_funcs, data_grabber, camera_connection, colors_pallete
 from backend.mouse import Mouse
 from backend.keyboard import Keyboard
 # from backend import Label
@@ -34,7 +34,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
-from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs
+from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs, dataset
 
 import database_utils
 from utils import *
@@ -155,6 +155,18 @@ class API:
         # binarylist image object
         self.binary_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
 
+        # ________________________________________________________________
+        # create classlist slider on UI
+        self.classification_image_list_name = 'classlist'
+        self.classlist_slider_check = []
+        self.classlist_slider_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
+                                                                                        db_obj=self.db,
+                                                                                        frame_obj=self.ui.class_list_slider_frame,
+                                                                                        prefix=self.classification_image_list_name))
+        # classlist image object
+        self.classification_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
+        #_____________________________________________________________________
+
         # DEBUG_FUNCTIONS
         # -------------------------------------
         # self.__debug_load_sheet__(['996','997'])
@@ -231,8 +243,9 @@ class API:
         # binary-model history
         self.ui.binary_tabel_prev.clicked.connect(partial(lambda: self.binary_model_tabel_nextorprev(next=False)))
         self.ui.binary_tabel_next.clicked.connect(partial(lambda: self.binary_model_tabel_nextorprev(next=True)))
-        self.ui.Binary_btn.clicked.connect(partial(self.refresh_binary_models_table))
-        self.ui.binary_history.clicked.connect(partial(self.refresh_binary_models_table))
+        self.ui.Binary_btn.clicked.connect(partial(self.refresh_binary_models_table_onevent))
+        self.ui.binary_history.clicked.connect(partial(self.refresh_binary_models_table_onevent))
+        self.ui.binary_table_refresh_btn.clicked.connect(partial(self.refresh_binary_models_table_onevent))
         self.ui.binary_filter_btn.clicked.connect(partial(lambda: self.refresh_binary_models_table(filter_mode=True)))
         self.ui.binary_clearfilter_btn.clicked.connect(partial(self.clear_filters))
 
@@ -247,6 +260,15 @@ class API:
             partial(lambda: self.update_binary_images_on_ui(defect=True, prevornext='prev')))
         self.ui.binary_list_defect_next_btn.clicked.connect(
             partial(lambda: self.update_binary_images_on_ui(defect=True, prevornext='next')))
+
+        # classification page
+        self.ui.Classification_btn.clicked.connect(partial(self.refresh_classes_table))
+        self.ui.classlist_show_related_img_btn.clicked.connect(partial(self.show_class_related_images))
+        self.ui.classlist_prev_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='prev')))
+        self.ui.classlist_next_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='next')))
+        # train model
+        self.ui.class_check_train_btn.clicked.connect(partial(self.check_classification_train_params))
+        
 
     def mouse_connector(self):
         for _, technical_widget in self.ui.get_technical().items():
@@ -817,6 +839,7 @@ class API:
         # print('asdqwdf')
         return parent_path
 
+
     def set_b_parms(self):
 
         b_parms = self.ui.get_binary_parms()
@@ -828,6 +851,7 @@ class API:
         #
         bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
+
 
     def update_b_chart_axes(self, nepoch):
         for chart_postfix in self.ui.chart_names:
@@ -843,7 +867,7 @@ class API:
 
     def assign_new_value_to_b_chart(self, last_epoch, logs):
         # print('here', last_epoch, logs)
-        chart_funcs.update_chart(ui_obj=self.ui, chart_postfixes=self.ui.chart_names, last_epoch=last_epoch, logs=logs)
+        chart_funcs.update_chart(ui_obj=self.ui, chart_postfixes=self.ui.chart_names, last_epoch=last_epoch, logs=logs, scroll_obj=self.ui.binary_chart_scrollbar)
 
     def set_l_parms(self):
 
@@ -1105,6 +1129,12 @@ class API:
 
     # _________________________________________________________________________________________________
     # binary-model history page functions
+    def refresh_binary_models_table_onevent(self):
+        self.bmodel_tabel_itr = 1
+        self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
+        self.refresh_binary_models_table(get_count=True)
+        self.refresh_binary_models_table()
+
 
     def refresh_binary_models_table(self, nextorprev=False, get_count=False, filter_mode=False):
         if get_count:
@@ -1279,6 +1309,7 @@ class API:
         else:
             self.ui.set_warning(texts.WARNINGS['BUILD_BINARYLIST_SLIDER_ERROR'][self.language], 'binarylist', level=2)
 
+
     # update slider images
     def update_binary_images_on_ui(self, defect=False, prevornext='False'):
         # next or prev on list
@@ -1318,6 +1349,106 @@ class API:
         # validate
         if not res:
             self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=2)
+
+
+    
+    # classification page
+    #------------------------------------------------------------------------------------------------------------------------
+    # get defects from database and apply to defects table
+    def refresh_classes_table(self):
+        defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
+        defects_list = classification_list_funcs.change_defect_group_id_to_name(db_obj=self.db, defects_list=defects_list)
+        classification_list_funcs.set_defects_on_ui(ui_obj=self.ui, defects_list=defects_list)
+        classification_list_funcs.set_defects_on_train_ui(ui_obj=self.ui, defects_list=defects_list)
+    
+
+    # show class related images on UI
+    def show_class_related_images(self):
+        # get selected defects from UI
+        defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
+        selected_defects = classification_list_funcs.get_selected_defects(ui_obj=self.ui, defects_list=defects_list)
+        if len(selected_defects) > 1:
+            self.ui.show_mesagges(self.ui.classlist_msg_label, 'Cant select more than one class', color=colors_pallete.failed_red)
+        elif len(selected_defects) == 0:
+            self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
+        else:
+            # get dataset
+            # read all datasets in table (must update)
+            datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
+            # get image/annots list related to defect
+            annotation_list, image_list = classification_list_funcs.load_images_related_to_defect(datasets_list=datasets_list, defect_id=selected_defects[0])
+
+            # create list object
+            self.classification_image_list.add(mylist=image_list, mylist_annots=annotation_list, name=self.classification_image_list_name)
+            # create next and prev funcs
+            self.classification_image_list_next_func = self.classification_image_list.build_next_func(name=self.classification_image_list_name)
+            self.classification_image_list_prev_func = self.classification_image_list.build_prev_func(name=self.classification_image_list_name)
+            # 
+            self.update_classlist_images_on_ui()
+            
+            # no images available
+            if len(annotation_list) == 0 and len(image_list) == 0:
+                # msg
+                self.ui.show_mesagges(self.ui.classlist_msg_label, 'No image(s) available with this defect', color=colors_pallete.failed_red)
+                # disable next/prev/buttons
+                self.ui.classlist_prev_btn.setEnabled(False)
+                self.ui.classlist_next_btn.setEnabled(False)
+            else:
+                # msg
+                self.ui.show_mesagges(self.ui.classlist_msg_label, 'Images with this defect are loaded', color=colors_pallete.successfull_green)
+                # disable next/prev/buttons
+                self.ui.classlist_prev_btn.setEnabled(True)
+                self.ui.classlist_next_btn.setEnabled(True)
+        
+    
+    # update slider images
+    def update_classlist_images_on_ui(self, prevornext='False'):
+        # next or prev on list
+        if prevornext == 'next':
+            self.classification_image_list_next_func()
+        # prev
+        elif prevornext == 'prev':
+            self.classification_image_list_prev_func()
+
+        # get curent image list to set to UI
+        current_image_list, current_annots_list = self.classification_image_list.get_n_current(name=self.classification_image_list_name, get_annots=True)
+
+        # set/update images on UI
+        res = binary_list_funcs.set_image_to_ui_slider_full_path(ui_obj=self.ui,
+                                                                image_path_list=current_image_list,
+                                                                annot_path_list=current_annots_list,
+                                                                prefix=self.classification_image_list_name)
+
+        # validate (must update)
+        # if not res:
+        #     self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=2)
+
+    
+    # check classification params
+    def check_classification_train_params(self):
+        # get train params from UI
+        cls_parms = self.ui.get_classification_parms()
+        defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
+        selected_defects = classification_list_funcs.get_selected_defects_for_train(ui_obj=self.ui, defects_list=defects_list)
+        #
+        if len(selected_defects) == 0:
+            self.ui.show_mesagges(self.ui.classification_train_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
+        
+        else:
+            cls_parms += [selected_defects]
+            print('cls params:', cls_parms)
+        # update chart axes given train data
+        #self.update_b_chart_axes(b_parms[3])
+        #
+        #bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
+        #binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
+
+            
+
+
+            
+
+
 
     def set_available_caemras(self):
 

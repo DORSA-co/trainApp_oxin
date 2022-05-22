@@ -312,8 +312,8 @@ class dataBase:
     #--------------------------------------------------------------------------
 
 
-    def get_all_content(self,table_name, count=False, limit=False, limit_size=20, offset=0):
-
+    def get_all_content(self,table_name, count=False, limit=False, limit_size=20, offset=0, reverse_order=False):
+        sort_order = 'DESC' if reverse_order else 'ASC'
         try:
             if self.check_connection:
                 cursor,connection=self.connect()
@@ -322,9 +322,9 @@ class dataBase:
                     sql_select_Query = "select count(*) from {}".format(table_name)
                 else:
                     if not limit:
-                        sql_select_Query = "select * from {}".format(table_name)
+                        sql_select_Query = "select * from {} ORDER BY id {}".format(table_name, sort_order)
                     else:
-                        sql_select_Query = "select * from {} LIMIT {} OFFSET {}".format(table_name, limit_size, offset)
+                        sql_select_Query = "select * from {} ORDER BY id {} LIMIT {} OFFSET {}".format(table_name, sort_order, limit_size, offset)
                     
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
                 # cursor.execute(sql_select_Query)

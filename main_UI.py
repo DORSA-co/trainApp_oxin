@@ -30,7 +30,7 @@ from functools import partial
 
 from FileDialog import FileDialog
 from app_settings import Settings
-from backend import data_grabber, chart_funcs , camera_connection
+from backend import data_grabber, chart_funcs , camera_connection, colors_pallete
 import detect_lenguage
 import setting
 import api
@@ -174,7 +174,7 @@ class UI_main_window(QMainWindow, ui):
         # QPixmap pixmapTarget = QPixmap(":/icons/images/icons/2png);
         # pixmapTarget = pixmapTarget.scaled(size-5, size-5, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         # ui->label_image_power->setPixmap(pixmapTarget );
-        self.classification_class_list_table()
+        #self.classification_class_list_table()
 
         # data aquization page
         self.load_coil_btn.clicked.connect(self.buttonClick)
@@ -220,20 +220,41 @@ class UI_main_window(QMainWindow, ui):
         # binary chart
         # accuracy
         chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_loss_frame, chart_postfix=self.chart_names[0],
-                                                chart_title='Loss', legend_train='Train', legend_val='Validation',
+                                                chart_title='Loss', legend_train='Train', legend_val='Validation', scroll_obj=self.binary_chart_scrollbar,
                                                 axisX_title='Epoch', axisY_title='Loss', checkbox_obj=self.binary_chart_checkbox, legend_visible=False, axisY_set_range=False)
 
         chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_acc_frame, chart_postfix=self.chart_names[1],
-                                                chart_title='Accuracy', legend_train='Train', legend_val='Validation',
+                                                chart_title='Accuracy', legend_train='Train', legend_val='Validation', scroll_obj=self.binary_chart_scrollbar,
                                                 axisX_title='Epoch', axisY_title='Accuracy', checkbox_obj=self.binary_chart_checkbox)
         # precission
         chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_prec_frame, chart_postfix=self.chart_names[2],
-                                                chart_title='Precision', legend_train='Train', legend_val='Validation',
+                                                chart_title='Precision', legend_train='Train', legend_val='Validation', scroll_obj=self.binary_chart_scrollbar,
                                                 axisX_title='Epoch', axisY_title='Precision', checkbox_obj=self.binary_chart_checkbox)
         # recall
         chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_recall_frame, chart_postfix=self.chart_names[3],
-                                                chart_title='Recall', legend_train='Train', legend_val='Validation',
+                                                chart_title='Recall', legend_train='Train', legend_val='Validation', scroll_obj=self.binary_chart_scrollbar,
                                                 axisX_title='Epoch', axisY_title='Recall', checkbox_obj=self.binary_chart_checkbox, axisX_visible=True)
+        
+        # -------------------------
+        # classification chart
+        # binary chart
+        # accuracy
+        self.cls_chart_names = ['loss_cls','accuracy_cls', 'recall_cls', 'precision_cls']
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.cls_chart_loss_frame, chart_postfix=self.cls_chart_names[0],
+                                                chart_title='Loss', legend_train='Train', legend_val='Validation', scroll_obj=self.cls_chart_scrollbar,
+                                                axisX_title='Epoch', axisY_title='Loss', checkbox_obj=self.cls_chart_checkbox, legend_visible=False, axisY_set_range=False)
+
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.cls_chart_acc_frame, chart_postfix=self.cls_chart_names[1],
+                                                chart_title='Accuracy', legend_train='Train', legend_val='Validation', scroll_obj=self.cls_chart_scrollbar,
+                                                axisX_title='Epoch', axisY_title='Accuracy', checkbox_obj=self.cls_chart_checkbox)
+        # precission
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.cls_chart_recall_frame, chart_postfix=self.cls_chart_names[2],
+                                                chart_title='Precision', legend_train='Train', legend_val='Validation', scroll_obj=self.cls_chart_scrollbar,
+                                                axisX_title='Epoch', axisY_title='Precision', checkbox_obj=self.cls_chart_checkbox)
+        # recall
+        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.cls_chart_prec_frame, chart_postfix=self.cls_chart_names[3],
+                                                chart_title='Recall', legend_train='Train', legend_val='Validation', scroll_obj=self.cls_chart_scrollbar,
+                                                axisX_title='Epoch', axisY_title='Recall', checkbox_obj=self.cls_chart_checkbox, axisX_visible=True)
 
         # ----------------------------------------------------------------------------------------------------
 
@@ -599,14 +620,14 @@ class UI_main_window(QMainWindow, ui):
         self.p_image.setPixmap(QPixmap.fromImage(image))
         # print(image)
 
-    def classification_class_list_table(self):
-        self.hh_Labels = ['No', 'Date', 'Name', 'Short name', 'ID', 'Is Defect', 'Group', 'Level', 'Color', 'Number',
-                          'Percentage']
-        self.class_list.setHorizontalHeaderLabels(self.hh_Labels)
+    # def classification_class_list_table(self):
+    #     self.hh_Labels = ['No', 'Date', 'Name', 'Short name', 'ID', 'Is Defect', 'Group', 'Level', 'Color', 'Number',
+    #                       'Percentage']
+    #     self.class_list.setHorizontalHeaderLabels(self.hh_Labels)
 
-        header = self.class_list.horizontalHeader()
-        header = self.class_list.horizontalHeader()
-        header.setSectionResizeMode(QHeaderView.ResizeToContents)
+    #     header = self.class_list.horizontalHeader()
+    #     header = self.class_list.horizontalHeader()
+    #     header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def get_label_type(self):
         return self.label_type
@@ -896,7 +917,9 @@ class UI_main_window(QMainWindow, ui):
     def init_training_page(self):
 
         b_algorithms = ['Xbc', 'Rbe']  # Must change
+        class_algorithms = ['A', 'B']
         self.b_algorithms.addItems(b_algorithms)
+        self.classification_algo_combo.addItems(class_algorithms)
         self.binary_name_filter_combo.addItem('All')
         self.binary_name_filter_combo.addItems(b_algorithms)
         self.set_default_parms()
@@ -907,6 +930,8 @@ class UI_main_window(QMainWindow, ui):
 
         b_parms = {'algorithm_name': 'Xbc', 'input_type': True, 'epochs': '2', 'batch_size': '8',
                    'learning_rate': '1e-3', 'tuning_epochs': '1', 'validation_split': '20'}
+        
+        classification_params = {'algorithm_name': 'A', 'epochs': '2', 'batch_size': '8', 'learning_rate': '1e-3', 'tuning_epochs': '1', 'validation_split': '20'}
 
         self.b_algorithms.setCurrentText(b_parms['algorithm_name'])
 
@@ -919,10 +944,20 @@ class UI_main_window(QMainWindow, ui):
         self.b_te.setText(b_parms['tuning_epochs'])
         self.b_vs.setText(b_parms['validation_split'])
 
+        # classification model params
+        self.class_epoch_lineedit.setText(classification_params['epochs'])
+        self.class_batch_lineedit.setText(b_parms['batch_size'])
+        self.class_lr_lineedit.setText(b_parms['learning_rate'])
+        self.class_tepoch_lineedit.setText(b_parms['tuning_epochs'])
+        self.class_split_lineedit.setText(b_parms['validation_split'])
+
+
         l_parms = {'batch_size': '64',
                    'image_path': 'asdsa'}  # Must change
 
         self.l_batch.setText(l_parms['batch_size'])
+
+
 
     def set_default_db_parms(self, binary_path, split_size):
         self.input_size1.setValue(split_size[0])
@@ -947,6 +982,30 @@ class UI_main_window(QMainWindow, ui):
             binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch, binary_lr,
             binary_te,
             binary_vs, binary_dp)
+    
+
+    def get_classification_parms(self):
+        try:
+            classification_algorithm_name = self.classification_algo_combo.currentText()
+            classification_epoch = int(float(self.class_epoch_lineedit.text()))
+            classification_batch = int(float(self.class_batch_lineedit.text()))
+            classification_lr = float(self.class_lr_lineedit.text())
+            classification_te = int(float(self.class_tepoch_lineedit.text()))
+            classification_vs = float(self.class_split_lineedit.text()) / 100
+        except:
+            self.show_mesagges(self.classification_train_msg_label, 'Parametrs are not invalid', color=colors_pallete.failed_red)
+            return []
+
+        if classification_vs > 0.5: classification_vs = 0.5
+        # text = self.b_dp.toPlainText()
+        # pattern = r'[0-9]+. '
+        # binary_dp = [s.rstrip() for s in re.split(pattern, text)[1:]]
+
+        return [
+            classification_algorithm_name, classification_epoch, classification_batch, classification_lr,
+            classification_te,
+            classification_vs]
+
 
     def add_binary_dataset(self):
         height = self.b_add_ds_frame.height()

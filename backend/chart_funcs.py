@@ -38,7 +38,7 @@ eff_val = [random.randint(0, 100) for _ in range(numepoch)]
 
 
 
-def create_train_chart_on_ui(ui_obj, frame_obj, checkbox_obj, chart_postfix, chart_title='chart', legend_train='legend1', legend_val='legend2',
+def create_train_chart_on_ui(ui_obj, frame_obj, checkbox_obj, scroll_obj, chart_postfix, chart_title='chart', legend_train='legend1', legend_val='legend2',
                             axisX_title='epoch', axisY_title='Accuracy', axisX_visible = False, legend_visible=False, axisY_set_range = True):
     # define chart
     chart = sQChart()
@@ -169,10 +169,10 @@ def create_train_chart_on_ui(ui_obj, frame_obj, checkbox_obj, chart_postfix, cha
     frame_obj.layout().setContentsMargins(0, 0, 0, 0)
     # -------------------------------------------------------------------------------------------------------------
     # define actions
-    ui_obj.binary_chart_scrollbar.valueChanged.connect(lambda: recalculate_range(ui_obj=ui_obj, scrolbaer_obj=ui_obj.binary_chart_scrollbar, checkbox_obj=checkbox_obj, chart_postfix=chart_postfix))
+    scroll_obj.valueChanged.connect(lambda: recalculate_range(ui_obj=ui_obj, scrolbaer_obj=scroll_obj, checkbox_obj=checkbox_obj, chart_postfix=chart_postfix))
     #                                                              
     checkbox_obj.stateChanged.connect(lambda: state_changed(checkbox_obj=checkbox_obj, ui_obj=ui_obj,
-                                        scrolbaer_obj=ui_obj.binary_chart_scrollbar, axisX_obj=eval('ui_obj.axisX_%s' % chart_postfix)))
+                                        scrolbaer_obj=scroll_obj, axisX_obj=eval('ui_obj.axisX_%s' % chart_postfix)))
     
 
 # clear series
@@ -189,7 +189,7 @@ def clear_series_date(chart_postfixes, ui_obj):
 # reset axisX range
 def recalculate_range(ui_obj, checkbox_obj, scrolbaer_obj, chart_postfix):
     if not checkbox_obj.isChecked():
-        scrollbar_obj = ui_obj.binary_chart_scrollbar
+        scrollbar_obj = scrolbaer_obj
         axisX_obj = eval('ui_obj.axisX_%s' % chart_postfix)
         xmin = scrollbar_obj.value()
         xmax = scrollbar_obj.value() + axisX_range
@@ -240,13 +240,13 @@ def update_axisX_range(ui_obj, nepoch):
     epochitr = 0
 
 
-def update_chart_test(ui_obj, chart_postfixes):
+def update_chart_test(ui_obj, chart_postfixes, scroll_obj):
     nepoch, last_epoch = get_nepochs_and_lastepoch()
     while last_epoch <= nepoch-1:
         #
         if last_epoch >= axisX_range and not ui_obj.checkBox.isChecked(): 
-            ui_obj.binary_chart_scrollbar.setMaximum(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
-            ui_obj.binary_chart_scrollbar.setValue(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
+            scroll_obj.setMaximum(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
+            scroll_obj.setValue(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
         #
         cv2.waitKey(1000)
         for chart_postfix in chart_postfixes:
@@ -258,12 +258,12 @@ def update_chart_test(ui_obj, chart_postfixes):
         nepoch, last_epoch = get_nepochs_and_lastepoch()
 
 
-def update_chart(ui_obj, chart_postfixes, last_epoch, logs):
+def update_chart(ui_obj, chart_postfixes, last_epoch, logs, scroll_obj):
     params = [logs['loss'], logs['accuracy']*100, logs['Precision']*100, logs['Recall']*100, logs['val_loss'], logs['val_accuracy']*100, logs['val_Precision']*100, logs['val_Recall']*100]
     
     if last_epoch >= axisX_range and not ui_obj.checkBox.isChecked():
-        ui_obj.binary_chart_scrollbar.setMaximum(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
-        ui_obj.binary_chart_scrollbar.setValue(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
+        scroll_obj.setMaximum(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
+        scroll_obj.setValue(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
     #
     for i, chart_postfix in enumerate(chart_postfixes):
         append_data_to_chart(ui_obj=ui_obj, chart_postfix=chart_postfix, train_x_series=last_epoch, train_y_series=params[i],

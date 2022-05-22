@@ -185,7 +185,7 @@ class dataBaseUtils():
     
     def get_binary_models(self, count=False, limit=False, limit_size=20, offset=0):
         try:
-            bmodels=self.db.get_all_content('binary_models', count=count, limit=limit, limit_size=limit_size, offset=offset)
+            bmodels=self.db.get_all_content('binary_models', count=count, limit=limit, limit_size=limit_size, offset=offset, reverse_order=True)
             #print('--------------------------------------------', defects)
             return bmodels
         except:
@@ -216,6 +216,41 @@ class dataBaseUtils():
             #print('asd',record)
             return record
 
+        except:
+            return []
+
+
+
+    # ______________________________________________________________________________________
+    # defects
+    def load_defects(self):
+        try:
+            defects=self.db.get_all_content('defects_info')
+
+            return defects
+        
+        except:
+
+            return []
+
+
+    def search_defect_group_by_id(self, input_defect_group_id):
+        try:
+            record = self.db.search( 'defect_groups' , 'defect_group_id', input_defect_group_id)[0]
+            #print('asd',record)
+            return record
+        except:
+            return []
+    
+    # ________________________________________________________________________________________
+    
+
+    #______________________________________________________________________________________
+    # datasets
+    def load_datasets(self):
+        try:
+            datasets=self.db.get_all_content('datasets')
+            return datasets
         except:
             return []
 

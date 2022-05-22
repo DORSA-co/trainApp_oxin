@@ -81,6 +81,7 @@ class moveOnImagrList:
     def __init__(self, sub_directory='', step=4):
 
         self.lists={}
+        self.lists_annots={}
         self.idxs={}
         self.sub_directory = sub_directory
         self.step = step
@@ -89,8 +90,9 @@ class moveOnImagrList:
         self.sub_directory = sub_directory
 
         
-    def add(self, mylist, name):
+    def add(self, mylist, name, mylist_annots=[]):
         self.lists[name] = mylist
+        self.lists_annots[name] = mylist_annots
         self.idxs [name] = 0
 
     
@@ -129,14 +131,22 @@ class moveOnImagrList:
         return idx, mylist[idx]
 
     
-    def get_n_current(self, name):
+    def get_n_current(self, name, get_annots=False):
         mylist = self.lists[ name ]
+        mylist_annots = self.lists_annots[name]
         idx = self.idxs[name]
         list = []
+        list_annots = []
         for i in range(idx, idx+self.step):
             if i < len(self.lists[name]):
                 list.append(mylist[i])
-        return list
+                if get_annots:
+                    list_annots.append(mylist_annots[i])
+
+        if not get_annots:
+            return list
+        else:
+            return list, list_annots
 
 
     def get_list(self,name):
