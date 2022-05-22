@@ -34,7 +34,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
-from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs
+from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs,date_funcs
 
 import database_utils
 from utils import *
@@ -56,6 +56,7 @@ from pynput.mouse import Button, Controller
 
 from login_win.login_api import login_API
 
+import dataset_utils
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
@@ -73,6 +74,7 @@ class API:
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
+        self.ds_json=dataset_utils.dataset_json()
         self.create_label_color()
         self.ds = Dataset(self.db.get_dataset_path(), self.db.get_dataset_path_uesr(), self.db.get_weights_path())
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
@@ -161,6 +163,8 @@ class API:
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
 
+        
+
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, 'sheets_id')
         self.selected_images_for_label.clear()
@@ -215,7 +219,16 @@ class API:
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
         self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
         self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
+
+        #login
+        self.login_user_name=''
         self.ui.login_btn.clicked.connect(partial(self.show_login))
+        self.ui.btn_user_proflie.clicked.connect(partial(self.set_profile_page))
+        self.ui.create_database_btn.clicked.connect(partial(self.create_dataset))
+        self.ui.my_databases_2.clicked.connect(partial(self.set_user_databases))
+        self.ui.set_default_database_btn.clicked.connect(partial(self.set_default_dataset))
+        self.set_databases()
+        self.set_user_databases()
         # self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
 
         # labeling
@@ -723,6 +736,9 @@ class API:
             self.ui.labeling_win.show()
             print('end show_labeling')
 
+
+     # login ---------------------------------       
+
     def show_login(self):
     
         if self.logged_in==False:
@@ -752,6 +768,10 @@ class API:
         self.ui.show_image_btn(self.ui.login_btn,'images/icons/person.png')
         self.ui.user_name.setText('')
         self.ui.stackedWidget.setCurrentWidget(self.ui.page_label)
+        self.ui.comboBox_user_datasets.clear()
+        self.ui.comboBox_default_dataset.clear()
+        self.ui.clear_table_name(self.ui.tableWidget_user_dataset)
+        self.ds_json.set_user_name_database('')
 
 
     def check_login(self):
@@ -765,6 +785,96 @@ class API:
             self.ui.show_image_btn(self.ui.login_btn,'images/logout.png')
             self.logged_in=True
             self.ui.stackedWidget.setCurrentWidget(self.ui.page_user_profile)
+            self.set_parms_login_page(self.login_info)
+
+    def set_parms_login_page(self,login_info):
+
+        print('login_info',login_info)
+        self.ui.user_name_2.setText(str(login_info[1]['user_name']))
+        self.ui.user_name_3.setText(str(login_info[1]['user_name']))
+        self.ui.date_created.setText(str(login_info[1]['date_created']))
+        self.ui.user_id.setText(str(login_info[1]['id']))
+        self.ui.role.setText(login_info[1]['role'])
+        self.ui.default_dataset.setText(str(login_info[1]['default_dataset']))
+        self.ui.today_date.setText(str(date_funcs.get_date(folder_path=True)))
+        self.login_user_name=(str(login_info[1]['user_name']))
+        self.ds_json.set_user_name_database(self.login_user_name)
+
+    def set_profile_page(self):
+        if self.logged_in==True:
+
+            self.ui.set_widget_page(self.ui.stackedWidget,self.ui.page_user_profile)
+        
+        else :
+            print('first login')
+            self.ui.set_warning(texts.WARNINGS['LOGIN_FIRST'][self.language], 'setting_eror', level=2)
+
+
+
+    def set_databases(self):
+        dataset_names=[]
+        self.datasets=self.db.get_all_datasets()
+        for i in range(len(self.datasets)):
+            dataset_names.append(self.datasets[i]['name'])
+        print('dataset_names',dataset_names)
+        self.ui.comboBox_all_datasets.addItems(dataset_names)
+        self.ui.comboBox_all_datasets.currentTextChanged.connect(self.update_table_all_datasets)
+    
+    def update_table_all_datasets(self):
+        current = self.ui.comboBox_all_datasets.currentIndex()
+        self.ui.show_all_datasets(list(self.datasets[current].values()))
+
+    def set_user_databases(self):
+        dataset_names=[]
+        self.user_databases=self.db.get_user_databases(self.login_user_name)
+        for i in range(len(self.user_databases)):
+            dataset_names.append(self.user_databases[i]['name'])
+        print('dataset_names',dataset_names)
+        self.ui.comboBox_user_datasets.addItems(dataset_names)
+        self.ui.comboBox_default_dataset.addItems(dataset_names)
+        self.ui.comboBox_user_datasets.currentTextChanged.connect(self.update_user_datasts)
+
+    def update_user_datasts(self):
+        current = self.ui.comboBox_user_datasets.currentIndex()
+        # print('asd',self.user_databases[current].values)
+        self.ui.show_user_datasets(list(self.user_databases[current].values()))
+
+    def set_default_dataset(self):
+
+        dataset_new=self.ui.comboBox_default_dataset.currentText()
+        self.db.update_dataset_default(dataset_new,self.login_user_name)
+        print('ok')
+        self.ui.default_dataset.setText(dataset_new)
+
+
+    #---------------------------------------------------------------------///////////////////////////////////////////
+    # dataset
+
+    def create_dataset(self):
+
+            t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
+                                        texts.WARNINGS['CREATE_DATABASE'][self.language])
+            if not t:
+                return
+            else:
+                parms=self.ui.get_create_dataset_parms()
+                print(parms)
+                self.create_folder(parms['dataset_name'],parms['path'])
+                # self.ds_json=dataset_utils.dataset_json()
+                self.ds_json.create_json_dataset(parms)
+                data=parms['dataset_name'],self.login_user_name,os.path.join(parms['path'], parms['dataset_name'])
+                self.db.add_dataset(data)
+
+    def create_folder(self,name,path):
+        try:
+            os.mkdir(os.path.join(path, name))
+        except:
+            print('eror')
+        # path=os.path.join(path, name, "{name}.json")
+        # os.mkdir(path)
+
+    
+    #----------------------------------------------------------------------///////////////////////
 
     def set_label(self):
         mouse_position = self.mouse.get_relative_position()
@@ -897,7 +1007,12 @@ class API:
             self.ds.save_to_perfect_splitted(crops, pos=pos)
             self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
-
+            print('no defect')
+            try:
+            
+                self.ds_json.modify_perfect()
+            except:
+                pass
         elif self.ui.yes_defect.isChecked():
             if saved_defect:
                 self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
@@ -915,7 +1030,11 @@ class API:
             self.ds.save_to_defect_splitted(crops, pos=pos)
             self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
-
+            try:
+            
+                self.ds_json.modify_defect()
+            except:
+                pass
         else:
             self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
 

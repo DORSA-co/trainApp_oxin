@@ -90,7 +90,13 @@ WARNINGS={
                  'en': ' Error while opening image '},
         
         'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
-                 'en': ' Are you sure want to logout ? '}
+                 'en': ' Are you sure want to logout ? '},
+        
+        'LOGIN_FIRST': {'fa': ' ابتدا وارد حساب کاربری شوید ',
+                 'en': ' You are not logged in '},
+        
+        'CREATE_DATABASE': {'fa': ' آیا از ایجاد دیتابیس جدید مطمئن هستید ؟ ',
+                 'en': ' Are you sure want to create new database ? '}
         
                 #  'en': ' Error while opening image '}
 
