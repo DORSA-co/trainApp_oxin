@@ -9,7 +9,7 @@ from backend import pathStructure, binary_model_funcs
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','root','localhost','saba_database')
+        self.db=database.dataBase('root','Dorsa1400@','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
@@ -183,9 +183,9 @@ class dataBaseUtils():
     #_____________________________________________________________________________________
     # binary-models
     
-    def get_binary_models(self, count=False, limit=False, limit_range=[0,20]):
+    def get_binary_models(self, count=False, limit=False, limit_size=20, offset=0):
         try:
-            bmodels=self.db.get_all_content('binary_models', count=count, limit=limit, limit_range=limit_range)
+            bmodels=self.db.get_all_content('binary_models', count=count, limit=limit, limit_size=limit_size, offset=offset)
             #print('--------------------------------------------', defects)
             return bmodels
         except:
@@ -209,10 +209,10 @@ class dataBaseUtils():
             return 'Databas Eror'
     
 
-    def search_binary_model_by_filter(self, parms, cols, limit=False, limit_range=[0,20], count=False):
+    def search_binary_model_by_filter(self, parms, cols, limit=False, limit_size=20, offset=0, count=False):
         try:
             #print('here')
-            record = self.db.search_with_range('binary_models', cols, parms, limit=limit, limit_range=limit_range, count=count)
+            record = self.db.search_with_range('binary_models', cols, parms, limit=limit, limit_size=limit_size, offset=offset, count=count)
             #print('asd',record)
             return record
 

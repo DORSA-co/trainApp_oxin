@@ -209,7 +209,7 @@ class dataBase:
             return [],[]
     
 
-    def search_with_range(self,table_name, col_names, values, limit=False, limit_range=[0,20], count=False):
+    def search_with_range(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
         # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
         try:
             if self.check_connection:
@@ -248,7 +248,7 @@ class dataBase:
                 
 
                 if limit:
-                    sql_select_Query += "LIMIT {},{}".format(limit_range[0], limit_range[1])
+                    sql_select_Query += "LIMIT {} OFFSET {}".format(limit_size, offset)
 
 
                 #print(sql_select_Query)
@@ -312,7 +312,7 @@ class dataBase:
     #--------------------------------------------------------------------------
 
 
-    def get_all_content(self,table_name, count=False, limit=False, limit_range=[0,20]):
+    def get_all_content(self,table_name, count=False, limit=False, limit_size=20, offset=0):
 
         try:
             if self.check_connection:
@@ -324,7 +324,7 @@ class dataBase:
                     if not limit:
                         sql_select_Query = "select * from {}".format(table_name)
                     else:
-                        sql_select_Query = "select * from {} LIMIT {},{}".format(table_name, limit_range[0], limit_range[1])
+                        sql_select_Query = "select * from {} LIMIT {} OFFSET {}".format(table_name, limit_size, offset)
                     
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
                 # cursor.execute(sql_select_Query)

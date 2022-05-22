@@ -1115,8 +1115,11 @@ class API:
 
         # load filterd models
         if filter_mode:
+            self.bmodel_tabel_itr = 1
+            self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
             res = self.filter_binary_models(filter_signal=True, count=True)
             if res[0]:
+                print(res[1])
                 self.bmodel_count = res[1][0]['count(*)']
                 self.binary_model_tabel_nextorprev(check=True)
                 # print('count',self.bmodel_count)
@@ -1137,14 +1140,12 @@ class API:
             else:
                 if not self.filter_mode:
                     bmodels_list = binary_model_funcs.get_binary_models_from_db(db_obj=self.db,
-                                                                                min=(
-                                                                                                self.bmodel_tabel_itr - 1) * binary_model_funcs.binary_table_nrows,
-                                                                                max=(
-                                                                                        self.bmodel_tabel_itr) * binary_model_funcs.binary_table_nrows)
+                                                                                limit_size=binary_model_funcs.binary_table_nrows,
+                                                                                offset=(self.bmodel_tabel_itr - 1) * binary_model_funcs.binary_table_nrows)
                 else:
                     res = self.filter_binary_models(
-                        min=(self.bmodel_tabel_itr - 1) * binary_model_funcs.binary_table_nrows,
-                        max=(self.bmodel_tabel_itr) * binary_model_funcs.binary_table_nrows)
+                        limit_size=binary_model_funcs.binary_table_nrows,
+                        offset=(self.bmodel_tabel_itr - 1) * binary_model_funcs.binary_table_nrows)
                     bmodels_list = res[1]
 
         if len(bmodels_list) == 0 and nextorprev:
@@ -1182,13 +1183,14 @@ class API:
         self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
 
     # filter function for binary models
-    def filter_binary_models(self, min=0, max=binary_model_funcs.binary_table_nrows, filter_signal=False, count=False):
+    def filter_binary_models(self, limit_size=binary_model_funcs.binary_table_nrows, offset=0, filter_signal=False, count=False):
         if filter_signal:
             self.filter_params = binary_model_funcs.get_binary_model_filter_info_from_ui(ui_obj=self.ui)
         #
         res = binary_model_funcs.get_filtered_binary_models_from_db(ui_obj=self.ui, db_obj=self.db,
-                                                                    filter_params=self.filter_params, min=min, max=max,
+                                                                    filter_params=self.filter_params, limit_size=limit_size, offset=offset,
                                                                     count=count)
+
         if res[0] == 'error':
             self.filter_mode = False
             return False, res[1]
@@ -1202,6 +1204,8 @@ class API:
     # clear filters for binary models
     def clear_filters(self):
         self.filter_mode = False
+        self.bmodel_tabel_itr = 1
+        self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
         self.refresh_binary_models_table(get_count=True)
         self.refresh_binary_models_table()
 
