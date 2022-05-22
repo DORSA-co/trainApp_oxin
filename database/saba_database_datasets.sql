@@ -16,40 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `settings`
+-- Table structure for table `datasets`
 --
 
-DROP TABLE IF EXISTS `settings`;
+DROP TABLE IF EXISTS `datasets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `settings` (
-  `id` int NOT NULL,
-  `parent_path` varchar(45) DEFAULT NULL,
-  `path_dataset` varchar(45) DEFAULT NULL,
-  `font_style` varchar(45) NOT NULL DEFAULT 'Arial',
-  `font_size` int NOT NULL DEFAULT '10',
-  `window_style` varchar(45) NOT NULL DEFAULT 'Windows',
-  `window_color` varchar(45) NOT NULL DEFAULT 'blue',
-  `language` varchar(45) NOT NULL DEFAULT 'English',
-  `large_rect_area` int NOT NULL DEFAULT '0',
-  `small_rect_area` int NOT NULL DEFAULT '0',
-  `rect_accuracy` float NOT NULL DEFAULT '0.9',
-  `split_size` varchar(45) NOT NULL DEFAULT '0',
-  `n_defect_colors` int NOT NULL DEFAULT '1',
-  `path_dataset_user` varchar(45) DEFAULT NULL,
-  `path_weights` varchar(45) DEFAULT NULL,
+CREATE TABLE `datasets` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `user_own` varchar(45) NOT NULL,
+  `path` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `settings`
+-- Dumping data for table `datasets`
 --
 
-LOCK TABLES `settings` WRITE;
-/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-INSERT INTO `settings` VALUES (0,'oxin_image_grabber','dataset','Times New Roman',8,'Windows','#144475','English',2000,1000,0.9,'(100, 100)',6,'dataset','weights');
-/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
+LOCK TABLES `datasets` WRITE;
+/*!40000 ALTER TABLE `datasets` DISABLE KEYS */;
+INSERT INTO `datasets` VALUES (1,'dataset','12','D:\\trainApp_oxin\\dataset');
+/*!40000 ALTER TABLE `datasets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
