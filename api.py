@@ -34,7 +34,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
-from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs, dataset
+from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs, dataset, classification_model_funcs
 
 import database_utils
 from utils import *
@@ -102,7 +102,10 @@ class API:
         self.bmodel_tabel_itr = 1
         self.bmodel_count = 0
         self.filter_mode = False
-
+        # cls-models
+        self.clsmodel_tabel_itr = 1
+        self.clsmodel_count = 0
+        self.cls_filter_mode = False
         # binarylist dataset parms
         self.dataset_params = {}
 
@@ -138,6 +141,7 @@ class API:
 
         # binary model start-up funcs
         self.refresh_binary_models_table(get_count=True)
+        self.refresh_cls_models_table(get_count=True)
 
         # create binarylist sliders on UI
         # perfect
@@ -268,6 +272,14 @@ class API:
         self.ui.classlist_next_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='next')))
         # train model
         self.ui.class_check_train_btn.clicked.connect(partial(self.check_classification_train_params))
+        # cls history
+        self.ui.Classification_btn.clicked.connect(partial(self.refresh_cls_models_table_onevent))
+        self.ui.classification_history.clicked.connect(partial(self.refresh_cls_models_table_onevent))
+        self.ui.cls_table_refresh_btn.clicked.connect(partial(self.refresh_cls_models_table_onevent))
+        self.ui.cls_filter_btn.clicked.connect(partial(lambda: self.refresh_cls_models_table(filter_mode=True)))
+        self.ui.cls_tabel_prev.clicked.connect(partial(lambda: self.cls_model_tabel_nextorprev(next=False)))
+        self.ui.cls_tabel_next.clicked.connect(partial(lambda: self.cls_model_tabel_nextorprev(next=True)))
+        self.ui.cls_clearfilter_btn.clicked.connect(partial(self.clear_filters_cls))
         
 
     def mouse_connector(self):
@@ -1134,6 +1146,7 @@ class API:
         self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
         self.refresh_binary_models_table(get_count=True)
         self.refresh_binary_models_table()
+        self.filter_mode = False
 
 
     def refresh_binary_models_table(self, nextorprev=False, get_count=False, filter_mode=False):
@@ -1185,6 +1198,7 @@ class API:
         else:
             binary_model_funcs.set_bmodels_on_ui_tabel(ui_obj=self.ui, bmodels_list=bmodels_list)
             return True
+
 
     # next and prev buttons for binary models table functionality
     def binary_model_tabel_nextorprev(self, next=True, check=False):
@@ -1240,8 +1254,7 @@ class API:
         self.refresh_binary_models_table()
 
     # _________________________________________________________________________________________________
-    # binary-model history page functions
-
+    # binary-list page functions
     # load binary images list
     def load_binary_images_list(self):
         if self.binarylist_sliders_check[0] and self.binarylist_sliders_check[1]:
@@ -1355,18 +1368,18 @@ class API:
     # classification page
     #------------------------------------------------------------------------------------------------------------------------
     # get defects from database and apply to defects table
-    def refresh_classes_table(self):
+    def refresh_classes_table(self, history_page=False):
         defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
         defects_list = classification_list_funcs.change_defect_group_id_to_name(db_obj=self.db, defects_list=defects_list)
         classification_list_funcs.set_defects_on_ui(ui_obj=self.ui, defects_list=defects_list)
         classification_list_funcs.set_defects_on_train_ui(ui_obj=self.ui, defects_list=defects_list)
+        classification_model_funcs.set_defects_on_filter_ui(ui_obj=self.ui, defects_list=defects_list)
     
 
     # show class related images on UI
     def show_class_related_images(self):
         # get selected defects from UI
-        defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
-        selected_defects = classification_list_funcs.get_selected_defects(ui_obj=self.ui, defects_list=defects_list)
+        selected_defects = classification_list_funcs.get_selected_defects(ui_obj=self.ui)
         if len(selected_defects) > 1:
             self.ui.show_mesagges(self.ui.classlist_msg_label, 'Cant select more than one class', color=colors_pallete.failed_red)
         elif len(selected_defects) == 0:
@@ -1428,8 +1441,7 @@ class API:
     def check_classification_train_params(self):
         # get train params from UI
         cls_parms = self.ui.get_classification_parms()
-        defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
-        selected_defects = classification_list_funcs.get_selected_defects_for_train(ui_obj=self.ui, defects_list=defects_list)
+        selected_defects = classification_list_funcs.get_selected_defects_for_train(ui_obj=self.ui)
         #
         if len(selected_defects) == 0:
             self.ui.show_mesagges(self.ui.classification_train_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
@@ -1443,7 +1455,124 @@ class API:
         #bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         #binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
 
-            
+    
+    # _________________________________________________________________________________________________
+    # classification-model history page functions
+    def refresh_cls_models_table_onevent(self):
+        self.clsmodel_tabel_itr = 1
+        self.ui.cls_tabel_page.setText(str(self.clsmodel_tabel_itr))
+        self.refresh_cls_models_table(get_count=True)
+        self.refresh_cls_models_table()
+        self.cls_filter_mode = False
+
+
+    def refresh_cls_models_table(self, nextorprev=False, get_count=False, filter_mode=False):
+        if get_count:
+            self.clsmodel_count = classification_model_funcs.get_cls_models_from_db(db_obj=self.db, count=get_count)[0]['count(*)']
+            self.cls_model_tabel_nextorprev(check=True)
+            return
+
+        # load filterd models
+        if filter_mode:
+            self.clsmodel_tabel_itr = 1
+            self.ui.cls_tabel_page.setText(str(self.clsmodel_tabel_itr))
+            res = self.filter_cls_models(filter_signal=True, count=True)
+            if res[0]:
+                print(res[1])
+                self.clsmodel_count = res[1][0]['count(*)']
+                self.cls_model_tabel_nextorprev(check=True)
+
+                res = self.filter_cls_models(filter_signal=True)
+                if res[0]:
+                    clsmodels_list = res[1]
+                else:
+                    self.refresh_cls_models_table(get_count=True)
+                    clsmodels_list = classification_model_funcs.get_cls_models_from_db(db_obj=self.db)
+            else:
+                self.refresh_cls_models_table(get_count=True)
+                clsmodels_list = classification_model_funcs.get_cls_models_from_db(db_obj=self.db)
+
+        else:
+            if not nextorprev:
+                clsmodels_list = classification_model_funcs.get_cls_models_from_db(db_obj=self.db)
+            else:
+                if not self.cls_filter_mode:
+                    clsmodels_list = classification_model_funcs.get_cls_models_from_db(db_obj=self.db,
+                                                                                    limit_size=classification_model_funcs.cls_table_nrows,
+                                                                                    offset=(self.clsmodel_tabel_itr - 1) * classification_model_funcs.cls_table_nrows)
+                else:
+                    res = self.filter_cls_models(
+                        limit_size=classification_model_funcs.cls_table_nrows,
+                        offset=(self.clsmodel_tabel_itr - 1) * classification_model_funcs.cls_table_nrows)
+                    clsmodels_list = res[1]
+
+        if len(clsmodels_list) == 0 and nextorprev:
+            return False
+
+        # set returned models to UI table 
+        else:
+            classification_model_funcs.set_clsmodels_on_ui_tabel(ui_obj=self.ui, models_list=clsmodels_list)
+            return True
+    
+
+    # next and prev buttons for binary models table functionality
+    def cls_model_tabel_nextorprev(self, next=True, check=False):
+        if check:
+            page_max = int(math.ceil(self.clsmodel_count / classification_model_funcs.cls_table_nrows))
+            if self.clsmodel_tabel_itr >= page_max:
+                self.ui.cls_tabel_next.setEnabled(False)
+            else:
+                self.ui.cls_tabel_next.setEnabled(True)
+            #
+            if self.clsmodel_tabel_itr > 1:
+                self.ui.cls_tabel_prev.setEnabled(True)
+            else:
+                self.ui.cls_tabel_prev.setEnabled(False)
+
+            return
+        #
+        if next:
+            self.clsmodel_tabel_itr += 1
+
+        elif self.clsmodel_tabel_itr > 1:
+            self.clsmodel_tabel_itr -= 1
+        #
+        res = self.refresh_cls_models_table(nextorprev=True)
+        self.cls_model_tabel_nextorprev(check=True)
+        self.ui.cls_tabel_page.setText(str(self.clsmodel_tabel_itr))
+
+
+    # filter function for binary models
+    def filter_cls_models(self, limit_size=classification_model_funcs.cls_table_nrows, offset=0, filter_signal=False, count=False):
+        if filter_signal:
+            self.cls_filter_params = classification_model_funcs.get_cls_model_filter_info_from_ui(ui_obj=self.ui)
+        #
+        res = classification_model_funcs.get_filtered_cls_models_from_db(ui_obj=self.ui, db_obj=self.db,
+                                                                        filter_params=self.cls_filter_params, limit_size=limit_size, offset=offset,
+                                                                        count=count)
+
+        if res[0] == 'error':
+            self.cls_filter_mode = False
+            return False, res[1]
+        if res[0] == 'all':
+            self.cls_filter_mode = False
+            return False, res[1]
+        else:
+            self.cls_filter_mode = True
+            return True, res[1]
+    
+    
+    # clear filters for binary models
+    def clear_filters_cls(self):
+        self.cls_filter_mode = False
+        self.clsmodel_tabel_itr = 1
+        self.ui.cls_tabel_page.setText(str(self.clsmodel_tabel_itr))
+        self.refresh_cls_models_table(get_count=True)
+        self.refresh_cls_models_table()
+
+
+
+    #_____________________________________________________________________________________________________
 
 
             

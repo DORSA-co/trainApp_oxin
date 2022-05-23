@@ -2329,7 +2329,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>4</number>
+                      <number>6</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -5104,7 +5104,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>517</height>
+                                     <height>17</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -5347,7 +5347,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>517</height>
+                                     <height>17</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -11758,23 +11758,32 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <spacer name="horizontalSpacer_57">
+                                  <widget class="Line" name="line_51">
                                    <property name="orientation">
-                                    <enum>Qt::Horizontal</enum>
+                                    <enum>Qt::Vertical</enum>
                                    </property>
-                                   <property name="sizeType">
-                                    <enum>QSizePolicy::Fixed</enum>
-                                   </property>
-                                   <property name="sizeHint" stdset="0">
-                                    <size>
-                                     <width>40</width>
-                                     <height>20</height>
-                                    </size>
-                                   </property>
-                                  </spacer>
+                                  </widget>
                                  </item>
                                  <item>
                                   <widget class="QLabel" name="binary_tabel_label">
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>300</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>300</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="frameShape">
+                                    <enum>QFrame::Panel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Sunken</enum>
+                                   </property>
                                    <property name="text">
                                     <string/>
                                    </property>
@@ -13287,7 +13296,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_classification">
                          <property name="currentIndex">
-                          <number>2</number>
+                          <number>3</number>
                          </property>
                          <widget class="QWidget" name="page_classification_class_list">
                           <layout class="QVBoxLayout" name="verticalLayout_58">
@@ -14743,10 +14752,16 @@ border:Transparent;</string>
                          <widget class="QWidget" name="page_classification_history">
                           <layout class="QHBoxLayout" name="horizontalLayout_38">
                            <item>
-                            <widget class="QFrame" name="frame_27">
+                            <widget class="QFrame" name="frame_28">
+                             <property name="minimumSize">
+                              <size>
+                               <width>300</width>
+                               <height>0</height>
+                              </size>
+                             </property>
                              <property name="maximumSize">
                               <size>
-                               <width>400</width>
+                               <width>300</width>
                                <height>16777215</height>
                               </size>
                              </property>
@@ -14756,7 +14771,7 @@ border:Transparent;</string>
                              <property name="frameShadow">
                               <enum>QFrame::Raised</enum>
                              </property>
-                             <layout class="QVBoxLayout" name="verticalLayout_49">
+                             <layout class="QVBoxLayout" name="verticalLayout_43">
                               <property name="spacing">
                                <number>0</number>
                               </property>
@@ -14773,10 +14788,10 @@ border:Transparent;</string>
                                <number>0</number>
                               </property>
                               <item>
-                               <widget class="QFrame" name="frame_29">
+                               <widget class="QGroupBox" name="groupBox_34">
                                 <property name="minimumSize">
                                  <size>
-                                  <width>400</width>
+                                  <width>300</width>
                                   <height>0</height>
                                  </size>
                                 </property>
@@ -14786,18 +14801,12 @@ border:Transparent;</string>
                                   <height>16777215</height>
                                  </size>
                                 </property>
-                                <property name="frameShape">
-                                 <enum>QFrame::Panel</enum>
+                                <property name="title">
+                                 <string>Search/Filter Traning Records</string>
                                 </property>
-                                <property name="frameShadow">
-                                 <enum>QFrame::Plain</enum>
-                                </property>
-                                <property name="lineWidth">
-                                 <number>1</number>
-                                </property>
-                                <layout class="QVBoxLayout" name="verticalLayout_48">
+                                <layout class="QVBoxLayout" name="verticalLayout_60">
                                  <property name="spacing">
-                                  <number>7</number>
+                                  <number>5</number>
                                  </property>
                                  <property name="leftMargin">
                                   <number>5</number>
@@ -14812,11 +14821,37 @@ border:Transparent;</string>
                                   <number>5</number>
                                  </property>
                                  <item>
-                                  <widget class="QLabel" name="label_77">
-                                   <property name="text">
-                                    <string>Search Tab</string>
-                                   </property>
-                                  </widget>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_48">
+                                   <item>
+                                    <widget class="QLabel" name="label_159">
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>16777215</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Name</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_50">
+                                     <item>
+                                      <widget class="QComboBox" name="cls_name_filter_combo"/>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                  </layout>
                                  </item>
                                  <item>
                                   <widget class="Line" name="line_26">
@@ -14826,37 +14861,12 @@ border:Transparent;</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <layout class="QHBoxLayout" name="horizontalLayout_40">
+                                  <layout class="QHBoxLayout" name="horizontalLayout_165">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
                                    <item>
-                                    <widget class="QSpinBox" name="spinBox_tedad">
-                                     <property name="maximumSize">
-                                      <size>
-                                       <width>50</width>
-                                       <height>16777212</height>
-                                      </size>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Segoe UI</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="prefix">
-                                      <string/>
-                                     </property>
-                                     <property name="maximum">
-                                      <number>999</number>
-                                     </property>
-                                     <property name="value">
-                                      <number>10</number>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <widget class="QLabel" name="label_46">
+                                    <widget class="QLabel" name="label_160">
                                      <property name="font">
                                       <font>
                                        <family>Segoe UI</family>
@@ -14867,380 +14877,314 @@ border:Transparent;</string>
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string> last row</string>
+                                      <string>Epochs</string>
                                      </property>
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QPushButton" name="request_btn">
-                                     <property name="font">
-                                      <font>
-                                       <family>Segoe UI</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="styleSheet">
-                                      <string notr="true">	color:rgb(255,255,255);</string>
-                                     </property>
-                                     <property name="text">
-                                      <string>Request</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                  </layout>
-                                 </item>
-                                 <item>
-                                  <layout class="QVBoxLayout" name="verticalLayout_44">
-                                   <item>
-                                    <widget class="Line" name="line_10">
+                                    <spacer name="horizontalSpacer_33">
                                      <property name="orientation">
                                       <enum>Qt::Horizontal</enum>
                                      </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <widget class="QLabel" name="label_47">
-                                     <property name="maximumSize">
+                                     <property name="sizeHint" stdset="0">
                                       <size>
-                                       <width>16777215</width>
+                                       <width>40</width>
                                        <height>20</height>
                                       </size>
                                      </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Segoe UI</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>by Name :</string>
-                                     </property>
-                                    </widget>
+                                    </spacer>
                                    </item>
                                    <item>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_41">
+                                    <layout class="QHBoxLayout" name="horizontalLayout_51">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
                                      <item>
-                                      <widget class="QLineEdit" name="lineEdit_id">
-                                       <property name="font">
-                                        <font>
-                                         <family>Segoe UI</family>
-                                         <pointsize>10</pointsize>
-                                         <weight>50</weight>
-                                         <italic>false</italic>
-                                         <bold>false</bold>
-                                        </font>
-                                       </property>
-                                      </widget>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_111_3">
+                                       <item>
+                                        <widget class="QLabel" name="label_161">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_epoch_min_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
                                      </item>
                                      <item>
-                                      <widget class="QPushButton" name="search_id_btn">
-                                       <property name="font">
-                                        <font>
-                                         <family>Segoe UI</family>
-                                         <pointsize>10</pointsize>
-                                         <weight>50</weight>
-                                         <italic>false</italic>
-                                         <bold>false</bold>
-                                        </font>
-                                       </property>
-                                       <property name="text">
-                                        <string>Search</string>
-                                       </property>
-                                      </widget>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_121_3">
+                                       <item>
+                                        <widget class="QLabel" name="label_162">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_epoch_max_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
                                      </item>
                                     </layout>
                                    </item>
-                                  </layout>
-                                 </item>
-                                 <item>
-                                  <layout class="QVBoxLayout" name="verticalLayout_45">
                                    <item>
-                                    <widget class="Line" name="line_11">
+                                    <widget class="Line" name="line_54">
                                      <property name="orientation">
                                       <enum>Qt::Horizontal</enum>
                                      </property>
                                     </widget>
                                    </item>
-                                   <item>
-                                    <widget class="QLabel" name="label_48">
-                                     <property name="font">
-                                      <font>
-                                       <family>Segoe UI</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>by Accuracy :</string>
-                                     </property>
-                                    </widget>
-                                   </item>
-                                   <item>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_42">
-                                     <item>
-                                      <layout class="QVBoxLayout" name="verticalLayout_46">
-                                       <item>
-                                        <widget class="QLabel" name="label_49">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="font">
-                                          <font>
-                                           <family>Segoe UI</family>
-                                           <pointsize>10</pointsize>
-                                           <weight>50</weight>
-                                           <italic>false</italic>
-                                           <bold>false</bold>
-                                          </font>
-                                         </property>
-                                         <property name="text">
-                                          <string>Min:</string>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLineEdit" name="lineEdit_id_2">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>30</height>
-                                          </size>
-                                         </property>
-                                         <property name="font">
-                                          <font>
-                                           <family>Segoe UI</family>
-                                           <pointsize>10</pointsize>
-                                           <weight>50</weight>
-                                           <italic>false</italic>
-                                           <bold>false</bold>
-                                          </font>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                      </layout>
-                                     </item>
-                                     <item>
-                                      <layout class="QVBoxLayout" name="verticalLayout_47">
-                                       <item>
-                                        <widget class="QLabel" name="label_50">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="font">
-                                          <font>
-                                           <family>Segoe UI</family>
-                                           <pointsize>10</pointsize>
-                                           <weight>50</weight>
-                                           <italic>false</italic>
-                                           <bold>false</bold>
-                                          </font>
-                                         </property>
-                                         <property name="text">
-                                          <string>Max:</string>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLineEdit" name="lineEdit_id_3">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>30</height>
-                                          </size>
-                                         </property>
-                                         <property name="font">
-                                          <font>
-                                           <family>Segoe UI</family>
-                                           <pointsize>10</pointsize>
-                                           <weight>50</weight>
-                                           <italic>false</italic>
-                                           <bold>false</bold>
-                                          </font>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                      </layout>
-                                     </item>
-                                    </layout>
-                                   </item>
-                                   <item>
-                                    <widget class="QPushButton" name="search_id_btn_2">
-                                     <property name="maximumSize">
-                                      <size>
-                                       <width>16777215</width>
-                                       <height>30</height>
-                                      </size>
-                                     </property>
-                                     <property name="font">
-                                      <font>
-                                       <family>Segoe UI</family>
-                                       <pointsize>10</pointsize>
-                                       <weight>50</weight>
-                                       <italic>false</italic>
-                                       <bold>false</bold>
-                                      </font>
-                                     </property>
-                                     <property name="text">
-                                      <string>Search</string>
-                                     </property>
-                                    </widget>
-                                   </item>
                                   </layout>
                                  </item>
                                  <item>
-                                  <widget class="Line" name="line_12">
+                                  <widget class="Line" name="line_55">
                                    <property name="orientation">
                                     <enum>Qt::Horizontal</enum>
                                    </property>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QLabel" name="label_76">
-                                   <property name="maximumSize">
-                                    <size>
-                                     <width>16777215</width>
-                                     <height>20</height>
-                                    </size>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_122_3">
+                                   <property name="spacing">
+                                    <number>0</number>
                                    </property>
-                                   <property name="font">
-                                    <font>
-                                     <family>Segoe UI</family>
-                                     <pointsize>10</pointsize>
-                                     <weight>50</weight>
-                                     <italic>false</italic>
-                                     <bold>false</bold>
-                                    </font>
-                                   </property>
-                                   <property name="text">
-                                    <string>by Recall :</string>
-                                   </property>
-                                  </widget>
-                                 </item>
-                                 <item>
-                                  <layout class="QHBoxLayout" name="horizontalLayout_43">
                                    <item>
-                                    <layout class="QVBoxLayout" name="verticalLayout_50">
+                                    <widget class="QLabel" name="label_163">
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Tune Epochs</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_22_4">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_48_4">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
                                      <item>
-                                      <widget class="QLabel" name="label_62">
-                                       <property name="maximumSize">
-                                        <size>
-                                         <width>16777215</width>
-                                         <height>20</height>
-                                        </size>
-                                       </property>
-                                       <property name="font">
-                                        <font>
-                                         <family>Segoe UI</family>
-                                         <pointsize>10</pointsize>
-                                         <weight>50</weight>
-                                         <italic>false</italic>
-                                         <bold>false</bold>
-                                        </font>
-                                       </property>
-                                       <property name="text">
-                                        <string>Min:</string>
-                                       </property>
-                                      </widget>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_123_4">
+                                       <item>
+                                        <widget class="QLabel" name="label_164">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_tepoch_min_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
                                      </item>
                                      <item>
-                                      <widget class="QLineEdit" name="lineEdit_id_4">
-                                       <property name="maximumSize">
-                                        <size>
-                                         <width>16777215</width>
-                                         <height>30</height>
-                                        </size>
-                                       </property>
-                                       <property name="font">
-                                        <font>
-                                         <family>Segoe UI</family>
-                                         <pointsize>10</pointsize>
-                                         <weight>50</weight>
-                                         <italic>false</italic>
-                                         <bold>false</bold>
-                                        </font>
-                                       </property>
-                                      </widget>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_124_4">
+                                       <item>
+                                        <widget class="QLabel" name="label_86_3">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_tepoch_max_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
                                      </item>
                                     </layout>
                                    </item>
                                    <item>
-                                    <layout class="QVBoxLayout" name="verticalLayout_51">
-                                     <item>
-                                      <widget class="QLabel" name="label_63">
-                                       <property name="maximumSize">
-                                        <size>
-                                         <width>16777215</width>
-                                         <height>20</height>
-                                        </size>
-                                       </property>
-                                       <property name="font">
-                                        <font>
-                                         <family>Segoe UI</family>
-                                         <pointsize>10</pointsize>
-                                         <weight>50</weight>
-                                         <italic>false</italic>
-                                         <bold>false</bold>
-                                        </font>
-                                       </property>
-                                       <property name="text">
-                                        <string>Max:</string>
-                                       </property>
-                                      </widget>
-                                     </item>
-                                     <item>
-                                      <widget class="QLineEdit" name="lineEdit_id_5">
-                                       <property name="maximumSize">
-                                        <size>
-                                         <width>16777215</width>
-                                         <height>30</height>
-                                        </size>
-                                       </property>
-                                       <property name="font">
-                                        <font>
-                                         <family>Segoe UI</family>
-                                         <pointsize>10</pointsize>
-                                         <weight>50</weight>
-                                         <italic>false</italic>
-                                         <bold>false</bold>
-                                        </font>
-                                       </property>
-                                      </widget>
-                                     </item>
-                                    </layout>
-                                   </item>
-                                  </layout>
-                                 </item>
-                                 <item>
-                                  <layout class="QVBoxLayout" name="verticalLayout_41_2">
-                                   <item>
-                                    <widget class="Line" name="line_13">
+                                    <widget class="Line" name="line_18_3">
                                      <property name="orientation">
                                       <enum>Qt::Horizontal</enum>
                                      </property>
                                     </widget>
                                    </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_47_3">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_128_3">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
                                    <item>
-                                    <widget class="QLabel" name="label_58">
-                                     <property name="maximumSize">
-                                      <size>
-                                       <width>16777215</width>
-                                       <height>20</height>
-                                      </size>
-                                     </property>
+                                    <widget class="QLabel" name="label_134_3">
                                      <property name="font">
                                       <font>
                                        <family>Segoe UI</family>
@@ -15251,16 +15195,32 @@ border:Transparent;</string>
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>by Epooch :</string>
+                                      <string>Tune Epochs</string>
                                      </property>
                                     </widget>
                                    </item>
                                    <item>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_39">
+                                    <spacer name="horizontalSpacer_22_5">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_48_5">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
                                      <item>
-                                      <layout class="QVBoxLayout" name="verticalLayout_42">
+                                      <layout class="QHBoxLayout" name="horizontalLayout_123_5">
                                        <item>
-                                        <widget class="QLabel" name="label_59">
+                                        <widget class="QLabel" name="label_85_3">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -15277,15 +15237,21 @@ border:Transparent;</string>
                                           </font>
                                          </property>
                                          <property name="text">
-                                          <string>Min:</string>
+                                          <string>Min</string>
                                          </property>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="lineEdit_id_6">
+                                        <widget class="QLineEdit" name="cls_tepoch_min_filter_lineedit_2">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
-                                           <width>16777215</width>
+                                           <width>50</width>
                                            <height>30</height>
                                           </size>
                                          </property>
@@ -15303,9 +15269,9 @@ border:Transparent;</string>
                                       </layout>
                                      </item>
                                      <item>
-                                      <layout class="QVBoxLayout" name="verticalLayout_43">
+                                      <layout class="QHBoxLayout" name="horizontalLayout_124_5">
                                        <item>
-                                        <widget class="QLabel" name="label_60">
+                                        <widget class="QLabel" name="label_165">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -15322,15 +15288,21 @@ border:Transparent;</string>
                                           </font>
                                          </property>
                                          <property name="text">
-                                          <string>Max:</string>
+                                          <string>Max</string>
                                          </property>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="lineEdit_id_7">
+                                        <widget class="QLineEdit" name="cls_tepoch_max_filter_lineedit_2">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
-                                           <width>16777215</width>
+                                           <width>50</width>
                                            <height>30</height>
                                           </size>
                                          </property>
@@ -15350,7 +15322,28 @@ border:Transparent;</string>
                                     </layout>
                                    </item>
                                    <item>
-                                    <widget class="QPushButton" name="search_id_btn_4">
+                                    <widget class="Line" name="line_56">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_57">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_166">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QLabel" name="label_166">
                                      <property name="font">
                                       <font>
                                        <family>Segoe UI</family>
@@ -15361,14 +15354,1180 @@ border:Transparent;</string>
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>Search</string>
+                                      <string>Batch-Size</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_34">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_167">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_168">
+                                       <item>
+                                        <widget class="QLabel" name="label_167">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_batch_min_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="inputMethodHints">
+                                          <set>Qt::ImhNone</set>
+                                         </property>
+                                         <property name="clearButtonEnabled">
+                                          <bool>false</bool>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_169">
+                                       <item>
+                                        <widget class="QLabel" name="label_168">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_batch_max_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                   <item>
+                                    <widget class="Line" name="line_40_3">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
                                      </property>
                                     </widget>
                                    </item>
                                   </layout>
                                  </item>
                                  <item>
-                                  <spacer name="verticalSpacer_4">
+                                  <widget class="Line" name="line_78">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_170">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QLabel" name="label_169">
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Split-Size</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_35">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_52">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_171">
+                                       <item>
+                                        <widget class="QLabel" name="label_170">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_split_min_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_172">
+                                       <item>
+                                        <widget class="QLabel" name="label_171">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_split_max_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                   <item>
+                                    <widget class="Line" name="line_33_3">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_79">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_173">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QLabel" name="label_172">
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Loss</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_36">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_174">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_175">
+                                       <item>
+                                        <widget class="QLabel" name="label_132_3">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_loss_min_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_176">
+                                       <item>
+                                        <widget class="QLabel" name="label_173">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_loss_max_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                   <item>
+                                    <widget class="Line" name="line_58">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_80">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_177">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QLabel" name="label_174">
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Accuracy</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_37">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_178">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_179">
+                                       <item>
+                                        <widget class="QLabel" name="label_175">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_acc_min_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_180">
+                                       <item>
+                                        <widget class="QLabel" name="label_176">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_acc_max_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                   <item>
+                                    <widget class="Line" name="line_59">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_81">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_181">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QLabel" name="label_177">
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Precision</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_38">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_182">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_183">
+                                       <item>
+                                        <widget class="QLabel" name="label_178">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_prec_min_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_184">
+                                       <item>
+                                        <widget class="QLabel" name="label_179">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_prec_max_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                   <item>
+                                    <widget class="Line" name="line_60">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_82">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_185">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QLabel" name="label_180">
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Recall</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_39">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_186">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_187">
+                                       <item>
+                                        <widget class="QLabel" name="label_181">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_rec_min_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_188">
+                                       <item>
+                                        <widget class="QLabel" name="label_182">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_rec_max_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                   <item>
+                                    <widget class="Line" name="line_61">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_83">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_189">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QLabel" name="label_183">
+                                     <property name="font">
+                                      <font>
+                                       <family>Segoe UI</family>
+                                       <pointsize>10</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Date</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_40">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_190">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_191">
+                                       <item>
+                                        <widget class="QLabel" name="label_184">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_date_min_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_192">
+                                       <item>
+                                        <widget class="QLabel" name="label_185">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="cls_date_max_filter_lineedit">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                   <item>
+                                    <widget class="Line" name="line_62">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_97">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_38">
+                                   <property name="text">
+                                    <string>Including Class(s)</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QTableWidget" name="table_classification_filter_class">
+                                   <property name="columnCount">
+                                    <number>3</number>
+                                   </property>
+                                   <column/>
+                                   <column/>
+                                   <column/>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QFrame" name="">
+                                   <property name="frameShape">
+                                    <enum>QFrame::Panel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Raised</enum>
+                                   </property>
+                                   <layout class="QHBoxLayout" name="horizontalLayout_193">
+                                    <property name="spacing">
+                                     <number>20</number>
+                                    </property>
+                                    <item>
+                                     <widget class="QPushButton" name="cls_filter_btn">
+                                      <property name="minimumSize">
+                                       <size>
+                                        <width>0</width>
+                                        <height>30</height>
+                                       </size>
+                                      </property>
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>16777215</width>
+                                        <height>30</height>
+                                       </size>
+                                      </property>
+                                      <property name="text">
+                                       <string>Search/Filter</string>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                    <item>
+                                     <widget class="QPushButton" name="cls_clearfilter_btn">
+                                      <property name="minimumSize">
+                                       <size>
+                                        <width>0</width>
+                                        <height>30</height>
+                                       </size>
+                                      </property>
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>16777215</width>
+                                        <height>30</height>
+                                       </size>
+                                      </property>
+                                      <property name="text">
+                                       <string>Clear Filters</string>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                   </layout>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <spacer name="verticalSpacer_11">
                                    <property name="orientation">
                                     <enum>Qt::Vertical</enum>
                                    </property>
@@ -15394,20 +16553,278 @@ border:Transparent;</string>
                             </widget>
                            </item>
                            <item>
-                            <widget class="QFrame" name="frame_28">
+                            <widget class="QFrame" name="frame_27">
+                             <property name="minimumSize">
+                              <size>
+                               <width>0</width>
+                               <height>0</height>
+                              </size>
+                             </property>
+                             <property name="maximumSize">
+                              <size>
+                               <width>16777215</width>
+                               <height>16777215</height>
+                              </size>
+                             </property>
                              <property name="frameShape">
                               <enum>QFrame::StyledPanel</enum>
                              </property>
                              <property name="frameShadow">
                               <enum>QFrame::Raised</enum>
                              </property>
-                            </widget>
-                           </item>
-                           <item>
-                            <widget class="QLabel" name="label_45">
-                             <property name="text">
-                              <string>hist</string>
-                             </property>
+                             <layout class="QVBoxLayout" name="verticalLayout_42">
+                              <property name="spacing">
+                               <number>5</number>
+                              </property>
+                              <property name="leftMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="topMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="rightMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="bottomMargin">
+                               <number>0</number>
+                              </property>
+                              <item>
+                               <widget class="QTableWidget" name="cls_history_tabel">
+                                <property name="frameShape">
+                                 <enum>QFrame::Panel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
+                                </property>
+                                <property name="rowCount">
+                                 <number>0</number>
+                                </property>
+                                <property name="columnCount">
+                                 <number>20</number>
+                                </property>
+                                <attribute name="horizontalHeaderMinimumSectionSize">
+                                 <number>120</number>
+                                </attribute>
+                                <attribute name="horizontalHeaderDefaultSectionSize">
+                                 <number>120</number>
+                                </attribute>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                                <column/>
+                               </widget>
+                              </item>
+                              <item>
+                               <widget class="QFrame" name="frame_68_3">
+                                <property name="frameShape">
+                                 <enum>QFrame::Panel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
+                                </property>
+                                <layout class="QHBoxLayout" name="horizontalLayout_109_3">
+                                 <property name="spacing">
+                                  <number>5</number>
+                                 </property>
+                                 <property name="leftMargin">
+                                  <number>5</number>
+                                 </property>
+                                 <property name="topMargin">
+                                  <number>5</number>
+                                 </property>
+                                 <property name="rightMargin">
+                                  <number>5</number>
+                                 </property>
+                                 <property name="bottomMargin">
+                                  <number>5</number>
+                                 </property>
+                                 <item>
+                                  <widget class="QPushButton" name="cls_table_refresh_btn">
+                                   <property name="cursor">
+                                    <cursorShape>PointingHandCursor</cursorShape>
+                                   </property>
+                                   <property name="layoutDirection">
+                                    <enum>Qt::RightToLeft</enum>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">background-color: Transparent;
+border : 0px;
+color : rgb(0,0,0);</string>
+                                   </property>
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                   <property name="icon">
+                                    <iconset>
+                                     <normaloff>images/refresh.png</normaloff>images/refresh.png</iconset>
+                                   </property>
+                                   <property name="iconSize">
+                                    <size>
+                                     <width>30</width>
+                                     <height>30</height>
+                                    </size>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_52">
+                                   <property name="orientation">
+                                    <enum>Qt::Vertical</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QPushButton" name="cls_tabel_prev">
+                                   <property name="enabled">
+                                    <bool>false</bool>
+                                   </property>
+                                   <property name="cursor">
+                                    <cursorShape>PointingHandCursor</cursorShape>
+                                   </property>
+                                   <property name="layoutDirection">
+                                    <enum>Qt::LeftToRight</enum>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">background-color: Transparent;
+border : 0px;
+color : rgb(0,0,0);</string>
+                                   </property>
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                   <property name="icon">
+                                    <iconset>
+                                     <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                   </property>
+                                   <property name="iconSize">
+                                    <size>
+                                     <width>30</width>
+                                     <height>30</height>
+                                    </size>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLineEdit" name="cls_tabel_page">
+                                   <property name="enabled">
+                                    <bool>false</bool>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>50</width>
+                                     <height>30</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>50</width>
+                                     <height>30</height>
+                                    </size>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">padding:0;</string>
+                                   </property>
+                                   <property name="text">
+                                    <string>1</string>
+                                   </property>
+                                   <property name="alignment">
+                                    <set>Qt::AlignCenter</set>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QPushButton" name="cls_tabel_next">
+                                   <property name="enabled">
+                                    <bool>false</bool>
+                                   </property>
+                                   <property name="cursor">
+                                    <cursorShape>PointingHandCursor</cursorShape>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">background-color: Transparent;
+border : 0px;
+color : rgb(0,0,0);</string>
+                                   </property>
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                   <property name="icon">
+                                    <iconset>
+                                     <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                   </property>
+                                   <property name="iconSize">
+                                    <size>
+                                     <width>30</width>
+                                     <height>30</height>
+                                    </size>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_53">
+                                   <property name="orientation">
+                                    <enum>Qt::Vertical</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="cls_tabel_label">
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>300</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>300</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="frameShape">
+                                    <enum>QFrame::Panel</enum>
+                                   </property>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Sunken</enum>
+                                   </property>
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <spacer name="horizontalSpacer_20_3">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                   <property name="sizeHint" stdset="0">
+                                    <size>
+                                     <width>40</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                  </spacer>
+                                 </item>
+                                </layout>
+                               </widget>
+                              </item>
+                             </layout>
                             </widget>
                            </item>
                           </layout>

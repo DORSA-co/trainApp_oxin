@@ -371,7 +371,7 @@ def set_defect_groups_on_ui(ui_obj, defect_groups_list):
 
 
 # get selected users from user table in UI
-def get_selected_defects(ui_obj, defects_list):
+def get_selected_defects(ui_obj):
     list = []
     for i in range(ui_obj.classes_table.rowCount()):    
         if ui_obj.classes_table.item(i, 0).checkState() == sQtCore.Qt.Checked:
@@ -382,7 +382,7 @@ def get_selected_defects(ui_obj, defects_list):
     # return selected_defects
     return list
 
-def get_selected_defects_for_train(ui_obj, defects_list):
+def get_selected_defects_for_train(ui_obj):
     list = []
     for i in range(ui_obj.table_classification_select_class.rowCount()):    
         if ui_obj.table_classification_select_class.item(i, 0).checkState() == sQtCore.Qt.Checked:

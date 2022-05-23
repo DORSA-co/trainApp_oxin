@@ -149,6 +149,7 @@ class UI_main_window(QMainWindow, ui):
         self.localization_Statistic.clicked.connect(self.buttonClick)
         self.localization_training.clicked.connect(self.buttonClick)
         self.localization_history.clicked.connect(self.buttonClick)
+
         # classification page
         self.classification_class_list.clicked.connect(self.buttonClick)
         self.classification_add_new_class.clicked.connect(self.buttonClick)
@@ -922,9 +923,12 @@ class UI_main_window(QMainWindow, ui):
         self.classification_algo_combo.addItems(class_algorithms)
         self.binary_name_filter_combo.addItem('All')
         self.binary_name_filter_combo.addItems(b_algorithms)
+        self.cls_name_filter_combo.addItem('All')
+        self.cls_name_filter_combo.addItems(b_algorithms)
         self.set_default_parms()
 
         # self.b_algorithms.setCurrentText(str(records[0][0]))   #Must change
+
 
     def set_default_parms(self):
 

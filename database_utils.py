@@ -219,6 +219,28 @@ class dataBaseUtils():
         except:
             return []
 
+    #________________________________________________________________________________________________________
+    # classification models
+    def get_cls_models(self, count=False, limit=False, limit_size=20, offset=0):
+        try:
+            bmodels=self.db.get_all_content('classification_models', count=count, limit=limit, limit_size=limit_size, offset=offset, reverse_order=True)
+            #print('--------------------------------------------', defects)
+            return bmodels
+        except:
+            return []
+    
+
+    # 
+    def search_cls_model_by_filter(self, parms, cols, limit=False, limit_size=20, offset=0, count=False):
+        try:
+            #print('here')
+            record = self.db.search_with_range_with_classes('classification_models', cols, parms, limit=limit, limit_size=limit_size, offset=offset, count=count)
+            #print('asd',record)
+            return record
+
+        except:
+            return []
+
 
 
     # ______________________________________________________________________________________
