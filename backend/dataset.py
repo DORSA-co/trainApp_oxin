@@ -5,23 +5,34 @@ import string
 import random
 import cv2
 
+IMAGES_TEMP_FOLDER = 'temp_images'
+ANNOTATIONS_TEMP_FOLDER = 'temp_annotations'
+IMAGE_FOLDERS = 'images'
+ANNOTATIONS_FOLDER = 'annotations'
+BINARY_FOLDER = 'binary'
+DEFECT_FOLDER = 'defect'
+PERFECT_FOLDER = 'perfect'
+DEFECT_SPLITED_FOLDER = 'defect_splitted'
+PERFECT_SPLITED_FOLDER = 'perfect_splitted'
+FORMAT_IMAGE = '.jpg'
+
 
 class Dataset:
 
     def __init__(self, dataset_path, dataset_path_user, weights_path):
-        self.images_temp_folder = 'temp_images'
-        self.annotations_temp_folder = 'temp_annotations'
-        self.images_folder = 'images'
-        self.annotations_folder = 'annotations'
-        self.binary_folder = 'binary'
-        self.defect_folder = 'defect'
-        self.perfect_folder = 'perfect'
-        self.defect_splitted_folder = 'defect_splitted'
-        self.perfect_splitted_folder = 'perfect_splitted'
+        self.images_temp_folder = IMAGES_TEMP_FOLDER
+        self.annotations_temp_folder = ANNOTATIONS_TEMP_FOLDER
+        self.images_folder = IMAGE_FOLDERS
+        self.annotations_folder = ANNOTATIONS_FOLDER
+        self.binary_folder = BINARY_FOLDER
+        self.defect_folder = DEFECT_FOLDER
+        self.perfect_folder = PERFECT_FOLDER
+        self.defect_splitted_folder = DEFECT_SPLITED_FOLDER
+        self.perfect_splitted_folder = PERFECT_SPLITED_FOLDER
         self.dataset_path = dataset_path
         self.weights_path = weights_path
         self.dataset_path_user = dataset_path_user
-        self.format_image = '.jpg'
+        self.format_image = FORMAT_IMAGE
 
         # print(self.dataset_path)
 
@@ -85,12 +96,6 @@ class Dataset:
         shutil.copyfile(img_path, res_path)
         self.create_annotation_to_ds(sheet, masks, bboxes, image_name, pos[-1])
 
-    def save(self, img_path , pos, sheet, masks, bboxes):
-            image_name = self.__file_name__(pos) + self.format_image
-            res_path = os.path.join(  self.images_path, image_name )
-            shutil.copyfile(img_path, res_path )
-            self.create_annotation_to_ds(sheet, masks, bboxes, image_name, pos[-1])
-
 
     def create_annotation_to_temp(self,sheet,fname):
         image_path = os.path.join(  self.images_temp_path, fname  )
@@ -108,49 +113,26 @@ class Dataset:
         annotation.set_path(image_path)
         annotation.write(json_path)
 
-    def create_annotation_to_ds(self, sheet, masks, bboxes, fname, pos):
-        image_path = os.path.join(self.images_path, fname)
+    # def create_annotation_to_ds(self, sheet, masks, bboxes, fname, pos):
+    #     image_path = os.path.join(self.images_path, fname)
 
-    # def create_annotation_to_ds(self,sheet,masks, bboxes, fname,pos):
-    #         image_path = os.path.join(  self.images_path, fname  )
+    def create_annotation_to_ds(self,sheet,masks, bboxes, fname,pos):
+            image_path = os.path.join(  self.images_path, fname  )
 
-    #         json_name = fname.split('.')[0] + '.json'
-    #         json_path = os.path.join(self.annotations_path, json_name)
+            json_name = fname.split('.')[0] + '.json'
+            json_path = os.path.join(self.annotations_path, json_name)
 
-    #         annotation=Annotation.Annotation()
-    #         annotation.set_fname(fname)
-    #         annotation.set_sheet_id(sheet.get_id())
-    #         annotation.set_date(sheet.get_date_string())
-    #         annotation.set_time(sheet.get_time_string())
-    #         annotation.set_user(sheet.get_user())
-    #         annotation.set_pos(pos)
-    #         annotation.set_path(image_path)
-    #         annotation.set_masks(masks)
-    #         annotation.set_bboxes(bboxes)
-    #         annotation.write(json_path)
-
-
-
-    # Mrs Abtahi-------------------------------------
-
-
-    def save_to_defect(self, img_path):
-        # image_name = os.path.split(img_path)[-1]
-        image_name = self.__random_name__(10) + self.format_image
-        json_name = fname.split('.')[0] + '.json'
-        json_path = os.path.join(self.annotations_path, json_name)
-
-        annotation = Annotation.Annotation()
-        annotation.set_fname(fname)
-        annotation.set_sheet_id(sheet.get_id())
-        annotation.set_date(sheet.get_date_string())
-        annotation.set_time(sheet.get_time_string())
-        annotation.set_user(sheet.get_user())
-        annotation.set_pos(pos)
-        annotation.set_path(image_path)
-        annotation.set_masks(masks)
-        annotation.set_bboxes(bboxes)
-        annotation.write(json_path)
+            annotation=Annotation.Annotation()
+            annotation.set_fname(fname)
+            annotation.set_sheet_id(sheet.get_id())
+            annotation.set_date(sheet.get_date_string())
+            annotation.set_time(sheet.get_time_string())
+            annotation.set_user(sheet.get_user())
+            annotation.set_pos(pos)
+            annotation.set_path(image_path)
+            annotation.set_masks(masks)
+            annotation.set_bboxes(bboxes)
+            annotation.write(json_path)
 
     # Miss Abtahi-------------------------------------
 
@@ -239,6 +221,13 @@ class Dataset:
         self.__creat_path__(defect_splitted_path)
         self.__creat_path__(perfect_splitted_path)
     # ---------------------------------------------------
+
+
+
+# get datasets list from db
+def get_datasets_list_from_db(db_obj):
+    ds_list = db_obj.load_datasets()
+    return ds_list
 
 
 

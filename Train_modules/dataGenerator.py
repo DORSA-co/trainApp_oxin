@@ -32,17 +32,18 @@ aug_dict = dict(rotation_range=15,
 # return:
 #   trainGen, testGen
 #
-# _________________________________________________________________________________________________________________
-def get_binarygenerator(paths, target_size, defective_folder, perfect_folder, aug_dict, batch_size=8,
-                        validation_split=0.2):
+#_________________________________________________________________________________________________________________
+def get_binarygenerator(paths, target_size, defective_folder, perfect_folder,aug_dict , batch_size=8, validation_split=0.2):
+    
     train_datasets = []
     val_datasets = []
     train_n = 0
     val_n = 0
     for path in paths:
         trainGen = ImageDataGenerator(**aug_dict, validation_split=validation_split)
-        valGen = ImageDataGenerator(validation_split=validation_split)
-
+        # valGen = ImageDataGenerator(validation_split=validation_split)
+        
+        
         train_dataset = trainGen.flow_from_directory(
             path,
             target_size=target_size,
@@ -50,7 +51,7 @@ def get_binarygenerator(paths, target_size, defective_folder, perfect_folder, au
             class_mode='binary',
             classes=[perfect_folder, defective_folder],
             seed=42,
-            subset='training')  # set as training data
+            subset='training') # set as training data
 
         val_dataset = trainGen.flow_from_directory(
             path,
@@ -59,7 +60,7 @@ def get_binarygenerator(paths, target_size, defective_folder, perfect_folder, au
             class_mode='binary',
             classes=[perfect_folder, defective_folder],
             seed=42,
-            subset='validation')  # set as training data
+            subset='validation') # set as validation data
 
         train_datasets.append(train_dataset)
         val_datasets.append(val_dataset)

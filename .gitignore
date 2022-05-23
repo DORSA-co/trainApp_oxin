@@ -1,4 +1,10 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/*.*
 */__pycache__/*.*
-.qt_for_python
+.venv10/
+models/
+Train_modules/deep_utils/__pycache__/*.*
+Train_modules/deep_utils/__pycache__
+Train_modules/deep_utils/__pycache__/*.*.*
+.qt_for_python/
+

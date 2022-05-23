@@ -23,6 +23,8 @@ class CustomCallback(keras.callbacks.Callback):
     
     
 
+        self.model.save( self.out_path)
+        print("--End epoch {} of training; got log keys: {}".format(epoch, keys))
 
     # def on_epoch_begin(self, epoch, logs={}):
     #     self.epoch = epoch

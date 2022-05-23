@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.29, for Win64 (x86_64)
 --
 -- Host: localhost    Database: saba_database
 -- ------------------------------------------------------
--- Server version	8.0.27
+-- Server version	8.0.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,7 +37,7 @@ CREATE TABLE `image_processing` (
 
 LOCK TABLES `image_processing` WRITE;
 /*!40000 ALTER TABLE `image_processing` DISABLE KEYS */;
-INSERT INTO `image_processing` VALUES (0,'small',-0.8,10);
+INSERT INTO `image_processing` VALUES (0,'Medium',-0.8,10);
 /*!40000 ALTER TABLE `image_processing` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-18 15:55:14
+-- Dump completed on 2022-05-23 13:10:12

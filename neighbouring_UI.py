@@ -104,7 +104,7 @@ class neighbouring(QMainWindow, ui):
 # api = labeling_api.labeling_API(win)
 import cv2
 if __name__ == "__main__":
-    img = cv2.imread('./images/no_image.png')
+    img = cv2.imread('/home/reyhane/oxin_image_grabber/995/BOTTOM/0/0.jpg')
     app = QApplication()
     win = neighbouring(img)
     win.show()

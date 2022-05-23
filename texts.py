@@ -19,7 +19,7 @@ WARNINGS={
                  'en':' No sheet loaded '},
         
         'IMAGE_STATUS': {'fa': ' وضعیت عیب تصویر مشخص نشده است ',
-                 'en': ' Image defect status is not specified '},
+                 'en': ' defect status is not specified '},
 
         'NO_IMAGE_LOADED': {'fa': ' تصویری بارگذاری نشده است ',
                  'en': ' No image loaded '},
@@ -53,6 +53,24 @@ WARNINGS={
         'DATASET_EXIST': {'fa': ' آدرس وارد شده وجود دارد ',
                  'en': ' Address already exist '},
         
+        'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
+                 'en': ' Are you sure want to logout ? '},
+        
+
+        'Cmamera_successful':{'fa': ' دوربین متصل شد',
+                 'en': ' Cmamera Connection successfuly '},
+
+        'Cmamera_serial_eror':{'fa': ' شماره سریال متصل نیست',
+                 'en': ' This camera Serial Not Connect '},
+ 
+        'disconnect_eror':{'fa': ' خطا در قطع اتصال',
+                 'en': ' Disconnectiong Eror '},                
+ 
+        'no_connect':{'fa': ' اتصالی برقرار نمیباشد',
+                 'en': ' There is no connection '},                
+
+
+        
         'DATASET_NOT_SELECTED': {'fa': ' دیتاست انتخاب نشده است ',
                  'en': ' No dataset selected '},
         
@@ -69,7 +87,12 @@ WARNINGS={
                  'en': ' Error while reading defect/perfect images '},
 
         'BINARYLIST_MAXIMIZE_IMAGE_ERROR': {'fa': ' خطای نمایش تصویر ',
-                 'en': ' Error while opening image '}
+                 'en': ' Error while opening image '},
+        
+        'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
+                 'en': ' Are you sure want to logout ? '}
+        
+                #  'en': ' Error while opening image '}
 
 }
 MESSEGES = {

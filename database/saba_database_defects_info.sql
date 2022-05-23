@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.29, for Win64 (x86_64)
 --
 -- Host: localhost    Database: saba_database
 -- ------------------------------------------------------
--- Server version	8.0.27
+-- Server version	8.0.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -42,7 +42,7 @@ CREATE TABLE `defects_info` (
 
 LOCK TABLES `defects_info` WRITE;
 /*!40000 ALTER TABLE `defects_info` DISABLE KEYS */;
-INSERT INTO `defects_info` VALUES (47,'d2','d2','2','no','1','0','#FFFFFF','7/2/1401'),(55,'d3','d3','3','yes','4','1','#05d2d2','17/02/1401'),(56,'d1','d1','1','yes','4','2','#d20505','7/2/1401'),(57,'d4','d4','4','yes','4','2','#980404','7/2/1401');
+INSERT INTO `defects_info` VALUES (1,'NO LABEL','LABEL','0','No','0','0','#FFFFFF','7/2/1401'),(47,'d2','d2','2','no','1','0','#05d2d2','7/2/1401'),(55,'d3','d3','3','yes','4','1','#05d2d2','17/02/1401'),(56,'d1','d1','1','yes','4','2','#d20505','7/2/1401'),(57,'d4','d4','4','yes','4','2','#980404','7/2/1401');
 /*!40000 ALTER TABLE `defects_info` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-18 15:55:14
+-- Dump completed on 2022-05-23 13:10:12

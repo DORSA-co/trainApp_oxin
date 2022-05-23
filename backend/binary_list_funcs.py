@@ -11,7 +11,7 @@ from PIL import ImageColor
 
 import texts
 from neighbouring_UI import neighbouring
-from backend import Annotation, defect_management_funcs
+from backend import Annotation, classification_list_funcs
 
 
 
@@ -58,6 +58,7 @@ def create_image_slider_on_ui(ui_obj, db_obj, frame_obj, prefix=widjet_prefixes[
 
 # maximize image label on click (open image in a window)
 def maximize_image_on_click(ui_obj, db_obj, label, event):
+    print('hi', label.whatsThis())
     pathes = label.whatsThis()
     #try:
     if pathes != '':
@@ -66,9 +67,15 @@ def maximize_image_on_click(ui_obj, db_obj, label, event):
             ui_obj.set_warning(texts.WARNINGS['BINARYLIST_MAXIMIZE_IMAGE_ERROR'][language], 'binarylist', level=2)
             return
         # load image
-        image = cv2.imread(os.path.join(pathes[0], pathes[1]))
-        # mask (annotations) overlay
-        annotation_path = os.path.join(pathes[2], pathes[1][:-4]+'.json')
+        if pathes[2] != 'fullpath':
+            image = cv2.imread(os.path.join(pathes[0], pathes[1]))
+            # mask (annotations) overlay
+            annotation_path = os.path.join(pathes[2], pathes[1][:-4]+'.json')
+        else:
+            image = cv2.imread(pathes[0])
+            # mask (annotations) overlay
+            annotation_path = pathes[1]
+
         res, annotated_image = create_mask_from_annotation_file(db_obj=db_obj, image=image, annotation_path=annotation_path)
         if res:
             ui_obj.window = neighbouring(image, annotated_image=annotated_image, has_annotation=True)
@@ -92,6 +99,34 @@ def set_image_to_ui_slider(ui_obj, sub_directory, annot_sub_direcotory, image_pa
             set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, i)), image=image, no_image=False)
             # update text (image url)
             whats_this_text = sub_directory + '#' + image_path + '#' + annot_sub_direcotory
+            eval('ui_obj.%s_label_%s' % (prefix, i)).setWhatsThis(whats_this_text)
+        # set last image labels on UI as empty
+        try:
+            i += 1
+        except:
+            i = 0
+        for j in range(i, n_images_per_row):
+            set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, j)), image=None, no_image=True)
+            eval('ui_obj.%s_label_%s' % (prefix, j)).setWhatsThis('')
+        
+        return True
+
+    except:
+        return False
+
+
+# set/update images to ui given full image and annoptation path
+def set_image_to_ui_slider_full_path(ui_obj, image_path_list, annot_path_list, prefix=widjet_prefixes['perfect']):
+    try:
+        # set dataset images on UI
+        for i, image_path in enumerate(image_path_list):
+            # load image
+            image = cv2.imread(image_path)
+            # set to UI label
+            set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, i)), image=image, no_image=False)
+            # update text (image url)
+            whats_this_text = image_path + '#' + annot_path_list[i] + '#' + 'fullpath'
+            print('whatsthis:', whats_this_text)
             eval('ui_obj.%s_label_%s' % (prefix, i)).setWhatsThis(whats_this_text)
         # set last image labels on UI as empty
         try:
@@ -252,7 +287,7 @@ def create_mask_from_annotation_file(db_obj, image, annotation_path):
 # get defect name and color by id
 def get_defect_info(db_obj, defect_id):
     try:
-        defect_info = defect_management_funcs.load_defects_from_db(db_obj=db_obj, defect_id=[defect_id])
+        defect_info = classification_list_funcs.load_defects_from_db(db_obj=db_obj, defect_id=[defect_id])
         if len(defect_id) > 0:
             return True, defect_info
         else:

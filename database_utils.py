@@ -9,12 +9,15 @@ from backend import pathStructure, binary_model_funcs
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','root','localhost','saba_database')
+        self.db=database.dataBase('root','Dorsa1400@','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
         self.defects_table = 'defects_info'
         self.sign_tables='sign_tables'
+        self.table_user='users'
+        self.table_cameras = 'camera_settings'
+        self.image_processing = 'image_processing'
 
     #________________________________________________________________
     #
@@ -131,6 +134,9 @@ class dataBaseUtils():
         
         return paths
 
+    def get_image_processing_params(self):
+        img_proc_info = self.db.get_all_content(self.image_processing)[0]
+        return list(img_proc_info.values())[1:]
 
     def get_defects(self):
 
@@ -164,13 +170,22 @@ class dataBaseUtils():
 
         self.db.update_record(self.sign_tables, col_name, value, id, id_value)
 
+    def load_cam_params(self, input_camera_id):
+        print('asdwa')
+        try:
+            record = self.db.search( self.table_cameras , 'id', input_camera_id )[0]
+            #print('camera info:', record)
+            # print('recor',record)
+            return record
+        except:
+            return []
 
     #_____________________________________________________________________________________
     # binary-models
     
-    def get_binary_models(self, count=False, limit=False, limit_range=[0,20]):
+    def get_binary_models(self, count=False, limit=False, limit_size=20, offset=0):
         try:
-            bmodels=self.db.get_all_content('binary_models', count=count, limit=limit, limit_range=limit_range)
+            bmodels=self.db.get_all_content('binary_models', count=count, limit=limit, limit_size=limit_size, offset=offset, reverse_order=True)
             #print('--------------------------------------------', defects)
             return bmodels
         except:
@@ -194,10 +209,32 @@ class dataBaseUtils():
             return 'Databas Eror'
     
 
-    def search_binary_model_by_filter(self, parms, cols, limit=False, limit_range=[0,20], count=False):
+    def search_binary_model_by_filter(self, parms, cols, limit=False, limit_size=20, offset=0, count=False):
         try:
             #print('here')
-            record = self.db.search_with_range('binary_models', cols, parms, limit=limit, limit_range=limit_range, count=count)
+            record = self.db.search_with_range('binary_models', cols, parms, limit=limit, limit_size=limit_size, offset=offset, count=count)
+            #print('asd',record)
+            return record
+
+        except:
+            return []
+
+    #________________________________________________________________________________________________________
+    # classification models
+    def get_cls_models(self, count=False, limit=False, limit_size=20, offset=0):
+        try:
+            bmodels=self.db.get_all_content('classification_models', count=count, limit=limit, limit_size=limit_size, offset=offset, reverse_order=True)
+            #print('--------------------------------------------', defects)
+            return bmodels
+        except:
+            return []
+    
+
+    # 
+    def search_cls_model_by_filter(self, parms, cols, limit=False, limit_size=20, offset=0, count=False):
+        try:
+            #print('here')
+            record = self.db.search_with_range_with_classes('classification_models', cols, parms, limit=limit, limit_size=limit_size, offset=offset, count=count)
             #print('asd',record)
             return record
 
@@ -206,6 +243,49 @@ class dataBaseUtils():
 
 
 
+    # ______________________________________________________________________________________
+    # defects
+    def load_defects(self):
+        try:
+            defects=self.db.get_all_content('defects_info')
+
+            return defects
+        
+        except:
+
+            return []
+
+
+    def search_defect_group_by_id(self, input_defect_group_id):
+        try:
+            record = self.db.search( 'defect_groups' , 'defect_group_id', input_defect_group_id)[0]
+            #print('asd',record)
+            return record
+        except:
+            return []
+    
+    # ________________________________________________________________________________________
+    
+
+    #______________________________________________________________________________________
+    # datasets
+    def load_datasets(self):
+        try:
+            datasets=self.db.get_all_content('datasets')
+            return datasets
+        except:
+            return []
+
+
+
+    def search_user(self,input_user_name):
+        try:
+            record = self.db.search( self.table_user , 'user_name', input_user_name )[0]
+            print(record)
+            #print('asd',record)
+            return record
+        except:
+            return []
 
 
 

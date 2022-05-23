@@ -8,6 +8,8 @@ import numpy as np
 import cv2
 import os
 
+from matplotlib.pyplot import figure
+
 gpu = tf.config.list_physical_devices('GPU') 
 cpu = tf.config.list_physical_devices('CPU') 
 tf.config.experimental.set_memory_growth(gpu[0], True)
@@ -15,8 +17,8 @@ tf.config.experimental.set_memory_growth(gpu[0], True)
 
 batch = 8
 epochs = 60
-train_path = 'data/mask_class/train'
-test_path =  'data/mask_class/test'
+train_path = 'J:\\dataset_oxin\\data\\mask_class\\train'
+test_path =  'J:\\dataset_oxin\\data\\mask_class\\test'
 train_data_count = 5333
 test_data_count = 1333
 input_size = (128,800,1)
@@ -66,14 +68,24 @@ my_callback = callbacks.CustomCallback('checkpoint.h5')
 #model.load_weights('ch.h5')
 inpt = input('do you want to train? y/n \n')
 if inpt in ['Y','y']:
-    model.fit(  trainGen,
+    history = model.fit(  trainGen,
                 steps_per_epoch=int(train_data_count/batch) + 1,
                 epochs=epochs,
                 callbacks=[my_callback ],
                 validation_data=testGen,
                 validation_steps=test_data_count//batch + 1, 
                 initial_epoch=0)
-
+    
+    print(history.history.keys())
+    figure(figsize=(8, 6))
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+    
     model.save('resnet_unet.h5')
 
 model.load_weights('resnet_unet.h5')

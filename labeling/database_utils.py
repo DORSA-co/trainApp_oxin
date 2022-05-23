@@ -8,7 +8,7 @@ import os
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','','localhost','saba_database')
+        self.db=database.dataBase('root','root','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
