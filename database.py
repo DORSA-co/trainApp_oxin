@@ -239,7 +239,7 @@ class dataBase:
 
 
 
-    def search_with_range(self,table_name, col_names, values, limit=False, limit_range=[0,20], count=False):
+    def search_with_range(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
         # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
         try:
             if self.check_connection:
@@ -278,7 +278,7 @@ class dataBase:
                 
 
                 if limit:
-                    sql_select_Query += "LIMIT {},{}".format(limit_range[0], limit_range[1])
+                    sql_select_Query += "LIMIT {} OFFSET {}".format(limit_size, offset)
 
 
                 #print(sql_select_Query)
@@ -307,6 +307,94 @@ class dataBase:
             return [],[]
 
     
+    def search_with_range_with_classes(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
+        # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
+        try:
+            if self.check_connection:
+                cursor,connection=self.connect()
+
+                if count:
+                    sql_select_Query = "SELECT count(*) FROM {} WHERE ".format(table_name)
+                else:
+                    sql_select_Query = "SELECT * FROM {} WHERE ".format(table_name)
+
+                # single values
+                single_cols_query = '('
+                single_vals_query = '('
+                flag1 = False
+                for i, col in enumerate(col_names):
+                    if len(values[i]) == 1 and col != 'classes':
+                        flag1 = True
+                        if i != 0:
+                            single_cols_query += ','
+                            single_vals_query += ','
+                        single_cols_query += col
+                        single_vals_query += str(values[i][0])
+                single_cols_query += ')'
+                single_vals_query += ')'
+            
+                # add single query yo main query
+                if not single_cols_query == '()' and not single_vals_query == '()':
+                    sql_select_Query = sql_select_Query + single_cols_query + '=' + single_vals_query + ' '
+
+                # range values
+                for i, col in enumerate(col_names):
+                    if len(values[i]) > 1 and col != 'classes':
+                        flag1 = True
+                        if i != 0:
+                            sql_select_Query += "AND "
+                        #
+                        sql_select_Query += "{} BETWEEN {} AND {} ".format(col, str(values[i][0]), str(values[i][1]))
+
+                # like values (for classes)
+                # classes LIKE '%,22,%' or classes LIKE '%,33,%'
+                for i, col in enumerate(col_names):
+                    if col == 'classes':
+                        if flag1:
+                            sql_select_Query += "AND ("
+                        else:
+                            sql_select_Query += "("
+                        # for loop in classes in list
+                        flag = False
+                        for j, cls in enumerate(values[i]):
+                            flag = True
+                            if j != 0:
+                                sql_select_Query += "AND "
+                            sql_select_Query += "{} LIKE '%,{},%' ".format(col, str(values[i][j]))
+                        if flag:
+                            sql_select_Query += ") "
+
+                #
+                if limit:
+                    sql_select_Query += "LIMIT {} OFFSET {}".format(limit_size, offset)
+
+
+                #print(sql_select_Query)
+                #return
+
+                cursor=self.execute_quary(sql_select_Query, cursor, connection)
+
+                records = cursor.fetchall()
+                #print("Total number of rows in table: ", cursor.rowcount)
+                #print(len(records),records)
+                #----------------------------
+                # print(records)
+                
+                field_names = [col[0] for col in cursor.description]
+                res = []
+                for record in records:
+                    record_dict = {}
+                    for i in range( len(field_names) ):
+                        record_dict[ field_names[i] ] = record[i]
+                    res.append( record_dict )
+
+                return res
+            return [],[]
+
+        except:
+            print('No record Found')
+            return [],[]
+            
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
 
@@ -342,8 +430,8 @@ class dataBase:
     #--------------------------------------------------------------------------
 
 
-    def get_all_content(self,table_name, count=False, limit=False, limit_range=[0,20]):
-
+    def get_all_content(self,table_name, count=False, limit=False, limit_size=20, offset=0, reverse_order=False):
+        sort_order = 'DESC' if reverse_order else 'ASC'
         try:
             if self.check_connection:
                 cursor,connection=self.connect()
@@ -352,9 +440,9 @@ class dataBase:
                     sql_select_Query = "select count(*) from {}".format(table_name)
                 else:
                     if not limit:
-                        sql_select_Query = "select * from {}".format(table_name)
+                        sql_select_Query = "select * from {} ORDER BY id {}".format(table_name, sort_order)
                     else:
-                        sql_select_Query = "select * from {} LIMIT {},{}".format(table_name, limit_range[0], limit_range[1])
+                        sql_select_Query = "select * from {} ORDER BY id {} LIMIT {} OFFSET {}".format(table_name, sort_order, limit_size, offset)
                     
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
                 # cursor.execute(sql_select_Query)
