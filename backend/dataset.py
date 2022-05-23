@@ -5,23 +5,34 @@ import string
 import random
 import cv2
 
+IMAGES_TEMP_FOLDER = 'temp_images'
+ANNOTATIONS_TEMP_FOLDER = 'temp_annotations'
+IMAGE_FOLDERS = 'images'
+ANNOTATIONS_FOLDER = 'annotations'
+BINARY_FOLDER = 'binary'
+DEFECT_FOLDER = 'defect'
+PERFECT_FOLDER = 'perfect'
+DEFECT_SPLITED_FOLDER = 'defect_splitted'
+PERFECT_SPLITED_FOLDER = 'perfect_splitted'
+FORMAT_IMAGE = '.jpg'
+
 
 class Dataset:
 
     def __init__(self, dataset_path, dataset_path_user, weights_path):
-        self.images_temp_folder = 'temp_images'
-        self.annotations_temp_folder = 'temp_annotations'
-        self.images_folder = 'images'
-        self.annotations_folder = 'annotations'
-        self.binary_folder = 'binary'
-        self.defect_folder = 'defect'
-        self.perfect_folder = 'perfect'
-        self.defect_splitted_folder = 'defect_splitted'
-        self.perfect_splitted_folder = 'perfect_splitted'
+        self.images_temp_folder = IMAGES_TEMP_FOLDER
+        self.annotations_temp_folder = ANNOTATIONS_TEMP_FOLDER
+        self.images_folder = IMAGE_FOLDERS
+        self.annotations_folder = ANNOTATIONS_FOLDER
+        self.binary_folder = BINARY_FOLDER
+        self.defect_folder = DEFECT_FOLDER
+        self.perfect_folder = PERFECT_FOLDER
+        self.defect_splitted_folder = DEFECT_SPLITED_FOLDER
+        self.perfect_splitted_folder = PERFECT_SPLITED_FOLDER
         self.dataset_path = dataset_path
         self.weights_path = weights_path
         self.dataset_path_user = dataset_path_user
-        self.format_image = '.jpg'
+        self.format_image = FORMAT_IMAGE
 
         # print(self.dataset_path)
 
@@ -210,6 +221,13 @@ class Dataset:
         self.__creat_path__(defect_splitted_path)
         self.__creat_path__(perfect_splitted_path)
     # ---------------------------------------------------
+
+
+
+# get datasets list from db
+def get_datasets_list_from_db(db_obj):
+    ds_list = db_obj.load_datasets()
+    return ds_list
 
 
 

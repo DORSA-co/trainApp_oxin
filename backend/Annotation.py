@@ -20,6 +20,7 @@ BBOX_KEY = 'bbox'
 OBJ_MASKS_KEY = 'obj_masks'
 MASK_KEY = 'mask'
 CLASS_KEY = 'class'
+NAME = 'name'
 
 
 #______________________________________________________________________________________________________________________________________________
@@ -223,7 +224,7 @@ class Annotation():
     #
     #--------------------------------------------------------
     def set_fname(self, name):
-        self.annotation['name'] = name
+        self.annotation[NAME] = name
 
     def set_sheet_id(self, id):
         self.annotation['sheet_id'] = id
@@ -274,7 +275,7 @@ class Annotation():
     #--------------------------------------------------------
 
     def get_fname(self):
-        return self.annotation['name']
+        return self.annotation[NAME]
 
     def get_sheet_id(self):
         return self.annotation['sheet_id']
@@ -295,7 +296,7 @@ class Annotation():
         return self.annotation['path']
 
     def get_fullpath(self):
-        return os.path.join(self.annotation['path'], self.annotation['name'] )
+        return os.path.join(self.annotation['path'], self.annotation[NAME] )
 
     def get_img(self):
         return cv2.imread( self.get_fullpath() )

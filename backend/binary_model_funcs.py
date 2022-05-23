@@ -28,8 +28,8 @@ binary_table_nrows = 20
 
 
 # get binary-models from database
-def get_binary_models_from_db(db_obj, count=False, min=0, max=binary_table_nrows):
-    bmodels_list = db_obj.get_binary_models(limit=True, count=count, limit_range=[min, max])
+def get_binary_models_from_db(db_obj, count=False, limit_size=binary_table_nrows, offset=0):
+    bmodels_list = db_obj.get_binary_models(limit=True, count=count, limit_size=limit_size, offset=offset)
     return bmodels_list
 
 
@@ -120,7 +120,7 @@ def get_binary_model_filter_info_from_ui(ui_obj):
     
 
 # get users from database
-def get_filtered_binary_models_from_db(ui_obj, db_obj, filter_params, min=0, max=binary_table_nrows, count=False):
+def get_filtered_binary_models_from_db(ui_obj, db_obj, filter_params, limit_size=binary_table_nrows, offset=0, count=False):
     # input parameters and column names in database
     params = []
     cols = []
@@ -218,10 +218,11 @@ def get_filtered_binary_models_from_db(ui_obj, db_obj, filter_params, min=0, max
     # check not wmpty
     if len(params) == 0 or len(cols) == 0:
         return 'all', []
+    
 
     # get from db
     try:
-        defects_list = db_obj.search_binary_model_by_filter(parms=params, cols=cols, limit=True, limit_range=[min,max], count=count)
+        defects_list = db_obj.search_binary_model_by_filter(parms=params, cols=cols, limit=True, limit_size=limit_size, offset=offset, count=count)
         return 'filtered', defects_list
     
     except:
