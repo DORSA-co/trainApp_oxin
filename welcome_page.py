@@ -21,7 +21,7 @@ import database_utils
 
 import cv2
 from platform import python_version
-import tensorflow as tf
+
 
 
 ui, _ = loadUiType("UI/welcome_page.ui")
@@ -44,7 +44,11 @@ class UI_main_window(QMainWindow, ui):
         self.activate_()
         self.line_username.setText('root')
         self.line_password.setText('root')
-        
+        self.seuccess_image=cv2.imread('UI/images/success.png')
+        self.eror_image=cv2.imread('UI/images/x-mark.png')
+        # self.eror_image='asd'
+        # print('asdwdawd',self.eror_image)
+   
         self.load_dataset_parms()
         self.load_programs()
         self.check_btn.clicked.connect(self.load_dataset_parms)
@@ -54,8 +58,8 @@ class UI_main_window(QMainWindow, ui):
         self.timer_run.start(1000) 
         self.timer=10
 
-        self.seuccess_image=cv2.imread('UI/images/success.png')
-        self.eror_image=cv2.imread('UI/images/x-mark.png')
+
+        
 
     def activate_(self):
         self.closeButton.clicked.connect(self.close_win)
@@ -72,33 +76,34 @@ class UI_main_window(QMainWindow, ui):
     def set_image_label(self,label_name, img):
         h, w, ch = img.shape
         bytes_per_line = ch * w
-        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_RGB888)
+        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_BGR888)
 
 
         label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))
 
     def load_programs(self):
 
-        try:
-            python_version=python_version()
-            self.label_4.setText(python_version)
-            
-            self.set_image_label(self.label_3, self.seuccess_image)
+        # try:
+        python_ver=python_version()
+        self.label_4.setText(python_ver)
         
-        except:
+        self.set_image_label(self.label_3, self.seuccess_image)
+    
+        # except:
             
-            self.label_4.setText('python Eror')
-            self.set_image_label(self.label_3, self.eror_image)
+        #     self.label_4.setText('python Eror')
+        #     self.set_image_label(self.label_3,self.eror_image)
 
         try:
-            tf_version=tf. __version__
-            self.label_6.setText(python_version)
+            import tensorflow as tf
+            tf_ver=tf. __version__
+            self.label_6.setText(tf_ver)
             
             self.set_image_label(self.label_5, self.seuccess_image)
         
         except:
             
-            self.label_6.setText('python Eror')
+            self.label_6.setText('Tensor Eror')
             self.set_image_label(self.label_5, self.eror_image)          
 
 
