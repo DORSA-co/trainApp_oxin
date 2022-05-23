@@ -20,7 +20,10 @@ class dataBase:
         self.host=host
         self.data_base_name=database_name
         self.check_connection()
-        
+    
+
+
+
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
     def connect(self):
@@ -180,16 +183,18 @@ class dataBase:
     #--------------------------------------------------------------------------
 
     def search(self,table_name,param_name, value,int_type=True):
+
+        user_id=value
         try:
             if self.check_connection:
                 cursor,connection=self.connect()
-                print('if')
-                print('param_name',param_name)
+
                 if int_type:
                     sql_select_Query = "SELECT * FROM {} WHERE {} = {};".format(table_name,param_name,str(value))
                     cursor=self.execute_quary(sql_select_Query, cursor, connection)
                 else:
-                    sql_select_Query = """SELECT * FROM {} WHERE {} = {} """.format(table_name,param_name,("'"+value+"'"))
+
+                    sql_select_Query = """SELECT * FROM {} WHERE {} = {} """.format(table_name,param_name,("'"+str(value)+"'"))
                     cursor=self.execute_quary(sql_select_Query, cursor, connection)
 
 
@@ -381,6 +386,17 @@ class dataBase:
             print("Error reading data from MySQL table", e)
             return []
 
+    def check_table_exist(self,table_name):
+
+        try:
+            if self.check_connection:
+                cursor,connection=self.connect()
+            sql_check_table = "SELECT * FROM {}.{};".format(self.data_base_name,table_name)
+            cursor=self.execute_quary(sql_check_table, cursor, connection)       
+            # print('check')    
+            return 'Exist'                              
+        except mysql.connector.Error as e:
+            print("Error reading data from MySQL table", e)
 
 
 if __name__ == "__main__":

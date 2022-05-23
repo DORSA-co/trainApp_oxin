@@ -6,10 +6,10 @@ import datetime
 from Sheet import Sheet
 import os
 from backend import pathStructure, binary_model_funcs
-
+import inspect
 class dataBaseUtils():
-    def __init__(self) :
-        self.db=database.dataBase('root','root','localhost','saba_database')
+    def __init__(self,user_name='root',password='root') :
+        self.db=database.dataBase(user_name,password,'localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
@@ -20,7 +20,15 @@ class dataBaseUtils():
         self.image_processing = 'image_processing'
         self.dataset='datasets '
 
-    #________________________________________________________________
+
+    def check_table_exist(self,table_name):
+        ret=self.db.check_table_exist(table_name)
+        return ret
+    
+    def check_connection(self):
+        ret=self.db.check_connection()
+        return ret
+            #________________________________________________________________
     #
     #________________________________________________________________
     def build_sheet(self,record):
@@ -223,8 +231,9 @@ class dataBaseUtils():
 
 
     def search_user(self,input_user_name):
+
         try:
-            record = self.db.search( self.table_user , 'user_name', input_user_name )[0]
+            record = self.db.search( self.table_user , 'user_name', input_user_name ,int_type=False)[0]
             print(record)
             #print('asd',record)
             return record
