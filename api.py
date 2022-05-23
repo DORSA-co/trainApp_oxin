@@ -14,7 +14,7 @@ from PySide6.QtGui import QPen, QPainter
 from PySide6.QtWidgets import QFileDialog
 from matplotlib import pyplot as plt
 
-from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap_bbox
+from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
 from app_settings import Settings
 from backend import data_grabber, camera_connection
 from backend.mouse import Mouse
@@ -55,7 +55,8 @@ from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
 from login_win.login_api import login_API
-
+from camera_live import save_camera_images
+from multiprocessing import Process
 import dataset_utils
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
@@ -104,6 +105,7 @@ class API:
         self.bmodel_tabel_itr = 1
         self.bmodel_count = 0
         self.filter_mode = False
+        self.proc_start_flag = True
 
         # binarylist dataset parms
         self.dataset_params = {}
@@ -156,6 +158,8 @@ class API:
         
         # binarylist image object
         self.binary_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
+
+        self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -1164,6 +1168,10 @@ class API:
         cam_num = self.ui.get_camera_parms()
         print('cam num', cam_num)
 
+        if self.proc_start_flag:
+            self.camera_process.start()
+            self.proc_start_flag = False
+
         if cam_num != 'All':
 
             print('cam_num', cam_num)
@@ -1493,10 +1501,10 @@ class API:
         label_type = self.ui.get_label_type()
         if label_type == 'mask':
             df = self.create_mask_from_mask(img_path)
-            hm = CreateHeatmap_bbox(img, df)
+            hm = CreateHeatmap(img, df)
         elif label_type == 'bbox':
             df = self.create_mask_from_bbox(img_path)
-            hm = CreateHeatmap_bbox(img, df)
+            hm = CreateHeatmap(img, df)
         self.ui.show_neighbouring(hm)
 
     # def create_piechart(self):

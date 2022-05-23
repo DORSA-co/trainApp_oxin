@@ -224,12 +224,11 @@ class dataBaseUtils():
 
     def search_user(self,input_user_name):
         try:
-            record = self.db.search( self.table_user ,'user_name', input_user_name ,int_type=False)[0]
-            print('rec',record)
+            record = self.db.search( self.table_user , 'user_name', input_user_name )[0]
+            print(record)
             #print('asd',record)
             return record
         except:
-            print('except')
             return []
 
 
