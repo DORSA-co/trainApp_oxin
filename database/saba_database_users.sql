@@ -27,6 +27,9 @@ CREATE TABLE `users` (
   `user_name` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
   `role` varchar(45) NOT NULL DEFAULT 'operator',
+  `default_dataset` varchar(45) DEFAULT 'none',
+  `date_created` varchar(45) DEFAULT '1-1-1401',
+  `full_path` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -37,7 +40,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (4,'test','test','operator'),(5,'ali','1234','Operator'),(18,'alii','1','Operator'),(19,'1','1','Operator'),(20,'2','2','Operator'),(29,'ali1','1','Operator'),(30,'testt','12','Operator'),(31,'te','te','Operator');
+INSERT INTO `users` VALUES (4,'test','test','operator','none','1-1-1401',NULL),(5,'ali','1234','Operator','ali_1','1-1-1401',NULL),(18,'alii','1','Operator','none','1-1-1401',NULL),(19,'1','1','Operator','12','1-1-1401',NULL),(20,'2','2','Operator','none','1-1-1401',NULL),(29,'ali1','1','Operator','asd','1-1-1401',NULL),(30,'testt','12','Operator','none','1-1-1401',NULL),(31,'te','te','Operator','none','1-1-1401',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-21 15:24:05
+-- Dump completed on 2022-05-23  9:25:30
