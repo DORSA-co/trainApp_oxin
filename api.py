@@ -14,7 +14,7 @@ from PySide6.QtGui import QPen, QPainter
 from PySide6.QtWidgets import QFileDialog
 from matplotlib import pyplot as plt
 
-from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap_bbox
+from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
 from app_settings import Settings
 from backend import data_grabber, camera_connection
 from backend.mouse import Mouse
@@ -55,7 +55,8 @@ from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
 from login_win.login_api import login_API
-
+from camera_live import save_camera_images
+from multiprocessing import Process
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
@@ -102,6 +103,7 @@ class API:
         self.bmodel_tabel_itr = 1
         self.bmodel_count = 0
         self.filter_mode = False
+        self.proc_start_flag = True
 
         # binarylist dataset parms
         self.dataset_params = {}
@@ -143,19 +145,19 @@ class API:
         # perfect
         self.binarylist_sliders_check = []
         self.binarylist_sliders_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
-                                                                                         frame_obj=self.ui.binary_list_perfect_frame,
-                                                                                         prefix=
-                                                                                         binary_list_funcs.widjet_prefixes[
-                                                                                             'perfect']))
+                                                                                        db_obj=self.db,
+                                                                                        frame_obj=self.ui.binary_list_perfect_frame,
+                                                                                        prefix=binary_list_funcs.widjet_prefixes['perfect']))
         # defect
         self.binarylist_sliders_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
-                                                                                         frame_obj=self.ui.binary_list_defect_frame,
-                                                                                         prefix=
-                                                                                         binary_list_funcs.widjet_prefixes[
-                                                                                             'defect']))
-
+                                                                                        db_obj=self.db,
+                                                                                        frame_obj=self.ui.binary_list_defect_frame,
+                                                                                        prefix=binary_list_funcs.widjet_prefixes['defect']))
+        
         # binarylist image object
         self.binary_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
+
+        self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -826,6 +828,11 @@ class API:
         # update chart axes given train data
         self.update_b_chart_axes(b_parms[3])
         #
+        t = threading.Thread(target=self.train_binary, args=(b_parms, ))
+        t.start()
+        # t.join()
+
+    def train_binary(self, b_parms):
         bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
 
@@ -977,7 +984,8 @@ class API:
             self.ui.b_dp.setPlainText(text + str(n) + '. ' + dname)
         #
         elif page == 'binarylist':
-            self.ui.binarylist_dataset_lineedit.setPlainText(dname)
+            self.ui.binarylist_dataset_lineedit.setText(dname)
+            self.ui.binarylist_dataset_annot_lineedit.setText(dname)
 
     def delete_binary_dataset(self):
         ds_n = self.ui.b_ds_num.value() - 1
@@ -1038,6 +1046,10 @@ class API:
 
         cam_num = self.ui.get_camera_parms()
         print('cam num', cam_num)
+
+        if self.proc_start_flag:
+            self.camera_process.start()
+            self.proc_start_flag = False
 
         if cam_num != 'All':
 
@@ -1300,18 +1312,16 @@ class API:
         # set/update images on UI
         if not defect:
             res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
-                                                           sub_directory=os.path.join(
-                                                               self.dataset_params['dataset_path'],
-                                                               self.ds.perfect_folder),
-                                                           image_path_list=current_image_list,
-                                                           prefix=binary_list_funcs.widjet_prefixes['perfect'])
+                                                            sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.perfect_folder),
+                                                            annot_sub_direcotory='./dataset/annotations',
+                                                            image_path_list=current_image_list,
+                                                            prefix=binary_list_funcs.widjet_prefixes['perfect'])
         else:
             res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
-                                                           sub_directory=os.path.join(
-                                                               self.dataset_params['dataset_path'],
-                                                               self.ds.defect_folder),
-                                                           image_path_list=current_image_list,
-                                                           prefix=binary_list_funcs.widjet_prefixes['defect'])
+                                                            sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.defect_folder),
+                                                            annot_sub_direcotory='./dataset/annotations',
+                                                            image_path_list=current_image_list,
+                                                            prefix=binary_list_funcs.widjet_prefixes['defect'])
         # validate
         if not res:
             self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=2)
@@ -1370,10 +1380,10 @@ class API:
         label_type = self.ui.get_label_type()
         if label_type == 'mask':
             df = self.create_mask_from_mask(img_path)
-            hm = CreateHeatmap_bbox(img, df)
+            hm = CreateHeatmap(img, df)
         elif label_type == 'bbox':
             df = self.create_mask_from_bbox(img_path)
-            hm = CreateHeatmap_bbox(img, df)
+            hm = CreateHeatmap(img, df)
         self.ui.show_neighbouring(hm)
 
     # def create_piechart(self):

@@ -9,7 +9,7 @@ from backend import pathStructure, binary_model_funcs
 
 class dataBaseUtils():
     def __init__(self) :
-        self.db=database.dataBase('root','root','localhost','saba_database')
+        self.db=database.dataBase('root','','localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
@@ -147,7 +147,16 @@ class dataBaseUtils():
         for i in range(len(defects_info)):
             name_list.append(defects_info[i]['name'])
 
-        return name_list,defects_info            
+        return name_list,defects_info       
+
+
+    def search_defect_by_id(self, input_defect_id):
+        try:
+            record = self.db.search( 'defects_info' , 'defect_ID', input_defect_id)[0]
+            #print('asd',record)
+            return record
+        except:
+            return []
 
 
     def ret_sign_defect_table(self):
@@ -161,14 +170,6 @@ class dataBaseUtils():
 
         self.db.update_record(self.sign_tables, col_name, value, id, id_value)
 
-    def search_user(self,input_user_name):
-        try:
-            record = self.db.search( self.table_user , 'user_name', input_user_name )[0]
-            print(record)
-            #print('asd',record)
-            return record
-        except:
-            return []
     def load_cam_params(self, input_camera_id):
         print('asdwa')
         try:
@@ -220,6 +221,14 @@ class dataBaseUtils():
 
 
 
+    def search_user(self,input_user_name):
+        try:
+            record = self.db.search( self.table_user , 'user_name', input_user_name )[0]
+            print(record)
+            #print('asd',record)
+            return record
+        except:
+            return []
 
 
 

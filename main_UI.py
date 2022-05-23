@@ -21,8 +21,6 @@ from PySide6.QtGui import QIntValidator as sQIntValidator
 import pandas as pd
 from functools import partial
 
-# from pytools import F
-
 from FileDialog import FileDialog
 from app_settings import Settings
 from backend import data_grabber, chart_funcs , camera_connection
@@ -696,14 +694,14 @@ class UI_main_window(QMainWindow, ui):
         self.tabWidget_defect.setCurrentIndex(0)
 
     def zoom_in(self):
-        cursor = PG.QPixmap('/home/reyhane/PycharmProjects/trainApp_oxin2/images/zoom-in_cursor.png')
+        cursor = PG.QPixmap('images/zoom-in_cursor.png')
         cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
         self.image.setCursor(PG.QCursor(cursor))
 
         self.zoom_type = 'zoom_in'
 
     def zoom_out(self):
-        cursor = PG.QPixmap('/home/reyhane/PycharmProjects/trainApp_oxin2/images/zoom-out_cursor.png')
+        cursor = PG.QPixmap('images/zoom-out_cursor.png')
         cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
         self.image.setCursor(PG.QCursor(cursor))
 
@@ -1246,6 +1244,8 @@ class UI_main_window(QMainWindow, ui):
             label_name.setText('')
 
 
+    def show_image_btn(self,label_name,img_path):
+        label_name.setIcon(sQPixmap.fromImage(sQImage(img_path)))
 
     # def get_label_type(self):
     #     if self.tabWidget_defect.currentTabText() =='Mask':

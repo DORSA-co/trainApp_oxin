@@ -26,6 +26,7 @@ binary_table_ncols = len(binary_headers)
 binary_table_nrows = 20
 
 
+
 # get binary-models from database
 def get_binary_models_from_db(db_obj, count=False, min=0, max=binary_table_nrows):
     bmodels_list = db_obj.get_binary_models(limit=True, count=count, limit_range=[min, max])

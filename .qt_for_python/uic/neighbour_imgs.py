@@ -3,11 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'neighbour_imgs.ui'
 ##
-<<<<<<< HEAD
 ## Created by: Qt User Interface Compiler version 6.2.4
-=======
-## Created by: Qt User Interface Compiler version 6.2.2
->>>>>>> ali
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,16 +15,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
-    QMainWindow, QPushButton, QSizePolicy, QSpacerItem,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
+    QLabel, QMainWindow, QPushButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(960, 676)
+        MainWindow.resize(960, 732)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -68,6 +64,21 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.miniButton)
 
+        self.maxiButton = QPushButton(self.rightButtons)
+        self.maxiButton.setObjectName(u"maxiButton")
+        self.maxiButton.setMinimumSize(QSize(28, 28))
+        self.maxiButton.setMaximumSize(QSize(28, 28))
+        self.maxiButton.setCursor(QCursor(Qt.PointingHandCursor))
+        self.maxiButton.setStyleSheet(u"#rightButtons .QPushButton { background-color: rgba(255, 255, 255, 0); border: none;  border-radius: 5px; }\n"
+"#rightButtons .QPushButton:hover { background-color: rgb(44, 49, 57); border-style: solid; border-radius: 4px; }\n"
+"#rightButtons .QPushButton:pressed { background-color: rgb(23, 26, 30); border-style: solid; border-radius: 4px; }")
+        icon1 = QIcon()
+        icon1.addFile(u"images/icons/icon_maximize.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.maxiButton.setIcon(icon1)
+        self.maxiButton.setIconSize(QSize(20, 20))
+
+        self.horizontalLayout_2.addWidget(self.maxiButton)
+
         self.closeButton = QPushButton(self.rightButtons)
         self.closeButton.setObjectName(u"closeButton")
         self.closeButton.setMinimumSize(QSize(28, 28))
@@ -76,9 +87,9 @@ class Ui_MainWindow(object):
         self.closeButton.setStyleSheet(u"#rightButtons .QPushButton { background-color: rgba(255, 255, 255, 0); border: none;  border-radius: 5px; }\n"
 "#rightButtons .QPushButton:hover { background-color: rgb(44, 49, 57); border-style: solid; border-radius: 4px; }\n"
 "#rightButtons .QPushButton:pressed { background-color: rgb(23, 26, 30); border-style: solid; border-radius: 4px; }")
-        icon1 = QIcon()
-        icon1.addFile(u"images/icons/cil-x.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.closeButton.setIcon(icon1)
+        icon2 = QIcon()
+        icon2.addFile(u"images/icons/cil-x.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.closeButton.setIcon(icon2)
         self.closeButton.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_2.addWidget(self.closeButton)
@@ -88,12 +99,42 @@ class Ui_MainWindow(object):
 
         self.n_image = QLabel(self.frame)
         self.n_image.setObjectName(u"n_image")
-        self.n_image.setMinimumSize(QSize(0, 0))
-        self.n_image.setMaximumSize(QSize(940, 600))
+        self.n_image.setMinimumSize(QSize(940, 600))
+        self.n_image.setMaximumSize(QSize(16777215, 16777215))
         self.n_image.setStyleSheet(u"border: 3px solid rgb(255, 255, 255);")
         self.n_image.setScaledContents(True)
 
         self.verticalLayout_3.addWidget(self.n_image)
+
+        self.rightButtons_2 = QFrame(self.frame)
+        self.rightButtons_2.setObjectName(u"rightButtons_2")
+        self.rightButtons_2.setMinimumSize(QSize(0, 50))
+        self.rightButtons_2.setMaximumSize(QSize(16777215, 50))
+        self.rightButtons_2.setStyleSheet(u"background-color: rgb(44, 49, 58);")
+        self.rightButtons_2.setFrameShape(QFrame.NoFrame)
+        self.rightButtons_2.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_3 = QHBoxLayout(self.rightButtons_2)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.annot_checkbox = QCheckBox(self.rightButtons_2)
+        self.annot_checkbox.setObjectName(u"annot_checkbox")
+        self.annot_checkbox.setEnabled(False)
+        self.annot_checkbox.setLayoutDirection(Qt.RightToLeft)
+        self.annot_checkbox.setStyleSheet(u"color:white")
+
+        self.horizontalLayout_3.addWidget(self.annot_checkbox)
+
+        self.msg_label = QLabel(self.rightButtons_2)
+        self.msg_label.setObjectName(u"msg_label")
+        self.msg_label.setStyleSheet(u"color:red;")
+
+        self.horizontalLayout_3.addWidget(self.msg_label)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_3.addItem(self.horizontalSpacer_3)
+
+
+        self.verticalLayout_3.addWidget(self.rightButtons_2)
 
 
         self.verticalLayout.addWidget(self.frame)
@@ -112,9 +153,15 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.miniButton.setText("")
 #if QT_CONFIG(tooltip)
+        self.maxiButton.setToolTip(QCoreApplication.translate("MainWindow", u"Minimize", None))
+#endif // QT_CONFIG(tooltip)
+        self.maxiButton.setText("")
+#if QT_CONFIG(tooltip)
         self.closeButton.setToolTip(QCoreApplication.translate("MainWindow", u"Close", None))
 #endif // QT_CONFIG(tooltip)
         self.closeButton.setText("")
         self.n_image.setText("")
+        self.annot_checkbox.setText(QCoreApplication.translate("MainWindow", u"Show Annotatins/Maks", None))
+        self.msg_label.setText("")
     # retranslateUi
 
