@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.29, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --
 -- Host: localhost    Database: saba_database
 -- ------------------------------------------------------
--- Server version	8.0.29
+-- Server version	8.0.28
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -28,7 +28,7 @@ CREATE TABLE `datasets` (
   `user_own` varchar(45) NOT NULL,
   `path` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `datasets` (
 
 LOCK TABLES `datasets` WRITE;
 /*!40000 ALTER TABLE `datasets` DISABLE KEYS */;
-INSERT INTO `datasets` VALUES (1,'dataset','12','D:\\trainApp_oxin\\dataset');
+INSERT INTO `datasets` VALUES (1,'ali_1','ali','D:\\trainApp_oxin\\dataset'),(2,'sad','sdf','sdsg'),(3,'dfsdf','ali','sdfsdf'),(4,'ghnfgn','ali','ghjghj'),(5,'asd','ali','asdasd'),(6,'asdasd','asda','asdaw'),(7,'asda','ali','casdasd'),(8,'dfg','dfg','dfg'),(9,'dataset_name','ali','adwad'),(10,'1','ali','D:/1'),(11,'1asdad','1','D:/1asdad'),(12,'1asdadasdas','te','D:/1asdadasdas'),(13,'dataset_name','ali','adwad'),(14,'12','1','D:/12');
 /*!40000 ALTER TABLE `datasets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-23 13:10:12
+-- Dump completed on 2022-05-23  9:25:30

@@ -208,7 +208,10 @@ class UI_main_window(QMainWindow, ui):
 
         self.create_new_database.clicked.connect(self.buttonClick)
         self.my_databases_2.clicked.connect(self.buttonClick)
-
+        self.btn_user_proflie.clicked.connect(self.buttonClick)
+        self.toolButton_select_directory.clicked.connect(self.buttonClick)
+        self.set_col_all_datasets()
+        self.set_col_user_datasets()
 
         self._old_pos = None
 
@@ -630,6 +633,24 @@ class UI_main_window(QMainWindow, ui):
     #     header = self.class_list.horizontalHeader()
     #     header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
+
+    def set_col_all_datasets(self):
+        labels = ['Id', 'Name', 'User own', 'Path']
+        self.tableWidget_all_dataset.setHorizontalHeaderLabels(labels)
+
+        header = self.tableWidget_all_dataset.horizontalHeader()
+        header = self.tableWidget_all_dataset.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeToContents)
+
+    def set_col_user_datasets(self):
+        labels = ['Id', 'Name', 'User own', 'Path']
+        self.tableWidget_user_dataset.setHorizontalHeaderLabels(labels)
+
+        header = self.tableWidget_user_dataset.horizontalHeader()
+        header = self.tableWidget_user_dataset.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeToContents)
+
+
     def get_label_type(self):
         return self.label_type
 
@@ -790,7 +811,8 @@ class UI_main_window(QMainWindow, ui):
             'label': self.warning_label_page,
             'train': self.warning_train_page,
             'camera_connection':self.camera_connection_msg,
-            'binarylist': self.warning_binarylist_page
+            'binarylist': self.warning_binarylist_page,
+            'setting_eror': self.setting_eror
         }
         # print('set_warning')
         if text != None:
@@ -1061,6 +1083,9 @@ class UI_main_window(QMainWindow, ui):
         self.comboBox_cam_select.addItems(strings)
         self.comboBox_cam_select.setCurrentIndex(24)
 
+        string=['5 Gb','15 Gb','40 Gb','Unlimit']
+        self.comboBox_max_size.addItems(string)
+        self.comboBox_max_size.setCurrentIndex(1)
         # x=['Small','Medium','Large']
         # self.block_image_proccessing={'Small':100,'Medium':200,'Large':300}
         # self.comboBox_block_size.addItems(x)
@@ -1078,9 +1103,50 @@ class UI_main_window(QMainWindow, ui):
 
         return cam_num
 
+    def get_create_dataset_parms(self):
+
+        # try:
+
+            user_name = self.user_name_2.text()
+            user_id = self.user_id.text()
+            dataset_name = self.lineEdit_name_dataset.text()
+            path = self.lineEdit_path_dataset.text()
+            max_size = self.comboBox_max_size.currentText()
+            date=self.today_date.text()
+
+            return {'user_name':user_name,'user_id':user_id,'dataset_name':dataset_name,'path':path,'max_size':max_size,'date':date}
+
+        # except:
+        #     return False
+    # profile page
+
+    def open_file_dialog(self):
+        file = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        # print('file',file)
+        self.lineEdit_path_dataset.setText(file)
 
 
+    def clear_table_name(self,name):
 
+        for i in range(name.rowCount()):
+            name.removeRow(0)
+
+
+    def show_all_datasets(self, records):
+
+        self.clear_table_name(self.tableWidget_all_dataset)  
+        self.tableWidget_all_dataset.setRowCount(1)  # set row count
+        print(records)
+        for i in range(4) :
+            self.tableWidget_all_dataset.setItem(0,i, QTableWidgetItem(str(records[i])))
+
+    def show_user_datasets(self,records):
+
+        self.clear_table_name(self.tableWidget_user_dataset)  
+        self.tableWidget_user_dataset.setRowCount(1)  # set row count
+        print(records)
+        for i in range(4) :
+            self.tableWidget_user_dataset.setItem(0,i, QTableWidgetItem(str(records[i])))
 
 
     def buttonClick(self):
@@ -1231,6 +1297,12 @@ class UI_main_window(QMainWindow, ui):
         if btnName == 'my_databases_2':
             self.stackedWidget_2.setCurrentWidget(self.my_databases)
 
+        if btnName == 'toolButton_select_directory':
+            self.open_file_dialog()
+
+        # if btnName == 'btn_user_proflie':
+        #     self.stackedWidget.setCurrentWidget(self.page_user_profile)
+
         # PRINT BTN NAME
         # print(f'Button "{btnName}" pressed!')
 
@@ -1357,6 +1429,9 @@ class UI_main_window(QMainWindow, ui):
             btn_name=eval('self.camera%s_btn_2'%cam_num)
             btn_name.setIcon(QIcon(img_btm))
 
+    def set_widget_page(self,widget,page_name): 
+
+        widget.setCurrentWidget(page_name)
 
 
 

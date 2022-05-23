@@ -20,7 +20,10 @@ class dataBase:
         self.host=host
         self.data_base_name=database_name
         self.check_connection()
-        
+    
+
+
+
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
     def connect(self):
@@ -108,15 +111,15 @@ class dataBase:
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
 
-    def update_record(self,table_name,col_name,value,id,id_value):
+    def update_record(self,table_name,col_name,value,id_name,id_value):
         
-
+        print('id_value',table_name,col_name,value,id_name,id_value)
         if self.check_connection:
             cursor,connection=self.connect()
 
             mySql_insert_query = """UPDATE {} 
                                     SET {} = {}
-                                    WHERE {} ={} """.format(table_name,col_name,("'"+value+"'"),id,id_value)
+                                    WHERE {} ={} """.format(table_name,col_name,("'"+value+"'"),id_name,("'"+id_value+"'"))
             #print(mySql_insert_query)
             cursor.execute(mySql_insert_query)
             # mySql_insert_query=(mySql_insert_query,data)
@@ -179,37 +182,64 @@ class dataBase:
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
 
-    def search(self,table_name,param_name, value):
+    def search(self,table_name,param_name, value,int_type=True):
+
+        user_id=value
         try:
             if self.check_connection:
                 cursor,connection=self.connect()
 
-                sql_select_Query = "SELECT * FROM {} WHERE {} = {}".format(table_name,param_name,value)
-                cursor=self.execute_quary(sql_select_Query, cursor, connection)
+                if int_type:
+                    sql_select_Query = "SELECT * FROM {} WHERE {} = {};".format(table_name,param_name,str(value))
+                    cursor=self.execute_quary(sql_select_Query, cursor, connection)
+                else:
+
+                    sql_select_Query = """SELECT * FROM {} WHERE {} = {} """.format(table_name,param_name,("'"+str(value)+"'"))
+                    cursor=self.execute_quary(sql_select_Query, cursor, connection)
+
+
+                print('cursor',cursor)
 
                 records = cursor.fetchall()
                 print("Total number of rows in table: ", cursor.rowcount)
                 #print(len(records),records)
                 #----------------------------
-                # print(records)
+                print('if',records)
                 
                 field_names = [col[0] for col in cursor.description]
                 res = []
                 for record in records:
+                    # print('record',record)
                     record_dict = {}
                     for i in range( len(field_names) ):
                         record_dict[ field_names[i] ] = record[i]
+                    # print('record_dict',record_dict)
+                    
                     res.append( record_dict )
-
+                # print('res',res)
                 return res
+
+
+            return res
+        except:
             return [],[]
 
-        except:
-            print('No record Found')
-            return [],[]
+        # except:
+        #     print('No record Found')
+        #     return [],[]
     
 
-    def search_with_range(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
+
+        #     print('No record Found')
+        #     return [],[]
+    
+
+
+
+
+
+
+    def search_with_range(self,table_name, col_names, values, limit=False, limit_range=[0,20], count=False):
         # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
         try:
             if self.check_connection:
@@ -248,7 +278,7 @@ class dataBase:
                 
 
                 if limit:
-                    sql_select_Query += "LIMIT {} OFFSET {}".format(limit_size, offset)
+                    sql_select_Query += "LIMIT {},{}".format(limit_range[0], limit_range[1])
 
 
                 #print(sql_select_Query)
@@ -275,97 +305,8 @@ class dataBase:
         except:
             print('No record Found')
             return [],[]
+
     
-
-    def search_with_range_with_classes(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
-        # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
-        try:
-            if self.check_connection:
-                cursor,connection=self.connect()
-
-                if count:
-                    sql_select_Query = "SELECT count(*) FROM {} WHERE ".format(table_name)
-                else:
-                    sql_select_Query = "SELECT * FROM {} WHERE ".format(table_name)
-
-                # single values
-                single_cols_query = '('
-                single_vals_query = '('
-                flag1 = False
-                for i, col in enumerate(col_names):
-                    if len(values[i]) == 1 and col != 'classes':
-                        flag1 = True
-                        if i != 0:
-                            single_cols_query += ','
-                            single_vals_query += ','
-                        single_cols_query += col
-                        single_vals_query += str(values[i][0])
-                single_cols_query += ')'
-                single_vals_query += ')'
-            
-                # add single query yo main query
-                if not single_cols_query == '()' and not single_vals_query == '()':
-                    sql_select_Query = sql_select_Query + single_cols_query + '=' + single_vals_query + ' '
-
-                # range values
-                for i, col in enumerate(col_names):
-                    if len(values[i]) > 1 and col != 'classes':
-                        flag1 = True
-                        if i != 0:
-                            sql_select_Query += "AND "
-                        #
-                        sql_select_Query += "{} BETWEEN {} AND {} ".format(col, str(values[i][0]), str(values[i][1]))
-
-                # like values (for classes)
-                # classes LIKE '%,22,%' or classes LIKE '%,33,%'
-                for i, col in enumerate(col_names):
-                    if col == 'classes':
-                        if flag1:
-                            sql_select_Query += "AND ("
-                        else:
-                            sql_select_Query += "("
-                        # for loop in classes in list
-                        flag = False
-                        for j, cls in enumerate(values[i]):
-                            flag = True
-                            if j != 0:
-                                sql_select_Query += "AND "
-                            sql_select_Query += "{} LIKE '%,{},%' ".format(col, str(values[i][j]))
-                        if flag:
-                            sql_select_Query += ") "
-
-                #
-                if limit:
-                    sql_select_Query += "LIMIT {} OFFSET {}".format(limit_size, offset)
-
-
-                #print(sql_select_Query)
-                #return
-
-                cursor=self.execute_quary(sql_select_Query, cursor, connection)
-
-                records = cursor.fetchall()
-                #print("Total number of rows in table: ", cursor.rowcount)
-                #print(len(records),records)
-                #----------------------------
-                # print(records)
-                
-                field_names = [col[0] for col in cursor.description]
-                res = []
-                for record in records:
-                    record_dict = {}
-                    for i in range( len(field_names) ):
-                        record_dict[ field_names[i] ] = record[i]
-                    res.append( record_dict )
-
-                return res
-            return [],[]
-
-        except:
-            print('No record Found')
-            return [],[]
-
-
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
 
@@ -401,8 +342,8 @@ class dataBase:
     #--------------------------------------------------------------------------
 
 
-    def get_all_content(self,table_name, count=False, limit=False, limit_size=20, offset=0, reverse_order=False):
-        sort_order = 'DESC' if reverse_order else 'ASC'
+    def get_all_content(self,table_name, count=False, limit=False, limit_range=[0,20]):
+
         try:
             if self.check_connection:
                 cursor,connection=self.connect()
@@ -411,9 +352,9 @@ class dataBase:
                     sql_select_Query = "select count(*) from {}".format(table_name)
                 else:
                     if not limit:
-                        sql_select_Query = "select * from {} ORDER BY id {}".format(table_name, sort_order)
+                        sql_select_Query = "select * from {}".format(table_name)
                     else:
-                        sql_select_Query = "select * from {} ORDER BY id {} LIMIT {} OFFSET {}".format(table_name, sort_order, limit_size, offset)
+                        sql_select_Query = "select * from {} LIMIT {},{}".format(table_name, limit_range[0], limit_range[1])
                     
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
                 # cursor.execute(sql_select_Query)
@@ -445,6 +386,17 @@ class dataBase:
             print("Error reading data from MySQL table", e)
             return []
 
+    def check_table_exist(self,table_name):
+
+        try:
+            if self.check_connection:
+                cursor,connection=self.connect()
+            sql_check_table = "SELECT * FROM {}.{};".format(self.data_base_name,table_name)
+            cursor=self.execute_quary(sql_check_table, cursor, connection)       
+            # print('check')    
+            return 'Exist'                              
+        except mysql.connector.Error as e:
+            print("Error reading data from MySQL table", e)
 
 
 if __name__ == "__main__":
@@ -455,8 +407,11 @@ if __name__ == "__main__":
     # data=(0,)*10
     # data=(0,0,0,0,1920,1200,0,0,0,0,0)
 
-    x=db.get_all_content('defects_info')
-    print(x)
+    # x=db.get_all_content('defects_info')
+    # print(x)
+
+    record = db.search( 'users' , 'user_name', 'testt')[0]
+    print(record)
     # table_name,parametrs,len_parameters)
 
     # db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,lenght,width,operator,time,date,main_path)',11)
