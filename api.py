@@ -936,6 +936,11 @@ class API:
         # update chart axes given train data
         self.update_b_chart_axes(b_parms[3])
         #
+        t = threading.Thread(target=self.train_binary, args=(b_parms, ))
+        t.start()
+        # t.join()
+
+    def train_binary(self, b_parms):
         bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
 
