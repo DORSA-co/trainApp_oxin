@@ -152,7 +152,7 @@ class UI_main_window(QMainWindow, ui):
 
         # classification page
         self.classification_class_list.clicked.connect(self.buttonClick)
-        self.classification_add_new_class.clicked.connect(self.buttonClick)
+        #self.classification_add_new_class.clicked.connect(self.buttonClick)
         self.classification_training.clicked.connect(self.buttonClick)
         self.classification_history.clicked.connect(self.buttonClick)
 

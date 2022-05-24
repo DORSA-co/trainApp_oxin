@@ -1,11 +1,11 @@
 from PySide6.QtCharts import QChart as sQChart
 from PySide6.QtCharts import QChartView as sQChartView
+from PySide6.QtCharts import QPieSeries as sQPieSeries
 from PySide6.QtCharts import QLineSeries as sQLineSeries
 from PySide6.QtCharts import QScatterSeries as sQScatterSeries
 from PySide6.QtCharts import QValueAxis as sQValueAxis
 from PySide6.QtCore import QPointF as sQPointF
 from PySide6.QtCore import QMargins as sQMargins
-from PySide6.QtCore import QRectF as sQRectF
 from PySide6.QtWidgets import QVBoxLayout as sQVBoxLayout
 from PySide6 import QtCore as sQtCore
 from PySide6.QtGui import QBrush as sQBrush
@@ -13,9 +13,12 @@ from PySide6.QtGui import QColor as sQColor
 from PySide6.QtGui import QPen as sQPen
 from PySide6.QtGui import QPainter as sQPainter
 from PySide6.QtGui import QFont as sQFont
+
 import cv2
 import numpy as np
 import random
+
+from backend import dataset
 
 
 # chart colors and appearance
@@ -272,6 +275,124 @@ def update_chart(ui_obj, chart_postfixes, last_epoch, logs, scroll_obj):
 
     global epochitr
     epochitr = last_epoch
+
+
+#_____________________________________________________________________________________________________________________
+perfect_color = '#007C00'
+defect_color = '#D90000'
+pie_background_color = '#09486B'
+pie_label_color = '#FFFFFF'
+pie_pen_width = 8
+
+# pie chart for class list page
+def create_classlist_piechart_on_ui(ui_obj, frame_obj_binary, frame_obj_classlist, chart_title='Chart', binary_hole_size=0.2):
+    # creat chart
+    # binary
+    ui_obj.binary_piechart = sQChart()
+    ui_obj.binary_piechart.setAnimationOptions(sQChart.SeriesAnimations)
+    ui_obj.binary_piechart.setMargins(sQMargins(0,0,0,0))
+    #ui_obj.binary_piechart.setTitle(chart_title)
+    #ui_obj.binary_piechart.setTheme(sQChart.ChartThemeDark)
+    ui_obj.binary_piechart.legend().setVisible(False)
+    ui_obj.binary_piechart.setBackgroundBrush(sQColor(pie_background_color))
+    # classes
+    ui_obj.classlist_piechart = sQChart()
+    ui_obj.classlist_piechart.setAnimationOptions(sQChart.SeriesAnimations)
+    ui_obj.classlist_piechart.setMargins(sQMargins(0,0,0,0))
+    #ui_obj.classlist_piechart.setTitle(chart_title)
+    #ui_obj.classlist_piechart.setTheme(sQChart.ChartThemeDark)
+    ui_obj.classlist_piechart.legend().setVisible(False)
+    ui_obj.classlist_piechart.setBackgroundBrush(sQColor(pie_background_color))
+
+    # binary series
+    ui_obj.classlist_pie_binary_series = sQPieSeries()
+    ui_obj.classlist_pie_binary_series.setHoleSize(binary_hole_size)
+    #ui_obj.pseries.setPieSize(0.2)
+    # classlist series
+    ui_obj.classlist_pie_cls_series = sQPieSeries()
+    ui_obj.classlist_pie_cls_series.setHoleSize(binary_hole_size)
+    # a = ui_obj.classlist_pie_cls_series.append('a', 1)
+    # a.setLabelFont
+    
+    # add series to chart
+    ui_obj.binary_piechart.addSeries(ui_obj.classlist_pie_binary_series)
+    ui_obj.classlist_piechart.addSeries(ui_obj.classlist_pie_cls_series)
+    
+    # set to ui
+    ui_obj.binary_piechartview = sQChartView(ui_obj.binary_piechart)
+    ui_obj.binary_piechartview.setContentsMargins(0,0,0,0)
+    ui_obj.classlist_piechartview = sQChartView(ui_obj.classlist_piechart)
+    ui_obj.classlist_piechartview.setContentsMargins(0,0,0,0)
+    #
+    pievbox = sQVBoxLayout()
+    pievbox.addWidget(ui_obj.binary_piechartview)
+    pievbox.setContentsMargins(0, 0, 0, 0)
+    #
+    pievbox2 = sQVBoxLayout()
+    pievbox2.addWidget(ui_obj.classlist_piechartview)
+    pievbox2.setContentsMargins(0, 0, 0, 0)
+    #
+    frame_obj_binary.setLayout(pievbox)
+    frame_obj_binary.layout().setContentsMargins(0, 0, 0, 0)
+    #
+    frame_obj_classlist.setLayout(pievbox2)
+    frame_obj_classlist.layout().setContentsMargins(0, 0, 0, 0)
+
+
+# update pie chart
+def update_classlist_piechart(ui_obj, binary_len, classes_len, classes_list):
+    ui_obj.classlist_pie_binary_series.clear()
+    ui_obj.classlist_pie_cls_series.clear()
+
+    try:
+        # binary
+        # convert len to percentage
+        perfect_percentage = binary_len[dataset.PERFECT_FOLDER] / (binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
+        defect_percentage = binary_len[dataset.DEFECT_FOLDER] / (binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
+        # append to series
+        my_slice = ui_obj.classlist_pie_binary_series.append("defect: %s" % binary_len[dataset.DEFECT_FOLDER], defect_percentage)
+        if defect_percentage != 0.0:
+            my_slice.setLabelVisible(True)
+            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
+            my_slice.setBrush(sQColor(defect_color))
+
+        my_slice = ui_obj.classlist_pie_binary_series.append("perfect: %s" % binary_len[dataset.PERFECT_FOLDER], perfect_percentage)
+        if perfect_percentage != 0.0:
+            my_slice.setLabelVisible(True)
+            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
+            my_slice.setBrush(sQColor(perfect_color))
+
+        # classes
+        # convert len to percentage
+        #print('defects', classes_list)
+        for cls in classes_list:
+            cls_id = str(cls['defect_ID'])
+            #
+            if cls_id in classes_len.keys():
+                percentage = classes_len[cls_id] / sum(classes_len.values())
+            else:
+                percentage = 0.0
+            #
+            try:
+                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': %s' % classes_len[cls_id], percentage)
+            except:
+                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': %s' % '0', percentage)
+            #
+            if percentage != 0.0:
+                my_slice.setLabelVisible(True)
+                my_slice.setLabelColor(sQColor(pie_label_color))
+                my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
+                my_slice.setBrush(sQColor(cls['color']))
+
+
+            # my_slice = series.append("Fat 15.6%", 15.6)
+            # my_slice.setExploded(True)
+            # my_slice.setLabelVisible(True)
+    
+    except:
+        return
     
         
 

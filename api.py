@@ -179,6 +179,8 @@ class API:
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
 
+        self.create_classlist_pie_chart()
+
         
 
     def __debug_load_sheet__(self, ids):
@@ -238,6 +240,7 @@ class API:
 
         #login
         self.login_user_name=''
+        self.default_dataset_user = ''
         self.ui.login_btn.clicked.connect(partial(self.show_login))
         self.ui.btn_user_proflie.clicked.connect(partial(self.set_profile_page))
         self.ui.create_database_btn.clicked.connect(partial(self.create_dataset))
@@ -280,6 +283,7 @@ class API:
 
         # classification page
         self.ui.Classification_btn.clicked.connect(partial(self.refresh_classes_table))
+        #self.ui.Classification_btn.clicked.connect(partial(self.refresh_datasets_table))
         self.ui.classlist_show_related_img_btn.clicked.connect(partial(self.show_class_related_images))
         self.ui.classlist_prev_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='prev')))
         self.ui.classlist_next_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='next')))
@@ -831,7 +835,9 @@ class API:
         self.ui.default_dataset.setText(str(login_info[1]['default_dataset']))
         self.ui.today_date.setText(str(date_funcs.get_date(folder_path=True)))
         self.login_user_name=(str(login_info[1]['user_name']))
+        self.default_dataset_user = str(login_info[1]['default_dataset'])
         self.ds_json.set_user_name_database(self.login_user_name)
+        #print('username:', self.login_user_name)
 
     def set_profile_page(self):
         if self.logged_in==True:
@@ -1495,28 +1501,44 @@ class API:
     # classification page
     #------------------------------------------------------------------------------------------------------------------------
     # get defects from database and apply to defects table
-    def refresh_classes_table(self, history_page=False):
+    def refresh_classes_table(self):
         defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
         defects_list = classification_list_funcs.change_defect_group_id_to_name(db_obj=self.db, defects_list=defects_list)
         classification_list_funcs.set_defects_on_ui(ui_obj=self.ui, defects_list=defects_list)
         classification_list_funcs.set_defects_on_train_ui(ui_obj=self.ui, defects_list=defects_list)
         classification_model_funcs.set_defects_on_filter_ui(ui_obj=self.ui, defects_list=defects_list)
+        #
+        self.refresh_datasets_table()
+
+
+    # get datasets from database and apply to datasets table
+    def refresh_datasets_table(self):
+        # get dataset
+        # read all datasets in table (must update)
+        datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
+        # show on UI
+        dataset.set_datasets_on_ui(ui_obj=self.ui, datasets_list=datasets_list, current_user=self.login_user_name, default_dataset=self.default_dataset_user)
     
 
     # show class related images on UI
     def show_class_related_images(self):
         # get selected defects from UI
+        defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
         selected_defects = classification_list_funcs.get_selected_defects(ui_obj=self.ui)
         if len(selected_defects) > 1:
             self.ui.show_mesagges(self.ui.classlist_msg_label, 'Cant select more than one class', color=colors_pallete.failed_red)
         elif len(selected_defects) == 0:
             self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
         else:
-            # get dataset
-            # read all datasets in table (must update)
+            # get selected datasets from ui
             datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
+            selected_datasets = dataset.get_selected_datasets(ui_obj=self.ui, datasets_list=datasets_list)
+            if len(selected_datasets) == 0:
+                self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one dataset', color=colors_pallete.failed_red)
+                return
+
             # get image/annots list related to defect
-            annotation_list, image_list = classification_list_funcs.load_images_related_to_defect(datasets_list=datasets_list, defect_id=selected_defects[0])
+            annotation_list, image_list, binary_count, classes_count = classification_list_funcs.load_images_related_to_defect(datasets_list=selected_datasets, defect_id=selected_defects[0])
 
             # create list object
             self.classification_image_list.add(mylist=image_list, mylist_annots=annotation_list, name=self.classification_image_list_name)
@@ -1539,6 +1561,9 @@ class API:
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(True)
                 self.ui.classlist_next_btn.setEnabled(True)
+            
+            # update pie chart
+            chart_funcs.update_classlist_piechart(ui_obj=self.ui, binary_len=binary_count, classes_len=classes_count, classes_list=defects_list)
         
     
     # update slider images
@@ -1581,6 +1606,11 @@ class API:
         #
         #bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         #binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
+    
+
+    # pie chart funcs
+    def create_classlist_pie_chart(self):
+        chart_funcs.create_classlist_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binary_chart_frame, frame_obj_classlist=self.ui.classlist_chart_frame)
 
     
     # _________________________________________________________________________________________________

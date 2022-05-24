@@ -1,8 +1,24 @@
-
 import json
 import os
 from backend import pathStructure,date_funcs
 import database_utils
+
+
+BASIC_INFO = 'basic'
+DATASET_NAME = 'dataset_name'
+DATE_CREATED = 'date_created'
+DATE_MODIFIED = 'date_modify'
+MAX_SIZE = 'max_size'
+PATH = 'path'
+USER_ID = 'user_id'
+USER_NAME = 'user_name'
+BINARY = 'binary'
+COUNT_DEFECT = 'count_defect'
+COUNT_PERFECT = 'count_perfect'
+CLASSIFICATION = 'classification'
+NONE_CLASS = 'None'
+
+
 class dataset_json():
 
     def read(self, path):
@@ -13,27 +29,27 @@ class dataset_json():
 
     def create_json_dataset(self,parms):
 
-        self.set_user(parms['user_name']) 
-        self.set_user_id(parms['user_id']) 
-        self.set_dataset_name(parms['dataset_name']) 
-        self.set_path(parms['path'],parms['dataset_name']) 
-        self.set_max_size(parms['max_size']) 
+        self.set_user(parms[USER_NAME]) 
+        self.set_user_id(parms[USER_ID]) 
+        self.set_dataset_name(parms[DATASET_NAME]) 
+        self.set_path(parms[PATH],parms[DATASET_NAME]) 
+        self.set_max_size(parms[MAX_SIZE]) 
         self.set_create_date(parms['date']) 
         self.set_modify_date('-') 
         self.set_count_defect(0) 
         self.set_count_perfect(0) 
-        self.set_parms_classification('None',0)
+        self.set_parms_classification(NONE_CLASS,0)
 
 
 
 
-        self.dataset_details['basic']=self.main_parms
-        self.dataset_details['classification']=self.classification_details
-        self.dataset_details['binary']=self.binary_details
+        self.dataset_details[BASIC_INFO]=self.main_parms
+        self.dataset_details[CLASSIFICATION]=self.classification_details
+        self.dataset_details[BINARY]=self.binary_details
 
             # return {'user_name':user_name,'user_id':user_id,'dataset_name':dataset_name,'path':path,'max_size':max_size}
-        path=os.path.join(parms['path'],parms['dataset_name'])
-        self.write(os.path.join(path,str(parms['dataset_name']+'.json')))
+        path=os.path.join(parms[PATH],parms[DATASET_NAME])
+        self.write(os.path.join(path,str(parms[DATASET_NAME]+'.json')))
         try:
             pathStructure.create_dataset_stracture(path)
         except:
@@ -60,32 +76,32 @@ class dataset_json():
     #
     #--------------------------------------------------------
     def set_user(self, name):
-        self.main_parms['user_name'] = name
+        self.main_parms[USER_NAME] = name
 
     def set_user_id(self, user_id):
-        self.main_parms['user_id'] = user_id
+        self.main_parms[USER_ID] = user_id
 
 
     def set_dataset_name(self, name):
-        self.main_parms['dataset_name'] = name
+        self.main_parms[DATASET_NAME] = name
 
     def set_path(self, path,name):
-        self.main_parms['path'] = str(path+name)
+        self.main_parms[PATH] = str(path+name)
 
     def set_max_size(self, max_size):
-        self.main_parms['max_size'] = max_size
+        self.main_parms[MAX_SIZE] = max_size
     
     def set_create_date(self,date):
-        self.main_parms['date_created'] = date_funcs.get_date()
+        self.main_parms[DATE_CREATED] = date_funcs.get_date()
     
     def set_modify_date(self,date):
-        self.main_parms['date_modify'] = date
+        self.main_parms[DATE_MODIFIED] = date
     
     def set_count_defect(self,num):
-        self.binary_details['count_defect'] = num
+        self.binary_details[COUNT_DEFECT] = num
     
     def set_count_perfect(self,num):
-        self.binary_details['count_perfect'] = num
+        self.binary_details[COUNT_PERFECT] = num
 
     def set_classification_parms(self,defects_list):
 
@@ -100,10 +116,10 @@ class dataset_json():
 
     def modify_defect(self,reset=False):
         file=self.read_modify()
-        count=file['binary']['count_defect']
+        count=file[BINARY][COUNT_DEFECT]
         if reset:
             count=-1
-        file['binary']['count_defect']=count+1
+        file[BINARY][COUNT_DEFECT]=count+1
         print('modify',file)
         try:
             file=self.modify_date(file)
@@ -114,10 +130,10 @@ class dataset_json():
     
     def modify_perfect(self,reset=False):
         file=self.read_modify()
-        count=file['binary']['count_perfect']
+        count=file[BINARY][COUNT_PERFECT]
         if reset:
             count=-1
-        file['binary']['count_perfect']=count+1
+        file[BINARY][COUNT_PERFECT]=count+1
         try:
             file=self.modify_date(file)
         except:
@@ -131,21 +147,21 @@ class dataset_json():
         if count !=0:
             AI=False
 
-        if str(name) in file['classification'].keys():
+        if str(name) in file[CLASSIFICATION].keys():
             if AI:
                 print('ai')
-                print((file['classification'][name]['count']))
-                count=int(file['classification'][name]['count'])
+                print((file[CLASSIFICATION][name]['count']))
+                count=int(file[CLASSIFICATION][name]['count'])
                 count_dict={'count':count+1}
-                file['classification'][name]=count_dict
+                file[CLASSIFICATION][name]=count_dict
             else :
                 count_dict={'count':count}
-                file['classification'][name]=count_dict
+                file[CLASSIFICATION][name]=count_dict
 
         else :
             count_dict={'count':count}
             name_dict={name:count_dict}
-            file['classification'].update(name_dict)
+            file[CLASSIFICATION].update(name_dict)
             print(file)
             # self.add_update_classification(name,AI,count)
         self.write_modify(file)
@@ -157,19 +173,19 @@ class dataset_json():
         print('default_name',default_name)
         path = self.db.get_path_dataset(default_name)
         path=os.path.join(path,default_name)
-        print('path',path)
+        print(PATH,path)
         with open(path+'.json') as jfile:
             file = json.load(jfile)
         return file
 
 
     def modify_date(self,file):
-        file['basic']['date_modify']=date_funcs.get_datetime()
+        file[BASIC_INFO][DATE_MODIFIED]=date_funcs.get_datetime()
         return file
 
 
     def write_modify(self,file):
-        path = os.path.join(file['basic']['path'],file['basic']['dataset_name'])
+        path = os.path.join(file[BASIC_INFO][PATH],file[BASIC_INFO][DATASET_NAME])
         with open(str(path+'.json'), 'w') as f:
             json.dump(file, f,indent=4, sort_keys=True)
 
