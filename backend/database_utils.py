@@ -22,9 +22,13 @@ class dataBaseUtils():
     #
     #________________________________________________________________
     def search_user(self,input_user_name):
+
+
+
         try:
-            record = self.db.search( self.table_user , 'user_name', input_user_name )[0]
+            record = self.db.search( self.table_user , 'user_name', str(input_user_name) )[0]
             #print('asd',record)
+            print('rec',record)
             return record
         except:
             return []

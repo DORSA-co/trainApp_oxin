@@ -14,9 +14,9 @@ from PySide6.QtGui import QPen, QPainter
 from PySide6.QtWidgets import QFileDialog
 from matplotlib import pyplot as plt
 
-from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap_bbox
+from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
 from app_settings import Settings
-from backend import classification_list_funcs, data_grabber, camera_connection, colors_pallete
+from backend import data_grabber, camera_connection
 from backend.mouse import Mouse
 from backend.keyboard import Keyboard
 # from backend import Label
@@ -34,7 +34,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
-from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs, dataset, classification_model_funcs
+from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs,date_funcs, classification_model_funcs, classification_list_funcs, dataset, colors_pallete
 
 import database_utils
 from utils import *
@@ -55,7 +55,9 @@ from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
 from login_win.login_api import login_API
-
+from camera_live import save_camera_images
+from multiprocessing import Process
+import dataset_utils
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
@@ -73,6 +75,7 @@ class API:
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
+        self.ds_json=dataset_utils.dataset_json()
         self.create_label_color()
         self.ds = Dataset(self.db.get_dataset_path(), self.db.get_dataset_path_uesr(), self.db.get_weights_path())
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
@@ -102,10 +105,8 @@ class API:
         self.bmodel_tabel_itr = 1
         self.bmodel_count = 0
         self.filter_mode = False
-        # cls-models
-        self.clsmodel_tabel_itr = 1
-        self.clsmodel_count = 0
-        self.cls_filter_mode = False
+        self.proc_start_flag = True
+
         # binarylist dataset parms
         self.dataset_params = {}
 
@@ -141,7 +142,6 @@ class API:
 
         # binary model start-up funcs
         self.refresh_binary_models_table(get_count=True)
-        self.refresh_cls_models_table(get_count=True)
 
         # create binarylist sliders on UI
         # perfect
@@ -171,11 +171,17 @@ class API:
         self.classification_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
         #_____________________________________________________________________
 
+        self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
+
         # DEBUG_FUNCTIONS
         # -------------------------------------
         # self.__debug_load_sheet__(['996','997'])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
+
+        self.create_classlist_pie_chart()
+
+        
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, 'sheets_id')
@@ -231,7 +237,17 @@ class API:
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
         self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
         self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
+
+        #login
+        self.login_user_name=''
+        self.default_dataset_user = ''
         self.ui.login_btn.clicked.connect(partial(self.show_login))
+        self.ui.btn_user_proflie.clicked.connect(partial(self.set_profile_page))
+        self.ui.create_database_btn.clicked.connect(partial(self.create_dataset))
+        self.ui.my_databases_2.clicked.connect(partial(self.set_user_databases))
+        self.ui.set_default_database_btn.clicked.connect(partial(self.set_default_dataset))
+        self.set_databases()
+        self.set_user_databases()
         # self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
 
         # labeling
@@ -267,6 +283,7 @@ class API:
 
         # classification page
         self.ui.Classification_btn.clicked.connect(partial(self.refresh_classes_table))
+        #self.ui.Classification_btn.clicked.connect(partial(self.refresh_datasets_table))
         self.ui.classlist_show_related_img_btn.clicked.connect(partial(self.show_class_related_images))
         self.ui.classlist_prev_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='prev')))
         self.ui.classlist_next_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='next')))
@@ -280,7 +297,6 @@ class API:
         self.ui.cls_tabel_prev.clicked.connect(partial(lambda: self.cls_model_tabel_nextorprev(next=False)))
         self.ui.cls_tabel_next.clicked.connect(partial(lambda: self.cls_model_tabel_nextorprev(next=True)))
         self.ui.cls_clearfilter_btn.clicked.connect(partial(self.clear_filters_cls))
-        
 
     def mouse_connector(self):
         for _, technical_widget in self.ui.get_technical().items():
@@ -757,6 +773,9 @@ class API:
             self.ui.labeling_win.show()
             print('end show_labeling')
 
+
+     # login ---------------------------------       
+
     def show_login(self):
     
         if self.logged_in==False:
@@ -786,6 +805,10 @@ class API:
         self.ui.show_image_btn(self.ui.login_btn,'images/icons/person.png')
         self.ui.user_name.setText('')
         self.ui.stackedWidget.setCurrentWidget(self.ui.page_label)
+        self.ui.comboBox_user_datasets.clear()
+        self.ui.comboBox_default_dataset.clear()
+        self.ui.clear_table_name(self.ui.tableWidget_user_dataset)
+        self.ds_json.set_user_name_database('')
 
 
     def check_login(self):
@@ -799,6 +822,98 @@ class API:
             self.ui.show_image_btn(self.ui.login_btn,'images/logout.png')
             self.logged_in=True
             self.ui.stackedWidget.setCurrentWidget(self.ui.page_user_profile)
+            self.set_parms_login_page(self.login_info)
+
+    def set_parms_login_page(self,login_info):
+
+        print('login_info',login_info)
+        self.ui.user_name_2.setText(str(login_info[1]['user_name']))
+        self.ui.user_name_3.setText(str(login_info[1]['user_name']))
+        self.ui.date_created.setText(str(login_info[1]['date_created']))
+        self.ui.user_id.setText(str(login_info[1]['id']))
+        self.ui.role.setText(login_info[1]['role'])
+        self.ui.default_dataset.setText(str(login_info[1]['default_dataset']))
+        self.ui.today_date.setText(str(date_funcs.get_date(folder_path=True)))
+        self.login_user_name=(str(login_info[1]['user_name']))
+        self.default_dataset_user = str(login_info[1]['default_dataset'])
+        self.ds_json.set_user_name_database(self.login_user_name)
+        #print('username:', self.login_user_name)
+
+    def set_profile_page(self):
+        if self.logged_in==True:
+
+            self.ui.set_widget_page(self.ui.stackedWidget,self.ui.page_user_profile)
+        
+        else :
+            print('first login')
+            self.ui.set_warning(texts.WARNINGS['LOGIN_FIRST'][self.language], 'setting_eror', level=2)
+
+
+
+    def set_databases(self):
+        dataset_names=[]
+        self.datasets=self.db.get_all_datasets()
+        for i in range(len(self.datasets)):
+            dataset_names.append(self.datasets[i]['name'])
+        print('dataset_names',dataset_names)
+        self.ui.comboBox_all_datasets.addItems(dataset_names)
+        self.ui.comboBox_all_datasets.currentTextChanged.connect(self.update_table_all_datasets)
+    
+    def update_table_all_datasets(self):
+        current = self.ui.comboBox_all_datasets.currentIndex()
+        self.ui.show_all_datasets(list(self.datasets[current].values()))
+
+    def set_user_databases(self):
+        dataset_names=[]
+        self.user_databases=self.db.get_user_databases(self.login_user_name)
+        for i in range(len(self.user_databases)):
+            dataset_names.append(self.user_databases[i]['name'])
+        print('dataset_names',dataset_names)
+        self.ui.comboBox_user_datasets.addItems(dataset_names)
+        self.ui.comboBox_default_dataset.addItems(dataset_names)
+        self.ui.comboBox_user_datasets.currentTextChanged.connect(self.update_user_datasts)
+
+    def update_user_datasts(self):
+        current = self.ui.comboBox_user_datasets.currentIndex()
+        # print('asd',self.user_databases[current].values)
+        self.ui.show_user_datasets(list(self.user_databases[current].values()))
+
+    def set_default_dataset(self):
+
+        dataset_new=self.ui.comboBox_default_dataset.currentText()
+        self.db.update_dataset_default(dataset_new,self.login_user_name)
+        print('ok')
+        self.ui.default_dataset.setText(dataset_new)
+
+
+    #---------------------------------------------------------------------///////////////////////////////////////////
+    # dataset
+
+    def create_dataset(self):
+
+            t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
+                                        texts.WARNINGS['CREATE_DATABASE'][self.language])
+            if not t:
+                return
+            else:
+                parms=self.ui.get_create_dataset_parms()
+                print(parms)
+                self.create_folder(parms['dataset_name'],parms['path'])
+                # self.ds_json=dataset_utils.dataset_json()
+                self.ds_json.create_json_dataset(parms)
+                data=parms['dataset_name'],self.login_user_name,os.path.join(parms['path'], parms['dataset_name'])
+                self.db.add_dataset(data)
+
+    def create_folder(self,name,path):
+        try:
+            os.mkdir(os.path.join(path, name))
+        except:
+            print('eror')
+        # path=os.path.join(path, name, "{name}.json")
+        # os.mkdir(path)
+
+    
+    #----------------------------------------------------------------------///////////////////////
 
     def set_label(self):
         mouse_position = self.mouse.get_relative_position()
@@ -851,7 +966,6 @@ class API:
         # print('asdqwdf')
         return parent_path
 
-
     def set_b_parms(self):
 
         b_parms = self.ui.get_binary_parms()
@@ -861,9 +975,13 @@ class API:
         # update chart axes given train data
         self.update_b_chart_axes(b_parms[3])
         #
+        t = threading.Thread(target=self.train_binary, args=(b_parms, ))
+        t.start()
+        # t.join()
+
+    def train_binary(self, b_parms):
         bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
-
 
     def update_b_chart_axes(self, nepoch):
         for chart_postfix in self.ui.chart_names:
@@ -879,7 +997,7 @@ class API:
 
     def assign_new_value_to_b_chart(self, last_epoch, logs):
         # print('here', last_epoch, logs)
-        chart_funcs.update_chart(ui_obj=self.ui, chart_postfixes=self.ui.chart_names, last_epoch=last_epoch, logs=logs, scroll_obj=self.ui.binary_chart_scrollbar)
+        chart_funcs.update_chart(ui_obj=self.ui, chart_postfixes=self.ui.chart_names, last_epoch=last_epoch, logs=logs)
 
     def set_l_parms(self):
 
@@ -933,7 +1051,12 @@ class API:
             self.ds.save_to_perfect_splitted(crops, pos=pos)
             self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
-
+            print('no defect')
+            try:
+            
+                self.ds_json.modify_perfect()
+            except:
+                pass
         elif self.ui.yes_defect.isChecked():
             if saved_defect:
                 self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
@@ -951,7 +1074,11 @@ class API:
             self.ds.save_to_defect_splitted(crops, pos=pos)
             self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
-
+            try:
+            
+                self.ds_json.modify_defect()
+            except:
+                pass
         else:
             self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
 
@@ -1076,6 +1203,10 @@ class API:
         cam_num = self.ui.get_camera_parms()
         print('cam num', cam_num)
 
+        if self.proc_start_flag:
+            self.camera_process.start()
+            self.proc_start_flag = False
+
         if cam_num != 'All':
 
             print('cam_num', cam_num)
@@ -1140,6 +1271,8 @@ class API:
             self.index_num = 0
 
     # _________________________________________________________________________________________________
+    # binary-model history page functions
+
     # binary-model history page functions
     def refresh_binary_models_table_onevent(self):
         self.bmodel_tabel_itr = 1
@@ -1368,28 +1501,44 @@ class API:
     # classification page
     #------------------------------------------------------------------------------------------------------------------------
     # get defects from database and apply to defects table
-    def refresh_classes_table(self, history_page=False):
+    def refresh_classes_table(self):
         defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
         defects_list = classification_list_funcs.change_defect_group_id_to_name(db_obj=self.db, defects_list=defects_list)
         classification_list_funcs.set_defects_on_ui(ui_obj=self.ui, defects_list=defects_list)
         classification_list_funcs.set_defects_on_train_ui(ui_obj=self.ui, defects_list=defects_list)
         classification_model_funcs.set_defects_on_filter_ui(ui_obj=self.ui, defects_list=defects_list)
+        #
+        self.refresh_datasets_table()
+
+
+    # get datasets from database and apply to datasets table
+    def refresh_datasets_table(self):
+        # get dataset
+        # read all datasets in table (must update)
+        datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
+        # show on UI
+        dataset.set_datasets_on_ui(ui_obj=self.ui, datasets_list=datasets_list, current_user=self.login_user_name, default_dataset=self.default_dataset_user)
     
 
     # show class related images on UI
     def show_class_related_images(self):
         # get selected defects from UI
+        defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
         selected_defects = classification_list_funcs.get_selected_defects(ui_obj=self.ui)
         if len(selected_defects) > 1:
             self.ui.show_mesagges(self.ui.classlist_msg_label, 'Cant select more than one class', color=colors_pallete.failed_red)
         elif len(selected_defects) == 0:
             self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
         else:
-            # get dataset
-            # read all datasets in table (must update)
+            # get selected datasets from ui
             datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
+            selected_datasets = dataset.get_selected_datasets(ui_obj=self.ui, datasets_list=datasets_list)
+            if len(selected_datasets) == 0:
+                self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one dataset', color=colors_pallete.failed_red)
+                return
+
             # get image/annots list related to defect
-            annotation_list, image_list = classification_list_funcs.load_images_related_to_defect(datasets_list=datasets_list, defect_id=selected_defects[0])
+            annotation_list, image_list, binary_count, classes_count = classification_list_funcs.load_images_related_to_defect(datasets_list=selected_datasets, defect_id=selected_defects[0])
 
             # create list object
             self.classification_image_list.add(mylist=image_list, mylist_annots=annotation_list, name=self.classification_image_list_name)
@@ -1412,6 +1561,9 @@ class API:
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(True)
                 self.ui.classlist_next_btn.setEnabled(True)
+            
+            # update pie chart
+            chart_funcs.update_classlist_piechart(ui_obj=self.ui, binary_len=binary_count, classes_len=classes_count, classes_list=defects_list)
         
     
     # update slider images
@@ -1454,6 +1606,11 @@ class API:
         #
         #bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         #binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
+    
+
+    # pie chart funcs
+    def create_classlist_pie_chart(self):
+        chart_funcs.create_classlist_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binary_chart_frame, frame_obj_classlist=self.ui.classlist_chart_frame)
 
     
     # _________________________________________________________________________________________________
@@ -1574,11 +1731,6 @@ class API:
 
     #_____________________________________________________________________________________________________
 
-
-            
-
-
-
     def set_available_caemras(self):
 
         connected_cameras = self.cameras.get_connected_cameras()
@@ -1633,10 +1785,10 @@ class API:
         label_type = self.ui.get_label_type()
         if label_type == 'mask':
             df = self.create_mask_from_mask(img_path)
-            hm = CreateHeatmap_bbox(img, df)
+            hm = CreateHeatmap(img, df)
         elif label_type == 'bbox':
             df = self.create_mask_from_bbox(img_path)
-            hm = CreateHeatmap_bbox(img, df)
+            hm = CreateHeatmap(img, df)
         self.ui.show_neighbouring(hm)
 
     # def create_piechart(self):

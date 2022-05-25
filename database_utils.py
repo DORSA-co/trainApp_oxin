@@ -6,10 +6,10 @@ import datetime
 from Sheet import Sheet
 import os
 from backend import pathStructure, binary_model_funcs
-
+import inspect
 class dataBaseUtils():
-    def __init__(self) :
-        self.db=database.dataBase('root','root','localhost','saba_database')
+    def __init__(self,user_name='root',password='Dorsa1400@') :
+        self.db=database.dataBase(user_name,password,'localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
         self.camera_settings_table='camera_settings'
@@ -18,8 +18,17 @@ class dataBaseUtils():
         self.table_user='users'
         self.table_cameras = 'camera_settings'
         self.image_processing = 'image_processing'
+        self.dataset='datasets '
 
-    #________________________________________________________________
+
+    def check_table_exist(self,table_name):
+        ret=self.db.check_table_exist(table_name)
+        return ret
+    
+    def check_connection(self):
+        ret=self.db.check_connection()
+        return ret
+            #________________________________________________________________
     #
     #________________________________________________________________
     def build_sheet(self,record):
@@ -218,6 +227,7 @@ class dataBaseUtils():
 
         except:
             return []
+    
 
     #________________________________________________________________________________________________________
     # classification models
@@ -263,10 +273,8 @@ class dataBaseUtils():
             return record
         except:
             return []
-    
-    # ________________________________________________________________________________________
-    
 
+    #______________________________________________________________________________________________
     #______________________________________________________________________________________
     # datasets
     def load_datasets(self):
@@ -275,18 +283,78 @@ class dataBaseUtils():
             return datasets
         except:
             return []
-
+    
+    #___________________________________________________________________________________
 
 
     def search_user(self,input_user_name):
+
         try:
-            record = self.db.search( self.table_user , 'user_name', input_user_name )[0]
+            record = self.db.search( self.table_user , 'user_name', input_user_name ,int_type=False)[0]
             print(record)
             #print('asd',record)
             return record
         except:
             return []
 
+
+    def get_default_dataset(self,user_name):
+
+        try:
+            record = self.db.search( self.table_user ,'user_name', user_name ,int_type=False)[0]
+
+            print('record',record)
+
+            return record['default_dataset']
+        except:
+            print('except')
+            return []
+
+    def get_path_dataset(self,dataset_name):
+
+    # try:
+        record = self.db.search( self.dataset ,'name', dataset_name ,int_type=False)[0]
+
+        print('record',record)
+
+        return record['path']
+        # except:
+        #     print('except')
+        #     return []
+
+    def get_all_datasets(self):
+        
+        records = self.db.report_last(self.dataset,'id',99)
+
+        return records
+
+
+    def get_user_databases(self,user_name):
+
+        try:
+            record = self.db.search( self.dataset ,'user_own', user_name ,int_type=False)
+
+            print('record',record)
+
+            return record
+        except:
+            print('except')
+            return []
+
+
+    def update_dataset_default(self,dataset_name,user_name):
+    
+        self.db.update_record(self.table_user, 'default_dataset', dataset_name, 'user_name', user_name)
+
+
+    def add_dataset(self,data):
+
+        # try:
+        self.db.add_record(data, table_name=self.dataset, parametrs='(name,user_own,path)', len_parameters=3)
+        return 'True'
+        
+        # except:
+        #     return 'Databas Eror'
 
 
 if __name__ == '__main__':
@@ -302,12 +370,15 @@ if __name__ == '__main__':
 
     # x=db.get_sign('defects_info')
 
-    db.update_sign_table('defects_info','4')
-
+    # db.update_sign_table('defects_info','4')
+    # d=db.get_user_databases('ali')
+    data=('dataset_name','ali','adwad')
+    d=db.add_dataset(data)
+    print(d)
     # print(x)
-    name,defects=db.get_defects()
-    print('name',name)
-    print('defe',defects)
+    # name,defects=db.get_defects()
+    # print('name',name)
+    # print('defe',defects)
 
 
     # db.get_path(['997', 'up', (5, 5)])

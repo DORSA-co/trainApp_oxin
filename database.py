@@ -20,7 +20,10 @@ class dataBase:
         self.host=host
         self.data_base_name=database_name
         self.check_connection()
-        
+    
+
+
+
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
     def connect(self):
@@ -108,15 +111,15 @@ class dataBase:
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
 
-    def update_record(self,table_name,col_name,value,id,id_value):
+    def update_record(self,table_name,col_name,value,id_name,id_value):
         
-
+        print('id_value',table_name,col_name,value,id_name,id_value)
         if self.check_connection:
             cursor,connection=self.connect()
 
             mySql_insert_query = """UPDATE {} 
                                     SET {} = {}
-                                    WHERE {} ={} """.format(table_name,col_name,("'"+value+"'"),id,id_value)
+                                    WHERE {} ={} """.format(table_name,col_name,("'"+value+"'"),id_name,("'"+id_value+"'"))
             #print(mySql_insert_query)
             cursor.execute(mySql_insert_query)
             # mySql_insert_query=(mySql_insert_query,data)
@@ -179,35 +182,62 @@ class dataBase:
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
 
-    def search(self,table_name,param_name, value):
+    def search(self,table_name,param_name, value,int_type=True):
+
+        user_id=value
         try:
             if self.check_connection:
                 cursor,connection=self.connect()
 
-                sql_select_Query = "SELECT * FROM {} WHERE {} = {}".format(table_name,param_name,value)
-                cursor=self.execute_quary(sql_select_Query, cursor, connection)
+                if int_type:
+                    sql_select_Query = "SELECT * FROM {} WHERE {} = {};".format(table_name,param_name,str(value))
+                    cursor=self.execute_quary(sql_select_Query, cursor, connection)
+                else:
+
+                    sql_select_Query = """SELECT * FROM {} WHERE {} = {} """.format(table_name,param_name,("'"+str(value)+"'"))
+                    cursor=self.execute_quary(sql_select_Query, cursor, connection)
+
+
+                print('cursor',cursor)
 
                 records = cursor.fetchall()
                 print("Total number of rows in table: ", cursor.rowcount)
                 #print(len(records),records)
                 #----------------------------
-                # print(records)
+                print('if',records)
                 
                 field_names = [col[0] for col in cursor.description]
                 res = []
                 for record in records:
+                    # print('record',record)
                     record_dict = {}
                     for i in range( len(field_names) ):
                         record_dict[ field_names[i] ] = record[i]
+                    # print('record_dict',record_dict)
+                    
                     res.append( record_dict )
-
+                # print('res',res)
                 return res
+
+
+            return res
+        except:
             return [],[]
 
-        except:
-            print('No record Found')
-            return [],[]
+        # except:
+        #     print('No record Found')
+        #     return [],[]
     
+
+
+        #     print('No record Found')
+        #     return [],[]
+    
+
+
+
+
+
 
     def search_with_range(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
         # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
@@ -275,8 +305,8 @@ class dataBase:
         except:
             print('No record Found')
             return [],[]
-    
 
+    
     def search_with_range_with_classes(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
         # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
         try:
@@ -364,8 +394,7 @@ class dataBase:
         except:
             print('No record Found')
             return [],[]
-
-
+            
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
 
@@ -445,6 +474,17 @@ class dataBase:
             print("Error reading data from MySQL table", e)
             return []
 
+    def check_table_exist(self,table_name):
+
+        try:
+            if self.check_connection:
+                cursor,connection=self.connect()
+            sql_check_table = "SELECT * FROM {}.{};".format(self.data_base_name,table_name)
+            cursor=self.execute_quary(sql_check_table, cursor, connection)       
+            # print('check')    
+            return 'Exist'                              
+        except mysql.connector.Error as e:
+            print("Error reading data from MySQL table", e)
 
 
 if __name__ == "__main__":
@@ -455,8 +495,11 @@ if __name__ == "__main__":
     # data=(0,)*10
     # data=(0,0,0,0,1920,1200,0,0,0,0,0)
 
-    x=db.get_all_content('defects_info')
-    print(x)
+    # x=db.get_all_content('defects_info')
+    # print(x)
+
+    record = db.search( 'users' , 'user_name', 'testt')[0]
+    print(record)
     # table_name,parametrs,len_parameters)
 
     # db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,lenght,width,operator,time,date,main_path)',11)
