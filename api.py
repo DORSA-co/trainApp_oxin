@@ -298,6 +298,27 @@ class API:
         self.ui.cls_tabel_next.clicked.connect(partial(lambda: self.cls_model_tabel_nextorprev(next=True)))
         self.ui.cls_clearfilter_btn.clicked.connect(partial(self.clear_filters_cls))
 
+
+        self.ui.Binary_btn.clicked.connect(partial(lambda:self.user_access_pages(self.ui.Binary_btn.objectName())))
+        self.ui.Localization_btn.clicked.connect(partial(lambda:self.user_access_pages(self.ui.Localization_btn.objectName())))
+        self.ui.Classification_btn.clicked.connect(partial(lambda:self.user_access_pages(self.ui.Classification_btn.objectName())))
+        self.ui.pbt_btn.clicked.connect(partial(lambda:self.user_access_pages(self.ui.pbt_btn.objectName())))
+
+    def user_access_pages(self,btn_name):
+
+        dic={'Binary_btn':self.ui.page_Binary,
+            'Localization_btn':self.ui.page_Localization,
+            'Classification_btn':self.ui.page_Classification,
+            'pbt_btn':self.ui.page_pbt}
+        print(dic[btn_name])
+        if self.logged_in:
+            eval('self.ui.set_widget_page(self.ui.stackedWidget,dic["{}"])'.format(btn_name))
+            # eval(self.stackedWidget.setCurrentWidget(self.page_Binary))
+        
+        else:
+            self.ui.set_warning(texts.WARNINGS['LOGIN_FIRST'][self.language], 'app_erors', level=2)
+
+
     def mouse_connector(self):
         for _, technical_widget in self.ui.get_technical().items():
             self.mouse.connet(technical_widget, self.update_technical_pointer_mouse)

@@ -219,7 +219,7 @@ class UI_main_window(QMainWindow, ui):
 
         #pbt page
 
-        # self.pipeline_pbt_btn.clicked.connect(self.buttonClick)
+        self.pipeline_pbt_btn.clicked.connect(self.buttonClick)
         self.load_dataset_pbt_btn.clicked.connect(self.buttonClick)
         self.history_pbt_btn.clicked.connect(self.buttonClick)
 
@@ -1205,7 +1205,7 @@ class UI_main_window(QMainWindow, ui):
 
         if btnName == 'Classification_btn':
             self.start_box_animation(self.extraLeftBox.width(), 0, "left")
-            # self.stackedWidget.setCurrentWidget(self.page_Classification)
+            self.stackedWidget.setCurrentWidget(self.page_Classification)
 
         if btnName == 'binary_list':
             self.stackedWidget_binary.setCurrentWidget(self.page_binary_list)
