@@ -5,14 +5,14 @@ import datetime
 def get_date(persian=True, folder_path=False):
     if persian:
         if not folder_path:
-            date = '%s/%s/%s' % (JalaliDate.today().day, JalaliDate.today().month, JalaliDate.today().year)
+            date = '%s/%s/%s' % (JalaliDate.today().year, JalaliDate.today().month, JalaliDate.today().day)
         else:
-            date = '%s-%s-%s' % (JalaliDate.today().day, JalaliDate.today().month, JalaliDate.today().year)
+            date = '%s-%s-%s' % (JalaliDate.today().year, JalaliDate.today().month, JalaliDate.today().day)
     else:
         if not folder_path:
-            date = '%s/%s/%s' % (datetime.datetime.today().date().day, datetime.datetime.today().date().month, datetime.datetime.today().date().year)
+            date = '%s/%s/%s' % (datetime.datetime.today().date().year, datetime.datetime.today().date().month, datetime.datetime.today().date().day)
         else:
-            date = '%s-%s-%s' % (datetime.datetime.today().date().day, datetime.datetime.today().date().month, datetime.datetime.today().date().year)
+            date = '%s-%s-%s' % (datetime.datetime.today().date().year, datetime.datetime.today().date().month, datetime.datetime.today().date().day)
 
     if date[1] == '/':
         date = '0' + date

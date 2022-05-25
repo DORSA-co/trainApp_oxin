@@ -166,7 +166,8 @@ class API:
         self.classlist_slider_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
                                                                                         db_obj=self.db,
                                                                                         frame_obj=self.ui.class_list_slider_frame,
-                                                                                        prefix=self.classification_image_list_name))
+                                                                                        prefix=self.classification_image_list_name,
+                                                                                        image_per_row=binary_list_funcs.n_images_per_row_classlist))
         # classlist image object
         self.classification_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
         #_____________________________________________________________________
@@ -283,6 +284,8 @@ class API:
 
         # classification page
         self.ui.Classification_btn.clicked.connect(partial(self.refresh_classes_table))
+        self.ui.classification_history.clicked.connect(partial(self.refresh_classes_table))
+        self.ui.classification_class_list.clicked.connect(partial(self.refresh_classes_table))
         #self.ui.Classification_btn.clicked.connect(partial(self.refresh_datasets_table))
         self.ui.classlist_show_related_img_btn.clicked.connect(partial(self.show_class_related_images))
         self.ui.classlist_prev_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='prev')))
@@ -1526,15 +1529,15 @@ class API:
         defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
         selected_defects = classification_list_funcs.get_selected_defects(ui_obj=self.ui)
         if len(selected_defects) > 1:
-            self.ui.show_mesagges(self.ui.classlist_msg_label, 'Cant select more than one class', color=colors_pallete.failed_red)
+            self.ui.set_warning(texts.WARNINGS['SELECT_MORE_THAN_ONE_DEFECT_CLASS'][self.language], 'classlist_msg_label', level=2)
         elif len(selected_defects) == 0:
-            self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
+            self.ui.set_warning(texts.WARNINGS['SELECT_NO_DEFECT_CLASS'][self.language], 'classlist_msg_label', level=2)
         else:
             # get selected datasets from ui
             datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
             selected_datasets = dataset.get_selected_datasets(ui_obj=self.ui, datasets_list=datasets_list)
             if len(selected_datasets) == 0:
-                self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one dataset', color=colors_pallete.failed_red)
+                self.ui.set_warning(texts.WARNINGS['SELECT_NO_DATASET'][self.language], 'classlist_msg_label', level=2)
                 return
 
             # get image/annots list related to defect
@@ -1551,13 +1554,13 @@ class API:
             # no images available
             if len(annotation_list) == 0 and len(image_list) == 0:
                 # msg
-                self.ui.show_mesagges(self.ui.classlist_msg_label, 'No image(s) available with this defect', color=colors_pallete.failed_red)
+                self.ui.set_warning(texts.MESSEGES['NO_IMAGE_AVAILABLE_WITH_DEFECT'][self.language], 'classlist_msg_label', level=2)
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(False)
                 self.ui.classlist_next_btn.setEnabled(False)
             else:
                 # msg
-                self.ui.show_mesagges(self.ui.classlist_msg_label, 'Images with this defect are loaded', color=colors_pallete.successfull_green)
+                self.ui.set_warning(texts.MESSEGES['LOAD_IMAGES_WITH_DEFECT'][self.language], 'classlist_msg_label', level=1)
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(True)
                 self.ui.classlist_next_btn.setEnabled(True)
@@ -1582,7 +1585,8 @@ class API:
         res = binary_list_funcs.set_image_to_ui_slider_full_path(ui_obj=self.ui,
                                                                 image_path_list=current_image_list,
                                                                 annot_path_list=current_annots_list,
-                                                                prefix=self.classification_image_list_name)
+                                                                prefix=self.classification_image_list_name,
+                                                                image_per_row=binary_list_funcs.n_images_per_row_classlist)
 
         # validate (must update)
         # if not res:

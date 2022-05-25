@@ -165,28 +165,40 @@ WARNINGS={
                  'en': ' Are you sure want to create new database ? '},
 
         'EPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Epoch range fields cant be empty, Please fill both them or leave them empty'},
+                 'en': ' Epoch range fields cant be empty, Please fill both them or leave them empty '},
 
         'TEPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به تیونیگ اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Tuning epoch range fields cant be empty, Please fill both them or leave them empty'},
+                 'en': ' Tuning epoch range fields cant be empty, Please fill both them or leave them empty '},
 
         'BATCHSIZE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به سایز بچ را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Batch-size range fields cant be empty, Please fill both them or leave them empty'},
+                 'en': ' Batch-size range fields cant be empty, Please fill both them or leave them empty '},
 
         'SPLITRATIO_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به نسبت اسپلیت را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Split-ratio range fields cant be empty, Please fill both them or leave them empty'},
+                 'en': ' Split-ratio range fields cant be empty, Please fill both them or leave them empty '},
 
         'LOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطا را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Loss range fields cant be empty, Please fill both them or leave them empty'},
+                 'en': ' Loss range fields cant be empty, Please fill both them or leave them empty '},
 
         'ACCU_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به دقت را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Accuracy range fields cant be empty, Please fill both them or leave them empty'},
+                 'en': ' Accuracy range fields cant be empty, Please fill both them or leave them empty '},
 
         'PREC_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به پرسیژن را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Precision range fields cant be empty, Please fill both them or leave them empty'},
+                 'en': ' Precision range fields cant be empty, Please fill both them or leave them empty '},
 
         'RECA_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به ریکال را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Recall range fields cant be empty, Please fill both them or leave them empty'},
+                 'en': ' Recall range fields cant be empty, Please fill both them or leave them empty '},
+
+        'SELECT_MORE_THAN_ONE_DEFECT_CLASS': {'fa': ' امکان انتخاب چند کلاس عیب به صورت همزمان وجود ندارد ',
+                 'en': ' Cant select more than one defect class at same time '},
+
+        'SELECT_NO_DEFECT_CLASS': {'fa': ' لطفا یک کلاس عیب انتخاب کنید  ',
+                 'en': ' Please select a defect class '},
+
+        'SELECT_NO_DATASET': {'fa': ' لطفا حداقل یک دیتاست انتخاب کنید  ',
+                 'en': ' Please select at least on dataset '},
+
+        'SELECT_NO_DATASET': {'fa': ' لطفا حداقل یک دیتاست انتخاب کنید  ',
+                 'en': ' Please select at least on dataset '}
         
         
                 #  'en': ' Error while opening image '}
@@ -199,6 +211,12 @@ MESSEGES = {
 
         'FILTERED_RESAULTS_SUCCUSSFULL' : {'fa': ' نتایج اعمال فیلتر با موفقیت بازگردانده شد ',
                  'en': ' Filtered resaults returened succussfully '},
+
+        'LOAD_IMAGES_WITH_DEFECT' : {'fa': ' تصاویر دارای کلاس عیب موردنظر بارگزاری شدند ',
+                 'en': ' Image records containing this defect are loaded'},
+
+        'NO_IMAGE_AVAILABLE_WITH_DEFECT': {'fa': ' هیچ تصویر دارای کلاس موردنظر در دیتاست های انتخاب شده یافت نشد  ',
+                 'en': ' No image available with this defect class in selected datasets'},
 
             
                          

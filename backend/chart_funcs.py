@@ -350,14 +350,14 @@ def update_classlist_piechart(ui_obj, binary_len, classes_len, classes_list):
         perfect_percentage = binary_len[dataset.PERFECT_FOLDER] / (binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
         defect_percentage = binary_len[dataset.DEFECT_FOLDER] / (binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
         # append to series
-        my_slice = ui_obj.classlist_pie_binary_series.append("defect: %s" % binary_len[dataset.DEFECT_FOLDER], defect_percentage)
+        my_slice = ui_obj.classlist_pie_binary_series.append("defect: {} ({:.1f}%)".format(binary_len[dataset.DEFECT_FOLDER], defect_percentage*100), defect_percentage)
         if defect_percentage != 0.0:
             my_slice.setLabelVisible(True)
             my_slice.setLabelColor(sQColor(pie_label_color))
             my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
             my_slice.setBrush(sQColor(defect_color))
 
-        my_slice = ui_obj.classlist_pie_binary_series.append("perfect: %s" % binary_len[dataset.PERFECT_FOLDER], perfect_percentage)
+        my_slice = ui_obj.classlist_pie_binary_series.append("perfect: {} ({:.1f}%)".format(binary_len[dataset.PERFECT_FOLDER], perfect_percentage*100), perfect_percentage)
         if perfect_percentage != 0.0:
             my_slice.setLabelVisible(True)
             my_slice.setLabelColor(sQColor(pie_label_color))
@@ -376,9 +376,9 @@ def update_classlist_piechart(ui_obj, binary_len, classes_len, classes_list):
                 percentage = 0.0
             #
             try:
-                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': %s' % classes_len[cls_id], percentage)
+                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': {} ({:.1f}%)'.format(classes_len[cls_id], percentage*100), percentage)
             except:
-                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': %s' % '0', percentage)
+                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': {} ({:.1f}%)'.format('0', '0.0'), percentage)
             #
             if percentage != 0.0:
                 my_slice.setLabelVisible(True)

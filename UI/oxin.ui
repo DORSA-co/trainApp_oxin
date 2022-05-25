@@ -5076,7 +5076,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>17</height>
+                                     <height>600</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -5319,7 +5319,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>17</height>
+                                     <height>600</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -13501,7 +13501,7 @@ QPushButton:hover {
                           </size>
                          </property>
                          <property name="currentIndex">
-                          <number>3</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_classification_class_list">
                           <layout class="QVBoxLayout" name="verticalLayout_29">
@@ -13684,16 +13684,16 @@ QPushButton:hover {
                                      <number>10</number>
                                     </property>
                                     <property name="leftMargin">
-                                     <number>0</number>
+                                     <number>5</number>
                                     </property>
                                     <property name="topMargin">
-                                     <number>0</number>
+                                     <number>5</number>
                                     </property>
                                     <property name="rightMargin">
-                                     <number>0</number>
+                                     <number>5</number>
                                     </property>
                                     <property name="bottomMargin">
-                                     <number>0</number>
+                                     <number>5</number>
                                     </property>
                                     <item>
                                      <spacer name="horizontalSpacer_44">
@@ -13712,18 +13712,25 @@ QPushButton:hover {
                                      <widget class="QPushButton" name="classlist_show_related_img_btn">
                                       <property name="minimumSize">
                                        <size>
-                                        <width>100</width>
+                                        <width>80</width>
                                         <height>30</height>
                                        </size>
                                       </property>
                                       <property name="maximumSize">
                                        <size>
-                                        <width>100</width>
+                                        <width>80</width>
                                         <height>30</height>
                                        </size>
                                       </property>
                                       <property name="text">
-                                       <string>PushButton</string>
+                                       <string>Search</string>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                    <item>
+                                     <widget class="Line" name="line_7">
+                                      <property name="orientation">
+                                       <enum>Qt::Vertical</enum>
                                       </property>
                                      </widget>
                                     </item>
@@ -13731,13 +13738,13 @@ QPushButton:hover {
                                      <widget class="QLabel" name="classlist_msg_label">
                                       <property name="minimumSize">
                                        <size>
-                                        <width>500</width>
+                                        <width>600</width>
                                         <height>30</height>
                                        </size>
                                       </property>
                                       <property name="maximumSize">
                                        <size>
-                                        <width>500</width>
+                                        <width>600</width>
                                         <height>30</height>
                                        </size>
                                       </property>
@@ -13748,7 +13755,7 @@ QPushButton:hover {
                                        <enum>QFrame::Sunken</enum>
                                       </property>
                                       <property name="text">
-                                       <string>TextLabel</string>
+                                       <string/>
                                       </property>
                                      </widget>
                                     </item>
@@ -13800,6 +13807,9 @@ QPushButton:hover {
                                     </property>
                                     <item>
                                      <widget class="QPushButton" name="classlist_prev_btn">
+                                      <property name="enabled">
+                                       <bool>false</bool>
+                                      </property>
                                       <property name="minimumSize">
                                        <size>
                                         <width>30</width>
@@ -13846,6 +13856,9 @@ border:Transparent</string>
                                     </item>
                                     <item>
                                      <widget class="QPushButton" name="classlist_next_btn">
+                                      <property name="enabled">
+                                       <bool>false</bool>
+                                      </property>
                                       <property name="minimumSize">
                                        <size>
                                         <width>30</width>
@@ -17137,13 +17150,13 @@ color : rgb(0,0,0);</string>
                                      <widget class="QLabel" name="cls_tabel_label">
                                       <property name="minimumSize">
                                        <size>
-                                        <width>500</width>
+                                        <width>600</width>
                                         <height>0</height>
                                        </size>
                                       </property>
                                       <property name="maximumSize">
                                        <size>
-                                        <width>500</width>
+                                        <width>600</width>
                                         <height>16777215</height>
                                        </size>
                                       </property>
@@ -17490,7 +17503,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>218</width>
+                                 <width>368</width>
                                  <height>218</height>
                                 </rect>
                                </property>

@@ -16,6 +16,7 @@ from backend import Annotation, classification_list_funcs
 
 
 n_images_per_row = 6
+n_images_per_row_classlist = 5
 no_image_path = './images/no_image.png'
 widjet_prefixes = {'perfect':'binary_list_perfect', 'defect':'binary_list_defect'}
 image_list_object_names = {'perfect':'perfect_images', 'defect':'defect_images'}
@@ -26,14 +27,14 @@ mask_alpha = 0.5
 
 
 # create image slider area on UI
-def create_image_slider_on_ui(ui_obj, db_obj, frame_obj, prefix=widjet_prefixes['perfect']):
+def create_image_slider_on_ui(ui_obj, db_obj, frame_obj, prefix=widjet_prefixes['perfect'], image_per_row=n_images_per_row):
     # create layout
     try:
         layout = sQHBoxLayout()
         eval("exec('ui_obj.%s_layout = layout')" % prefix)
         
         # creat and assign labels to layout
-        for i in range(n_images_per_row):
+        for i in range(image_per_row):
             label = sQLabel()
             label.setScaledContents(True)
             label.setWhatsThis('')
@@ -64,7 +65,7 @@ def maximize_image_on_click(ui_obj, db_obj, label, event):
     if pathes != '':
         pathes = pathes.split("#")
         if len(pathes) != 3:
-            ui_obj.set_warning(texts.ERORS['BINARYLIST_MAXIMIZE_IMAGE_ERROR'][language], 'binarylist', level=3)
+            ui_obj.set_warning(texts.ERORS['MAXIMIZE_IMAGE_ERROR'][language], 'binarylist', level=3)
             return
         # load image
         if pathes[2] != 'fullpath':
@@ -89,7 +90,7 @@ def maximize_image_on_click(ui_obj, db_obj, label, event):
         
 
 # set/update images to ui
-def set_image_to_ui_slider(ui_obj, sub_directory, annot_sub_direcotory, image_path_list, prefix=widjet_prefixes['perfect']):
+def set_image_to_ui_slider(ui_obj, sub_directory, annot_sub_direcotory, image_path_list, prefix=widjet_prefixes['perfect'], image_per_row=n_images_per_row):
     try:
         # set dataset images on UI
         for i, image_path in enumerate(image_path_list):
@@ -105,7 +106,7 @@ def set_image_to_ui_slider(ui_obj, sub_directory, annot_sub_direcotory, image_pa
             i += 1
         except:
             i = 0
-        for j in range(i, n_images_per_row):
+        for j in range(i, image_per_row):
             set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, j)), image=None, no_image=True)
             eval('ui_obj.%s_label_%s' % (prefix, j)).setWhatsThis('')
         
@@ -116,7 +117,7 @@ def set_image_to_ui_slider(ui_obj, sub_directory, annot_sub_direcotory, image_pa
 
 
 # set/update images to ui given full image and annoptation path
-def set_image_to_ui_slider_full_path(ui_obj, image_path_list, annot_path_list, prefix=widjet_prefixes['perfect']):
+def set_image_to_ui_slider_full_path(ui_obj, image_path_list, annot_path_list, prefix=widjet_prefixes['perfect'], image_per_row=n_images_per_row):
     try:
         # set dataset images on UI
         for i, image_path in enumerate(image_path_list):
@@ -133,7 +134,7 @@ def set_image_to_ui_slider_full_path(ui_obj, image_path_list, annot_path_list, p
             i += 1
         except:
             i = 0
-        for j in range(i, n_images_per_row):
+        for j in range(i, image_per_row):
             set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, j)), image=None, no_image=True)
             eval('ui_obj.%s_label_%s' % (prefix, j)).setWhatsThis('')
         

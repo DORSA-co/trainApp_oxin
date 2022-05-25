@@ -813,7 +813,8 @@ class UI_main_window(QMainWindow, ui):
             'camera_connection':self.camera_connection_msg,
             'binarylist': self.warning_binarylist_page,
             'setting_eror': self.setting_eror,
-            'classification_model_history': self.cls_tabel_label
+            'classification_model_history': self.cls_tabel_label,
+            'classlist_msg_label': self.classlist_msg_label
         }
         # print('set_warning')
         if text != None:
@@ -827,7 +828,7 @@ class UI_main_window(QMainWindow, ui):
                 waring_labels[name].setStyleSheet('background-color:#FDFFA9;border-radius:2px;color:black')
 
             if level >= 3:
-                waring_labels[name].setText(' EROR : ' + text)
+                waring_labels[name].setText(' ERROR : ' + text)
                 waring_labels[name].setStyleSheet('background-color:#D9534F;border-radius:2px;color:black')
             
 

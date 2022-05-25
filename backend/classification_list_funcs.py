@@ -22,7 +22,7 @@ headers_train = ['Defect Name', 'Defect ID', 'Defect Level']
 defect_group_table_ncols = 4
 defect_group_table_nrows = 20
 headers_defect_groups = ['Defect-Group Name', 'Defect-Group ID', 'Is Defect', 'Created Date']
-n_image_per_slide = 6
+n_image_per_slide = 5
 
 #---------------------------------------------------------------------------------------------------------------------------
 
