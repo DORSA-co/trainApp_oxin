@@ -219,7 +219,7 @@ class UI_main_window(QMainWindow, ui):
 
         #pbt page
 
-        self.pipeline_pbt_btn.clicked.connect(self.buttonClick)
+        # self.pipeline_pbt_btn.clicked.connect(self.buttonClick)
         self.load_dataset_pbt_btn.clicked.connect(self.buttonClick)
         self.history_pbt_btn.clicked.connect(self.buttonClick)
 
