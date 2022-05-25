@@ -16,7 +16,7 @@ from matplotlib import pyplot as plt
 
 from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
 from app_settings import Settings
-from backend import classification_list_funcs, data_grabber, camera_connection, colors_pallete
+from backend import data_grabber, camera_connection
 from backend.mouse import Mouse
 from backend.keyboard import Keyboard
 # from backend import Label
@@ -34,7 +34,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
-from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs, dataset, classification_model_funcs
+from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs,date_funcs, classification_model_funcs, classification_list_funcs, dataset, colors_pallete
 
 import database_utils
 from utils import *
@@ -107,10 +107,6 @@ class API:
         self.filter_mode = False
         self.proc_start_flag = True
 
-        # cls-models
-        self.clsmodel_tabel_itr = 1
-        self.clsmodel_count = 0
-        self.cls_filter_mode = False
         # binarylist dataset parms
         self.dataset_params = {}
 
@@ -146,7 +142,6 @@ class API:
 
         # binary model start-up funcs
         self.refresh_binary_models_table(get_count=True)
-        self.refresh_cls_models_table(get_count=True)
 
         # create binarylist sliders on UI
         # perfect
@@ -164,7 +159,6 @@ class API:
         # binarylist image object
         self.binary_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
 
-        self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
         # ________________________________________________________________
         # create classlist slider on UI
         self.classification_image_list_name = 'classlist'
@@ -177,11 +171,15 @@ class API:
         self.classification_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
         #_____________________________________________________________________
 
+        self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
+
         # DEBUG_FUNCTIONS
         # -------------------------------------
         # self.__debug_load_sheet__(['996','997'])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
+
+        self.create_classlist_pie_chart()
 
         
 
@@ -242,6 +240,7 @@ class API:
 
         #login
         self.login_user_name=''
+        self.default_dataset_user = ''
         self.ui.login_btn.clicked.connect(partial(self.show_login))
         self.ui.btn_user_proflie.clicked.connect(partial(self.set_profile_page))
         self.ui.create_database_btn.clicked.connect(partial(self.create_dataset))
@@ -284,6 +283,7 @@ class API:
 
         # classification page
         self.ui.Classification_btn.clicked.connect(partial(self.refresh_classes_table))
+        #self.ui.Classification_btn.clicked.connect(partial(self.refresh_datasets_table))
         self.ui.classlist_show_related_img_btn.clicked.connect(partial(self.show_class_related_images))
         self.ui.classlist_prev_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='prev')))
         self.ui.classlist_next_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='next')))
@@ -297,38 +297,6 @@ class API:
         self.ui.cls_tabel_prev.clicked.connect(partial(lambda: self.cls_model_tabel_nextorprev(next=False)))
         self.ui.cls_tabel_next.clicked.connect(partial(lambda: self.cls_model_tabel_nextorprev(next=True)))
         self.ui.cls_clearfilter_btn.clicked.connect(partial(self.clear_filters_cls))
-        
-
-
-        # pbt Page
-
-        self.ui.pbt_btn.clicked.connect(lambda x:self.set_page_ui(self.ui.pbt_btn.objectName()))
-        self.ui.Binary_btn.clicked.connect(lambda x:self.set_page_ui(self.ui.Binary_btn.objectName()))
-        self.ui.Localization_btn.clicked.connect(lambda x:self.set_page_ui(self.ui.Localization_btn.objectName()))
-        self.ui.Classification_btn.clicked.connect(lambda x:self.set_page_ui(self.ui.Classification_btn.objectName()))
-
-
-    def set_page_ui(self,btnName):
-
-        page_list={
-            'pbt_btn':'page_pbt',
-            'Binary_btn':'page_Binary',
-            'Localization_btn':'page_Localization',
-            'Classification_btn':'page_Classification'
-        }
-
-        print('b',btnName)
-
-        # btn = self.sender()
-        # print('btn',btn)
-        # btnName = b.objectName()
-
-        if self.logged_in:
-            eval('self.ui.set_widget_page(self.ui.stackedWidget,self.ui.{})'.format(page_list[str(btnName)]))
-
-        else :
-            self.ui.set_warning(texts.WARNINGS['LOGIN_FIRST'][self.language], 'app_erors', level=2)
-
 
     def mouse_connector(self):
         for _, technical_widget in self.ui.get_technical().items():
@@ -867,7 +835,9 @@ class API:
         self.ui.default_dataset.setText(str(login_info[1]['default_dataset']))
         self.ui.today_date.setText(str(date_funcs.get_date(folder_path=True)))
         self.login_user_name=(str(login_info[1]['user_name']))
+        self.default_dataset_user = str(login_info[1]['default_dataset'])
         self.ds_json.set_user_name_database(self.login_user_name)
+        #print('username:', self.login_user_name)
 
     def set_profile_page(self):
         if self.logged_in==True:
@@ -996,7 +966,6 @@ class API:
         # print('asdqwdf')
         return parent_path
 
-
     def set_b_parms(self):
 
         b_parms = self.ui.get_binary_parms()
@@ -1014,7 +983,6 @@ class API:
         bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
 
-
     def update_b_chart_axes(self, nepoch):
         for chart_postfix in self.ui.chart_names:
             eval('self.ui.axisX_%s' % chart_postfix).setRange(0, nepoch)
@@ -1029,7 +997,7 @@ class API:
 
     def assign_new_value_to_b_chart(self, last_epoch, logs):
         # print('here', last_epoch, logs)
-        chart_funcs.update_chart(ui_obj=self.ui, chart_postfixes=self.ui.chart_names, last_epoch=last_epoch, logs=logs, scroll_obj=self.ui.binary_chart_scrollbar)
+        chart_funcs.update_chart(ui_obj=self.ui, chart_postfixes=self.ui.chart_names, last_epoch=last_epoch, logs=logs)
 
     def set_l_parms(self):
 
@@ -1304,6 +1272,8 @@ class API:
 
     # _________________________________________________________________________________________________
     # binary-model history page functions
+
+    # binary-model history page functions
     def refresh_binary_models_table_onevent(self):
         self.bmodel_tabel_itr = 1
         self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
@@ -1531,28 +1501,44 @@ class API:
     # classification page
     #------------------------------------------------------------------------------------------------------------------------
     # get defects from database and apply to defects table
-    def refresh_classes_table(self, history_page=False):
+    def refresh_classes_table(self):
         defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
         defects_list = classification_list_funcs.change_defect_group_id_to_name(db_obj=self.db, defects_list=defects_list)
         classification_list_funcs.set_defects_on_ui(ui_obj=self.ui, defects_list=defects_list)
         classification_list_funcs.set_defects_on_train_ui(ui_obj=self.ui, defects_list=defects_list)
         classification_model_funcs.set_defects_on_filter_ui(ui_obj=self.ui, defects_list=defects_list)
+        #
+        self.refresh_datasets_table()
+
+
+    # get datasets from database and apply to datasets table
+    def refresh_datasets_table(self):
+        # get dataset
+        # read all datasets in table (must update)
+        datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
+        # show on UI
+        dataset.set_datasets_on_ui(ui_obj=self.ui, datasets_list=datasets_list, current_user=self.login_user_name, default_dataset=self.default_dataset_user)
     
 
     # show class related images on UI
     def show_class_related_images(self):
         # get selected defects from UI
+        defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
         selected_defects = classification_list_funcs.get_selected_defects(ui_obj=self.ui)
         if len(selected_defects) > 1:
             self.ui.show_mesagges(self.ui.classlist_msg_label, 'Cant select more than one class', color=colors_pallete.failed_red)
         elif len(selected_defects) == 0:
             self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
         else:
-            # get dataset
-            # read all datasets in table (must update)
+            # get selected datasets from ui
             datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
+            selected_datasets = dataset.get_selected_datasets(ui_obj=self.ui, datasets_list=datasets_list)
+            if len(selected_datasets) == 0:
+                self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one dataset', color=colors_pallete.failed_red)
+                return
+
             # get image/annots list related to defect
-            annotation_list, image_list = classification_list_funcs.load_images_related_to_defect(datasets_list=datasets_list, defect_id=selected_defects[0])
+            annotation_list, image_list, binary_count, classes_count = classification_list_funcs.load_images_related_to_defect(datasets_list=selected_datasets, defect_id=selected_defects[0])
 
             # create list object
             self.classification_image_list.add(mylist=image_list, mylist_annots=annotation_list, name=self.classification_image_list_name)
@@ -1575,6 +1561,9 @@ class API:
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(True)
                 self.ui.classlist_next_btn.setEnabled(True)
+            
+            # update pie chart
+            chart_funcs.update_classlist_piechart(ui_obj=self.ui, binary_len=binary_count, classes_len=classes_count, classes_list=defects_list)
         
     
     # update slider images
@@ -1617,6 +1606,11 @@ class API:
         #
         #bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         #binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
+    
+
+    # pie chart funcs
+    def create_classlist_pie_chart(self):
+        chart_funcs.create_classlist_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binary_chart_frame, frame_obj_classlist=self.ui.classlist_chart_frame)
 
     
     # _________________________________________________________________________________________________
@@ -1736,11 +1730,6 @@ class API:
 
 
     #_____________________________________________________________________________________________________
-
-
-            
-
-
 
     def set_available_caemras(self):
 

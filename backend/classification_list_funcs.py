@@ -11,6 +11,7 @@ from persiantools.jdatetime import JalaliDate
 import json
 
 from backend import colors_pallete, dataset, Annotation
+import dataset_utils
 
 
 # users table number of rows and cols
@@ -569,19 +570,41 @@ def show_defects_summary_info(ui_obj, db_obj):
 def load_images_related_to_defect(datasets_list, defect_id):
     annotation_list = []
     image_list = []
+    binary_count = {dataset.DEFECT_FOLDER:0, dataset.PERFECT_FOLDER:0}
+    classes_count = {}
+    #
     for ds in datasets_list:
         ds_path = ds['path']
         print('dataset_path:', ds_path)
-        # validation
+        # validationdataset_info_json_exists
         if validate_dataset(dataset_path=ds_path):
             # dataset main json file isnt available
-            if not dataset_info_json_exists(dataset_path=ds_path):
-                annotation_list += get_related_images_by_annotation(dataset_path=ds_path, defect_id=defect_id)[0]
-                image_list += get_related_images_by_annotation(dataset_path=ds_path, defect_id=defect_id)[1]
+            res, json_list, img_list, existed_binaries, existded_classes = dataset_info_json_exists(dataset_path=ds_path, dataset_name=ds['name'], defect_id=defect_id)
+            if not res:
+                print('--------------------------------------------------')
+                print('dataet json not exist')
+                related_annot_files, related_images_files, existded_classes = get_related_images_by_annotation(dataset_path=ds_path, defect_id=defect_id)
+                existed_binaries = get_binary_count_by_filders(dataset_path=ds_path)
+                annotation_list += related_annot_files
+                image_list += related_images_files
+            
+            else:
+                print('--------------------------------------------------')
+                print('load from dataet json')
+                annotation_list += json_list
+                image_list += img_list
+        
+        # add to count dicts
+        binary_count = merge_classes_dictionaries(existded_classes_total=binary_count, existded_classes=existed_binaries)
+        classes_count = merge_classes_dictionaries(existded_classes_total=classes_count, existded_classes=existded_classes)
+
     
     print('annotation_list:', annotation_list)
     print('image_list:', image_list)
-    return annotation_list, image_list
+    print('binary count:', binary_count)
+    print('existed classes:', classes_count)
+
+    return annotation_list, image_list, binary_count, classes_count
 
 
 # get image pathes realated to class using image annotations in annotation folder
@@ -589,15 +612,35 @@ def get_related_images_by_annotation(dataset_path, defect_id):
     # annotations folder path
     annot_path = os.path.join(dataset_path, dataset.ANNOTATIONS_FOLDER)
     print('annot_path:', annot_path)
-    related_annot_files, related_images_files = get_jsons_related_to_defect(dirpath=annot_path, defect_id=defect_id, dataset_path=dataset_path)
+    related_annot_files, related_images_files, existded_classes = get_jsons_related_to_defect(dirpath=annot_path, defect_id=defect_id, dataset_path=dataset_path)
     #
-    return related_annot_files, related_images_files
-    
+    return related_annot_files, related_images_files, existded_classes
 
+
+def get_binary_count_by_filders(dataset_path):
+    binary_count = {dataset.DEFECT_FOLDER:0, dataset.PERFECT_FOLDER:0}
+    try:
+        # len defect folder
+        defect_path = os.path.join(dataset_path, dataset.BINARY_FOLDER, dataset.DEFECT_FOLDER)
+        if os.path.exists(defect_path):
+            binary_count[dataset.DEFECT_FOLDER] = len([s for s in os.listdir(defect_path) if os.path.isfile(os.path.join(defect_path, s)) and s[-3:]=='jpg'])
+        
+        # len perfect folder
+        perfect_path = os.path.join(dataset_path, dataset.BINARY_FOLDER, dataset.PERFECT_FOLDER)
+        if os.path.exists(perfect_path):
+            binary_count[dataset.PERFECT_FOLDER] = len([s for s in os.listdir(perfect_path) if os.path.isfile(os.path.join(perfect_path, s)) and s[-3:]=='jpg'])
+        
+        return binary_count
+    
+    except:
+        return binary_count
+        
+    
 # get files in a directory
 def get_jsons_related_to_defect(dirpath, defect_id, dataset_path):
     jsons_list = []
     images_list = []
+    existded_classes_total = {}
     try:
         a = [s for s in os.listdir(dirpath) if os.path.isfile(os.path.join(dirpath, s)) and s[-4:]=='json']
         a.sort(key=lambda s: os.path.getmtime(os.path.join(dirpath, s)))
@@ -608,6 +651,11 @@ def get_jsons_related_to_defect(dirpath, defect_id, dataset_path):
                 with open(os.path.join(dirpath, annot)) as json_file:
                     annotations = json.load(json_file)
                 json_file.close()
+
+                # count existed defects in annotation
+                existded_classes = get_existed_defects_in_image_annotation(json_annotation=annotations)
+                existded_classes_total = merge_classes_dictionaries(existded_classes_total=existded_classes_total, existded_classes=existded_classes)
+
                 # add to list if has defect class
                 if check_annotation_related_to_defect(json_annotation=annotations, defect_id=defect_id):
                     # check image exist
@@ -621,10 +669,24 @@ def get_jsons_related_to_defect(dirpath, defect_id, dataset_path):
             except:
                 continue
         
-        return jsons_list, images_list
+        return jsons_list, images_list, existded_classes_total
 
     except:
-        return [], []
+        return [], [], {}
+
+
+def merge_classes_dictionaries(existded_classes_total, existded_classes):
+    try:
+        for cls in existded_classes.keys():
+            if cls not in existded_classes_total.keys():
+                existded_classes_total[cls] = existded_classes[cls]
+            else:
+                existded_classes_total[cls] += existded_classes[cls]
+        
+        return existded_classes_total
+    
+    except:
+        return existded_classes
 
 
 def check_annotation_related_to_defect(json_annotation, defect_id):
@@ -643,6 +705,24 @@ def check_annotation_related_to_defect(json_annotation, defect_id):
         return False
 
 
+def get_existed_defects_in_image_annotation(json_annotation):
+    existded_classes = {}
+    try:
+        for obj_mask in json_annotation[Annotation.OBJ_MASKS_KEY]:
+            if obj_mask[Annotation.CLASS_KEY] not in existded_classes.keys():
+                existded_classes[obj_mask[Annotation.CLASS_KEY]] = 1
+        
+        #
+        for obj_bbox in json_annotation[Annotation.OBJ_BBOXS_KEY]:
+            if obj_bbox[Annotation.CLASS_KEY] not in existded_classes.keys():
+                existded_classes[obj_bbox[Annotation.CLASS_KEY]] = 1
+
+        #
+        return existded_classes
+    except:
+        return existded_classes
+
+
 def check_image_exist_by_json(image_path):
     try:
         print('image_path:', image_path)
@@ -652,9 +732,14 @@ def check_image_exist_by_json(image_path):
     except:
         return False
 
-
-
-
+def check_image_annotation_exist(annot_path):
+    try:
+        print('annot_path:', annot_path)
+        if os.path.exists(annot_path):
+            return True
+        return False
+    except:
+        return False
 
 
 # dataset validation
@@ -676,9 +761,68 @@ def validate_dataset(dataset_path):
 
 
 # check datasets main info json exists
-def dataset_info_json_exists(dataset_path):
-    # must update
-    return False
+def dataset_info_json_exists(dataset_path, dataset_name, defect_id):
+    jsons_list = []
+    images_list = []
+    #
+    dataset_json_path = os.path.join(dataset_path, dataset_name+'.json')
+    #
+    if not os.path.exists(dataset_json_path):
+        return False, jsons_list, images_list, {}, {}
+    
+    else:
+        try:
+            # open json
+            with open(dataset_json_path) as json_file:
+                annotations = json.load(json_file)
+            json_file.close()
+
+            # count defects
+            binary_count, existded_classes = get_existed_defects_in_dataset_annotation(json_annotation=annotations)
+
+            # check defect id is available in json file
+            if str(defect_id) not in annotations[dataset_utils.CLASSIFICATION].keys():
+                print('defect id not available in json')
+                return True, jsons_list, images_list, binary_count, existded_classes
+            else:
+                for image_name in annotations[dataset_utils.CLASSIFICATION][str(defect_id)]:
+                    # image directory
+                    image_path = os.path.join(dataset_path, dataset.BINARY_FOLDER, dataset.DEFECT_FOLDER, image_name)
+                    if check_image_exist_by_json(image_path=image_path):
+                        images_list.append(image_path)
+
+                        # annotation directory
+                        annot_path = os.path.join(dataset_path, dataset.ANNOTATIONS_FOLDER, image_name[:-4]+'.json')
+                        if check_image_annotation_exist(annot_path=annot_path):
+                            jsons_list.append(annot_path)
+                        else:
+                            jsons_list.append('')
+                        
+
+            return True, jsons_list, images_list, binary_count, existded_classes
+
+        except:
+            return False, jsons_list, images_list, {}, {}
+
+
+def get_existed_defects_in_dataset_annotation(json_annotation):
+    existded_classes = {}
+    binary_count = {dataset.DEFECT_FOLDER:0, dataset.PERFECT_FOLDER:0}
+    #
+    try:
+        #
+        for cls_id in json_annotation[dataset_utils.CLASSIFICATION].keys():
+            if cls_id != dataset_utils.NONE_CLASS:
+                existded_classes[cls_id] = len(json_annotation[dataset_utils.CLASSIFICATION][cls_id])
+        
+        #
+        binary_count[dataset.DEFECT_FOLDER] = json_annotation[dataset_utils.BINARY][dataset_utils.COUNT_DEFECT]
+        binary_count[dataset.PERFECT_FOLDER] = json_annotation[dataset_utils.BINARY][dataset_utils.COUNT_PERFECT]
+
+        return binary_count, existded_classes
+
+    except:
+        return binary_count, existded_classes
 
 
         

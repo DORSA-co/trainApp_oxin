@@ -209,10 +209,10 @@ def get_filtered_binary_models_from_db(ui_obj, db_obj, filter_params, limit_size
         params.append(filter_params['val_recall'])
         cols.append('val_recall')
     #
-    # print('-----------------------------------------------------------')
-    # print('params:', params)
-    # print('cols:', cols)
-    # print('-----------------------------------------------------------')
+    print('-----------------------------------------------------------')
+    print('params:', params)
+    print('cols:', cols)
+    print('-----------------------------------------------------------')
     # return
     
     # check not wmpty

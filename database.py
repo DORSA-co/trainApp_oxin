@@ -229,6 +229,16 @@ class dataBase:
         #     return [],[]
     
 
+
+        #     print('No record Found')
+        #     return [],[]
+    
+
+
+
+
+
+
     def search_with_range(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
         # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
         try:
@@ -295,8 +305,8 @@ class dataBase:
         except:
             print('No record Found')
             return [],[]
-    
 
+    
     def search_with_range_with_classes(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
         # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
         try:
@@ -384,8 +394,7 @@ class dataBase:
         except:
             print('No record Found')
             return [],[]
-
-    
+            
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
 

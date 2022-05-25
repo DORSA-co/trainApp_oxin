@@ -8,7 +8,7 @@ import os
 from backend import pathStructure, binary_model_funcs
 import inspect
 class dataBaseUtils():
-    def __init__(self,user_name='root',password='root') :
+    def __init__(self,user_name='root',password='Dorsa1400@') :
         self.db=database.dataBase(user_name,password,'localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
@@ -227,6 +227,7 @@ class dataBaseUtils():
 
         except:
             return []
+    
 
     #________________________________________________________________________________________________________
     # classification models
@@ -272,10 +273,8 @@ class dataBaseUtils():
             return record
         except:
             return []
-    
-    # ________________________________________________________________________________________
-    
 
+    #______________________________________________________________________________________________
     #______________________________________________________________________________________
     # datasets
     def load_datasets(self):
@@ -284,7 +283,8 @@ class dataBaseUtils():
             return datasets
         except:
             return []
-
+    
+    #___________________________________________________________________________________
 
 
     def search_user(self,input_user_name):

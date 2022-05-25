@@ -1,6 +1,12 @@
 import os
 import shutil
-from backend import Annotation
+from PySide6.QtWidgets import QHeaderView as sQHeaderView
+from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
+from PySide6.QtGui import QColor as sQColor
+from PySide6.QtWidgets import QLabel as sQlabel
+from PySide6 import QtCore as sQtCore
+
+from backend import Annotation, colors_pallete
 import string
 import random
 import cv2
@@ -15,6 +21,10 @@ PERFECT_FOLDER = 'perfect'
 DEFECT_SPLITED_FOLDER = 'defect_splitted'
 PERFECT_SPLITED_FOLDER = 'perfect_splitted'
 FORMAT_IMAGE = '.jpg'
+#
+datasets_table_ncols = 3
+datasets_table_nrows = 20
+headers = ['Dataset Name', 'User Own', 'Dataset Path']
 
 
 class Dataset:
@@ -228,6 +238,61 @@ class Dataset:
 def get_datasets_list_from_db(db_obj):
     ds_list = db_obj.load_datasets()
     return ds_list
+
+
+# set datasets on UI table
+def set_datasets_on_ui(ui_obj, datasets_list, current_user='', default_dataset=''):
+    print('def', default_dataset)
+    # definr table parameters
+    ui_obj.datasets_table.resizeColumnsToContents()
+    ui_obj.datasets_table.setColumnCount(datasets_table_ncols)
+    print('len', len(datasets_list))
+    if len(datasets_list) != 0:
+        ui_obj.datasets_table.setRowCount(datasets_table_nrows)
+    else:
+        ui_obj.datasets_table.setRowCount(0)
+
+    ui_obj.datasets_table.verticalHeader().setVisible(True)
+    ui_obj.datasets_table.horizontalHeader().setSectionResizeMode(sQHeaderView.Stretch)
+    ui_obj.datasets_table.setHorizontalHeaderLabels(headers)
+
+    # add users to table
+    for i, dataset in enumerate(datasets_list):
+        # text color
+        text_color = colors_pallete.successfull_green if dataset['user_own'] == current_user else colors_pallete.black
+        # set name
+        table_item = sQTableWidgetItem(str(dataset['name']))
+        table_item.setFlags(sQtCore.Qt.ItemFlag.ItemIsUserCheckable | sQtCore.Qt.ItemFlag.ItemIsEnabled)
+        table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
+        if str(dataset['name']) == default_dataset:
+            table_item.setCheckState(sQtCore.Qt.CheckState.Checked)
+        table_item.setForeground(sQColor(text_color))
+        ui_obj.datasets_table.setItem(i, 0, table_item)
+        # set user_own
+        table_item = sQTableWidgetItem(str(dataset['user_own']))
+        table_item.setForeground(sQColor(text_color))
+        ui_obj.datasets_table.setItem(i, 1, table_item)
+        # set path
+        table_item = sQTableWidgetItem(str(dataset['path']))
+        table_item.setForeground(sQColor(text_color))
+        ui_obj.datasets_table.setItem(i, 2, table_item)
+
+    try:
+        ui_obj.datasets_table.setRowCount(i+1)
+    except:
+        return
+
+
+# get selected users from user table in UI
+def get_selected_datasets(ui_obj, datasets_list):
+    list = []
+    for i in range(ui_obj.datasets_table.rowCount()):    
+        if ui_obj.datasets_table.item(i, 0).checkState() == sQtCore.Qt.Checked:
+            #
+            for dataset in datasets_list:
+                if dataset['name'] == ui_obj.datasets_table.item(i, 0).text():
+                    list.append(dataset)
+    return list
 
 
 
