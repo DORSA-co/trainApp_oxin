@@ -52,7 +52,7 @@ def create_image_slider_on_ui(ui_obj, db_obj, frame_obj, prefix=widjet_prefixes[
         return True
 
     except:
-        ui_obj.set_warning(texts.WARNINGS['BUILD_BINARYLIST_SLIDER_ERROR'][language], 'binarylist', level=2)
+        ui_obj.set_warning(texts.ERORS['BUILD_BINARYLIST_SLIDER_ERROR'][language], 'binarylist', level=3)
         return False
 
 
@@ -64,7 +64,7 @@ def maximize_image_on_click(ui_obj, db_obj, label, event):
     if pathes != '':
         pathes = pathes.split("#")
         if len(pathes) != 3:
-            ui_obj.set_warning(texts.WARNINGS['BINARYLIST_MAXIMIZE_IMAGE_ERROR'][language], 'binarylist', level=2)
+            ui_obj.set_warning(texts.ERORS['BINARYLIST_MAXIMIZE_IMAGE_ERROR'][language], 'binarylist', level=3)
             return
         # load image
         if pathes[2] != 'fullpath':

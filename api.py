@@ -1396,8 +1396,8 @@ class API:
 
             # validation
             if len(self.dataset_params) == 0:
-                self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_PARAMS_ERROR'][self.language], 'binarylist',
-                                    level=2)
+                self.ui.set_warning(texts.ERORS['READ_BINARYLIST_PARAMS_ERROR'][self.language], 'binarylist',
+                                    level=3)
                 return
             if self.dataset_params['dataset_path'] == '':
                 self.ui.set_warning(texts.WARNINGS['DATASET_NOT_SELECTED'][self.language], 'binarylist', level=2)
@@ -1409,8 +1409,8 @@ class API:
             # validation
             if not perfect_check or not defect_check:
                 print(perfect_check, defect_check)
-                self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_FOLDERS_ERROR'][self.language], 'binarylist',
-                                    level=2)
+                self.ui.set_warning(texts.ERORS['READ_BINARYLIST_FOLDERS_ERROR'][self.language], 'binarylist',
+                                    level=3)
 
             # creat image list objects
             # list obj
@@ -1453,7 +1453,7 @@ class API:
 
         # error in building image sliders
         else:
-            self.ui.set_warning(texts.WARNINGS['BUILD_BINARYLIST_SLIDER_ERROR'][self.language], 'binarylist', level=2)
+            self.ui.set_warning(texts.ERORS['BUILD_BINARYLIST_SLIDER_ERROR'][self.language], 'binarylist', level=3)
 
 
     # update slider images
@@ -1494,7 +1494,7 @@ class API:
                                                             prefix=binary_list_funcs.widjet_prefixes['defect'])
         # validate
         if not res:
-            self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=2)
+            self.ui.set_warning(texts.ERORS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=3)
 
 
     
@@ -1716,7 +1716,9 @@ class API:
             return False, res[1]
         else:
             self.cls_filter_mode = True
+            self.ui.set_warning(texts.MESSEGES['FILTERED_RESAULTS_SUCCUSSFULL'][self.language], 'classification_model_history', level=1)
             return True, res[1]
+            
     
     
     # clear filters for binary models

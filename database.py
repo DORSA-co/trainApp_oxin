@@ -308,6 +308,7 @@ class dataBase:
 
     
     def search_with_range_with_classes(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
+        print('here')
         # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
         try:
             if self.check_connection:
@@ -369,7 +370,7 @@ class dataBase:
                     sql_select_Query += "LIMIT {} OFFSET {}".format(limit_size, offset)
 
 
-                #print(sql_select_Query)
+                print(sql_select_Query)
                 #return
 
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)

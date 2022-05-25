@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>1290</width>
-    <height>675</height>
+    <height>795</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -13501,7 +13501,7 @@ QPushButton:hover {
                           </size>
                          </property>
                          <property name="currentIndex">
-                          <number>0</number>
+                          <number>3</number>
                          </property>
                          <widget class="QWidget" name="page_classification_class_list">
                           <layout class="QVBoxLayout" name="verticalLayout_29">
@@ -15008,7 +15008,7 @@ border:Transparent</string>
                                    </property>
                                    <layout class="QVBoxLayout" name="verticalLayout_102">
                                     <property name="spacing">
-                                     <number>5</number>
+                                     <number>0</number>
                                     </property>
                                     <property name="leftMargin">
                                      <number>5</number>
@@ -15049,7 +15049,14 @@ border:Transparent</string>
                                       <item>
                                        <layout class="QHBoxLayout" name="horizontalLayout_51">
                                         <item>
-                                         <widget class="QComboBox" name="cls_name_filter_combo"/>
+                                         <widget class="QComboBox" name="cls_name_filter_combo">
+                                          <property name="maximumSize">
+                                           <size>
+                                            <width>16777215</width>
+                                            <height>30</height>
+                                           </size>
+                                          </property>
+                                         </widget>
                                         </item>
                                        </layout>
                                       </item>
@@ -15148,6 +15155,9 @@ border:Transparent</string>
                                               <bold>false</bold>
                                              </font>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
                                            </widget>
                                           </item>
                                          </layout>
@@ -15198,6 +15208,9 @@ border:Transparent</string>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
                                             </property>
                                            </widget>
                                           </item>
@@ -15307,6 +15320,9 @@ border:Transparent</string>
                                               <bold>false</bold>
                                              </font>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
                                            </widget>
                                           </item>
                                          </layout>
@@ -15358,6 +15374,9 @@ border:Transparent</string>
                                               <bold>false</bold>
                                              </font>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
                                            </widget>
                                           </item>
                                          </layout>
@@ -15375,165 +15394,6 @@ border:Transparent</string>
                                     </item>
                                     <item>
                                      <widget class="Line" name="line_47_3">
-                                      <property name="orientation">
-                                       <enum>Qt::Horizontal</enum>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <layout class="QHBoxLayout" name="horizontalLayout_128_3">
-                                      <property name="spacing">
-                                       <number>0</number>
-                                      </property>
-                                      <item>
-                                       <widget class="QLabel" name="label_134_3">
-                                        <property name="font">
-                                         <font>
-                                          <family>Segoe UI</family>
-                                          <pointsize>10</pointsize>
-                                          <weight>50</weight>
-                                          <italic>false</italic>
-                                          <bold>false</bold>
-                                         </font>
-                                        </property>
-                                        <property name="text">
-                                         <string>Tune Epochs</string>
-                                        </property>
-                                       </widget>
-                                      </item>
-                                      <item>
-                                       <spacer name="horizontalSpacer_22_5">
-                                        <property name="orientation">
-                                         <enum>Qt::Horizontal</enum>
-                                        </property>
-                                        <property name="sizeHint" stdset="0">
-                                         <size>
-                                          <width>40</width>
-                                          <height>20</height>
-                                         </size>
-                                        </property>
-                                       </spacer>
-                                      </item>
-                                      <item>
-                                       <layout class="QHBoxLayout" name="horizontalLayout_48_5">
-                                        <property name="spacing">
-                                         <number>10</number>
-                                        </property>
-                                        <item>
-                                         <layout class="QHBoxLayout" name="horizontalLayout_123_5">
-                                          <item>
-                                           <widget class="QLabel" name="label_85_3">
-                                            <property name="maximumSize">
-                                             <size>
-                                              <width>16777215</width>
-                                              <height>20</height>
-                                             </size>
-                                            </property>
-                                            <property name="font">
-                                             <font>
-                                              <family>Segoe UI</family>
-                                              <pointsize>10</pointsize>
-                                              <weight>50</weight>
-                                              <italic>false</italic>
-                                              <bold>false</bold>
-                                             </font>
-                                            </property>
-                                            <property name="text">
-                                             <string>Min</string>
-                                            </property>
-                                           </widget>
-                                          </item>
-                                          <item>
-                                           <widget class="QLineEdit" name="cls_tepoch_min_filter_lineedit_2">
-                                            <property name="minimumSize">
-                                             <size>
-                                              <width>50</width>
-                                              <height>0</height>
-                                             </size>
-                                            </property>
-                                            <property name="maximumSize">
-                                             <size>
-                                              <width>50</width>
-                                              <height>30</height>
-                                             </size>
-                                            </property>
-                                            <property name="font">
-                                             <font>
-                                              <family>Segoe UI</family>
-                                              <pointsize>10</pointsize>
-                                              <weight>50</weight>
-                                              <italic>false</italic>
-                                              <bold>false</bold>
-                                             </font>
-                                            </property>
-                                           </widget>
-                                          </item>
-                                         </layout>
-                                        </item>
-                                        <item>
-                                         <layout class="QHBoxLayout" name="horizontalLayout_124_5">
-                                          <item>
-                                           <widget class="QLabel" name="label_166">
-                                            <property name="maximumSize">
-                                             <size>
-                                              <width>16777215</width>
-                                              <height>20</height>
-                                             </size>
-                                            </property>
-                                            <property name="font">
-                                             <font>
-                                              <family>Segoe UI</family>
-                                              <pointsize>10</pointsize>
-                                              <weight>50</weight>
-                                              <italic>false</italic>
-                                              <bold>false</bold>
-                                             </font>
-                                            </property>
-                                            <property name="text">
-                                             <string>Max</string>
-                                            </property>
-                                           </widget>
-                                          </item>
-                                          <item>
-                                           <widget class="QLineEdit" name="cls_tepoch_max_filter_lineedit_2">
-                                            <property name="minimumSize">
-                                             <size>
-                                              <width>50</width>
-                                              <height>0</height>
-                                             </size>
-                                            </property>
-                                            <property name="maximumSize">
-                                             <size>
-                                              <width>50</width>
-                                              <height>30</height>
-                                             </size>
-                                            </property>
-                                            <property name="font">
-                                             <font>
-                                              <family>Segoe UI</family>
-                                              <pointsize>10</pointsize>
-                                              <weight>50</weight>
-                                              <italic>false</italic>
-                                              <bold>false</bold>
-                                             </font>
-                                            </property>
-                                           </widget>
-                                          </item>
-                                         </layout>
-                                        </item>
-                                       </layout>
-                                      </item>
-                                      <item>
-                                       <widget class="Line" name="line_56">
-                                        <property name="orientation">
-                                         <enum>Qt::Horizontal</enum>
-                                        </property>
-                                       </widget>
-                                      </item>
-                                     </layout>
-                                    </item>
-                                    <item>
-                                     <widget class="Line" name="line_57">
                                       <property name="orientation">
                                        <enum>Qt::Horizontal</enum>
                                       </property>
@@ -15628,6 +15488,9 @@ border:Transparent</string>
                                             <property name="inputMethodHints">
                                              <set>Qt::ImhNone</set>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>3</number>
+                                            </property>
                                             <property name="clearButtonEnabled">
                                              <bool>false</bool>
                                             </property>
@@ -15681,6 +15544,9 @@ border:Transparent</string>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>3</number>
                                             </property>
                                            </widget>
                                           </item>
@@ -15790,6 +15656,9 @@ border:Transparent</string>
                                               <bold>false</bold>
                                              </font>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
                                            </widget>
                                           </item>
                                          </layout>
@@ -15840,6 +15709,9 @@ border:Transparent</string>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
                                             </property>
                                            </widget>
                                           </item>
@@ -15949,6 +15821,9 @@ border:Transparent</string>
                                               <bold>false</bold>
                                              </font>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
                                            </widget>
                                           </item>
                                          </layout>
@@ -15999,6 +15874,9 @@ border:Transparent</string>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
                                             </property>
                                            </widget>
                                           </item>
@@ -16108,6 +15986,9 @@ border:Transparent</string>
                                               <bold>false</bold>
                                              </font>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
                                            </widget>
                                           </item>
                                          </layout>
@@ -16158,6 +16039,9 @@ border:Transparent</string>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
                                             </property>
                                            </widget>
                                           </item>
@@ -16267,6 +16151,9 @@ border:Transparent</string>
                                               <bold>false</bold>
                                              </font>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
                                            </widget>
                                           </item>
                                          </layout>
@@ -16317,6 +16204,9 @@ border:Transparent</string>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
                                             </property>
                                            </widget>
                                           </item>
@@ -16426,6 +16316,9 @@ border:Transparent</string>
                                               <bold>false</bold>
                                              </font>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
                                            </widget>
                                           </item>
                                          </layout>
@@ -16477,6 +16370,9 @@ border:Transparent</string>
                                               <bold>false</bold>
                                              </font>
                                             </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
                                            </widget>
                                           </item>
                                          </layout>
@@ -16505,92 +16401,15 @@ border:Transparent</string>
                                        <number>0</number>
                                       </property>
                                       <item>
-                                       <widget class="QLabel" name="label_184">
-                                        <property name="font">
-                                         <font>
-                                          <family>Segoe UI</family>
-                                          <pointsize>10</pointsize>
-                                          <weight>50</weight>
-                                          <italic>false</italic>
-                                          <bold>false</bold>
-                                         </font>
-                                        </property>
-                                        <property name="text">
-                                         <string>Date</string>
-                                        </property>
-                                       </widget>
-                                      </item>
-                                      <item>
-                                       <spacer name="horizontalSpacer_43">
-                                        <property name="orientation">
-                                         <enum>Qt::Horizontal</enum>
-                                        </property>
-                                        <property name="sizeHint" stdset="0">
-                                         <size>
-                                          <width>40</width>
-                                          <height>20</height>
-                                         </size>
-                                        </property>
-                                       </spacer>
-                                      </item>
-                                      <item>
-                                       <layout class="QHBoxLayout" name="horizontalLayout_193">
+                                       <layout class="QVBoxLayout" name="verticalLayout_44">
                                         <property name="spacing">
-                                         <number>10</number>
+                                         <number>2</number>
                                         </property>
-                                        <item>
-                                         <layout class="QHBoxLayout" name="horizontalLayout_194">
-                                          <item>
-                                           <widget class="QLabel" name="label_185">
-                                            <property name="maximumSize">
-                                             <size>
-                                              <width>16777215</width>
-                                              <height>20</height>
-                                             </size>
-                                            </property>
-                                            <property name="font">
-                                             <font>
-                                              <family>Segoe UI</family>
-                                              <pointsize>10</pointsize>
-                                              <weight>50</weight>
-                                              <italic>false</italic>
-                                              <bold>false</bold>
-                                             </font>
-                                            </property>
-                                            <property name="text">
-                                             <string>Min</string>
-                                            </property>
-                                           </widget>
-                                          </item>
-                                          <item>
-                                           <widget class="QLineEdit" name="cls_date_min_filter_lineedit">
-                                            <property name="minimumSize">
-                                             <size>
-                                              <width>50</width>
-                                              <height>0</height>
-                                             </size>
-                                            </property>
-                                            <property name="maximumSize">
-                                             <size>
-                                              <width>50</width>
-                                              <height>30</height>
-                                             </size>
-                                            </property>
-                                            <property name="font">
-                                             <font>
-                                              <family>Segoe UI</family>
-                                              <pointsize>10</pointsize>
-                                              <weight>50</weight>
-                                              <italic>false</italic>
-                                              <bold>false</bold>
-                                             </font>
-                                            </property>
-                                           </widget>
-                                          </item>
-                                         </layout>
-                                        </item>
                                         <item>
                                          <layout class="QHBoxLayout" name="horizontalLayout_195">
+                                          <property name="spacing">
+                                           <number>5</number>
+                                          </property>
                                           <item>
                                            <widget class="QLabel" name="label_186">
                                             <property name="maximumSize">
@@ -16609,21 +16428,21 @@ border:Transparent</string>
                                              </font>
                                             </property>
                                             <property name="text">
-                                             <string>Max</string>
+                                             <string>Start Date</string>
                                             </property>
                                            </widget>
                                           </item>
                                           <item>
-                                           <widget class="QLineEdit" name="cls_date_max_filter_lineedit">
+                                           <widget class="QLineEdit" name="cls_start_year_lineedit">
                                             <property name="minimumSize">
                                              <size>
-                                              <width>50</width>
+                                              <width>55</width>
                                               <height>0</height>
                                              </size>
                                             </property>
                                             <property name="maximumSize">
                                              <size>
-                                              <width>50</width>
+                                              <width>55</width>
                                               <height>30</height>
                                              </size>
                                             </property>
@@ -16635,6 +16454,293 @@ border:Transparent</string>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QLabel" name="label_187">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>5</width>
+                                              <height>0</height>
+                                             </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>5</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="text">
+                                             <string>/</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QLineEdit" name="cls_start_month_lineedit">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>30</width>
+                                              <height>0</height>
+                                             </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>30</width>
+                                              <height>30</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>2</number>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QLabel" name="label_188">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>5</width>
+                                              <height>0</height>
+                                             </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>5</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="text">
+                                             <string>/</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QLineEdit" name="cls_start_day_lineedit">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>30</width>
+                                              <height>0</height>
+                                             </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>30</width>
+                                              <height>30</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>2</number>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                         </layout>
+                                        </item>
+                                        <item>
+                                         <layout class="QHBoxLayout" name="horizontalLayout_194">
+                                          <property name="spacing">
+                                           <number>5</number>
+                                          </property>
+                                          <item>
+                                           <widget class="QLabel" name="label_185">
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>16777215</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="text">
+                                             <string>End Date</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QLineEdit" name="cls_end_year_lineedit">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>55</width>
+                                              <height>0</height>
+                                             </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>55</width>
+                                              <height>30</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="text">
+                                             <string/>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>4</number>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QLabel" name="label_189">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>5</width>
+                                              <height>0</height>
+                                             </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>5</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="text">
+                                             <string>/</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QLineEdit" name="cls_end_month_lineedit">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>30</width>
+                                              <height>0</height>
+                                             </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>30</width>
+                                              <height>30</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>2</number>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QLabel" name="label_190">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>5</width>
+                                              <height>0</height>
+                                             </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>5</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="text">
+                                             <string>/</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <widget class="QLineEdit" name="cls_end_day_lineedit">
+                                            <property name="minimumSize">
+                                             <size>
+                                              <width>30</width>
+                                              <height>0</height>
+                                             </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                             <size>
+                                              <width>30</width>
+                                              <height>30</height>
+                                             </size>
+                                            </property>
+                                            <property name="font">
+                                             <font>
+                                              <family>Segoe UI</family>
+                                              <pointsize>10</pointsize>
+                                              <weight>50</weight>
+                                              <italic>false</italic>
+                                              <bold>false</bold>
+                                             </font>
+                                            </property>
+                                            <property name="maxLength">
+                                             <number>2</number>
                                             </property>
                                            </widget>
                                           </item>
@@ -17031,13 +17137,13 @@ color : rgb(0,0,0);</string>
                                      <widget class="QLabel" name="cls_tabel_label">
                                       <property name="minimumSize">
                                        <size>
-                                        <width>300</width>
+                                        <width>500</width>
                                         <height>0</height>
                                        </size>
                                       </property>
                                       <property name="maximumSize">
                                        <size>
-                                        <width>300</width>
+                                        <width>500</width>
                                         <height>16777215</height>
                                        </size>
                                       </property>
