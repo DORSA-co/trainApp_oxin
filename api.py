@@ -299,6 +299,37 @@ class API:
         self.ui.cls_clearfilter_btn.clicked.connect(partial(self.clear_filters_cls))
         
 
+
+        # pbt Page
+
+        self.ui.pbt_btn.clicked.connect(lambda x:self.set_page_ui(self.ui.pbt_btn.objectName()))
+        self.ui.Binary_btn.clicked.connect(lambda x:self.set_page_ui(self.ui.Binary_btn.objectName()))
+        self.ui.Localization_btn.clicked.connect(lambda x:self.set_page_ui(self.ui.Localization_btn.objectName()))
+        self.ui.Classification_btn.clicked.connect(lambda x:self.set_page_ui(self.ui.Classification_btn.objectName()))
+
+
+    def set_page_ui(self,btnName):
+
+        page_list={
+            'pbt_btn':'page_pbt',
+            'Binary_btn':'page_Binary',
+            'Localization_btn':'page_Localization',
+            'Classification_btn':'page_Classification'
+        }
+
+        print('b',btnName)
+
+        # btn = self.sender()
+        # print('btn',btn)
+        # btnName = b.objectName()
+
+        if self.logged_in:
+            eval('self.ui.set_widget_page(self.ui.stackedWidget,self.ui.{})'.format(page_list[str(btnName)]))
+
+        else :
+            self.ui.set_warning(texts.WARNINGS['LOGIN_FIRST'][self.language], 'app_erors', level=2)
+
+
     def mouse_connector(self):
         for _, technical_widget in self.ui.get_technical().items():
             self.mouse.connet(technical_widget, self.update_technical_pointer_mouse)

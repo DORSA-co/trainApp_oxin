@@ -217,6 +217,11 @@ class UI_main_window(QMainWindow, ui):
 
         
 
+        #pbt page
+
+        self.pipeline_pbt_btn.clicked.connect(self.buttonClick)
+        self.load_dataset_pbt_btn.clicked.connect(self.buttonClick)
+        self.history_pbt_btn.clicked.connect(self.buttonClick)
 
         
         # charts ---------------------------------------------------------------------------------------------
@@ -812,7 +817,8 @@ class UI_main_window(QMainWindow, ui):
             'train': self.warning_train_page,
             'camera_connection':self.camera_connection_msg,
             'binarylist': self.warning_binarylist_page,
-            'setting_eror': self.setting_eror
+            'setting_eror': self.setting_eror,
+            "app_erors":self.label_app_erors
         }
         # print('set_warning')
         if text != None:
@@ -837,6 +843,7 @@ class UI_main_window(QMainWindow, ui):
         else:
             waring_labels[name].setText('')
             waring_labels[name].setStyleSheet('')
+
 
     def show_question(self, title, message):
         msg = QMessageBox.question(self, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -1148,6 +1155,8 @@ class UI_main_window(QMainWindow, ui):
         for i in range(4) :
             self.tableWidget_user_dataset.setItem(0,i, QTableWidgetItem(str(records[i])))
 
+    # def ret_btn_
+
 
     def buttonClick(self):
         # GET BUTTON CLICKED
@@ -1179,7 +1188,8 @@ class UI_main_window(QMainWindow, ui):
             self.left_bar_clear()
             self.pbt_btn.setStyleSheet(
                 "background-image: url(:/icons/images/icons/pbt.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
-            self.stackedWidget.setCurrentWidget(self.page_pbt)
+            # self.stackedWidget.setCurrentWidget(self.page_pbt)
+
         if btnName == 'aboutus_btn':
             self.left_bar_clear()
             # self.page_aboutus_btn.setStyleSheet("QPushButton {background-color: rgb(197 , 195,196);	color: rgb(0,0,0);	border: none;	text-align: left;padding-left: 10px;}QPushButton:hover {background-color:  rgb(197 , 195,196)};QPushButton:pressed {background-color: rgb(197 , 195,196);}")
@@ -1187,15 +1197,15 @@ class UI_main_window(QMainWindow, ui):
 
         if btnName == 'Binary_btn':
             self.start_box_animation(self.extraLeftBox.width(), 0, "left")
-            self.stackedWidget.setCurrentWidget(self.page_Binary)
+            # self.stackedWidget.setCurrentWidget(self.page_Binary)
 
         if btnName == 'Localization_btn':
             self.start_box_animation(self.extraLeftBox.width(), 0, "left")
-            self.stackedWidget.setCurrentWidget(self.page_Localization)
+            # self.stackedWidget.setCurrentWidget(self.page_Localization)
 
         if btnName == 'Classification_btn':
             self.start_box_animation(self.extraLeftBox.width(), 0, "left")
-            self.stackedWidget.setCurrentWidget(self.page_Classification)
+            # self.stackedWidget.setCurrentWidget(self.page_Classification)
 
         if btnName == 'binary_list':
             self.stackedWidget_binary.setCurrentWidget(self.page_binary_list)
@@ -1300,6 +1310,17 @@ class UI_main_window(QMainWindow, ui):
         if btnName == 'toolButton_select_directory':
             self.open_file_dialog()
 
+        if btnName == 'pipeline_pbt_btn':
+            self.stackedWidget_pbt.setCurrentWidget(self.page_pipeline)
+
+        if btnName == 'load_dataset_pbt_btn':
+            self.stackedWidget_pbt.setCurrentWidget(self.page_load_dataset)
+
+        if btnName == 'history_pbt_btn':
+            self.stackedWidget_pbt.setCurrentWidget(self.page_history)
+
+
+
         # if btnName == 'btn_user_proflie':
         #     self.stackedWidget.setCurrentWidget(self.page_user_profile)
 
@@ -1319,6 +1340,9 @@ class UI_main_window(QMainWindow, ui):
     #     if event.buttons() == Qt.RightButton:
     #         print('Mouse click: RIGHT CLICK')
     #     return event.x()
+
+    def show_1(self):
+        self.show()
 
     def connet_keyboard(self, keys, functions, page_name):
         for key in keys:

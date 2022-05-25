@@ -17,7 +17,9 @@ from PySide6.QtGui import QPixmap as sQPixmap
 from PySide6.QtGui import QIcon as sQIcon
 from PySide6.QtGui import QIntValidator as sQIntValidator
 import database_utils
-
+from main_UI import UI_main_window 
+import api
+from Sheet_loader_win.data_loader_UI import data_loader
 
 import cv2
 from platform import python_version
@@ -28,38 +30,44 @@ ui, _ = loadUiType("UI/welcome_page.ui")
 os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
 
 
-class UI_main_window(QMainWindow, ui):
+class UI_welcome_window(QMainWindow, ui):
     global widgets
     widgets = ui
     x = 0
 
     def __init__(self):
 
-        super(UI_main_window, self).__init__()
+        super(UI_welcome_window, self).__init__()
 
         self.setupUi(self)
         flags = Qt.WindowFlags(Qt.FramelessWindowHint)
         self.pos_ = self.pos()
         self.setWindowFlags(flags)
         self.activate_()
-        self.line_username.setText('root')
+        self.line_username.setText('root2')
         self.line_password.setText('root')
         self.seuccess_image=cv2.imread('UI/images/success.png')
-        self.eror_image=cv2.imread('UI/images/x-mark.png')
+        self.eror_image=cv2.imread('UI/images/warning.png')
+        # self.label_9.setStyleSheet('background-color:Transparent;')
         # self.eror_image='asd'
         # print('asdwdawd',self.eror_image)
    
         self.load_dataset_parms()
         self.load_programs()
         self.check_btn.clicked.connect(self.load_dataset_parms)
+        self.run_btn.clicked.connect(self.test)
 
         self.timer_run = QTimer(self)
         self.timer_run.timeout.connect(self.timer_run_program)
         self.timer_run.start(1000) 
-        self.timer=10
-
-
+        self.timer=2
+        # self.eror = False
         
+
+    def test(self):
+        self.load_dataset_parms()
+        self.load_programs()
+        self.timer_run_program()
 
     def activate_(self):
         self.closeButton.clicked.connect(self.close_win)
@@ -83,29 +91,96 @@ class UI_main_window(QMainWindow, ui):
 
     def load_programs(self):
 
-        # try:
-        python_ver=python_version()
-        self.label_4.setText(python_ver)
-        
-        self.set_image_label(self.label_3, self.seuccess_image)
-    
-        # except:
+        try:
+            python_ver=python_version()
+            self.label_4.setText(python_ver)
             
-        #     self.label_4.setText('python Eror')
-        #     self.set_image_label(self.label_3,self.eror_image)
+            self.set_image_label(self.label_3, self.seuccess_image)
+    
+        except:
+            
+            self.label_4.setText('python Eror')
+            self.set_image_label(self.label_3,self.eror_image)
+            self.timer=-1 
+            # self.run_btn.setDisabled(True)
+            self.eror=True
 
         try:
             import tensorflow as tf
             tf_ver=tf. __version__
-            self.label_6.setText(tf_ver)
-            
+            self.label_12.setText(tf_ver)
             self.set_image_label(self.label_5, self.seuccess_image)
-        
+
+
         except:
             
             self.label_6.setText('Tensor Eror')
-            self.set_image_label(self.label_5, self.eror_image)          
+            self.set_image_label(self.label_5, self.eror_image) 
+            self.timer=-1 
+            self.eror=True 
 
+        try:
+            gpu_names=tf.test.gpu_device_name()
+            if gpu_names!='':
+                self.label_8.setText(gpu_names)
+                self.set_image_label(self.label_7, self.seuccess_image)
+            else:
+                self.label_8.setText('Gpu Not Found')
+                self.set_image_label(self.label_7, self.eror_image)
+
+        except:
+            
+            self.label_8.setText('Gpu Eror')
+            self.set_image_label(self.label_7, self.eror_image) 
+            self.timer=-1      
+
+
+        # try:
+        try:
+            self.other_libs()
+        except:
+            self.label_10.setText('Packages Eror')
+
+
+
+    def other_libs(self):
+        import io
+        file1 = io.open("requirements.txt", mode="r", encoding='utf-16-le')
+        print(file1)
+        Lines = file1.readlines()
+        cou=0
+        count = 0
+        import importlib
+        lis=[]
+        # Strips the newline character
+        for line in Lines:
+            count += 1
+            libs=(line.strip().split("="))[0]
+            print(libs)
+            # try:
+            #     eval('import {}'.format(libs))
+            # except:
+            #     cou+=1
+            #     print(cou)
+
+            
+            spam_spec = importlib.util.find_spec(libs)
+            found = spam_spec is not None
+            print(found)
+
+            if not found:
+
+                lis.append(line)
+
+
+        print('lis',lis)
+        self.label_10.setToolTip(str(lis))
+        if len(lis)>5:
+            self.label_10.setText('Packages Not found')
+            self.set_image_label(self.label_9, self.eror_image) 
+        else :
+            self.label_10.setText('Packages Done')
+            self.set_image_label(self.label_9, self.seuccess_image) 
 
 
     def load_dataset_parms(self):
@@ -118,9 +193,15 @@ class UI_main_window(QMainWindow, ui):
         ret=self.db.check_connection()
         if ret:
             self.check_dataset_tables()
+            
         else:
             self.show_eror_sql.setText('Connection Eror')
             self.show_eror_sql.setStyleSheet("color:red") 
+            # self.timer_run.stop()
+            # self.run_btn.setDisabled(True)
+            self.eror=True
+            print('self.eror',self.eror)
+            self.timer=-1
 
 
 
@@ -150,9 +231,15 @@ class UI_main_window(QMainWindow, ui):
         if eror_count==0:
             self.show_eror_sql.setText(eror_text)
             self.show_eror_sql.setStyleSheet("color:green")
+            self.eror=False
         else:
             self.show_eror_sql.setText(str(str(eror_count)+' '+eror_text))
             self.show_eror_sql.setStyleSheet("color:red")
+            # self.timer_run.stop()
+            self.check_btn.setDisabled(True)
+            # self.run_btn.setDisabled(True)
+            self.eror=True
+            print(self.eror,self.eror)
         str1=''    
         # for i in check_list:
         #     str1 = str1 + '\n'+ str(check_list[i])   
@@ -169,16 +256,41 @@ class UI_main_window(QMainWindow, ui):
             self.run_btn.setText(str('Run Train App  ('+str(self.timer)+')'))
             self.timer-=1
         else :
-            self.run_btn.setText(str('Run Train App  ('+str(self.timer)+')'))
             self.timer_run.stop()
+            print('else',self.eror)
+            if self.eror==False:
 
+                self.run_btn.setText(str('Run Train App  ('+str(self.timer)+')'))
+                # ui, _ = loadUiType("UI/oxin.ui")
+                # self.asdw = U_main_window()
+                
+                # api = api.API(win2)
+                self.close()
+                # self.asdw.show()
+                # self.load_sheets_win = data_loader()
+                # print(self.asdw)
+                # self.load_sheets_win.show()
+                b=hasan()
+                # sys.exit()
+                b.a()
+                # self.asdw.show()
+                # app = QtWidgets.QApplication(sys.argv) 
+                # openIcon_p = QtGui.QPixmap(win2)
+                
+            
 
+    
+
+class hasan():
+    def a(self):
+        print('asdaw')
+        os.system('python .\main_UI.py')
 
 
 
 
 if __name__ == "__main__":
     app = QApplication()
-    win = UI_main_window()
+    win = UI_welcome_window()
     win.show()
     sys.exit(app.exec())
