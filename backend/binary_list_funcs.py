@@ -11,7 +11,7 @@ from PIL import ImageColor
 
 import texts
 from neighbouring_UI import neighbouring
-from backend import Annotation, classification_list_funcs
+from backend import Annotation, classification_list_funcs, dataset
 
 
 
@@ -156,32 +156,46 @@ def get_params_from_ui(ui_obj):
 
 
 # get image pathes in dataset directory
-def get_image_pathes_list(ds_obj, dataset_path):
+def get_binarylist_image_pathes_list(ds_obj, dataset_pathes):
+    print('ds_pathes:', dataset_pathes)
     # perfect
-    perfect_check = True
-    try:
+    perfect_image_pathes = []
+    perfect_check = False
+    defect_image_pathes = []
+    defect_annot_pathes = []
+    defect_check = False
+    binary_count = {dataset.DEFECT_FOLDER:0, dataset.PERFECT_FOLDER:0}
+
+    for ds_path in dataset_pathes:
+        ds_path = ds_path['path']
         # perfect path
-        perfect_path = os.path.join(dataset_path, ds_obj.perfect_folder)
-        # get image pathes
-        perfect_image_pathes = getfiles(perfect_path)
-
-    except:
-        perfect_check = False
-        perfect_image_pathes = []
-    
-    # defect
-    defect_check = True
-    try:
+        perfect_path = os.path.join(ds_path, dataset.BINARY_FOLDER, dataset.PERFECT_FOLDER)
+        if os.path.exists(perfect_path):
+            # get image pathes
+            for img_path in getfiles(perfect_path):
+                perfect_check = True
+                perfect_image_pathes.append(os.path.join(perfect_path, img_path))
+                binary_count[dataset.PERFECT_FOLDER] += 1
+        
         # defect path
-        defect_path = os.path.join(dataset_path, ds_obj.defect_folder)
-        # get image pathes
-        defect_image_pathes = getfiles(defect_path)
-
-    except:
-        defect_check = False
-        defect_image_pathes = []
+        defect_path = os.path.join(ds_path, dataset.BINARY_FOLDER, dataset.DEFECT_FOLDER)
+        if os.path.exists(defect_path):
+            # get image pathes
+            for img_path in getfiles(defect_path):
+                defect_check = True
+                defect_image_pathes.append(os.path.join(defect_path, img_path))
+                binary_count[dataset.DEFECT_FOLDER] += 1
+                # annotation
+                annot_path = os.path.join(ds_path, dataset.ANNOTATIONS_FOLDER, img_path[:-4]+'.json')
+                if os.path.exists(annot_path):
+                    defect_annot_pathes.append(annot_path)
+                else:
+                    defect_annot_pathes.append('')
     
-    return perfect_check, perfect_image_pathes, defect_check, defect_image_pathes
+    print('perf path:', perfect_image_pathes)
+    print('defe path:', defect_image_pathes)
+    print('annot path:', defect_annot_pathes)
+    return perfect_check, perfect_image_pathes, defect_check, defect_image_pathes, defect_annot_pathes, binary_count
 
 
 # get files in a directory
@@ -316,6 +330,7 @@ def centroid(vertexes):
 
 
 if __name__ == "__main__":
-    html_to_bgr(mask_color)
+    files_list = getfiles('D:/trainApp_oxin/dataset/binary/defect')
+    print(files_list)
     
 

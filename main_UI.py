@@ -814,7 +814,8 @@ class UI_main_window(QMainWindow, ui):
             'binarylist': self.warning_binarylist_page,
             'setting_eror': self.setting_eror,
             'classification_model_history': self.cls_tabel_label,
-            'classlist_msg_label': self.classlist_msg_label
+            'classlist_msg_label': self.classlist_msg_label,
+            'binary_model_history': self.binary_tabel_label
         }
         # print('set_warning')
         if text != None:

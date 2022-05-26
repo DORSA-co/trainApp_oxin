@@ -212,11 +212,23 @@ MESSEGES = {
         'FILTERED_RESAULTS_SUCCUSSFULL' : {'fa': ' نتایج اعمال فیلتر با موفقیت بازگردانده شد ',
                  'en': ' Filtered resaults returened succussfully '},
 
+        'FILTERED_RESAULTS_CLEAR' : {'fa': ' فیلترهای اعمال شده پاک شدند ',
+                 'en': ' Filters cleared '},
+
+        'REFRESH_TABLE' : {'fa': ' جدول(ها) رفرش شدند، فیلترهای اعمال شده پاک شدند ',
+                 'en': ' Table(s) refreshed succussfully, Filters cleared  '},
+
         'LOAD_IMAGES_WITH_DEFECT' : {'fa': ' تصاویر دارای کلاس عیب موردنظر بارگزاری شدند ',
                  'en': ' Image records containing this defect are loaded'},
 
+        'LOAD_IMAGES_DATASETS' : {'fa': ' تصاویر دیتاست های انتخاب شده بارگزاری شدند ',
+                 'en': ' Image records belonging selected datasets are loaded'},
+
         'NO_IMAGE_AVAILABLE_WITH_DEFECT': {'fa': ' هیچ تصویر دارای کلاس موردنظر در دیتاست های انتخاب شده یافت نشد  ',
                  'en': ' No image available with this defect class in selected datasets'},
+
+        'NO_IMAGE_AVAILABLE_IN_DATASET': {'fa': ' هیچ تصویری در دیتاست های انتخاب شده یافت نشد  ',
+                 'en': ' No image available in selected datasets'},
 
             
                          
