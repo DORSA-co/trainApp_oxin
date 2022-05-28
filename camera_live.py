@@ -18,7 +18,7 @@ class live_manager:
         camera_simulator()
 
         while 1:
-            plc = open('plc.txt').read().strip()
+            plc = open('plc.txt', encoding='Utf-8').read().strip()
             if plc == '':
                 continue
             coil_number_new = int(plc)
@@ -29,7 +29,7 @@ class live_manager:
 
             # print(coil_number)
 
-            grab_new = open('grab.txt').read().strip()
+            grab_new = open('grab.txt', encoding='Utf-8').read().strip()
             if grab_new == '':
                 continue
             if grab_new == 'True' and self.grab == 'True':

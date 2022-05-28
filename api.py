@@ -175,7 +175,7 @@ class API:
         self.classification_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
         #_____________________________________________________________________
 
-        self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
+        # self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
         self.live = live_manager(self.ui, self.db.get_parent_path())
         self.camera_process = threading.Thread(target=self.live.save_camera_images, args=(self.cameras, ))
 

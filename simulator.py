@@ -4,7 +4,7 @@ import numpy as np
 import time
 import threading
 
-PATH = '/home/reyhane/camera/c.jpg'
+PATH = 'MyDS\c.jpg'
 coil_number = 889
 side = 'TOP'
 n = 1
@@ -15,7 +15,7 @@ def camera_simulator():
     global coil_number
     global f
 
-    grab = open('grab.txt', 'w')
+    grab = open('grab.txt', 'w',encoding='Utf-8')
     grab.write('True')
     grab.close()
 
@@ -30,7 +30,7 @@ def camera_simulator():
     f += 1
     time.sleep(0.1)
 
-    grab = open('grab.txt', 'w')
+    grab = open('grab.txt', 'w', encoding='Utf-8')
     grab.write('False')
     grab.close()
 
@@ -44,7 +44,7 @@ def plc_simulator():
     global f
     coil_number += 1
     f = 1
-    plc = open('plc.txt', 'w')
+    plc = open('plc.txt', 'w', encoding='Utf-8')
     plc.write(str(coil_number))
     plc.close()
 
