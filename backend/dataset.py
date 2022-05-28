@@ -241,20 +241,26 @@ def get_datasets_list_from_db(db_obj):
 
 
 # set datasets on UI table
-def set_datasets_on_ui(ui_obj, datasets_list, current_user='', default_dataset=''):
+def set_datasets_on_ui(ui_obj, datasets_list, current_user='', default_dataset='', is_binarylist=False):
+    # dataset object
+    if is_binarylist:
+        table_object = ui_obj.datasets_table_binarylist
+    else:
+        table_object = ui_obj.datasets_table
+    #
     print('def', default_dataset)
     # definr table parameters
-    ui_obj.datasets_table.resizeColumnsToContents()
-    ui_obj.datasets_table.setColumnCount(datasets_table_ncols)
+    table_object.resizeColumnsToContents()
+    table_object.setColumnCount(datasets_table_ncols)
     print('len', len(datasets_list))
     if len(datasets_list) != 0:
-        ui_obj.datasets_table.setRowCount(datasets_table_nrows)
+        table_object.setRowCount(datasets_table_nrows)
     else:
-        ui_obj.datasets_table.setRowCount(0)
+        table_object.setRowCount(0)
 
-    ui_obj.datasets_table.verticalHeader().setVisible(True)
-    ui_obj.datasets_table.horizontalHeader().setSectionResizeMode(sQHeaderView.Stretch)
-    ui_obj.datasets_table.setHorizontalHeaderLabels(headers)
+    table_object.verticalHeader().setVisible(True)
+    table_object.horizontalHeader().setSectionResizeMode(sQHeaderView.Stretch)
+    table_object.setHorizontalHeaderLabels(headers)
 
     # add users to table
     for i, dataset in enumerate(datasets_list):
@@ -267,32 +273,39 @@ def set_datasets_on_ui(ui_obj, datasets_list, current_user='', default_dataset='
         if str(dataset['name']) == default_dataset:
             table_item.setCheckState(sQtCore.Qt.CheckState.Checked)
         table_item.setForeground(sQColor(text_color))
-        ui_obj.datasets_table.setItem(i, 0, table_item)
+        table_object.setItem(i, 0, table_item)
         # set user_own
         table_item = sQTableWidgetItem(str(dataset['user_own']))
         table_item.setForeground(sQColor(text_color))
-        ui_obj.datasets_table.setItem(i, 1, table_item)
+        table_object.setItem(i, 1, table_item)
         # set path
         table_item = sQTableWidgetItem(str(dataset['path']))
         table_item.setForeground(sQColor(text_color))
-        ui_obj.datasets_table.setItem(i, 2, table_item)
+        table_object.setItem(i, 2, table_item)
 
     try:
-        ui_obj.datasets_table.setRowCount(i+1)
+        table_object.setRowCount(i+1)
     except:
         return
 
 
 # get selected users from user table in UI
-def get_selected_datasets(ui_obj, datasets_list):
+def get_selected_datasets(ui_obj, datasets_list, is_binarylist=False):
+    # dataset object
+    if is_binarylist:
+        table_object = ui_obj.datasets_table_binarylist
+    else:
+        table_object = ui_obj.datasets_table
+    #
     list = []
-    for i in range(ui_obj.datasets_table.rowCount()):    
-        if ui_obj.datasets_table.item(i, 0).checkState() == sQtCore.Qt.Checked:
+    for i in range(table_object.rowCount()):    
+        if table_object.item(i, 0).checkState() == sQtCore.Qt.Checked:
             #
             for dataset in datasets_list:
-                if dataset['name'] == ui_obj.datasets_table.item(i, 0).text():
+                if dataset['name'] == table_object.item(i, 0).text():
                     list.append(dataset)
     return list
+
 
 
 

@@ -350,14 +350,14 @@ def update_classlist_piechart(ui_obj, binary_len, classes_len, classes_list):
         perfect_percentage = binary_len[dataset.PERFECT_FOLDER] / (binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
         defect_percentage = binary_len[dataset.DEFECT_FOLDER] / (binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
         # append to series
-        my_slice = ui_obj.classlist_pie_binary_series.append("defect: %s" % binary_len[dataset.DEFECT_FOLDER], defect_percentage)
+        my_slice = ui_obj.classlist_pie_binary_series.append("defect: {} ({:.1f}%)".format(binary_len[dataset.DEFECT_FOLDER], defect_percentage*100), defect_percentage)
         if defect_percentage != 0.0:
             my_slice.setLabelVisible(True)
             my_slice.setLabelColor(sQColor(pie_label_color))
             my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
             my_slice.setBrush(sQColor(defect_color))
 
-        my_slice = ui_obj.classlist_pie_binary_series.append("perfect: %s" % binary_len[dataset.PERFECT_FOLDER], perfect_percentage)
+        my_slice = ui_obj.classlist_pie_binary_series.append("perfect: {} ({:.1f}%)".format(binary_len[dataset.PERFECT_FOLDER], perfect_percentage*100), perfect_percentage)
         if perfect_percentage != 0.0:
             my_slice.setLabelVisible(True)
             my_slice.setLabelColor(sQColor(pie_label_color))
@@ -376,9 +376,9 @@ def update_classlist_piechart(ui_obj, binary_len, classes_len, classes_list):
                 percentage = 0.0
             #
             try:
-                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': %s' % classes_len[cls_id], percentage)
+                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': {} ({:.1f}%)'.format(classes_len[cls_id], percentage*100), percentage)
             except:
-                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': %s' % '0', percentage)
+                my_slice = ui_obj.classlist_pie_cls_series.append(cls['short_name']+': {} ({:.1f}%)'.format('0', '0.0'), percentage)
             #
             if percentage != 0.0:
                 my_slice.setLabelVisible(True)
@@ -390,6 +390,68 @@ def update_classlist_piechart(ui_obj, binary_len, classes_len, classes_list):
             # my_slice = series.append("Fat 15.6%", 15.6)
             # my_slice.setExploded(True)
             # my_slice.setLabelVisible(True)
+    
+    except:
+        return
+
+
+# pie chart for binarylist page
+def create_binarylist_piechart_on_ui(ui_obj, frame_obj_binary, chart_title='Chart', binary_hole_size=0.2):
+    # creat chart
+    # binary
+    ui_obj.binarylist_piechart = sQChart()
+    ui_obj.binarylist_piechart.setAnimationOptions(sQChart.SeriesAnimations)
+    ui_obj.binarylist_piechart.setMargins(sQMargins(0,0,0,0))
+    #ui_obj.binary_piechart.setTitle(chart_title)
+    #ui_obj.binary_piechart.setTheme(sQChart.ChartThemeDark)
+    ui_obj.binarylist_piechart.legend().setVisible(False)
+    ui_obj.binarylist_piechart.setBackgroundBrush(sQColor(pie_background_color))
+
+    # binary series
+    ui_obj.pie_binarylist_series = sQPieSeries()
+    ui_obj.pie_binarylist_series.setHoleSize(binary_hole_size)
+    #ui_obj.pseries.setPieSize(0.2)
+    # a = ui_obj.classlist_pie_cls_series.append('a', 1)
+    # a.setLabelFont
+    
+    # add series to chart
+    ui_obj.binarylist_piechart.addSeries(ui_obj.pie_binarylist_series)
+    
+    # set to ui
+    ui_obj.binarylist_piechartview = sQChartView(ui_obj.binarylist_piechart)
+    ui_obj.binarylist_piechartview.setContentsMargins(0,0,0,0)
+    #
+    bpievbox = sQVBoxLayout()
+    bpievbox.addWidget(ui_obj.binarylist_piechartview)
+    bpievbox.setContentsMargins(0, 0, 0, 0)
+    #
+    frame_obj_binary.setLayout(bpievbox)
+    frame_obj_binary.layout().setContentsMargins(0, 0, 0, 0)
+
+
+# update binarylist pie chart
+def update_binarylist_piechart(ui_obj, binary_len):
+    ui_obj.pie_binarylist_series.clear()
+
+    try:
+        # binary
+        # convert len to percentage
+        perfect_percentage = binary_len[dataset.PERFECT_FOLDER] / (binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
+        defect_percentage = binary_len[dataset.DEFECT_FOLDER] / (binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
+        # append to series
+        my_slice = ui_obj.pie_binarylist_series.append("defect: {} ({:.1f}%)".format(binary_len[dataset.DEFECT_FOLDER], defect_percentage*100), defect_percentage)
+        if defect_percentage != 0.0:
+            my_slice.setLabelVisible(True)
+            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
+            my_slice.setBrush(sQColor(defect_color))
+
+        my_slice = ui_obj.pie_binarylist_series.append("perfect: {} ({:.1f}%)".format(binary_len[dataset.PERFECT_FOLDER], perfect_percentage*100), perfect_percentage)
+        if perfect_percentage != 0.0:
+            my_slice.setLabelVisible(True)
+            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
+            my_slice.setBrush(sQColor(perfect_color))
     
     except:
         return

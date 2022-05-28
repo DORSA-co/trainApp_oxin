@@ -812,22 +812,26 @@ class UI_main_window(QMainWindow, ui):
             'train': self.warning_train_page,
             'camera_connection':self.camera_connection_msg,
             'binarylist': self.warning_binarylist_page,
-            'setting_eror': self.setting_eror
+            'setting_eror': self.setting_eror,
+            'classification_model_history': self.cls_tabel_label,
+            'classlist_msg_label': self.classlist_msg_label,
+            'binary_model_history': self.binary_tabel_label
         }
         # print('set_warning')
         if text != None:
     
             if level == 1:
                 waring_labels[name].setText(' ' + text + ' ')
-                waring_labels[name].setStyleSheet('background-color:#20a740;border-radius:10px;color:white')
+                waring_labels[name].setStyleSheet('background-color:#20a740;border-radius:2px;color:white')
 
             if level == 2:
                 waring_labels[name].setText(' Warning: ' + text)
                 waring_labels[name].setStyleSheet('background-color:#FDFFA9;border-radius:2px;color:black')
 
-            if level == 3:
-                waring_labels[name].setText(' EROR : ' + text)
+            if level >= 3:
+                waring_labels[name].setText(' ERROR : ' + text)
                 waring_labels[name].setStyleSheet('background-color:#D9534F;border-radius:2px;color:black')
+            
 
             threading.Timer(2, self.set_warning, args=(None, name)).start()
 

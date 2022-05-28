@@ -6,7 +6,7 @@ from PySide6.QtGui import QColor as sQColor
 from pyparsing import col
 
 from backend import colors_pallete
-import train_api
+import train_api, texts
 
 
 # table number of rows and cols
@@ -112,7 +112,11 @@ def get_binary_model_filter_info_from_ui(ui_obj):
         bmodel_info['val_accuracy'] = [ui_obj.binary_acc_min_filter_lineedit.text(), ui_obj.binary_acc_max_filter_lineedit.text()]
         bmodel_info['val_precision'] = [ui_obj.binary_prec_min_filter_lineedit.text(), ui_obj.binary_prec_max_filter_lineedit.text()]
         bmodel_info['val_recall'] = [ui_obj.binary_rec_min_filter_lineedit.text(), ui_obj.binary_rec_max_filter_lineedit.text()]
-        bmodel_info['date_'] = [ui_obj.binary_date_min_filter_lineedit.text(), ui_obj.binary_date_max_filter_lineedit.text()]
+
+        # date
+        bmodel_info['start_date'] = [ui_obj.binary_start_year_lineedit.text(), ui_obj.binary_start_month_lineedit.text(), ui_obj.binary_start_day_lineedit.text()]
+        bmodel_info['end_date'] = [ui_obj.binary_end_year_lineedit.text(), ui_obj.binary_end_month_lineedit.text(), ui_obj.binary_end_day_lineedit.text()]
+
         return bmodel_info
            
     except:
@@ -125,89 +129,201 @@ def get_filtered_binary_models_from_db(ui_obj, db_obj, filter_params, limit_size
     params = []
     cols = []
     # add parameters and col names to build the input sql query
+    # algo name
     if filter_params['algo_name'][0] != -1:
         params.append(filter_params['algo_name'])
         cols.append('algo_name')
-    #
-    if filter_params['epochs'][0] != '' and filter_params['epochs'][1] != '' and int(filter_params['epochs'][0]) > int(filter_params['epochs'][1]):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Epoch Range Incorrect', color=colors_pallete.failed_red)
+    # epoch
+    try:
+        if filter_params['epochs'][0] != '' and filter_params['epochs'][1] != '' and int(filter_params['epochs'][0]) > int(filter_params['epochs'][1]):
+            ui_obj.set_warning(texts.ERORS['EPOCH_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['epochs'][0] == '') ^ bool(filter_params['epochs'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['EPOCH_RANGE_EMPTY'][ui_obj.language], 'binary_model_history', level=2)
+            return 'error',[]
+        elif filter_params['epochs'][0] != '' and filter_params['epochs'][1] != '':
+            params.append([str(int(filter_params['epochs'][0])), str(int(filter_params['epochs'][1]))])
+            cols.append('epochs')
+    except:
+        ui_obj.set_warning(texts.ERORS['EPOCH_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
         return 'error',[]
-    elif bool(filter_params['epochs'][0] == '') ^ bool(filter_params['epochs'][1] == ''):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Epoch Range Cant be Empty', color=colors_pallete.failed_red)
+    # tune epochs
+    try:
+        if filter_params['tuning_epochs'][0] != '' and filter_params['tuning_epochs'][1] != '' and int(filter_params['tuning_epochs'][0]) > int(filter_params['tuning_epochs'][1]):
+            ui_obj.set_warning(texts.ERORS['TEPOCH_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['tuning_epochs'][0] == '') ^ bool(filter_params['tuning_epochs'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['TEPOCH_RANGE_EMPTY'][ui_obj.language], 'binary_model_history', level=2)
+            return 'error',[]
+        elif filter_params['tuning_epochs'][0] != '' and filter_params['tuning_epochs'][1] != '':
+            params.append([str(int(filter_params['tuning_epochs'][0])), str(int(filter_params['tuning_epochs'][1]))])
+            cols.append('tuning_epochs')
+    except:
+        ui_obj.set_warning(texts.ERORS['TEPOCH_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
         return 'error',[]
-    elif filter_params['epochs'][0] != '' and filter_params['epochs'][1] != '':
-        params.append(filter_params['epochs'])
-        cols.append('epochs')
-    #
-    if filter_params['tuning_epochs'][0] != '' and filter_params['tuning_epochs'][1] != '' and int(filter_params['tuning_epochs'][0]) > int(filter_params['tuning_epochs'][1]):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Tunning Epoch Range Incorrect', color=colors_pallete.failed_red)
+    # batch-size
+    try:
+        if filter_params['batch_size'][0] != '' and filter_params['batch_size'][1] != '' and int(filter_params['batch_size'][0]) > int(filter_params['batch_size'][1]):
+            ui_obj.set_warning(texts.ERORS['BATCHSIZE_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['batch_size'][0] == '') ^ bool(filter_params['batch_size'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['BATCHSIZE_RANGE_EMPTY'][ui_obj.language], 'binary_model_history', level=2)
+            return 'error',[]
+        elif filter_params['batch_size'][0] != '' and filter_params['batch_size'][1] != '':
+            params.append([str(int(filter_params['batch_size'][0])), str(int(filter_params['batch_size'][1]))])
+            cols.append('batch_size')
+    except:
+        ui_obj.set_warning(texts.ERORS['BATCHSIZE_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
         return 'error',[]
-    elif bool(filter_params['tuning_epochs'][0] == '') ^ bool(filter_params['tuning_epochs'][1] == ''):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Tunning Epoch Range Cant be Empty', color=colors_pallete.failed_red)
+    # split ration
+    try:
+        if filter_params['split_ratio'][0] != '' and filter_params['split_ratio'][1] != '' and float(filter_params['split_ratio'][0]) > float(filter_params['split_ratio'][1]):
+            ui_obj.set_warning(texts.ERORS['SPLITRATIO_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['split_ratio'][0] == '') ^ bool(filter_params['split_ratio'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['SPLITRATIO_RANGE_EMPTY'][ui_obj.language], 'binary_model_history', level=2)
+            return 'error',[]
+        elif filter_params['split_ratio'][0] != '' and filter_params['split_ratio'][1] != '':
+            params.append([str(float(filter_params['split_ratio'][0])), str(float(filter_params['split_ratio'][1]))])
+            cols.append('split_ratio')
+    except:
+        ui_obj.set_warning(texts.ERORS['SPLITRATIO_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
         return 'error',[]
-    elif filter_params['tuning_epochs'][0] != '' and filter_params['tuning_epochs'][1] != '':
-        params.append(filter_params['tuning_epochs'])
-        cols.append('tuning_epochs')
-    #
-    if filter_params['batch_size'][0] != '' and filter_params['batch_size'][1] != '' and int(filter_params['batch_size'][0]) > int(filter_params['batch_size'][1]):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Batch-Size Range Incorrect', color=colors_pallete.failed_red)
+    # loss
+    try:
+        if filter_params['val_loss'][0] != '' and filter_params['val_loss'][1] != '' and float(filter_params['val_loss'][0]) > float(filter_params['val_loss'][1]):
+            ui_obj.set_warning(texts.ERORS['LOSS_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['val_loss'][0] == '') ^ bool(filter_params['val_loss'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['LOSS_RANGE_EMPTY'][ui_obj.language], 'binary_model_history', level=2)
+            return 'error',[]
+        elif filter_params['val_loss'][0] != '' and filter_params['val_loss'][1] != '':
+            params.append([str(float(filter_params['val_loss'][0])), str(float(filter_params['val_loss'][1]))])
+            cols.append('val_loss')
+    except:
+        ui_obj.set_warning(texts.ERORS['LOSS_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
         return 'error',[]
-    elif bool(filter_params['batch_size'][0] == '') ^ bool(filter_params['batch_size'][1] == ''):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Batch-Size Range Cant be Empty', color=colors_pallete.failed_red)
+    # acc
+    try:
+        if filter_params['val_accuracy'][0] != '' and filter_params['val_accuracy'][1] != '' and float(filter_params['val_accuracy'][0]) > float(filter_params['val_accuracy'][1]):
+            ui_obj.set_warning(texts.ERORS['ACCU_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['val_accuracy'][0] == '') ^ bool(filter_params['val_accuracy'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['ACCU_RANGE_EMPTY'][ui_obj.language], 'binary_model_history', level=2)
+            return 'error',[]
+        elif filter_params['val_accuracy'][0] != '' and filter_params['val_accuracy'][1] != '':
+            params.append([str(float(filter_params['val_accuracy'][0])), str(float(filter_params['val_accuracy'][1]))])
+            cols.append('val_accuracy')
+    except:
+        ui_obj.set_warning(texts.ERORS['ACCU_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
         return 'error',[]
-    elif filter_params['batch_size'][0] != '' and filter_params['batch_size'][1] != '':
-        params.append(filter_params['batch_size'])
-        cols.append('batch_size')
-    #
-    if filter_params['split_ratio'][0] != '' and filter_params['split_ratio'][1] != '' and int(filter_params['split_ratio'][0]) > int(filter_params['split_ratio'][1]):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Split_Ratio Range Incorrect', color=colors_pallete.failed_red)
+    # precision
+    try:
+        if filter_params['val_precision'][0] != '' and filter_params['val_precision'][1] != '' and float(filter_params['val_precision'][0]) > float(filter_params['val_precision'][1]):
+            ui_obj.set_warning(texts.ERORS['PREC_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['val_precision'][0] == '') ^ bool(filter_params['val_precision'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['PREC_RANGE_EMPTY'][ui_obj.language], 'binary_model_history', level=2)
+            return 'error',[]
+        elif filter_params['val_precision'][0] != '' and filter_params['val_precision'][1] != '':
+            params.append([str(float(filter_params['val_precision'][0])), str(float(filter_params['val_precision'][1]))])
+            cols.append('val_precision')
+    except:
+        ui_obj.set_warning(texts.ERORS['PREC_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
         return 'error',[]
-    elif bool(filter_params['split_ratio'][0] == '') ^ bool(filter_params['split_ratio'][1] == ''):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Split_Ratio Range Cant be Empty', color=colors_pallete.failed_red)
+    # recall
+    try:
+        if filter_params['val_recall'][0] != '' and filter_params['val_recall'][1] != '' and float(filter_params['val_recall'][0]) > float(filter_params['val_recall'][1]):
+            ui_obj.set_warning(texts.ERORS['RECA_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['val_recall'][0] == '') ^ bool(filter_params['val_recall'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['RECA_RANGE_EMPTY'][ui_obj.language], 'binary_model_history', level=2)
+            return 'error',[]
+        elif filter_params['val_recall'][0] != '' and filter_params['val_recall'][1] != '':
+            params.append([str(float(filter_params['val_recall'][0])), str(float(filter_params['val_recall'][1]))])
+            cols.append('val_recall')
+    except:
+        ui_obj.set_warning(texts.ERORS['RECA_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
         return 'error',[]
-    elif filter_params['split_ratio'][0] != '' and filter_params['split_ratio'][1] != '':
-        params.append(filter_params['split_ratio'])
-        cols.append('split_ratio')
-    #
-    if filter_params['val_loss'][0] != '' and filter_params['val_loss'][1] != '' and int(filter_params['val_loss'][0]) > int(filter_params['val_loss'][1]):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Loss Range Incorrect', color=colors_pallete.failed_red)
-        return 'error',[]
-    elif bool(filter_params['val_loss'][0] == '') ^ bool(filter_params['val_loss'][1] == ''):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Loss Range Cant be Empty', color=colors_pallete.failed_red)
-        return 'error',[]
-    elif filter_params['val_loss'][0] != '' and filter_params['val_loss'][1] != '':
-        params.append(filter_params['val_loss'])
-        cols.append('val_loss')
-    #
-    if filter_params['val_accuracy'][0] != '' and filter_params['val_accuracy'][1] != '' and int(filter_params['val_accuracy'][0]) > int(filter_params['val_accuracy'][1]):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Accuracy Range Incorrect', color=colors_pallete.failed_red)
-        return 'error',[]
-    elif bool(filter_params['val_accuracy'][0] == '') ^ bool(filter_params['val_accuracy'][1] == ''):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Accuracy Range Cant be Empty', color=colors_pallete.failed_red)
-        return 'error',[]
-    elif filter_params['val_accuracy'][0] != '' and filter_params['val_accuracy'][1] != '':
-        params.append(filter_params['val_accuracy'])
-        cols.append('val_accuracy')
-    #
-    if filter_params['val_precision'][0] != '' and filter_params['val_precision'][1] != '' and int(filter_params['val_precision'][0]) > int(filter_params['val_precision'][1]):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Precision Range Incorrect', color=colors_pallete.failed_red)
-        return 'error',[]
-    elif bool(filter_params['val_precision'][0] == '') ^ bool(filter_params['val_precision'][1] == ''):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Precision Range Cant be Empty', color=colors_pallete.failed_red)
-        return 'error',[]
-    elif filter_params['val_precision'][0] != '' and filter_params['val_precision'][1] != '':
-        params.append(filter_params['val_precision'])
-        cols.append('val_precision')
-    #
-    if filter_params['val_recall'][0] != '' and filter_params['val_recall'][1] != '' and int(filter_params['val_recall'][0]) > int(filter_params['val_recall'][1]):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Recall Range Incorrect', color=colors_pallete.failed_red)
-        return 'error',[]
-    elif bool(filter_params['val_recall'][0] == '') ^ bool(filter_params['val_recall'][1] == ''):
-        ui_obj.show_mesagges(label_name=ui_obj.binary_tabel_label, text='Recall Range Cant be Empty', color=colors_pallete.failed_red)
-        return 'error',[]
-    elif filter_params['val_recall'][0] != '' and filter_params['val_recall'][1] != '':
-        params.append(filter_params['val_recall'])
-        cols.append('val_recall')
+
+    # date
+    #start year
+    if filter_params['start_date'][0] != '' or filter_params['start_date'][1] != '' or filter_params['start_date'][2] != ''\
+        or filter_params['end_date'][0] != '' or filter_params['end_date'][1] != '' or filter_params['end_date'][2] != '':
+        #
+        try:
+            if int(filter_params['start_date'][0]) < 1402 or int(filter_params['start_date'][0]) > 1500:
+                ui_obj.set_warning(texts.ERORS['YEAR_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+                return 'error',[]
+        except:
+            ui_obj.set_warning(texts.ERORS['YEAR_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        #start month
+        try:
+            if int(filter_params['start_date'][1]) < 1 or int(filter_params['start_date'][1]) > 12:
+                ui_obj.set_warning(texts.ERORS['MONTH_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+                return 'error',[]
+        except:
+            ui_obj.set_warning(texts.ERORS['MONTH_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        #start day
+        try:
+            if int(filter_params['start_date'][2]) < 1 or int(filter_params['start_date'][2]) > 31:
+                ui_obj.set_warning(texts.ERORS['DAY_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+                return 'error',[]
+        except:
+            ui_obj.set_warning(texts.ERORS['DAY_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        #
+        # end year
+        try:
+            if int(filter_params['end_date'][0]) < 1402 or int(filter_params['end_date'][0]) > 1500:
+                ui_obj.set_warning(texts.ERORS['YEAR_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+                return 'error',[]
+        except:
+            ui_obj.set_warning(texts.ERORS['YEAR_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        #start month
+        try:
+            if int(filter_params['end_date'][1]) < 1 or int(filter_params['end_date'][1]) > 12:
+                ui_obj.set_warning(texts.ERORS['MONTH_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+                return 'error',[]
+        except:
+            ui_obj.set_warning(texts.ERORS['MONTH_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        #start day
+        try:
+            if int(filter_params['end_date'][2]) < 1 or int(filter_params['end_date'][2]) > 31:
+                ui_obj.set_warning(texts.ERORS['DAY_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+                return 'error',[]
+        except:
+            ui_obj.set_warning(texts.ERORS['DAY_FORMAT_INVALID'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+        #
+        try:
+            if len(filter_params['start_date'][1]) < 2:
+                filter_params['start_date'][1] = '0' + filter_params['start_date'][1]
+            if len(filter_params['start_date'][2]) < 2:
+                filter_params['start_date'][2] = '0' + filter_params['start_date'][2]
+            if len(filter_params['end_date'][1]) < 2:
+                filter_params['end_date'][1] = '0' + filter_params['end_date'][1]
+            if len(filter_params['end_date'][2]) < 2:
+                filter_params['end_date'][2] = '0' + filter_params['end_date'][2]
+            #
+            start_date = filter_params['start_date'][0] + '/' + filter_params['start_date'][1] + '/' + filter_params['start_date'][2]
+            end_date = filter_params['end_date'][0] + '/' + filter_params['end_date'][1] + '/' + filter_params['end_date'][2]
+            if start_date > end_date:
+                ui_obj.set_warning(texts.ERORS['DATE_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+                return 'error',[]
+            else:
+                params.append(['"'+start_date+'"', '"'+end_date+'"'])
+                cols.append('date_')
+        except:
+            print('date error')
+            ui_obj.set_warning(texts.ERORS['DATE_RANGE_INCORRECT'][ui_obj.language], 'binary_model_history', level=3)
+            return 'error',[]
+
+
     #
     print('-----------------------------------------------------------')
     print('params:', params)
