@@ -1,4 +1,5 @@
 # from logging import _Level
+import ast
 import re
 import sys
 from ast import Try
@@ -34,7 +35,7 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
 from functools import partial
-from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs,date_funcs
+from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs, date_funcs
 
 import database_utils
 from utils import *
@@ -55,7 +56,7 @@ from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
 from login_win.login_api import login_API
-from camera_live import save_camera_images
+from camera_live import live_manager
 from multiprocessing import Process
 import dataset_utils
 
@@ -68,16 +69,14 @@ TECHNICAL_WGT_NAME_TO_SIDE = {'up_side_technical', 'top', 'bottom'}
 
 # down_side_technical     ,   up_side_technical
 class API:
-
     def __init__(self, ui):
         self.ui = ui
         self.mouse = Mouse()
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
-        self.ds_json=dataset_utils.dataset_json()
         self.create_label_color()
-        self.ds = Dataset(self.db.get_dataset_path(), self.db.get_dataset_path_uesr(), self.db.get_weights_path())
+        self.create_default_ds()
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
             'mask': Label.maskLbl((1200, 1920), self.LABEL_COLOR),
@@ -98,7 +97,7 @@ class API:
         self.selected_images_for_label = tempMemory.manageSelectedImage()
         self.finish_draw = 0
         self.language = 'en'
-        self.size = self.db.get_split_size()
+        self.size = self.db.get_split_size(id=0)
         self.img = None
         self.n_imgs = []
         # iterator for binary-model history tabel
@@ -112,7 +111,7 @@ class API:
 
         self.ui.set_default_db_parms(self.ds.binary_path, self.size)
 
-        self.logged_in=False
+        self.logged_in = False
         # Create labeling window
         # -------------------------------------
 
@@ -147,27 +146,30 @@ class API:
         # perfect
         self.binarylist_sliders_check = []
         self.binarylist_sliders_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
-                                                                                        db_obj=self.db,
-                                                                                        frame_obj=self.ui.binary_list_perfect_frame,
-                                                                                        prefix=binary_list_funcs.widjet_prefixes['perfect']))
+                                                                                         db_obj=self.db,
+                                                                                         frame_obj=self.ui.binary_list_perfect_frame,
+                                                                                         prefix=
+                                                                                         binary_list_funcs.widjet_prefixes[
+                                                                                             'perfect']))
         # defect
         self.binarylist_sliders_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
-                                                                                        db_obj=self.db,
-                                                                                        frame_obj=self.ui.binary_list_defect_frame,
-                                                                                        prefix=binary_list_funcs.widjet_prefixes['defect']))
-        
+                                                                                         db_obj=self.db,
+                                                                                         frame_obj=self.ui.binary_list_defect_frame,
+                                                                                         prefix=
+                                                                                         binary_list_funcs.widjet_prefixes[
+                                                                                             'defect']))
+
         # binarylist image object
         self.binary_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
 
-        self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
+        self.live = live_manager(self.ui, self.db.get_parent_path())
+        self.camera_process = threading.Thread(target=self.live.save_camera_images, args=(self.cameras, ))
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
         # self.__debug_load_sheet__(['996','997'])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
-
-        
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, 'sheets_id')
@@ -200,6 +202,12 @@ class API:
     # 
     # ----------------------------------------------------------------------------------------
     # ----------------------------------------------------------------------------------------
+    def create_default_ds(self):
+        parms = self.db.get_dataset()
+        parms = {'user_name': parms['user_own'], 'user_id': parms['id'], 'dataset_name': parms['name'], 'path': parms['path'], 'max_size': '15 Gb', 'date': '3-3-1401'}
+        self.ds = Dataset(parms['path'])
+        self.ds_json = dataset_utils.dataset_json()
+        self.ds_json.create_json_dataset(parms)
 
     def button_connector(self):
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
@@ -224,15 +232,13 @@ class API:
         self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
         self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
 
-        #login
-        self.login_user_name=''
+        # login
+        self.login_user_name = ''
         self.ui.login_btn.clicked.connect(partial(self.show_login))
         self.ui.btn_user_proflie.clicked.connect(partial(self.set_profile_page))
         self.ui.create_database_btn.clicked.connect(partial(self.create_dataset))
         self.ui.my_databases_2.clicked.connect(partial(self.set_user_databases))
         self.ui.set_default_database_btn.clicked.connect(partial(self.set_default_dataset))
-        self.set_databases()
-        self.set_user_databases()
         # self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
 
         # labeling
@@ -541,11 +547,11 @@ class API:
             bboxs = SSI(self.img, *params)
             labels = []
             for bbox in bboxs:
-                label = ['NO LABEL', np.array(bbox)]
+                label = ['0', np.array(bbox)]
                 labels.append(label)
             self.label_memory.append(img_path,
-                                  labels,
-                                  'bbox')
+                                     labels,
+                                     'bbox')
             self.detect_bboxs_imgs.append(img_path)
 
     # ----------------------------------------------------------------------------------------
@@ -561,6 +567,9 @@ class API:
         label_img = self.label_bakcend[label_type].draw()
         self.img = Utils.add_layer_to_img(self.img, label_img, opacity=0.4, compress=0.5)
         self.ui.show_image_in_label(self.img)
+
+        labels = self.label_bakcend[label_type].get()
+        self.ui.show_labels(labels, label_type)
 
         # print(self.label_bakcend[label_type].get())
         # print(label, img_path)
@@ -632,7 +641,8 @@ class API:
             hex_color = defect_info[i]['color'].lstrip('#')
             rgb_color = tuple(int(hex_color[i:i + 2], 16) for i in (0, 2, 4))
             rgb = (rgb_color[2], rgb_color[1], rgb_color[0])
-            self.LABEL_COLOR.update({defect_name[i]: rgb})
+            self.LABEL_COLOR.update({defect_info[i]['defect_ID']: rgb})
+        print('******************', self.LABEL_COLOR)
 
     def label_image_mouse(self, wgt_name=''):
 
@@ -642,25 +652,25 @@ class API:
         mouse_pt = self.mouse.get_relative_position()
 
         if self.ui.get_zoom_type() is None:
-            # try:
-            sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-            img = Utils.read_image(img_path, 'color')
-            self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt)
-            if self.label_bakcend[label_type].is_drawing_finish():
-                self.label_bakcend[label_type].save('NO LABEL')
-            label_img = self.label_bakcend[label_type].draw()
-            img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
-            self.ui.show_image_in_label(img, self.scale, self.position)
-            self.img = img
+            try:
+                sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+                img = Utils.read_image(img_path, 'color')
+                self.label_bakcend[label_type].mouse_event(mouse_status, mouse_button, mouse_pt)
+                if self.label_bakcend[label_type].is_drawing_finish():
+                    self.label_bakcend[label_type].save('0')
+                label_img = self.label_bakcend[label_type].draw()
+                img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
+                self.ui.show_image_in_label(img, self.scale, self.position)
+                self.img = img
 
-            labels = self.label_bakcend[label_type].get()
-            self.label_memory.add(img_path,
-                                    labels,
-                                    label_type)
-            self.ui.show_labels(labels, label_type)
-            # except:
-            #     self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
-            #     return
+                labels = self.label_bakcend[label_type].get()
+                self.label_memory.add(img_path,
+                                      labels,
+                                      label_type)
+                self.ui.show_labels(labels, label_type)
+            except:
+                self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
+                return
 
         elif self.ui.get_zoom_type() != 'drag':
             if mouse_status == 'mouse_press':
@@ -740,60 +750,60 @@ class API:
             self.ui.labeling_win.show()
             print('end show_labeling')
 
-
-     # login ---------------------------------       
+    # login ---------------------------------
 
     def show_login(self):
-    
-        if self.logged_in==False:
 
-            login_window=self.ui.ret_create_login()
-            self.login_api=login_API(login_window)
+        if self.logged_in == False:
+
+            login_window = self.ui.ret_create_login()
+            self.login_api = login_API(login_window)
             # self.login_api.button_connector()
             login_window.login_btn.clicked.connect(partial(self.check_login))
             print('show_ui')
             self.ui.login_window.show()
-        else :
+        else:
             print('user_loged_in')
             self.show_message_logout()
-        
 
     def show_message_logout(self):
 
-            t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
-                                        texts.WARNINGS['CONFIRM_LOGOUT'][self.language])
-            if not t:
-                return
-            else:
-                self.log_out()
-       
+        t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
+                                  texts.WARNINGS['CONFIRM_LOGOUT'][self.language])
+        if not t:
+            return
+        else:
+            self.log_out()
+
     def log_out(self):
-        self.logged_in=False
-        self.ui.show_image_btn(self.ui.login_btn,'images/icons/person.png')
+        self.logged_in = False
+        self.ui.show_image_btn(self.ui.login_btn, 'images/icons/person.png')
         self.ui.user_name.setText('')
         self.ui.stackedWidget.setCurrentWidget(self.ui.page_label)
         self.ui.comboBox_user_datasets.clear()
-        self.ui.comboBox_default_dataset.clear()
+        # self.ui.comboBox_default_dataset.clear()
         self.ui.clear_table_name(self.ui.tableWidget_user_dataset)
         self.ds_json.set_user_name_database('')
 
-
     def check_login(self):
 
-        self.login_info=self.login_api.check_login()
-        print('ret 0 ',self.login_info[0])
-        if self.login_info[0]==True:
-
+        self.login_info = self.login_api.check_login()
+        print('ret 0 ', self.login_info[0])
+        if self.login_info[0] == True:
             print('ok')
             self.ui.user_name.setText(self.login_info[1]['user_name'])
-            self.ui.show_image_btn(self.ui.login_btn,'images/logout.png')
-            self.logged_in=True
+            self.ui.show_image_btn(self.ui.login_btn, 'images/logout.png')
+            self.logged_in = True
             self.ui.stackedWidget.setCurrentWidget(self.ui.page_user_profile)
             self.set_parms_login_page(self.login_info)
 
-    def set_parms_login_page(self,login_info):
+            self.set_databases()
+            self.set_user_databases()
+            self.set_default_dataset()
 
-        print('login_info',login_info)
+    def set_parms_login_page(self, login_info):
+
+        print('login_info', login_info)
         self.ui.user_name_2.setText(str(login_info[1]['user_name']))
         self.ui.user_name_3.setText(str(login_info[1]['user_name']))
         self.ui.date_created.setText(str(login_info[1]['date_created']))
@@ -801,42 +811,46 @@ class API:
         self.ui.role.setText(login_info[1]['role'])
         self.ui.default_dataset.setText(str(login_info[1]['default_dataset']))
         self.ui.today_date.setText(str(date_funcs.get_date(folder_path=True)))
-        self.login_user_name=(str(login_info[1]['user_name']))
+        self.login_user_name = (str(login_info[1]['user_name']))
         self.ds_json.set_user_name_database(self.login_user_name)
 
     def set_profile_page(self):
-        if self.logged_in==True:
+        if self.logged_in == True:
 
-            self.ui.set_widget_page(self.ui.stackedWidget,self.ui.page_user_profile)
-        
-        else :
+            self.ui.set_widget_page(self.ui.stackedWidget, self.ui.page_user_profile)
+
+        else:
             print('first login')
             self.ui.set_warning(texts.WARNINGS['LOGIN_FIRST'][self.language], 'setting_eror', level=2)
 
-
-
     def set_databases(self):
-        dataset_names=[]
-        self.datasets=self.db.get_all_datasets()
+        dataset_names = []
+        self.datasets = self.db.get_all_datasets()
         for i in range(len(self.datasets)):
             dataset_names.append(self.datasets[i]['name'])
-        print('dataset_names',dataset_names)
+        print('dataset_names', dataset_names)
+        self.ui.comboBox_all_datasets.clear()
         self.ui.comboBox_all_datasets.addItems(dataset_names)
         self.ui.comboBox_all_datasets.currentTextChanged.connect(self.update_table_all_datasets)
-    
+
     def update_table_all_datasets(self):
         current = self.ui.comboBox_all_datasets.currentIndex()
         self.ui.show_all_datasets(list(self.datasets[current].values()))
 
     def set_user_databases(self):
-        dataset_names=[]
-        self.user_databases=self.db.get_user_databases(self.login_user_name)
+        dataset_names = []
+        self.user_databases = self.db.get_user_databases(self.login_user_name)
+        print('******************', self.user_databases)
+        self.user_default_databases = self.db.get_default_dataset(self.login_user_name)
         for i in range(len(self.user_databases)):
             dataset_names.append(self.user_databases[i]['name'])
-        print('dataset_names',dataset_names)
+        print('dataset_names', dataset_names)
+        self.ui.comboBox_user_datasets.clear()
         self.ui.comboBox_user_datasets.addItems(dataset_names)
-        self.ui.comboBox_default_dataset.addItems(dataset_names)
+        # self.ui.comboBox_default_dataset.addItems(dataset_names)
+        self.update_user_datasts()
         self.ui.comboBox_user_datasets.currentTextChanged.connect(self.update_user_datasts)
+        self.set_databases()
 
     def update_user_datasts(self):
         current = self.ui.comboBox_user_datasets.currentIndex()
@@ -844,45 +858,58 @@ class API:
         self.ui.show_user_datasets(list(self.user_databases[current].values()))
 
     def set_default_dataset(self):
+        current_index = self.ui.comboBox_user_datasets.currentIndex()
+        self.current = self.user_databases[current_index]
+        self.ds = Dataset(self.current['path'])
+        self.size = ast.literal_eval(self.current['split_size'])
+        self.ui.create_alert_message(texts.WARNINGS['SET_DATASET_TITLE'][self.language], texts.WARNINGS['SET_DATASET'][self.language])
+        #
+        # dataset_new=self.ui.comboBox_default_dataset.currentText()
+        # if dataset_new == '': dataset_new = 'None'
+        self.db.update_dataset_default(self.current['id'],self.login_user_name)
+        # print('ok')
+        self.ui.default_dataset.setText(self.current['name'])
+        self.binary_pieChart()
 
-        dataset_new=self.ui.comboBox_default_dataset.currentText()
-        self.db.update_dataset_default(dataset_new,self.login_user_name)
-        print('ok')
-        self.ui.default_dataset.setText(dataset_new)
-
-
-    #---------------------------------------------------------------------///////////////////////////////////////////
+    # ---------------------------------------------------------------------///////////////////////////////////////////
     # dataset
 
     def create_dataset(self):
 
-            t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
-                                        texts.WARNINGS['CREATE_DATABASE'][self.language])
-            if not t:
+        t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
+                                  texts.WARNINGS['CREATE_DATABASE'][self.language])
+        if not t:
+            return
+        else:
+            parms = self.ui.get_create_dataset_parms()
+            print(parms)
+
+            if os.path.exists(os.path.join(parms['path'], parms['dataset_name'])):
+                self.ui.create_alert_message(texts.WARNINGS['CREATE_DATASET_TITLE'][self.language], texts.WARNINGS['CREATE_DATASET'][self.language])
                 return
-            else:
-                parms=self.ui.get_create_dataset_parms()
-                print(parms)
-                self.create_folder(parms['dataset_name'],parms['path'])
-                # self.ds_json=dataset_utils.dataset_json()
-                self.ds_json.create_json_dataset(parms)
-                data=parms['dataset_name'],self.login_user_name,os.path.join(parms['path'], parms['dataset_name'])
-                self.db.add_dataset(data)
 
-    def create_folder(self,name,path):
-        try:
-            os.mkdir(os.path.join(path, name))
-        except:
-            print('eror')
-        # path=os.path.join(path, name, "{name}.json")
-        # os.mkdir(path)
+            parms['path'] = os.path.join(parms['path'], parms['dataset_name'])
+            Dataset(parms['path'])
+            ds_json = dataset_utils.dataset_json()
+            ds_json.create_json_dataset(parms)
+            data = parms['dataset_name'], self.login_user_name, parms['path']
+            self.db.add_dataset(data)
 
-    
-    #----------------------------------------------------------------------///////////////////////
+    # def create_folder(self,name,path):
+    #     try:
+    #         os.mkdir(os.path.join(path, name))
+    #     except:
+    #         print('eror')
+    # path=os.path.join(path, name, "{name}.json")
+    # os.mkdir(path)
+
+    # ----------------------------------------------------------------------///////////////////////
 
     def set_label(self):
         mouse_position = self.mouse.get_relative_position()
-        selected_label = self.labeling_api.ret_selcted_label()
+        selected_label_name = self.labeling_api.ret_selcted_label()
+        selected_label = self.db.get_defect_id(selected_label_name)
+        print('***************', selected_label)
         label_type = self.ui.get_label_type()
         self.label_bakcend[label_type].update_label(str(selected_label), mouse_position)
         label_img = self.label_bakcend[label_type].draw()
@@ -899,7 +926,6 @@ class API:
         # print(labels[1])
 
         self.ui.show_labels(labels, label_type)
-
 
     def close_labeling(self):
         self.ui.labeling_win = None
@@ -940,7 +966,7 @@ class API:
         # update chart axes given train data
         self.update_b_chart_axes(b_parms[3])
         #
-        t = threading.Thread(target=self.train_binary, args=(b_parms, ))
+        t = threading.Thread(target=self.train_binary, args=(b_parms,))
         t.start()
         # t.join()
 
@@ -982,26 +1008,39 @@ class API:
         )
 
     def save_train_ds(self):
+        masks = self.label_bakcend['mask'].get()
+        bboxes = self.label_bakcend['bbox'].get()
         try:
             sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
             self.ds.save(
                 img_path=img_path,
                 pos=pos,
                 sheet=sheet,
-                masks=self.label_bakcend['mask'].get(),
-                bboxes=self.label_bakcend['bbox'].get()
+                masks=masks,
+                bboxes=bboxes
             )
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
             return
 
+        labels = []
+        for mask in masks:
+            if mask[0] not in labels:
+                labels.append(mask[0])
+
+        for bbox in bboxes:
+            if bbox[0] not in labels:
+                labels.append(bbox[0])
+
+        self.ds_json.add_update_classification(img_path, labels)
+
         saved_perfect = self.ds.check_saved_perfect(pos=pos)
         saved_defect = self.ds.check_saved_defect(pos=pos)
 
         if self.ui.no_defect.isChecked():
-            if saved_perfect:
-                self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
-                return
+            # if saved_perfect:
+            #     self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
+            #     return
             if saved_defect:
                 t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
                                           texts.WARNINGS['ALREADY_SAVED_DEFECT'][self.language])
@@ -1012,20 +1051,19 @@ class API:
                     self.ds.delete_from_defect_splitted(pos)
 
             self.ds.save_to_perfect(img_path=img_path, pos=pos)
-            crops = ImageCrops(self.img, self.size)
+            crops = ImageCrops(Utils.read_image(img_path, 'gray'), self.size)
             self.ds.save_to_perfect_splitted(crops, pos=pos)
             self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
             print('no defect')
-            try:
-            
-                self.ds_json.modify_perfect()
-            except:
-                pass
+            # try:
+            self.ds_json.modify_perfect()
+            # except:
+            #     pass
         elif self.ui.yes_defect.isChecked():
-            if saved_defect:
-                self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
-                return
+            # if saved_defect:
+            #     self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
+            #     return
             if saved_perfect:
                 t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
                                           texts.WARNINGS['ALREADY_SAVED_PERFECT'][self.language])
@@ -1035,12 +1073,11 @@ class API:
                     self.ds.delete_from_perfect(pos)
                     self.ds.delete_from_perfect_splitted(pos)
             self.ds.save_to_defect(img_path=img_path, pos=pos)
-            crops = ImageCrops(self.img, self.size)
+            crops = ImageCrops(Utils.read_image(img_path, 'gray'), self.size)
             self.ds.save_to_defect_splitted(crops, pos=pos)
             self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
             try:
-            
                 self.ds_json.modify_defect()
             except:
                 pass
@@ -1054,7 +1091,7 @@ class API:
             else:
                 if path == self.ds.binary_path:
                     self.size = size
-                    self.db.set_split_size(self.size)
+                    self.db.set_split_size(self.size, self.current['id'])
                 if self.ds.check_binary_dataset(path):
                     self.ds.create_split_folder(path)
 
@@ -1078,7 +1115,7 @@ class API:
                     return
 
     def select_binary_dataset(self, page='train'):
-        self.select_ds_dialog = FileDialog('Select a directory', self.ds.dataset_path_user)
+        self.select_ds_dialog = FileDialog('Select a directory', '/')
         selected = self.select_ds_dialog.exec()
 
         if selected:
@@ -1170,6 +1207,7 @@ class API:
 
         if self.proc_start_flag:
             self.camera_process.start()
+            # self.live.save_camera_images(self.cameras)
             self.proc_start_flag = False
 
         if cam_num != 'All':
@@ -1270,7 +1308,7 @@ class API:
                 if not self.filter_mode:
                     bmodels_list = binary_model_funcs.get_binary_models_from_db(db_obj=self.db,
                                                                                 min=(
-                                                                                                self.bmodel_tabel_itr - 1) * binary_model_funcs.binary_table_nrows,
+                                                                                            self.bmodel_tabel_itr - 1) * binary_model_funcs.binary_table_nrows,
                                                                                 max=(
                                                                                         self.bmodel_tabel_itr) * binary_model_funcs.binary_table_nrows)
                 else:
@@ -1433,16 +1471,20 @@ class API:
         # set/update images on UI
         if not defect:
             res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
-                                                            sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.perfect_folder),
-                                                            annot_sub_direcotory='./dataset/annotations',
-                                                            image_path_list=current_image_list,
-                                                            prefix=binary_list_funcs.widjet_prefixes['perfect'])
+                                                           sub_directory=os.path.join(
+                                                               self.dataset_params['dataset_path'],
+                                                               self.ds.perfect_folder),
+                                                           annot_sub_direcotory='./dataset/annotations',
+                                                           image_path_list=current_image_list,
+                                                           prefix=binary_list_funcs.widjet_prefixes['perfect'])
         else:
             res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
-                                                            sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.defect_folder),
-                                                            annot_sub_direcotory='./dataset/annotations',
-                                                            image_path_list=current_image_list,
-                                                            prefix=binary_list_funcs.widjet_prefixes['defect'])
+                                                           sub_directory=os.path.join(
+                                                               self.dataset_params['dataset_path'],
+                                                               self.ds.defect_folder),
+                                                           annot_sub_direcotory='./dataset/annotations',
+                                                           image_path_list=current_image_list,
+                                                           prefix=binary_list_funcs.widjet_prefixes['defect'])
         # validate
         if not res:
             self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=2)

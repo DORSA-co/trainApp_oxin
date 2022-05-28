@@ -8,10 +8,11 @@ import os
 from backend import pathStructure, binary_model_funcs
 import inspect
 class dataBaseUtils():
-    def __init__(self,user_name='root',password='root') :
+    def __init__(self,user_name='root',password='') :
         self.db=database.dataBase(user_name,password,'localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
+        self.datasets_table = 'datasets'
         self.camera_settings_table='camera_settings'
         self.defects_table = 'defects_info'
         self.sign_tables='sign_tables'
@@ -98,32 +99,23 @@ class dataBaseUtils():
         self.db.update_record(table_name= self.setting_tabel,col_name='path_dataset',value=path,id='id',id_value=0)
 
 
-    def get_dataset_path(self):
-        record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
-        return record['path_dataset']
+    def get_dataset(self, value=0):
+        record =self.db.search(table_name=self.datasets_table, param_name='id', value=value)[0 ]
+        return record
+
+    def get_parent_path(self, value=0):
+        record = self.db.search(table_name=self.setting_tabel, param_name='id', value=value)[0]
+        return record['parent_path']
 
     def set_dataset_path_user(self,path):
         #  update_record(self,data,table_name,col_name,value,id,id_value):
         self.db.update_record(table_name= self.setting_tabel,col_name='path_dataset_user',value=path,id='id',id_value=0)
 
-    def get_dataset_path_uesr(self):
-        record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
-        print('record',record)
-        return record['path_dataset_user']
+    def set_split_size(self, size, id):
+        self.db.update_record(table_name=self.datasets_table, col_name='split_size', value=str(size), id='id', id_value=id)
 
-    def set_weights_path(self,path):
-        #  update_record(self,data,table_name,col_name,value,id,id_value):
-        self.db.update_record(table_name= self.setting_tabel,col_name='path_weights',value=path,id='id',id_value=0)
-
-    def get_weights_path(self):
-        record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
-        return record['path_weights']
-
-    def set_split_size(self, size):
-        self.db.update_record(table_name=self.setting_tabel, col_name='split_size', value=str(size), id='id', id_value=0)
-
-    def get_split_size(self):
-        record =self.db.search(table_name=self.setting_tabel,param_name='id',value=0)[0 ]
+    def get_split_size(self, id):
+        record =self.db.search(table_name=self.datasets_table,param_name='id',value=id)[0 ]
         return eval(record['split_size'])
 
     def get_path_sheet_image(self,filtered_selected):
@@ -156,8 +148,15 @@ class dataBaseUtils():
         for i in range(len(defects_info)):
             name_list.append(defects_info[i]['name'])
 
-        return name_list,defects_info       
+        return name_list, defects_info
 
+    def get_defect_id(self, selected_label):
+        try:
+            record = self.db.search(self.defects_table, 'name', selected_label, int_type=False)[0]
+            # print('asd',record)
+            return record['defect_ID']
+        except:
+            return []
 
     def search_defect_by_id(self, input_defect_id):
         try:
@@ -234,6 +233,8 @@ class dataBaseUtils():
 
         try:
             record = self.db.search( self.table_user , 'user_name', input_user_name ,int_type=False)[0]
+            record_ds = self.db.search(self.datasets_table, 'id', record['default_dataset'], int_type=False)[0]
+            record['default_dataset'] = record_ds['name']
             print(record)
             #print('asd',record)
             return record
@@ -253,10 +254,21 @@ class dataBaseUtils():
             print('except')
             return []
 
-    def get_path_dataset(self,dataset_name):
+    def get_dateset_name(self, id):
+        try:
+            record = self.db.search( self.datasets_table ,'id', id ,int_type=False)[0]
+
+            print('record',record)
+
+            return record['name']
+        except:
+            print('except')
+            return []
+
+    def get_path_dataset(self,dataset_id):
 
     # try:
-        record = self.db.search( self.dataset ,'name', dataset_name ,int_type=False)[0]
+        record = self.db.search( self.dataset ,'id', dataset_id ,int_type=False)[0]
 
         print('record',record)
 
@@ -272,22 +284,34 @@ class dataBaseUtils():
         return records
 
 
-    def get_user_databases(self,user_name):
+    def get_user_databases(self,user_name, default=True):
 
-        try:
-            record = self.db.search( self.dataset ,'user_own', user_name ,int_type=False)
+        # try:
+        record = self.db.search( self.dataset ,'user_own', user_name ,int_type=False)
 
-            print('record',record)
+        if default:
+            default_record = self.db.search( self.dataset ,'id', 0 ,int_type=False)
+            record += default_record
 
-            return record
-        except:
-            print('except')
-            return []
+        default_ds = self.get_default_dataset(user_name)
+        print('*********{}**********'.format(default_ds))
+
+        for i in range(len(record)):
+            if str(record[i]['id']) == default_ds:
+                break
+
+        record.insert(0, record.pop(i))
+
+        print('****record',record)
+        return record
+    # except:
+        #     print('except')
+        #     return []
 
 
-    def update_dataset_default(self,dataset_name,user_name):
+    def update_dataset_default(self,dataset_id,user_name):
     
-        self.db.update_record(self.table_user, 'default_dataset', dataset_name, 'user_name', user_name)
+        self.db.update_record(self.table_user, 'default_dataset', str(dataset_id), 'user_name', user_name)
 
 
     def add_dataset(self,data):

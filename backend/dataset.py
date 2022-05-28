@@ -8,7 +8,7 @@ import cv2
 
 class Dataset:
 
-    def __init__(self, dataset_path, dataset_path_user, weights_path):
+    def __init__(self, dataset_path):
         self.images_temp_folder = 'temp_images'
         self.annotations_temp_folder = 'temp_annotations'
         self.images_folder = 'images'
@@ -18,9 +18,11 @@ class Dataset:
         self.perfect_folder = 'perfect'
         self.defect_splitted_folder = 'defect_splitted'
         self.perfect_splitted_folder = 'perfect_splitted'
+        self.weights = 'weights'
+        self.weights_binary = 'binary'
+        self.weights_localization = 'localization'
+        self.weights_classification = 'classification'
         self.dataset_path = dataset_path
-        self.weights_path = weights_path
-        self.dataset_path_user = dataset_path_user
         self.format_image = '.jpg'
 
         # print(self.dataset_path)
@@ -41,11 +43,14 @@ class Dataset:
         self.perfect_path = os.path.join(self.binary_path, self.perfect_folder)
         self.defect_splitted_path = os.path.join(self.binary_path, self.defect_splitted_folder)
         self.perfect_splitted_path = os.path.join(self.binary_path, self.perfect_splitted_folder)
-        self.weights_binary_path = os.path.join(self.weights_path, self.binary_folder)
+        self.weights_path = os.path.join(self.dataset_path, self.weights)
+        self.weights_binary_path = os.path.join(self.weights_path, self.weights_binary)
+        self.weights_localization_path = os.path.join(self.weights_path, self.weights_localization)
+        self.weights_classification_path = os.path.join(self.weights_path, self.weights_classification)
+
         # print(self.annotations_folder)
         self.__creat_path__(self.dataset_path)
         self.__creat_path__(self.weights_path)
-        self.__creat_path__(self.dataset_path_user)
         self.__creat_path__(self.images_temp_path)
         self.__creat_path__(self.annotations_temp_path)
         self.__creat_path__(self.images_path)
@@ -55,7 +60,10 @@ class Dataset:
         self.__creat_path__(self.perfect_path)
         self.__creat_path__(self.defect_splitted_path)
         self.__creat_path__(self.perfect_splitted_path)
+        self.__creat_path__(self.weights_path)
         self.__creat_path__(self.weights_binary_path)
+        self.__creat_path__(self.weights_localization_path)
+        self.__creat_path__(self.weights_classification_path)
 
     def __random_name__(self, length):
         letters = string.ascii_lowercase + string.digits + string.ascii_uppercase
@@ -85,9 +93,8 @@ class Dataset:
         shutil.copyfile(img_path, res_path)
         self.create_annotation_to_ds(sheet, masks, bboxes, image_name, pos[-1])
 
-
-    def create_annotation_to_temp(self,sheet,fname):
-        image_path = os.path.join(  self.images_temp_path, fname  )
+    def create_annotation_to_temp(self, sheet, fname):
+        image_path = os.path.join(  self.images_temp_path, fname)
 
         json_name = fname.split('.')[0] + '.json'
         json_path = os.path.join(self.annotations_temp_path, json_name)
