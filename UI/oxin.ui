@@ -3472,7 +3472,7 @@ QComboBox QAbstractItemView {
                                    </widget>
                                   </item>
                                   <item>
-                                   <widget class="QLabel" name="label_21">
+                                   <widget class="QLabel" name="live1">
                                     <property name="text">
                                      <string>TextLabel</string>
                                     </property>
@@ -5089,7 +5089,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>600</height>
+                                     <height>481</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -5332,7 +5332,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>600</height>
+                                     <height>481</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -7847,6 +7847,28 @@ QPushButton:hover {
                                      </widget>
                                     </item>
                                     <item>
+                                     <widget class="QPushButton" name="set_default_database_btn">
+                                      <property name="minimumSize">
+                                       <size>
+                                        <width>67</width>
+                                        <height>0</height>
+                                       </size>
+                                      </property>
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>50</width>
+                                        <height>16777215</height>
+                                       </size>
+                                      </property>
+                                      <property name="styleSheet">
+                                       <string notr="true">color:white;</string>
+                                      </property>
+                                      <property name="text">
+                                       <string>Set</string>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                    <item>
                                      <spacer name="horizontalSpacer_22">
                                       <property name="orientation">
                                        <enum>Qt::Horizontal</enum>
@@ -7861,99 +7883,6 @@ QPushButton:hover {
                                        </size>
                                       </property>
                                      </spacer>
-                                    </item>
-                                    <item>
-                                     <widget class="QFrame" name="frame_78">
-                                      <property name="minimumSize">
-                                       <size>
-                                        <width>0</width>
-                                        <height>29</height>
-                                       </size>
-                                      </property>
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>499</width>
-                                        <height>56</height>
-                                       </size>
-                                      </property>
-                                      <property name="frameShape">
-                                       <enum>QFrame::StyledPanel</enum>
-                                      </property>
-                                      <property name="frameShadow">
-                                       <enum>QFrame::Raised</enum>
-                                      </property>
-                                      <layout class="QHBoxLayout" name="horizontalLayout_168">
-                                       <property name="leftMargin">
-                                        <number>0</number>
-                                       </property>
-                                       <property name="topMargin">
-                                        <number>0</number>
-                                       </property>
-                                       <property name="rightMargin">
-                                        <number>0</number>
-                                       </property>
-                                       <property name="bottomMargin">
-                                        <number>0</number>
-                                       </property>
-                                       <item>
-                                        <widget class="QLabel" name="label_159">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>47</width>
-                                           <height>0</height>
-                                          </size>
-                                         </property>
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>104</width>
-                                           <height>16777215</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string>Default Dataset :</string>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QComboBox" name="comboBox_default_dataset">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>120</width>
-                                           <height>0</height>
-                                          </size>
-                                         </property>
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>25</height>
-                                          </size>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QPushButton" name="set_default_database_btn">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>67</width>
-                                           <height>0</height>
-                                          </size>
-                                         </property>
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>50</width>
-                                           <height>16777215</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">color:white;</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>Set</string>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                      </layout>
-                                     </widget>
                                     </item>
                                    </layout>
                                   </widget>
@@ -18664,7 +18593,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>346</width>
+                                 <width>360</width>
                                  <height>218</height>
                                 </rect>
                                </property>

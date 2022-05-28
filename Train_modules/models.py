@@ -274,11 +274,11 @@ def resnet_unet(input_size,learning_rate=1e-3, num_class=1, mode=BINARY):
 #_____________________________________________________________________________________________________________
 def resnet_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
     preprocess_input = tf.keras.applications.resnet_v2.preprocess_input
-    base_model = tf.keras.applications.ResNet50V2(include_top=False, weights='imagenet', input_shape=input_size)
+    # base_model = tf.keras.applications.ResNet50V2(include_top=False, weights='imagenet', input_shape=input_size)
 
-    # base_model = tf.keras.applications.ResNet50V2(include_top=False, weights=None, input_shape=input_size)
-    # base_model.load_weights(
-    #     '/home/reyhane/PycharmProjects/pythonProject2/resnet50v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
+    base_model = tf.keras.applications.ResNet50V2(include_top=False, weights=None, input_shape=input_size)
+    base_model.load_weights(
+        '/home/reyhane/PycharmProjects/pythonProject2/resnet50v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
     base_model.trainable = False
 
@@ -323,11 +323,11 @@ def resnet_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, fine_tun
 #_____________________________________________________________________________________________________________________________
 def xception_cnn(input_size,learning_rate=1e-3, num_class=1, mode=BINARY, fine_tune_layer=-1, weights=None):
     preprocess_input = tf.keras.applications.xception.preprocess_input
-    base_model = tf.keras.applications.Xception(include_top=False, weights='imagenet', input_shape=input_size)
+    # base_model = tf.keras.applications.Xception(include_top=False, weights='imagenet', input_shape=input_size)
 
-    # base_model = tf.keras.applications.Xception(include_top=False, weights=None, input_shape=input_size)
-    # base_model.load_weights(
-    #     '/home/reyhane/PycharmProjects/pythonProject2/xception_weights_tf_dim_ordering_tf_kernels_notop.h5')
+    base_model = tf.keras.applications.Xception(include_top=False, weights=None, input_shape=input_size)
+    base_model.load_weights(
+        '/home/reyhane/PycharmProjects/pythonProject2/xception_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
     base_model.trainable = False
 

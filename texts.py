@@ -198,8 +198,19 @@ WARNINGS={
                  'en': ' Please select at least on dataset '},
 
         'SELECT_NO_DATASET': {'fa': ' لطفا حداقل یک دیتاست انتخاب کنید  ',
-                 'en': ' Please select at least on dataset '}
+                 'en': ' Please select at least on dataset '},
         
+        'SET_DATASET': {'fa': ' دیتاست با موفقیت تنظیم شد ',
+                 'en': ' Default dataset set successfully '},
+
+        'SET_DATASET_TITLE': {'fa': ' دیتاست پیش فرض ',
+                 'en': ' Default dataset '},
+
+        'CREATE_DATASET_TITLE': {'fa': ' وجود دیتاست ',
+                 'en': ' Dataset exist '},
+
+        'CREATE_DATASET': {'fa': ' دیتاست با این آدرس و نام وجود دارد ',
+                 'en': ' Dataset with this path and name already axist '}
         
                 #  'en': ' Error while opening image '}
 

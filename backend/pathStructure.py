@@ -48,10 +48,10 @@ def sheet_path(main_path,id):
 
 
 
-def create_dataset_stracture(path):
-
-    os.mkdir(os.path.join(path,'annotations'))
-    os.mkdir(os.path.join(path,'binary'))
-    os.mkdir(os.path.join(path,'temp_annotations'))
-    os.mkdir(os.path.join(path,'temp_images'))
+# def create_dataset_stracture(path):
+#
+#     os.mkdir(os.path.join(path,'annotations'))
+#     os.mkdir(os.path.join(path,'binary'))
+#     os.mkdir(os.path.join(path,'temp_annotations'))
+#     os.mkdir(os.path.join(path,'temp_images'))
 

@@ -29,16 +29,18 @@ class dataset_json():
 
     def create_json_dataset(self,parms):
 
-        self.set_user(parms[USER_NAME]) 
-        self.set_user_id(parms[USER_ID]) 
-        self.set_dataset_name(parms[DATASET_NAME]) 
-        self.set_path(parms[PATH],parms[DATASET_NAME]) 
-        self.set_max_size(parms[MAX_SIZE]) 
+        _, defects_info = self.db.get_defects()
+
+        self.set_user(parms['user_name'])
+        self.set_user_id(parms['user_id']) 
+        self.set_dataset_name(parms['dataset_name']) 
+        self.set_path(parms['path'])
+        self.set_max_size(parms['max_size']) 
         self.set_create_date(parms['date']) 
         self.set_modify_date('-') 
         self.set_count_defect(0) 
         self.set_count_perfect(0) 
-        self.set_parms_classification(NONE_CLASS,0)
+        self.set_parms_classification(defects_info)
 
 
 
@@ -48,12 +50,12 @@ class dataset_json():
         self.dataset_details[BINARY]=self.binary_details
 
             # return {'user_name':user_name,'user_id':user_id,'dataset_name':dataset_name,'path':path,'max_size':max_size}
-        path=os.path.join(parms[PATH],parms[DATASET_NAME])
-        self.write(os.path.join(path,str(parms[DATASET_NAME]+'.json')))
-        try:
-            pathStructure.create_dataset_stracture(path)
-        except:
-            path
+        path=parms['path']
+        self.write(os.path.join(path,str(parms['dataset_name']+'.json')))
+        # try:
+        #     pathStructure.create_dataset_stracture(path)
+        # except:
+        #     path
     def write(self,path):    
         print('write',path)
         with open(str(path), 'w') as f:
@@ -85,8 +87,8 @@ class dataset_json():
     def set_dataset_name(self, name):
         self.main_parms[DATASET_NAME] = name
 
-    def set_path(self, path,name):
-        self.main_parms[PATH] = str(path+name)
+    def set_path(self, path):
+        self.main_parms['path'] = str(path)
 
     def set_max_size(self, max_size):
         self.main_parms[MAX_SIZE] = max_size
@@ -107,9 +109,10 @@ class dataset_json():
 
         self.classification_details['defects_list'] = list(defects_list)
 
-    def set_parms_classification(self,name,count):
+    def set_parms_classification(self,defects_info):
 
-        self.classification_details[name] = count
+        for defect in defects_info:
+            self.classification_details[defect['defect_ID']] = []
 
     ######################################
     #  Modify        ///////////////
@@ -140,40 +143,40 @@ class dataset_json():
             pass
         self.write_modify(file)
     
-    def add_update_classification(self,name,AI=True,number=0):
-        count=number
+    def add_update_classification(self,path, labels):
         file=self.read_modify()
 
-        if count !=0:
-            AI=False
+        for label in labels:
+            file['classification'][label].append(path)
 
-        if str(name) in file[CLASSIFICATION].keys():
-            if AI:
-                print('ai')
-                print((file[CLASSIFICATION][name]['count']))
-                count=int(file[CLASSIFICATION][name]['count'])
-                count_dict={'count':count+1}
-                file[CLASSIFICATION][name]=count_dict
-            else :
-                count_dict={'count':count}
-                file[CLASSIFICATION][name]=count_dict
-
-        else :
-            count_dict={'count':count}
-            name_dict={name:count_dict}
-            file[CLASSIFICATION].update(name_dict)
-            print(file)
-            # self.add_update_classification(name,AI,count)
+        # if str(name) in file['classification'].keys():
+        #     if AI:
+        #         print('ai')
+        #         print((file['classification'][name]['count']))
+        #         count=int(file['classification'][name]['count'])
+        #         count_dict={'count':count+1}
+        #         file['classification'][name]=count_dict
+        #     else :
+        #         count_dict={'count':count}
+        #         file['classification'][name]=count_dict
+        #
+        # else :
+        #     count_dict={'count':count}
+        #     name_dict={name:count_dict}
+        #     file['classification'].update(name_dict)
+        #     print(file)
+        #     # self.add_update_classification(name,AI,count)
         self.write_modify(file)
 
 
     def read_modify(self):
         print('user_name',self.user_name_database)
-        default_name = self.db.get_default_dataset(self.user_name_database)
+        default_id = self.db.get_default_dataset(self.user_name_database)
+        default_name = self.db.get_dateset_name(default_id)
         print('default_name',default_name)
-        path = self.db.get_path_dataset(default_name)
-        path=os.path.join(path,default_name)
-        print(PATH,path)
+        path = self.db.get_path_dataset(default_id)
+        path=os.path.join(path, default_name)
+        print('path', path)
         with open(path+'.json') as jfile:
             file = json.load(jfile)
         return file
