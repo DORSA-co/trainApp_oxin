@@ -2,26 +2,21 @@
     "basic": {
         "dataset_name": "default_dataset",
         "date_created": "07/03/1401",
-        "date_modify": "7-3-1401-13-52-45",
+        "date_modify": "-",
         "max_size": "15 Gb",
         "path": "default_dataset",
         "user_id": 0,
         "user_name": "Default"
     },
     "binary": {
-        "count_defect": 1,
-        "count_perfect": 1
+        "count_defect": 0,
+        "count_perfect": 0
     },
     "classification": {
-        "0": [
-            "oxin_image_grabber/997/TOP/4/3.jpg",
-            "oxin_image_grabber/997/BOTTOM/4/5.jpg"
-        ],
+        "0": [],
         "101": [],
         "102": [],
-        "103": [
-            "oxin_image_grabber/997/TOP/4/3.jpg"
-        ],
+        "103": [],
         "104": []
     }
 }
