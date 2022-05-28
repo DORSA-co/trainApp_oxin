@@ -166,7 +166,8 @@ class API:
         self.classlist_slider_check.append(binary_list_funcs.create_image_slider_on_ui(ui_obj=self.ui,
                                                                                         db_obj=self.db,
                                                                                         frame_obj=self.ui.class_list_slider_frame,
-                                                                                        prefix=self.classification_image_list_name))
+                                                                                        prefix=self.classification_image_list_name,
+                                                                                        image_per_row=binary_list_funcs.n_images_per_row_classlist))
         # classlist image object
         self.classification_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
         #_____________________________________________________________________
@@ -270,7 +271,8 @@ class API:
         self.ui.binary_clearfilter_btn.clicked.connect(partial(self.clear_filters))
 
         # binary-list
-        self.ui.binary_list_dataset_btn.clicked.connect(partial(lambda: self.select_binary_dataset(page='binarylist')))
+        self.ui.binary_list.clicked.connect(partial(lambda: self.refresh_datasets_table(is_binarylist=True)))
+        #self.ui.binary_list_dataset_btn.clicked.connect(partial(lambda: self.select_binary_dataset(page='binarylist')))
         self.ui.binary_list_show_btn.clicked.connect(partial(self.load_binary_images_list))
         self.ui.binary_list_perfect_prev_btn.clicked.connect(
             partial(lambda: self.update_binary_images_on_ui(prevornext='prev')))
@@ -283,7 +285,11 @@ class API:
 
         # classification page
         self.ui.Classification_btn.clicked.connect(partial(self.refresh_classes_table))
-        #self.ui.Classification_btn.clicked.connect(partial(self.refresh_datasets_table))
+        self.ui.classification_history.clicked.connect(partial(self.refresh_classes_table))
+        self.ui.classification_class_list.clicked.connect(partial(self.refresh_classes_table))
+        self.ui.classification_training.clicked.connect(partial(self.refresh_classes_table))
+        self.ui.Classification_btn.clicked.connect(partial(self.refresh_datasets_table))
+        self.ui.classification_class_list.clicked.connect(partial(self.refresh_datasets_table))
         self.ui.classlist_show_related_img_btn.clicked.connect(partial(self.show_class_related_images))
         self.ui.classlist_prev_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='prev')))
         self.ui.classlist_next_btn.clicked.connect(partial(lambda: self.update_classlist_images_on_ui(prevornext='next')))
@@ -1301,6 +1307,7 @@ class API:
         self.refresh_binary_models_table(get_count=True)
         self.refresh_binary_models_table()
         self.filter_mode = False
+        self.ui.set_warning(texts.MESSEGES['REFRESH_TABLE'][self.language], 'binary_model_history', level=1)
 
 
     def refresh_binary_models_table(self, nextorprev=False, get_count=False, filter_mode=False):
@@ -1397,7 +1404,9 @@ class API:
             return False, res[1]
         else:
             self.filter_mode = True
+            self.ui.set_warning(texts.MESSEGES['FILTERED_RESAULTS_SUCCUSSFULL'][self.language], 'binary_model_history', level=1)
             return True, res[1]
+
 
     # clear filters for binary models
     def clear_filters(self):
@@ -1406,75 +1415,70 @@ class API:
         self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
         self.refresh_binary_models_table(get_count=True)
         self.refresh_binary_models_table()
+        self.ui.set_warning(texts.MESSEGES['FILTERED_RESAULTS_CLEAR'][self.language], 'binary_model_history', level=1)
 
     # _________________________________________________________________________________________________
     # binary-list page functions
     # load binary images list
     def load_binary_images_list(self):
         if self.binarylist_sliders_check[0] and self.binarylist_sliders_check[1]:
-            # get dataset parameters from UI
-            self.dataset_params = binary_list_funcs.get_params_from_ui(ui_obj=self.ui)
-
-            # validation
-            if len(self.dataset_params) == 0:
-                self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_PARAMS_ERROR'][self.language], 'binarylist',
-                                    level=2)
+            # get selected dataset parameters from
+            #self.dataset_params = binary_list_funcs.get_params_from_ui(ui_obj=self.ui)
+            # get selected datasets from ui
+            datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
+            selected_datasets = dataset.get_selected_datasets(ui_obj=self.ui, datasets_list=datasets_list, is_binarylist=True)
+            if len(selected_datasets) == 0:
+                self.ui.set_warning(texts.WARNINGS['SELECT_NO_DATASET'][self.language], 'binarylist', level=2)
                 return
-            if self.dataset_params['dataset_path'] == '':
-                self.ui.set_warning(texts.WARNINGS['DATASET_NOT_SELECTED'][self.language], 'binarylist', level=2)
-                return
-
+            
+            # get image/annots list related to defect
             # get image pathes
-            perfect_check, perfect_image_pathes, defect_check, defect_image_pathes = binary_list_funcs.get_image_pathes_list(
-                ds_obj=self.ds, dataset_path=self.dataset_params['dataset_path'])
+            perfect_check, perfect_image_pathes, defect_check, defect_image_pathes, defect_annot_pathes, binary_count = binary_list_funcs.get_binarylist_image_pathes_list(ds_obj=self.ds,
+                                                                                                                                        dataset_pathes=selected_datasets)
+            print(perfect_check, defect_check)
             # validation
-            if not perfect_check or not defect_check:
-                print(perfect_check, defect_check)
-                self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_FOLDERS_ERROR'][self.language], 'binarylist',
-                                    level=2)
+            if not perfect_check and not defect_check:
+                self.ui.set_warning(texts.MESSEGES['NO_IMAGE_AVAILABLE_IN_DATASET'][self.language], 'binarylist', level=2)
+            else:
+                # msg
+                self.ui.set_warning(texts.MESSEGES['LOAD_IMAGES_DATASETS'][self.language], 'binarylist', level=1)
 
-            # creat image list objects
-            # list obj
-            self.binary_image_list.add_sub_directory(self.dataset_params['dataset_path'])
+            # create list object
             # perfect dir
             if perfect_check:
-                self.binary_image_list.add(perfect_image_pathes,
-                                           name=binary_list_funcs.image_list_object_names['perfect'])
+                self.binary_image_list.add(mylist=perfect_image_pathes, name=binary_list_funcs.image_list_object_names['perfect'])
                 # create next and prev funcs
-                self.perfect_image_list_next_func = self.binary_image_list.build_next_func(
-                    name=binary_list_funcs.image_list_object_names['perfect'])
-                self.perfect_image_list_prev_func = self.binary_image_list.build_prev_func(
-                    name=binary_list_funcs.image_list_object_names['perfect'])
+                self.perfect_image_list_next_func = self.binary_image_list.build_next_func(name=binary_list_funcs.image_list_object_names['perfect'])
+                self.perfect_image_list_prev_func = self.binary_image_list.build_prev_func(name=binary_list_funcs.image_list_object_names['perfect'])
                 # connect next and prev buttons to funcs
                 self.ui.binary_list_perfect_prev_btn.setEnabled(True)
                 self.ui.binary_list_perfect_next_btn.setEnabled(True)
-
                 self.update_binary_images_on_ui()
             else:
                 self.ui.binary_list_perfect_prev_btn.setEnabled(False)
                 self.ui.binary_list_perfect_next_btn.setEnabled(False)
-
+            
             # defect
             if defect_check:
-                self.binary_image_list.add(defect_image_pathes,
-                                           name=binary_list_funcs.image_list_object_names['defect'])
+                self.binary_image_list.add(mylist=defect_image_pathes, mylist_annots=defect_annot_pathes, name=binary_list_funcs.image_list_object_names['defect'])
                 # create next and prev funcs
-                self.defect_image_list_next_func = self.binary_image_list.build_next_func(
-                    name=binary_list_funcs.image_list_object_names['defect'])
-                self.defect_image_list_prev_func = self.binary_image_list.build_prev_func(
-                    name=binary_list_funcs.image_list_object_names['defect'])
+                self.defect_image_list_next_func = self.binary_image_list.build_next_func(name=binary_list_funcs.image_list_object_names['defect'])
+                self.defect_image_list_prev_func = self.binary_image_list.build_prev_func(name=binary_list_funcs.image_list_object_names['defect'])
                 # connect next and prev buttons to funcs
                 self.ui.binary_list_defect_prev_btn.setEnabled(True)
                 self.ui.binary_list_defect_next_btn.setEnabled(True)
-
                 self.update_binary_images_on_ui(defect=True)
             else:
                 self.ui.binary_list_defect_prev_btn.setEnabled(False)
                 self.ui.binary_list_defect_next_btn.setEnabled(False)
 
+
+            # update pie chart
+            chart_funcs.update_binarylist_piechart(ui_obj=self.ui, binary_len=binary_count)
+
         # error in building image sliders
         else:
-            self.ui.set_warning(texts.WARNINGS['BUILD_BINARYLIST_SLIDER_ERROR'][self.language], 'binarylist', level=2)
+            self.ui.set_warning(texts.ERORS['BUILD_BINARYLIST_SLIDER_ERROR'][self.language], 'binarylist', level=3)
 
 
     # update slider images
@@ -1494,31 +1498,30 @@ class API:
 
         # get curent image list to set to UI
         if not defect:
-            current_image_list = self.binary_image_list.get_n_current(
-                name=binary_list_funcs.image_list_object_names['perfect'])
+            current_image_list = self.binary_image_list.get_n_current(name=binary_list_funcs.image_list_object_names['perfect'])
+            current_annot_list =  ['' for i in range(len(current_image_list))]
         else:
-            current_image_list = self.binary_image_list.get_n_current(
-                name=binary_list_funcs.image_list_object_names['defect'])
+            current_image_list, current_annot_list = self.binary_image_list.get_n_current(name=binary_list_funcs.image_list_object_names['defect'], get_annots=True)
 
         # set/update images on UI
         if not defect:
-            res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
-                                                            sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.perfect_folder),
-                                                            annot_sub_direcotory='./dataset/annotations',
-                                                            image_path_list=current_image_list,
-                                                            prefix=binary_list_funcs.widjet_prefixes['perfect'])
+            res = binary_list_funcs.set_image_to_ui_slider_full_path(ui_obj=self.ui,
+                                                                    image_path_list=current_image_list,
+                                                                    annot_path_list=current_annot_list,
+                                                                    prefix=binary_list_funcs.widjet_prefixes['perfect'],
+                                                                    image_per_row=binary_list_funcs.n_images_per_row)
         else:
-            res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
-                                                            sub_directory=os.path.join(self.dataset_params['dataset_path'], self.ds.defect_folder),
-                                                            annot_sub_direcotory='./dataset/annotations',
-                                                            image_path_list=current_image_list,
-                                                            prefix=binary_list_funcs.widjet_prefixes['defect'])
+            res = binary_list_funcs.set_image_to_ui_slider_full_path(ui_obj=self.ui,
+                                                                    image_path_list=current_image_list,
+                                                                    annot_path_list=current_annot_list,
+                                                                    prefix=binary_list_funcs.widjet_prefixes['defect'],
+                                                                    image_per_row=binary_list_funcs.n_images_per_row)
+
         # validate
         if not res:
-            self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=2)
+            self.ui.set_warning(texts.ERORS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=3)
 
 
-    
     # classification page
     #------------------------------------------------------------------------------------------------------------------------
     # get defects from database and apply to defects table
@@ -1528,17 +1531,24 @@ class API:
         classification_list_funcs.set_defects_on_ui(ui_obj=self.ui, defects_list=defects_list)
         classification_list_funcs.set_defects_on_train_ui(ui_obj=self.ui, defects_list=defects_list)
         classification_model_funcs.set_defects_on_filter_ui(ui_obj=self.ui, defects_list=defects_list)
-        #
-        self.refresh_datasets_table()
 
 
     # get datasets from database and apply to datasets table
-    def refresh_datasets_table(self):
+    def refresh_datasets_table(self, is_binarylist=False):
         # get dataset
         # read all datasets in table (must update)
         datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
         # show on UI
-        dataset.set_datasets_on_ui(ui_obj=self.ui, datasets_list=datasets_list, current_user=self.login_user_name, default_dataset=self.default_dataset_user)
+        if not is_binarylist:
+            # classlist
+            dataset.set_datasets_on_ui(ui_obj=self.ui, datasets_list=datasets_list, current_user=self.login_user_name, default_dataset=self.default_dataset_user)
+        else:
+            # binarylist
+            dataset.set_datasets_on_ui(ui_obj=self.ui,
+                                        datasets_list=datasets_list,
+                                        current_user=self.login_user_name,
+                                        default_dataset=self.default_dataset_user,
+                                        is_binarylist=is_binarylist)
     
 
     # show class related images on UI
@@ -1547,15 +1557,15 @@ class API:
         defects_list = classification_list_funcs.get_defects_from_db(db_obj=self.db)
         selected_defects = classification_list_funcs.get_selected_defects(ui_obj=self.ui)
         if len(selected_defects) > 1:
-            self.ui.show_mesagges(self.ui.classlist_msg_label, 'Cant select more than one class', color=colors_pallete.failed_red)
+            self.ui.set_warning(texts.WARNINGS['SELECT_MORE_THAN_ONE_DEFECT_CLASS'][self.language], 'classlist_msg_label', level=2)
         elif len(selected_defects) == 0:
-            self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
+            self.ui.set_warning(texts.WARNINGS['SELECT_NO_DEFECT_CLASS'][self.language], 'classlist_msg_label', level=2)
         else:
             # get selected datasets from ui
             datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
             selected_datasets = dataset.get_selected_datasets(ui_obj=self.ui, datasets_list=datasets_list)
             if len(selected_datasets) == 0:
-                self.ui.show_mesagges(self.ui.classlist_msg_label, 'Please select at least one dataset', color=colors_pallete.failed_red)
+                self.ui.set_warning(texts.WARNINGS['SELECT_NO_DATASET'][self.language], 'classlist_msg_label', level=2)
                 return
 
             # get image/annots list related to defect
@@ -1572,13 +1582,13 @@ class API:
             # no images available
             if len(annotation_list) == 0 and len(image_list) == 0:
                 # msg
-                self.ui.show_mesagges(self.ui.classlist_msg_label, 'No image(s) available with this defect', color=colors_pallete.failed_red)
+                self.ui.set_warning(texts.MESSEGES['NO_IMAGE_AVAILABLE_WITH_DEFECT'][self.language], 'classlist_msg_label', level=2)
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(False)
                 self.ui.classlist_next_btn.setEnabled(False)
             else:
                 # msg
-                self.ui.show_mesagges(self.ui.classlist_msg_label, 'Images with this defect are loaded', color=colors_pallete.successfull_green)
+                self.ui.set_warning(texts.MESSEGES['LOAD_IMAGES_WITH_DEFECT'][self.language], 'classlist_msg_label', level=1)
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(True)
                 self.ui.classlist_next_btn.setEnabled(True)
@@ -1603,7 +1613,8 @@ class API:
         res = binary_list_funcs.set_image_to_ui_slider_full_path(ui_obj=self.ui,
                                                                 image_path_list=current_image_list,
                                                                 annot_path_list=current_annots_list,
-                                                                prefix=self.classification_image_list_name)
+                                                                prefix=self.classification_image_list_name,
+                                                                image_per_row=binary_list_funcs.n_images_per_row_classlist)
 
         # validate (must update)
         # if not res:
@@ -1631,7 +1642,11 @@ class API:
 
     # pie chart funcs
     def create_classlist_pie_chart(self):
+        # classlist page
         chart_funcs.create_classlist_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binary_chart_frame, frame_obj_classlist=self.ui.classlist_chart_frame)
+        # binarylist page
+        chart_funcs.create_binarylist_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binarylist_chart_frame)
+
 
     
     # _________________________________________________________________________________________________
@@ -1642,6 +1657,7 @@ class API:
         self.refresh_cls_models_table(get_count=True)
         self.refresh_cls_models_table()
         self.cls_filter_mode = False
+        self.ui.set_warning(texts.MESSEGES['REFRESH_TABLE'][self.language], 'classification_model_history', level=1)
 
 
     def refresh_cls_models_table(self, nextorprev=False, get_count=False, filter_mode=False):
@@ -1737,7 +1753,9 @@ class API:
             return False, res[1]
         else:
             self.cls_filter_mode = True
+            self.ui.set_warning(texts.MESSEGES['FILTERED_RESAULTS_SUCCUSSFULL'][self.language], 'classification_model_history', level=1)
             return True, res[1]
+            
     
     
     # clear filters for binary models
@@ -1747,6 +1765,7 @@ class API:
         self.ui.cls_tabel_page.setText(str(self.clsmodel_tabel_itr))
         self.refresh_cls_models_table(get_count=True)
         self.refresh_cls_models_table()
+        self.ui.set_warning(texts.MESSEGES['FILTERED_RESAULTS_CLEAR'][self.language], 'classification_model_history', level=1)
 
 
 

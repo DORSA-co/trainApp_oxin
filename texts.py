@@ -3,8 +3,89 @@
 
 ERORS={
 
+        'BUILD_BINARYLIST_SLIDER_ERROR': {'fa': ' خطای ساخت اسلایدر تصاویر ',
+                 'en': ' Error while building slider(s) '},
 
+        'READ_BINARYLIST_PARAMS_ERROR': {'fa': ' خطای دریافت اطلاعات دیتاست ',
+                 'en': ' Error while reading dataset parameters '},
 
+        'READ_BINARYLIST_FOLDERS_ERROR': {'fa': ' خطای خواندن فولدر تصاویر معیوب/سالم ',
+                 'en': ' Error while reading defect/perfect folders '},
+        
+        'READ_BINARYLIST_IMAGES_ERROR': {'fa': ' خطای دریافت تصاویر معیوب/سالم ',
+                 'en': ' Error while reading defect/perfect images '},
+
+        'MAXIMIZE_IMAGE_ERROR': {'fa': ' خطای نمایش تصویر ',
+                 'en': ' Error while opening image '},
+
+        'EPOCH_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای اپوک صحیح نیست ',
+                 'en': ' Epoch range is not correct '},
+
+        'EPOCH_FORMAT_INVALID': {'fa': ' فرمت واردشده برای اپوک نامعتبر است ',
+                 'en': ' Epoch format invalid '},
+
+        'TEPOCH_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای تیونینگ اپوک صحیح نیست ',
+                 'en': ' Tuning epoch range is not correct '},
+
+        'TEPOCH_FORMAT_INVALID': {'fa': ' فرمت واردشده برای تیونینگ اپوک نامعتبر است ',
+                 'en': ' Tuning epoch format invalid '},
+
+        'BATCHSIZE_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای سایز بچ صحیح نیست ',
+                 'en': ' Batch-size range is not correct '},
+
+        'BATCHSIZE_FORMAT_INVALID': {'fa': ' فرمت واردشده برای سایز بچ نامعتبر است ',
+                 'en': ' Batch-size format invalid '},
+
+        'SPLITRATIO_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای نسبت اسپلیت صحیح نیست ',
+                 'en': ' Split-ratio range is not correct '},
+
+        'SPLITRATIO_FORMAT_INVALID': {'fa': ' فرمت واردشده برای نسبت اسپلیت نامعتبر است ',
+                 'en': ' Split-ratio format invalid '},
+
+        'LOSS_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای خطا صحیح نیست ',
+                 'en': ' Loss range is not correct '},
+
+        'LOSS_FORMAT_INVALID': {'fa': ' فرمت واردشده برای خطا نامعتبر است ',
+                 'en': ' Loss format invalid '},
+
+        'ACCU_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای دقت صحیح نیست ',
+                 'en': ' Accuracy range is not correct '},
+
+        'ACCU_FORMAT_INVALID': {'fa': ' فرمت واردشده برای دقت نامعتبر است ',
+                 'en': ' Accuracy format invalid '},
+                 
+        'PREC_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای پرسیژن صحیح نیست ',
+                 'en': ' Precision range is not correct '},
+
+        'PREC_FORMAT_INVALID': {'fa': ' فرمت واردشده برای پرسیژن نامعتبر است ',
+                 'en': ' Precision format invalid '},
+
+        'RECA_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای ریکال صحیح نیست ',
+                 'en': ' Recall range is not correct '},
+
+        'RECA_FORMAT_INVALID': {'fa': ' فرمت واردشده برای ریکال نامعتبر است ',
+                 'en': ' Recall format invalid '},
+        
+        'YEAR_RANGE_INCORRECT': {'fa': ' مقدار وارد شده برای سال خارج از بازه است ',
+                 'en': ' Start/end year not in range '},
+        
+        'YEAR_FORMAT_INVALID': {'fa': ' فرمت واردشده برای سال نامعتبر است و یا فیلدها خالی هستند ',
+                 'en': ' Year format invalid/fields empty, Please check format of fill both fields '},
+
+        'MONTH_RANGE_INCORRECT': {'fa': ' مقدار وارد شده برای ماه خارج از بازه است ',
+                 'en': ' Start/end month not in range '},
+        
+        'MONTH_FORMAT_INVALID': {'fa': ' فرمت واردشده برای ماه نامعتبر است و یا فیلدها خالی هستند ',
+                 'en': ' Month format invalid/fields empty, Please check format of fill both fields '},
+
+        'DAY_RANGE_INCORRECT': {'fa': ' مقدار وارد شده برای روز خارج از بازه است ',
+                 'en': ' Start/end day not in range '},
+        
+        'DAY_FORMAT_INVALID': {'fa': ' فرمت واردشده برای روز نامعتبر است و یا فیلدها خالی هستند ',
+                 'en': ' Day format invalid/fields empty, Please check format of fill both fields '},
+        
+        'DATE_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای تاریخ صحیح نیست ',
+                 'en': ' Date range is not correct '}
     
 
 }
@@ -70,24 +151,9 @@ WARNINGS={
                  'en': ' There is no connection '},                
 
 
-        
         'DATASET_NOT_SELECTED': {'fa': ' دیتاست انتخاب نشده است ',
                  'en': ' No dataset selected '},
         
-        'BUILD_BINARYLIST_SLIDER_ERROR': {'fa': ' خطای ساخت اسلایدر تصاویر ',
-                 'en': ' Error while building slider(s) '},
-        
-        'READ_BINARYLIST_PARAMS_ERROR': {'fa': ' خطای دریافت اطلاعات دیتاست ',
-                 'en': ' Error while reading dataset parameters '},
-
-        'READ_BINARYLIST_FOLDERS_ERROR': {'fa': ' خطای خواندن فولدر تصاویر معیوب/سالم ',
-                 'en': ' Error while reading defect/perfect folders '},
-        
-        'READ_BINARYLIST_IMAGES_ERROR': {'fa': ' خطای دریافت تصاویر معیوب/سالم ',
-                 'en': ' Error while reading defect/perfect images '},
-
-        'BINARYLIST_MAXIMIZE_IMAGE_ERROR': {'fa': ' خطای نمایش تصویر ',
-                 'en': ' Error while opening image '},
         
         'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
                  'en': ' Are you sure want to logout ? '},
@@ -96,7 +162,44 @@ WARNINGS={
                  'en': ' You are not logged in '},
         
         'CREATE_DATABASE': {'fa': ' آیا از ایجاد دیتابیس جدید مطمئن هستید ؟ ',
-                 'en': ' Are you sure want to create new database ? '}
+                 'en': ' Are you sure want to create new database ? '},
+
+        'EPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
+                 'en': ' Epoch range fields cant be empty, Please fill both them or leave them empty '},
+
+        'TEPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به تیونیگ اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
+                 'en': ' Tuning epoch range fields cant be empty, Please fill both them or leave them empty '},
+
+        'BATCHSIZE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به سایز بچ را مقدار دهید یا هر دو را خالی بگذارید ',
+                 'en': ' Batch-size range fields cant be empty, Please fill both them or leave them empty '},
+
+        'SPLITRATIO_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به نسبت اسپلیت را مقدار دهید یا هر دو را خالی بگذارید ',
+                 'en': ' Split-ratio range fields cant be empty, Please fill both them or leave them empty '},
+
+        'LOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطا را مقدار دهید یا هر دو را خالی بگذارید ',
+                 'en': ' Loss range fields cant be empty, Please fill both them or leave them empty '},
+
+        'ACCU_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به دقت را مقدار دهید یا هر دو را خالی بگذارید ',
+                 'en': ' Accuracy range fields cant be empty, Please fill both them or leave them empty '},
+
+        'PREC_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به پرسیژن را مقدار دهید یا هر دو را خالی بگذارید ',
+                 'en': ' Precision range fields cant be empty, Please fill both them or leave them empty '},
+
+        'RECA_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به ریکال را مقدار دهید یا هر دو را خالی بگذارید ',
+                 'en': ' Recall range fields cant be empty, Please fill both them or leave them empty '},
+
+        'SELECT_MORE_THAN_ONE_DEFECT_CLASS': {'fa': ' امکان انتخاب چند کلاس عیب به صورت همزمان وجود ندارد ',
+                 'en': ' Cant select more than one defect class at same time '},
+
+        'SELECT_NO_DEFECT_CLASS': {'fa': ' لطفا یک کلاس عیب انتخاب کنید  ',
+                 'en': ' Please select a defect class '},
+
+        'SELECT_NO_DATASET': {'fa': ' لطفا حداقل یک دیتاست انتخاب کنید  ',
+                 'en': ' Please select at least on dataset '},
+
+        'SELECT_NO_DATASET': {'fa': ' لطفا حداقل یک دیتاست انتخاب کنید  ',
+                 'en': ' Please select at least on dataset '}
+        
         
                 #  'en': ' Error while opening image '}
 
@@ -104,7 +207,30 @@ WARNINGS={
 MESSEGES = {
 
         'SELECT_IMAGE': {'fa':'دوربین: {} | فریم: {}',
-                         'en':'Camera: {} | Frame: {} '}
+                         'en':'Camera: {} | Frame: {} '},
+
+        'FILTERED_RESAULTS_SUCCUSSFULL' : {'fa': ' نتایج اعمال فیلتر با موفقیت بازگردانده شد ',
+                 'en': ' Filtered resaults returened succussfully '},
+
+        'FILTERED_RESAULTS_CLEAR' : {'fa': ' فیلترهای اعمال شده پاک شدند ',
+                 'en': ' Filters cleared '},
+
+        'REFRESH_TABLE' : {'fa': ' جدول(ها) رفرش شدند، فیلترهای اعمال شده پاک شدند ',
+                 'en': ' Table(s) refreshed succussfully, Filters cleared  '},
+
+        'LOAD_IMAGES_WITH_DEFECT' : {'fa': ' تصاویر دارای کلاس عیب موردنظر بارگزاری شدند ',
+                 'en': ' Image records containing this defect are loaded'},
+
+        'LOAD_IMAGES_DATASETS' : {'fa': ' تصاویر دیتاست های انتخاب شده بارگزاری شدند ',
+                 'en': ' Image records belonging selected datasets are loaded'},
+
+        'NO_IMAGE_AVAILABLE_WITH_DEFECT': {'fa': ' هیچ تصویر دارای کلاس موردنظر در دیتاست های انتخاب شده یافت نشد  ',
+                 'en': ' No image available with this defect class in selected datasets'},
+
+        'NO_IMAGE_AVAILABLE_IN_DATASET': {'fa': ' هیچ تصویری در دیتاست های انتخاب شده یافت نشد  ',
+                 'en': ' No image available in selected datasets'},
+
+            
                          
 }
 
