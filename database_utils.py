@@ -8,7 +8,7 @@ import os
 from backend import pathStructure, binary_model_funcs
 import inspect
 class dataBaseUtils():
-    def __init__(self,user_name='root',password='root') :
+    def __init__(self,user_name='root',password='') :
         self.db=database.dataBase(user_name,password,'localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'

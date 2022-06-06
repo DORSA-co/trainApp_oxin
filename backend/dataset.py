@@ -95,15 +95,15 @@ class Dataset:
         name = ''
         pos = list(map(lambda x:str(x), pos))
         name = ''.join(pos)
-        name = name.replace(',','_')
+        name = name.replace(',', '_')
         name = name.replace(' ', '')
         name = name.replace('(', '')
         name = name.replace(')', '')
         return name
 
-    def save_to_temp(self, imgs_path, sheets):
-        for img_path, sheet in zip(imgs_path, sheets):
-            image_name = self.__random_name__(10) + self.format_image
+    def save_to_temp(self, imgs_path, sheets, positions):
+        for img_path, sheet, pos in zip(imgs_path, sheets, positions):
+            image_name = self.__file_name__(pos) + self.format_image
             res_path = os.path.join(self.images_temp_path, image_name)
             shutil.copyfile(img_path, res_path)
             self.create_annotation_to_temp(sheet, image_name)

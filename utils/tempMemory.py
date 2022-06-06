@@ -47,9 +47,10 @@ class manageSelectedImage:
         
 
     def remove_by_index(self,idxs):
+        subjects = []
         for idx in idxs:
-            subject = self.selects_list[idx]
-            
+            subjects.append(self.selects_list[idx])
+        for subject in subjects:
             self.selects_dict[subject[0]][subject[1]].remove(subject[2])
             self.selects_list.remove( subject )
 
