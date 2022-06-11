@@ -598,11 +598,7 @@ class UI_main_window(QMainWindow, ui):
         self.showMinimized()
 
     def close_win(self):
-        api.live.stop = True
-        try:
-            api.camera_process.join()
-        except:
-            pass
+        api.stop_capture_func()
         self.close()
         sys.exit()
 

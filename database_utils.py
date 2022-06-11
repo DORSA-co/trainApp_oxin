@@ -54,6 +54,25 @@ class dataBaseUtils():
         )
         return sheet_obj
 
+    # ________________________________________________________________
+    #
+    # ________________________________________________________________
+    def set_sheet(self, coil_dict):
+        data = ()
+        db_headers = ''
+        for key in coil_dict:
+            data = data + (coil_dict[key],)
+            db_headers = db_headers + key + ','
+        db_headers = '(' + db_headers[:-1] + ')'
+        # print('bmodel_record:', data, 'cols:', db_headers)
+        try:
+            self.db.add_record(data, table_name=self.sheets_info_tabel, parametrs=db_headers,
+                               len_parameters=len(coil_dict))
+            return 'True'
+
+        except:
+            return 'Databas Eror'
+
     #________________________________________________________________
     #
     #________________________________________________________________

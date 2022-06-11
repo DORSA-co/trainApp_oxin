@@ -34,6 +34,7 @@ from PyQt5.QtGui import QPixmap, QImage
 # from backend import add_remove_label
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
+from PySide6.QtCore import QThread
 from functools import partial
 from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs,date_funcs, classification_model_funcs, classification_list_funcs, dataset, colors_pallete
 
@@ -56,7 +57,7 @@ from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
 from login_win.login_api import login_API
-from camera_live import live_manager
+from camera_live import ImageManager
 from multiprocessing import Process
 import dataset_utils
 
@@ -104,7 +105,8 @@ class API:
         self.bmodel_tabel_itr = 1
         self.bmodel_count = 0
         self.filter_mode = False
-        self.proc_start_flag = True
+        self.flag_all_camera = False
+        self.start_capture_flag = False
 
         # binarylist dataset parms
         self.dataset_params = {}
@@ -173,12 +175,11 @@ class API:
                                                                                         image_per_row=binary_list_funcs.n_images_per_row_classlist))
         # classlist image object
         self.classification_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
-        #_____________________________________________________________________
-
-        # self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
-        self.ui.set_list_combo_boxes(self.ui.comboBox_connected_cams, ['1', '2', '13', '14'])
-        self.live = live_manager(self.db.get_parent_path(), self.ui, self.cameras)
-        self.camera_process = threading.Thread(target=self.live.read_camera_images)
+        # _____________________________________________________________________
+        # self.camera_thread = QThread()
+        # self.ImageManager = ImageManager(self.login_user_name, self.ui, self.cameras)
+        # self.ImageManager.moveToThread(self.camera_thread)
+        # self.camera_thread.started.connect(self.ImageManager.start)
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -188,7 +189,7 @@ class API:
 
         self.create_classlist_pie_chart()
 
-        
+
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, 'sheets_id')
@@ -270,7 +271,9 @@ class API:
         # data aquization
         self.ui.connect_camera_btn.clicked.connect(partial(self.camera_connection_func))
         self.ui.disconnect_camera_btn.clicked.connect(partial(self.camera_disconnection_func))
-        self.ui.comboBox_connected_cams.currentTextChanged.connect(partial(self.change_live_camera))
+        self.ui.start_capture_btn.clicked.connect(partial(self.start_capture_func))
+        self.ui.stop_capture_btn.clicked.connect(partial(self.stop_capture_func))
+        # self.ui.comboBox_connected_cams.currentTextChanged.connect(partial(self.change_live_camera))
 
         # self.ui.comboBox_cam_select.currentTextChanged.connect(self.combo_image_preccess)
 
@@ -333,7 +336,7 @@ class API:
         if self.logged_in:
             eval('self.ui.set_widget_page(self.ui.stackedWidget,dic["{}"])'.format(btn_name))
             # eval(self.stackedWidget.setCurrentWidget(self.page_Binary))
-        
+
         else:
             self.ui.set_warning(texts.WARNINGS['LOGIN_FIRST'][self.language], 'app_erors', level=2)
 
@@ -1006,6 +1009,7 @@ class API:
         self.ui.default_dataset.setText(str(login_info[1]['default_dataset']))
         self.ui.today_date.setText(str(date_funcs.get_date(folder_path=True)))
         self.login_user_name = (str(login_info[1]['user_name']))
+        self.ImageManager.set_user(self.login_user_name)
         self.ds_json.set_user_name_database(self.login_user_name)
         #print('username:', self.login_user_name)
 
@@ -1397,13 +1401,13 @@ class API:
 
     def camera_connection_func(self):
 
+        self.ui.set_enabel(self.ui.start_capture_btn, False)
+        self.ui.set_enabel(self.ui.stop_capture_btn, False)
+        self.ui.set_enabel(self.ui.connect_camera_btn, False)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, False)
+
         cam_num = self.ui.get_camera_parms()
         print('cam num', cam_num)
-
-        if self.proc_start_flag:
-            self.camera_process.start()
-            # self.live.save_camera_images(self.cameras)
-            self.proc_start_flag = False
 
         if cam_num != 'All':
 
@@ -1431,12 +1435,22 @@ class API:
 
                 self.ui.set_img_btn_camera(cam_num, status=False)
 
+                if not self.flag_all_camera:
+                    self.ui.set_enabel(self.ui.start_capture_btn, True)
+                    self.ui.set_enabel(self.ui.connect_camera_btn, True)
+                    self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
         else:
+            self.flag_all_camera = True
             self.auto_connect_all_cameras()
 
         self.set_available_caemras()
 
+
     def camera_disconnection_func(self):
+        self.ui.set_enabel(self.ui.start_capture_btn, False)
+        self.ui.set_enabel(self.ui.stop_capture_btn, False)
+        self.ui.set_enabel(self.ui.connect_camera_btn, False)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, False)
 
         cam_num = self.ui.get_camera_parms()
         cam_parms = self.get_camera_config(str(cam_num))
@@ -1454,6 +1468,10 @@ class API:
         else:
             self.ui.set_warning(texts.WARNINGS['disconnect_eror'][self.language], 'camera_connection', level=3)
 
+        self.ui.set_enabel(self.ui.start_capture_btn, True)
+        self.ui.set_enabel(self.ui.connect_camera_btn, True)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
+
     def auto_connect_all_cameras(self, first_cam=1):
 
         if self.index_num < 24:
@@ -1465,11 +1483,39 @@ class API:
             print('asd')
 
         elif self.index_num == 24:
-
             self.index_num = 0
+            self.flag_all_camera = False
+            self.ui.set_enabel(self.ui.start_capture_btn, True)
+            self.ui.set_enabel(self.ui.connect_camera_btn, True)
+            self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
 
-    def change_live_camera(self, text):
-        self.live.n_camera_live = int(text)
+    def start_capture_func(self):
+        self.ui.set_enabel(self.ui.connect_camera_btn, False)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, False)
+        self.ui.set_enabel(self.ui.start_capture_btn, False)
+        self.ui.set_enabel(self.ui.stop_capture_btn, True)
+
+        self.camera_thread = QThread()
+        self.ImageManager = ImageManager(self.login_user_name, self.ui, self.cameras)
+        self.ImageManager.moveToThread(self.camera_thread)
+        self.camera_thread.started.connect(self.ImageManager.start)
+        self.camera_thread.start()
+        self.start_capture_flag = True
+
+    def stop_capture_func(self):
+        self.ui.set_enabel(self.ui.connect_camera_btn, True)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
+        self.ui.set_enabel(self.ui.start_capture_btn, True)
+        self.ui.set_enabel(self.ui.stop_capture_btn, False)
+
+        if self.start_capture_flag:
+            self.ImageManager.set_stop_capture()
+            self.camera_thread.quit()
+            self.camera_thread.wait()
+            self.start_capture_flag = False
+
+    # def change_live_camera(self, text):
+    #     self.live.n_camera_live = int(text)
 
 
     # _________________________________________________________________________________________________
@@ -1605,7 +1651,7 @@ class API:
             if len(selected_datasets) == 0:
                 self.ui.set_warning(texts.WARNINGS['SELECT_NO_DATASET'][self.language], 'binarylist', level=2)
                 return
-            
+
             # get image/annots list related to defect
             # get image pathes
             perfect_check, perfect_image_pathes, defect_check, defect_image_pathes, defect_annot_pathes, binary_count = binary_list_funcs.get_binarylist_image_pathes_list(ds_obj=self.ds,
@@ -1632,7 +1678,7 @@ class API:
             else:
                 self.ui.binary_list_perfect_prev_btn.setEnabled(False)
                 self.ui.binary_list_perfect_next_btn.setEnabled(False)
-            
+
             # defect
             if defect_check:
                 self.binary_image_list.add(mylist=defect_image_pathes, mylist_annots=defect_annot_pathes, name=binary_list_funcs.image_list_object_names['defect'])
@@ -1727,7 +1773,7 @@ class API:
                                         current_user=self.login_user_name,
                                         default_dataset=self.default_dataset_user,
                                         is_binarylist=is_binarylist)
-    
+
 
     # show class related images on UI
     def show_class_related_images(self):
@@ -1756,7 +1802,7 @@ class API:
             self.classification_image_list_prev_func = self.classification_image_list.build_prev_func(name=self.classification_image_list_name)
             # 
             self.update_classlist_images_on_ui()
-            
+
             # no images available
             if len(annotation_list) == 0 and len(image_list) == 0:
                 # msg
@@ -1770,11 +1816,11 @@ class API:
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(True)
                 self.ui.classlist_next_btn.setEnabled(True)
-            
+
             # update pie chart
             chart_funcs.update_classlist_piechart(ui_obj=self.ui, binary_len=binary_count, classes_len=classes_count, classes_list=defects_list)
-        
-    
+
+
     # update slider images
     def update_classlist_images_on_ui(self, prevornext='False'):
         # next or prev on list
@@ -1798,7 +1844,7 @@ class API:
         # if not res:
         #     self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=2)
 
-    
+
     # check classification params
     def check_classification_train_params(self):
         # get train params from UI
@@ -1807,7 +1853,7 @@ class API:
         #
         if len(selected_defects) == 0:
             self.ui.show_mesagges(self.ui.classification_train_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
-        
+
         else:
             cls_parms += [selected_defects]
             print('cls params:', cls_parms)
@@ -1816,7 +1862,7 @@ class API:
         #
         #bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         #binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
-    
+
 
     # pie chart funcs
     def create_classlist_pie_chart(self):
@@ -1826,7 +1872,7 @@ class API:
         chart_funcs.create_binarylist_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binarylist_chart_frame)
 
 
-    
+
     # _________________________________________________________________________________________________
     # classification-model history page functions
     def refresh_cls_models_table_onevent(self):
@@ -1885,7 +1931,7 @@ class API:
         else:
             classification_model_funcs.set_clsmodels_on_ui_tabel(ui_obj=self.ui, models_list=clsmodels_list)
             return True
-    
+
 
     # next and prev buttons for binary models table functionality
     def cls_model_tabel_nextorprev(self, next=True, check=False):
@@ -1933,14 +1979,15 @@ class API:
             self.cls_filter_mode = True
             self.ui.set_warning(texts.MESSEGES['FILTERED_RESAULTS_SUCCUSSFULL'][self.language], 'classification_model_history', level=1)
             return True, res[1]
-            
-    
-    
+
+
+
     # clear filters for binary models
     def clear_filters_cls(self):
         self.cls_filter_mode = False
         self.clsmodel_tabel_itr = 1
         self.ui.cls_tabel_page.setText(str(self.clsmodel_tabel_itr))
+        self.refresh_cls_models_table(get_count=True)
         self.refresh_cls_models_table(get_count=True)
         self.refresh_cls_models_table()
         self.ui.set_warning(texts.MESSEGES['FILTERED_RESAULTS_CLEAR'][self.language], 'classification_model_history', level=1)
@@ -1949,13 +1996,12 @@ class API:
 
     #_____________________________________________________________________________________________________
 
+
+
     def set_available_caemras(self):
-
-        connected_cameras = self.cameras.get_connected_cameras()
-
-        sn_available = connected_cameras.keys()
-
-        # self.ui.set_list_combo_boxes(self.ui.comboBox_connected_cams, sn_available)
+        connected_cameras = self.cameras.get_connected_cameras_by_id()
+        sn_available = list(connected_cameras.keys())
+        self.ui.set_list_combo_boxes(self.ui.comboBox_connected_cams, sn_available)
         ############################################################################
         ############################################################################
         ############################################################################

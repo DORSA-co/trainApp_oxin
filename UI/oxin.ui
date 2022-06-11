@@ -2498,22 +2498,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                              <attribute name="title">
                               <string>LIVE</string>
                              </attribute>
-                             <layout class="QVBoxLayout" name="verticalLayout_97">
-                              <property name="spacing">
-                               <number>0</number>
-                              </property>
-                              <property name="leftMargin">
-                               <number>3</number>
-                              </property>
-                              <property name="topMargin">
-                               <number>3</number>
-                              </property>
-                              <property name="rightMargin">
-                               <number>3</number>
-                              </property>
-                              <property name="bottomMargin">
-                               <number>3</number>
-                              </property>
+                             <layout class="QVBoxLayout" name="verticalLayout_89">
                               <item>
                                <widget class="QFrame" name="frame_73">
                                 <property name="maximumSize">
@@ -3261,7 +3246,7 @@ border-color:Transparent</string>
                                  <item>
                                   <widget class="QLabel" name="camera_connection_msg">
                                    <property name="text">
-                                    <string>TextLabel</string>
+                                    <string/>
                                    </property>
                                   </widget>
                                  </item>
@@ -3280,6 +3265,56 @@ border-color:Transparent</string>
                                  </item>
                                 </layout>
                                </widget>
+                              </item>
+                              <item>
+                               <layout class="QHBoxLayout" name="horizontalLayout_117">
+                                <item>
+                                 <widget class="QPushButton" name="start_capture_btn">
+                                  <property name="enabled">
+                                   <bool>false</bool>
+                                  </property>
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>16777215</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="cursor">
+                                   <cursorShape>PointingHandCursor</cursorShape>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color:rgb(255,255,255);
+color:rgb(0,0,0);</string>
+                                  </property>
+                                  <property name="text">
+                                   <string>Start Capture</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QPushButton" name="stop_capture_btn">
+                                  <property name="enabled">
+                                   <bool>false</bool>
+                                  </property>
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>16777215</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="cursor">
+                                   <cursorShape>PointingHandCursor</cursorShape>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">background-color:rgb(255,255,255);
+color:rgb(0,0,0);</string>
+                                  </property>
+                                  <property name="text">
+                                   <string>Stop Capture</string>
+                                  </property>
+                                 </widget>
+                                </item>
+                               </layout>
                               </item>
                               <item>
                                <widget class="QTabWidget" name="tabWidget">
@@ -3396,7 +3431,7 @@ QComboBox QAbstractItemView {
                                   <item>
                                    <widget class="QLabel" name="live1">
                                     <property name="text">
-                                     <string>TextLabel</string>
+                                     <string/>
                                     </property>
                                     <property name="scaledContents">
                                      <bool>true</bool>
@@ -18281,7 +18316,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>312</width>
+                                 <width>218</width>
                                  <height>218</height>
                                 </rect>
                                </property>

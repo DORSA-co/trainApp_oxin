@@ -1,3 +1,4 @@
+import json
 import os
 import cv2
 import numpy as np
@@ -7,6 +8,8 @@ import threading
 PATH = '/home/reyhane/camera'
 coil_number = 889
 f = 1
+coil_dict = {'sheet_id': 996, 'heat_number': '0', 'ps_number': '1111', 'pdl_number': '2222.0', 'lenght': 1000.0,
+             'width': 480.0, 'thickness': None}
 
 
 def cameras_simulator(cameras_numbers):
@@ -52,7 +55,9 @@ def plc_simulator():
     global f
     coil_number += 1
     f = 1
+    coil_dict['sheet_id'] = coil_number
     with open('plc.txt', 'w', encoding='Utf-8') as plc:
-        plc.write(str(coil_number))
+        plc.write(str(coil_dict))
 
     threading.Timer(12, plc_simulator).start()
+
