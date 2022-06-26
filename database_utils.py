@@ -34,7 +34,7 @@ class dataBaseUtils():
     #________________________________________________________________
     def build_sheet(self,record):
         y,m,d = record['date'].split('/')
-        hh,mm = record['time'].split(':')
+        hh,mm,_ = record['time'].split(':')
         sheet_obj = Sheet(
             id          = record['id'],
             sheet_id    = record['sheet_id'],

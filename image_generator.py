@@ -8,7 +8,7 @@ import numpy as np
 ncam = 13
 nframe=50
 for cnt in range(995,998):
-    path = 'D:\oxin_image_grabber\{}'.format(cnt)
+    path = '/home/reyhane/oxin_image_grabber/{}'.format(cnt)
     if not os.path.exists(path):
         os.makedirs(path)
     for side in ['TOP', 'BOTTOM']:
@@ -28,4 +28,4 @@ for cnt in range(995,998):
                             2,
                             cv2.FONT_HERSHEY_COMPLEX_SMALL,255)
                 # print(res_path)
-                cv2.imwrite(os.path.join(res_path, str(f)+'.jpg'), img)
+                cv2.imwrite(os.path.join(res_path, str(f)+'.png'), img)

@@ -57,7 +57,7 @@ from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
 from login_win.login_api import login_API
-from camera_live import ImageManager
+from camera_live_thread import ImageManager
 from multiprocessing import Process
 import dataset_utils
 
@@ -107,6 +107,7 @@ class API:
         self.filter_mode = False
         self.flag_all_camera = False
         self.start_capture_flag = False
+        self.live_type = 0
 
         # binarylist dataset parms
         self.dataset_params = {}
@@ -176,10 +177,8 @@ class API:
         # classlist image object
         self.classification_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
         # _____________________________________________________________________
-        # self.camera_thread = QThread()
-        # self.ImageManager = ImageManager(self.login_user_name, self.ui, self.cameras)
-        # self.ImageManager.moveToThread(self.camera_thread)
-        # self.camera_thread.started.connect(self.ImageManager.start)
+        self.ImageManager = ImageManager(self.login_user_name, self.ui, self.cameras)
+
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -233,7 +232,7 @@ class API:
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
         self.ui.add_btn_SI.clicked.connect(partial(self.append_select_img))
         self.ui.add_filter_btn_SI.clicked.connect(partial(self.append_filter_img))
-        self.ui.remove_filter_btn_SI.clicked.connect(partial(self.remove_filter_img))
+        self.ui.select_filter_btn_SI.clicked.connect(partial(self.select_filter_img))
         self.ui.remove_btn_SI.clicked.connect(partial(self.remove_select_img))
         self.ui.load_coil_btn.clicked.connect(partial(self.show_sheet_loader))
         self.ui.next_coil_btn.clicked.connect(partial(self.next_sheet))
@@ -273,7 +272,8 @@ class API:
         self.ui.disconnect_camera_btn.clicked.connect(partial(self.camera_disconnection_func))
         self.ui.start_capture_btn.clicked.connect(partial(self.start_capture_func))
         self.ui.stop_capture_btn.clicked.connect(partial(self.stop_capture_func))
-        # self.ui.comboBox_connected_cams.currentTextChanged.connect(partial(self.change_live_camera))
+        self.ui.comboBox_connected_cams.currentTextChanged.connect(partial(self.change_live_camera))
+        self.ui.live_tabWidget.currentChanged.connect(partial(self.change_live_type))
 
         # self.ui.comboBox_cam_select.currentTextChanged.connect(self.combo_image_preccess)
 
@@ -389,7 +389,7 @@ class API:
     # ----------------------------------------------------------------------------------------
     def load_sheets(self):
         sheets_id = self.ui.load_sheets_win.get_selected_sheetid()
-        if sheets_id == []:
+        if not sheets_id:
             self.ui.load_sheets_win.close()
             self.ui.set_warning(texts.WARNINGS['NO_SHEET_LOADED'][self.language], 'data_auquzation', level=2)
             return
@@ -444,7 +444,7 @@ class API:
                     side
                 )
 
-                self.thechnicals_backend[side].update_selected(selecteds)
+                # self.thechnicals_backend[side].update_selected(selecteds)
                 self.current_technical_side = side
                 self.refresh_thechnical(fp=1)  #
 
@@ -587,27 +587,27 @@ class API:
             self.ui.set_warning(texts.WARNINGS['FRAME_EMPTY'][self.language], 'data_auquzation', level=2)
             return
 
-
-
         for s in side:
             for c in cameras:
                 for f in frames:
                     self.selected_images_for_label.add(sheet_id,
                                                        s,
                                                        (c, f))
-                    self.thechnicals_backend[s].update_selected(
-                        [(c, f)]
-                    )
-
-                    self.refresh_thechnical(fp=1)
-
-                    self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
+            self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
+            self.thechnicals_backend[s].update_selected(
+                self.selected_images_for_label.get_sheet_side_selections(
+                    sheet_id,
+                    s
+                )
+            )
+            self.current_technical_side = s
+            self.refresh_thechnical(fp=1)
         self.ui.set_warning(texts.WARNINGS['APPEND_SUCCESSFULLY'][self.language], 'data_auquzation', level=1)
 
     # ----------------------------------------------------------------------------------------
     # 
     # ----------------------------------------------------------------------------------------
-    def remove_filter_img(self):
+    def select_filter_img(self):
         side = []
         cameras = []
         frames = []
@@ -653,9 +653,11 @@ class API:
         for s in side:
             for c in cameras:
                 for f in frames:
-                    self.selected_images_for_label.remove_by_value(sheet_id, s, (c, f))
-                    self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
-        self.ui.set_warning(texts.WARNINGS['REMOVE_SUCCESSFULLY'][self.language], 'data_auquzation', level=1)
+                    index = self.selected_images_for_label.get_index_by_value([sheet_id, s, (c, f)])
+                    if index is not None:
+                        self.ui.listWidget_append_img_list.item(index, 0).setCheckState(Qt.CheckState.Checked)
+
+        # self.ui.set_warning(texts.WARNINGS['REMOVE_SUCCESSFULLY'][self.language], 'data_auquzation', level=1)
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
@@ -693,6 +695,15 @@ class API:
             self.selected_images_for_label.remove_by_index(selected_img_for_remove)
             self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
             self.ui.set_warning(texts.WARNINGS['REMOVE_SUCCESSFULLY'][self.language], 'data_auquzation', level=1)
+            for s in ['up', 'down']:
+                self.thechnicals_backend[s].update_selected(
+                    self.selected_images_for_label.get_sheet_side_selections(
+                        self.sheet.get_id(),
+                        s
+                    )
+                )
+                self.current_technical_side = s
+                self.refresh_thechnical(fp=1)
         else:
             self.ui.set_warning(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language], 'data_auquzation', level=2)
 
@@ -1495,11 +1506,20 @@ class API:
         self.ui.set_enabel(self.ui.start_capture_btn, False)
         self.ui.set_enabel(self.ui.stop_capture_btn, True)
 
-        self.camera_thread = QThread()
+        # self.camera_thread = QThread()
+
         self.ImageManager = ImageManager(self.login_user_name, self.ui, self.cameras)
-        self.ImageManager.moveToThread(self.camera_thread)
-        self.camera_thread.started.connect(self.ImageManager.start)
-        self.camera_thread.start()
+        self.ImageManager.set_live_type(self.live_type)
+
+        # self.ImageManager.moveToThread(self.camera_thread)
+        # self.camera_thread.started.connect(self.ImageManager.start)
+        # self.camera_thread.start()
+
+        self.ImageManager.start()
+        self.timer = QTimer(self.ui)
+        self.timer.timeout.connect(self.ImageManager.show_live)
+        self.timer.start(5)
+
         self.start_capture_flag = True
 
     def stop_capture_func(self):
@@ -1509,13 +1529,18 @@ class API:
         self.ui.set_enabel(self.ui.stop_capture_btn, False)
 
         if self.start_capture_flag:
-            self.ImageManager.set_stop_capture()
-            self.camera_thread.quit()
-            self.camera_thread.wait()
+            self.ImageManager.stop()
+            self.timer.stop()
+            # self.camera_thread.quit()
+            # self.camera_thread.wait()
             self.start_capture_flag = False
 
-    # def change_live_camera(self, text):
-    #     self.live.n_camera_live = int(text)
+    def change_live_camera(self, text):
+        self.ImageManager.set_n_camera_live(int(text))
+
+    def change_live_type(self, index):
+        self.live_type = index
+        self.ImageManager.set_live_type(index)
 
 
     # _________________________________________________________________________________________________
@@ -2001,6 +2026,7 @@ class API:
     def set_available_caemras(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
         sn_available = list(connected_cameras.keys())
+        sn_available = [str(i) for i in range(1, 25)]
         self.ui.set_list_combo_boxes(self.ui.comboBox_connected_cams, sn_available)
         ############################################################################
         ############################################################################

@@ -44,7 +44,13 @@ class manageSelectedImage:
 
     def get_sheet_side_selections(self, sheet_id, side):
         return self.selects_dict.get(sheet_id, {}).get(side, [] )
-        
+
+    def get_index_by_value(self, subject):
+        try:
+            i = self.selects_list.index(subject)
+        except:
+            i = None
+        return i
 
     def remove_by_index(self,idxs):
         subjects = []
