@@ -45,11 +45,11 @@ def SSI(img, block_size='Small', defect_th=0, noise_th=7, noise=True, heatmap=Fa
         hm = np.concatenate([t[0]['heatmap'], t[1]['heatmap'], t[2]['heatmap'], t[3]['heatmap']])
 
     # Draw rectangle around defective regions
-    # res = temp_img.copy()
+    res = temp_img.copy()
     df = cv2.resize(df, (temp_img.shape[1], temp_img.shape[0]))
     contours = cv2.findContours(df, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
 
-    # df = np.zeros_like(df)
+    df = np.zeros_like(df)
     bboxs = []
     for cntr in contours:
         x, y, w, h = cv2.boundingRect(cntr)
@@ -57,9 +57,10 @@ def SSI(img, block_size='Small', defect_th=0, noise_th=7, noise=True, heatmap=Fa
         y -= 5
         h += 10
         w += 10
-        # cv2.rectangle(res, (x, y), (x + w, y + h), (205, 175, 33), 2)
-        bboxs.append([[x, y], [x+w, y+h]])
-    print('algo', bboxs)
+        cv2.rectangle(res, (x, y), (x + w, y + h), (205, 175, 33), 2)
+        df[y:y+h, x:x+w] = 255
+    #     bboxs.append([[x, y], [x+w, y+h]])
+    # print('algo', bboxs)
 
     # Improve heatmap based on defect mask
     if heatmap:
@@ -67,9 +68,9 @@ def SSI(img, block_size='Small', defect_th=0, noise_th=7, noise=True, heatmap=Fa
         hm[:, :, 0] *= (df / 255).astype('uint8')
         hm[:, :, 1] *= (df / 255).astype('uint8')
         hm[:, :, 2] *= (df / 255).astype('uint8')
-        return bboxs, hm
+        return res, hm
     else:
-        return bboxs
+        return res
 
 
 # ______________________________________________________________________________________________________________________________________________
@@ -160,29 +161,10 @@ def FindDefectiveBlocks(gray, block_size='Small', defect_th=0, noise_th=7, noise
 #   heatmap
 #   heatmap: heatmap of image (np.array shape=(h, w, 3))
 # ______________________________________________________________________________________________________________________________________________
-# def CreateHeatmap(gray, img):
-#     # Image thresholding based on yen thresholding
-#     th = threshold_yen(img)
-#     imgt = cv2.threshold(img.astype('uint8'), th, 1, cv2.THRESH_BINARY, None)[1]
-#
-#     # Normalize binary image multiply by gray image between [0, 255]
-#     t = cv2.normalize((imgt * gray).astype('uint8'), None, 0, 255, cv2.NORM_MINMAX, -1, None)
-#
-#     # Create heatmap of image
-#     heatmap = cv2.applyColorMap(255 - t, cv2.COLORMAP_AUTUMN)
-#
-#     # Multiply heatmap with binary image to remove background
-#     heatmap[:, :, 0] *= imgt.astype('uint8')
-#     heatmap[:, :, 1] *= imgt.astype('uint8')
-#     heatmap[:, :, 2] *= imgt.astype('uint8')
-#
-#     return heatmap
-
-def CreateHeatmap(gray, mask):
-    imge = ImageEnhancement(gray)
-
-    th = threshold_yen(imge)
-    imgt = cv2.threshold(imge.astype('uint8'), th, 1, cv2.THRESH_BINARY, None)[1]
+def CreateHeatmap(gray, img):
+    # Image thresholding based on yen thresholding
+    th = threshold_yen(img)
+    imgt = cv2.threshold(img.astype('uint8'), th, 1, cv2.THRESH_BINARY, None)[1]
 
     # Normalize binary image multiply by gray image between [0, 255]
     t = cv2.normalize((imgt * gray).astype('uint8'), None, 0, 255, cv2.NORM_MINMAX, -1, None)
@@ -195,11 +177,30 @@ def CreateHeatmap(gray, mask):
     heatmap[:, :, 1] *= imgt.astype('uint8')
     heatmap[:, :, 2] *= imgt.astype('uint8')
 
-    heatmap[:, :, 0] *= (mask / 255).astype('uint8')
-    heatmap[:, :, 1] *= (mask / 255).astype('uint8')
-    heatmap[:, :, 2] *= (mask / 255).astype('uint8')
-
     return heatmap
+
+# def CreateHeatmap(gray, mask):
+#     imge = ImageEnhancement(gray)
+#
+#     th = threshold_yen(imge)
+#     imgt = cv2.threshold(imge.astype('uint8'), th, 1, cv2.THRESH_BINARY, None)[1]
+#
+#     # Normalize binary image multiply by gray image between [0, 255]
+#     t = cv2.normalize((imgt * gray).astype('uint8'), None, 0, 255, cv2.NORM_MINMAX, -1, None)
+#
+#     # Create heatmap of image
+#     heatmap = cv2.applyColorMap(255 - t, cv2.COLORMAP_AUTUMN)
+#
+#     # Multiply heatmap with binary image to remove background
+#     heatmap[:, :, 0] *= imgt.astype('uint8')
+#     heatmap[:, :, 1] *= imgt.astype('uint8')
+#     heatmap[:, :, 2] *= imgt.astype('uint8')
+#
+#     heatmap[:, :, 0] *= (mask / 255).astype('uint8')
+#     heatmap[:, :, 1] *= (mask / 255).astype('uint8')
+#     heatmap[:, :, 2] *= (mask / 255).astype('uint8')
+#
+#     return heatmap
 
 
 if __name__ == '__main__':

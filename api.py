@@ -81,14 +81,12 @@ class API:
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
             'mask': Label.maskLbl((1200, 1920), self.LABEL_COLOR),
-            'bbox': Label.bboxLbl((1200, 1920), self.LABEL_COLOR)
         }
 
         # Label.bbox_lbl()
         self.label_memory = tempMemory.manageLabel()
         # self.technical_backend = {'top': data_grabber()}
         self.thechnicals_backend = {}
-        self.detect_bboxs_imgs = []
         # self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
         self.t = 0
         self.scale = 1
@@ -233,6 +231,8 @@ class API:
         self.ui.add_btn_SI.clicked.connect(partial(self.append_select_img))
         self.ui.add_filter_btn_SI.clicked.connect(partial(self.append_filter_img))
         self.ui.select_filter_btn_SI.clicked.connect(partial(self.select_filter_img))
+        self.ui.comboBox_ncamera_SI.currentTextChanged.connect(partial(self.set_ncamera_label))
+        self.ui.comboBox_nframe_SI.currentTextChanged.connect(partial(self.set_nframe_label))
         self.ui.remove_btn_SI.clicked.connect(partial(self.remove_select_img))
         self.ui.load_coil_btn.clicked.connect(partial(self.show_sheet_loader))
         self.ui.next_coil_btn.clicked.connect(partial(self.next_sheet))
@@ -247,6 +247,7 @@ class API:
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
+        self.ui.bounding_btn.clicked.connect(partial(self.image_processing_suggest))
 
         # trainig
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
@@ -657,7 +658,21 @@ class API:
                     if index is not None:
                         self.ui.listWidget_append_img_list.item(index, 0).setCheckState(Qt.CheckState.Checked)
 
-        # self.ui.set_warning(texts.WARNINGS['REMOVE_SUCCESSFULLY'][self.language], 'data_auquzation', level=1)
+    def set_ncamera_label(self, text):
+        self.ui.label_ncamera_SI.clear()
+        s = ''
+        for t in self.ui.comboBox_ncamera_SI.getValue():
+            s += t
+            s += ', '
+        self.ui.label_ncamera_SI.setText(s[:-2])
+
+    def set_nframe_label(self, text):
+        self.ui.label_nframe_SI.clear()
+        s = ''
+        for t in self.ui.comboBox_nframe_SI.getValue():
+            s += t
+            s += ', '
+        self.ui.label_nframe_SI.setText(s[:-2])
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
@@ -747,29 +762,12 @@ class API:
             self.t += 1
 
     # ----------------------------------------------------------------------------------------
-    # 
-    # ----------------------------------------------------------------------------------------
-    def find_bboxs(self, img_path):
-        params = self.db.get_image_processing_params()
-        if img_path not in self.detect_bboxs_imgs:
-            bboxs = SSI(self.img, *params)
-            labels = []
-            for bbox in bboxs:
-                label = ['0', np.array(bbox)]
-                labels.append(label)
-            self.label_memory.append(img_path,
-                                     labels,
-                                     'bbox')
-            self.detect_bboxs_imgs.append(img_path)
-
-    # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
     def load_image_to_label_page(self):
         sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
         label_type = self.ui.get_label_type()
         self.img = Utils.read_image(img_path, 'color')
-        self.find_bboxs(img_path)
         self.load_label_from_memory(img_path)
 
         label_img = self.label_bakcend[label_type].draw()
@@ -791,7 +789,7 @@ class API:
         self.position = [0, 0]
 
     def load_label_from_memory(self, img_path):
-        for label_type in ['bbox', 'mask']:
+        for label_type in ['mask']:
             label = self.label_memory.get_label(label_type, img_path)
             self.label_bakcend[label_type].load(label)
 
@@ -922,10 +920,11 @@ class API:
     def label_classify(self, wgt_name=''):
         if self.ui.get_zoom_type() is None:
             label_type = self.ui.get_label_type()
-            mouse_position = self.mouse.get_relative_position()
             if label_type == 'mask':
-                self.label_bakcend[label_type].delete_point_or_mask(mouse_position)
-            self.show_labeling(mouse_position)
+                mouse_position = self.mouse.get_relative_position()
+                if label_type == 'mask':
+                    self.label_bakcend[label_type].delete_point_or_mask(mouse_position)
+                self.show_labeling(mouse_position)
 
     def get_defects(self):
         self.defects_name, self.defects_info = self.db.get_defects()
@@ -1212,14 +1211,11 @@ class API:
             img_path=img_path,
             pos=pos,
             sheet=sheet,
-            masks=self.label_bakcend['mask'].get(),
-            bboxes=self.label_bakcend['bbox'].get()
-
+            masks=self.label_bakcend['mask']
         )
 
     def save_train_ds(self):
         masks = self.label_bakcend['mask'].get()
-        bboxes = self.label_bakcend['bbox'].get()
         try:
             sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
             self.ds.save(
@@ -1227,7 +1223,6 @@ class API:
                 pos=pos,
                 sheet=sheet,
                 masks=masks,
-                bboxes=bboxes
             )
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
@@ -1237,10 +1232,6 @@ class API:
         for mask in masks:
             if mask[0] not in labels:
                 labels.append(mask[0])
-
-        for bbox in bboxes:
-            if bbox[0] not in labels:
-                labels.append(bbox[0])
 
         self.ds_json.add_update_classification(img_path, labels)
 
@@ -1446,10 +1437,10 @@ class API:
 
                 self.ui.set_img_btn_camera(cam_num, status=False)
 
-                if not self.flag_all_camera:
-                    self.ui.set_enabel(self.ui.start_capture_btn, True)
-                    self.ui.set_enabel(self.ui.connect_camera_btn, True)
-                    self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
+            if not self.flag_all_camera:
+                self.ui.set_enabel(self.ui.start_capture_btn, True)
+                self.ui.set_enabel(self.ui.connect_camera_btn, True)
+                self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
         else:
             self.flag_all_camera = True
             self.auto_connect_all_cameras()
@@ -1518,7 +1509,7 @@ class API:
         self.ImageManager.start()
         self.timer = QTimer(self.ui)
         self.timer.timeout.connect(self.ImageManager.show_live)
-        self.timer.start(5)
+        self.timer.start(100)
 
         self.start_capture_flag = True
 
@@ -2067,26 +2058,25 @@ class API:
             cv2.drawContours(mask, [cnt], 0, color=255, thickness=-1)
         return mask
 
-    def create_mask_from_bbox(self, img_path):
-        labels = self.label_memory.get_label('bbox', img_path)
-        mask = np.zeros((self.img.shape[0], self.img.shape[1]))
-        for label in labels:
-            point = label[1].flatten()
-            cv2.rectangle(mask, (point[0], point[1]), (point[2], point[3]), 255, -1)
-        return mask
-
     def create_Heatmap(self):
         sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        self.create_mask_from_mask(img_path)
-        img = Utils.read_image(img_path, 'gray')
-        label_type = self.ui.get_label_type()
-        if label_type == 'mask':
-            df = self.create_mask_from_mask(img_path)
-            hm = CreateHeatmap(img, df)
-        elif label_type == 'bbox':
-            df = self.create_mask_from_bbox(img_path)
-            hm = CreateHeatmap(img, df)
-        self.ui.show_neighbouring(hm)
+        img = Utils.read_image(img_path, 'color')
+        _, hm = SSI(img, heatmap=True)
+        self.img = hm
+        self.ui.set_image_label(self.ui.image, hm)
+        self.ui.image.setScaledContents(True)
+        self.scale = 1
+        self.position = [0, 0]
+
+    def image_processing_suggest(self):
+        sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+        img = Utils.read_image(img_path, 'color')
+        res = SSI(img)
+        self.img = res
+        self.ui.set_image_label(self.ui.image, res)
+        self.ui.image.setScaledContents(True)
+        self.scale = 1
+        self.position = [0, 0]
 
     # def create_piechart(self):
     #     series = QPieSeries()

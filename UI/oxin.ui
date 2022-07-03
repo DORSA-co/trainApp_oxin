@@ -2570,7 +2570,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
 }</string>
                             </property>
                             <property name="currentIndex">
-                             <number>0</number>
+                             <number>1</number>
                             </property>
                             <widget class="QWidget" name="tab_5">
                              <attribute name="title">
@@ -3546,6 +3546,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -3558,6 +3561,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -3572,6 +3578,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -3584,6 +3593,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -3723,6 +3735,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -3735,6 +3750,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -3749,6 +3767,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -3761,6 +3782,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -3900,6 +3924,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -3912,6 +3939,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -3926,6 +3956,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -3938,6 +3971,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -4074,7 +4110,7 @@ QComboBox QAbstractItemView {
                                   <item>
                                    <layout class="QHBoxLayout" name="horizontalLayout_203">
                                     <item>
-                                     <widget class="QLabel" name="blive1">
+                                     <widget class="QLabel" name="blive13">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4083,11 +4119,14 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QLabel" name="blive2">
+                                     <widget class="QLabel" name="blive14">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4096,11 +4135,14 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QLabel" name="blive3">
+                                     <widget class="QLabel" name="blive15">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4109,11 +4151,14 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QLabel" name="blive4">
+                                     <widget class="QLabel" name="blive16">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4122,6 +4167,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -4251,7 +4299,7 @@ QComboBox QAbstractItemView {
                                   <item>
                                    <layout class="QHBoxLayout" name="horizontalLayout_201">
                                     <item>
-                                     <widget class="QLabel" name="blive5">
+                                     <widget class="QLabel" name="blive17">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4260,11 +4308,14 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QLabel" name="blive6">
+                                     <widget class="QLabel" name="blive18">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4273,11 +4324,14 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QLabel" name="blive7">
+                                     <widget class="QLabel" name="blive19">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4286,11 +4340,14 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QLabel" name="blive8">
+                                     <widget class="QLabel" name="blive20">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4299,6 +4356,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -4428,7 +4488,7 @@ QComboBox QAbstractItemView {
                                   <item>
                                    <layout class="QHBoxLayout" name="horizontalLayout_204">
                                     <item>
-                                     <widget class="QLabel" name="blive9">
+                                     <widget class="QLabel" name="blive21">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4437,11 +4497,14 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QLabel" name="blive10">
+                                     <widget class="QLabel" name="blive22">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4450,11 +4513,14 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QLabel" name="blive11">
+                                     <widget class="QLabel" name="blive23">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4463,11 +4529,14 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QLabel" name="blive12">
+                                     <widget class="QLabel" name="blive24">
                                       <property name="minimumSize">
                                        <size>
                                         <width>0</width>
@@ -4476,6 +4545,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -4625,6 +4697,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -4637,6 +4712,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -4651,6 +4729,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -4663,6 +4744,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -4677,6 +4761,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -4689,6 +4776,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -4882,6 +4972,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -4894,6 +4987,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -4908,6 +5004,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -4920,6 +5019,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -4934,6 +5036,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -4946,6 +5051,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -5139,6 +5247,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -5151,6 +5262,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -5165,6 +5279,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -5177,6 +5294,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -5191,6 +5311,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -5203,6 +5326,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -5396,6 +5522,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -5408,6 +5537,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -5422,6 +5554,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -5434,6 +5569,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -5448,6 +5586,9 @@ QComboBox QAbstractItemView {
                                       <property name="text">
                                        <string/>
                                       </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
+                                      </property>
                                      </widget>
                                     </item>
                                     <item>
@@ -5460,6 +5601,9 @@ QComboBox QAbstractItemView {
                                       </property>
                                       <property name="text">
                                        <string/>
+                                      </property>
+                                      <property name="scaledContents">
+                                       <bool>true</bool>
                                       </property>
                                      </widget>
                                     </item>
@@ -5860,7 +6004,7 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>393</width>
+                                         <width>256</width>
                                          <height>27</height>
                                         </rect>
                                        </property>
@@ -6880,9 +7024,28 @@ QComboBox QAbstractItemView {
                                           </widget>
                                          </item>
                                          <item>
+                                          <widget class="QLabel" name="label_ncamera_SI">
+                                           <property name="sizePolicy">
+                                            <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+                                             <horstretch>0</horstretch>
+                                             <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                           </property>
+                                           <property name="text">
+                                            <string/>
+                                           </property>
+                                          </widget>
+                                         </item>
+                                         <item>
                                           <widget class="CheckableComboBox" name="comboBox_ncamera_SI">
                                            <property name="enabled">
                                             <bool>true</bool>
+                                           </property>
+                                           <property name="maximumSize">
+                                            <size>
+                                             <width>29</width>
+                                             <height>16777215</height>
+                                            </size>
                                            </property>
                                            <property name="styleSheet">
                                             <string notr="true">QComboBox{
@@ -6913,6 +7076,9 @@ QComboBox QAbstractItemView {
 	background-color: rgb(255, 255, 255);
 	padding: 10px;
 	selection-background-color: rgb(39, 44, 54);
+}
+QComboBox QAbstractItemView {
+    min-width: 100px;
 }</string>
                                            </property>
                                           </widget>
@@ -6981,9 +7147,22 @@ QCheckBox::indicator:unchecked {
                                           </widget>
                                          </item>
                                          <item>
+                                          <widget class="QLabel" name="label_nframe_SI">
+                                           <property name="text">
+                                            <string/>
+                                           </property>
+                                          </widget>
+                                         </item>
+                                         <item>
                                           <widget class="CheckableComboBox" name="comboBox_nframe_SI">
                                            <property name="enabled">
                                             <bool>true</bool>
+                                           </property>
+                                           <property name="maximumSize">
+                                            <size>
+                                             <width>29</width>
+                                             <height>16777215</height>
+                                            </size>
                                            </property>
                                            <property name="styleSheet">
                                             <string notr="true">QComboBox{
@@ -7014,6 +7193,9 @@ QComboBox QAbstractItemView {
 	background-color: rgb(255, 255, 255);
 	padding: 10px;
 	selection-background-color: rgb(39, 44, 54);
+}
+QComboBox QAbstractItemView {
+    min-width: 100px;
 }</string>
                                            </property>
                                           </widget>
@@ -7326,7 +7508,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>625</height>
+                                     <height>16</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -7572,7 +7754,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>625</height>
+                                     <height>16</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -8169,12 +8351,12 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/noun-rectangle-667504.png</normaloff>images/noun-rectangle-667504.png</iconset>
+                                    <normaloff>images/suggest.png</normaloff>images/suggest.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
-                                    <width>31</width>
-                                    <height>29</height>
+                                    <width>45</width>
+                                    <height>45</height>
                                    </size>
                                   </property>
                                  </widget>
@@ -9065,21 +9247,6 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                                     <layout class="QVBoxLayout" name="verticalLayout_95">
                                      <item>
                                       <widget class="QTableWidget" name="mask_table_widget">
-                                       <property name="columnCount">
-                                        <number>1</number>
-                                       </property>
-                                       <column/>
-                                      </widget>
-                                     </item>
-                                    </layout>
-                                   </widget>
-                                   <widget class="QWidget" name="tab_2">
-                                    <attribute name="title">
-                                     <string>Bounding Box</string>
-                                    </attribute>
-                                    <layout class="QVBoxLayout" name="verticalLayout_831">
-                                     <item>
-                                      <widget class="QTableWidget" name="bbox_table_widget">
                                        <property name="columnCount">
                                         <number>1</number>
                                        </property>
@@ -20833,7 +21000,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>312</width>
+                                 <width>218</width>
                                  <height>218</height>
                                 </rect>
                                </property>

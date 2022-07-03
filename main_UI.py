@@ -123,6 +123,8 @@ class UI_main_window(QMainWindow, ui):
             # SET HACKS
             self.setThemeHack()
 
+        self.bounding_btn.setIcon(QIcon('UI/images/suggest.png'))
+
         self.label_dorsa_open(enable=True)
         # /////////Setting
         self.btn_software_setting.clicked.connect(self.buttonClick)
@@ -165,7 +167,6 @@ class UI_main_window(QMainWindow, ui):
         # labeling
 
         self.polygon_btn.clicked.connect(self.buttonClick)
-        self.bounding_btn.clicked.connect(self.buttonClick)
         self.zoomIn_btn.clicked.connect(self.buttonClick)
         self.zoomOut_btn.clicked.connect(self.buttonClick)
         self.drag_btn.clicked.connect(self.buttonClick)
@@ -761,13 +762,6 @@ class UI_main_window(QMainWindow, ui):
     #         self.show_side.setText('DOWN Side Technical')
 
     # --------- label page
-    def bounding_box(self):
-        # print('bounding_box')
-        self.image.setCursor(Qt.CrossCursor)
-        self.zoom_type = None
-        self.label_type = 'bbox'
-
-        self.tabWidget_defect.setCurrentIndex(1)
 
     def polygon(self):
         # print('polygon')
@@ -781,6 +775,7 @@ class UI_main_window(QMainWindow, ui):
         self.label_type = 'mask'
 
         self.tabWidget_defect.setCurrentIndex(0)
+        api.load_image_to_label_page()
 
     def zoom_in(self):
         cursor = PG.QPixmap('images/zoom-in_cursor.png')
@@ -819,7 +814,7 @@ class UI_main_window(QMainWindow, ui):
 
     def show_labels(self, labels, label_type):
 
-        LABEL_TABLE = {'mask': self.mask_table_widget, 'bbox': self.bbox_table_widget}
+        LABEL_TABLE = {'mask': self.mask_table_widget}
 
         print('labe', label_type)
 
@@ -1312,9 +1307,6 @@ class UI_main_window(QMainWindow, ui):
         if btnName == 'polygon_btn':
             self.polygon()
 
-        if btnName == 'bounding_btn':
-            self.bounding_box()
-
         if btnName == 'zoomIn_btn':
             self.zoom_in()
 
@@ -1491,7 +1483,7 @@ class UI_main_window(QMainWindow, ui):
     def set_image_label(self,label_name, img):
         h, w, ch = img.shape
         bytes_per_line = ch * w
-        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_RGB888)
+        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_BGR888)
 
 
         label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))
