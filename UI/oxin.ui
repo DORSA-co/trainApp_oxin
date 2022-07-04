@@ -3659,7 +3659,7 @@ QPushButton:enabled {
                                  <enum>Qt::LeftToRight</enum>
                                 </property>
                                 <property name="currentIndex">
-                                 <number>3</number>
+                                 <number>0</number>
                                 </property>
                                 <widget class="QWidget" name="tab_3">
                                  <attribute name="title">
@@ -3781,6 +3781,9 @@ QComboBox QAbstractItemView {
                                     </property>
                                     <property name="scaledContents">
                                      <bool>true</bool>
+                                    </property>
+                                    <property name="margin">
+                                     <number>2</number>
                                     </property>
                                    </widget>
                                   </item>
