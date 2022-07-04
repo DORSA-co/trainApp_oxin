@@ -19,13 +19,13 @@ class ImageManager(QObject):
         self.ui = ui
         self.cameras = cameras
         self.plc_thread = None
-        self.n_read_thread = 4
-        self.n_write_thread = 6
+        self.n_read_thread = 12
+        self.n_write_thread = 0
         self.read_thread = []
         self.write_thread = []
         self.qinfo = []
         self.qimage = []
-        self.images = [np.zeros((1200, 1920, 3))]*24
+        self.images = [np.zeros((1200, 1920))]*24
         self.db = database_utils.dataBaseUtils()
         self.sheet_id = 0
         self.coil_dict = None
@@ -122,20 +122,44 @@ class ImageManager(QObject):
         while True:
             # if s == 1:
             #     self.nframe += 1
-            print(self.nframe)
+            # print(self.nframe)
             for camera_id in range(s, d + 1):
                 if self.start_cam < camera_id <= self.stop_cam or self.start_cam + 12 < camera_id <= self.stop_cam + 12:
                     self.nframe[int(camera_id) - 1] += 1
                     if str(camera_id) in list(connected_cameras.keys()):
                         self.images[int(camera_id) - 1] = connected_cameras[str(camera_id)].getPictures()
-                        self.qimage.append(self.images[int(camera_id) - 1])
-                        self.qinfo.append((str(self.sheet_id), str(camera_id), str(self.nframe[int(camera_id) - 1])))
+                        # self.qimage.append(self.images[int(camera_id) - 1])
+                        # self.qinfo.append((str(self.sheet_id), str(camera_id), str(self.nframe[int(camera_id) - 1])))
+                        if int(camera_id) <= 12:
+                            side = 'TOP'
+                            path = sheet_image_path(self.main_path, self.sheet_id, side, camera_id,
+                                                    str(self.nframe[int(camera_id) - 1]),
+                                                    self.image_format)
+                        else:
+                            side = 'BOTTOM'
+                            path = sheet_image_path(self.main_path, self.sheet_id, side, str(camera_id - 12),
+                                                    str(self.nframe[int(camera_id) - 1]),
+                                                    self.image_format)
+                        # print(path)
+                        cv2.imwrite(path, self.images[int(camera_id) - 1])
                     else:
-                        self.images[int(camera_id) - 1] = np.zeros((1200, 1920, 3))
-                        # self.images[int(camera_id) - 1][:, :] = np.random.randint(0, 150)
-                        self.qimage.append(self.images[int(camera_id) - 1])
-                        self.qinfo.append((str(self.sheet_id), str(camera_id), str(self.nframe[int(camera_id) - 1])))
-                        time.sleep(0.02)
+                        self.images[int(camera_id) - 1] = np.zeros((1200, 1920), dtype=np.uint8)
+                        self.images[int(camera_id) - 1][:, :] = np.random.randint(0, 150)
+                        # self.qimage.append(self.images[int(camera_id) - 1])
+                        # self.qinfo.append((str(self.sheet_id), str(camera_id), str(self.nframe[int(camera_id) - 1])))
+                        if int(camera_id) <= 12:
+                            side = 'TOP'
+                            path = sheet_image_path(self.main_path, self.sheet_id, side, camera_id,
+                                                    str(self.nframe[int(camera_id) - 1]),
+                                                    self.image_format)
+                        else:
+                            side = 'BOTTOM'
+                            path = sheet_image_path(self.main_path, self.sheet_id, side, str(camera_id - 12),
+                                                    str(self.nframe[int(camera_id) - 1]),
+                                                    self.image_format)
+                        # print(path)
+                        cv2.imwrite(path, self.images[int(camera_id) - 1])
+                        time.sleep(0.005)
                 if self.stop_capture:
                     return
             if self.stop_capture:
@@ -160,55 +184,50 @@ class ImageManager(QObject):
                 side = 'BOTTOM'
                 path = sheet_image_path(self.main_path, info[0], side, str(int(info[1]) - 12), info[2],
                                         self.image_format)
-            print(path)
+            # print(path)
+            t = time.time()
             cv2.imwrite(path, img)
+            print(time.time() - t)
 
     def show_live(self):
         if self.live_type == 0:
-            img = self.images[self.n_camera_live - 1].copy()
-            h, w, ch = img.shape
-            bytes_per_line = ch * w
-            fs = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_RGB888)
+            fs = sQImage(self.images[self.n_camera_live - 1], self.images[self.n_camera_live - 1].shape[1],
+                        self.images[self.n_camera_live - 1].shape[0],
+                        self.images[self.n_camera_live - 1].strides[0],
+                        sQImage.Format_Grayscale8)
             self.ui.live.setPixmap(sQPixmap.fromImage(fs))
+
         if self.live_type == 1:
-            for i in range(12):
-                img = self.images[i].copy()
-                h, w, ch = img.shape
-                bytes_per_line = ch * w
-                fs = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_RGB888)
-                s = 'self.ui.tlive' + str(i+1) + '.setPixmap(sQPixmap.fromImage(fs))'
-                exec(s)
+            list(map(self.set_image, ['t']*12, range(12)))
+
         if self.live_type == 2:
-            for i in range(12, 24):
-                img = self.images[i].copy()
-                h, w, ch = img.shape
-                bytes_per_line = ch * w
-                fs = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_RGB888)
-                s = 'self.ui.blive' + str(i - 11) + '.setPixmap(sQPixmap.fromImage(fs))'
-                exec(s)
+            list(map(self.set_image, ['b']*12, range(12, 24)))
+
         if self.live_type == 3:
-            for i in range(24):
-                img = self.images[i].copy()
-                h, w, ch = img.shape
-                bytes_per_line = ch * w
-                fs = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_RGB888)
-                s = 'self.ui.live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
-                exec(s)
+            list(map(self.set_image, ['']*24, list(range(24))))
+
+    def set_image(self, c, i):
+        fs = sQImage(self.images[i], self.images[i].shape[1],
+                     self.images[i].shape[0],
+                     self.images[i].strides[0],
+                     sQImage.Format_Grayscale8)
+        s = 'self.ui.' + str(c) + 'live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
+        exec(s)
 
     def join_all(self):
         for t in self.read_thread:
             t.join()
-        for t in self.write_thread:
-            t.join()
+        # for t in self.write_thread:
+        #     t.join()
 
     def start(self):
         # self.create_queues()
         self.create_read_threads()
-        self.create_write_threads()
+        # self.create_write_threads()
         plc_simulator()
         self.read_from_plc()
         self.start_read_threads()
-        self.start_write_threads()
+        # self.start_write_threads()
 
     def stop(self):
         self.set_stop_capture()

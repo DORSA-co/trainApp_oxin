@@ -233,6 +233,8 @@ class API:
         self.ui.add_btn_SI.clicked.connect(partial(self.append_select_img))
         self.ui.add_filter_btn_SI.clicked.connect(partial(self.append_filter_img))
         self.ui.select_filter_btn_SI.clicked.connect(partial(self.select_filter_img))
+        self.ui.comboBox_ncamera_SI.currentTextChanged.connect(partial(self.set_ncamera_label))
+        self.ui.comboBox_nframe_SI.currentTextChanged.connect(partial(self.set_nframe_label))
         self.ui.remove_btn_SI.clicked.connect(partial(self.remove_select_img))
         self.ui.load_coil_btn.clicked.connect(partial(self.show_sheet_loader))
         self.ui.next_coil_btn.clicked.connect(partial(self.next_sheet))
@@ -657,7 +659,21 @@ class API:
                     if index is not None:
                         self.ui.listWidget_append_img_list.item(index, 0).setCheckState(Qt.CheckState.Checked)
 
-        # self.ui.set_warning(texts.WARNINGS['REMOVE_SUCCESSFULLY'][self.language], 'data_auquzation', level=1)
+    def set_ncamera_label(self, text):
+        self.ui.label_ncamera_SI.clear()
+        s = ''
+        for t in self.ui.comboBox_ncamera_SI.getValue():
+            s += t
+            s += ', '
+        self.ui.label_ncamera_SI.setText(s[:-2])
+
+    def set_nframe_label(self, text):
+        self.ui.label_nframe_SI.clear()
+        s = ''
+        for t in self.ui.comboBox_nframe_SI.getValue():
+            s += t
+            s += ', '
+        self.ui.label_nframe_SI.setText(s[:-2])
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
@@ -1446,10 +1462,10 @@ class API:
 
                 self.ui.set_img_btn_camera(cam_num, status=False)
 
-                if not self.flag_all_camera:
-                    self.ui.set_enabel(self.ui.start_capture_btn, True)
-                    self.ui.set_enabel(self.ui.connect_camera_btn, True)
-                    self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
+            if not self.flag_all_camera:
+                self.ui.set_enabel(self.ui.start_capture_btn, True)
+                self.ui.set_enabel(self.ui.connect_camera_btn, True)
+                self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
         else:
             self.flag_all_camera = True
             self.auto_connect_all_cameras()
@@ -1518,7 +1534,7 @@ class API:
         self.ImageManager.start()
         self.timer = QTimer(self.ui)
         self.timer.timeout.connect(self.ImageManager.show_live)
-        self.timer.start(5)
+        self.timer.start(100)
 
         self.start_capture_flag = True
 

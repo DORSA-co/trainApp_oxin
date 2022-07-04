@@ -123,6 +123,9 @@ class UI_main_window(QMainWindow, ui):
             # SET HACKS
             self.setThemeHack()
 
+        # plan A for split: split sequential
+        # plan B for split: split random
+
         self.label_dorsa_open(enable=True)
         # /////////Setting
         self.btn_software_setting.clicked.connect(self.buttonClick)
@@ -768,6 +771,7 @@ class UI_main_window(QMainWindow, ui):
         self.label_type = 'bbox'
 
         self.tabWidget_defect.setCurrentIndex(1)
+        api.load_image_to_label_page()
 
     def polygon(self):
         # print('polygon')
@@ -781,6 +785,7 @@ class UI_main_window(QMainWindow, ui):
         self.label_type = 'mask'
 
         self.tabWidget_defect.setCurrentIndex(0)
+        api.load_image_to_label_page()
 
     def zoom_in(self):
         cursor = PG.QPixmap('images/zoom-in_cursor.png')

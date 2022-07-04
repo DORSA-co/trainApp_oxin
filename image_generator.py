@@ -14,10 +14,10 @@ for cnt in range(995,998):
     for side in ['TOP', 'BOTTOM']:
         if not os.path.exists(os.path.join( path, side )):
             os.makedirs(os.path.join( path, side ))
-        for n in range(ncam):
+        for n in range(1, ncam):
             if not os.path.exists(os.path.join( path, side, str(n))):
                 os.makedirs(os.path.join( path, side, str(n)))
-            for f in range(nframe):
+            for f in range(1, nframe):
                 img = np.zeros((1200,1920), dtype=np.uint8)
                 img[:,:] = np.random.randint(0,150)
                 res_path = os.path.join( path, side, str(n))
