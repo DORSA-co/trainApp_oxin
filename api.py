@@ -34,6 +34,7 @@ from PyQt5.QtGui import QPixmap, QImage
 # from backend import add_remove_label
 from PyQt5 import QtCore, QtWidgets
 from Sheet_loader_win import get_data
+from PySide6.QtCore import QThread
 from functools import partial
 from backend import Label, chart_funcs, binary_model_funcs, binary_list_funcs,date_funcs, classification_model_funcs, classification_list_funcs, dataset, colors_pallete
 
@@ -56,7 +57,7 @@ from labeling import labeling_api
 from pynput.mouse import Button, Controller
 
 from login_win.login_api import login_API
-from camera_live import live_manager
+from camera_live_thread import ImageManager
 from multiprocessing import Process
 import dataset_utils
 
@@ -80,14 +81,12 @@ class API:
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
             'mask': Label.maskLbl((1200, 1920), self.LABEL_COLOR),
-            'bbox': Label.bboxLbl((1200, 1920), self.LABEL_COLOR)
         }
 
         # Label.bbox_lbl()
         self.label_memory = tempMemory.manageLabel()
         # self.technical_backend = {'top': data_grabber()}
         self.thechnicals_backend = {}
-        self.detect_bboxs_imgs = []
         # self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
         self.t = 0
         self.scale = 1
@@ -104,7 +103,9 @@ class API:
         self.bmodel_tabel_itr = 1
         self.bmodel_count = 0
         self.filter_mode = False
-        self.proc_start_flag = True
+        self.flag_all_camera = False
+        self.start_capture_flag = False
+        self.live_type = 0
 
         # binarylist dataset parms
         self.dataset_params = {}
@@ -173,11 +174,9 @@ class API:
                                                                                         image_per_row=binary_list_funcs.n_images_per_row_classlist))
         # classlist image object
         self.classification_image_list = moveOnImagrList(sub_directory='', step=binary_list_funcs.n_images_per_row)
-        #_____________________________________________________________________
+        # _____________________________________________________________________
+        self.ImageManager = ImageManager(self.login_user_name, self.ui, self.cameras)
 
-        # self.camera_process = Process(target=save_camera_images, args=(self.cameras, ))
-        self.live = live_manager(self.ui, self.db.get_parent_path())
-        self.camera_process = threading.Thread(target=self.live.save_camera_images, args=(self.cameras, ))
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -187,7 +186,7 @@ class API:
 
         self.create_classlist_pie_chart()
 
-        
+
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, 'sheets_id')
@@ -230,11 +229,15 @@ class API:
     def button_connector(self):
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
         self.ui.add_btn_SI.clicked.connect(partial(self.append_select_img))
+        self.ui.add_filter_btn_SI.clicked.connect(partial(self.append_filter_img))
+        self.ui.select_filter_btn_SI.clicked.connect(partial(self.select_filter_img))
+        self.ui.comboBox_ncamera_SI.currentTextChanged.connect(partial(self.set_ncamera_label))
+        self.ui.comboBox_nframe_SI.currentTextChanged.connect(partial(self.set_nframe_label))
         self.ui.remove_btn_SI.clicked.connect(partial(self.remove_select_img))
         self.ui.load_coil_btn.clicked.connect(partial(self.show_sheet_loader))
         self.ui.next_coil_btn.clicked.connect(partial(self.next_sheet))
         self.ui.prev_coil_btn.clicked.connect(partial(self.prev_sheet))
-        self.ui.save_btn_SI.clicked.connect(partial(self.save_temp_img_ds))
+        # self.ui.save_btn_SI.clicked.connect(partial(self.save_temp_img_ds))
         self.ui.label_btn_SI.clicked.connect(partial(self.label_selected_img))
 
         self.ui.next_img_label_btn.clicked.connect(partial(self.next_label_img))
@@ -244,6 +247,7 @@ class API:
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
+        self.ui.bounding_btn.clicked.connect(partial(self.image_processing_suggest))
 
         # trainig
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
@@ -267,6 +271,10 @@ class API:
         # data aquization
         self.ui.connect_camera_btn.clicked.connect(partial(self.camera_connection_func))
         self.ui.disconnect_camera_btn.clicked.connect(partial(self.camera_disconnection_func))
+        self.ui.start_capture_btn.clicked.connect(partial(self.start_capture_func))
+        self.ui.stop_capture_btn.clicked.connect(partial(self.stop_capture_func))
+        self.ui.comboBox_connected_cams.currentTextChanged.connect(partial(self.change_live_camera))
+        self.ui.live_tabWidget.currentChanged.connect(partial(self.change_live_type))
 
         # self.ui.comboBox_cam_select.currentTextChanged.connect(self.combo_image_preccess)
 
@@ -329,7 +337,7 @@ class API:
         if self.logged_in:
             eval('self.ui.set_widget_page(self.ui.stackedWidget,dic["{}"])'.format(btn_name))
             # eval(self.stackedWidget.setCurrentWidget(self.page_Binary))
-        
+
         else:
             self.ui.set_warning(texts.WARNINGS['LOGIN_FIRST'][self.language], 'app_erors', level=2)
 
@@ -381,10 +389,14 @@ class API:
     # get id of sheets that user select in load_sheet_win and load first one
     # ----------------------------------------------------------------------------------------
     def load_sheets(self):
-
         sheets_id = self.ui.load_sheets_win.get_selected_sheetid()
+        if not sheets_id:
+            self.ui.load_sheets_win.close()
+            self.ui.set_warning(texts.WARNINGS['NO_SHEET_LOADED'][self.language], 'data_auquzation', level=2)
+            return
         self.move_on_list.add(sheets_id, 'sheets_id')
         self.selected_images_for_label.clear()
+        self.ui.clear_table()
         self.ui.load_sheets_win.close()
         self.load_sheet()
 
@@ -398,6 +410,19 @@ class API:
         self.sheet = self.db.load_sheet(selceted_sheets_id)  # load inference of Sheet class from database by sheet id
         self.build_sheet_technical(self.sheet)  # build technical sheet
         self.ui.show_sheet_details(self.sheet.get_info_dict())  # show sheet details in UI.details_label
+        self.load_filter_params()
+
+    # ----------------------------------------------------------------------------------------
+    #
+    # ----------------------------------------------------------------------------------------
+    def load_filter_params(self):
+        self.ui.set_enabel(self.ui.checkBox_all_imgs_SI, True)
+        self.ui.set_enabel(self.ui.checkBox_all_frame_SI, True)
+        self.ui.set_enabel(self.ui.checkBox_all_camera_SI, True)
+        self.ui.set_side_combobox()
+        self.ui.set_camera_combobox(min=self.sheet.cameras[0], max=self.sheet.cameras[1])
+        self.ui.set_frame_combobox(max=self.sheet.nframe)
+        self.ui.checkBox_all_imgs_SI.setChecked(True)
 
     # ----------------------------------------------------------------------------------------
     #
@@ -420,7 +445,7 @@ class API:
                     side
                 )
 
-                self.thechnicals_backend[side].update_selected(selecteds)
+                # self.thechnicals_backend[side].update_selected(selecteds)
                 self.current_technical_side = side
                 self.refresh_thechnical(fp=1)  #
 
@@ -493,7 +518,7 @@ class API:
                 self.current_technical_side].get_real_img()  # get image of sheet corespond to mouse position
             self.ui.set_crop_image(img)  # show image in UI
             self.update_sheet_img(self.current_technical_side)
-            self.ui.show_selected_side(self.current_technical_side)
+            # self.ui.show_selected_side(self.current_technical_side)
 
         else:
             self.t += 1
@@ -518,9 +543,143 @@ class API:
         self.ui.data_loader_win_show()
 
     # ----------------------------------------------------------------------------------------
+    #
+    # ----------------------------------------------------------------------------------------
+    def append_filter_img(self):
+        side = []
+        cameras = []
+        frames = []
+        try:
+            sheet_id = self.sheet.get_id()
+        except:
+            self.ui.set_warning(texts.WARNINGS['NO_SHEET'][self.language], 'data_auquzation', level=2)
+            return
+
+        if self.ui.checkBox_all_imgs_SI.isChecked():
+            side = ['up', 'down']
+            cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]))
+            frames = list(range(0, self.sheet.nframe))
+        else:
+            s = self.ui.comboBox_side_SI.currentText()
+            if s == 'TOP':
+                side = ['up']
+            elif s == 'BOTTOM':
+                side = ['down']
+            elif s == 'BOTH':
+                side = ['up', 'down']
+            if self.ui.checkBox_all_camera_SI.isChecked():
+                cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]))
+            else:
+                cameras = self.ui.comboBox_ncamera_SI.getValue()
+                cameras = list(map(int, cameras))
+            if self.ui.checkBox_all_frame_SI.isChecked():
+                frames = list(range(0, self.sheet.nframe))
+            else:
+                frames = self.ui.comboBox_nframe_SI.getValue()
+                frames = list(map(int, frames))
+
+        if not side:
+            self.ui.set_warning(texts.WARNINGS['SIDE_EMPTY'][self.language], 'data_auquzation', level=2)
+            return
+        if not cameras:
+            self.ui.set_warning(texts.WARNINGS['CAMERA_EMPTY'][self.language], 'data_auquzation', level=2)
+            return
+        if not frames:
+            self.ui.set_warning(texts.WARNINGS['FRAME_EMPTY'][self.language], 'data_auquzation', level=2)
+            return
+
+        for s in side:
+            for c in cameras:
+                for f in frames:
+                    self.selected_images_for_label.add(sheet_id,
+                                                       s,
+                                                       (c, f))
+            self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
+            self.thechnicals_backend[s].update_selected(
+                self.selected_images_for_label.get_sheet_side_selections(
+                    sheet_id,
+                    s
+                )
+            )
+            self.current_technical_side = s
+            self.refresh_thechnical(fp=1)
+        self.ui.set_warning(texts.WARNINGS['APPEND_SUCCESSFULLY'][self.language], 'data_auquzation', level=1)
+
+    # ----------------------------------------------------------------------------------------
     # 
     # ----------------------------------------------------------------------------------------
+    def select_filter_img(self):
+        side = []
+        cameras = []
+        frames = []
+        try:
+            sheet_id = self.sheet.get_id()
+        except:
+            self.ui.set_warning(texts.WARNINGS['NO_SHEET'][self.language], 'data_auquzation', level=2)
+            return
+
+        if self.ui.checkBox_all_imgs_SI.isChecked():
+            side = ['up', 'down']
+            cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]))
+            frames = list(range(0, self.sheet.nframe))
+        else:
+            s = self.ui.comboBox_side_SI.currentText()
+            if s == 'TOP':
+                side = ['up']
+            elif s == 'BOTTOM':
+                side = ['down']
+            elif s == 'BOTH':
+                side = ['up', 'down']
+            if self.ui.checkBox_all_camera_SI.isChecked():
+                cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]))
+            else:
+                cameras = self.ui.comboBox_ncamera_SI.getValue()
+                cameras = list(map(int, cameras))
+            if self.ui.checkBox_all_frame_SI.isChecked():
+                frames = list(range(0, self.sheet.nframe))
+            else:
+                frames = self.ui.comboBox_nframe_SI.getValue()
+                frames = list(map(int, frames))
+
+        if not side:
+            self.ui.set_warning(texts.WARNINGS['SIDE_EMPTY'][self.language], 'data_auquzation', level=2)
+            return
+        if not cameras:
+            self.ui.set_warning(texts.WARNINGS['CAMERA_EMPTY'][self.language], 'data_auquzation', level=2)
+            return
+        if not frames:
+            self.ui.set_warning(texts.WARNINGS['FRAME_EMPTY'][self.language], 'data_auquzation', level=2)
+            return
+
+        for s in side:
+            for c in cameras:
+                for f in frames:
+                    index = self.selected_images_for_label.get_index_by_value([sheet_id, s, (c, f)])
+                    if index is not None:
+                        self.ui.listWidget_append_img_list.item(index, 0).setCheckState(Qt.CheckState.Checked)
+
+    def set_ncamera_label(self, text):
+        self.ui.label_ncamera_SI.clear()
+        s = ''
+        for t in self.ui.comboBox_ncamera_SI.getValue():
+            s += t
+            s += ', '
+        self.ui.label_ncamera_SI.setText(s[:-2])
+
+    def set_nframe_label(self, text):
+        self.ui.label_nframe_SI.clear()
+        s = ''
+        for t in self.ui.comboBox_nframe_SI.getValue():
+            s += t
+            s += ', '
+        self.ui.label_nframe_SI.setText(s[:-2])
+    # ----------------------------------------------------------------------------------------
+    #
+    # ----------------------------------------------------------------------------------------
     def append_select_img(self):
+        if self.current_technical_side == '':
+            self.ui.set_warning(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language], 'data_auquzation', level=2)
+            return
         cam, frame = self.thechnicals_backend[self.current_technical_side].get_current_img_position()
         # print(cam,frame, '^'*20)
         if (frame < 0) or (cam < 0):
@@ -529,8 +688,10 @@ class API:
 
             side = self.thechnicals_backend[self.current_technical_side].get_side()
             main_path = self.sheet.get_path()
+
             self.selected_images_for_label.add(self.move_on_list.get_current('sheets_id'), self.current_technical_side,
                                                (cam, frame))
+
             self.thechnicals_backend[self.current_technical_side].update_selected(
                 self.selected_images_for_label.get_sheet_side_selections(
                     self.move_on_list.get_current('sheets_id'),
@@ -540,6 +701,7 @@ class API:
             self.refresh_thechnical(fp=1)
 
             self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
+            self.ui.set_warning(texts.WARNINGS['APPEND_SUCCESSFULLY'][self.language], 'data_auquzation', level=1)
 
     def remove_select_img(self):
 
@@ -547,27 +709,19 @@ class API:
         if len(selected_img_for_remove):
             self.selected_images_for_label.remove_by_index(selected_img_for_remove)
             self.ui.add_selected_image(self.selected_images_for_label.get_all_selections_list())
+            self.ui.set_warning(texts.WARNINGS['REMOVE_SUCCESSFULLY'][self.language], 'data_auquzation', level=1)
+            for s in ['up', 'down']:
+                self.thechnicals_backend[s].update_selected(
+                    self.selected_images_for_label.get_sheet_side_selections(
+                        self.sheet.get_id(),
+                        s
+                    )
+                )
+                self.current_technical_side = s
+                self.refresh_thechnical(fp=1)
         else:
             self.ui.set_warning(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language], 'data_auquzation', level=2)
 
-    # ----------------------------------------------------------------------------------------
-    # 
-    # ----------------------------------------------------------------------------------------
-    def save_temp_img_ds(self, ):
-        selected_imgs = self.selected_images_for_label.get_all_selections_list()
-        selected_idxs = self.ui.get_selected_img()
-        filtered_selected = Utils.get_selected_value(selected_imgs, selected_idxs)
-        paths = self.db.get_path_sheet_image(filtered_selected)
-        sheets = []
-        self.ui.progressBar_SI.setMaximumWidth(150)
-        for select_img in filtered_selected:
-            sheets.append(self.db.load_sheet(select_img[0]))
-            self.ui.progressBar_SI.setValue(100)
-        self.ds.save_to_temp(paths, sheets)
-        # print(filtered_selected)
-        # self.create
-
-        self.ui.progressBar_SI.setMaximumWidth(0)
 
     # ----------------------------------------------------------------------------------------
     # 
@@ -580,13 +734,19 @@ class API:
             filtered_selected = Utils.get_selected_value(selected_imgs, selected_idxs)
             paths = self.db.get_path_sheet_image(filtered_selected)
             sheets = []
+            self.ui.progressBar_SI.setMinimumWidth(150)
+            self.ui.progressBar_SI.setMaximumWidth(150)
             for select_img in filtered_selected:
                 sheets.append(self.db.load_sheet(select_img[0]))
+                self.ui.progressBar_SI.setValue(self.ui.progressBar_SI.value() + (100 / len(filtered_selected)))
+
+            self.ds.save_to_temp(paths, sheets, filtered_selected)
+            self.ui.progressBar_SI.setMinimumWidth(0)
+            self.ui.progressBar_SI.setMaximumWidth(0)
 
             self.move_on_list.add(list(zip(sheets, filtered_selected, paths)), 'selected_imgs_for_label')
             self.ui.show_label_page()
             self.load_image_to_label_page()
-
         else:
             self.ui.set_warning(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language], 'data_auquzation', level=2)
 
@@ -602,29 +762,12 @@ class API:
             self.t += 1
 
     # ----------------------------------------------------------------------------------------
-    # 
-    # ----------------------------------------------------------------------------------------
-    def find_bboxs(self, img_path):
-        params = self.db.get_image_processing_params()
-        if img_path not in self.detect_bboxs_imgs:
-            bboxs = SSI(self.img, *params)
-            labels = []
-            for bbox in bboxs:
-                label = ['0', np.array(bbox)]
-                labels.append(label)
-            self.label_memory.append(img_path,
-                                     labels,
-                                     'bbox')
-            self.detect_bboxs_imgs.append(img_path)
-
-    # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
     def load_image_to_label_page(self):
         sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
         label_type = self.ui.get_label_type()
         self.img = Utils.read_image(img_path, 'color')
-        self.find_bboxs(img_path)
         self.load_label_from_memory(img_path)
 
         label_img = self.label_bakcend[label_type].draw()
@@ -646,7 +789,7 @@ class API:
         self.position = [0, 0]
 
     def load_label_from_memory(self, img_path):
-        for label_type in ['bbox', 'mask']:
+        for label_type in ['mask']:
             label = self.label_memory.get_label(label_type, img_path)
             self.label_bakcend[label_type].load(label)
 
@@ -777,10 +920,11 @@ class API:
     def label_classify(self, wgt_name=''):
         if self.ui.get_zoom_type() is None:
             label_type = self.ui.get_label_type()
-            mouse_position = self.mouse.get_relative_position()
             if label_type == 'mask':
-                self.label_bakcend[label_type].delete_point_or_mask(mouse_position)
-            self.show_labeling(mouse_position)
+                mouse_position = self.mouse.get_relative_position()
+                if label_type == 'mask':
+                    self.label_bakcend[label_type].delete_point_or_mask(mouse_position)
+                self.show_labeling(mouse_position)
 
     def get_defects(self):
         self.defects_name, self.defects_info = self.db.get_defects()
@@ -875,6 +1019,7 @@ class API:
         self.ui.default_dataset.setText(str(login_info[1]['default_dataset']))
         self.ui.today_date.setText(str(date_funcs.get_date(folder_path=True)))
         self.login_user_name = (str(login_info[1]['user_name']))
+        self.ImageManager.set_user(self.login_user_name)
         self.ds_json.set_user_name_database(self.login_user_name)
         #print('username:', self.login_user_name)
 
@@ -1066,14 +1211,11 @@ class API:
             img_path=img_path,
             pos=pos,
             sheet=sheet,
-            masks=self.label_bakcend['mask'].get(),
-            bboxes=self.label_bakcend['bbox'].get()
-
+            masks=self.label_bakcend['mask']
         )
 
     def save_train_ds(self):
         masks = self.label_bakcend['mask'].get()
-        bboxes = self.label_bakcend['bbox'].get()
         try:
             sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
             self.ds.save(
@@ -1081,7 +1223,6 @@ class API:
                 pos=pos,
                 sheet=sheet,
                 masks=masks,
-                bboxes=bboxes
             )
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
@@ -1091,10 +1232,6 @@ class API:
         for mask in masks:
             if mask[0] not in labels:
                 labels.append(mask[0])
-
-        for bbox in bboxes:
-            if bbox[0] not in labels:
-                labels.append(bbox[0])
 
         self.ds_json.add_update_classification(img_path, labels)
 
@@ -1266,13 +1403,13 @@ class API:
 
     def camera_connection_func(self):
 
+        self.ui.set_enabel(self.ui.start_capture_btn, False)
+        self.ui.set_enabel(self.ui.stop_capture_btn, False)
+        self.ui.set_enabel(self.ui.connect_camera_btn, False)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, False)
+
         cam_num = self.ui.get_camera_parms()
         print('cam num', cam_num)
-
-        if self.proc_start_flag:
-            self.camera_process.start()
-            # self.live.save_camera_images(self.cameras)
-            self.proc_start_flag = False
 
         if cam_num != 'All':
 
@@ -1300,12 +1437,22 @@ class API:
 
                 self.ui.set_img_btn_camera(cam_num, status=False)
 
+            if not self.flag_all_camera:
+                self.ui.set_enabel(self.ui.start_capture_btn, True)
+                self.ui.set_enabel(self.ui.connect_camera_btn, True)
+                self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
         else:
+            self.flag_all_camera = True
             self.auto_connect_all_cameras()
 
         self.set_available_caemras()
 
+
     def camera_disconnection_func(self):
+        self.ui.set_enabel(self.ui.start_capture_btn, False)
+        self.ui.set_enabel(self.ui.stop_capture_btn, False)
+        self.ui.set_enabel(self.ui.connect_camera_btn, False)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, False)
 
         cam_num = self.ui.get_camera_parms()
         cam_parms = self.get_camera_config(str(cam_num))
@@ -1323,6 +1470,10 @@ class API:
         else:
             self.ui.set_warning(texts.WARNINGS['disconnect_eror'][self.language], 'camera_connection', level=3)
 
+        self.ui.set_enabel(self.ui.start_capture_btn, True)
+        self.ui.set_enabel(self.ui.connect_camera_btn, True)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
+
     def auto_connect_all_cameras(self, first_cam=1):
 
         if self.index_num < 24:
@@ -1334,8 +1485,54 @@ class API:
             print('asd')
 
         elif self.index_num == 24:
-
             self.index_num = 0
+            self.flag_all_camera = False
+            self.ui.set_enabel(self.ui.start_capture_btn, True)
+            self.ui.set_enabel(self.ui.connect_camera_btn, True)
+            self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
+
+    def start_capture_func(self):
+        self.ui.set_enabel(self.ui.connect_camera_btn, False)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, False)
+        self.ui.set_enabel(self.ui.start_capture_btn, False)
+        self.ui.set_enabel(self.ui.stop_capture_btn, True)
+
+        # self.camera_thread = QThread()
+
+        self.ImageManager = ImageManager(self.login_user_name, self.ui, self.cameras)
+        self.ImageManager.set_live_type(self.live_type)
+
+        # self.ImageManager.moveToThread(self.camera_thread)
+        # self.camera_thread.started.connect(self.ImageManager.start)
+        # self.camera_thread.start()
+
+        self.ImageManager.start()
+        self.timer = QTimer(self.ui)
+        self.timer.timeout.connect(self.ImageManager.show_live)
+        self.timer.start(100)
+
+        self.start_capture_flag = True
+
+    def stop_capture_func(self):
+        self.ui.set_enabel(self.ui.connect_camera_btn, True)
+        self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
+        self.ui.set_enabel(self.ui.start_capture_btn, True)
+        self.ui.set_enabel(self.ui.stop_capture_btn, False)
+
+        if self.start_capture_flag:
+            self.ImageManager.stop()
+            self.timer.stop()
+            # self.camera_thread.quit()
+            # self.camera_thread.wait()
+            self.start_capture_flag = False
+
+    def change_live_camera(self, text):
+        self.ImageManager.set_n_camera_live(int(text))
+
+    def change_live_type(self, index):
+        self.live_type = index
+        self.ImageManager.set_live_type(index)
+
 
     # _________________________________________________________________________________________________
     # binary-model history page functions
@@ -1470,7 +1667,7 @@ class API:
             if len(selected_datasets) == 0:
                 self.ui.set_warning(texts.WARNINGS['SELECT_NO_DATASET'][self.language], 'binarylist', level=2)
                 return
-            
+
             # get image/annots list related to defect
             # get image pathes
             perfect_check, perfect_image_pathes, defect_check, defect_image_pathes, defect_annot_pathes, binary_count = binary_list_funcs.get_binarylist_image_pathes_list(ds_obj=self.ds,
@@ -1497,7 +1694,7 @@ class API:
             else:
                 self.ui.binary_list_perfect_prev_btn.setEnabled(False)
                 self.ui.binary_list_perfect_next_btn.setEnabled(False)
-            
+
             # defect
             if defect_check:
                 self.binary_image_list.add(mylist=defect_image_pathes, mylist_annots=defect_annot_pathes, name=binary_list_funcs.image_list_object_names['defect'])
@@ -1592,7 +1789,7 @@ class API:
                                         current_user=self.login_user_name,
                                         default_dataset=self.default_dataset_user,
                                         is_binarylist=is_binarylist)
-    
+
 
     # show class related images on UI
     def show_class_related_images(self):
@@ -1621,7 +1818,7 @@ class API:
             self.classification_image_list_prev_func = self.classification_image_list.build_prev_func(name=self.classification_image_list_name)
             # 
             self.update_classlist_images_on_ui()
-            
+
             # no images available
             if len(annotation_list) == 0 and len(image_list) == 0:
                 # msg
@@ -1635,11 +1832,11 @@ class API:
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(True)
                 self.ui.classlist_next_btn.setEnabled(True)
-            
+
             # update pie chart
             chart_funcs.update_classlist_piechart(ui_obj=self.ui, binary_len=binary_count, classes_len=classes_count, classes_list=defects_list)
-        
-    
+
+
     # update slider images
     def update_classlist_images_on_ui(self, prevornext='False'):
         # next or prev on list
@@ -1663,7 +1860,7 @@ class API:
         # if not res:
         #     self.ui.set_warning(texts.WARNINGS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=2)
 
-    
+
     # check classification params
     def check_classification_train_params(self):
         # get train params from UI
@@ -1672,7 +1869,7 @@ class API:
         #
         if len(selected_defects) == 0:
             self.ui.show_mesagges(self.ui.classification_train_msg_label, 'Please select at least one class', color=colors_pallete.failed_red)
-        
+
         else:
             cls_parms += [selected_defects]
             print('cls params:', cls_parms)
@@ -1681,7 +1878,7 @@ class API:
         #
         #bmodel_records = train_api.train_binary(*b_parms, self.ds.weights_binary_path, self)
         #binary_model_funcs.save_new_binary_model_record(ui_obj=self.ui, db_obj=self.db, bmodel_records=bmodel_records)
-    
+
 
     # pie chart funcs
     def create_classlist_pie_chart(self):
@@ -1691,7 +1888,7 @@ class API:
         chart_funcs.create_binarylist_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binarylist_chart_frame)
 
 
-    
+
     # _________________________________________________________________________________________________
     # classification-model history page functions
     def refresh_cls_models_table_onevent(self):
@@ -1750,7 +1947,7 @@ class API:
         else:
             classification_model_funcs.set_clsmodels_on_ui_tabel(ui_obj=self.ui, models_list=clsmodels_list)
             return True
-    
+
 
     # next and prev buttons for binary models table functionality
     def cls_model_tabel_nextorprev(self, next=True, check=False):
@@ -1798,14 +1995,15 @@ class API:
             self.cls_filter_mode = True
             self.ui.set_warning(texts.MESSEGES['FILTERED_RESAULTS_SUCCUSSFULL'][self.language], 'classification_model_history', level=1)
             return True, res[1]
-            
-    
-    
+
+
+
     # clear filters for binary models
     def clear_filters_cls(self):
         self.cls_filter_mode = False
         self.clsmodel_tabel_itr = 1
         self.ui.cls_tabel_page.setText(str(self.clsmodel_tabel_itr))
+        self.refresh_cls_models_table(get_count=True)
         self.refresh_cls_models_table(get_count=True)
         self.refresh_cls_models_table()
         self.ui.set_warning(texts.MESSEGES['FILTERED_RESAULTS_CLEAR'][self.language], 'classification_model_history', level=1)
@@ -1814,13 +2012,20 @@ class API:
 
     #_____________________________________________________________________________________________________
 
+
+
     def set_available_caemras(self):
-
-        connected_cameras = self.cameras.get_connected_cameras()
-
-        sn_available = connected_cameras.keys()
-
+        connected_cameras = self.cameras.get_connected_cameras_by_id()
+        sn_available = list(connected_cameras.keys())
+        sn_available = [str(i) for i in range(1, 25)]
         self.ui.set_list_combo_boxes(self.ui.comboBox_connected_cams, sn_available)
+        ############################################################################
+        ############################################################################
+        ############################################################################
+        ############################################################################
+        ############################################################################
+        ############################################################################
+        ############################################################################
 
     def update_cameras(self):
 
@@ -1853,26 +2058,25 @@ class API:
             cv2.drawContours(mask, [cnt], 0, color=255, thickness=-1)
         return mask
 
-    def create_mask_from_bbox(self, img_path):
-        labels = self.label_memory.get_label('bbox', img_path)
-        mask = np.zeros((self.img.shape[0], self.img.shape[1]))
-        for label in labels:
-            point = label[1].flatten()
-            cv2.rectangle(mask, (point[0], point[1]), (point[2], point[3]), 255, -1)
-        return mask
-
     def create_Heatmap(self):
         sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        self.create_mask_from_mask(img_path)
-        img = Utils.read_image(img_path, 'gray')
-        label_type = self.ui.get_label_type()
-        if label_type == 'mask':
-            df = self.create_mask_from_mask(img_path)
-            hm = CreateHeatmap(img, df)
-        elif label_type == 'bbox':
-            df = self.create_mask_from_bbox(img_path)
-            hm = CreateHeatmap(img, df)
-        self.ui.show_neighbouring(hm)
+        img = Utils.read_image(img_path, 'color')
+        _, hm = SSI(img, heatmap=True)
+        self.img = hm
+        self.ui.set_image_label(self.ui.image, hm)
+        self.ui.image.setScaledContents(True)
+        self.scale = 1
+        self.position = [0, 0]
+
+    def image_processing_suggest(self):
+        sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+        img = Utils.read_image(img_path, 'color')
+        res = SSI(img)
+        self.img = res
+        self.ui.set_image_label(self.ui.image, res)
+        self.ui.image.setScaledContents(True)
+        self.scale = 1
+        self.position = [0, 0]
 
     # def create_piechart(self):
     #     series = QPieSeries()

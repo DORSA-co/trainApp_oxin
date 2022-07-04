@@ -87,7 +87,6 @@ class dataBase:
         s ='%s,'*len_parameters
         s = s[:-1]
         s = '(' + s + ')'
-        
 
         if self.check_connection:
             cursor,connection=self.connect()
@@ -95,10 +94,12 @@ class dataBase:
             mySql_insert_query = """INSERT INTO {} {} 
                                 VALUES 
                                 {} """.format(table_name,parametrs,s)
+            print(mySql_insert_query, data)
             #print('Q:', mySql_insert_query)                   
             cursor.execute(mySql_insert_query,data)
             # mySql_insert_query=(mySql_insert_query,data)
             # self.execute_quary(mySql_insert_query, cursor, connection, close=False,need_data=True )
+            print(mySql_insert_query, data)
             connection.commit()
             print(cursor.rowcount, "Record inserted successfully into images table")
             cursor.close()

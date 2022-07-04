@@ -95,24 +95,24 @@ class Dataset:
         name = ''
         pos = list(map(lambda x:str(x), pos))
         name = ''.join(pos)
-        name = name.replace(',','_')
+        name = name.replace(',', '_')
         name = name.replace(' ', '')
         name = name.replace('(', '')
         name = name.replace(')', '')
         return name
 
-    def save_to_temp(self, imgs_path, sheets):
-        for img_path, sheet in zip(imgs_path, sheets):
-            image_name = self.__random_name__(10) + self.format_image
+    def save_to_temp(self, imgs_path, sheets, positions):
+        for img_path, sheet, pos in zip(imgs_path, sheets, positions):
+            image_name = self.__file_name__(pos) + self.format_image
             res_path = os.path.join(self.images_temp_path, image_name)
             shutil.copyfile(img_path, res_path)
             self.create_annotation_to_temp(sheet, image_name)
 
-    def save(self, img_path, pos, sheet, masks, bboxes):
+    def save(self, img_path, pos, sheet, masks):
         image_name = self.__file_name__(pos) + self.format_image
         res_path = os.path.join(self.images_path, image_name)
         shutil.copyfile(img_path, res_path)
-        self.create_annotation_to_ds(sheet, masks, bboxes, image_name, pos[-1])
+        self.create_annotation_to_ds(sheet, masks, image_name, pos[-1])
 
     def create_annotation_to_temp(self, sheet, fname):
         image_path = os.path.join(  self.images_temp_path, fname)
@@ -133,7 +133,7 @@ class Dataset:
     # def create_annotation_to_ds(self, sheet, masks, bboxes, fname, pos):
     #     image_path = os.path.join(self.images_path, fname)
 
-    def create_annotation_to_ds(self,sheet,masks, bboxes, fname,pos):
+    def create_annotation_to_ds(self,sheet,masks, fname,pos):
             image_path = os.path.join(  self.images_path, fname  )
 
             json_name = fname.split('.')[0] + '.json'
@@ -148,7 +148,6 @@ class Dataset:
             annotation.set_pos(pos)
             annotation.set_path(image_path)
             annotation.set_masks(masks)
-            annotation.set_bboxes(bboxes)
             annotation.write(json_path)
 
     # Miss Abtahi-------------------------------------

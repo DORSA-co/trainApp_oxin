@@ -16,8 +16,8 @@ def get_date(persian=True, folder_path=False):
 
     if date[1] == '/':
         date = '0' + date
-    if date[4] == '/':
-        date = date[:3] + '0' + date[3:]
+    # if date[4] == '/':
+    #     date = date[:3] + '0' + date[3:]
     return date
 
 

@@ -34,7 +34,7 @@ import database_utils
 
 show_eror=False
 
-if show_eror: 
+if show_eror:
 
     from eror_window import UI_eror_window
 
@@ -77,7 +77,7 @@ class Collector():
 
 
         for device in self.__tl_factory.EnumerateDevices():
-            if (device.GetDeviceClass() == 'BaslerGigE'):                
+            if (device.GetDeviceClass() == 'BaslerGigE'):
                 devices.append(device)
 
         # assert len(devices) > 0 , 'No Camera is Connected!'
@@ -88,7 +88,7 @@ class Collector():
             print(camera.GetDeviceInfo().GetSerialNumber())
             if camera.GetDeviceInfo().GetSerialNumber() == self.serial_number:
                 self.camera = camera
-                
+
                 break
         assert len(devices) > 0 , 'No Camera is Connected!'
 
@@ -127,24 +127,24 @@ class Collector():
             self.camera.Open()
             if self.manual:
 
-                
+
                 if model=='PRO':
                     print('yes pro')
                     # print(self.camera.DeviceTemperature.GetValue())
                     self.camera.ExposureTime.SetValue(self.exposure)
 
                     self.camera.Gain.SetValue(self.gain)
-                    
+
                     # self.camera.GevSCPSPacketSize.SetValue(int(self.ps)+1000)
                     # self.camera.Close()
                     # self.camera.Open()
                     self.camera.GevSCPSPacketSize.SetValue(int(self.ps))
                     self.camera.Close()
                     self.camera.Open()
-                                                  
+
                     self.camera.GevSCPD.SetValue(self.dp)
                     self.camera.Close()
-                    self.camera.Open()                   
+                    self.camera.Open()
                     self.camera.GevSCFTD.SetValue(self.ftd)
                     self.camera.Close()
                     self.camera.Open()
@@ -157,14 +157,14 @@ class Collector():
 
                     self.camera.OffsetX.SetValue(self.offset_x)
                     self.camera.OffsetY.SetValue(self.offset_y)
-                    
 
 
 
-                
+
+
 
                 else:
-                    
+
 
 
                     self.camera.ExposureTimeAbs.SetValue(self.exposure)
@@ -173,10 +173,10 @@ class Collector():
                     self.camera.GevSCPSPacketSize.SetValue(int(self.ps)+1000)
                     self.camera.Close()
                     self.camera.Open()
-                                
+
                     self.camera.GevSCPD.SetValue(self.dp)
                     self.camera.Close()
-                    self.camera.Open()                   
+                    self.camera.Open()
                     self.camera.GevSCFTD.SetValue(self.ftd)
                     self.camera.Close()
                     self.camera.Open()
@@ -189,12 +189,12 @@ class Collector():
 
                     self.camera.OffsetX.SetValue(self.offset_x)
                     self.camera.OffsetY.SetValue(self.offset_y)
-                    
+
 
 
             self.camera.Close()
 
-            self.camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly) 
+            self.camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly)
 
             self.camera.Open()
 
@@ -216,14 +216,14 @@ class Collector():
             #     # int64_t = self.camera.PayloadSize.GetValue()
             #     # self.camera.GevStreamChannelSelectorCamera.GevStreamChannelSelector.SetValue( 'GevStreamChannelSelector_StreamChannel0 ')
             #     # self.camera.GevSCPSPacketSize.SetValue(1500)
-                             
+
             #     self.camera.GevSCPD.SetValue(self.dp)
-                
+
             #     self.camera.GevSCFTD.SetValue(self.ftd)
             self.exitCode=0
 
             return 'True'
-            
+
         except genicam.GenericException as e:
             # Error handling
             print("An exception occurred.", e)
@@ -232,18 +232,18 @@ class Collector():
             raise e
             return e
 
-            
+
             # return self.exitCode
 
 
 
     def stop_grabbing(self):
-        
+
         self.camera.Close()
 
         print('camnera close')
-            
-        
+
+
     def listDevices(self):
         """Lists the available devices
         """
@@ -257,7 +257,7 @@ class Collector():
                 device_info.GetMacAddress(),
                 device_info.GetSerialNumber(),
                 )
-            
+
             )
             print(device_info)
 
@@ -268,7 +268,7 @@ class Collector():
         devices = []
 
         for device in self.__tl_factory.EnumerateDevices():
-            if (device.GetDeviceClass() == 'BaslerGigE'):                
+            if (device.GetDeviceClass() == 'BaslerGigE'):
                 devices.append(device)
 
         # assert len(devices) > 0 , 'No Camera is Connected!'
@@ -288,13 +288,13 @@ class Collector():
         for i ,  camera in enumerate(self.cameras):
             device_info = camera.GetDeviceInfo()
             serial_list.append(device_info.GetSerialNumber())
-        return serial_list         
+        return serial_list
 
 
 
 
     def trigg_exec(self,):
-        
+
         if self.trigger:
             self.camera.TriggerSoftware()
             print(self.camera.GetQueuedBufferCount(), 'T'*100)
@@ -305,17 +305,17 @@ class Collector():
 
     def getPictures(self, time_out = 5000):
         try:
-            
+
             if DEBUG:
                 print('TRIGE Done')
             if self.camera.IsGrabbing():
                 if DEBUG:
                     print('Is grabbing')
-                    
+
                     if self.camera.GetQueuedBufferCount() == 10:
                         print('ERRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOORRRRRRRRRRRRRRRRRRRRRRRRR')
                 grabResult = self.camera.RetrieveResult(time_out, pylon.TimeoutHandling_ThrowException)
-                
+
 
                 # print(self.camera.GetQueuedBufferCount(), 'f'*100)
                 if DEBUG:
@@ -324,7 +324,7 @@ class Collector():
                     if self.camera.GetQueuedBufferCount() == 10:
                         print('ERRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOORRRRRRRRRRRRRRRRRRRRRRRRR')
                 if grabResult.GrabSucceeded():
-                    
+
                     if DEBUG:
                         print('Grab Succed')
 
@@ -341,18 +341,18 @@ class Collector():
                     img=np.zeros([1200,1920,3],dtype=np.uint8)
         except:
             print('eror')
-        
+
         # print(self.camera.GetQueuedBufferCount(), 'f'*100)
         # time.sleep(0.1)
         # print(self.camera.GetQueuedBufferCount(), 'f'*100)
         # self.img = img
-        
+
         return img
 
 
     def get_cam(self):
         return self.camera
-    
+
 
 
 
@@ -367,7 +367,7 @@ def get_threading(cameras):
 
         t = threading.Timer(0.330, thread_func )
         t.start()
-    
+
     return thread_func
 
 
@@ -383,8 +383,9 @@ class connect_manage_cameras():
         self.id_list=[]
         # self.db=database_utils.dataBaseUtils()
         self.cam_objs={}
+        self.cam_ids={}
 
-    
+
     # def add_camera(self,id,cam_parms):
 
     #     if id not in self.id_list:
@@ -426,7 +427,7 @@ class connect_manage_cameras():
                         packet_size=cam_parms['packet_size'],frame_transmission_delay=cam_parms['transmission_delay'],height=cam_parms['height'],\
                         width=cam_parms['width'],offet_x=cam_parms['offsetx_value'],offset_y=cam_parms['offsety_value'],manual=False)
 
-                
+
 
                 print(collector)
 
@@ -435,6 +436,7 @@ class connect_manage_cameras():
                 ret=collector.start_grabbing()
 
                 self.cam_objs[cam_parms['serial_number']]=collector
+                self.cam_ids[id]=collector
                 print('grab_cameras',self.cam_objs)
 
                 print('ret grab',ret)
@@ -442,10 +444,10 @@ class connect_manage_cameras():
                 if ret=='True':
 
                     return 'True'
-                
+
                 else:
                     return ret
-            
+
             except:
 
                 # print(ret)
@@ -477,7 +479,7 @@ class connect_manage_cameras():
         devices = []
 
         for device in self.__tl_factory.EnumerateDevices():
-            if (device.GetDeviceClass() == 'BaslerGigE'):                
+            if (device.GetDeviceClass() == 'BaslerGigE'):
                 devices.append(device)
 
         # assert len(devices) > 0 , 'No Camera is Connected!'
@@ -494,7 +496,7 @@ class connect_manage_cameras():
         for i ,  camera in enumerate(self.all_available_cameras):
             device_info = camera.GetDeviceInfo()
             serial_list.append(device_info.GetSerialNumber())
-        return self.all_available_cameras,serial_list   
+        return self.all_available_cameras,serial_list
 
 
     def disconnect_camera(self,sn):
@@ -508,7 +510,7 @@ class connect_manage_cameras():
                 return 'True'
             else :
                 return 'no_connection'
-        
+
         except:
             raise False
             return False
@@ -516,6 +518,10 @@ class connect_manage_cameras():
     def get_connected_cameras(self):
 
         return self.cam_objs
+
+    def get_connected_cameras_by_id(self):
+        # self.cam_ids = {'1': None, '2':None, '13':None, '14':None}
+        return self.cam_ids
 
 
 
@@ -533,17 +539,17 @@ if __name__ == '__main__':
     # parms=cam_obj.get_camera_config('4')
 
     # cam_obj.add_camera('4',parms)
-    
+
     # cameras = {}
     # # for sn in ['40150887']:
     #     # collector = Collector( sn,exposure=3000 , gain=30, trigger=False, delay_packet=170000)
     collector = Collector('40150887',exposure=3000, gain=10, trigger=False, delay_packet=81062,\
         packet_size=9000,frame_transmission_delay=18036,height=1000,width=1000,offet_x=16,offset_y=4,manual=False)
 
-   
+
     # x=collector.get_cam()
-   
-   
+
+
     collector.start_grabbing()
     collector.start_grabbing()
     cameras=collector
@@ -554,10 +560,10 @@ if __name__ == '__main__':
 
 
     # while True:
-        
+
     # #     # for cam in cameras:
     # #     #         cam.trigg_exec()
-                
+
     # #     # for cam in cameras:
     # #     #print(cam.camera.GetQueuedBufferCount())
     #     img = cameras.getPictures()
@@ -585,4 +591,3 @@ if __name__ == '__main__':
         # print('-'*100)
     # func = get_threading(cameras)
     # func()
-        

@@ -123,6 +123,8 @@ class UI_main_window(QMainWindow, ui):
             # SET HACKS
             self.setThemeHack()
 
+        self.bounding_btn.setIcon(QIcon('UI/images/suggest.png'))
+
         self.label_dorsa_open(enable=True)
         # /////////Setting
         self.btn_software_setting.clicked.connect(self.buttonClick)
@@ -165,7 +167,6 @@ class UI_main_window(QMainWindow, ui):
         # labeling
 
         self.polygon_btn.clicked.connect(self.buttonClick)
-        self.bounding_btn.clicked.connect(self.buttonClick)
         self.zoomIn_btn.clicked.connect(self.buttonClick)
         self.zoomOut_btn.clicked.connect(self.buttonClick)
         self.drag_btn.clicked.connect(self.buttonClick)
@@ -183,8 +184,11 @@ class UI_main_window(QMainWindow, ui):
         self.next_coil_btn.clicked.connect(self.buttonClick)
         self.prev_coil_btn.clicked.connect(self.buttonClick)
         self.checkBox_select.clicked.connect(self.buttonClick)
+        self.checkBox_all_imgs_SI.stateChanged.connect(self.buttonClick)
+        self.checkBox_all_camera_SI.stateChanged.connect(self.buttonClick)
+        self.checkBox_all_frame_SI.stateChanged.connect(self.buttonClick)
 
-        self.show_tools_btn.clicked.connect(self.buttonClick)
+        # self.show_tools_btn.clicked.connect(self.buttonClick)
 
         self.keyboard_connections = {}
         self.label_type = 'mask'
@@ -522,39 +526,39 @@ class UI_main_window(QMainWindow, ui):
             # print('no ani')
 
     # frame tools   ////////////////////////////////////
-    def show_frame_tools(self):
-        height = self.frame_tools_technical.height()
-        if height == 0:
-            self.group = QParallelAnimationGroup()
-            for f in ([b"minimumHeight", b"maximumHeight"]):
-                left_box = QPropertyAnimation(self.frame_tools_technical, f)
-                left_box.setDuration(Settings.TIME_ANIMATION)
-                left_box.setStartValue(0)
-                left_box.setEndValue(220)
-                left_box.setEasingCurve(QEasingCurve.InOutQuart)
-
-                self.group.addAnimation(left_box)
-
-            rMyIcon = QPixmap("images\icons\cil-arrow-bottom.png")
-            self.show_tools_btn.setIcon(QIcon(rMyIcon))
-
-            self.group.start()
-
-        elif height == 220:
-            self.group = QParallelAnimationGroup()
-            for f in ([b"minimumHeight", b"maximumHeight"]):
-                left_box = QPropertyAnimation(self.frame_tools_technical, f)
-                left_box.setDuration(Settings.TIME_ANIMATION)
-                left_box.setStartValue(220)
-                left_box.setEndValue(0)
-                left_box.setEasingCurve(QEasingCurve.InOutQuart)
-
-                self.group.addAnimation(left_box)
-
-            rMyIcon = QPixmap("images\icons\cil-arrow-top.png")
-            self.show_tools_btn.setIcon(QIcon(rMyIcon))
-
-            self.group.start()
+    # def show_frame_tools(self):
+    #     height = self.frame_tools_technical.height()
+    #     if height == 0:
+    #         self.group = QParallelAnimationGroup()
+    #         for f in ([b"minimumHeight", b"maximumHeight"]):
+    #             left_box = QPropertyAnimation(self.frame_tools_technical, f)
+    #             left_box.setDuration(Settings.TIME_ANIMATION)
+    #             left_box.setStartValue(0)
+    #             left_box.setEndValue(220)
+    #             left_box.setEasingCurve(QEasingCurve.InOutQuart)
+    #
+    #             self.group.addAnimation(left_box)
+    #
+    #         rMyIcon = QPixmap("images\icons\cil-arrow-bottom.png")
+    #         self.show_tools_btn.setIcon(QIcon(rMyIcon))
+    #
+    #         self.group.start()
+    #
+    #     elif height == 220:
+    #         self.group = QParallelAnimationGroup()
+    #         for f in ([b"minimumHeight", b"maximumHeight"]):
+    #             left_box = QPropertyAnimation(self.frame_tools_technical, f)
+    #             left_box.setDuration(Settings.TIME_ANIMATION)
+    #             left_box.setStartValue(220)
+    #             left_box.setEndValue(0)
+    #             left_box.setEasingCurve(QEasingCurve.InOutQuart)
+    #
+    #             self.group.addAnimation(left_box)
+    #
+    #         rMyIcon = QPixmap("images\icons\cil-arrow-top.png")
+    #         self.show_tools_btn.setIcon(QIcon(rMyIcon))
+    #
+    #         self.group.start()
 
             # IMPORT THEMES FILES QSS/CSS
 
@@ -595,6 +599,7 @@ class UI_main_window(QMainWindow, ui):
         self.showMinimized()
 
     def close_win(self):
+        api.stop_capture_func()
         self.close()
         sys.exit()
 
@@ -694,7 +699,7 @@ class UI_main_window(QMainWindow, ui):
             table_item.setCheckState(Qt.CheckState.Unchecked)
             table_item.setData(Qt.DisplayRole, record)
             self.listWidget_append_img_list.setItem(row, 0, table_item)
-            print(table_item)
+            # print(table_item)
 
     def get_selected_img(self):
         selected_list = []
@@ -719,21 +724,44 @@ class UI_main_window(QMainWindow, ui):
             for i in range(self.listWidget_append_img_list.rowCount()):
                 self.listWidget_append_img_list.item(i, 0).setCheckState(Qt.CheckState.Unchecked)
 
-    def show_selected_side(self, name):
-        if name == 'up_side_technical':
-            self.show_side.setText('UP Side Technical')
+    def able_enable_filters(self):
+        if self.checkBox_all_imgs_SI.isChecked():
+            self.comboBox_side_SI.setEnabled(False)
+            self.comboBox_ncamera_SI.setEnabled(False)
+            self.checkBox_all_camera_SI.setEnabled(False)
+            self.comboBox_nframe_SI.setEnabled(False)
+            self.checkBox_all_frame_SI.setEnabled(False)
 
-        if name == 'down_side_technical':
-            self.show_side.setText('DOWN Side Technical')
+            self.comboBox_side_SI.setCurrentIndex(-1)
+            self.comboBox_ncamera_SI.setCurrentIndex(-1)
+            self.comboBox_nframe_SI.setCurrentIndex(-1)
+        else:
+            self.comboBox_side_SI.setEnabled(True)
+            self.comboBox_ncamera_SI.setEnabled(True)
+            self.checkBox_all_camera_SI.setEnabled(True)
+            self.comboBox_nframe_SI.setEnabled(True)
+            self.checkBox_all_frame_SI.setEnabled(True)
+
+    def able_enable_camera_filter(self):
+        if self.checkBox_all_camera_SI.isChecked():
+            self.comboBox_ncamera_SI.setEnabled(False)
+        else:
+            self.comboBox_ncamera_SI.setEnabled(True)
+
+    def able_enable_frame_filter(self):
+        if self.checkBox_all_frame_SI.isChecked():
+            self.comboBox_nframe_SI.setEnabled(False)
+        else:
+            self.comboBox_nframe_SI.setEnabled(True)
+
+    # def show_selected_side(self, name):
+    #     if name == 'up_side_technical':
+    #         self.show_side.setText('UP Side Technical')
+    #
+    #     if name == 'down_side_technical':
+    #         self.show_side.setText('DOWN Side Technical')
 
     # --------- label page
-    def bounding_box(self):
-        # print('bounding_box')
-        self.image.setCursor(Qt.CrossCursor)
-        self.zoom_type = None
-        self.label_type = 'bbox'
-
-        self.tabWidget_defect.setCurrentIndex(1)
 
     def polygon(self):
         # print('polygon')
@@ -747,6 +775,7 @@ class UI_main_window(QMainWindow, ui):
         self.label_type = 'mask'
 
         self.tabWidget_defect.setCurrentIndex(0)
+        api.load_image_to_label_page()
 
     def zoom_in(self):
         cursor = PG.QPixmap('images/zoom-in_cursor.png')
@@ -785,7 +814,7 @@ class UI_main_window(QMainWindow, ui):
 
     def show_labels(self, labels, label_type):
 
-        LABEL_TABLE = {'mask': self.mask_table_widget, 'bbox': self.bbox_table_widget}
+        LABEL_TABLE = {'mask': self.mask_table_widget}
 
         print('labe', label_type)
 
@@ -1083,7 +1112,28 @@ class UI_main_window(QMainWindow, ui):
         return (localization_algorithm_name, localization_epoch, localization_batch, localization_lr, localization_te,
                 localization_vs, localization_ip, localization_lp)
 
+    def set_side_combobox(self):
+        self.comboBox_side_SI.clear()
+        self.comboBox_side_SI.addItems(['TOP', 'BOTTOM', 'BOTH'])
+        self.comboBox_side_SI.setCurrentIndex(-1)
 
+    def set_camera_combobox(self, min, max):
+        self.comboBox_ncamera_SI.clear()
+        i=0
+        for x in range(min, max):
+            self.comboBox_ncamera_SI.addItem(str(x))
+            self.comboBox_ncamera_SI.setItemChecked(i, False)
+            i+=1
+        self.comboBox_ncamera_SI.setCurrentIndex(-1)
+
+    def set_frame_combobox(self, max):
+        self.comboBox_nframe_SI.clear()
+        i = 0
+        for x in range(0, max):
+            self.comboBox_nframe_SI.addItem(str(x))
+            self.comboBox_nframe_SI.setItemChecked(i, False)
+            i += 1
+        self.comboBox_nframe_SI.setCurrentIndex(-1)
 
     # Dta aquization page add live cameras              Milad
 
@@ -1257,9 +1307,6 @@ class UI_main_window(QMainWindow, ui):
         if btnName == 'polygon_btn':
             self.polygon()
 
-        if btnName == 'bounding_btn':
-            self.bounding_box()
-
         if btnName == 'zoomIn_btn':
             self.zoom_in()
 
@@ -1287,8 +1334,17 @@ class UI_main_window(QMainWindow, ui):
 
             self.select_unselect_all()
 
-        if btnName == "show_tools_btn":
-            self.show_frame_tools()
+        if btnName == 'checkBox_all_imgs_SI':
+            self.able_enable_filters()
+
+        if btnName == 'checkBox_all_camera_SI':
+            self.able_enable_camera_filter()
+
+        if btnName == 'checkBox_all_frame_SI':
+            self.able_enable_frame_filter()
+
+        # if btnName == "show_tools_btn":
+        #     self.show_frame_tools()
         if btnName == 'label_btn_2':
             self.stackedWidget.setCurrentWidget(self.page_label)
             image = ImageQt.fromqpixmap(self.crop_image.pixmap())
@@ -1427,11 +1483,16 @@ class UI_main_window(QMainWindow, ui):
     def set_image_label(self,label_name, img):
         h, w, ch = img.shape
         bytes_per_line = ch * w
-        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_RGB888)
+        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_BGR888)
 
 
         label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))
 
+    def set_text_label(self,label_name,text,color=None):
+
+        label_name.setText(text)
+        if color:
+            label_name.setStyleSheet("color:{}".format(color))
 
     def set_img_btn_camera(self,cam_num,status=True):
 

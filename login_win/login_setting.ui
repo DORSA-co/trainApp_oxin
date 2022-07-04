@@ -1187,7 +1187,7 @@ color:white;</string>
            <widget class="QPushButton" name="forgot_btn">
             <property name="minimumSize">
              <size>
-              <width>165</width>
+              <width>223</width>
               <height>0</height>
              </size>
             </property>

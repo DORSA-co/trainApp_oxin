@@ -8,7 +8,7 @@ import os
 from backend import pathStructure, binary_model_funcs
 import inspect
 class dataBaseUtils():
-    def __init__(self,user_name='root',password='root') :
+    def __init__(self,user_name='root',password='Dorsa1400@') :
         self.db=database.dataBase(user_name,password,'localhost','saba_database')
         self.sheets_info_tabel = 'sheets_info'
         self.setting_tabel = 'settings'
@@ -34,7 +34,7 @@ class dataBaseUtils():
     #________________________________________________________________
     def build_sheet(self,record):
         y,m,d = record['date'].split('/')
-        hh,mm = record['time'].split(':')
+        hh,mm,_ = record['time'].split(':')
         sheet_obj = Sheet(
             id          = record['id'],
             sheet_id    = record['sheet_id'],
@@ -53,6 +53,25 @@ class dataBaseUtils():
             cameras     = [int( record['cameras'].split('-')[0] ) , int( record['cameras'].split('-')[1] )]
         )
         return sheet_obj
+
+    # ________________________________________________________________
+    #
+    # ________________________________________________________________
+    def set_sheet(self, coil_dict):
+        data = ()
+        db_headers = ''
+        for key in coil_dict:
+            data = data + (coil_dict[key],)
+            db_headers = db_headers + key + ','
+        db_headers = '(' + db_headers[:-1] + ')'
+        # print('bmodel_record:', data, 'cols:', db_headers)
+        try:
+            self.db.add_record(data, table_name=self.sheets_info_tabel, parametrs=db_headers,
+                               len_parameters=len(coil_dict))
+            return 'True'
+
+        except:
+            return 'Databas Eror'
 
     #________________________________________________________________
     #

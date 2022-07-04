@@ -1,7 +1,5 @@
 
-
-
-ERORS={
+ERORS ={
 
         'BUILD_BINARYLIST_SLIDER_ERROR': {'fa': ' خطای ساخت اسلایدر تصاویر ',
                  'en': ' Error while building slider(s) '},
@@ -91,13 +89,13 @@ ERORS={
 }
 
 
-WARNINGS={
+WARNINGS ={
 
-        'NO_CHOOSEN_IMG': {'fa':' تصویری انتخاب نشده است ',
-            'en':' No image selected '},
+        'NO_CHOOSEN_IMG': {'fa' :' تصویری انتخاب نشده است ',
+            'en' :' No image selected '},
 
-        'NO_SHEET': {'fa':' ورقی بارگذاری نشده است ',
-                 'en':' No sheet loaded '},
+        'NO_SHEET': {'fa' :' ورقی بارگذاری نشده است ',
+                 'en' :' No sheet loaded '},
         
         'IMAGE_STATUS': {'fa': ' وضعیت عیب تصویر مشخص نشده است ',
                  'en': ' defect status is not specified '},
@@ -105,144 +103,154 @@ WARNINGS={
         'NO_IMAGE_LOADED': {'fa': ' تصویری بارگذاری نشده است ',
                  'en': ' No image loaded '},
 
+        'NO_SHEET_LOADED': {'fa': ' ورقی بارگذاری نشده است ',
+                 'en': ' No sheet loaded '},
+
         'ALREADY_SAVED': {'fa': ' تصویر قبلا ذخیره شده است ',
                  'en': ' Image already saved '},
 
         'ALREADY_SAVED_TITLE': {'fa': ' اخطار ',
                  'en': ' Warning '},
 
-        'ALREADY_SAVED_DEFECT': {'fa': ' تصویر قبلا با وضعیت عیب "بله" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "خیر" ذخیره کنید؟ ',
-                 'en': 'Image already saved with defect status "Yes". Are you sure you want to save it with defect '
-                       'status "No" '},
+        'ALREADY_SAVED_DEFECT':
+        {'fa': ' تصویر قبلا با وضعیت عیب "بله" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "خیر" ذخیره کنید؟ ',
+        'en': 'Image already saved with defect status "Yes". Are you sure you want to save it with defect '
+              'status "No" '},
 
-        'ALREADY_SAVED_PERFECT': {'fa': ' تصویر قبلا با وضعیت عیب "خیر" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "بله" ذخیره کنید؟ ',
-                 'en': 'Image already saved with defect status "No". Are you sure you want to save it with defect '
-                       'status "Yes" '},
+    'ALREADY_SAVED_PERFECT': {
+        'fa': ' تصویر قبلا با وضعیت عیب "خیر" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "بله" ذخیره کنید؟ ',
+        'en': 'Image already saved with defect status "No". Are you sure you want to save it with defect '
+              'status "Yes" '},
 
-        'INVALID_DATASET': {'fa': ' آدرس مجموعه داده معتبر نیست ',
-                 'en': ' Dataset address is invalid '},
+    'INVALID_DATASET': {'fa': ' آدرس مجموعه داده معتبر نیست ',
+                        'en': ' Dataset address is invalid '},
 
-        'DATASET_FORMAT': {'fa': ' قالب مجموعه داده صحیح نیست ',
-                 'en': ' Dataset format is incorrect '},
+    'DATASET_FORMAT': {'fa': ' قالب مجموعه داده صحیح نیست ',
+                       'en': ' Dataset format is incorrect '},
 
-        'IMAGE_SAVE_SUCCESSFULLY':{'fa': 'موفقیت ذخیره شد',
-                 'en': ' Image Saved '},
+    'IMAGE_SAVE_SUCCESSFULLY': {'fa': 'موفقیت ذخیره شد',
+                                'en': ' Image Saved '},
 
-        'DATASET_NUMBER': {'fa': ' شماره ی مجموعه داده خارج از محدوده است ',
-                 'en': ' Dataset number is out of range '},
+    'DATASET_NUMBER': {'fa': ' شماره ی مجموعه داده خارج از محدوده است ',
+                       'en': ' Dataset number is out of range '},
 
-        'DATASET_EXIST': {'fa': ' آدرس وارد شده وجود دارد ',
-                 'en': ' Address already exist '},
-        
-        'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
-                 'en': ' Are you sure want to logout ? '},
-        
+    'DATASET_EXIST': {'fa': ' آدرس وارد شده وجود دارد ',
+                      'en': ' Address already exist '},
 
-        'Cmamera_successful':{'fa': ' دوربین متصل شد',
-                 'en': ' Cmamera Connection successfuly '},
+    'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
+                       'en': ' Are you sure want to logout ? '},
 
-        'Cmamera_serial_eror':{'fa': ' شماره سریال متصل نیست',
-                 'en': ' This camera Serial Not Connect '},
- 
-        'disconnect_eror':{'fa': ' خطا در قطع اتصال',
-                 'en': ' Disconnectiong Eror '},                
- 
-        'no_connect':{'fa': ' اتصالی برقرار نمیباشد',
-                 'en': ' There is no connection '},                
+    'Cmamera_successful': {'fa': ' دوربین متصل شد',
+                           'en': ' Cmamera Connection successfuly '},
 
+    'Cmamera_serial_eror': {'fa': ' شماره سریال متصل نیست',
+                            'en': ' This camera Serial Not Connect '},
 
-        'DATASET_NOT_SELECTED': {'fa': ' دیتاست انتخاب نشده است ',
-                 'en': ' No dataset selected '},
-        
-        
-        'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
-                 'en': ' Are you sure want to logout ? '},
-        
-        'LOGIN_FIRST': {'fa': ' ابتدا وارد حساب کاربری شوید ',
-                 'en': ' You are not logged in '},
-        
-        'CREATE_DATABASE': {'fa': ' آیا از ایجاد دیتابیس جدید مطمئن هستید ؟ ',
-                 'en': ' Are you sure want to create new database ? '},
+    'disconnect_eror': {'fa': ' خطا در قطع اتصال',
+                        'en': ' Disconnectiong Eror '},
 
-        'EPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Epoch range fields cant be empty, Please fill both them or leave them empty '},
+    'no_connect': {'fa': ' اتصالی برقرار نمیباشد',
+                   'en': ' There is no connection '},
 
-        'TEPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به تیونیگ اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Tuning epoch range fields cant be empty, Please fill both them or leave them empty '},
+    'DATASET_NOT_SELECTED': {'fa': ' دیتاست انتخاب نشده است ',
+                             'en': ' No dataset selected '},
 
-        'BATCHSIZE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به سایز بچ را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Batch-size range fields cant be empty, Please fill both them or leave them empty '},
+    'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
+                       'en': ' Are you sure want to logout ? '},
 
-        'SPLITRATIO_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به نسبت اسپلیت را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Split-ratio range fields cant be empty, Please fill both them or leave them empty '},
+    'LOGIN_FIRST': {'fa': ' ابتدا وارد حساب کاربری شوید ',
+                    'en': ' You are not logged in '},
 
-        'LOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطا را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Loss range fields cant be empty, Please fill both them or leave them empty '},
+    'CREATE_DATABASE': {'fa': ' آیا از ایجاد دیتابیس جدید مطمئن هستید ؟ ',
+                        'en': ' Are you sure want to create new database ? '},
 
-        'ACCU_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به دقت را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Accuracy range fields cant be empty, Please fill both them or leave them empty '},
+    'EPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
+                          'en': ' Epoch range fields cant be empty, Please fill both them or leave them empty '},
 
-        'PREC_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به پرسیژن را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Precision range fields cant be empty, Please fill both them or leave them empty '},
+    'TEPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به تیونیگ اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
+                           'en': ' Tuning epoch range fields cant be empty, Please fill both them or leave them empty '},
 
-        'RECA_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به ریکال را مقدار دهید یا هر دو را خالی بگذارید ',
-                 'en': ' Recall range fields cant be empty, Please fill both them or leave them empty '},
+    'BATCHSIZE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به سایز بچ را مقدار دهید یا هر دو را خالی بگذارید ',
+                              'en': ' Batch-size range fields cant be empty, Please fill both them or leave them empty '},
 
-        'SELECT_MORE_THAN_ONE_DEFECT_CLASS': {'fa': ' امکان انتخاب چند کلاس عیب به صورت همزمان وجود ندارد ',
-                 'en': ' Cant select more than one defect class at same time '},
+    'SPLITRATIO_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به نسبت اسپلیت را مقدار دهید یا هر دو را خالی بگذارید ',
+                               'en': ' Split-ratio range fields cant be empty, Please fill both them or leave them empty '},
 
-        'SELECT_NO_DEFECT_CLASS': {'fa': ' لطفا یک کلاس عیب انتخاب کنید  ',
-                 'en': ' Please select a defect class '},
+    'LOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطا را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Loss range fields cant be empty, Please fill both them or leave them empty '},
 
-        'SELECT_NO_DATASET': {'fa': ' لطفا حداقل یک دیتاست انتخاب کنید  ',
-                 'en': ' Please select at least on dataset '},
+    'ACCU_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به دقت را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Accuracy range fields cant be empty, Please fill both them or leave them empty '},
 
-        'SELECT_NO_DATASET': {'fa': ' لطفا حداقل یک دیتاست انتخاب کنید  ',
-                 'en': ' Please select at least on dataset '},
-        
-        'SET_DATASET': {'fa': ' دیتاست با موفقیت تنظیم شد ',
-                 'en': ' Default dataset set successfully '},
+    'PREC_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به پرسیژن را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Precision range fields cant be empty, Please fill both them or leave them empty '},
 
-        'SET_DATASET_TITLE': {'fa': ' دیتاست پیش فرض ',
-                 'en': ' Default dataset '},
+    'RECA_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به ریکال را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Recall range fields cant be empty, Please fill both them or leave them empty '},
 
-        'CREATE_DATASET_TITLE': {'fa': ' وجود دیتاست ',
-                 'en': ' Dataset exist '},
+    'SELECT_MORE_THAN_ONE_DEFECT_CLASS': {'fa': ' امکان انتخاب چند کلاس عیب به صورت همزمان وجود ندارد ',
+                                          'en': ' Cant select more than one defect class at same time '},
 
-        'CREATE_DATASET': {'fa': ' دیتاست با این آدرس و نام وجود دارد ',
-                 'en': ' Dataset with this path and name already axist '}
-        
-                #  'en': ' Error while opening image '}
+    'SELECT_NO_DEFECT_CLASS': {'fa': ' لطفا یک کلاس عیب انتخاب کنید  ',
+                               'en': ' Please select a defect class '},
+
+    'SELECT_NO_DATASET': {'fa': ' لطفا حداقل یک دیتاست انتخاب کنید  ',
+                          'en': ' Please select at least on dataset '},
+
+    'SET_DATASET': {'fa': ' دیتاست با موفقیت تنظیم شد ',
+                    'en': ' Default dataset set successfully '},
+
+    'SET_DATASET_TITLE': {'fa': ' دیتاست پیش فرض ',
+                          'en': ' Default dataset '},
+
+    'CREATE_DATASET_TITLE': {'fa': ' وجود دیتاست ',
+                             'en': ' Dataset exist '},
+
+    'CREATE_DATASET': {'fa': ' دیتاست با این آدرس و نام وجود دارد ',
+                       'en': ' Dataset with this path and name already axist '},
+
+    'SIDE_EMPTY': {'fa': ' فیلد جهت خالی است ',
+                   'en': ' Side is empty '},
+
+    'CAMERA_EMPTY': {'fa': ' فیلد شماره دوربین خالی است ',
+                     'en': ' Camera number is empty '},
+
+    'FRAME_EMPTY': {'fa': ' فیلد شماره فریم خالی است ',
+                    'en': ' Frame number is empty '},
+
+    'APPEND_SUCCESSFULLY': {'fa': ' با موفقیت اضافه شد ',
+                            'en': ' Append successfully '},
+
+    'REMOVE_SUCCESSFULLY': {'fa': ' با موفقیت حذف شد ',
+                           'en': ' Remove successfully '}
+
+    #  'en': ' Error while opening image '}
 
 }
 MESSEGES = {
 
-        'SELECT_IMAGE': {'fa':'دوربین: {} | فریم: {}',
-                         'en':'Camera: {} | Frame: {} '},
+    'SELECT_IMAGE': {'fa': 'دوربین: {} | فریم: {}',
+                     'en': 'Camera: {} | Frame: {} '},
 
-        'FILTERED_RESAULTS_SUCCUSSFULL' : {'fa': ' نتایج اعمال فیلتر با موفقیت بازگردانده شد ',
-                 'en': ' Filtered resaults returened succussfully '},
+    'FILTERED_RESAULTS_SUCCUSSFULL': {'fa': ' نتایج اعمال فیلتر با موفقیت بازگردانده شد ',
+                                      'en': ' Filtered resaults returened succussfully '},
 
-        'FILTERED_RESAULTS_CLEAR' : {'fa': ' فیلترهای اعمال شده پاک شدند ',
-                 'en': ' Filters cleared '},
+    'FILTERED_RESAULTS_CLEAR': {'fa': ' فیلترهای اعمال شده پاک شدند ',
+                                'en': ' Filters cleared '},
 
-        'REFRESH_TABLE' : {'fa': ' جدول(ها) رفرش شدند، فیلترهای اعمال شده پاک شدند ',
-                 'en': ' Table(s) refreshed succussfully, Filters cleared  '},
+    'REFRESH_TABLE': {'fa': ' جدول(ها) رفرش شدند، فیلترهای اعمال شده پاک شدند ',
+                      'en': ' Table(s) refreshed succussfully, Filters cleared  '},
 
-        'LOAD_IMAGES_WITH_DEFECT' : {'fa': ' تصاویر دارای کلاس عیب موردنظر بارگزاری شدند ',
-                 'en': ' Image records containing this defect are loaded'},
+    'LOAD_IMAGES_WITH_DEFECT': {'fa': ' تصاویر دارای کلاس عیب موردنظر بارگزاری شدند ',
+                                'en': ' Image records containing this defect are loaded'},
 
-        'LOAD_IMAGES_DATASETS' : {'fa': ' تصاویر دیتاست های انتخاب شده بارگزاری شدند ',
-                 'en': ' Image records belonging selected datasets are loaded'},
+    'LOAD_IMAGES_DATASETS': {'fa': ' تصاویر دیتاست های انتخاب شده بارگزاری شدند ',
+                             'en': ' Image records belonging selected datasets are loaded'},
 
-        'NO_IMAGE_AVAILABLE_WITH_DEFECT': {'fa': ' هیچ تصویر دارای کلاس موردنظر در دیتاست های انتخاب شده یافت نشد  ',
-                 'en': ' No image available with this defect class in selected datasets'},
+    'NO_IMAGE_AVAILABLE_WITH_DEFECT': {'fa': ' هیچ تصویر دارای کلاس موردنظر در دیتاست های انتخاب شده یافت نشد  ',
+                                       'en': ' No image available with this defect class in selected datasets'},
 
-        'NO_IMAGE_AVAILABLE_IN_DATASET': {'fa': ' هیچ تصویری در دیتاست های انتخاب شده یافت نشد  ',
-                 'en': ' No image available in selected datasets'},
+    'NO_IMAGE_AVAILABLE_IN_DATASET': {'fa': ' هیچ تصویری در دیتاست های انتخاب شده یافت نشد  ',
+                                      'en': ' No image available in selected datasets'},
 
-            
-                         
 }
-
-
