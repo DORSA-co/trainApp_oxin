@@ -86,7 +86,8 @@ class ImageManager(QObject):
             self.nframe = [0]*24
             self.stop_cam = ceil(coil_dict['width'] / self.camera_width)
             create_sheet_path(self.main_path, self.sheet_id)
-            self.ui.sheet_label.setText(str(coil_dict))
+            # self.ui.sheet_label.setText(str(coil_dict))
+            self.set_ui(coil_dict)
             if self.coil_dict:
                 self.update_database()
             self.coil_dict = coil_dict
@@ -95,6 +96,24 @@ class ImageManager(QObject):
         else:
             self.plc_thread = threading.Timer(1, self.read_from_plc)
             self.plc_thread.start()
+
+
+    def set_ui(self,coil):
+        print('coil',coil)
+        # for i in coil.keys():
+        #     self.ui.set_text_label(eval('self.ui.label_{}'.format(i)),str(coil[i]))
+        # {'sheet_id': 890, 'heat_number': '0', 'ps_number': '1111', 'pdl_number': '2222.0', 'lenght': 1000.0, 'width': 480.0, 'thickness': None}
+        
+        print(str(coil['sheet_id']))
+        self.ui.set_text_label(self.ui.label_sheet_id,str(coil['sheet_id']))
+        self.ui.set_text_label(self.ui.label_heat_number,str(coil['heat_number']))
+        self.ui.set_text_label(self.ui.label_ps_number,str(coil['ps_number']))
+        self.ui.set_text_label(self.ui.label_pdl_number,str(coil['pdl_number']))
+        self.ui.set_text_label(self.ui.label_lenght,str(coil['lenght']))
+        self.ui.set_text_label(self.ui.label_width,str(coil['width']))
+        self.ui.set_text_label(self.ui.label_thickness,str(coil['thickness']))
+
+
 
     def update_database(self):
         self.coil_dict['user'] = self.user

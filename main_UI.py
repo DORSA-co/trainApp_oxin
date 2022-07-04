@@ -1488,6 +1488,11 @@ class UI_main_window(QMainWindow, ui):
 
         label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))
 
+    def set_text_label(self,label_name,text,color=None):
+
+        label_name.setText(text)
+        if color:
+            label_name.setStyleSheet("color:{}".format(color))
 
     def set_img_btn_camera(self,cam_num,status=True):
 
