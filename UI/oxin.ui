@@ -1460,20 +1460,20 @@ text-align:left;</string>
                   <property name="maximumSize">
                    <size>
                     <width>0</width>
-                    <height>16777215</height>
+                    <height>62</height>
                    </size>
                   </property>
                   <property name="text">
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap>images/images/whitew.png</pixmap>
+                   <pixmap>images/images/dorsa_oxin_white.png</pixmap>
                   </property>
                   <property name="scaledContents">
                    <bool>true</bool>
                   </property>
                   <property name="margin">
-                   <number>-11</number>
+                   <number>0</number>
                   </property>
                  </widget>
                 </item>
@@ -3527,13 +3527,13 @@ QPushButton:enabled {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>625</width>
+                                   <width>634</width>
                                    <height>26</height>
                                   </rect>
                                  </property>
                                  <layout class="QHBoxLayout" name="horizontalLayout_212">
                                   <property name="leftMargin">
-                                   <number>0</number>
+                                   <number>9</number>
                                   </property>
                                   <property name="topMargin">
                                    <number>0</number>
@@ -3659,7 +3659,7 @@ QPushButton:enabled {
                                  <enum>Qt::LeftToRight</enum>
                                 </property>
                                 <property name="currentIndex">
-                                 <number>3</number>
+                                 <number>1</number>
                                 </property>
                                 <widget class="QWidget" name="tab_3">
                                  <attribute name="title">
@@ -5091,9 +5091,9 @@ QComboBox QAbstractItemView {
                                     <property name="frameShadow">
                                      <enum>QFrame::Plain</enum>
                                     </property>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_203">
+                                    <layout class="QHBoxLayout" name="horizontalLayout_148">
                                      <property name="spacing">
-                                      <number>6</number>
+                                      <number>0</number>
                                      </property>
                                      <property name="leftMargin">
                                       <number>0</number>
@@ -5108,107 +5108,100 @@ QComboBox QAbstractItemView {
                                       <number>0</number>
                                      </property>
                                      <item>
-                                      <layout class="QHBoxLayout" name="horizontalLayout_148">
-                                       <property name="spacing">
-                                        <number>0</number>
+                                      <widget class="QLabel" name="live1">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
                                        </property>
-                                       <item>
-                                        <widget class="QLabel" name="live1">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live2">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live3">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live4">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live5">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live6">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                      </layout>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live2">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live3">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live4">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live5">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live6">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
                                      </item>
                                     </layout>
                                    </widget>
@@ -5396,7 +5389,7 @@ QComboBox QAbstractItemView {
                                     <property name="frameShadow">
                                      <enum>QFrame::Plain</enum>
                                     </property>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_204">
+                                    <layout class="QHBoxLayout" name="horizontalLayout_149">
                                      <property name="spacing">
                                       <number>0</number>
                                      </property>
@@ -5413,107 +5406,100 @@ QComboBox QAbstractItemView {
                                       <number>0</number>
                                      </property>
                                      <item>
-                                      <layout class="QHBoxLayout" name="horizontalLayout_149">
-                                       <property name="spacing">
-                                        <number>0</number>
+                                      <widget class="QLabel" name="live7">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
                                        </property>
-                                       <item>
-                                        <widget class="QLabel" name="live7">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live8">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live9">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live10">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live11">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live12">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                      </layout>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live8">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live9">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live10">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live11">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live12">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
                                      </item>
                                     </layout>
                                    </widget>
@@ -5701,7 +5687,7 @@ QComboBox QAbstractItemView {
                                     <property name="frameShadow">
                                      <enum>QFrame::Plain</enum>
                                     </property>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_218">
+                                    <layout class="QHBoxLayout" name="horizontalLayout_150">
                                      <property name="spacing">
                                       <number>0</number>
                                      </property>
@@ -5718,107 +5704,100 @@ QComboBox QAbstractItemView {
                                       <number>0</number>
                                      </property>
                                      <item>
-                                      <layout class="QHBoxLayout" name="horizontalLayout_150">
-                                       <property name="spacing">
-                                        <number>0</number>
+                                      <widget class="QLabel" name="live13">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
                                        </property>
-                                       <item>
-                                        <widget class="QLabel" name="live13">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live14">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live15">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live16">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live17">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live18">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                      </layout>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live14">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live15">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live16">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live17">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live18">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
                                      </item>
                                     </layout>
                                    </widget>
@@ -6006,7 +5985,7 @@ QComboBox QAbstractItemView {
                                     <property name="frameShadow">
                                      <enum>QFrame::Plain</enum>
                                     </property>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_219">
+                                    <layout class="QHBoxLayout" name="horizontalLayout_168">
                                      <property name="spacing">
                                       <number>0</number>
                                      </property>
@@ -6023,107 +6002,100 @@ QComboBox QAbstractItemView {
                                       <number>0</number>
                                      </property>
                                      <item>
-                                      <layout class="QHBoxLayout" name="horizontalLayout_168">
-                                       <property name="spacing">
-                                        <number>0</number>
+                                      <widget class="QLabel" name="live19">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
                                        </property>
-                                       <item>
-                                        <widget class="QLabel" name="live19">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live20">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live21">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live22">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live23">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="live24">
-                                         <property name="minimumSize">
-                                          <size>
-                                           <width>0</width>
-                                           <height>70</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                         <property name="scaledContents">
-                                          <bool>true</bool>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                      </layout>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live20">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live21">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live22">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live23">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="live24">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>0</width>
+                                         <height>70</height>
+                                        </size>
+                                       </property>
+                                       <property name="text">
+                                        <string/>
+                                       </property>
+                                       <property name="scaledContents">
+                                        <bool>true</bool>
+                                       </property>
+                                      </widget>
                                      </item>
                                     </layout>
                                    </widget>
@@ -6523,7 +6495,7 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>393</width>
+                                         <width>379</width>
                                          <height>27</height>
                                         </rect>
                                        </property>
@@ -7815,6 +7787,35 @@ color:white;</string>
                               </item>
                              </layout>
                             </widget>
+                           </widget>
+                          </item>
+                          <item alignment="Qt::AlignTop">
+                           <widget class="QPushButton" name="btn_technical_move">
+                            <property name="styleSheet">
+                             <string notr="true">QPushButton{
+background-color:rgb(255,255,255);
+color:rgb(0,0,0);
+border: 1px solid rgb(52, 59, 72);
+border-radius: 1px;	
+background-image: url(:/icons/images/icons/t2.png)
+}
+QPushButton:hover {
+	background-color: rgb(230,230,230);
+	border: 2px solid rgb(61, 70, 86);
+}
+QPushButton:pressed {	
+	background-color: rgb(200,200,200);
+	border: 2px solid rgb(43, 50, 61);
+}
+</string>
+                            </property>
+                            <property name="text">
+                             <string/>
+                            </property>
+                            <property name="icon">
+                             <iconset>
+                              <normaloff>images/images/fast-forward.png</normaloff>images/images/fast-forward.png</iconset>
+                            </property>
                            </widget>
                           </item>
                           <item>
@@ -16135,7 +16136,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_localization">
                          <property name="currentIndex">
-                          <number>1</number>
+                          <number>2</number>
                          </property>
                          <widget class="QWidget" name="page_localization_statics">
                           <layout class="QHBoxLayout" name="horizontalLayout_60">
@@ -21519,7 +21520,7 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>218</width>
+                                 <width>312</width>
                                  <height>218</height>
                                 </rect>
                                </property>

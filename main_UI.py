@@ -78,6 +78,8 @@ class UI_main_window(QMainWindow, ui):
         # TOGGLE MENU
         # ///////////////////////////////////////////////////////////////
         self.toggleButton.clicked.connect(self.buttonClick)
+        self.btn_technical_move.clicked.connect(self.buttonClick)
+        
 
         # USE CUSTOM TITLE BAR | USE AS "False" FOR MAC OR LINUX
         # ///////////////////////////////////////////////////////////////
@@ -369,6 +371,47 @@ class UI_main_window(QMainWindow, ui):
             self.animation.setEasingCurve(QEasingCurve.InOutQuart)
             self.animation.start()
 
+    # Technical view Move
+    # ///////////////////////////////////////////////////////////////
+    def technical_move(self, enable):
+        if enable:
+            # GET WIDTH
+            width = self.frame_413.width()
+            maxExtend = 0
+            standard = 600
+
+            # SET MAX WIDTH
+            if width  !=0:
+                print('OPEN')
+                # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
+                self.set_btn_image(self.btn_technical_move,'UI/images/images/left.png')
+                widthExtended = maxExtend
+                # print(widthExtended)
+            else:
+                # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
+                self.set_btn_image(self.btn_technical_move,'UI/images/images/fast-forward.png')
+
+                print('Close')
+                widthExtended = standard
+                # print(widthExtended)
+
+            # ANIMATION
+            print('width',width)
+            self.animation = QPropertyAnimation(self.frame_413, b"maximumWidth")
+            self.animation.setDuration(Settings.TIME_ANIMATION)
+            self.animation.setStartValue(width)
+            self.animation.setEndValue(widthExtended)
+            self.animation.setEasingCurve(QEasingCurve.InOutQuart)
+            self.animation.start()
+            # self.animation = QPropertyAnimation(self.frame_413, b"minimumWidth")
+            # self.animation.setDuration(Settings.TIME_ANIMATION)
+            # self.animation.setStartValue(width)
+            # self.animation.setEndValue(widthExtended)
+            # self.animation.setEasingCurve(QEasingCurve.InOutQuart)
+            # self.animation.start()
+            print('start')
+
+
     # TOGGLE LEFT BOX
     # ///////////////////////////////////////////////////////////////
     def hi(self):
@@ -430,7 +473,8 @@ class UI_main_window(QMainWindow, ui):
         if enable:
             # GET WIDTH
             width = self.label_dorsa.width()
-            maxExtend = 150
+            maxExtend = 224
+
             standard = 0
 
             # SET MAX WIDTH
@@ -1220,6 +1264,11 @@ class UI_main_window(QMainWindow, ui):
         if btnName == 'toggleButton':
             self.toggleMenu(True)
 
+        if btnName == 'btn_technical_move':
+            self.technical_move(True)
+    
+
+
         if btnName == 'Data_auquzation_btn':
             self.left_bar_clear()
             self.Data_auquzation_btn.setStyleSheet(
@@ -1522,7 +1571,10 @@ class UI_main_window(QMainWindow, ui):
 
         widget.setCurrentWidget(page_name)
 
+    def set_btn_image(self,btn_name,img_path):
 
+        # btn_name=eval('self.camera%s_btn_2'%cam_num)
+        btn_name.setIcon(QIcon(img_path))
 
 
 if __name__ == "__main__":
