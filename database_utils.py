@@ -130,12 +130,12 @@ class dataBaseUtils():
         #  update_record(self,data,table_name,col_name,value,id,id_value):
         self.db.update_record(table_name= self.setting_tabel,col_name='path_dataset_user',value=path,id='id',id_value=0)
 
-    def set_split_size(self, size, id):
-        self.db.update_record(table_name=self.datasets_table, col_name='split_size', value=str(size), id='id', id_value=id)
-
-    def get_split_size(self, id):
-        record =self.db.search(table_name=self.datasets_table,param_name='id',value=id)[0 ]
-        return eval(record['split_size'])
+    # def set_split_size(self, size, id):
+    #     self.db.update_record(table_name=self.datasets_table, col_name='split_size', value=str(size), id='id', id_value=id)
+    #
+    # def get_split_size(self, id):
+    #     record =self.db.search(table_name=self.datasets_table,param_name='id',value=id)[0 ]
+    #     return eval(record['split_size'])
 
     def get_path_sheet_image(self,filtered_selected):
         paths = []

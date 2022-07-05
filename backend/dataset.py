@@ -28,7 +28,6 @@ headers = ['Dataset Name', 'User Own', 'Dataset Path']
 
 
 class Dataset:
-
     def __init__(self, dataset_path):
         self.images_temp_folder = 'temp_images'
         self.annotations_temp_folder = 'temp_annotations'
@@ -37,6 +36,7 @@ class Dataset:
         self.binary_folder = 'binary'
         self.defect_folder = 'defect'
         self.perfect_folder = 'perfect'
+        self.defect_mask_folder = 'defect_mask'
         self.defect_splitted_folder = 'defect_splitted'
         self.perfect_splitted_folder = 'perfect_splitted'
         self.weights = 'weights'
@@ -44,7 +44,7 @@ class Dataset:
         self.weights_localization = 'localization'
         self.weights_classification = 'classification'
         self.dataset_path = dataset_path
-        self.format_image = '.jpg'
+        self.format_image = '.png'
 
         # print(self.dataset_path)
 
@@ -61,6 +61,7 @@ class Dataset:
         self.annotations_path = os.path.join(self.dataset_path, self.annotations_folder)
         self.binary_path = os.path.join(self.dataset_path, self.binary_folder)
         self.defect_path = os.path.join(self.binary_path, self.defect_folder)
+        self.defect_mask_path = os.path.join(self.binary_path, self.defect_mask_folder)
         self.perfect_path = os.path.join(self.binary_path, self.perfect_folder)
         self.defect_splitted_path = os.path.join(self.binary_path, self.defect_splitted_folder)
         self.perfect_splitted_path = os.path.join(self.binary_path, self.perfect_splitted_folder)
@@ -79,6 +80,7 @@ class Dataset:
         self.__creat_path__(self.binary_path)
         self.__creat_path__(self.defect_path)
         self.__creat_path__(self.perfect_path)
+        self.__creat_path__(self.defect_mask_path)
         self.__creat_path__(self.defect_splitted_path)
         self.__creat_path__(self.perfect_splitted_path)
         self.__creat_path__(self.weights_path)
@@ -90,10 +92,9 @@ class Dataset:
         letters = string.ascii_lowercase + string.digits + string.ascii_uppercase
         return ''.join(random.choice(letters) for i in range(length))
 
-    
     def __file_name__(self, pos):
         name = ''
-        pos = list(map(lambda x:str(x), pos))
+        pos = list(map(lambda x: str(x), pos))
         name = ''.join(pos)
         name = name.replace(',', '_')
         name = name.replace(' ', '')
@@ -108,14 +109,14 @@ class Dataset:
             shutil.copyfile(img_path, res_path)
             self.create_annotation_to_temp(sheet, image_name)
 
-    def save(self, img_path, pos, sheet, masks, bboxes):
+    def save(self, img_path, pos, sheet, masks):
         image_name = self.__file_name__(pos) + self.format_image
         res_path = os.path.join(self.images_path, image_name)
         shutil.copyfile(img_path, res_path)
-        self.create_annotation_to_ds(sheet, masks, bboxes, image_name, pos[-1])
+        self.create_annotation_to_ds(sheet, masks, image_name, pos[-1])
 
     def create_annotation_to_temp(self, sheet, fname):
-        image_path = os.path.join(  self.images_temp_path, fname)
+        image_path = os.path.join(self.images_temp_path, fname)
 
         json_name = fname.split('.')[0] + '.json'
         json_path = os.path.join(self.annotations_temp_path, json_name)
@@ -133,23 +134,22 @@ class Dataset:
     # def create_annotation_to_ds(self, sheet, masks, bboxes, fname, pos):
     #     image_path = os.path.join(self.images_path, fname)
 
-    def create_annotation_to_ds(self,sheet,masks, bboxes, fname,pos):
-            image_path = os.path.join(  self.images_path, fname  )
+    def create_annotation_to_ds(self, sheet, masks, fname, pos):
+        image_path = os.path.join(self.images_path, fname)
 
-            json_name = fname.split('.')[0] + '.json'
-            json_path = os.path.join(self.annotations_path, json_name)
+        json_name = fname.split('.')[0] + '.json'
+        json_path = os.path.join(self.annotations_path, json_name)
 
-            annotation=Annotation.Annotation()
-            annotation.set_fname(fname)
-            annotation.set_sheet_id(sheet.get_id())
-            annotation.set_date(sheet.get_date_string())
-            annotation.set_time(sheet.get_time_string())
-            annotation.set_user(sheet.get_user())
-            annotation.set_pos(pos)
-            annotation.set_path(image_path)
-            annotation.set_masks(masks)
-            annotation.set_bboxes(bboxes)
-            annotation.write(json_path)
+        annotation = Annotation.Annotation()
+        annotation.set_fname(fname)
+        annotation.set_sheet_id(sheet.get_id())
+        annotation.set_date(sheet.get_date_string())
+        annotation.set_time(sheet.get_time_string())
+        annotation.set_user(sheet.get_user())
+        annotation.set_pos(pos)
+        annotation.set_path(image_path)
+        annotation.set_masks(masks)
+        annotation.write(json_path)
 
     # Miss Abtahi-------------------------------------
 
@@ -167,15 +167,19 @@ class Dataset:
             return True
         return False
 
-    def save_to_defect(self, img_path, pos):
+    def save_to_defect(self, img_path, pos, mask):
         image_name = self.__file_name__(pos) + self.format_image
         res_path = os.path.join(self.defect_path, image_name)
+        mask_path = os.path.join(self.defect_mask_path, image_name)
         shutil.copyfile(img_path, res_path)
+        cv2.imwrite(mask_path, mask)
 
     def delete_from_defect(self, pos):
         image_name = self.__file_name__(pos) + self.format_image
         path = os.path.join(self.defect_path, image_name)
+        mask_path = os.path.join(self.defect_mask_path, image_name)
         os.remove(path)
+        os.remove(mask_path)
 
     def save_to_perfect(self, img_path, pos):
         image_name = self.__file_name__(pos) + self.format_image
@@ -192,10 +196,9 @@ class Dataset:
         if pos != '':
             name = self.__file_name__(pos)
         for i in range(crops.shape[0]):
-            for j in range(crops.shape[1]):
-                image_name = name + '_(' + str(i) + ', ' + str(j) + ')' + self.format_image
-                res_path = os.path.join(path, image_name)
-                cv2.imwrite(res_path, crops[i, j])
+            image_name = name + '_(' + str(i) + ')' + self.format_image
+            res_path = os.path.join(path, image_name)
+            cv2.imwrite(res_path, crops[i])
 
     def delete_from_defect_splitted(self, pos):
         image_name = self.__file_name__(pos)
@@ -210,10 +213,9 @@ class Dataset:
         if pos != '':
             name = self.__file_name__(pos)
         for i in range(crops.shape[0]):
-            for j in range(crops.shape[1]):
-                image_name = name + '_(' + str(i) + ', ' + str(j) + ')' + self.format_image
-                res_path = os.path.join(path, image_name)
-                cv2.imwrite(res_path, crops[i, j])
+            image_name = name + '_(' + str(i) + ')' + self.format_image
+            res_path = os.path.join(path, image_name)
+            cv2.imwrite(res_path, crops[i])
 
     def delete_from_perfect_splitted(self, pos):
         image_name = self.__file_name__(pos)
@@ -226,6 +228,7 @@ class Dataset:
     def check_binary_dataset(self, dataset_path):
         defect_path = os.path.join(dataset_path, self.defect_folder)
         perfect_path = os.path.join(dataset_path, self.perfect_folder)
+        defect_mask_path = os.path.join(dataset_path, self.defect_mask_folder)
         return os.path.exists(defect_path) and os.path.exists(perfect_path)
 
     def create_split_folder(self, dataset_path):
@@ -238,7 +241,6 @@ class Dataset:
         self.__creat_path__(defect_splitted_path)
         self.__creat_path__(perfect_splitted_path)
     # ---------------------------------------------------
-
 
 
 # get datasets list from db
@@ -291,7 +293,7 @@ def set_datasets_on_ui(ui_obj, datasets_list, current_user='', default_dataset='
         table_object.setItem(i, 2, table_item)
 
     try:
-        table_object.setRowCount(i+1)
+        table_object.setRowCount(i + 1)
     except:
         return
 
@@ -305,15 +307,13 @@ def get_selected_datasets(ui_obj, datasets_list, is_binarylist=False):
         table_object = ui_obj.datasets_table
     #
     list = []
-    for i in range(table_object.rowCount()):    
+    for i in range(table_object.rowCount()):
         if table_object.item(i, 0).checkState() == sQtCore.Qt.Checked:
             #
             for dataset in datasets_list:
                 if dataset['name'] == table_object.item(i, 0).text():
                     list.append(dataset)
     return list
-
-
 
 
 if __name__ == '__main__':

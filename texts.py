@@ -155,9 +155,6 @@ WARNINGS ={
     'DATASET_NOT_SELECTED': {'fa': ' دیتاست انتخاب نشده است ',
                              'en': ' No dataset selected '},
 
-    'CONFIRM_LOGOUT': {'fa': ' آیا مطمئن هستید که خارج میشوید؟ ',
-                       'en': ' Are you sure want to logout ? '},
-
     'LOGIN_FIRST': {'fa': ' ابتدا وارد حساب کاربری شوید ',
                     'en': ' You are not logged in '},
 
@@ -222,7 +219,11 @@ WARNINGS ={
                             'en': ' Append successfully '},
 
     'REMOVE_SUCCESSFULLY': {'fa': ' با موفقیت حذف شد ',
-                           'en': ' Remove successfully '}
+                           'en': ' Remove successfully '},
+
+    'WRONGE_MASK': {'fa': ' وضعیت یا ماسک اشتباه است ',
+                           'en': ' Status or mask is wrong '}
+
 
     #  'en': ' Error while opening image '}
 

@@ -46,7 +46,7 @@ import texts  # eror and warnings texts
 from utils import tempMemory, Utils
 
 from backend.dataset import Dataset
-from image_splitter import ImageCrops
+from random_split import get_crops, get_crops_no_defect, get_crops_no_defect2
 import train_api
 
 from labeling.labeling_UI import labeling
@@ -81,14 +81,12 @@ class API:
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
             'mask': Label.maskLbl((1200, 1920), self.LABEL_COLOR),
-            'bbox': Label.bboxLbl((1200, 1920), self.LABEL_COLOR)
         }
 
         # Label.bbox_lbl()
         self.label_memory = tempMemory.manageLabel()
         # self.technical_backend = {'top': data_grabber()}
         self.thechnicals_backend = {}
-        self.detect_bboxs_imgs = []
         # self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
         self.t = 0
         self.scale = 1
@@ -98,7 +96,6 @@ class API:
         self.selected_images_for_label = tempMemory.manageSelectedImage()
         self.finish_draw = 0
         self.language = 'en'
-        self.size = self.db.get_split_size(id=0)
         self.img = None
         self.n_imgs = []
         # iterator for binary-model history tabel
@@ -112,7 +109,7 @@ class API:
         # binarylist dataset parms
         self.dataset_params = {}
 
-        self.ui.set_default_db_parms(self.ds.binary_path, self.size)
+        self.ui.set_default_db_parms(self.ds.binary_path)
 
         self.logged_in = False
         # Create labeling window
@@ -249,6 +246,7 @@ class API:
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
+        self.ui.bounding_btn.clicked.connect(partial(self.image_processing_suggest))
 
         # trainig
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
@@ -763,29 +761,12 @@ class API:
             self.t += 1
 
     # ----------------------------------------------------------------------------------------
-    # 
-    # ----------------------------------------------------------------------------------------
-    def find_bboxs(self, img_path):
-        params = self.db.get_image_processing_params()
-        if img_path not in self.detect_bboxs_imgs:
-            bboxs = SSI(self.img, *params)
-            labels = []
-            for bbox in bboxs:
-                label = ['0', np.array(bbox)]
-                labels.append(label)
-            self.label_memory.append(img_path,
-                                     labels,
-                                     'bbox')
-            self.detect_bboxs_imgs.append(img_path)
-
-    # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
     def load_image_to_label_page(self):
         sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
         label_type = self.ui.get_label_type()
         self.img = Utils.read_image(img_path, 'color')
-        self.find_bboxs(img_path)
         self.load_label_from_memory(img_path)
 
         label_img = self.label_bakcend[label_type].draw()
@@ -807,7 +788,7 @@ class API:
         self.position = [0, 0]
 
     def load_label_from_memory(self, img_path):
-        for label_type in ['bbox', 'mask']:
+        for label_type in ['mask']:
             label = self.label_memory.get_label(label_type, img_path)
             self.label_bakcend[label_type].load(label)
 
@@ -938,10 +919,11 @@ class API:
     def label_classify(self, wgt_name=''):
         if self.ui.get_zoom_type() is None:
             label_type = self.ui.get_label_type()
-            mouse_position = self.mouse.get_relative_position()
             if label_type == 'mask':
-                self.label_bakcend[label_type].delete_point_or_mask(mouse_position)
-            self.show_labeling(mouse_position)
+                mouse_position = self.mouse.get_relative_position()
+                if label_type == 'mask':
+                    self.label_bakcend[label_type].delete_point_or_mask(mouse_position)
+                self.show_labeling(mouse_position)
 
     def get_defects(self):
         self.defects_name, self.defects_info = self.db.get_defects()
@@ -1007,6 +989,7 @@ class API:
         self.ui.comboBox_user_datasets.clear()
         # self.ui.comboBox_default_dataset.clear()
         self.ui.clear_table_name(self.ui.tableWidget_user_dataset)
+        self.ImageManager.set_user('')
         self.ds_json.set_user_name_database('')
 
     def check_login(self):
@@ -1087,7 +1070,6 @@ class API:
         current_index = self.ui.comboBox_user_datasets.currentIndex()
         self.current = self.user_databases[current_index]
         self.ds = Dataset(self.current['path'])
-        self.size = ast.literal_eval(self.current['split_size'])
         self.ui.create_alert_message(texts.WARNINGS['SET_DATASET_TITLE'][self.language], texts.WARNINGS['SET_DATASET'][self.language])
         #
         # dataset_new=self.ui.comboBox_default_dataset.currentText()
@@ -1150,6 +1132,10 @@ class API:
 
         labels = self.label_bakcend[label_type].get()
         # print(labels[1])
+        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+        self.label_memory.add(img_path,
+                              labels,
+                              label_type)
 
         self.ui.show_labels(labels, label_type)
 
@@ -1228,45 +1214,23 @@ class API:
             img_path=img_path,
             pos=pos,
             sheet=sheet,
-            masks=self.label_bakcend['mask'].get(),
-            bboxes=self.label_bakcend['bbox'].get()
-
+            masks=self.label_bakcend['mask']
         )
 
     def save_train_ds(self):
         masks = self.label_bakcend['mask'].get()
-        bboxes = self.label_bakcend['bbox'].get()
         try:
             sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-            self.ds.save(
-                img_path=img_path,
-                pos=pos,
-                sheet=sheet,
-                masks=masks,
-                bboxes=bboxes
-            )
         except:
             self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
             return
 
-        labels = []
-        for mask in masks:
-            if mask[0] not in labels:
-                labels.append(mask[0])
-
-        for bbox in bboxes:
-            if bbox[0] not in labels:
-                labels.append(bbox[0])
-
-        self.ds_json.add_update_classification(img_path, labels)
-
         saved_perfect = self.ds.check_saved_perfect(pos=pos)
         saved_defect = self.ds.check_saved_defect(pos=pos)
-
         if self.ui.no_defect.isChecked():
-            # if saved_perfect:
-            #     self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
-            #     return
+            if masks:
+                self.ui.set_warning(texts.WARNINGS['WRONGE_MASK'][self.language], 'label', level=2)
+                return
             if saved_defect:
                 t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
                                           texts.WARNINGS['ALREADY_SAVED_DEFECT'][self.language])
@@ -1274,22 +1238,17 @@ class API:
                     return
                 else:
                     self.ds.delete_from_defect(pos)
-                    self.ds.delete_from_defect_splitted(pos)
+                    self.ds_json.modify_defect(self.ds.defect_path)
 
             self.ds.save_to_perfect(img_path=img_path, pos=pos)
-            crops = ImageCrops(Utils.read_image(img_path, 'gray'), self.size)
-            self.ds.save_to_perfect_splitted(crops, pos=pos)
             self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
             print('no defect')
-            # try:
-            self.ds_json.modify_perfect()
-            # except:
-            #     pass
+            self.ds_json.modify_perfect(self.ds.perfect_path)
         elif self.ui.yes_defect.isChecked():
-            # if saved_defect:
-            #     self.ui.set_warning(texts.WARNINGS['ALREADY_SAVED'][self.language], 'label', level=2)
-            #     return
+            if not masks:
+                self.ui.set_warning(texts.WARNINGS['WRONGE_MASK'][self.language], 'label', level=2)
+                return
             if saved_perfect:
                 t = self.ui.show_question(texts.WARNINGS['ALREADY_SAVED_TITLE'][self.language],
                                           texts.WARNINGS['ALREADY_SAVED_PERFECT'][self.language])
@@ -1297,48 +1256,56 @@ class API:
                     return
                 else:
                     self.ds.delete_from_perfect(pos)
-                    self.ds.delete_from_perfect_splitted(pos)
-            self.ds.save_to_defect(img_path=img_path, pos=pos)
-            crops = ImageCrops(Utils.read_image(img_path, 'gray'), self.size)
-            self.ds.save_to_defect_splitted(crops, pos=pos)
+                    self.ds_json.modify_perfect(self.ds.perfect_path)
+
+            mask = self.create_mask_from_mask(img_path)
+            self.ds.save_to_defect(img_path=img_path, pos=pos, mask=mask)
             self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
-            try:
-                self.ds_json.modify_defect()
-            except:
-                pass
+            self.ds_json.modify_defect(self.ds.defect_path)
         else:
             self.ui.set_warning(texts.WARNINGS['IMAGE_STATUS'][self.language], 'label', level=2)
+            return
+
+        self.ds.save(
+            img_path=img_path,
+            pos=pos,
+            sheet=sheet,
+            masks=masks
+        )
+        labels = []
+        for mask in masks:
+            if mask[0] not in labels:
+                labels.append(mask[0])
+
+        self.ds_json.add_update_classification(img_path, labels)
 
     def split_binary_dataset(self, paths, size):
         for path in paths:
-            if path == self.ds.binary_path and size == self.size:
-                continue
+            if self.ds.check_binary_dataset(path):
+                self.ds.create_split_folder(path)
+
+                s_mask = os.path.join(path, self.ds.defect_mask_folder)
+                s_defect = os.path.join(path, self.ds.defect_folder)
+                d_defect = os.path.join(path, self.ds.defect_splitted_folder)
+                imgs = os.listdir(s_defect)
+                for i in imgs:
+                    img = Utils.read_image(os.path.join(s_defect, i), color='gray')
+                    mask = Utils.read_image(os.path.join(s_mask, i), color='gray')
+                    crops, _ = get_crops(img, mask)
+                    self.ds.save_to_defect_splitted(crops, d_defect, name=i.split('.')[0])
+
+                s_perfect = os.path.join(path, self.ds.perfect_folder)
+                d_perfect = os.path.join(path, self.ds.perfect_splitted_folder)
+                imgs = os.listdir(s_perfect)
+                n_split = np.ceil((len(os.listdir(d_defect)) * 1.5) / (len(os.listdir(s_perfect))))
+                for i in imgs:
+                    img = Utils.read_image(os.path.join(s_perfect, i), color='color')
+                    crops = get_crops_no_defect(img, n_split)
+                    self.ds.save_to_perfect_splitted(crops, d_perfect, i.split('.')[0])
             else:
-                if path == self.ds.binary_path:
-                    self.size = size
-                    self.db.set_split_size(self.size, self.current['id'])
-                if self.ds.check_binary_dataset(path):
-                    self.ds.create_split_folder(path)
-
-                    s = os.path.join(path, self.ds.defect_folder)
-                    d = os.path.join(path, self.ds.defect_splitted_folder)
-                    imgs = os.listdir(s)
-                    for i in imgs:
-                        img = Utils.read_image(os.path.join(s, i), color='color')
-                        crops = ImageCrops(img, size)
-                        self.ds.save_to_defect_splitted(crops, d, name=i.split('.')[0])
-
-                    s = os.path.join(path, self.ds.perfect_folder)
-                    d = os.path.join(path, self.ds.perfect_splitted_folder)
-                    imgs = os.listdir(s)
-                    for i in imgs:
-                        img = Utils.read_image(os.path.join(s, i), color='color')
-                        crops = ImageCrops(img, size)
-                        self.ds.save_to_perfect_splitted(crops, d, i.split('.')[0])
-                else:
-                    self.ui.set_warning(texts.WARNINGS['DATASET_FORMAT'][self.language], 'train', level=2)
-                    return
+                self.ui.set_warning(texts.WARNINGS['DATASET_FORMAT'][self.language], 'train', level=2)
+                return
 
     def select_binary_dataset(self, page='train'):
         self.select_ds_dialog = FileDialog('Select a directory', '/')
@@ -2083,26 +2050,25 @@ class API:
             cv2.drawContours(mask, [cnt], 0, color=255, thickness=-1)
         return mask
 
-    def create_mask_from_bbox(self, img_path):
-        labels = self.label_memory.get_label('bbox', img_path)
-        mask = np.zeros((self.img.shape[0], self.img.shape[1]))
-        for label in labels:
-            point = label[1].flatten()
-            cv2.rectangle(mask, (point[0], point[1]), (point[2], point[3]), 255, -1)
-        return mask
-
     def create_Heatmap(self):
         sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
-        self.create_mask_from_mask(img_path)
-        img = Utils.read_image(img_path, 'gray')
-        label_type = self.ui.get_label_type()
-        if label_type == 'mask':
-            df = self.create_mask_from_mask(img_path)
-            hm = CreateHeatmap(img, df)
-        elif label_type == 'bbox':
-            df = self.create_mask_from_bbox(img_path)
-            hm = CreateHeatmap(img, df)
-        self.ui.show_neighbouring(hm)
+        img = Utils.read_image(img_path, 'color')
+        _, hm = SSI(img, heatmap=True)
+        self.img = hm
+        self.ui.set_image_label(self.ui.image, hm)
+        self.ui.image.setScaledContents(True)
+        self.scale = 1
+        self.position = [0, 0]
+
+    def image_processing_suggest(self):
+        sheet, selected_img_pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
+        img = Utils.read_image(img_path, 'color')
+        res = SSI(img)
+        self.img = res
+        self.ui.set_image_label(self.ui.image, res)
+        self.ui.image.setScaledContents(True)
+        self.scale = 1
+        self.position = [0, 0]
 
     # def create_piechart(self):
     #     series = QPieSeries()

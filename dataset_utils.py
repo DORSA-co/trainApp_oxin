@@ -28,6 +28,8 @@ class dataset_json():
 
 
     def create_json_dataset(self,parms):
+        if os.path.exists(os.path.join(parms['path'],str(parms['dataset_name']+'.json'))):
+            return
 
         _, defects_info = self.db.get_defects()
 
@@ -41,9 +43,6 @@ class dataset_json():
         self.set_count_defect(0) 
         self.set_count_perfect(0) 
         self.set_parms_classification(defects_info)
-
-
-
 
         self.dataset_details[BASIC_INFO]=self.main_parms
         self.dataset_details[CLASSIFICATION]=self.classification_details
@@ -117,13 +116,10 @@ class dataset_json():
     ######################################
     #  Modify        ///////////////
 
-    def modify_defect(self,reset=False):
+    def modify_defect(self, path):
         file=self.read_modify()
-        count=file[BINARY][COUNT_DEFECT]
-        if reset:
-            count=-1
-        file[BINARY][COUNT_DEFECT]=count+1
-        print('modify',file)
+        count = len(os.listdir(path))
+        file[BINARY][COUNT_DEFECT]=count
         try:
             file=self.modify_date(file)
         except:
@@ -131,12 +127,10 @@ class dataset_json():
             pass
         self.write_modify(file)
     
-    def modify_perfect(self,reset=False):
+    def modify_perfect(self, path):
         file=self.read_modify()
-        count=file[BINARY][COUNT_PERFECT]
-        if reset:
-            count=-1
-        file[BINARY][COUNT_PERFECT]=count+1
+        count=len(os.listdir(path))
+        file[BINARY][COUNT_PERFECT]=count
         try:
             file=self.modify_date(file)
         except:
@@ -144,7 +138,11 @@ class dataset_json():
         self.write_modify(file)
     
     def add_update_classification(self,path, labels):
-        file=self.read_modify()
+        file = self.read_modify()
+
+        for label in file['classification'].keys():
+            if path in file['classification'][label]:
+                file['classification'][label].remove(path)
 
         for label in labels:
             file['classification'][label].append(path)
@@ -166,6 +164,10 @@ class dataset_json():
         #     file['classification'].update(name_dict)
         #     print(file)
         #     # self.add_update_classification(name,AI,count)
+        try:
+            file = self.modify_date(file)
+        except:
+            pass
         self.write_modify(file)
 
 

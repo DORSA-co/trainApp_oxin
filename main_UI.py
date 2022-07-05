@@ -123,8 +123,7 @@ class UI_main_window(QMainWindow, ui):
             # SET HACKS
             self.setThemeHack()
 
-        # plan A for split: split sequential
-        # plan B for split: split random
+        self.bounding_btn.setIcon(QIcon('UI/images/suggest.png'))
 
         self.label_dorsa_open(enable=True)
         # /////////Setting
@@ -168,7 +167,6 @@ class UI_main_window(QMainWindow, ui):
         # labeling
 
         self.polygon_btn.clicked.connect(self.buttonClick)
-        self.bounding_btn.clicked.connect(self.buttonClick)
         self.zoomIn_btn.clicked.connect(self.buttonClick)
         self.zoomOut_btn.clicked.connect(self.buttonClick)
         self.drag_btn.clicked.connect(self.buttonClick)
@@ -764,14 +762,6 @@ class UI_main_window(QMainWindow, ui):
     #         self.show_side.setText('DOWN Side Technical')
 
     # --------- label page
-    def bounding_box(self):
-        # print('bounding_box')
-        self.image.setCursor(Qt.CrossCursor)
-        self.zoom_type = None
-        self.label_type = 'bbox'
-
-        self.tabWidget_defect.setCurrentIndex(1)
-        api.load_image_to_label_page()
 
     def polygon(self):
         # print('polygon')
@@ -824,7 +814,7 @@ class UI_main_window(QMainWindow, ui):
 
     def show_labels(self, labels, label_type):
 
-        LABEL_TABLE = {'mask': self.mask_table_widget, 'bbox': self.bbox_table_widget}
+        LABEL_TABLE = {'mask': self.mask_table_widget}
 
         print('labe', label_type)
 
@@ -1026,6 +1016,8 @@ class UI_main_window(QMainWindow, ui):
         self.class_lr_lineedit.setText(b_parms['learning_rate'])
         self.class_tepoch_lineedit.setText(b_parms['tuning_epochs'])
         self.class_split_lineedit.setText(b_parms['validation_split'])
+        self.input_size1.setValue(300)
+        self.input_size2.setValue(300)
 
 
         l_parms = {'batch_size': '64',
@@ -1035,9 +1027,7 @@ class UI_main_window(QMainWindow, ui):
 
 
 
-    def set_default_db_parms(self, binary_path, split_size):
-        self.input_size1.setValue(split_size[0])
-        self.input_size2.setValue(split_size[1])
+    def set_default_db_parms(self, binary_path):
         self.b_dp.setPlainText('1. ' + binary_path)
 
     def get_binary_parms(self):
@@ -1058,7 +1048,6 @@ class UI_main_window(QMainWindow, ui):
             binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch, binary_lr,
             binary_te,
             binary_vs, binary_dp)
-    
 
     def get_classification_parms(self):
         try:
@@ -1317,9 +1306,6 @@ class UI_main_window(QMainWindow, ui):
         if btnName == 'polygon_btn':
             self.polygon()
 
-        if btnName == 'bounding_btn':
-            self.bounding_box()
-
         if btnName == 'zoomIn_btn':
             self.zoom_in()
 
@@ -1496,7 +1482,7 @@ class UI_main_window(QMainWindow, ui):
     def set_image_label(self,label_name, img):
         h, w, ch = img.shape
         bytes_per_line = ch * w
-        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_RGB888)
+        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_BGR888)
 
 
         label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))

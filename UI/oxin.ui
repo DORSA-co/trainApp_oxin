@@ -7148,6 +7148,12 @@ QCheckBox::indicator:unchecked {
                                          </item>
                                          <item>
                                           <widget class="QLabel" name="label_nframe_SI">
+                                           <property name="sizePolicy">
+                                            <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+                                             <horstretch>0</horstretch>
+                                             <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                           </property>
                                            <property name="text">
                                             <string/>
                                            </property>
@@ -8351,12 +8357,12 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/noun-rectangle-667504.png</normaloff>images/noun-rectangle-667504.png</iconset>
+                                    <normaloff>images/suggest.png</normaloff>images/suggest.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
-                                    <width>31</width>
-                                    <height>29</height>
+                                    <width>45</width>
+                                    <height>45</height>
                                    </size>
                                   </property>
                                  </widget>
@@ -9247,21 +9253,6 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                                     <layout class="QVBoxLayout" name="verticalLayout_95">
                                      <item>
                                       <widget class="QTableWidget" name="mask_table_widget">
-                                       <property name="columnCount">
-                                        <number>1</number>
-                                       </property>
-                                       <column/>
-                                      </widget>
-                                     </item>
-                                    </layout>
-                                   </widget>
-                                   <widget class="QWidget" name="tab_2">
-                                    <attribute name="title">
-                                     <string>Bounding Box</string>
-                                    </attribute>
-                                    <layout class="QVBoxLayout" name="verticalLayout_831">
-                                     <item>
-                                      <widget class="QTableWidget" name="bbox_table_widget">
                                        <property name="columnCount">
                                         <number>1</number>
                                        </property>
@@ -12906,6 +12897,36 @@ QRadioButton::indicator:unchecked {
                                      <property name="text">
                                       <string>Add</string>
                                      </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_212">
+                                   <item>
+                                    <widget class="QLabel" name="label_130">
+                                     <property name="text">
+                                      <string>Train GPU:</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <widget class="QComboBox" name="comboBox_6">
+                                     <item>
+                                      <property name="text">
+                                       <string>GPU 0</string>
+                                      </property>
+                                     </item>
+                                     <item>
+                                      <property name="text">
+                                       <string>GPU 1</string>
+                                      </property>
+                                     </item>
+                                     <item>
+                                      <property name="text">
+                                       <string>GPU 2</string>
+                                      </property>
+                                     </item>
                                     </widget>
                                    </item>
                                   </layout>
