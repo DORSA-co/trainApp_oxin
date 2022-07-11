@@ -102,8 +102,8 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../resources.qrc">
-              <normaloff>:/icons/images/icons/icon_minimize.png</normaloff>:/icons/images/icons/icon_minimize.png</iconset>
+             <iconset>
+              <normaloff>images/icons/icon_minimize.png</normaloff>images/icons/icon_minimize.png</iconset>
             </property>
             <property name="iconSize">
              <size>

@@ -1,8 +1,10 @@
-from PySide6.QtCharts import QChart as sQChart
+from PySide6.QtCharts import QChart as sQChart, QBarCategoryAxis, QBarSet, QValueAxis
 from PySide6.QtCharts import QChartView as sQChartView
 from PySide6.QtCharts import QPieSeries as sQPieSeries
 from PySide6.QtCharts import QLineSeries as sQLineSeries
 from PySide6.QtCharts import QScatterSeries as sQScatterSeries
+from PySide6.QtCharts import QBarSeries as sQBarSeries
+from PySide6.QtCharts import QBarSet as sQBarSet
 from PySide6.QtCharts import QValueAxis as sQValueAxis
 from PySide6.QtCore import QPointF as sQPointF
 from PySide6.QtCore import QMargins as sQMargins
@@ -24,6 +26,7 @@ from backend import dataset
 # chart colors and appearance
 train_color = '#1564FF'
 val_color = '#FF0000'
+bar_color = '#f8b41c'
 pen_width = 3
 marker_size = 10
 animation_duration = 1000
@@ -278,9 +281,9 @@ def update_chart(ui_obj, chart_postfixes, last_epoch, logs, scroll_obj):
 
 
 #_____________________________________________________________________________________________________________________
-perfect_color = '#007C00'
-defect_color = '#D90000'
-pie_background_color = '#09486B'
+perfect_color = '#00ff00'
+defect_color = '#ff0000'
+pie_background_color = '#282c34'
 pie_label_color = '#FFFFFF'
 pie_pen_width = 8
 
@@ -455,10 +458,208 @@ def update_binarylist_piechart(ui_obj, binary_len):
     
     except:
         return
-    
+
+
+def create_userprofile_piechart_on_ui(ui_obj, frame_obj_binary, chart_title='Chart', binary_hole_size=0.2):
+    # creat chart
+    # binary
+    ui_obj.binary_piechart_pro = sQChart()
+    ui_obj.binary_piechart_pro.setAnimationOptions(sQChart.SeriesAnimations)
+    ui_obj.binary_piechart_pro.setMargins(sQMargins(0, 0, 0, 0))
+    # ui_obj.binary_piechart.setTitle(chart_title)
+    # ui_obj.binary_piechart.setTheme(sQChart.ChartThemeDark)
+    ui_obj.binary_piechart_pro.legend().setVisible(False)
+    ui_obj.binary_piechart_pro.setBackgroundBrush(sQColor(pie_background_color))
+
+    # binary series
+    ui_obj.pie_binary_series_pro = sQPieSeries()
+    ui_obj.pie_binary_series_pro.setHoleSize(binary_hole_size)
+    # ui_obj.pseries.setPieSize(0.2)
+    # a = ui_obj.classlist_pie_cls_series.append('a', 1)
+    # a.setLabelFont
+
+    # add series to chart
+    ui_obj.binary_piechart_pro.addSeries(ui_obj.pie_binary_series_pro)
+
+    # set to ui
+    ui_obj.binary_piechartview_pro = sQChartView(ui_obj.binary_piechart_pro)
+    ui_obj.binary_piechartview_pro.setContentsMargins(0, 0, 0, 0)
+    #
+    bpievbox = sQVBoxLayout()
+    bpievbox.addWidget(ui_obj.binary_piechartview_pro)
+    bpievbox.setContentsMargins(0, 0, 0, 0)
+    #
+    frame_obj_binary.setLayout(bpievbox)
+    frame_obj_binary.layout().setContentsMargins(0, 0, 0, 0)
+
+
+def update_userprofile_piechart(ui_obj, binary_len):
+    ui_obj.pie_binary_series_pro.clear()
+
+    try:
+        # binary
+        # convert len to percentage
+        perfect_percentage = binary_len[dataset.PERFECT_FOLDER] / (
+                    binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
+        defect_percentage = binary_len[dataset.DEFECT_FOLDER] / (
+                    binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
+        # append to series
+        my_slice = ui_obj.pie_binary_series_pro.append(
+            "defect: {} ({:.1f}%)".format(binary_len[dataset.DEFECT_FOLDER], defect_percentage * 100),
+            defect_percentage)
+        if defect_percentage != 0.0:
+            my_slice.setLabelVisible(True)
+            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
+            my_slice.setBrush(sQColor(defect_color))
+
+        my_slice = ui_obj.pie_binary_series_pro.append(
+            "perfect: {} ({:.1f}%)".format(binary_len[dataset.PERFECT_FOLDER], perfect_percentage * 100),
+            perfect_percentage)
+        if perfect_percentage != 0.0:
+            my_slice.setLabelVisible(True)
+            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
+            my_slice.setBrush(sQColor(perfect_color))
+
+    except:
+        return
+
+
+def create_userprofile_barchart_on_ui(ui_obj, frame_obj_binary, chart_title='Chart'):
+    # creat chart
+    # binary
+    ui_obj.binary_barchart_pro = sQChart()
+    ui_obj.binary_barchart_pro.setAnimationOptions(sQChart.SeriesAnimations)
+    ui_obj.binary_barchart_pro.setMargins(sQMargins(0, 0, 0, 0))
+    # ui_obj.binary_barchart.setTitle(chart_title)
+    # ui_obj.binary_barchart.setTheme(sQChart.ChartThemeDark)
+    ui_obj.binary_barchart_pro.legend().setVisible(False)
+    ui_obj.binary_barchart_pro.setBackgroundBrush(sQColor(pie_background_color))
+
+    # binary series
+    ui_obj.bar_binary_series_pro = sQBarSeries()
+    # ui_obj.bar_binary_series_pro.setHoleSize(binary_hole_size)
+    # ui_obj.pseries.setbarSize(0.2)
+    # a = ui_obj.classlist_bar_cls_series.append('a', 1)
+    # a.setLabelFont
+
+    # add series to chart
+    ui_obj.binary_barchart_pro.addSeries(ui_obj.bar_binary_series_pro)
+
+    # set to ui
+    ui_obj.binary_barchartview_pro = sQChartView(ui_obj.binary_barchart_pro)
+    ui_obj.binary_barchartview_pro.setContentsMargins(0, 0, 0, 0)
+    #
+    bbarvbox = sQVBoxLayout()
+    bbarvbox.addWidget(ui_obj.binary_barchartview_pro)
+    bbarvbox.setContentsMargins(0, 0, 0, 0)
+    #
+    frame_obj_binary.setLayout(bbarvbox)
+    frame_obj_binary.layout().setContentsMargins(0, 0, 0, 0)
+
+
+def update_userprofile_barchart(ui_obj, classification_len):
+    ui_obj.bar_binary_series_pro.clear()
+
+    total = classification_len['total']
+    if total == 0:
+        return
+    del (classification_len['total'])
+
+    categories = list(classification_len.keys())
+    ui_obj.axisX = QBarCategoryAxis()
+    ui_obj.axisX.append(categories)
+    ui_obj.binary_barchart_pro.setAxisX(ui_obj.axisX, ui_obj.bar_binary_series_pro)
+    ui_obj.axisX.setLabelsColor(sQColor(pie_label_color))
+
+    ui_obj.axisY = QValueAxis()
+    ui_obj.binary_barchart_pro.setAxisY(ui_obj.axisY, ui_obj.bar_binary_series_pro)
+    ui_obj.axisY.setRange(0, 100)
+    ui_obj.axisY.setLabelsColor(sQColor(pie_label_color))
+
+    set0 = QBarSet('defects')
+
+    for d in classification_len:
+        p = (classification_len[d] / total) * 100
+        set0.append(p)
         
+    set0.setBrush(sQColor(bar_color))
+
+    ui_obj.bar_binary_series_pro.append(set0)
 
 
+def clear_userprofile_barchart(ui_obj):
+    ui_obj.binary_barchart_pro.removeAxis(ui_obj.axisX)
+    ui_obj.binary_barchart_pro.removeAxis(ui_obj.axisY)
+    ui_obj.bar_binary_series_pro.clear()
+    ui_obj.pie_binary_series_pro.clear()
+
+
+def create_label_piechart_on_ui(ui_obj, frame_obj_binary, chart_title='Chart', binary_hole_size=0.2):
+    # creat chart
+    # binary
+    ui_obj.binary_piechart_label = sQChart()
+    ui_obj.binary_piechart_label.setAnimationOptions(sQChart.SeriesAnimations)
+    ui_obj.binary_piechart_label.setMargins(sQMargins(0, 0, 0, 0))
+    # ui_obj.binary_piechart.setTitle(chart_title)
+    # ui_obj.binary_piechart.setTheme(sQChart.ChartThemeDark)
+    ui_obj.binary_piechart_label.legend().setVisible(False)
+    ui_obj.binary_piechart_label.setBackgroundBrush(sQColor(pie_background_color))
+
+    # binary series
+    ui_obj.pie_binary_series_label = sQPieSeries()
+    ui_obj.pie_binary_series_label.setHoleSize(binary_hole_size)
+    # ui_obj.pseries.setPieSize(0.2)
+    # a = ui_obj.classlist_pie_cls_series.append('a', 1)
+    # a.setLabelFont
+
+    # add series to chart
+    ui_obj.binary_piechart_label.addSeries(ui_obj.pie_binary_series_label)
+
+    # set to ui
+    ui_obj.binary_piechartview_label = sQChartView(ui_obj.binary_piechart_label)
+    ui_obj.binary_piechartview_label.setContentsMargins(0, 0, 0, 0)
+    #
+    bpievbox = sQVBoxLayout()
+    bpievbox.addWidget(ui_obj.binary_piechartview_label)
+    bpievbox.setContentsMargins(0, 0, 0, 0)
+    #
+    frame_obj_binary.setLayout(bpievbox)
+    frame_obj_binary.layout().setContentsMargins(0, 0, 0, 0)
+
+
+def update_label_piechart(ui_obj, binary_len):
+    ui_obj.pie_binary_series_label.clear()
+
+    try:
+        # binary
+        # convert len to percentage
+        perfect_percentage = binary_len[dataset.PERFECT_FOLDER] / (
+                    binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
+        defect_percentage = binary_len[dataset.DEFECT_FOLDER] / (
+                    binary_len[dataset.PERFECT_FOLDER] + binary_len[dataset.DEFECT_FOLDER])
+        # append to series
+        my_slice = ui_obj.pie_binary_series_label.append(
+            "{:.1f}%".format(defect_percentage * 100),
+            defect_percentage)
+        if defect_percentage != 0.0:
+            my_slice.setLabelVisible(True)
+            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
+            my_slice.setBrush(sQColor(defect_color))
+
+        my_slice = ui_obj.pie_binary_series_label.append(
+            "{:.1f}%".format(perfect_percentage * 100),
+            perfect_percentage)
+        if perfect_percentage != 0.0:
+            my_slice.setLabelVisible(True)
+            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
+            my_slice.setBrush(sQColor(perfect_color))
+
+    except:
+        return
 
 # # chart (must be add in main_ui.py)
 # # chart ---------------------------------------------------------------------------------------------

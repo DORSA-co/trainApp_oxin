@@ -355,7 +355,7 @@ class dataBaseUtils():
 
     def get_all_datasets(self):
         
-        records = self.db.report_last(self.dataset,'id',99)
+        records = self.db.report_last(self.dataset,'id',99, side='ASC')
 
         return records
 

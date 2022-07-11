@@ -150,11 +150,11 @@ class dataBase:
 
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------
-    def report_last(self,table_name,parametr,count):
+    def report_last(self,table_name,parametr,count, side = 'DESC'):
         if self.check_connection:
             cursor,connection=self.connect()
 
-            sql_select_Query = "select * from {} ORDER BY {} DESC LIMIT {}".format(table_name,parametr,count)
+            sql_select_Query = "select * from {} ORDER BY {} {} LIMIT {}".format(table_name,parametr,side, count)
             cursor=self.execute_quary(sql_select_Query, cursor, connection)
             # cursor.execute(sql_select_Query)
             records = cursor.fetchall()

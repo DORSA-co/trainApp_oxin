@@ -37,6 +37,7 @@ import api
 from Sheet_loader_win.data_loader_UI import data_loader
 from labeling.labeling_UI import labeling
 from neighbouring_UI import neighbouring
+from small_neighbouring_UI import small_neighbouring
 from labeling import labeling_api
 from PIL import ImageQt
 import numpy as np
@@ -171,7 +172,7 @@ class UI_main_window(QMainWindow, ui):
         self.zoomOut_btn.clicked.connect(self.buttonClick)
         self.drag_btn.clicked.connect(self.buttonClick)
         # self.add_label.clicked.connect(self.buttonClick)
-        self.add_label_btn.clicked.connect(self.buttonClick)
+        # self.add_label_btn.clicked.connect(self.buttonClick)
 
         # QPixmap pixmapTarget = QPixmap(":/icons/images/icons/2png);
         # pixmapTarget = pixmapTarget.scaled(size-5, size-5, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -197,6 +198,9 @@ class UI_main_window(QMainWindow, ui):
         self.img = cv2.imread('images/dorsa-logo.png')
         self.set_crop_image(self.img)
 
+        img = cv2.imread('UI/images/male-placeholder.jpg')
+        self.set_image_label(self.user_label, img)
+
 
 
         self.set_combo_boxes()
@@ -211,11 +215,13 @@ class UI_main_window(QMainWindow, ui):
         # user page
 
         self.create_new_database.clicked.connect(self.buttonClick)
+        self.all_databases.clicked.connect(self.buttonClick)
         self.my_databases_2.clicked.connect(self.buttonClick)
+        self.my_databases_3.clicked.connect(self.buttonClick)
         self.btn_user_proflie.clicked.connect(self.buttonClick)
         self.toolButton_select_directory.clicked.connect(self.buttonClick)
-        self.set_col_all_datasets()
-        self.set_col_user_datasets()
+        # self.set_col_all_datasets()
+        # self.set_col_user_datasets()
 
         self._old_pos = None
 
@@ -457,35 +463,35 @@ class UI_main_window(QMainWindow, ui):
     # /////////////////////////////////////////////////////////////// 
     def def_yes_defect(self):
         self.stackedWidget_defect.setCurrentWidget(self.page_yes)
-        self.stackedWidget_defect.setMaximumHeight(166666)
-        x = self.stackedWidget_defect.height()
-        if x < 70:
-            # print('x',x)
-            self.left_box = QPropertyAnimation(self.stackedWidget_defect, b"maximumHeight")
-            self.left_box.setDuration(Settings.TIME_ANIMATION)
-            self.left_box.setStartValue(60)
-            self.left_box.setEndValue(400)
-            self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
-            self.group = QParallelAnimationGroup()
-            self.group.addAnimation(self.left_box)
-            # self.group.addAnimation(self.right_box)
-            self.group.start()
+        # self.stackedWidget_defect.setMaximumHeight(166666)
+        # x = self.stackedWidget_defect.height()
+        # if x < 81:
+        #     # print('x',x)
+        #     self.left_box = QPropertyAnimation(self.stackedWidget_defect, b"maximumHeight")
+        #     self.left_box.setDuration(Settings.TIME_ANIMATION)
+        #     self.left_box.setStartValue(80)
+        #     self.left_box.setEndValue(400)
+        #     self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
+        #     self.group = QParallelAnimationGroup()
+        #     self.group.addAnimation(self.left_box)
+        #     # self.group.addAnimation(self.right_box)
+        #     self.group.start()
 
     def def_no_defect(self):
         self.stackedWidget_defect.setCurrentWidget(self.page_no)
-        self.stackedWidget_defect.setMaximumHeight(60)
-        x = self.stackedWidget_defect.height()
-        # print('height',x)
-        # if x ==400:
-        self.left_box = QPropertyAnimation(self.stackedWidget_defect, b"maximumHeight")
-        self.left_box.setDuration(Settings.TIME_ANIMATION)
-        self.left_box.setStartValue(400)
-        self.left_box.setEndValue(60)
-        self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
-        self.group = QParallelAnimationGroup()
-        self.group.addAnimation(self.left_box)
-        # self.group.addAnimation(self.right_box)
-        self.group.start()
+        # self.stackedWidget_defect.setMaximumHeight(80)
+        # x = self.stackedWidget_defect.height()
+        # # print('height',x)
+        # # if x ==400:
+        # self.left_box = QPropertyAnimation(self.stackedWidget_defect, b"maximumHeight")
+        # self.left_box.setDuration(Settings.TIME_ANIMATION)
+        # self.left_box.setStartValue(400)
+        # self.left_box.setEndValue(80)
+        # self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
+        # self.group = QParallelAnimationGroup()
+        # self.group.addAnimation(self.left_box)
+        # # self.group.addAnimation(self.right_box)
+        # self.group.start()
         # print('no ani')
 
     # TOGGLE LOGIN & setting
@@ -610,6 +616,7 @@ class UI_main_window(QMainWindow, ui):
             # self.sheet_view_down=data_grabber.sheetOverView(h=129,w=1084,nh=12,nw=30)
         else:
             self.showMaximized()
+        print('ssssssssssssssssssss', self.image.size())
 
     def left_bar_clear(self):
         self.Data_auquzation_btn.setStyleSheet("background-image: url(:/icons/images/icons/graber.png);")
@@ -644,21 +651,21 @@ class UI_main_window(QMainWindow, ui):
     #     header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
 
-    def set_col_all_datasets(self):
-        labels = ['Id', 'Name', 'User own', 'Path']
-        self.tableWidget_all_dataset.setHorizontalHeaderLabels(labels)
-
-        header = self.tableWidget_all_dataset.horizontalHeader()
-        header = self.tableWidget_all_dataset.horizontalHeader()
-        header.setSectionResizeMode(QHeaderView.ResizeToContents)
-
-    def set_col_user_datasets(self):
-        labels = ['Id', 'Name', 'User own', 'Path']
-        self.tableWidget_user_dataset.setHorizontalHeaderLabels(labels)
-
-        header = self.tableWidget_user_dataset.horizontalHeader()
-        header = self.tableWidget_user_dataset.horizontalHeader()
-        header.setSectionResizeMode(QHeaderView.ResizeToContents)
+    # def set_col_all_datasets(self):
+    #     labels = ['Id', 'Name', 'User own', 'Path']
+    #     self.tableWidget_all_dataset.setHorizontalHeaderLabels(labels)
+    #
+    #     header = self.tableWidget_all_dataset.horizontalHeader()
+    #     header = self.tableWidget_all_dataset.horizontalHeader()
+    #     header.setSectionResizeMode(QHeaderView.ResizeToContents)
+    #
+    # def set_col_user_datasets(self):
+    #     labels = ['Id', 'Name', 'User own', 'Path']
+    #     self.tableWidget_user_dataset.setHorizontalHeaderLabels(labels)
+    #
+    #     header = self.tableWidget_user_dataset.horizontalHeader()
+    #     header = self.tableWidget_user_dataset.horizontalHeader()
+    #     header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
 
     def get_label_type(self):
@@ -774,7 +781,6 @@ class UI_main_window(QMainWindow, ui):
         self.zoom_type = None
         self.label_type = 'mask'
 
-        self.tabWidget_defect.setCurrentIndex(0)
         api.load_image_to_label_page()
 
     def zoom_in(self):
@@ -831,6 +837,14 @@ class UI_main_window(QMainWindow, ui):
     def show_neighbouring(self, img):
         self.n = neighbouring(img)
         self.n.show()
+
+    def show_small_neighbouring(self, imgs):
+        self.sn = small_neighbouring(imgs, self.image)
+        self.sn.win_set_geometry(0, 0)
+        self.sn.show()
+
+    def close_small_neighbouring(self):
+        self.sn.close()
 
     def show_sheet_details(self, details):
 
@@ -909,6 +923,7 @@ class UI_main_window(QMainWindow, ui):
         self.bounding_btn.setEnabled(True)
         self.delete_btn.setEnabled(True)
         self.heatmap_btn.setEnabled(True)
+        self.checkBox_show_neighbours.setEnabled(True)
         self.fs = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
         if scale == 1:
             self.image.setScaledContents(True)
@@ -919,39 +934,6 @@ class UI_main_window(QMainWindow, ui):
             position = self.update_image(position)
 
         return position
-
-    def show_image_in_neighbour_labels(self, imgs):
-        image_ul = imgs[0]
-        self.image_up_left.setPixmap(QPixmap.fromImage(
-            QImage(image_ul, image_ul.shape[1], image_ul.shape[0], image_ul.strides[0], QImage.Format_BGR888)))
-
-        image_u = imgs[1]
-        self.image_up.setPixmap(QPixmap.fromImage(
-            QImage(image_u, image_u.shape[1], image_u.shape[0], image_u.strides[0], QImage.Format_BGR888)))
-
-        image_ur = imgs[2]
-        self.image_up_right.setPixmap(QPixmap.fromImage(
-            QImage(image_ur, image_ur.shape[1], image_ur.shape[0], image_ur.strides[0], QImage.Format_BGR888)))
-
-        image_l = imgs[3]
-        self.image_left.setPixmap(QPixmap.fromImage(
-            QImage(image_l, image_l.shape[1], image_l.shape[0], image_l.strides[0], QImage.Format_BGR888)))
-
-        image_r = imgs[4]
-        self.image_right.setPixmap(QPixmap.fromImage(
-            QImage(image_r, image_r.shape[1], image_r.shape[0], image_r.strides[0], QImage.Format_BGR888)))
-
-        image_bl = imgs[5]
-        self.image_bottom_left.setPixmap(QPixmap.fromImage(
-            QImage(image_bl, image_bl.shape[1], image_bl.shape[0], image_bl.strides[0], QImage.Format_BGR888)))
-
-        image_b = imgs[6]
-        self.image_bottom.setPixmap(QPixmap.fromImage(
-            QImage(image_b, image_b.shape[1], image_b.shape[0], image_b.strides[0], QImage.Format_BGR888)))
-
-        image_br = imgs[7]
-        self.image_bottom_right.setPixmap(QPixmap.fromImage(
-            QImage(image_br, image_br.shape[1], image_br.shape[0], image_br.strides[0], QImage.Format_BGR888)))
 
     def update_image(self, position):
         pixmap = QPixmap(self.image.size())
@@ -1191,22 +1173,17 @@ class UI_main_window(QMainWindow, ui):
         for i in range(name.rowCount()):
             name.removeRow(0)
 
-
     def show_all_datasets(self, records):
+        self.all_ds_id.setText(str(records[0]))
+        self.all_ds_name.setText(str(records[1]))
+        self.all_ds_owner_user.setText(str(records[2]))
+        self.all_ds_path.setText(str(records[3]))
 
-        self.clear_table_name(self.tableWidget_all_dataset)  
-        self.tableWidget_all_dataset.setRowCount(1)  # set row count
-        print(records)
-        for i in range(4) :
-            self.tableWidget_all_dataset.setItem(0,i, QTableWidgetItem(str(records[i])))
-
-    def show_user_datasets(self,records):
-
-        self.clear_table_name(self.tableWidget_user_dataset)  
-        self.tableWidget_user_dataset.setRowCount(1)  # set row count
-        print(records)
-        for i in range(4) :
-            self.tableWidget_user_dataset.setItem(0,i, QTableWidgetItem(str(records[i])))
+    def show_user_datasets(self, records):
+        self.my_ds_id.setText(str(records[0]))
+        self.my_ds_name.setText(str(records[1]))
+        self.my_ds_owner_user.setText(str(records[2]))
+        self.my_ds_path.setText(str(records[3]))
 
     # def ret_btn_
 
@@ -1315,9 +1292,6 @@ class UI_main_window(QMainWindow, ui):
         if btnName == 'drag_btn':
             self.drag_image()
 
-        if btnName == 'add_label_btn':
-            api.add_remove_label()
-
         if btnName == 'btn_software_setting':
             # self.bounding_box()
             self.stackedWidget.setCurrentWidget(self.page_software_setting)
@@ -1361,10 +1335,50 @@ class UI_main_window(QMainWindow, ui):
             self.hi()
 
         if btnName == 'create_new_database':
-            self.stackedWidget_2.setCurrentWidget(self.create_database)
+            self.stackedWidget_2.setCurrentWidget(self.page_create_db)
+            chart_funcs.clear_userprofile_barchart(self)
+            self.create_new_database.setStyleSheet(
+                "color:white;background-color: rgb(212, 212, 212);")
+            self.all_databases.setStyleSheet(
+                "color:white;")
+            self.my_databases_2.setStyleSheet(
+                "color:white;")
+            self.my_databases_3.setStyleSheet(
+                "color:white;")
+
+        if btnName == 'all_databases':
+            self.stackedWidget_2.setCurrentWidget(self.page_all_db)
+            self.create_new_database.setStyleSheet(
+                "color:white;")
+            self.all_databases.setStyleSheet(
+                "color:white;background-color: rgb(212, 212, 212);")
+            self.my_databases_2.setStyleSheet(
+                "color:white;")
+            self.my_databases_3.setStyleSheet(
+                "color:white;")
 
         if btnName == 'my_databases_2':
-            self.stackedWidget_2.setCurrentWidget(self.my_databases)
+            self.stackedWidget_2.setCurrentWidget(self.page_my_db)
+            self.create_new_database.setStyleSheet(
+                "color:white;")
+            self.all_databases.setStyleSheet(
+                "color:white;")
+            self.my_databases_2.setStyleSheet(
+                "color:white;background-color: rgb(212, 212, 212);")
+            self.my_databases_3.setStyleSheet(
+                "color:white;")
+
+        if btnName == 'my_databases_3':
+            self.stackedWidget_2.setCurrentWidget(self.page_my_pipelines)
+            chart_funcs.clear_userprofile_barchart(self)
+            self.create_new_database.setStyleSheet(
+                "color:white;")
+            self.all_databases.setStyleSheet(
+                "color:white;")
+            self.my_databases_2.setStyleSheet(
+                "color:white;")
+            self.my_databases_3.setStyleSheet(
+                "color:white;background-color: rgb(212, 212, 212);")
 
         if btnName == 'toolButton_select_directory':
             self.open_file_dialog()

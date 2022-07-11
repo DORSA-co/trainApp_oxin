@@ -76,6 +76,7 @@ class API:
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils()
+        self.create_classlist_pie_chart()
         self.create_label_color()
         self.create_default_ds()
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
@@ -120,7 +121,6 @@ class API:
         self.mouse_controll = Controller()
 
         self.get_defects()
-        self.binary_pieChart()
 
         # self.defects_name,self.defects_info=self.db.get_defects()
 
@@ -183,7 +183,6 @@ class API:
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
 
-        self.create_classlist_pie_chart()
 
 
 
@@ -224,6 +223,8 @@ class API:
         self.ds = Dataset(parms['path'])
         self.ds_json = dataset_utils.dataset_json()
         self.ds_json.create_json_dataset(parms)
+        binary_count = self.ds_json.get_binary_count(os.path.join(parms['path'], parms['dataset_name'] + '.json'))
+        chart_funcs.update_label_piechart(self.ui, binary_count)
 
     def button_connector(self):
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
@@ -247,6 +248,7 @@ class API:
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
         self.ui.bounding_btn.clicked.connect(partial(self.image_processing_suggest))
+        self.ui.checkBox_show_neighbours.stateChanged.connect(partial(self.show_neighbours))
 
         # trainig
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
@@ -259,6 +261,7 @@ class API:
         self.ui.login_btn.clicked.connect(partial(self.show_login))
         self.ui.btn_user_proflie.clicked.connect(partial(self.set_profile_page))
         self.ui.create_database_btn.clicked.connect(partial(self.create_dataset))
+        self.ui.all_databases.clicked.connect(partial(self.set_databases))
         self.ui.my_databases_2.clicked.connect(partial(self.set_user_databases))
         self.ui.set_default_database_btn.clicked.connect(partial(self.set_default_dataset))
         # self.ui.split_dataset.clicked.connect(partial(self.split_binary_dataset))
@@ -349,40 +352,40 @@ class API:
         self.mouse.connet_dbclick(self.ui.image, self.label_classify)
 
         self.mouse.connet_dbclick(self.ui.crop_image, self.fit_image)
-
-        self.mouse.connet_dbclick(self.ui.image_up_left, self.enlarge_neighbour_image)
-        self.mouse.connet_dbclick(self.ui.image_up, self.enlarge_neighbour_image)
-        self.mouse.connet_dbclick(self.ui.image_up_right, self.enlarge_neighbour_image)
-        self.mouse.connet_dbclick(self.ui.image_left, self.enlarge_neighbour_image)
-        self.mouse.connet_dbclick(self.ui.image_right, self.enlarge_neighbour_image)
-        self.mouse.connet_dbclick(self.ui.image_bottom_left, self.enlarge_neighbour_image)
-        self.mouse.connet_dbclick(self.ui.image_bottom, self.enlarge_neighbour_image)
-        self.mouse.connet_dbclick(self.ui.image_bottom_right, self.enlarge_neighbour_image)
+        #
+        # self.mouse.connet_dbclick(self.ui.image_up_left, self.enlarge_neighbour_image)
+        # self.mouse.connet_dbclick(self.ui.image_up, self.enlarge_neighbour_image)
+        # self.mouse.connet_dbclick(self.ui.image_up_right, self.enlarge_neighbour_image)
+        # self.mouse.connet_dbclick(self.ui.image_left, self.enlarge_neighbour_image)
+        # self.mouse.connet_dbclick(self.ui.image_right, self.enlarge_neighbour_image)
+        # self.mouse.connet_dbclick(self.ui.image_bottom_left, self.enlarge_neighbour_image)
+        # self.mouse.connet_dbclick(self.ui.image_bottom, self.enlarge_neighbour_image)
+        # self.mouse.connet_dbclick(self.ui.image_bottom_right, self.enlarge_neighbour_image)
 
     def keyboard_connector(self):
         self.keyboard.connet(self.ui, ['left', 'right', 'up', 'down'], [self.update_technical_pointer_keyboard],
                              'Technical View')
 
-    def enlarge_neighbour_image(self, widget_name):
-        if self.n_imgs == []:
-            self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
-            return
-        if widget_name == 'image_up_left':
-            self.ui.show_neighbouring(self.n_imgs[0])
-        if widget_name == 'image_up':
-            self.ui.show_neighbouring(self.n_imgs[1])
-        if widget_name == 'image_up_right':
-            self.ui.show_neighbouring(self.n_imgs[2])
-        if widget_name == 'image_left':
-            self.ui.show_neighbouring(self.n_imgs[3])
-        if widget_name == 'image_right':
-            self.ui.show_neighbouring(self.n_imgs[4])
-        if widget_name == 'image_bottom_left':
-            self.ui.show_neighbouring(self.n_imgs[5])
-        if widget_name == 'image_bottom':
-            self.ui.show_neighbouring(self.n_imgs[6])
-        if widget_name == 'image_bottom_right':
-            self.ui.show_neighbouring(self.n_imgs[7])
+    # def enlarge_neighbour_image(self, widget_name):
+    #     if self.n_imgs == []:
+    #         self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
+    #         return
+    #     if widget_name == 'image_up_left':
+    #         self.ui.show_neighbouring(self.n_imgs[0])
+    #     if widget_name == 'image_up':
+    #         self.ui.show_neighbouring(self.n_imgs[1])
+    #     if widget_name == 'image_up_right':
+    #         self.ui.show_neighbouring(self.n_imgs[2])
+    #     if widget_name == 'image_left':
+    #         self.ui.show_neighbouring(self.n_imgs[3])
+    #     if widget_name == 'image_right':
+    #         self.ui.show_neighbouring(self.n_imgs[4])
+    #     if widget_name == 'image_bottom_left':
+    #         self.ui.show_neighbouring(self.n_imgs[5])
+    #     if widget_name == 'image_bottom':
+    #         self.ui.show_neighbouring(self.n_imgs[6])
+    #     if widget_name == 'image_bottom_right':
+    #         self.ui.show_neighbouring(self.n_imgs[7])
 
     # ----------------------------------------------------------------------------------------
     # get id of sheets that user select in load_sheet_win and load first one
@@ -746,6 +749,8 @@ class API:
             self.move_on_list.add(list(zip(sheets, filtered_selected, paths)), 'selected_imgs_for_label')
             self.ui.show_label_page()
             self.load_image_to_label_page()
+            self.ui.checkBox_show_neighbours.setCheckState(Qt.CheckState.Checked)
+            # self.ui.show_small_neighbouring(self.n_imgs)
         else:
             self.ui.set_warning(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language], 'data_auquzation', level=2)
 
@@ -812,6 +817,8 @@ class API:
         neighbours.append(n_down)
         n_down_right = [selected_img_pos[0], selected_img_pos[1], (c + 1, f + 1)]
         neighbours.append(n_down_right)
+        n_center = [selected_img_pos[0], selected_img_pos[1], (c, f)]
+        neighbours.append(n_center)
 
         paths = self.db.get_path_sheet_image(neighbours)
 
@@ -822,8 +829,6 @@ class API:
             else:
                 img = np.zeros((160, 100))
             self.n_imgs.append(img)
-
-        self.ui.show_image_in_neighbour_labels(self.n_imgs)
 
     def next_label_img(self):
         self.move_on_list.next_on_list('selected_imgs_for_label')
@@ -848,6 +853,15 @@ class API:
             rgb = (rgb_color[2], rgb_color[1], rgb_color[0])
             self.LABEL_COLOR.update({defect_info[i]['defect_ID']: rgb})
         print('******************', self.LABEL_COLOR)
+
+    def get_labels_color(self):
+        defect_name, defect_info = self.get_defects()
+        # print(len(defect_info),defect_info)
+        colors = {}
+        for i in range(len(defect_info)):
+            hex_color = defect_info[i]['color']
+            colors.update({defect_info[i]['defect_ID']: hex_color})
+        return colors
 
     def label_image_mouse(self, wgt_name=''):
 
@@ -987,10 +1001,10 @@ class API:
         self.ui.user_name.setText('')
         self.ui.stackedWidget.setCurrentWidget(self.ui.page_label)
         self.ui.comboBox_user_datasets.clear()
-        # self.ui.comboBox_default_dataset.clear()
-        self.ui.clear_table_name(self.ui.tableWidget_user_dataset)
+        self.ui.comboBox_all_datasets.clear()
+
         self.ImageManager.set_user('')
-        self.ds_json.set_user_name_database('')
+        self.create_default_ds()
 
     def check_login(self):
 
@@ -1025,8 +1039,9 @@ class API:
 
     def set_profile_page(self):
         if self.logged_in == True:
-
             self.ui.set_widget_page(self.ui.stackedWidget, self.ui.page_user_profile)
+            self.update_table_all_datasets()
+            self.update_user_datasts()
 
         else:
             print('first login')
@@ -1040,11 +1055,16 @@ class API:
         print('dataset_names', dataset_names)
         self.ui.comboBox_all_datasets.clear()
         self.ui.comboBox_all_datasets.addItems(dataset_names)
+        self.update_table_all_datasets()
         self.ui.comboBox_all_datasets.currentTextChanged.connect(self.update_table_all_datasets)
 
     def update_table_all_datasets(self):
         current = self.ui.comboBox_all_datasets.currentIndex()
         self.ui.show_all_datasets(list(self.datasets[current].values()))
+        binary_count = self.ds_json.get_binary_count(os.path.join(self.datasets[current]['path'], self.datasets[current]['name'] + '.json'))
+        chart_funcs.update_userprofile_piechart(ui_obj=self.ui, binary_len=binary_count)
+        classification_count = self.ds_json.get_classification_count(os.path.join(self.datasets[current]['path'], self.datasets[current]['name'] + '.json'))
+        chart_funcs.update_userprofile_barchart(ui_obj=self.ui, classification_len=classification_count)
 
     def set_user_databases(self):
         dataset_names = []
@@ -1059,12 +1079,15 @@ class API:
         # self.ui.comboBox_default_dataset.addItems(dataset_names)
         self.update_user_datasts()
         self.ui.comboBox_user_datasets.currentTextChanged.connect(self.update_user_datasts)
-        self.set_databases()
 
     def update_user_datasts(self):
         current = self.ui.comboBox_user_datasets.currentIndex()
         # print('asd',self.user_databases[current].values)
         self.ui.show_user_datasets(list(self.user_databases[current].values()))
+        binary_count = self.ds_json.get_binary_count(os.path.join(self.user_databases[current]['path'], self.user_databases[current]['name'] + '.json'))
+        chart_funcs.update_userprofile_piechart(ui_obj=self.ui, binary_len=binary_count)
+        classification_count = self.ds_json.get_classification_count(os.path.join(self.user_databases[current]['path'], self.user_databases[current]['name'] + '.json'))
+        chart_funcs.update_userprofile_barchart(ui_obj=self.ui, classification_len=classification_count)
 
     def set_default_dataset(self):
         current_index = self.ui.comboBox_user_datasets.currentIndex()
@@ -1077,7 +1100,8 @@ class API:
         self.db.update_dataset_default(self.current['id'],self.login_user_name)
         # print('ok')
         self.ui.default_dataset.setText(self.current['name'])
-        self.binary_pieChart()
+        binary_count = self.ds_json.get_binary_count(os.path.join(self.current['path'], self.current['name'] + '.json'))
+        chart_funcs.update_label_piechart(self.ui, binary_count)
 
     # ---------------------------------------------------------------------///////////////////////////////////////////
     # dataset
@@ -1241,7 +1265,6 @@ class API:
                     self.ds_json.modify_defect(self.ds.defect_path)
 
             self.ds.save_to_perfect(img_path=img_path, pos=pos)
-            self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
             print('no defect')
             self.ds_json.modify_perfect(self.ds.perfect_path)
@@ -1260,7 +1283,6 @@ class API:
 
             mask = self.create_mask_from_mask(img_path)
             self.ds.save_to_defect(img_path=img_path, pos=pos, mask=mask)
-            self.binary_pieChart()
             self.ui.set_warning(texts.WARNINGS['IMAGE_SAVE_SUCCESSFULLY'][self.language], 'label', level=1)
             self.ds_json.modify_defect(self.ds.defect_path)
         else:
@@ -1279,6 +1301,8 @@ class API:
                 labels.append(mask[0])
 
         self.ds_json.add_update_classification(img_path, labels)
+        binary_count = self.ds_json.get_binary_count(self.ds.annotations_path)
+        chart_funcs.update_label_piechart(self.ui, binary_count)
 
     def split_binary_dataset(self, paths, size):
         for path in paths:
@@ -1733,25 +1757,25 @@ class API:
             current_image_list, current_annot_list = self.binary_image_list.get_n_current(name=binary_list_funcs.image_list_object_names['defect'], get_annots=True)
 
         # set/update images on UI
-        if not defect:
-            res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
-                                                           sub_directory=os.path.join(
-                                                               self.dataset_params['dataset_path'],
-                                                               self.ds.perfect_folder),
-                                                           annot_sub_direcotory='./dataset/annotations',
-                                                           image_path_list=current_image_list,
-                                                           prefix=binary_list_funcs.widjet_prefixes['perfect'])
-        else:
-            res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
-                                                           sub_directory=os.path.join(
-                                                               self.dataset_params['dataset_path'],
-                                                               self.ds.defect_folder),
-                                                           annot_sub_direcotory='./dataset/annotations',
-                                                           image_path_list=current_image_list,
-                                                           prefix=binary_list_funcs.widjet_prefixes['defect'])
-        # validate
-        if not res:
-            self.ui.set_warning(texts.ERORS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=3)
+        # if not defect:
+        #     res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
+        #                                                    sub_directory=os.path.join(
+        #                                                        self.dataset_params['dataset_path'],
+        #                                                        self.ds.perfect_folder),
+        #                                                    annot_sub_direcotory='./dataset/annotations',
+        #                                                    image_path_list=current_image_list,
+        #                                                    prefix=binary_list_funcs.widjet_prefixes['perfect'])
+        # else:
+        #     res = binary_list_funcs.set_image_to_ui_slider(ui_obj=self.ui,
+        #                                                    sub_directory=os.path.join(
+        #                                                        self.dataset_params['dataset_path'],
+        #                                                        self.ds.defect_folder),
+        #                                                    annot_sub_direcotory='./dataset/annotations',
+        #                                                    image_path_list=current_image_list,
+        #                                                    prefix=binary_list_funcs.widjet_prefixes['defect'])
+        # # validate
+        # if not res:
+        #     self.ui.set_warning(texts.ERORS['READ_BINARYLIST_IMAGES_ERROR'][self.language], 'binarylist', level=3)
 
 
     # classification page
@@ -1878,8 +1902,11 @@ class API:
         chart_funcs.create_classlist_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binary_chart_frame, frame_obj_classlist=self.ui.classlist_chart_frame)
         # binarylist page
         chart_funcs.create_binarylist_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binarylist_chart_frame)
-
-
+        # userprofile page
+        chart_funcs.create_userprofile_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binary_chart_frame_profile)
+        chart_funcs.create_userprofile_barchart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.classlist_chart_frame_profile)
+        # labal page
+        chart_funcs.create_label_piechart_on_ui(ui_obj=self.ui, frame_obj_binary=self.ui.binary_chart_frame_label)
 
     # _________________________________________________________________________________________________
     # classification-model history page functions
@@ -2026,22 +2053,22 @@ class API:
     def get_image(self):
         return self.img
 
-    def binary_pieChart(self):
-        labels = ['Yes', 'No']
-        num_yes = len(os.listdir(self.ds.defect_path))
-        num_no = len(os.listdir(self.ds.perfect_path))
-        sizes = [num_yes, num_no]
-        self.show_pieChart(labels, sizes)
-
-    def show_pieChart(self, labels, sizes):
-        if sizes != [0, 0]:
-            self.ui.pieChart.figure.clf()
-            ax = self.ui.pieChart.figure.add_subplot(111)
-            ax.pie(sizes, labels=labels, autopct='%1.1f%%',
-                   shadow=True, startangle=90)
-            # Equal aspect ratio ensures that pie is drawn as a circle
-            ax.axis('equal')
-            self.ui.pieChart.draw()
+    # def binary_pieChart(self):
+    #     labels = ['Yes', 'No']
+    #     num_yes = len(os.listdir(self.ds.defect_path))
+    #     num_no = len(os.listdir(self.ds.perfect_path))
+    #     sizes = [num_yes, num_no]
+    #     self.show_pieChart(labels, sizes)
+    #
+    # def show_pieChart(self, labels, sizes):
+    #     if sizes != [0, 0]:
+    #         self.ui.pieChart.figure.clf()
+    #         ax = self.ui.pieChart.figure.add_subplot(111)
+    #         ax.pie(sizes, labels=labels, autopct='%1.1f%%',
+    #                shadow=True, startangle=90)
+    #         # Equal aspect ratio ensures that pie is drawn as a circle
+    #         ax.axis('equal')
+    #         self.ui.pieChart.draw()
 
     def create_mask_from_mask(self, img_path):
         labels = self.label_memory.get_label('mask', img_path)
@@ -2069,6 +2096,12 @@ class API:
         self.ui.image.setScaledContents(True)
         self.scale = 1
         self.position = [0, 0]
+
+    def show_neighbours(self, state):
+        if state == 2:
+            self.ui.show_small_neighbouring(self.n_imgs)
+        else:
+            self.ui.close_small_neighbouring()
 
     # def create_piechart(self):
     #     series = QPieSeries()

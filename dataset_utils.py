@@ -26,9 +26,8 @@ class dataset_json():
             file = json.load(jfile)
         return file
 
-
-    def create_json_dataset(self,parms):
-        if os.path.exists(os.path.join(parms['path'],str(parms['dataset_name']+'.json'))):
+    def create_json_dataset(self, parms):
+        if os.path.exists(os.path.join(parms['path'], str(parms['dataset_name']+'.json'))):
             return
 
         _, defects_info = self.db.get_defects()
@@ -49,12 +48,13 @@ class dataset_json():
         self.dataset_details[BINARY]=self.binary_details
 
             # return {'user_name':user_name,'user_id':user_id,'dataset_name':dataset_name,'path':path,'max_size':max_size}
-        path=parms['path']
-        self.write(os.path.join(path,str(parms['dataset_name']+'.json')))
+        path = parms['path']
+        self.write(os.path.join(path, str(parms['dataset_name']+'.json')))
         # try:
         #     pathStructure.create_dataset_stracture(path)
         # except:
         #     path
+
     def write(self,path):    
         print('write',path)
         with open(str(path), 'w') as f:
@@ -183,22 +183,27 @@ class dataset_json():
             file = json.load(jfile)
         return file
 
-
     def modify_date(self,file):
         file[BASIC_INFO][DATE_MODIFIED]=date_funcs.get_datetime()
         return file
-
 
     def write_modify(self,file):
         path = os.path.join(file[BASIC_INFO][PATH],file[BASIC_INFO][DATASET_NAME])
         with open(str(path+'.json'), 'w') as f:
             json.dump(file, f,indent=4, sort_keys=True)
 
+    def get_binary_count(self, annotation_path):
+        file = self.read(annotation_path)
+        return {'defect': file['binary']['count_defect'], 'perfect': file['binary']['count_perfect']}
 
-    
+    def get_classification_count(self, annotation_path):
+        file = self.read(annotation_path)
+        res = {}
+        for key in file['classification'].keys():
+            res[key] = len(file['classification'][key])
 
-
-
+        res['total'] = file['binary']['count_defect']
+        return res
 
 
 if __name__=='__main__':

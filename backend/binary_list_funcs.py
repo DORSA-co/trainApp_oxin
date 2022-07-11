@@ -201,7 +201,7 @@ def get_binarylist_image_pathes_list(ds_obj, dataset_pathes):
 # get files in a directory
 def getfiles(dirpath):
     try:
-        a = [s for s in os.listdir(dirpath) if os.path.isfile(os.path.join(dirpath, s)) and s[-3:]=='jpg']
+        a = [s for s in os.listdir(dirpath) if os.path.isfile(os.path.join(dirpath, s)) and s[-3:]=='png']
         a.sort(key=lambda s: os.path.getmtime(os.path.join(dirpath, s)))
         return a
     except:
