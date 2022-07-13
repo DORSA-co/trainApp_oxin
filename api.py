@@ -83,6 +83,9 @@ class API:
         self.label_bakcend = {
             'mask': Label.maskLbl((1200, 1920), self.LABEL_COLOR),
         }
+        self.label_bakcend_neighbours = {
+            'mask': Label.maskLbl((1200, 1920), self.LABEL_COLOR),
+        }
 
         # Label.bbox_lbl()
         self.label_memory = tempMemory.manageLabel()
@@ -99,6 +102,7 @@ class API:
         self.language = 'en'
         self.img = None
         self.n_imgs = []
+        self.n_anns = []
         # iterator for binary-model history tabel
         self.bmodel_tabel_itr = 1
         self.bmodel_count = 0
@@ -249,6 +253,7 @@ class API:
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
         self.ui.bounding_btn.clicked.connect(partial(self.image_processing_suggest))
         self.ui.checkBox_show_neighbours.stateChanged.connect(partial(self.show_neighbours))
+        self.ui.checkBox_show_neighbours_labels.stateChanged.connect(partial(self.show_neighbours_labels))
 
         # trainig
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
@@ -352,15 +357,8 @@ class API:
         self.mouse.connet_dbclick(self.ui.image, self.label_classify)
 
         self.mouse.connet_dbclick(self.ui.crop_image, self.fit_image)
-        #
-        # self.mouse.connet_dbclick(self.ui.image_up_left, self.enlarge_neighbour_image)
-        # self.mouse.connet_dbclick(self.ui.image_up, self.enlarge_neighbour_image)
-        # self.mouse.connet_dbclick(self.ui.image_up_right, self.enlarge_neighbour_image)
-        # self.mouse.connet_dbclick(self.ui.image_left, self.enlarge_neighbour_image)
-        # self.mouse.connet_dbclick(self.ui.image_right, self.enlarge_neighbour_image)
-        # self.mouse.connet_dbclick(self.ui.image_bottom_left, self.enlarge_neighbour_image)
-        # self.mouse.connet_dbclick(self.ui.image_bottom, self.enlarge_neighbour_image)
-        # self.mouse.connet_dbclick(self.ui.image_bottom_right, self.enlarge_neighbour_image)
+        self.mouse.connet_dbclick(self.ui.sn, self.maximize_neighbours)
+
 
     def keyboard_connector(self):
         self.keyboard.connet(self.ui, ['left', 'right', 'up', 'down'], [self.update_technical_pointer_keyboard],
@@ -736,21 +734,29 @@ class API:
             filtered_selected = Utils.get_selected_value(selected_imgs, selected_idxs)
             paths = self.db.get_path_sheet_image(filtered_selected)
             sheets = []
-            self.ui.progressBar_SI.setMinimumWidth(150)
-            self.ui.progressBar_SI.setMaximumWidth(150)
             for select_img in filtered_selected:
                 sheets.append(self.db.load_sheet(select_img[0]))
-                self.ui.progressBar_SI.setValue(self.ui.progressBar_SI.value() + (100 / len(filtered_selected)))
 
             self.ds.save_to_temp(paths, sheets, filtered_selected)
-            self.ui.progressBar_SI.setMinimumWidth(0)
-            self.ui.progressBar_SI.setMaximumWidth(0)
 
             self.move_on_list.add(list(zip(sheets, filtered_selected, paths)), 'selected_imgs_for_label')
+            label_type = self.ui.get_label_type()
+            for sheet, selected_img_pos, img_path in zip(sheets, filtered_selected, paths):
+                if img_path not in self.label_memory.get_all()[label_type].keys():
+                    label = self.ds.get_label_from_annotation(selected_img_pos)
+                    f = []
+                    for i in label:
+                        f.append([i['class'], np.array(i['mask'])])
+                    if f:
+                        self.label_memory.add(img_path,
+                                              f,
+                                              label_type)
+
             self.ui.show_label_page()
+            self.ui.show_small_neighbouring()
             self.load_image_to_label_page()
             self.ui.checkBox_show_neighbours.setCheckState(Qt.CheckState.Checked)
-            # self.ui.show_small_neighbouring(self.n_imgs)
+            self.ui.checkBox_show_neighbours_labels.setCheckState(Qt.CheckState.Checked)
         else:
             self.ui.set_warning(texts.WARNINGS['NO_CHOOSEN_IMG'][self.language], 'data_auquzation', level=2)
 
@@ -830,6 +836,30 @@ class API:
                 img = np.zeros((160, 100))
             self.n_imgs.append(img)
 
+        self.load_neighbour_annotations(neighbours, paths)
+
+        self.ui.update_neighbour_images(self.n_imgs, self.n_anns)
+
+    def load_neighbour_annotations(self, neighbours, paths):
+        # t = time.time()
+        label_type = self.ui.get_label_type()
+        self.n_anns = []
+        for selected_img_pos, img_path in zip(neighbours, paths):
+            if img_path not in self.label_memory.get_all()[label_type].keys():
+                label = self.ds.get_label_from_annotation(selected_img_pos)
+                f = []
+                for i in label:
+                    f.append([i['class'], np.array(i['mask'])])
+                if f:
+                    self.label_memory.add(img_path,
+                                          f,
+                                          label_type)
+            label = self.label_memory.get_label(label_type, img_path)
+            self.label_bakcend_neighbours[label_type].load(label)
+            label_img = self.label_bakcend_neighbours[label_type].draw()
+            self.n_anns.append(label_img)
+        # print(time.time() - t)
+
     def next_label_img(self):
         self.move_on_list.next_on_list('selected_imgs_for_label')
         self.load_image_to_label_page()
@@ -878,6 +908,7 @@ class API:
                 if self.label_bakcend[label_type].is_drawing_finish():
                     self.label_bakcend[label_type].save('0')
                 label_img = self.label_bakcend[label_type].draw()
+                # self.ui.update_center_image(img, label_img)
                 img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
                 self.ui.show_image_in_label(img, self.scale, self.position)
                 self.img = img
@@ -1142,10 +1173,13 @@ class API:
         selected_label_name = self.labeling_api.ret_selcted_label()
         selected_label = self.db.get_defect_id(selected_label_name)
         print('***************', selected_label)
+        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
         label_type = self.ui.get_label_type()
         self.label_bakcend[label_type].update_label(str(selected_label), mouse_position)
+        img = Utils.read_image(img_path, 'color')
         label_img = self.label_bakcend[label_type].draw()
-        img = Utils.add_layer_to_img(self.img, label_img, opacity=0.4, compress=0.5)
+        # self.ui.update_center_image(img, label_img)
+        img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
         self.ui.show_image_in_label(img, self.scale, self.position)
         self.img = img
         print('end set_label', selected_label)
@@ -1156,7 +1190,6 @@ class API:
 
         labels = self.label_bakcend[label_type].get()
         # print(labels[1])
-        sheet, pos, img_path = self.move_on_list.get_current('selected_imgs_for_label')
         self.label_memory.add(img_path,
                               labels,
                               label_type)
@@ -1301,7 +1334,7 @@ class API:
                 labels.append(mask[0])
 
         self.ds_json.add_update_classification(img_path, labels)
-        binary_count = self.ds_json.get_binary_count(self.ds.annotations_path)
+        binary_count = self.ds_json.get_binary_count(None)
         chart_funcs.update_label_piechart(self.ui, binary_count)
 
     def split_binary_dataset(self, paths, size):
@@ -2099,9 +2132,20 @@ class API:
 
     def show_neighbours(self, state):
         if state == 2:
-            self.ui.show_small_neighbouring(self.n_imgs)
+            self.ui.show_small_neighbouring()
         else:
             self.ui.close_small_neighbouring()
+
+    def show_neighbours_labels(self, state):
+        if state == 2:
+            self.ui.update_neighbour_labels(True)
+        else:
+            self.ui.update_neighbour_labels(False)
+
+    def maximize_neighbours(self, widget_name=''):
+        if self.ui.sn:
+            image = self.ui.sn.get_img()
+            self.ui.show_neighbouring(image)
 
     # def create_piechart(self):
     #     series = QPieSeries()

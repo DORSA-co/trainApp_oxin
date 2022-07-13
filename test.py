@@ -36,11 +36,3 @@
 #         cv2.waitKey()
 #
 
-def squareNum(a):
-    print('test', a)
-
-
-listt = [0, -1, 3, 4.5, 99, .08]
-x = map(squareNum, listt)
-print(list(x))
-

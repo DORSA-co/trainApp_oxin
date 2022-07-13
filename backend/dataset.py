@@ -151,6 +151,17 @@ class Dataset:
         annotation.set_masks(masks)
         annotation.write(json_path)
 
+    def get_label_from_annotation(self, pos):
+        fname = self.__file_name__(pos) + '.json'
+        json_path = os.path.join(self.annotations_path, fname)
+        if not os.path.exists(json_path):
+            return []
+        file = Annotation.Annotation().read(json_path)
+        return file['obj_masks']
+
+
+
+
     # Miss Abtahi-------------------------------------
 
     def check_saved_defect(self, pos):

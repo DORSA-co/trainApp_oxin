@@ -192,8 +192,11 @@ class dataset_json():
         with open(str(path+'.json'), 'w') as f:
             json.dump(file, f,indent=4, sort_keys=True)
 
-    def get_binary_count(self, annotation_path):
-        file = self.read(annotation_path)
+    def get_binary_count(self, annotation_path=None):
+        if annotation_path:
+            file = self.read(annotation_path)
+        else:
+            file = self.read_modify()
         return {'defect': file['binary']['count_defect'], 'perfect': file['binary']['count_perfect']}
 
     def get_classification_count(self, annotation_path):

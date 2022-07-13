@@ -1,3 +1,5 @@
+import sys
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqt5_plugins import *
 from PySide6.QtCharts import *
@@ -34,9 +36,15 @@ class neighbouring(QMainWindow, ui):
         self.center()
         self._old_pos = None
 
+        self.scale = 1
+        self.position = [0, 0]
+        self.pressed = None
+
         # btn connector
         self.annot_checkbox.clicked.connect(self.set_annotations)
-
+        self.n_image.mousePressEvent = self.mousePressImage()
+        self.n_image.mouseReleaseEvent = self.mouseReleaseImage()
+        self.n_image.mouseMoveEvent = self.mouseMoveImage()
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -51,6 +59,85 @@ class neighbouring(QMainWindow, ui):
             return
         delta = event.pos() - self._old_pos
         self.move(self.pos() + delta)
+
+    def mousePressImage(self):
+        def func(event):
+            if self.n_image.hasScaledContents():
+                self.scale = 1
+                self.position = [0, 0]
+            if self.scale != 1:
+                self.pressed = event.x(), event.y()
+                self.anchor = self.position
+        return func
+
+    def mouseReleaseImage(self):
+        def func(event):
+            if self.n_image.hasScaledContents():
+                self.scale = 1
+                self.position = [0, 0]
+            self.pressed = None
+        return func
+
+    def mouseMoveImage(self):
+        def func(event):
+            if self.n_image.hasScaledContents():
+                self.scale = 1
+                self.position = [0, 0]
+            x, y = event.x(), event.y()
+            if self.pressed:
+                dx, dy = x - self.pressed[0], y - self.pressed[1]
+                self.position = self.anchor[0] - dx, self.anchor[1] - dy
+                self.position = self.update_image(self.position)
+        return func
+
+    def wheelEvent(self, event):
+        if self.n_image.hasScaledContents():
+            self.scale = 1
+            self.position = [0, 0]
+            self.n_image.setScaledContents(False)
+        if event.angleDelta().y() > 0:
+            self.scale *= 1.25
+        else:
+            self.scale /= 1.25
+            if self.scale < 1:
+                self.scale = 1
+                self.position = [0, 0]
+
+        self.position = self.show_image_in_label(self.img, self.scale, (event.position().x(), event.position().y()))
+
+    def show_image_in_label(self, img, scale=1, position=(0, 0)):
+        self.fs = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
+        if scale == 1:
+            self.n_image.setScaledContents(True)
+            self.n_image.setPixmap(QPixmap.fromImage(self.fs))
+        else:
+            self.fs = self.fs.scaled(self.n_image.size() * scale)
+            # self.n_image.setPixmap(QPixmap.fromImage(self.fs).scaled(self.n_image.size() * scale))
+            position = self.update_image(position)
+
+        return position
+
+    def update_image(self, position):
+        pixmap = QPixmap(self.n_image.size())
+        px, py = position
+        px = px if (px <= self.fs.width() - self.n_image.width()) else (
+                self.fs.width() - self.n_image.width())
+        py = py if (py <= self.fs.height() - self.n_image.height()) else (
+                self.fs.height() - self.n_image.height())
+        px = px if (px >= 0) else 0
+        py = py if (py >= 0) else 0
+        position = (px, py)
+
+        painter = QPainter()
+        painter.begin(pixmap)
+        painter.drawImage(QPoint(0, 0), self.fs,
+                          QRect(position[0], position[1], self.n_image.width(),
+                                self.n_image.height()))
+        painter.end()
+
+        self.n_image.setPixmap(pixmap)
+
+        return position
 
     def activate_(self):
         self.closeButton.clicked.connect(self.close_win)
@@ -104,7 +191,7 @@ class neighbouring(QMainWindow, ui):
 # api = labeling_api.labeling_API(win)
 import cv2
 if __name__ == "__main__":
-    img = cv2.imread('/home/reyhane/oxin_image_grabber/995/BOTTOM/0/0.jpg')
+    img = cv2.imread('/home/reyhane/oxin_image_grabber/995/BOTTOM/1/5.png')
     app = QApplication()
     win = neighbouring(img)
     win.show()

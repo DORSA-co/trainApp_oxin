@@ -225,6 +225,8 @@ class UI_main_window(QMainWindow, ui):
 
         self._old_pos = None
 
+        self.sn = small_neighbouring(self.image)
+
         
 
         #pbt page
@@ -616,7 +618,6 @@ class UI_main_window(QMainWindow, ui):
             # self.sheet_view_down=data_grabber.sheetOverView(h=129,w=1084,nh=12,nw=30)
         else:
             self.showMaximized()
-        print('ssssssssssssssssssss', self.image.size())
 
     def left_bar_clear(self):
         self.Data_auquzation_btn.setStyleSheet("background-image: url(:/icons/images/icons/graber.png);")
@@ -832,16 +833,39 @@ class UI_main_window(QMainWindow, ui):
             table_item = QTableWidgetItem(str(labels[row][0]))
             LABEL_TABLE[label_type].setItem(row, 0, table_item)
 
+            s = cv2.contourArea(labels[row][1])
+            table_item = QTableWidgetItem(str(s))
+            LABEL_TABLE[label_type].setItem(row, 2, table_item)
+
+            # table_item = QTableWidgetItem(str(labels[row][0]))
+            # LABEL_TABLE[label_type].setItem(row, 0, table_item)
+
         # self.labeling_win.show()
 
     def show_neighbouring(self, img):
         self.n = neighbouring(img)
         self.n.show()
 
-    def show_small_neighbouring(self, imgs):
-        self.sn = small_neighbouring(imgs, self.image)
+    def show_small_neighbouring(self):
         self.sn.win_set_geometry(0, 0)
         self.sn.show()
+
+    def update_neighbour_images(self, imgs, anns):
+        if self.sn:
+            self.sn.set_imgs(imgs)
+            self.sn.set_annts(anns)
+            self.sn.set_image_in_label(self.checkBox_show_neighbours_labels.isChecked())
+
+    def update_center_image(self, img, ann):
+        if self.sn:
+            self.sn.set_img(img, 8)
+            self.sn.set_annt(ann, 8)
+            self.sn.set_image_in_label(self.checkBox_show_neighbours_labels.isChecked())
+
+    def update_neighbour_labels(self, flag):
+        if self.sn:
+            self.sn.set_image_in_label(flag)
+
 
     def close_small_neighbouring(self):
         self.sn.close()
@@ -924,6 +948,7 @@ class UI_main_window(QMainWindow, ui):
         self.delete_btn.setEnabled(True)
         self.heatmap_btn.setEnabled(True)
         self.checkBox_show_neighbours.setEnabled(True)
+        self.checkBox_show_neighbours_labels.setEnabled(True)
         self.fs = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
         if scale == 1:
             self.image.setScaledContents(True)

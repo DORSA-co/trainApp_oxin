@@ -1,3 +1,6 @@
+import time
+
+import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqt5_plugins import *
 from PySide6.QtCharts import *
@@ -5,6 +8,8 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
+from backend.mouse import Mouse
+from utils import Utils
 
 ui, _ = loadUiType("UI/small_neighbour_imgs.ui")
 os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
@@ -15,17 +20,23 @@ class small_neighbouring(QMainWindow, ui):
     widgets = ui
     x = 0
 
-    def __init__(self, imgs, parent):
+    def __init__(self, parent):
         super(small_neighbouring, self).__init__(parent=parent)
         self.setupUi(self)
         self.installEventFilter(self)
-        flags = Qt.WindowFlags(Qt.FramelessWindowHint|Qt.WindowStaysOnTopHint)
+        flags = Qt.WindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.pos_ = self.pos()
         self.setWindowFlags(flags)
-        self.set_imgs(imgs)
         self.win_set_geometry()
         self.center()
         self._old_pos = None
+        self.maxFlag = False
+        self.mouse = Mouse()
+
+        self.imgs = []
+        self.anns = []
+        self.ann = None
+        self.img = None
 
         # btn connector
 
@@ -43,6 +54,18 @@ class small_neighbouring(QMainWindow, ui):
         delta = event.pos() - self._old_pos
         self.move(self.pos() + delta)
 
+    # def mouseDoubleClickEvent(self, event):
+    #     if self.maxFlag:
+    #         self.win_set_geometry()
+    #         flags = Qt.WindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+    #         self.setWindowFlags(flags)
+    #         self.maxFlag = False
+    #     else:
+    #         self.win_set_geometry(width=576, height=360)
+    #         flags = Qt.WindowFlags(Qt.WindowStaysOnTopHint)
+    #         self.setWindowFlags(flags)
+    #         self.maxFlag = True
+
     def win_set_geometry(self, left=10, top=10, width=288, height=180):
         self.setGeometry(left, top, width, height)
 
@@ -56,52 +79,49 @@ class small_neighbouring(QMainWindow, ui):
         # self.move(frame_geo.moveTop)
 
     def set_imgs(self, imgs):
-        image_ul = imgs[0]
-        self.image_up_left.setPixmap(QPixmap.fromImage(
-            QImage(image_ul, image_ul.shape[1], image_ul.shape[0], image_ul.strides[0], QImage.Format_BGR888)))
+        self.imgs = imgs
 
-        image_u = imgs[1]
-        self.image_up.setPixmap(QPixmap.fromImage(
-            QImage(image_u, image_u.shape[1], image_u.shape[0], image_u.strides[0], QImage.Format_BGR888)))
+    def set_img(self, img, index):
+        self.imgs[index] = img
 
-        image_ur = imgs[2]
-        self.image_up_right.setPixmap(QPixmap.fromImage(
-            QImage(image_ur, image_ur.shape[1], image_ur.shape[0], image_ur.strides[0], QImage.Format_BGR888)))
+    def get_img(self):
+        return self.img
 
-        image_l = imgs[3]
-        self.image_left.setPixmap(QPixmap.fromImage(
-            QImage(image_l, image_l.shape[1], image_l.shape[0], image_l.strides[0], QImage.Format_BGR888)))
+    def set_annts(self, anns):
+        self.anns = anns
 
-        image_r = imgs[4]
-        self.image_right.setPixmap(QPixmap.fromImage(
-            QImage(image_r, image_r.shape[1], image_r.shape[0], image_r.strides[0], QImage.Format_BGR888)))
+    def set_annt(self, annt, index):
+        self.anns[index] = annt
 
-        image_bl = imgs[5]
-        self.image_bottom_left.setPixmap(QPixmap.fromImage(
-            QImage(image_bl, image_bl.shape[1], image_bl.shape[0], image_bl.strides[0], QImage.Format_BGR888)))
+    def set_image_in_label(self, annotation=True):
+        image_u = cv2.hconcat([self.imgs[0], self.imgs[1], self.imgs[2]])
+        image_c = cv2.hconcat([self.imgs[3], self.imgs[8], self.imgs[4]])
+        image_d = cv2.hconcat([self.imgs[5], self.imgs[6], self.imgs[7]])
+        self.img = cv2.vconcat([image_u, image_c, image_d])
 
-        image_b = imgs[6]
-        self.image_bottom.setPixmap(QPixmap.fromImage(
-            QImage(image_b, image_b.shape[1], image_b.shape[0], image_b.strides[0], QImage.Format_BGR888)))
+        if annotation:
+            annotation_u = cv2.hconcat([self.anns[0], self.anns[1], self.anns[2]])
+            annotation_c = cv2.hconcat([self.anns[3], self.anns[8], self.anns[4]])
+            annotation_d = cv2.hconcat([self.anns[5], self.anns[6], self.anns[7]])
+            self.ann = cv2.vconcat([annotation_u, annotation_c, annotation_d])
+            self.img = Utils.add_layer_to_img(self.img, self.ann, opacity=0.4, compress=0.5)
 
-        image_br = imgs[7]
-        self.image_bottom_right.setPixmap(QPixmap.fromImage(
-            QImage(image_br, image_br.shape[1], image_br.shape[0], image_br.strides[0], QImage.Format_BGR888)))
-
-        image_c = imgs[8]
-        self.image_center.setPixmap(QPixmap.fromImage(
-            QImage(image_c, image_c.shape[1], image_c.shape[0], image_c.strides[0], QImage.Format_BGR888)))
+        self.image.setPixmap(QPixmap.fromImage(
+            QImage(self.img, self.img.shape[1], self.img.shape[0], self.img.strides[0],
+                   QImage.Format_BGR888)))
 
 
 # api = labeling_api.labeling_API(win)
 import cv2
 
 if __name__ == "__main__":
-    img = cv2.imread('/home/reyhane/oxin_image_grabber/995/BOTTOM/1/1.png')
+    img = cv2.imread('/home/reyhane/oxin_image_grabber/995/BOTTOM/1/5.png')
     imgs = []
     for i in range(9):
         imgs.append(img)
     app = QApplication()
-    win = small_neighbouring(imgs)
+    win = small_neighbouring(None)
+    win.set_imgs(imgs)
+    win.set_image_in_label(False)
     win.show()
     sys.exit(app.exec())

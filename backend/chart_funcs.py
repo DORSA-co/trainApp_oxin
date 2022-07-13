@@ -1,4 +1,4 @@
-from PySide6.QtCharts import QChart as sQChart, QBarCategoryAxis, QBarSet, QValueAxis
+from PySide6.QtCharts import QChart as sQChart, QBarCategoryAxis, QBarSet, QValueAxis, QPieSlice
 from PySide6.QtCharts import QChartView as sQChartView
 from PySide6.QtCharts import QPieSeries as sQPieSeries
 from PySide6.QtCharts import QLineSeries as sQLineSeries
@@ -285,6 +285,7 @@ perfect_color = '#00ff00'
 defect_color = '#ff0000'
 pie_background_color = '#282c34'
 pie_label_color = '#FFFFFF'
+pie_label_color2 = '#000000'
 pie_pen_width = 8
 
 # pie chart for class list page
@@ -645,7 +646,7 @@ def update_label_piechart(ui_obj, binary_len):
             defect_percentage)
         if defect_percentage != 0.0:
             my_slice.setLabelVisible(True)
-            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setLabelColor(sQColor(pie_label_color2))
             my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
             my_slice.setBrush(sQColor(defect_color))
 
@@ -654,9 +655,12 @@ def update_label_piechart(ui_obj, binary_len):
             perfect_percentage)
         if perfect_percentage != 0.0:
             my_slice.setLabelVisible(True)
-            my_slice.setLabelColor(sQColor(pie_label_color))
+            my_slice.setLabelColor(sQColor(pie_label_color2))
             my_slice.setPen(sQPen(sQColor(pie_background_color), pie_pen_width))
             my_slice.setBrush(sQColor(perfect_color))
+
+
+        ui_obj.pie_binary_series_label.setLabelsPosition(QPieSlice.LabelInsideHorizontal)
 
     except:
         return
