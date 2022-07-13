@@ -785,7 +785,10 @@ class API:
         self.ui.show_image_in_label(self.img)
 
         labels = self.label_bakcend[label_type].get()
-        self.ui.show_labels(labels, label_type)
+        labels_name = []
+        for label in labels:
+            labels_name.append(self.defects_name_dict[label[0]])
+        self.ui.show_labels(labels, labels_name, label_type)
 
         # print(self.label_bakcend[label_type].get())
         # print(label, img_path)
@@ -917,7 +920,10 @@ class API:
                 self.label_memory.add(img_path,
                                       labels,
                                       label_type)
-                self.ui.show_labels(labels, label_type)
+                labels_name = []
+                for label in labels:
+                    labels_name.append(self.defects_name_dict[label[0]])
+                self.ui.show_labels(labels, labels_name, label_type)
             except:
                 self.ui.set_warning(texts.WARNINGS['NO_IMAGE_LOADED'][self.language], 'label', level=2)
                 return
@@ -972,8 +978,14 @@ class API:
 
     def get_defects(self):
         self.defects_name, self.defects_info = self.db.get_defects()
+        self.find_defect_name()
 
         return self.defects_name, self.defects_info
+
+    def find_defect_name(self):
+        self.defects_name_dict = {}
+        for defect in self.defects_info:
+            self.defects_name_dict[defect['defect_ID']] = defect['name']
 
     def show_labeling(self, mouse_position):
         label_type = self.ui.get_label_type()
@@ -989,6 +1001,7 @@ class API:
                 print('change')
                 try:
                     self.defects_name, self.defects_info = self.db.get_defects()
+                    self.find_defect_name()
                     self.db.update_sign_table('defects_info', '0')
                 except:
                     pass
@@ -1194,7 +1207,10 @@ class API:
                               labels,
                               label_type)
 
-        self.ui.show_labels(labels, label_type)
+        labels_name = []
+        for label in labels:
+            labels_name.append(self.defects_name_dict[label[0]])
+        self.ui.show_labels(labels, labels_name, label_type)
 
     def close_labeling(self):
         self.ui.labeling_win = None

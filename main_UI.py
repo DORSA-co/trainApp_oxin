@@ -819,7 +819,7 @@ class UI_main_window(QMainWindow, ui):
         return self.labeling_win
         # self.labeling_win_show()
 
-    def show_labels(self, labels, label_type):
+    def show_labels(self, labels, labels_name, label_type):
 
         LABEL_TABLE = {'mask': self.mask_table_widget}
 
@@ -833,12 +833,12 @@ class UI_main_window(QMainWindow, ui):
             table_item = QTableWidgetItem(str(labels[row][0]))
             LABEL_TABLE[label_type].setItem(row, 0, table_item)
 
+            table_item = QTableWidgetItem(str(labels_name[row]))
+            LABEL_TABLE[label_type].setItem(row, 1, table_item)
+
             s = cv2.contourArea(labels[row][1])
             table_item = QTableWidgetItem(str(s))
             LABEL_TABLE[label_type].setItem(row, 2, table_item)
-
-            # table_item = QTableWidgetItem(str(labels[row][0]))
-            # LABEL_TABLE[label_type].setItem(row, 0, table_item)
 
         # self.labeling_win.show()
 
