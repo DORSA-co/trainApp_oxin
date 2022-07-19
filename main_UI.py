@@ -22,7 +22,7 @@ from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 from PyQt5.QtGui import QPainter
 from PySide6.QtWidgets import QMessageBox as sQMessageBox
-from PySide6.QtGui import QPixmap as sQPixmap 
+from PySide6.QtGui import QPixmap as sQPixmap
 from PySide6.QtGui import QIcon as sQIcon
 from PySide6.QtGui import QIntValidator as sQIntValidator
 import pandas as pd
@@ -30,7 +30,7 @@ from functools import partial
 
 from FileDialog import FileDialog
 from app_settings import Settings
-from backend import data_grabber, chart_funcs , camera_connection, colors_pallete
+from backend import data_grabber, chart_funcs, camera_connection, colors_pallete
 import detect_lenguage
 import setting
 import api
@@ -41,6 +41,7 @@ from labeling import labeling_api
 from PIL import ImageQt
 import numpy as np
 import threading
+
 # from modules import UIFunctions
 
 import cv2
@@ -53,7 +54,8 @@ from consts.pages_indexs import PAGES_IDX
 import texts
 
 from login_win.login_UI import UI_login_window
-# from login_win.login_api import 
+
+# from login_win.login_api import
 
 
 ui, _ = loadUiType("UI/oxin.ui")
@@ -79,7 +81,6 @@ class UI_main_window(QMainWindow, ui):
         # ///////////////////////////////////////////////////////////////
         self.toggleButton.clicked.connect(self.buttonClick)
         self.btn_technical_move.clicked.connect(self.buttonClick)
-        
 
         # USE CUSTOM TITLE BAR | USE AS "False" FOR MAC OR LINUX
         # ///////////////////////////////////////////////////////////////
@@ -97,7 +98,7 @@ class UI_main_window(QMainWindow, ui):
         # SET LANGUAGE
         # //////////////////////////////////////////////
         # self.set_language()
-        self.language = 'en'
+        self.language = "en"
 
         # SET FONT & SIZE
         # /////////////////////////////////////////////
@@ -108,11 +109,10 @@ class UI_main_window(QMainWindow, ui):
         # CONNECTED WINDOWS
         # //////////////////////////////////////////////
         self.load_sheets_win = data_loader()
-        
 
         self.labeling_win = None
         self.labeling_win = labeling()
-        self.login_window=UI_login_window()
+        self.login_window = UI_login_window()
 
         useCustomTheme = False
         themeFile = "themes\py_dracula_light.qss"
@@ -125,13 +125,13 @@ class UI_main_window(QMainWindow, ui):
             # SET HACKS
             self.setThemeHack()
 
-        self.bounding_btn.setIcon(QIcon('UI/images/suggest.png'))
+        self.bounding_btn.setIcon(QIcon("UI/images/suggest.png"))
 
         self.label_dorsa_open(enable=True)
         # /////////Setting
         self.btn_software_setting.clicked.connect(self.buttonClick)
 
-        self.x, self.y, self.status, self.widget_name = -1, -1, '', ''
+        self.x, self.y, self.status, self.widget_name = -1, -1, "", ""
         # #left bar click
         self.Data_auquzation_btn.clicked.connect(self.buttonClick)
         self.label_btn.clicked.connect(self.buttonClick)
@@ -156,7 +156,7 @@ class UI_main_window(QMainWindow, ui):
 
         # classification page
         self.classification_class_list.clicked.connect(self.buttonClick)
-        #self.classification_add_new_class.clicked.connect(self.buttonClick)
+        # self.classification_add_new_class.clicked.connect(self.buttonClick)
         self.classification_training.clicked.connect(self.buttonClick)
         self.classification_history.clicked.connect(self.buttonClick)
 
@@ -178,7 +178,7 @@ class UI_main_window(QMainWindow, ui):
         # QPixmap pixmapTarget = QPixmap(":/icons/images/icons/2png);
         # pixmapTarget = pixmapTarget.scaled(size-5, size-5, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         # ui->label_image_power->setPixmap(pixmapTarget );
-        #self.classification_class_list_table()
+        # self.classification_class_list_table()
 
         # data aquization page
         self.load_coil_btn.clicked.connect(self.buttonClick)
@@ -193,16 +193,13 @@ class UI_main_window(QMainWindow, ui):
         # self.show_tools_btn.clicked.connect(self.buttonClick)
 
         self.keyboard_connections = {}
-        self.label_type = 'mask'
+        self.label_type = "mask"
         self.zoom_type = None
 
-        self.img = cv2.imread('images/dorsa-logo.png')
+        self.img = cv2.imread("images/dorsa-logo.png")
         self.set_crop_image(self.img)
 
-
-
         self.set_combo_boxes()
-
 
         # Training_page
 
@@ -221,58 +218,159 @@ class UI_main_window(QMainWindow, ui):
 
         self._old_pos = None
 
-        
-
-        #pbt page
-
+        # pbt page
         self.pipeline_pbt_btn.clicked.connect(self.buttonClick)
+
+        # add items of combobox
+        self.cbBox_of_binary_model_in_PBT_page.addItem(
+            "All"
+        )  # first time you see the page,you see no chooose
+        self.cbBox_of_binary_model_in_PBT_page.addItem(
+            "Xbc"
+        )  # xception binary classifiction model
+        self.cbBox_of_binary_model_in_PBT_page.addItem(
+            "Rbc"
+        )  # resnet binary classifiction model
+
+        self.cbBox_of_localiztion_model_in_PBT_page.addItem("All")
+        self.cbBox_of_localiztion_model_in_PBT_page.addItem("Rleu")
+        self.cbBox_of_localiztion_model_in_PBT_page.addItem("Llu")
+        self.cbBox_of_localiztion_model_in_PBT_page.addItem("uln")
+
+        self.cbBox_of_multiClassification_model_in_PBT_page.addItem("All")
+        self.cbBox_of_multiClassification_model_in_PBT_page.addItem("Xcc")
+        self.cbBox_of_multiClassification_model_in_PBT_page.addItem("Rce")
+
+        self.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
+
         self.load_dataset_pbt_btn.clicked.connect(self.buttonClick)
         self.history_pbt_btn.clicked.connect(self.buttonClick)
 
-        
         # charts ---------------------------------------------------------------------------------------------
-        self.chart_names = ['loss','accuracy', 'recall', 'precision']
+        self.chart_names = ["loss", "accuracy", "recall", "precision"]
         # binary chart
         # accuracy
-        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_loss_frame, chart_postfix=self.chart_names[0],
-                                                chart_title='Loss', legend_train='Train', legend_val='Validation', scroll_obj=self.binary_chart_scrollbar,
-                                                axisX_title='Epoch', axisY_title='Loss', checkbox_obj=self.binary_chart_checkbox, legend_visible=False, axisY_set_range=False)
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.binary_chart_loss_frame,
+            chart_postfix=self.chart_names[0],
+            chart_title="Loss",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.binary_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Loss",
+            checkbox_obj=self.binary_chart_checkbox,
+            legend_visible=False,
+            axisY_set_range=False,
+        )
 
-        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_acc_frame, chart_postfix=self.chart_names[1],
-                                                chart_title='Accuracy', legend_train='Train', legend_val='Validation', scroll_obj=self.binary_chart_scrollbar,
-                                                axisX_title='Epoch', axisY_title='Accuracy', checkbox_obj=self.binary_chart_checkbox)
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.binary_chart_acc_frame,
+            chart_postfix=self.chart_names[1],
+            chart_title="Accuracy",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.binary_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Accuracy",
+            checkbox_obj=self.binary_chart_checkbox,
+        )
         # precission
-        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_prec_frame, chart_postfix=self.chart_names[2],
-                                                chart_title='Precision', legend_train='Train', legend_val='Validation', scroll_obj=self.binary_chart_scrollbar,
-                                                axisX_title='Epoch', axisY_title='Precision', checkbox_obj=self.binary_chart_checkbox)
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.binary_chart_prec_frame,
+            chart_postfix=self.chart_names[2],
+            chart_title="Precision",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.binary_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Precision",
+            checkbox_obj=self.binary_chart_checkbox,
+        )
         # recall
-        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.binary_chart_recall_frame, chart_postfix=self.chart_names[3],
-                                                chart_title='Recall', legend_train='Train', legend_val='Validation', scroll_obj=self.binary_chart_scrollbar,
-                                                axisX_title='Epoch', axisY_title='Recall', checkbox_obj=self.binary_chart_checkbox, axisX_visible=True)
-        
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.binary_chart_recall_frame,
+            chart_postfix=self.chart_names[3],
+            chart_title="Recall",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.binary_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Recall",
+            checkbox_obj=self.binary_chart_checkbox,
+            axisX_visible=True,
+        )
+
         # -------------------------
         # classification chart
         # binary chart
         # accuracy
-        self.cls_chart_names = ['loss_cls','accuracy_cls', 'recall_cls', 'precision_cls']
-        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.cls_chart_loss_frame, chart_postfix=self.cls_chart_names[0],
-                                                chart_title='Loss', legend_train='Train', legend_val='Validation', scroll_obj=self.cls_chart_scrollbar,
-                                                axisX_title='Epoch', axisY_title='Loss', checkbox_obj=self.cls_chart_checkbox, legend_visible=False, axisY_set_range=False)
+        self.cls_chart_names = [
+            "loss_cls",
+            "accuracy_cls",
+            "recall_cls",
+            "precision_cls",
+        ]
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.cls_chart_loss_frame,
+            chart_postfix=self.cls_chart_names[0],
+            chart_title="Loss",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.cls_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Loss",
+            checkbox_obj=self.cls_chart_checkbox,
+            legend_visible=False,
+            axisY_set_range=False,
+        )
 
-        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.cls_chart_acc_frame, chart_postfix=self.cls_chart_names[1],
-                                                chart_title='Accuracy', legend_train='Train', legend_val='Validation', scroll_obj=self.cls_chart_scrollbar,
-                                                axisX_title='Epoch', axisY_title='Accuracy', checkbox_obj=self.cls_chart_checkbox)
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.cls_chart_acc_frame,
+            chart_postfix=self.cls_chart_names[1],
+            chart_title="Accuracy",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.cls_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Accuracy",
+            checkbox_obj=self.cls_chart_checkbox,
+        )
         # precission
-        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.cls_chart_recall_frame, chart_postfix=self.cls_chart_names[2],
-                                                chart_title='Precision', legend_train='Train', legend_val='Validation', scroll_obj=self.cls_chart_scrollbar,
-                                                axisX_title='Epoch', axisY_title='Precision', checkbox_obj=self.cls_chart_checkbox)
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.cls_chart_recall_frame,
+            chart_postfix=self.cls_chart_names[2],
+            chart_title="Precision",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.cls_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Precision",
+            checkbox_obj=self.cls_chart_checkbox,
+        )
         # recall
-        chart_funcs.create_train_chart_on_ui(ui_obj=self, frame_obj=self.cls_chart_prec_frame, chart_postfix=self.cls_chart_names[3],
-                                                chart_title='Recall', legend_train='Train', legend_val='Validation', scroll_obj=self.cls_chart_scrollbar,
-                                                axisX_title='Epoch', axisY_title='Recall', checkbox_obj=self.cls_chart_checkbox, axisX_visible=True)
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.cls_chart_prec_frame,
+            chart_postfix=self.cls_chart_names[3],
+            chart_title="Recall",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.cls_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Recall",
+            checkbox_obj=self.cls_chart_checkbox,
+            axisX_visible=True,
+        )
 
         # ----------------------------------------------------------------------------------------------------
-
 
     def create_alert_message(self, title, message):
         alert_window = sQMessageBox(sQMessageBox.Warning, title, message)
@@ -281,7 +379,6 @@ class UI_main_window(QMainWindow, ui):
         icon.addPixmap(sQPixmap("images/alert.png"), sQIcon.Normal)
         alert_window.setWindowIcon(icon)
         alert_window.exec()
-
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
@@ -299,42 +396,49 @@ class UI_main_window(QMainWindow, ui):
 
     def get_technical(self, name=True):
         if name:
-            return {self.up_side_technical.objectName(): self.up_side_technical,
-                    self.down_side_technical.objectName(): self.down_side_technical}
+            return {
+                self.up_side_technical.objectName(): self.up_side_technical,
+                self.down_side_technical.objectName(): self.down_side_technical,
+            }
 
         else:
-            return {'up': self.up_side_technical,
-                    'down': self.down_side_technical}
+            return {"up": self.up_side_technical, "down": self.down_side_technical}
 
     def get_technical_wgt_side(self, wgt_name):
         if wgt_name == self.down_side_technical.objectName():
-            return 'down'
+            return "down"
 
         elif wgt_name == self.up_side_technical.objectName():
-            return 'up'
+            return "up"
 
     def ret_mouse(self):
         x, y, widget_name, status = self.x, self.y, self.widget_name, self.status
-        self.x, self.y, self.widget_name, self.status = -1, -1, '', ''
+        self.x, self.y, self.widget_name, self.status = -1, -1, "", ""
         return (x, y), widget_name, status
 
     # ///////////////////// LANGUAGE
     def set_language(self):
         print(detect_lenguage.language())
-        if detect_lenguage.language() == 'Persian(فارسی)':
+        if detect_lenguage.language() == "Persian(فارسی)":
             detect_lenguage.main_window(self)
 
     def set_img_sheet(self, img, side):
         if side == "up" or side == self.up_side_technical.objectName():
-            image = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
+            image = QImage(
+                img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+            )
             self.up_side_technical.setPixmap(QPixmap.fromImage(image))
         if side == "down" or side == self.down_side_technical.objectName():
-            image = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
+            image = QImage(
+                img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+            )
             self.down_side_technical.setPixmap(QPixmap.fromImage(image))
 
     def set_crop_image(self, img):
 
-        image = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
+        image = QImage(
+            img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+        )
         self.crop_image.setPixmap(QPixmap.fromImage(image))
         # cv2.waitKey(200)
 
@@ -354,11 +458,15 @@ class UI_main_window(QMainWindow, ui):
             # SET MAX WIDTH
             if width == 60:
                 # print('OPEN')
-                self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
+                self.toggleButton.setStyleSheet(
+                    "background-image: url(:/icons/images/icons/t2.png);"
+                )
                 widthExtended = maxExtend
                 # print(widthExtended)
             else:
-                self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
+                self.toggleButton.setStyleSheet(
+                    "background-image: url(:/icons/images/icons/t1.png);"
+                )
                 # print('Close')
                 widthExtended = standard
                 # print(widthExtended)
@@ -381,22 +489,24 @@ class UI_main_window(QMainWindow, ui):
             standard = 600
 
             # SET MAX WIDTH
-            if width  !=0:
-                print('OPEN')
+            if width != 0:
+                print("OPEN")
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
-                self.set_btn_image(self.btn_technical_move,'UI/images/images/left.png')
+                self.set_btn_image(self.btn_technical_move, "UI/images/images/left.png")
                 widthExtended = maxExtend
                 # print(widthExtended)
             else:
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
-                self.set_btn_image(self.btn_technical_move,'UI/images/images/fast-forward.png')
+                self.set_btn_image(
+                    self.btn_technical_move, "UI/images/images/fast-forward.png"
+                )
 
-                print('Close')
+                print("Close")
                 widthExtended = standard
                 # print(widthExtended)
 
             # ANIMATION
-            print('width',width)
+            print("width", width)
             self.animation = QPropertyAnimation(self.frame_413, b"maximumWidth")
             self.animation.setDuration(Settings.TIME_ANIMATION)
             self.animation.setStartValue(width)
@@ -409,8 +519,7 @@ class UI_main_window(QMainWindow, ui):
             # self.animation.setEndValue(widthExtended)
             # self.animation.setEasingCurve(QEasingCurve.InOutQuart)
             # self.animation.start()
-            print('start')
-
+            print("start")
 
     # TOGGLE LEFT BOX
     # ///////////////////////////////////////////////////////////////
@@ -436,7 +545,7 @@ class UI_main_window(QMainWindow, ui):
         else:
             widthExtended = standard
             # RESET BTN
-            self.toggleLeftBox.setStyleSheet(style.replace(color, ''))
+            self.toggleLeftBox.setStyleSheet(style.replace(color, ""))
 
         self.start_box_animation(width, widthRightBox, "left")
 
@@ -455,7 +564,7 @@ class UI_main_window(QMainWindow, ui):
         else:
             right_width = 0
             # print('ok')
-        # ANIMATION LEFT BOX        
+        # ANIMATION LEFT BOX
         self.left_box = QPropertyAnimation(self.extraLeftBox, b"minimumWidth")
         self.left_box.setDuration(Settings.TIME_ANIMATION)
         self.left_box.setStartValue(left_box_width)
@@ -468,7 +577,7 @@ class UI_main_window(QMainWindow, ui):
         self.group.start()
 
     # Label Dorsa
-    # ///////////////////////////////////////////////     
+    # ///////////////////////////////////////////////
     def label_dorsa_open(self, enable):
         if enable:
             # GET WIDTH
@@ -498,14 +607,16 @@ class UI_main_window(QMainWindow, ui):
             self.animation.start()
 
     # TOGGLE Yes_defect
-    # /////////////////////////////////////////////////////////////// 
+    # ///////////////////////////////////////////////////////////////
     def def_yes_defect(self):
         self.stackedWidget_defect.setCurrentWidget(self.page_yes)
         self.stackedWidget_defect.setMaximumHeight(166666)
         x = self.stackedWidget_defect.height()
         if x < 70:
             # print('x',x)
-            self.left_box = QPropertyAnimation(self.stackedWidget_defect, b"maximumHeight")
+            self.left_box = QPropertyAnimation(
+                self.stackedWidget_defect, b"maximumHeight"
+            )
             self.left_box.setDuration(Settings.TIME_ANIMATION)
             self.left_box.setStartValue(60)
             self.left_box.setEndValue(400)
@@ -538,7 +649,6 @@ class UI_main_window(QMainWindow, ui):
     def show_login(self):
 
         self.login_window.show()
-        
 
     def setting_win(self):
         height = self.frame_settin2.height()
@@ -604,12 +714,12 @@ class UI_main_window(QMainWindow, ui):
     #
     #         self.group.start()
 
-            # IMPORT THEMES FILES QSS/CSS
+    # IMPORT THEMES FILES QSS/CSS
 
     # ///////////////////////////////////////////////////////////////
     def theme(self, file, useCustomTheme):
         if useCustomTheme:
-            str = open(file, 'r').read()
+            str = open(file, "r").read()
             self.styleSheet.setStyleSheet(str)
 
     def setThemeHack(self):
@@ -626,9 +736,11 @@ class UI_main_window(QMainWindow, ui):
         self.pushButton.setStyleSheet("background-color: #6272a4;")
         self.plainTextEdit.setStyleSheet("background-color: #6272a4;")
         self.tableWidget.setStyleSheet(
-            "QScrollBar:vertical { background: #6272a4; } QScrollBar:horizontal { background: #6272a4; }")
+            "QScrollBar:vertical { background: #6272a4; } QScrollBar:horizontal { background: #6272a4; }"
+        )
         self.scrollArea.setStyleSheet(
-            "QScrollBar:vertical { background: #6272a4; } QScrollBar:horizontal { background: #6272a4; }")
+            "QScrollBar:vertical { background: #6272a4; } QScrollBar:horizontal { background: #6272a4; }"
+        )
         self.comboBox.setStyleSheet("background-color: #6272a4;")
         self.horizontalScrollBar.setStyleSheet("background-color: #6272a4;")
         self.verticalScrollBar.setStyleSheet("background-color: #6272a4;")
@@ -656,25 +768,48 @@ class UI_main_window(QMainWindow, ui):
             self.showMaximized()
 
     def left_bar_clear(self):
-        self.Data_auquzation_btn.setStyleSheet("background-image: url(:/icons/images/icons/graber.png);")
-        self.label_btn.setStyleSheet("background-image: url(:/icons/images/icons/label.png);")
-        self.tuning_btn.setStyleSheet("background-image: url(:/icons/images/icons/tuning.png);")
-        self.pbt_btn.setStyleSheet("background-image: url(:/icons/images/icons/pbt.png);")
+        self.Data_auquzation_btn.setStyleSheet(
+            "background-image: url(:/icons/images/icons/graber.png);"
+        )
+        self.label_btn.setStyleSheet(
+            "background-image: url(:/icons/images/icons/label.png);"
+        )
+        self.tuning_btn.setStyleSheet(
+            "background-image: url(:/icons/images/icons/tuning.png);"
+        )
+        self.pbt_btn.setStyleSheet(
+            "background-image: url(:/icons/images/icons/pbt.png);"
+        )
         # self.page_aboutus_btn.setStyleSheet("QPushButton {background-color: rgb(100,100,100);;	color: rgb(0,0,0);	border: none;	text-align: left;padding-left: 10px;}QPushButton:hover {background-color:  rgb(197 , 195,196)};QPushButton:pressed {background-color: rgb(197 , 195,196);}")
 
     def test(self):
-        input_image = cv2.imread('1.jpg')
+        input_image = cv2.imread("1.jpg")
         self.input_image = input_image
-        image = QImage(input_image, input_image.shape[1], input_image.shape[0], input_image.strides[0],
-                       QImage.Format_BGR888)
+        image = QImage(
+            input_image,
+            input_image.shape[1],
+            input_image.shape[0],
+            input_image.strides[0],
+            QImage.Format_BGR888,
+        )
         self.image.setPixmap(QPixmap.fromImage(image))
-        input_image = cv2.imread('2.jpg')
-        image = QImage(input_image, input_image.shape[1], input_image.shape[0], input_image.strides[0],
-                       QImage.Format_BGR888)
+        input_image = cv2.imread("2.jpg")
+        image = QImage(
+            input_image,
+            input_image.shape[1],
+            input_image.shape[0],
+            input_image.strides[0],
+            QImage.Format_BGR888,
+        )
         self.n_image.setPixmap(QPixmap.fromImage(image))
-        input_image = cv2.imread('3.jpg')
-        image = QImage(input_image, input_image.shape[1], input_image.shape[0], input_image.strides[0],
-                       QImage.Format_BGR888)
+        input_image = cv2.imread("3.jpg")
+        image = QImage(
+            input_image,
+            input_image.shape[1],
+            input_image.shape[0],
+            input_image.strides[0],
+            QImage.Format_BGR888,
+        )
         self.p_image.setPixmap(QPixmap.fromImage(image))
         # print(image)
 
@@ -687,9 +822,8 @@ class UI_main_window(QMainWindow, ui):
     #     header = self.class_list.horizontalHeader()
     #     header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
-
     def set_col_all_datasets(self):
-        labels = ['Id', 'Name', 'User own', 'Path']
+        labels = ["Id", "Name", "User own", "Path"]
         self.tableWidget_all_dataset.setHorizontalHeaderLabels(labels)
 
         header = self.tableWidget_all_dataset.horizontalHeader()
@@ -697,13 +831,12 @@ class UI_main_window(QMainWindow, ui):
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def set_col_user_datasets(self):
-        labels = ['Id', 'Name', 'User own', 'Path']
+        labels = ["Id", "Name", "User own", "Path"]
         self.tableWidget_user_dataset.setHorizontalHeaderLabels(labels)
 
         header = self.tableWidget_user_dataset.horizontalHeader()
         header = self.tableWidget_user_dataset.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
-
 
     def get_label_type(self):
         return self.label_type
@@ -736,10 +869,12 @@ class UI_main_window(QMainWindow, ui):
         for row, record in enumerate(records):
             # for i in range(11):
             # print(i)
-            record = '{} - {} - {}'.format(record[0], record[1], (record[2]))
+            record = "{} - {} - {}".format(record[0], record[1], (record[2]))
             table_item = QTableWidgetItem(str(record))
             # if i ==0:
-            table_item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+            table_item.setFlags(
+                Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled
+            )
             table_item.setCheckState(Qt.CheckState.Unchecked)
             table_item.setData(Qt.DisplayRole, record)
             self.listWidget_append_img_list.setItem(row, 0, table_item)
@@ -748,7 +883,10 @@ class UI_main_window(QMainWindow, ui):
     def get_selected_img(self):
         selected_list = []
         for i in range(self.listWidget_append_img_list.rowCount()):
-            if self.listWidget_append_img_list.item(i, 0).checkState() == QtCore.Qt.Checked:
+            if (
+                self.listWidget_append_img_list.item(i, 0).checkState()
+                == QtCore.Qt.Checked
+            ):
                 if i >= 0:
                     selected_list.append(i)
 
@@ -762,11 +900,15 @@ class UI_main_window(QMainWindow, ui):
     def select_unselect_all(self):
         if self.checkBox_select.isChecked():
             for i in range(self.listWidget_append_img_list.rowCount()):
-                self.listWidget_append_img_list.item(i, 0).setCheckState(Qt.CheckState.Checked)
+                self.listWidget_append_img_list.item(i, 0).setCheckState(
+                    Qt.CheckState.Checked
+                )
 
         else:
             for i in range(self.listWidget_append_img_list.rowCount()):
-                self.listWidget_append_img_list.item(i, 0).setCheckState(Qt.CheckState.Unchecked)
+                self.listWidget_append_img_list.item(i, 0).setCheckState(
+                    Qt.CheckState.Unchecked
+                )
 
     def able_enable_filters(self):
         if self.checkBox_all_imgs_SI.isChecked():
@@ -816,31 +958,31 @@ class UI_main_window(QMainWindow, ui):
 
         self.image.setCursor(Qt.ArrowCursor)
         self.zoom_type = None
-        self.label_type = 'mask'
+        self.label_type = "mask"
 
         self.tabWidget_defect.setCurrentIndex(0)
         api.load_image_to_label_page()
 
     def zoom_in(self):
-        cursor = PG.QPixmap('images/zoom-in_cursor.png')
+        cursor = PG.QPixmap("images/zoom-in_cursor.png")
         cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
         self.image.setCursor(PG.QCursor(cursor))
 
-        self.zoom_type = 'zoom_in'
+        self.zoom_type = "zoom_in"
 
     def zoom_out(self):
-        cursor = PG.QPixmap('images/zoom-out_cursor.png')
+        cursor = PG.QPixmap("images/zoom-out_cursor.png")
         cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
         self.image.setCursor(PG.QCursor(cursor))
 
-        self.zoom_type = 'zoom_out'
+        self.zoom_type = "zoom_out"
 
     def drag_image(self):
         self.image.setCursor(Qt.OpenHandCursor)
-        self.zoom_type = 'drag'
+        self.zoom_type = "drag"
 
     def data_loader_win_show(self):
-        self.label_type = 'mask'
+        self.label_type = "mask"
 
         self.load_sheets_win.show()
 
@@ -848,7 +990,7 @@ class UI_main_window(QMainWindow, ui):
 
     def ret_create_login(self):
 
-        self.login_window=UI_login_window()
+        self.login_window = UI_login_window()
         return self.login_window
 
     def ret_create_labeling(self):
@@ -858,9 +1000,9 @@ class UI_main_window(QMainWindow, ui):
 
     def show_labels(self, labels, label_type):
 
-        LABEL_TABLE = {'mask': self.mask_table_widget}
+        LABEL_TABLE = {"mask": self.mask_table_widget}
 
-        print('labe', label_type)
+        print("labe", label_type)
 
         self.clear_table()  # cleare table
 
@@ -878,52 +1020,63 @@ class UI_main_window(QMainWindow, ui):
 
     def show_sheet_details(self, details):
 
-        text = '  id: ' + str(details['sheet_id']) + ' || heat_number: ' + str(
-            details['heat_number']) + ' || width: ' + str(details['width']) + ' || lenght: ' + str(details['lenght'])
+        text = (
+            "  id: "
+            + str(details["sheet_id"])
+            + " || heat_number: "
+            + str(details["heat_number"])
+            + " || width: "
+            + str(details["width"])
+            + " || lenght: "
+            + str(details["lenght"])
+        )
 
         self.details_label.setText(text)
 
     def set_warning(self, text, name, level=1):
         waring_labels = {
-            'data_auquzation': self.warning_data_page,
-            'label': self.warning_label_page,
-            'train': self.warning_train_page,
-            'camera_connection':self.camera_connection_msg,
-            'binarylist': self.warning_binarylist_page,
-            'setting_eror': self.setting_eror,
-            "app_erors":self.label_app_erors,
-            'classification_model_history': self.cls_tabel_label,
-            'classlist_msg_label': self.classlist_msg_label,
-            'binary_model_history': self.binary_tabel_label
+            "data_auquzation": self.warning_data_page,
+            "label": self.warning_label_page,
+            "train": self.warning_train_page,
+            "camera_connection": self.camera_connection_msg,
+            "binarylist": self.warning_binarylist_page,
+            "setting_eror": self.setting_eror,
+            "app_erors": self.label_app_erors,
+            "classification_model_history": self.cls_tabel_label,
+            "classlist_msg_label": self.classlist_msg_label,
+            "binary_model_history": self.binary_tabel_label,
         }
         # print('set_warning')
         if text != None:
-    
+
             if level == 1:
-                waring_labels[name].setText(' ' + text + ' ')
-                waring_labels[name].setStyleSheet('background-color:#20a740;border-radius:2px;color:white')
+                waring_labels[name].setText(" " + text + " ")
+                waring_labels[name].setStyleSheet(
+                    "background-color:#20a740;border-radius:2px;color:white"
+                )
 
             if level == 2:
-                waring_labels[name].setText(' Warning: ' + text)
-                waring_labels[name].setStyleSheet('background-color:#FDFFA9;border-radius:2px;color:black')
+                waring_labels[name].setText(" Warning: " + text)
+                waring_labels[name].setStyleSheet(
+                    "background-color:#FDFFA9;border-radius:2px;color:black"
+                )
 
             if level >= 3:
-                waring_labels[name].setText(' ERROR : ' + text)
-                waring_labels[name].setStyleSheet('background-color:#D9534F;border-radius:2px;color:black')
-            
+                waring_labels[name].setText(" ERROR : " + text)
+                waring_labels[name].setStyleSheet(
+                    "background-color:#D9534F;border-radius:2px;color:black"
+                )
 
             threading.Timer(2, self.set_warning, args=(None, name)).start()
 
-
-
-
         else:
-            waring_labels[name].setText('')
-            waring_labels[name].setStyleSheet('')
-
+            waring_labels[name].setText("")
+            waring_labels[name].setStyleSheet("")
 
     def show_question(self, title, message):
-        msg = QMessageBox.question(self, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        msg = QMessageBox.question(
+            self, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        )
         if msg == QMessageBox.Yes:
             return True
         if msg == QMessageBox.No:
@@ -936,7 +1089,8 @@ class UI_main_window(QMainWindow, ui):
     def show_label_page(self):
         self.left_bar_clear()
         self.label_btn.setStyleSheet(
-            "background-image: url(:/icons/images/icons/label.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
+            "background-image: url(:/icons/images/icons/label.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);"
+        )
         self.stackedWidget.setCurrentWidget(self.page_label)
 
     def show_image_in_label(self, img=None, scale=1, position=(0, 0)):
@@ -953,7 +1107,9 @@ class UI_main_window(QMainWindow, ui):
         self.bounding_btn.setEnabled(True)
         self.delete_btn.setEnabled(True)
         self.heatmap_btn.setEnabled(True)
-        self.fs = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
+        self.fs = QImage(
+            img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+        )
         if scale == 1:
             self.image.setScaledContents(True)
             self.image.setPixmap(QPixmap.fromImage(self.fs))
@@ -966,53 +1122,133 @@ class UI_main_window(QMainWindow, ui):
 
     def show_image_in_neighbour_labels(self, imgs):
         image_ul = imgs[0]
-        self.image_up_left.setPixmap(QPixmap.fromImage(
-            QImage(image_ul, image_ul.shape[1], image_ul.shape[0], image_ul.strides[0], QImage.Format_BGR888)))
+        self.image_up_left.setPixmap(
+            QPixmap.fromImage(
+                QImage(
+                    image_ul,
+                    image_ul.shape[1],
+                    image_ul.shape[0],
+                    image_ul.strides[0],
+                    QImage.Format_BGR888,
+                )
+            )
+        )
 
         image_u = imgs[1]
-        self.image_up.setPixmap(QPixmap.fromImage(
-            QImage(image_u, image_u.shape[1], image_u.shape[0], image_u.strides[0], QImage.Format_BGR888)))
+        self.image_up.setPixmap(
+            QPixmap.fromImage(
+                QImage(
+                    image_u,
+                    image_u.shape[1],
+                    image_u.shape[0],
+                    image_u.strides[0],
+                    QImage.Format_BGR888,
+                )
+            )
+        )
 
         image_ur = imgs[2]
-        self.image_up_right.setPixmap(QPixmap.fromImage(
-            QImage(image_ur, image_ur.shape[1], image_ur.shape[0], image_ur.strides[0], QImage.Format_BGR888)))
+        self.image_up_right.setPixmap(
+            QPixmap.fromImage(
+                QImage(
+                    image_ur,
+                    image_ur.shape[1],
+                    image_ur.shape[0],
+                    image_ur.strides[0],
+                    QImage.Format_BGR888,
+                )
+            )
+        )
 
         image_l = imgs[3]
-        self.image_left.setPixmap(QPixmap.fromImage(
-            QImage(image_l, image_l.shape[1], image_l.shape[0], image_l.strides[0], QImage.Format_BGR888)))
+        self.image_left.setPixmap(
+            QPixmap.fromImage(
+                QImage(
+                    image_l,
+                    image_l.shape[1],
+                    image_l.shape[0],
+                    image_l.strides[0],
+                    QImage.Format_BGR888,
+                )
+            )
+        )
 
         image_r = imgs[4]
-        self.image_right.setPixmap(QPixmap.fromImage(
-            QImage(image_r, image_r.shape[1], image_r.shape[0], image_r.strides[0], QImage.Format_BGR888)))
+        self.image_right.setPixmap(
+            QPixmap.fromImage(
+                QImage(
+                    image_r,
+                    image_r.shape[1],
+                    image_r.shape[0],
+                    image_r.strides[0],
+                    QImage.Format_BGR888,
+                )
+            )
+        )
 
         image_bl = imgs[5]
-        self.image_bottom_left.setPixmap(QPixmap.fromImage(
-            QImage(image_bl, image_bl.shape[1], image_bl.shape[0], image_bl.strides[0], QImage.Format_BGR888)))
+        self.image_bottom_left.setPixmap(
+            QPixmap.fromImage(
+                QImage(
+                    image_bl,
+                    image_bl.shape[1],
+                    image_bl.shape[0],
+                    image_bl.strides[0],
+                    QImage.Format_BGR888,
+                )
+            )
+        )
 
         image_b = imgs[6]
-        self.image_bottom.setPixmap(QPixmap.fromImage(
-            QImage(image_b, image_b.shape[1], image_b.shape[0], image_b.strides[0], QImage.Format_BGR888)))
+        self.image_bottom.setPixmap(
+            QPixmap.fromImage(
+                QImage(
+                    image_b,
+                    image_b.shape[1],
+                    image_b.shape[0],
+                    image_b.strides[0],
+                    QImage.Format_BGR888,
+                )
+            )
+        )
 
         image_br = imgs[7]
-        self.image_bottom_right.setPixmap(QPixmap.fromImage(
-            QImage(image_br, image_br.shape[1], image_br.shape[0], image_br.strides[0], QImage.Format_BGR888)))
+        self.image_bottom_right.setPixmap(
+            QPixmap.fromImage(
+                QImage(
+                    image_br,
+                    image_br.shape[1],
+                    image_br.shape[0],
+                    image_br.strides[0],
+                    QImage.Format_BGR888,
+                )
+            )
+        )
 
     def update_image(self, position):
         pixmap = QPixmap(self.image.size())
         px, py = position
-        px = px if (px <= self.fs.width() - self.image.width()) else (
-                self.fs.width() - self.image.width())
-        py = py if (py <= self.fs.height() - self.image.height()) else (
-                self.fs.height() - self.image.height())
+        px = (
+            px
+            if (px <= self.fs.width() - self.image.width())
+            else (self.fs.width() - self.image.width())
+        )
+        py = (
+            py
+            if (py <= self.fs.height() - self.image.height())
+            else (self.fs.height() - self.image.height())
+        )
         px = px if (px >= 0) else 0
         py = py if (py >= 0) else 0
         position = (px, py)
 
         painter = QPainter()
         painter.begin(pixmap)
-        painter.drawImage(QPoint(0, 0), self.fs,
-                          QRect(position[0], position[1], self.image.width(),
-                                self.image.height()))
+        painter.drawImage(
+            QPoint(0, 0),
+            self.fs,
+            QRect(position[0], position[1], self.image.width(), self.image.height()),
+        )
         painter.end()
 
         self.image.setPixmap(pixmap)
@@ -1023,56 +1259,65 @@ class UI_main_window(QMainWindow, ui):
 
     def init_training_page(self):
 
-        b_algorithms = ['Xbc', 'Rbe']  # Must change
-        class_algorithms = ['A', 'B']
+        b_algorithms = ["Xbc", "Rbc"]  # Must change
+        class_algorithms = ["A", "B"]
         self.b_algorithms.addItems(b_algorithms)
         self.classification_algo_combo.addItems(class_algorithms)
-        self.binary_name_filter_combo.addItem('All')
+        self.binary_name_filter_combo.addItem("All")
         self.binary_name_filter_combo.addItems(b_algorithms)
-        self.cls_name_filter_combo.addItem('All')
+        self.cls_name_filter_combo.addItem("All")
         self.cls_name_filter_combo.addItems(b_algorithms)
         self.set_default_parms()
 
         # self.b_algorithms.setCurrentText(str(records[0][0]))   #Must change
 
-
     def set_default_parms(self):
 
-        b_parms = {'algorithm_name': 'Xbc', 'input_type': True, 'epochs': '2', 'batch_size': '8',
-                   'learning_rate': '1e-3', 'tuning_epochs': '1', 'validation_split': '20'}
-        
-        classification_params = {'algorithm_name': 'A', 'epochs': '2', 'batch_size': '8', 'learning_rate': '1e-3', 'tuning_epochs': '1', 'validation_split': '20'}
+        b_parms = {
+            "algorithm_name": "Xbc",
+            "input_type": True,
+            "epochs": "2",
+            "batch_size": "8",
+            "learning_rate": "1e-3",
+            "tuning_epochs": "1",
+            "validation_split": "20",
+        }
 
-        self.b_algorithms.setCurrentText(b_parms['algorithm_name'])
+        classification_params = {
+            "algorithm_name": "A",
+            "epochs": "2",
+            "batch_size": "8",
+            "learning_rate": "1e-3",
+            "tuning_epochs": "1",
+            "validation_split": "20",
+        }
 
-        self.input_type_resize.setChecked(not b_parms['input_type'])
-        self.input_type_split.setChecked(b_parms['input_type'])
+        self.b_algorithms.setCurrentText(b_parms["algorithm_name"])
 
-        self.b_epochs.setText(b_parms['epochs'])
-        self.b_batch.setText(b_parms['batch_size'])
-        self.b_lr.setText(b_parms['learning_rate'])
-        self.b_te.setText(b_parms['tuning_epochs'])
-        self.b_vs.setText(b_parms['validation_split'])
+        self.input_type_resize.setChecked(not b_parms["input_type"])
+        self.input_type_split.setChecked(b_parms["input_type"])
+
+        self.b_epochs.setText(b_parms["epochs"])
+        self.b_batch.setText(b_parms["batch_size"])
+        self.b_lr.setText(b_parms["learning_rate"])
+        self.b_te.setText(b_parms["tuning_epochs"])
+        self.b_vs.setText(b_parms["validation_split"])
 
         # classification model params
-        self.class_epoch_lineedit.setText(classification_params['epochs'])
-        self.class_batch_lineedit.setText(b_parms['batch_size'])
-        self.class_lr_lineedit.setText(b_parms['learning_rate'])
-        self.class_tepoch_lineedit.setText(b_parms['tuning_epochs'])
-        self.class_split_lineedit.setText(b_parms['validation_split'])
+        self.class_epoch_lineedit.setText(classification_params["epochs"])
+        self.class_batch_lineedit.setText(b_parms["batch_size"])
+        self.class_lr_lineedit.setText(b_parms["learning_rate"])
+        self.class_tepoch_lineedit.setText(b_parms["tuning_epochs"])
+        self.class_split_lineedit.setText(b_parms["validation_split"])
 
+        l_parms = {"batch_size": "64", "image_path": "asdsa"}  # Must change
 
-        l_parms = {'batch_size': '64',
-                   'image_path': 'asdsa'}  # Must change
-
-        self.l_batch.setText(l_parms['batch_size'])
-
-
+        self.l_batch.setText(l_parms["batch_size"])
 
     def set_default_db_parms(self, binary_path, split_size):
         self.input_size1.setValue(split_size[0])
         self.input_size2.setValue(split_size[1])
-        self.b_dp.setPlainText('1. ' + binary_path)
+        self.b_dp.setPlainText("1. " + binary_path)
 
     def get_binary_parms(self):
         binary_algorithm_name = self.b_algorithms.currentText()
@@ -1083,16 +1328,23 @@ class UI_main_window(QMainWindow, ui):
         binary_lr = float(self.b_lr.text())
         binary_te = int(float(self.b_te.text()))
         binary_vs = float(self.b_vs.text()) / 100
-        if binary_vs > 0.5: binary_vs = 0.5
+        if binary_vs > 0.5:
+            binary_vs = 0.5
         text = self.b_dp.toPlainText()
-        pattern = r'[0-9]+. '
+        pattern = r"[0-9]+. "
         binary_dp = [s.rstrip() for s in re.split(pattern, text)[1:]]
 
         return (
-            binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch, binary_lr,
+            binary_algorithm_name,
+            binary_input_size,
+            binary_input_type,
+            binary_epoch,
+            binary_batch,
+            binary_lr,
             binary_te,
-            binary_vs, binary_dp)
-    
+            binary_vs,
+            binary_dp,
+        )
 
     def get_classification_parms(self):
         try:
@@ -1103,19 +1355,27 @@ class UI_main_window(QMainWindow, ui):
             classification_te = int(float(self.class_tepoch_lineedit.text()))
             classification_vs = float(self.class_split_lineedit.text()) / 100
         except:
-            self.show_mesagges(self.classification_train_msg_label, 'Parametrs are not invalid', color=colors_pallete.failed_red)
+            self.show_mesagges(
+                self.classification_train_msg_label,
+                "Parametrs are not invalid",
+                color=colors_pallete.failed_red,
+            )
             return []
 
-        if classification_vs > 0.5: classification_vs = 0.5
+        if classification_vs > 0.5:
+            classification_vs = 0.5
         # text = self.b_dp.toPlainText()
         # pattern = r'[0-9]+. '
         # binary_dp = [s.rstrip() for s in re.split(pattern, text)[1:]]
 
         return [
-            classification_algorithm_name, classification_epoch, classification_batch, classification_lr,
+            classification_algorithm_name,
+            classification_epoch,
+            classification_batch,
+            classification_lr,
             classification_te,
-            classification_vs]
-
+            classification_vs,
+        ]
 
     def add_binary_dataset(self):
         height = self.b_add_ds_frame.height()
@@ -1141,7 +1401,7 @@ class UI_main_window(QMainWindow, ui):
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
             self.group.start()
-            self.b_add_ds_lineedit.setText('')
+            self.b_add_ds_lineedit.setText("")
 
     def get_localization_parms(self):
         localization_algorithm_name = self.l_algorithms.currentText()
@@ -1153,21 +1413,29 @@ class UI_main_window(QMainWindow, ui):
         localization_ip = self.l_ip.text()
         localization_lp = self.l_lp.text()
 
-        return (localization_algorithm_name, localization_epoch, localization_batch, localization_lr, localization_te,
-                localization_vs, localization_ip, localization_lp)
+        return (
+            localization_algorithm_name,
+            localization_epoch,
+            localization_batch,
+            localization_lr,
+            localization_te,
+            localization_vs,
+            localization_ip,
+            localization_lp,
+        )
 
     def set_side_combobox(self):
         self.comboBox_side_SI.clear()
-        self.comboBox_side_SI.addItems(['TOP', 'BOTTOM', 'BOTH'])
+        self.comboBox_side_SI.addItems(["TOP", "BOTTOM", "BOTH"])
         self.comboBox_side_SI.setCurrentIndex(-1)
 
     def set_camera_combobox(self, min, max):
         self.comboBox_ncamera_SI.clear()
-        i=0
+        i = 0
         for x in range(min, max):
             self.comboBox_ncamera_SI.addItem(str(x))
             self.comboBox_ncamera_SI.setItemChecked(i, False)
-            i+=1
+            i += 1
         self.comboBox_ncamera_SI.setCurrentIndex(-1)
 
     def set_frame_combobox(self, max):
@@ -1182,13 +1450,13 @@ class UI_main_window(QMainWindow, ui):
     # Dta aquization page add live cameras              Milad
 
     def set_combo_boxes(self):
-    
-        strings = [str(x) for x in range(1,25)]
-        strings.append('All')
+
+        strings = [str(x) for x in range(1, 25)]
+        strings.append("All")
         self.comboBox_cam_select.addItems(strings)
         self.comboBox_cam_select.setCurrentIndex(24)
 
-        string=['5 Gb','15 Gb','40 Gb','Unlimit']
+        string = ["5 Gb", "15 Gb", "40 Gb", "Unlimit"]
         self.comboBox_max_size.addItems(string)
         self.comboBox_max_size.setCurrentIndex(1)
         # x=['Small','Medium','Large']
@@ -1196,15 +1464,16 @@ class UI_main_window(QMainWindow, ui):
         # self.comboBox_block_size.addItems(x)
         # self.comboBox_block_size.currentTextChanged.connect(self.combo_image_preccess)
 
-    def update_combo_box(self,combo_name,index):
+    def update_combo_box(self, combo_name, index):
         combo_name.setCurrentIndex(index)
-    def set_list_combo_boxes(self,combo_name,items):
+
+    def set_list_combo_boxes(self, combo_name, items):
         combo_name.clear()
-        combo_name.addItems(items)  
+        combo_name.addItems(items)
+
     def get_camera_parms(self):
 
-        cam_num=self.comboBox_cam_select.currentText()
-
+        cam_num = self.comboBox_cam_select.currentText()
 
         return cam_num
 
@@ -1212,17 +1481,24 @@ class UI_main_window(QMainWindow, ui):
 
         # try:
 
-            user_name = self.user_name_2.text()
-            user_id = self.user_id.text()
-            dataset_name = self.lineEdit_name_dataset.text()
-            path = self.lineEdit_path_dataset.text()
-            max_size = self.comboBox_max_size.currentText()
-            date=self.today_date.text()
+        user_name = self.user_name_2.text()
+        user_id = self.user_id.text()
+        dataset_name = self.lineEdit_name_dataset.text()
+        path = self.lineEdit_path_dataset.text()
+        max_size = self.comboBox_max_size.currentText()
+        date = self.today_date.text()
 
-            return {'user_name':user_name,'user_id':user_id,'dataset_name':dataset_name,'path':path,'max_size':max_size,'date':date}
+        return {
+            "user_name": user_name,
+            "user_id": user_id,
+            "dataset_name": dataset_name,
+            "path": path,
+            "max_size": max_size,
+            "date": date,
+        }
 
-        # except:
-        #     return False
+    # except:
+    #     return False
     # profile page
 
     def open_file_dialog(self):
@@ -1230,205 +1506,226 @@ class UI_main_window(QMainWindow, ui):
         # print('file',file)
         self.lineEdit_path_dataset.setText(file)
 
-
-    def clear_table_name(self,name):
+    def clear_table_name(self, name):
 
         for i in range(name.rowCount()):
             name.removeRow(0)
 
-
     def show_all_datasets(self, records):
 
-        self.clear_table_name(self.tableWidget_all_dataset)  
+        self.clear_table_name(self.tableWidget_all_dataset)
         self.tableWidget_all_dataset.setRowCount(1)  # set row count
         print(records)
-        for i in range(4) :
-            self.tableWidget_all_dataset.setItem(0,i, QTableWidgetItem(str(records[i])))
+        for i in range(4):
+            self.tableWidget_all_dataset.setItem(
+                0, i, QTableWidgetItem(str(records[i]))
+            )
 
-    def show_user_datasets(self,records):
+    def show_user_datasets(self, records):
 
-        self.clear_table_name(self.tableWidget_user_dataset)  
+        self.clear_table_name(self.tableWidget_user_dataset)
         self.tableWidget_user_dataset.setRowCount(1)  # set row count
         print(records)
-        for i in range(4) :
-            self.tableWidget_user_dataset.setItem(0,i, QTableWidgetItem(str(records[i])))
+        for i in range(4):
+            self.tableWidget_user_dataset.setItem(
+                0, i, QTableWidgetItem(str(records[i]))
+            )
 
     # def ret_btn_
-
 
     def buttonClick(self):
         # GET BUTTON CLICKED
         btn = self.sender()
         btnName = btn.objectName()
 
-        if btnName == 'toggleButton':
+        if btnName == "toggleButton":
             self.toggleMenu(True)
 
-        if btnName == 'btn_technical_move':
+        if btnName == "btn_technical_move":
             self.technical_move(True)
-    
 
-
-        if btnName == 'Data_auquzation_btn':
+        if btnName == "Data_auquzation_btn":
             self.left_bar_clear()
             self.Data_auquzation_btn.setStyleSheet(
-                "background-image: url(:/icons/images/icons/graber.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
+                "background-image: url(:/icons/images/icons/graber.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);"
+            )
             self.stackedWidget.setCurrentWidget(self.page_data_auquzation)
-        if btnName == 'label_btn' or btnName == 'label_btn_SI':
-            print('asdasdasd')
+        if btnName == "label_btn" or btnName == "label_btn_SI":
+            print("asdasdasd")
             self.left_bar_clear()
             self.label_btn.setStyleSheet(
-                "background-image: url(:/icons/images/icons/label.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
+                "background-image: url(:/icons/images/icons/label.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);"
+            )
             self.stackedWidget.setCurrentWidget(self.page_label)
-        if btnName == 'tuning_btn':
+        if btnName == "tuning_btn":
             self.left_bar_clear()
             self.tuning_btn.setStyleSheet(
-                "background-image: url(:/icons/images/icons/tuning.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
+                "background-image: url(:/icons/images/icons/tuning.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);"
+            )
             # self.stackedWidget.setCurrentWidget(self.page_tuning)
             self.hi()
 
-        if btnName == 'pbt_btn':
+        if btnName == "pbt_btn":
             self.left_bar_clear()
             self.pbt_btn.setStyleSheet(
-                "background-image: url(:/icons/images/icons/pbt.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);")
-            # self.stackedWidget.setCurrentWidget(self.page_pbt)
+                "background-image: url(:/icons/images/icons/pbt.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);"
+            )
+            self.stackedWidget.setCurrentWidget(self.page_pbt)
 
-        if btnName == 'aboutus_btn':
+        if btnName == "aboutus_btn":
             self.left_bar_clear()
             # self.page_aboutus_btn.setStyleSheet("QPushButton {background-color: rgb(197 , 195,196);	color: rgb(0,0,0);	border: none;	text-align: left;padding-left: 10px;}QPushButton:hover {background-color:  rgb(197 , 195,196)};QPushButton:pressed {background-color: rgb(197 , 195,196);}")
             self.stackedWidget.setCurrentWidget(self.page_aboutus)
 
-        if btnName == 'Binary_btn':
+        if btnName == "Binary_btn":
             self.start_box_animation(self.extraLeftBox.width(), 0, "left")
             # self.stackedWidget.setCurrentWidget(self.page_Binary)
 
-        if btnName == 'Localization_btn':
+        if btnName == "Localization_btn":
             self.start_box_animation(self.extraLeftBox.width(), 0, "left")
             # self.stackedWidget.setCurrentWidget(self.page_Localization)
 
-        if btnName == 'Classification_btn':
+        if btnName == "Classification_btn":
             self.start_box_animation(self.extraLeftBox.width(), 0, "left")
             self.stackedWidget.setCurrentWidget(self.page_Classification)
 
-        if btnName == 'binary_list':
+        if btnName == "binary_list":
             self.stackedWidget_binary.setCurrentWidget(self.page_binary_list)
 
-        if btnName == 'binary_training':
+        if btnName == "binary_training":
             self.stackedWidget_binary.setCurrentWidget(self.page_binary_training)
 
-        if btnName == 'binary_history':
+        if btnName == "binary_history":
             self.stackedWidget_binary.setCurrentWidget(self.page_binary_history)
 
-        if btnName == 'localization_Statistic':
-            self.stackedWidget_localization.setCurrentWidget(self.page_localization_statics)
+        if btnName == "localization_Statistic":
+            self.stackedWidget_localization.setCurrentWidget(
+                self.page_localization_statics
+            )
 
-        if btnName == 'localization_training':
-            self.stackedWidget_localization.setCurrentWidget(self.page_localization_training)
+        if btnName == "localization_training":
+            self.stackedWidget_localization.setCurrentWidget(
+                self.page_localization_training
+            )
 
-        if btnName == 'localization_history':
-            self.stackedWidget_localization.setCurrentWidget(self.page_localization_history)
+        if btnName == "localization_history":
+            self.stackedWidget_localization.setCurrentWidget(
+                self.page_localization_history
+            )
 
-        if btnName == 'classification_class_list':
-            self.stackedWidget_classification.setCurrentWidget(self.page_classification_class_list)
+        if btnName == "classification_class_list":
+            self.stackedWidget_classification.setCurrentWidget(
+                self.page_classification_class_list
+            )
 
-        if btnName == 'classification_add_new_class':
-            self.stackedWidget_classification.setCurrentWidget(self.page_classification_add_new_class)
+        if btnName == "classification_add_new_class":
+            self.stackedWidget_classification.setCurrentWidget(
+                self.page_classification_add_new_class
+            )
 
-        if btnName == 'classification_training':
-            self.stackedWidget_classification.setCurrentWidget(self.page_classification_training)
+        if btnName == "classification_training":
+            self.stackedWidget_classification.setCurrentWidget(
+                self.page_classification_training
+            )
 
-        if btnName == 'classification_history':
-            self.stackedWidget_classification.setCurrentWidget(self.page_classification_history)
+        if btnName == "classification_history":
+            self.stackedWidget_classification.setCurrentWidget(
+                self.page_classification_history
+            )
 
-        if btnName == 'yes_defect':
+        if btnName == "yes_defect":
             self.def_yes_defect()
 
-        if btnName == 'no_defect':
+        if btnName == "no_defect":
             self.def_no_defect()
 
-        if btnName == 'login_btn':
-            print('click')
+        if btnName == "login_btn":
+            print("click")
             # self.show_login()
 
-        if btnName == 'setting_btn':
+        if btnName == "setting_btn":
             self.setting_win()
 
-        if btnName == 'polygon_btn':
+        if btnName == "polygon_btn":
             self.polygon()
 
-        if btnName == 'zoomIn_btn':
+        if btnName == "zoomIn_btn":
             self.zoom_in()
 
-        if btnName == 'zoomOut_btn':
+        if btnName == "zoomOut_btn":
             self.zoom_out()
 
-        if btnName == 'drag_btn':
+        if btnName == "drag_btn":
             self.drag_image()
 
-        if btnName == 'add_label_btn':
+        if btnName == "add_label_btn":
             api.add_remove_label()
 
-        if btnName == 'btn_software_setting':
+        if btnName == "btn_software_setting":
             # self.bounding_box()
             self.stackedWidget.setCurrentWidget(self.page_software_setting)
             setting.language(self)
             # self.stackedWidget.setCurrentWidget(self.page_software_setting)
 
-        if btnName == 'load_coil_btn':
+        if btnName == "load_coil_btn":
             # print('asdqwdwqd')
             self.data_loader_win_show()
 
-        if btnName == 'checkBox_select':
+        if btnName == "checkBox_select":
             # print('asdqwdwqd')
 
             self.select_unselect_all()
 
-        if btnName == 'checkBox_all_imgs_SI':
+        if btnName == "checkBox_all_imgs_SI":
             self.able_enable_filters()
 
-        if btnName == 'checkBox_all_camera_SI':
+        if btnName == "checkBox_all_camera_SI":
             self.able_enable_camera_filter()
 
-        if btnName == 'checkBox_all_frame_SI':
+        if btnName == "checkBox_all_frame_SI":
             self.able_enable_frame_filter()
 
         # if btnName == "show_tools_btn":
         #     self.show_frame_tools()
-        if btnName == 'label_btn_2':
+        if btnName == "label_btn_2":
             self.stackedWidget.setCurrentWidget(self.page_label)
             image = ImageQt.fromqpixmap(self.crop_image.pixmap())
             image = np.ascontiguousarray(image)
-            self.fs = QImage(image, image.shape[1], image.shape[0], image.strides[0], QImage.Format_BGR888)
+            self.fs = QImage(
+                image,
+                image.shape[1],
+                image.shape[0],
+                image.strides[0],
+                QImage.Format_BGR888,
+            )
             self.image.setPixmap(QPixmap.fromImage(self.fs))
 
-        if btnName == 'b_add_ds':
+        if btnName == "b_add_ds":
             self.add_binary_dataset()
 
-        if btnName == 'b_add_cancel':
+        if btnName == "b_add_cancel":
             self.cancel_add_binary_ds()
 
         if self.extraLeftBox.width() != 0:
             self.hi()
 
-        if btnName == 'create_new_database':
+        if btnName == "create_new_database":
             self.stackedWidget_2.setCurrentWidget(self.create_database)
 
-        if btnName == 'my_databases_2':
+        if btnName == "my_databases_2":
             self.stackedWidget_2.setCurrentWidget(self.my_databases)
 
-        if btnName == 'toolButton_select_directory':
+        if btnName == "toolButton_select_directory":
             self.open_file_dialog()
 
-        if btnName == 'pipeline_pbt_btn':
+        if btnName == "pipeline_pbt_btn":
             self.stackedWidget_pbt.setCurrentWidget(self.page_pipeline)
 
-        if btnName == 'load_dataset_pbt_btn':
+        if btnName == "load_dataset_pbt_btn":
             self.stackedWidget_pbt.setCurrentWidget(self.page_load_dataset)
 
-        if btnName == 'history_pbt_btn':
+        if btnName == "history_pbt_btn":
             self.stackedWidget_pbt.setCurrentWidget(self.page_history)
-
-
 
         # if btnName == 'btn_user_proflie':
         #     self.stackedWidget.setCurrentWidget(self.page_user_profile)
@@ -1463,7 +1760,10 @@ class UI_main_window(QMainWindow, ui):
             return -1
         else:
             page_name, funcs = connections
-            if page_name == PAGES_IDX.get(self.stackedWidget.currentIndex()) or page_name == None:
+            if (
+                page_name == PAGES_IDX.get(self.stackedWidget.currentIndex())
+                or page_name == None
+            ):
                 for func in funcs:
                     func(key)
                 return 1
@@ -1483,10 +1783,9 @@ class UI_main_window(QMainWindow, ui):
         self.plabel_date_txt.setText(str(sheet.get_date_string()))
         self.plabel_cam_txt.setText(str(pos[-1][0]))
 
-    def show_image_btn(self,label_name,img_path):
+    def show_image_btn(self, label_name, img_path):
         label_name.setIcon(sQPixmap.fromImage(sQImage(img_path)))
 
-    
     def set_qlineedit_validator(self):
         self.onlyInt = sQIntValidator()
         self.binary_epoch_min_filter_lineedit.setValidator(self.onlyInt)
@@ -1508,18 +1807,16 @@ class UI_main_window(QMainWindow, ui):
         self.binary_date_min_filter_lineedit.setValidator(self.onlyInt)
         self.binary_date_max_filter_lineedit.setValidator(self.onlyInt)
 
-
-    def show_mesagges(self, label_name, text, color='green'):
-        name=label_name
-        if text!=None:
+    def show_mesagges(self, label_name, text, color="green"):
+        name = label_name
+        if text != None:
             label_name.setText(text)
-            label_name.setStyleSheet("color:{}".format(color))       
-            threading.Timer(2,self.show_mesagges,args=(name,None)).start()
+            label_name.setStyleSheet("color:{}".format(color))
+            threading.Timer(2, self.show_mesagges, args=(name, None)).start()
         else:
-            label_name.setText('')
+            label_name.setText("")
 
-
-    def show_image_btn(self,label_name,img_path):
+    def show_image_btn(self, label_name, img_path):
         label_name.setIcon(sQPixmap.fromImage(sQImage(img_path)))
 
     # def get_label_type(self):
@@ -1529,49 +1826,50 @@ class UI_main_window(QMainWindow, ui):
     #     elif self.tabWidget_defect.currentTabText() == 'Bounding Box':
     #         return 'bbox'
 
-    def set_image_label(self,label_name, img):
+    def set_image_label(self, label_name, img):
         h, w, ch = img.shape
         bytes_per_line = ch * w
-        convert_to_Qt_format = sQImage(img.data, w, h, bytes_per_line, sQImage.Format_BGR888)
-
+        convert_to_Qt_format = sQImage(
+            img.data, w, h, bytes_per_line, sQImage.Format_BGR888
+        )
 
         label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))
 
-    def set_text_label(self,label_name,text,color=None):
+    def set_text_label(self, label_name, text, color=None):
 
         label_name.setText(text)
         if color:
             label_name.setStyleSheet("color:{}".format(color))
 
-    def set_img_btn_camera(self,cam_num,status=True):
+    def set_img_btn_camera(self, cam_num, status=True):
 
-        if status==True:
+        if status == True:
             # print('avtive')
-            img_top = 'images/camtop_actived.png'
-            img_btm = 'images/cambtm_actived.png'
+            img_top = "images/camtop_actived.png"
+            img_btm = "images/cambtm_actived.png"
 
-        elif status=='Disconnect':
-            img_top = 'images/camtop.png'
-            img_btm = 'images/cambtm.png'
+        elif status == "Disconnect":
+            img_top = "images/camtop.png"
+            img_btm = "images/cambtm.png"
 
         else:
-            img_top = 'images/camtop_deactive.png'
-            img_btm = 'images/cambtm_deactive.png'
-        if int(cam_num)<=12:
+            img_top = "images/camtop_deactive.png"
+            img_btm = "images/cambtm_deactive.png"
+        if int(cam_num) <= 12:
 
-            btn_name=eval('self.camera%s_btn_2'%cam_num)
+            btn_name = eval("self.camera%s_btn_2" % cam_num)
             btn_name.setIcon(QIcon(img_top))
-        
-        else :
 
-            btn_name=eval('self.camera%s_btn_2'%cam_num)
+        else:
+
+            btn_name = eval("self.camera%s_btn_2" % cam_num)
             btn_name.setIcon(QIcon(img_btm))
 
-    def set_widget_page(self,widget,page_name): 
+    def set_widget_page(self, widget, page_name):
 
         widget.setCurrentWidget(page_name)
 
-    def set_btn_image(self,btn_name,img_path):
+    def set_btn_image(self, btn_name, img_path):
 
         # btn_name=eval('self.camera%s_btn_2'%cam_num)
         btn_name.setIcon(QIcon(img_path))

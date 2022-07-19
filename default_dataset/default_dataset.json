@@ -1,7 +1,7 @@
 {
     "basic": {
         "dataset_name": "default_dataset",
-        "date_created": "1401/4/13",
+        "date_created": "1401/4/28",
         "date_modify": "-",
         "max_size": "15 Gb",
         "path": "default_dataset",
@@ -14,9 +14,9 @@
     },
     "classification": {
         "0": [],
-        "101": [],
-        "102": [],
-        "103": [],
-        "104": []
+        "1": [],
+        "2": [],
+        "3": [],
+        "4": []
     }
 }
