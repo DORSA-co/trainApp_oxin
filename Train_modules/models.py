@@ -2,6 +2,7 @@ import numpy as np
 import os
 import numpy as np
 import tensorflow as tf
+from tensorflow.python.keras.applications import xception
 
 # tf.compat.v1.enable_eager_execution()
 from tensorflow.keras.models import *
@@ -58,7 +59,7 @@ def base_unet(
         ],
     )
 
-    model.summary()
+    # model.summary()
     return model
 
 
@@ -249,7 +250,7 @@ def unet(input_size, learning_rate=1e-4, num_class=1, mode=BINARY, nfilter=64):
         ],
     )
 
-    model.summary()
+    # model.summary()
 
     return model
 
@@ -364,7 +365,7 @@ def low_unet(input_size, learning_rate=1e-4, num_class=1, mode=BINARY):
             iou,
         ],
     )
-    model.summary()
+    # model.summary()
 
     return model
 
@@ -444,7 +445,7 @@ def resnet_unet(input_size, learning_rate=1e-3, num_class=1, mode=BINARY):
         ],
     )
 
-    model.summary()
+    # model.summary()
 
     return model
 
@@ -476,9 +477,9 @@ def resnet_cnn(
     base_model = tf.keras.applications.ResNet50V2(
         include_top=False, weights=None, input_shape=input_size
     )
-    base_model.load_weights(
-        "/home/reyhane/PycharmProjects/pythonProject2/resnet50v2_weights_tf_dim_ordering_tf_kernels_notop.h5"
-    )
+    # base_model.load_weights(
+    #     "/home/reyhane/PycharmProjects/pythonProject2/resnet50v2_weights_tf_dim_ordering_tf_kernels_notop.h5"
+    # )
 
     base_model.trainable = False
 
@@ -515,7 +516,7 @@ def resnet_cnn(
         ],
     )
 
-    model.summary()
+    # model.summary()
     return model
 
 
@@ -531,7 +532,7 @@ def xception_cnn(
     weights=None,
 ):
     preprocess_input = tf.keras.applications.xception.preprocess_input
-    base_model = tf.keras.applications.Xception(
+    base_model = xception.Xception(
         include_top=False, weights="imagenet", input_shape=input_size
     )
 
@@ -731,7 +732,7 @@ def efficientnetb2_base_cnn(
             tf.keras.metrics.Recall(name="Recall"),
         ],
     )
-    model.summary()
+    # model.summary()
     return model
 
 

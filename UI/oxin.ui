@@ -3533,8 +3533,8 @@ QPushButton:enabled {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>744</width>
-                                   <height>23</height>
+                                   <width>574</width>
+                                   <height>17</height>
                                   </rect>
                                  </property>
                                  <layout class="QHBoxLayout" name="horizontalLayout_212">
@@ -6501,8 +6501,8 @@ QPushButton:hover {
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>242</width>
-                                         <height>28</height>
+                                         <width>248</width>
+                                         <height>27</height>
                                         </rect>
                                        </property>
                                        <layout class="QHBoxLayout" name="horizontalLayout_92">
@@ -8034,7 +8034,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>28</height>
+                                     <height>17</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -8280,7 +8280,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>28</height>
+                                     <height>17</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -9144,8 +9144,8 @@ QToolTip {
                               <rect>
                                <x>0</x>
                                <y>0</y>
-                               <width>1367</width>
-                               <height>154</height>
+                               <width>1356</width>
+                               <height>143</height>
                               </rect>
                              </property>
                              <layout class="QHBoxLayout" name="horizontalLayout_13">
@@ -11337,7 +11337,7 @@ QPushButton:hover {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>493</width>
+                                      <width>502</width>
                                       <height>198</height>
                                      </rect>
                                     </property>
@@ -11352,8 +11352,8 @@ QPushButton:hover {
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>469</width>
-                                          <height>52</height>
+                                          <width>482</width>
+                                          <height>54</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -11397,8 +11397,8 @@ QPushButton:hover {
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>469</width>
-                                          <height>52</height>
+                                          <width>482</width>
+                                          <height>54</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -11442,8 +11442,8 @@ QPushButton:hover {
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>469</width>
-                                          <height>52</height>
+                                          <width>482</width>
+                                          <height>54</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_43">
@@ -11680,6 +11680,66 @@ color : rgb(0,0,0);</string>
                              </layout>
                             </widget>
                            </item>
+                           <item>
+                            <widget class="QFrame" name="frame_107">
+                             <property name="minimumSize">
+                              <size>
+                               <width>0</width>
+                               <height>30</height>
+                              </size>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::StyledPanel</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Raised</enum>
+                             </property>
+                             <widget class="QPushButton" name="BTN_apply_of_binary_classifaction_in_PBT_page">
+                              <property name="geometry">
+                               <rect>
+                                <x>450</x>
+                                <y>0</y>
+                                <width>80</width>
+                                <height>27</height>
+                               </rect>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>80</width>
+                                <height>16777215</height>
+                               </size>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">color:white;</string>
+                              </property>
+                              <property name="text">
+                               <string>Apply</string>
+                              </property>
+                             </widget>
+                             <widget class="QPushButton" name="pushButton_5">
+                              <property name="geometry">
+                               <rect>
+                                <x>550</x>
+                                <y>0</y>
+                                <width>80</width>
+                                <height>27</height>
+                               </rect>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>80</width>
+                                <height>80</height>
+                               </size>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">color:white;</string>
+                              </property>
+                              <property name="text">
+                               <string>Refresh</string>
+                              </property>
+                             </widget>
+                            </widget>
+                           </item>
                           </layout>
                          </widget>
                          <widget class="QWidget" name="page_load_dataset">
@@ -11783,14 +11843,20 @@ color : rgb(0,0,0);</string>
                                      <number>0</number>
                                     </property>
                                     <item>
-                                     <widget class="QCheckBox" name="checkBox_2">
+                                     <widget class="QCheckBox" name="chbox_prefectdata_in_PBT_page">
+                                      <property name="enabled">
+                                       <bool>true</bool>
+                                      </property>
                                       <property name="text">
                                        <string>Defect</string>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QCheckBox" name="checkBox_3">
+                                     <widget class="QCheckBox" name="chbox_defectdata_in_PBT_page">
+                                      <property name="enabled">
+                                       <bool>true</bool>
+                                      </property>
                                       <property name="text">
                                        <string>Perfect</string>
                                       </property>
@@ -11800,7 +11866,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QPushButton" name="pushButton_12">
+                                  <widget class="QPushButton" name="BTN_load_in_PBT_page">
                                    <property name="maximumSize">
                                     <size>
                                      <width>70</width>
@@ -11823,7 +11889,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QLineEdit" name="lineEdit_5">
+                                  <widget class="QLineEdit" name="lineEdit_of_path_displayment_in_PBT_page">
                                    <property name="maximumSize">
                                     <size>
                                      <width>200</width>
@@ -11840,7 +11906,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QPushButton" name="pushButton_13">
+                                  <widget class="QPushButton" name="BTN_load_image_in_PBT_page">
                                    <property name="maximumSize">
                                     <size>
                                      <width>101</width>
@@ -11903,7 +11969,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QComboBox" name="comboBox_3">
+                                  <widget class="QComboBox" name="cbBox_of_pipline_in_PBT_page_load_dataset">
                                    <property name="maximumSize">
                                     <size>
                                      <width>16777215</width>
@@ -11913,7 +11979,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QPushButton" name="pushButton_14">
+                                  <widget class="QPushButton" name="BTN_set_pipline_in_PBT_page">
                                    <property name="maximumSize">
                                     <size>
                                      <width>50</width>
@@ -11939,6 +12005,38 @@ color : rgb(0,0,0);</string>
                              <property name="orientation">
                               <enum>Qt::Horizontal</enum>
                              </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QFrame" name="frame_46">
+                             <property name="frameShape">
+                              <enum>QFrame::StyledPanel</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Raised</enum>
+                             </property>
+                             <widget class="QPushButton" name="BTN_evaluate_image_in_PBT_page_2">
+                              <property name="geometry">
+                               <rect>
+                                <x>10</x>
+                                <y>0</y>
+                                <width>81</width>
+                                <height>21</height>
+                               </rect>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>101</width>
+                                <height>16777215</height>
+                               </size>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">color:white;</string>
+                              </property>
+                              <property name="text">
+                               <string>Evaluate</string>
+                              </property>
+                             </widget>
                             </widget>
                            </item>
                            <item>
@@ -11978,7 +12076,7 @@ color : rgb(0,0,0);</string>
                                 </property>
                                 <layout class="QVBoxLayout" name="verticalLayout_51">
                                  <item>
-                                  <widget class="QGroupBox" name="groupBox_8">
+                                  <widget class="QGroupBox" name="GBox_model_evaluation_details">
                                    <property name="title">
                                     <string>Evaluated Details</string>
                                    </property>
@@ -12080,7 +12178,10 @@ color : rgb(0,0,0);</string>
                                         <number>10</number>
                                        </property>
                                        <item>
-                                        <widget class="QPushButton" name="classlist_prev_btn_2">
+                                        <widget class="QPushButton" name="BTN_prev_original_image_in_PBT_page">
+                                         <property name="enabled">
+                                          <bool>false</bool>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>30</width>
@@ -12113,7 +12214,7 @@ border:Transparent</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="class_list_slider_frame_2">
+                                        <widget class="QLabel" name="original_image_list_frame">
                                          <property name="frameShape">
                                           <enum>QFrame::Panel</enum>
                                          </property>
@@ -12126,7 +12227,10 @@ border:Transparent</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QPushButton" name="classlist_next_btn_2">
+                                        <widget class="QPushButton" name="BTN_next_original_image_in_PBT_page">
+                                         <property name="enabled">
+                                          <bool>false</bool>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>30</width>
@@ -12229,7 +12333,10 @@ border:Transparent</string>
                                         <number>10</number>
                                        </property>
                                        <item>
-                                        <widget class="QPushButton" name="classlist_prev_btn_3">
+                                        <widget class="QPushButton" name="BTN_prev_predictions_image_in_PBT_page">
+                                         <property name="enabled">
+                                          <bool>false</bool>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>30</width>
@@ -12262,7 +12369,7 @@ border:Transparent</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="class_list_slider_frame_3">
+                                        <widget class="QLabel" name="evaluated_image_list_frame">
                                          <property name="frameShape">
                                           <enum>QFrame::Panel</enum>
                                          </property>
@@ -12275,7 +12382,10 @@ border:Transparent</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QPushButton" name="classlist_next_btn_3">
+                                        <widget class="QPushButton" name="BTN_next_predictions_image_in_PBT_page">
+                                         <property name="enabled">
+                                          <bool>false</bool>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>30</width>
@@ -12322,66 +12432,6 @@ border:Transparent</string>
                           </layout>
                          </widget>
                          <widget class="QWidget" name="page_history"/>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QFrame" name="frame_46">
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>30</height>
-                          </size>
-                         </property>
-                         <property name="frameShape">
-                          <enum>QFrame::StyledPanel</enum>
-                         </property>
-                         <property name="frameShadow">
-                          <enum>QFrame::Raised</enum>
-                         </property>
-                         <widget class="QPushButton" name="pushButton_5">
-                          <property name="geometry">
-                           <rect>
-                            <x>540</x>
-                            <y>0</y>
-                            <width>80</width>
-                            <height>27</height>
-                           </rect>
-                          </property>
-                          <property name="maximumSize">
-                           <size>
-                            <width>80</width>
-                            <height>80</height>
-                           </size>
-                          </property>
-                          <property name="styleSheet">
-                           <string notr="true">color:white;</string>
-                          </property>
-                          <property name="text">
-                           <string>Refresh</string>
-                          </property>
-                         </widget>
-                         <widget class="QPushButton" name="BTN_apply_of_binary_classifaction_in_PBT_page">
-                          <property name="geometry">
-                           <rect>
-                            <x>450</x>
-                            <y>0</y>
-                            <width>80</width>
-                            <height>27</height>
-                           </rect>
-                          </property>
-                          <property name="maximumSize">
-                           <size>
-                            <width>80</width>
-                            <height>16777215</height>
-                           </size>
-                          </property>
-                          <property name="styleSheet">
-                           <string notr="true">color:white;</string>
-                          </property>
-                          <property name="text">
-                           <string>Apply</string>
-                          </property>
-                         </widget>
                         </widget>
                        </item>
                       </layout>
@@ -12548,7 +12598,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_binary">
                          <property name="currentIndex">
-                          <number>0</number>
+                          <number>2</number>
                          </property>
                          <widget class="QWidget" name="page_binary_list">
                           <layout class="QVBoxLayout" name="verticalLayout_53">
@@ -21713,8 +21763,8 @@ color : rgb(0,0,0);</string>
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>222</width>
-                                 <height>222</height>
+                                 <width>218</width>
+                                 <height>218</height>
                                 </rect>
                                </property>
                                <property name="styleSheet">

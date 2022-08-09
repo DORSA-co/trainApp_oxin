@@ -1,4 +1,5 @@
 from functools import partial
+from sys import path_hooks
 from PySide6.QtWidgets import QLabel as sQLabel
 from PySide6.QtWidgets import QHBoxLayout as sQHBoxLayout
 from PySide6.QtGui import QImage as sQImage
@@ -6,6 +7,7 @@ from PySide6.QtGui import QPixmap as sQPixmap
 import json
 import os
 import cv2
+from jinja2 import PrefixLoader
 import numpy as np
 from PIL import ImageColor
 
@@ -14,142 +16,325 @@ from neighbouring_UI import neighbouring
 from backend import Annotation, classification_list_funcs, dataset
 
 
-
 n_images_per_row = 6
 n_images_per_row_classlist = 5
-no_image_path = './images/no_image.png'
-widjet_prefixes = {'perfect':'binary_list_perfect', 'defect':'binary_list_defect'}
-image_list_object_names = {'perfect':'perfect_images', 'defect':'defect_images'}
-language = 'en'
-mask_color = '#FF0000' # BGR format
+no_image_path = "./images/no_image.png"
+widjet_prefixes = {"perfect": "binary_list_perfect", "defect": "binary_list_defect"}
+image_list_object_names = {"perfect": "perfect_images", "defect": "defect_images"}
+language = "en"
+mask_color = "#FF0000"  # BGR format
 line_tickness = 4
 mask_alpha = 0.5
 
 
 # create image slider area on UI
-def create_image_slider_on_ui(ui_obj, db_obj, frame_obj, prefix=widjet_prefixes['perfect'], image_per_row=n_images_per_row):
+def create_image_slider_on_ui(
+    ui_obj,
+    db_obj,
+    frame_obj,
+    prefix=widjet_prefixes["perfect"],
+    image_per_row=n_images_per_row,
+):
     # create layout
     try:
         layout = sQHBoxLayout()
         eval("exec('ui_obj.%s_layout = layout')" % prefix)
-        
+
         # creat and assign labels to layout
         for i in range(image_per_row):
             label = sQLabel()
             label.setScaledContents(True)
-            label.setWhatsThis('')
+            label.setWhatsThis("")
             # assign label to UI with name
             eval("exec('ui_obj.%s_label_%s = label')" % (prefix, i))
             # add to layout
-            eval('ui_obj.%s_layout' % prefix).addWidget(eval('ui_obj.%s_label_%s' % (prefix, i)))
+            eval("ui_obj.%s_layout" % prefix).addWidget(
+                eval("ui_obj.%s_label_%s" % (prefix, i))
+            )
             # assign image
-            set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, i)), image=None, no_image=True)
+            set_image_to_ui(
+                label_name=eval("ui_obj.%s_label_%s" % (prefix, i)),
+                image=None,
+                no_image=True,
+            )
 
             # doble-click event for labels
-            eval('ui_obj.%s_label_%s' % (prefix, i)).mouseDoubleClickEvent = partial(maximize_image_on_click, ui_obj, db_obj, eval('ui_obj.%s_label_%s' % (prefix, i)))
+            eval("ui_obj.%s_label_%s" % (prefix, i)).mouseDoubleClickEvent = partial(
+                maximize_image_on_click,
+                ui_obj,
+                db_obj,
+                eval("ui_obj.%s_label_%s" % (prefix, i)),
+            )
 
         # assign layout to frame
-        frame_obj.setLayout(eval('ui_obj.%s_layout' % prefix))
+        frame_obj.setLayout(eval("ui_obj.%s_layout" % prefix))
         return True
 
     except:
-        ui_obj.set_warning(texts.ERORS['BUILD_BINARYLIST_SLIDER_ERROR'][language], 'binarylist', level=3)
+        ui_obj.set_warning(
+            texts.ERORS["BUILD_BINARYLIST_SLIDER_ERROR"][language],
+            "binarylist",
+            level=3,
+        )
         return False
 
 
 # maximize image label on click (open image in a window)
 def maximize_image_on_click(ui_obj, db_obj, label, event):
-    print('hi', label.whatsThis())
+    print("hi", label.whatsThis())
     pathes = label.whatsThis()
-    #try:
-    if pathes != '':
+    # try:
+    if pathes != "":
         pathes = pathes.split("#")
         if len(pathes) != 3:
-            ui_obj.set_warning(texts.ERORS['MAXIMIZE_IMAGE_ERROR'][language], 'binarylist', level=3)
+            ui_obj.set_warning(
+                texts.ERORS["MAXIMIZE_IMAGE_ERROR"][language], "binarylist", level=3
+            )
             return
         # load image
-        if pathes[2] != 'fullpath':
+        if pathes[2] != "fullpath":
             image = cv2.imread(os.path.join(pathes[0], pathes[1]))
             # mask (annotations) overlay
-            annotation_path = os.path.join(pathes[2], pathes[1][:-4]+'.json')
+            annotation_path = os.path.join(pathes[2], pathes[1][:-4] + ".json")
         else:
             image = cv2.imread(pathes[0])
             # mask (annotations) overlay
             annotation_path = pathes[1]
 
-        res, annotated_image = create_mask_from_annotation_file(db_obj=db_obj, image=image, annotation_path=annotation_path)
+        res, annotated_image = create_mask_from_annotation_file(
+            db_obj=db_obj, image=image, annotation_path=annotation_path
+        )
         if res:
-            ui_obj.window = neighbouring(image, annotated_image=annotated_image, has_annotation=True)
+            ui_obj.window = neighbouring(
+                image, annotated_image=annotated_image, has_annotation=True
+            )
             ui_obj.window.show()
         else:
-            ui_obj.window = neighbouring(image, annotated_image=annotated_image, has_annotation=False)
+            ui_obj.window = neighbouring(
+                image, annotated_image=annotated_image, has_annotation=False
+            )
             ui_obj.window.show()
-    
-    #except:
-        #ui_obj.set_warning(texts.WARNINGS['BINARYLIST_MAXIMIZE_IMAGE_ERROR'][language], 'binarylist', level=2)
-        
+
+    # except:
+    # ui_obj.set_warning(texts.WARNINGS['BINARYLIST_MAXIMIZE_IMAGE_ERROR'][language], 'binarylist', level=2)
+
+
+def set_image_on_loadDataSetSlider_in_PBT(
+    ui_obj,
+    db_obj,
+    frame_obj,
+    prefix="original",
+    image_per_row=n_images_per_row,
+):
+    # create layout
+    try:
+        layout = sQHBoxLayout()
+        eval("exec('ui_obj.loadDataset_PBT_page_layout_%s = layout')" % prefix)
+
+        # creat and assign labels to layout
+        for i in range(image_per_row):
+            label = sQLabel()
+            label.setScaledContents(True)
+            label.setWhatsThis("")
+            # assign label to UI with name
+            eval(
+                "exec('ui_obj.loadDataset_PBT_page_label_%s_%s = label')" % (prefix, i)
+            )
+            # add to layout
+            eval("ui_obj.loadDataset_PBT_page_layout_%s" % prefix).addWidget(
+                eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i))
+            )
+            # assign image
+            set_image_to_ui(
+                label_name=eval(
+                    "ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i)
+                ),
+                image=None,
+                no_image=True,
+            )
+
+            # doble-click event for labels
+            eval(
+                "ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i)
+            ).mouseDoubleClickEvent = partial(
+                maximize_image_on_click,
+                ui_obj,
+                db_obj,
+                eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i)),
+            )
+
+        # assign layout to frame
+        frame_obj.setLayout(eval("ui_obj.loadDataset_PBT_page_layout_%s" % prefix))
+        return True
+
+    except:
+        ui_obj.set_warning(
+            texts.ERORS["BUILD_BINARYLIST_SLIDER_ERROR"][language],
+            "binarylist",
+            level=3,
+        )
+        return False
+
 
 # set/update images to ui
-def set_image_to_ui_slider(ui_obj, sub_directory, annot_sub_direcotory, image_path_list, prefix=widjet_prefixes['perfect'], image_per_row=n_images_per_row):
+def set_image_to_ui_slider(
+    ui_obj,
+    sub_directory,
+    annot_sub_direcotory,
+    image_path_list,
+    prefix=widjet_prefixes["perfect"],
+    image_per_row=n_images_per_row,
+):
     try:
         # set dataset images on UI
         for i, image_path in enumerate(image_path_list):
             # load image
             image = cv2.imread(os.path.join(sub_directory, image_path))
             # set to UI label
-            set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, i)), image=image, no_image=False)
+            set_image_to_ui(
+                label_name=eval("ui_obj.%s_label_%s" % (prefix, i)),
+                image=image,
+                no_image=False,
+            )
             # update text (image url)
-            whats_this_text = sub_directory + '#' + image_path + '#' + annot_sub_direcotory
-            eval('ui_obj.%s_label_%s' % (prefix, i)).setWhatsThis(whats_this_text)
+            whats_this_text = (
+                sub_directory + "#" + image_path + "#" + annot_sub_direcotory
+            )
+            eval("ui_obj.%s_label_%s" % (prefix, i)).setWhatsThis(whats_this_text)
         # set last image labels on UI as empty
         try:
             i += 1
         except:
             i = 0
         for j in range(i, image_per_row):
-            set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, j)), image=None, no_image=True)
-            eval('ui_obj.%s_label_%s' % (prefix, j)).setWhatsThis('')
-        
+            set_image_to_ui(
+                label_name=eval("ui_obj.%s_label_%s" % (prefix, j)),
+                image=None,
+                no_image=True,
+            )
+            eval("ui_obj.%s_label_%s" % (prefix, j)).setWhatsThis("")
+
         return True
 
     except:
         return False
 
 
+# __________________________________________________JJ ZONE STARTS
+def set_image_to_ui_slider_eidted_version(
+    ui_obj,
+    sub_directory,
+    annot_sub_direcotory,
+    image_path_list,
+    prefix="original",
+    image_per_row=n_images_per_row,
+):
+    image_type = "noimage"
+    try:
+        # set dataset images on UI
+        for i, image_path in enumerate(image_path_list):
+            # load image
+            image = cv2.imread(os.path.join(sub_directory, image_path))
+            path = os.path.join(sub_directory, image_path)
+            if path.find("perfect") != -1:
+                image_type = "perfect"
+            elif path.find("defect") != -1:
+                image_type = "defect"
+            else:
+                image_type = "noimage"
+
+            print(path)
+
+            # set to UI label
+            set_image_to_ui(
+                label_name=eval(
+                    "ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i)
+                ),
+                image=image,
+                no_image=False,
+                image_type=image_type,
+            )
+            # update text (image url)
+            whats_this_text = (
+                sub_directory + "#" + image_path + "#" + annot_sub_direcotory
+            )
+            eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i)).setWhatsThis(
+                whats_this_text
+            )
+        # set last image labels on UI as empty
+        try:
+            i += 1
+        except:
+            i = 0
+        for j in range(i, image_per_row):
+            set_image_to_ui(
+                label_name=eval(
+                    "ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, j)
+                ),
+                image=None,
+                no_image=True,
+                image_type=image_type,
+            )
+            eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, j)).setWhatsThis(
+                ""
+            )
+
+        return True
+
+    except:
+        return False
+
+
+# __________________________________________________JJ ZONE STOPS
+
+
 # set/update images to ui given full image and annoptation path
-def set_image_to_ui_slider_full_path(ui_obj, image_path_list, annot_path_list, prefix=widjet_prefixes['perfect'], image_per_row=n_images_per_row):
+def set_image_to_ui_slider_full_path(
+    ui_obj,
+    image_path_list,
+    annot_path_list,
+    prefix=widjet_prefixes["perfect"],
+    image_per_row=n_images_per_row,
+):
     try:
         # set dataset images on UI
         for i, image_path in enumerate(image_path_list):
             # load image
             image = cv2.imread(image_path)
             # set to UI label
-            set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, i)), image=image, no_image=False)
+            set_image_to_ui(
+                label_name=eval("ui_obj.%s_label_%s" % (prefix, i)),
+                image=image,
+                no_image=False,
+            )
             # update text (image url)
-            whats_this_text = image_path + '#' + annot_path_list[i] + '#' + 'fullpath'
-            print('whatsthis:', whats_this_text)
-            eval('ui_obj.%s_label_%s' % (prefix, i)).setWhatsThis(whats_this_text)
+            whats_this_text = image_path + "#" + annot_path_list[i] + "#" + "fullpath"
+            print("whatsthis:", whats_this_text)
+            eval("ui_obj.%s_label_%s" % (prefix, i)).setWhatsThis(whats_this_text)
         # set last image labels on UI as empty
         try:
             i += 1
         except:
             i = 0
         for j in range(i, image_per_row):
-            set_image_to_ui(label_name=eval('ui_obj.%s_label_%s' % (prefix, j)), image=None, no_image=True)
-            eval('ui_obj.%s_label_%s' % (prefix, j)).setWhatsThis('')
-        
+            set_image_to_ui(
+                label_name=eval("ui_obj.%s_label_%s" % (prefix, j)),
+                image=None,
+                no_image=True,
+            )
+            eval("ui_obj.%s_label_%s" % (prefix, j)).setWhatsThis("")
+
         return True
 
     except:
         return False
 
-        
 
 # get binarylist params from ui
 def get_params_from_ui(ui_obj):
     params = {}
     try:
-        params['dataset_path'] = ui_obj.binarylist_dataset_lineedit.text()
+        params["dataset_path"] = ui_obj.binarylist_dataset_lineedit.text()
         return params
     except:
         return {}
@@ -157,28 +342,35 @@ def get_params_from_ui(ui_obj):
 
 # get image pathes in dataset directory
 def get_binarylist_image_pathes_list(ds_obj, dataset_pathes):
-    print('ds_pathes:', dataset_pathes)
+    # print('ds_pathes:', dataset_pathes)
     # perfect
+
     perfect_image_pathes = []
     perfect_check = False
     defect_image_pathes = []
     defect_annot_pathes = []
+    mask_image_pathes = []
+    mask_image_check = False
     defect_check = False
-    binary_count = {dataset.DEFECT_FOLDER:0, dataset.PERFECT_FOLDER:0}
+    binary_count = {dataset.DEFECT_FOLDER: 0, dataset.PERFECT_FOLDER: 0}
 
     for ds_path in dataset_pathes:
-        ds_path = ds_path['path']
+        ds_path = ds_path["path"]
         # perfect path
-        perfect_path = os.path.join(ds_path, dataset.BINARY_FOLDER, dataset.PERFECT_FOLDER)
+        perfect_path = os.path.join(
+            ds_path, dataset.BINARY_FOLDER, dataset.PERFECT_FOLDER
+        )
         if os.path.exists(perfect_path):
             # get image pathes
             for img_path in getfiles(perfect_path):
                 perfect_check = True
                 perfect_image_pathes.append(os.path.join(perfect_path, img_path))
                 binary_count[dataset.PERFECT_FOLDER] += 1
-        
+
         # defect path
-        defect_path = os.path.join(ds_path, dataset.BINARY_FOLDER, dataset.DEFECT_FOLDER)
+        defect_path = os.path.join(
+            ds_path, dataset.BINARY_FOLDER, dataset.DEFECT_FOLDER
+        )
         if os.path.exists(defect_path):
             # get image pathes
             for img_path in getfiles(defect_path):
@@ -186,22 +378,45 @@ def get_binarylist_image_pathes_list(ds_obj, dataset_pathes):
                 defect_image_pathes.append(os.path.join(defect_path, img_path))
                 binary_count[dataset.DEFECT_FOLDER] += 1
                 # annotation
-                annot_path = os.path.join(ds_path, dataset.ANNOTATIONS_FOLDER, img_path[:-4]+'.json')
+                annot_path = os.path.join(
+                    ds_path, dataset.ANNOTATIONS_FOLDER, img_path[:-4] + ".json"
+                )
                 if os.path.exists(annot_path):
                     defect_annot_pathes.append(annot_path)
                 else:
-                    defect_annot_pathes.append('')
-    
-    print('perf path:', perfect_image_pathes)
-    print('defe path:', defect_image_pathes)
-    print('annot path:', defect_annot_pathes)
-    return perfect_check, perfect_image_pathes, defect_check, defect_image_pathes, defect_annot_pathes, binary_count
+                    defect_annot_pathes.append("")
+
+                mask_path = os.path.join(ds_path, dataset.MASKS_FOLDER, img_path)
+
+                if os.path.exists(mask_path):
+                    mask_image_pathes.append(mask_path)
+                    mask_image_check = True
+                else:
+                    mask_image_pathes.append("")
+
+    # print("perf path:", perfect_image_pathes)
+    # print("defe path:", defect_image_pathes)
+    # print("annot path:", defect_annot_pathes)
+    return (
+        perfect_check,
+        perfect_image_pathes,
+        defect_check,
+        defect_image_pathes,
+        defect_annot_pathes,
+        binary_count,
+        mask_image_pathes,
+        mask_image_check,
+    )
 
 
 # get files in a directory
 def getfiles(dirpath):
     try:
-        a = [s for s in os.listdir(dirpath) if os.path.isfile(os.path.join(dirpath, s)) and s[-3:]=='jpg']
+        a = [
+            s
+            for s in os.listdir(dirpath)
+            if os.path.isfile(os.path.join(dirpath, s)) and s[-3:] == "jpg"
+        ]
         a.sort(key=lambda s: os.path.getmtime(os.path.join(dirpath, s)))
         return a
     except:
@@ -209,7 +424,7 @@ def getfiles(dirpath):
 
 
 # set cameras imnages to UI
-def set_image_to_ui(label_name, image, no_image=False):
+def set_image_to_ui(label_name, image, no_image=False, image_type="perfect"):
     if no_image:
         image = cv2.imread(no_image_path)
     if len(image.shape) == 2:
@@ -217,14 +432,24 @@ def set_image_to_ui(label_name, image, no_image=False):
     #
     h, w, ch = image.shape
     bytes_per_line = ch * w
-    convert_to_Qt_format = sQImage(image.data, w, h, bytes_per_line, sQImage.Format_BGR888)
+    convert_to_Qt_format = sQImage(
+        image.data, w, h, bytes_per_line, sQImage.Format_BGR888
+    )
+    # if not (no_image):
+    if image_type == "perfect" and not (no_image):
+        label_name.setStyleSheet("border: 4px solid green;")
+    elif image_type == "defect" and not (no_image):
+        label_name.setStyleSheet("border: 4px solid red;")
+    else:
+        label_name.setStyleSheet("border: 4px solid white;")
+
     label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))
 
 
 # read annotation files and create mask
 def create_mask_from_annotation_file(db_obj, image, annotation_path):
 
-    print('annot:', annotation_path)
+    print("annot:", annotation_path)
     # create image mask
     image_shape = image.shape
     image_mask = np.zeros((image_shape))
@@ -235,49 +460,91 @@ def create_mask_from_annotation_file(db_obj, image, annotation_path):
         with open(annotation_path) as json_file:
             annotations = json.load(json_file)
     except:
-        return False, 'Annotation file doesnt exist/cant be loaded'
-    
+        return False, "Annotation file doesnt exist/cant be loaded"
+
     # draw bbox and polygons on mask
     # polygons
     try:
         for obj_mask in annotations[Annotation.OBJ_MASKS_KEY]:
             # get defect color and name
-            res, defect_info = get_defect_info(db_obj=db_obj, defect_id=obj_mask[Annotation.CLASS_KEY])
+            res, defect_info = get_defect_info(
+                db_obj=db_obj, defect_id=obj_mask[Annotation.CLASS_KEY]
+            )
 
             # polygon points
-            pts = np.array(obj_mask[Annotation.MASK_KEY] , np.int32)
+            pts = np.array(obj_mask[Annotation.MASK_KEY], np.int32)
             pts_center = centroid(vertexes=pts)
             pts = pts.reshape((-1, 1, 2))
             # Draw a line nofilled polygon
             # overlay_image = cv2.polylines(overlay_image, pts=[pts], isClosed=True, color=mask_color, thickness=8)
             # draw a filled polygon
             if res:
-                #image_mask = cv2.fillPoly(image_mask, pts=[pts], color=html_to_bgr(defect_info['color']))
-                image_mask = cv2.polylines(image_mask, [pts], isClosed=True, color=html_to_bgr(defect_info['color']), thickness=line_tickness)
-                image_mask2 = cv2.putText(image_mask2, defect_info['short_name'], pts_center, cv2.FONT_HERSHEY_SIMPLEX, 1.5, html_to_bgr(defect_info['color']))
+                # image_mask = cv2.fillPoly(image_mask, pts=[pts], color=html_to_bgr(defect_info['color']))
+                image_mask = cv2.polylines(
+                    image_mask,
+                    [pts],
+                    isClosed=True,
+                    color=html_to_bgr(defect_info["color"]),
+                    thickness=line_tickness,
+                )
+                image_mask2 = cv2.putText(
+                    image_mask2,
+                    defect_info["short_name"],
+                    pts_center,
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1.5,
+                    html_to_bgr(defect_info["color"]),
+                )
             else:
-                #image_mask = cv2.fillPoly(image_mask, pts=[pts], color=html_to_bgr(mask_color))
-                image_mask = cv2.polylines(image_mask, [pts], isClosed=True, color=html_to_bgr(mask_color), thickness=line_tickness)
-        
+                # image_mask = cv2.fillPoly(image_mask, pts=[pts], color=html_to_bgr(mask_color))
+                image_mask = cv2.polylines(
+                    image_mask,
+                    [pts],
+                    isClosed=True,
+                    color=html_to_bgr(mask_color),
+                    thickness=line_tickness,
+                )
+
         # masks
         for obj_bbox in annotations[Annotation.OBJ_BBOXS_KEY]:
             # get defect color and name
-            res, defect_info = get_defect_info(db_obj=db_obj, defect_id=obj_bbox[Annotation.CLASS_KEY])
+            res, defect_info = get_defect_info(
+                db_obj=db_obj, defect_id=obj_bbox[Annotation.CLASS_KEY]
+            )
 
             # polygon points
-            pts = np.array(obj_bbox[Annotation.BBOX_KEY] , np.int32)
+            pts = np.array(obj_bbox[Annotation.BBOX_KEY], np.int32)
             pts_center = centroid(vertexes=pts)
-            
+
             # draw a filled bbox
             if res:
-                image_mask = cv2.rectangle(image_mask, pts[0], pts[1], color=html_to_bgr(defect_info['color']), thickness=line_tickness)
-                image_mask2 = cv2.putText(image_mask2, defect_info['short_name'], pts_center, cv2.FONT_HERSHEY_SIMPLEX, 1.5, html_to_bgr(defect_info['color']))
+                image_mask = cv2.rectangle(
+                    image_mask,
+                    pts[0],
+                    pts[1],
+                    color=html_to_bgr(defect_info["color"]),
+                    thickness=line_tickness,
+                )
+                image_mask2 = cv2.putText(
+                    image_mask2,
+                    defect_info["short_name"],
+                    pts_center,
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1.5,
+                    html_to_bgr(defect_info["color"]),
+                )
             else:
-                image_mask = cv2.rectangle(image_mask, pts[0], pts[1], color=html_to_bgr(mask_color), thickness=line_tickness)
+                image_mask = cv2.rectangle(
+                    image_mask,
+                    pts[0],
+                    pts[1],
+                    color=html_to_bgr(mask_color),
+                    thickness=line_tickness,
+                )
 
     except:
-        return False, 'Cant laod masks from annotation file'
-    
+        return False, "Cant laod masks from annotation file"
+
     try:
         baskground_image = image.copy()
         # Create a new np array
@@ -289,12 +556,16 @@ def create_mask_from_annotation_file(db_obj, image, annotation_path):
         # Change this into bool to use it as mask
         mask = shapes.astype(bool)
         mask2 = shapes2.astype(bool)
-        
+
         # Create the overlay
-        baskground_image[mask] = cv2.addWeighted(baskground_image, 1-mask_alpha, shapes, mask_alpha, 0)[mask]
-        baskground_image[mask2] = cv2.addWeighted(baskground_image, 1-mask_alpha, shapes2, mask_alpha, 0)[mask2]
+        baskground_image[mask] = cv2.addWeighted(
+            baskground_image, 1 - mask_alpha, shapes, mask_alpha, 0
+        )[mask]
+        baskground_image[mask2] = cv2.addWeighted(
+            baskground_image, 1 - mask_alpha, shapes2, mask_alpha, 0
+        )[mask2]
     except:
-        return False, 'Cant annotation mask overlay on image'
+        return False, "Cant annotation mask overlay on image"
 
     return True, baskground_image
 
@@ -302,14 +573,16 @@ def create_mask_from_annotation_file(db_obj, image, annotation_path):
 # get defect name and color by id
 def get_defect_info(db_obj, defect_id):
     try:
-        defect_info = classification_list_funcs.load_defects_from_db(db_obj=db_obj, defect_id=[defect_id])
+        defect_info = classification_list_funcs.load_defects_from_db(
+            db_obj=db_obj, defect_id=[defect_id]
+        )
         if len(defect_id) > 0:
             return True, defect_info
         else:
-            return False, 'Cant load defect info from database'
+            return False, "Cant load defect info from database"
 
     except:
-        return False, 'Cant load defect info from database'
+        return False, "Cant load defect info from database"
 
 
 def html_to_bgr(html_code):
@@ -321,16 +594,14 @@ def html_to_bgr(html_code):
 
 # get centroid of polygon/box
 def centroid(vertexes):
-    _x_list = [vertex [0] for vertex in vertexes]
-    _y_list = [vertex [1] for vertex in vertexes]
+    _x_list = [vertex[0] for vertex in vertexes]
+    _y_list = [vertex[1] for vertex in vertexes]
     _len = len(vertexes)
     _x = sum(_x_list) / _len
     _y = sum(_y_list) / _len
-    return(int(_x)-30, int(_y)+20)
+    return (int(_x) - 30, int(_y) + 20)
 
 
 if __name__ == "__main__":
-    files_list = getfiles('D:/trainApp_oxin/dataset/binary/defect')
+    files_list = getfiles("D:/trainApp_oxin/dataset/binary/defect")
     print(files_list)
-    
-

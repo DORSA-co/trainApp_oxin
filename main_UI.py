@@ -241,6 +241,10 @@ class UI_main_window(QMainWindow, ui):
         self.cbBox_of_multiClassification_model_in_PBT_page.addItem("Xcc")
         self.cbBox_of_multiClassification_model_in_PBT_page.addItem("Rce")
 
+        self.cbBox_of_pipline_in_PBT_page_load_dataset.addItem("")
+        self.cbBox_of_pipline_in_PBT_page_load_dataset.addItem("BLC")
+        self.cbBox_of_pipline_in_PBT_page_load_dataset.addItem("BC")
+
         self.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
 
         self.load_dataset_pbt_btn.clicked.connect(self.buttonClick)

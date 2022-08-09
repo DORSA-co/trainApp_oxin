@@ -33,6 +33,32 @@ aug_dict = dict(rotation_range=15,
 #   trainGen, testGen
 #
 #_________________________________________________________________________________________________________________
+def get_binarygenerator_for_prediction(paths, target_size, defective_folder, perfect_folder, batch_size=8):
+    
+
+    datasets = []
+    n = 0
+
+    for path in paths:
+        dataGen = ImageDataGenerator()
+        
+        
+        train_dataset = dataGen.flow_from_directory(
+            path,
+            target_size=target_size,
+            batch_size=batch_size,
+            class_mode='binary',
+            classes=[perfect_folder, defective_folder],
+            seed=42,)
+
+       
+
+        datasets.append(train_dataset)
+
+        n += train_dataset.n
+
+    return binary_train_generator(datasets) ,n
+
 def get_binarygenerator(paths, target_size, defective_folder, perfect_folder,aug_dict , batch_size=8, validation_split=0.2):
     
     train_datasets = []
@@ -108,7 +134,7 @@ def binary_val_generator(val_datasets):
 def maskGenerator(path,
                   image_folder,
                   mask_folder,
-                  aug_dict,
+                 #aug_dict,
                   subfolders_mask=None,
                   target_size=(256, 256),
                   batch_size=8,
@@ -134,8 +160,10 @@ def maskGenerator(path,
             return (img, mask)
 
     # -----------------------------------------------------
-    image_datagen = ImageDataGenerator(**aug_dict)
-    mask_datagen = ImageDataGenerator(**aug_dict)
+    # image_datagen = ImageDataGenerator(**aug_dict)
+    # mask_datagen = ImageDataGenerator(**aug_dict)
+    image_datagen = ImageDataGenerator()
+    mask_datagen = ImageDataGenerator()
     # -----------------------------------------------------
     image_generator = image_datagen.flow_from_directory(
         path,

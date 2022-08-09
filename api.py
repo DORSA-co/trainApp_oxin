@@ -16,6 +16,7 @@ from PySide6.QtCore import *
 from PySide6.QtGui import QPen, QPainter
 from PySide6.QtWidgets import QFileDialog
 from matplotlib import pyplot as plt
+from pyrsistent import m
 
 from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
 from app_settings import Settings
@@ -76,7 +77,18 @@ from multiprocessing import Process
 import dataset_utils
 
 # _______JJ importing:
+import random
+from PySide6.QtWidgets import QLabel as sQLabel, QProgressBar
+from PySide6.QtWidgets import QVBoxLayout
 from Train_modules.models import xception_cnn, resnet_cnn
+from Train_modules.models import unet, low_unet, resnet_unet
+from Train_modules.dataGenerator import (
+    get_binarygenerator_for_prediction,
+    maskGenerator,
+)
+import matplotlib.pyplot as plt
+from tensorflow.keras.metrics import Accuracy, Precision, Recall
+
 
 # _______JJ
 
@@ -150,6 +162,9 @@ class API:
         # connet comboBox to correspondings functions in API
         self.comboBox_connector()
         self.QTableWidget_connector()
+        self.checkbox_connector()
+        self.perfect_show = False
+        self.defect_show = False
         # connet mouse event to correspondings functions in API
         self.mouse_connector()
         # connet keyboard event to correspondings functions in API
@@ -208,6 +223,34 @@ class API:
         self.classification_image_list = moveOnImagrList(
             sub_directory="", step=binary_list_funcs.n_images_per_row
         )
+
+        # _________________________________________
+        # create binarylist sliders on UI
+        # raw image
+        self.raw_and_evaluated_Imagw_sliders_check = []
+        self.raw_and_evaluated_Imagw_sliders_check.append(
+            binary_list_funcs.set_image_on_loadDataSetSlider_in_PBT(
+                ui_obj=self.ui,
+                db_obj=self.db,
+                frame_obj=self.ui.original_image_list_frame,
+                prefix="original",
+            )
+        )
+        # evaluated image
+        self.raw_and_evaluated_Imagw_sliders_check.append(
+            binary_list_funcs.set_image_on_loadDataSetSlider_in_PBT(
+                ui_obj=self.ui,
+                db_obj=self.db,
+                frame_obj=self.ui.evaluated_image_list_frame,
+                prefix="evaluated",
+            )
+        )
+
+        self.original_and_evaluated_image_in_PBT = moveOnImagrList(
+            sub_directory="", step=binary_list_funcs.n_images_per_row
+        )
+        # _________________________________________
+
         # _____________________________________________________________________
         self.ImageManager = ImageManager(self.login_user_name, self.ui, self.cameras)
 
@@ -294,38 +337,82 @@ class API:
             self.bmodels_list[row]["dataset_pathes"],
             self.bmodels_list[row]["weights_path"],
         )
-        print(model_summery_that_show)
+        # print(model_summery_that_show)
         b_list = ["Xbc", "Rbc"]
         c_list = ["Xcc", "Rce"]
-        l_list = (["Rleu", "Llu", "uln"],)
+        l_list = ["Rleu", "Llu", "uln"]
 
         temp = self.bmodels_list[row]["input_size"]
         input_size = tuple(map(int, temp[1:-1].split(",")))
 
         if self.bmodels_list[row]["algo_name"] in b_list:
             # set the  summery at the lineEdit ,that under the table
-            model = self.create_selected_binary_model(
-                model_architecture=self.bmodels_list[row]["algo_name"],
-                input_size=input_size,
-                weight_path=self.bmodels_list[row]["weights_path"],
-            )
             self.ui.LBL_of_selected_binary_classifaction_model_in_PBT_page.setText(
                 model_summery_that_show
             )
+
+            self.algo_name_binary_model = self.bmodels_list[row]["algo_name"]
+            self.input_size_binary_model = input_size
+            self.weight_path_binary_model = self.bmodels_list[row]["weights_path"]
+
         elif self.bmodels_list[row]["algo_name"] in c_list:
             # set the  summery at the lineEdit ,that under the table
             self.ui.LBL_of_selected_multiClassification_model_in_PBT_page.setText(
                 model_summery_that_show
             )
+
+            self.algo_name_classification_model = self.bmodels_list[row]["algo_name"]
+            self.input_size_classification_model = input_size
+            self.weight_path_classification_model = self.bmodels_list[row][
+                "weights_path"
+            ]
+
         elif self.bmodels_list[row]["algo_name"] in l_list:
             # set the  summery at the lineEdit ,that under the table
             self.ui.LBL_of_selected_localization_model_in_PBT_page.setText(
                 model_summery_that_show
             )
 
+            self.algo_name_localization_model = self.bmodels_list[row]["algo_name"]
+            self.input_size_localization_model = input_size
+            self.weight_path_localization_model = self.bmodels_list[row]["weights_path"]
+
         self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(True)
 
-    def create_selected_binary_model(self, model_architecture, input_size, weight_path):
+    def create_selected_localization_model(
+        self, model_architecture, input_size=(224, 224, 1), weight_path=None
+    ):
+        if model_architecture == "Rleu":
+            model = resnet_unet(input_size=(224, 224, 1))
+            return model
+        elif model_architecture == "Llu":
+            model = low_unet(input_size=(224, 224, 1))
+            return model
+        elif model_architecture == "uln":
+            model = unet(input_size=(224, 224, 1))
+            return model
+        else:
+            print("what the fuckkkkkk!!!!!!!!!")
+
+    def create_selected_classification_model(
+        self, model_architecture, input_size=(224, 224, 3), weight_path=None
+    ):
+        if model_architecture == "Xcc":
+            model = xception_cnn(
+                input_size=(224, 224, 3), num_class=5, mode="categorical"
+            )
+            return model
+        elif model_architecture == "Rce":
+            model = resnet_cnn(
+                input_size=(224, 224, 3), num_class=5, mode="categorical"
+            )
+            return model
+        else:
+            print("what the fuckkkkkk!!!!!!!!!")
+
+    def create_selected_binary_model(
+        self, model_architecture, input_size=(224, 224, 3), weight_path=None
+    ):
         """this function instantiate a binary model,
         according to the existing model in comboBOX
 
@@ -358,6 +445,35 @@ class API:
             self.ui.stackedWidget_pbt.setCurrentWidget(self.ui.page_load_dataset)
             self.refresh_datasets_table(PBT_page=True)
 
+    def load_image_btn_in_PBT_page(self):
+        path = QFileDialog.getExistingDirectory(self.ui, "Choose Directory", "E:\\")
+        self.ui.lineEdit_of_path_displayment_in_PBT_page.setText(path)
+
+    def set_perfect_defect_checkBox_dataset(self, state, perfectOrdefect):
+
+        if perfectOrdefect == "perfect":
+            self.perfect_show = state
+        elif perfectOrdefect == "defect":
+            self.defect_show = state
+
+    def checkbox_connector(self):
+        self.ui.chbox_prefectdata_in_PBT_page.stateChanged.connect(
+            partial(
+                lambda x: self.set_perfect_defect_checkBox_dataset(
+                    state=self.ui.chbox_prefectdata_in_PBT_page.isChecked(),
+                    perfectOrdefect="perfect",
+                )
+            )
+        )
+        self.ui.chbox_defectdata_in_PBT_page.stateChanged.connect(
+            partial(
+                lambda x: self.set_perfect_defect_checkBox_dataset(
+                    state=self.ui.chbox_defectdata_in_PBT_page.isChecked(),
+                    perfectOrdefect="defect",
+                )
+            )
+        )
+
     def QTableWidget_connector(self):
         """by calling this function, the qtablewidget of UI connect to corresponding function.
         this function call in __init__ function
@@ -389,7 +505,6 @@ class API:
             )
         )
 
-        # ????????
         self.ui.comboBox_ncamera_SI.currentTextChanged.connect(
             partial(self.set_ncamera_label)
         )
@@ -416,6 +531,9 @@ class API:
             partial(
                 lambda: self.binary_model_tabel_nextorprev(next=False, wich_page="PBT")
             )
+        )
+        self.ui.BTN_load_image_in_PBT_page.clicked.connect(
+            self.load_image_btn_in_PBT_page
         )
         # _______________UNDER RELATED TO BEFORE JJ
 
@@ -520,6 +638,47 @@ class API:
                 lambda: self.update_binary_images_on_ui(defect=True, prevornext="next")
             )
         )
+        self.ui.BTN_load_in_PBT_page.clicked.connect(
+            self.load_binary_images_list_in_PBT_load_dataset_page
+        )
+
+        self.ui.BTN_evaluate_image_in_PBT_page_2.clicked.connect(
+            self.evaluate_model_on_selected_model
+        )
+        self.ui.BTN_set_pipline_in_PBT_page.clicked.connect(self.set_pipline)
+        # ______________________________________________JJ ZONE START
+
+        self.ui.BTN_prev_original_image_in_PBT_page.clicked.connect(
+            partial(
+                lambda: self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
+                    prevornext="prev"
+                )
+            )
+        )
+        self.ui.BTN_next_original_image_in_PBT_page.clicked.connect(
+            partial(
+                lambda: self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
+                    prevornext="next"
+                )
+            )
+        )
+
+        self.ui.BTN_next_predictions_image_in_PBT_page.clicked.connect(
+            partial(
+                lambda: self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
+                    defect=True, prevornext="next"
+                )
+            )
+        )
+        self.ui.BTN_prev_predictions_image_in_PBT_page.clicked.connect(
+            partial(
+                lambda: self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
+                    defect=True, prevornext="prev"
+                )
+            )
+        )
+
+        # ______________________________________________JJ ZONE STOP
 
         # classification page
         self.ui.Classification_btn.clicked.connect(partial(self.refresh_classes_table))
@@ -2240,6 +2399,247 @@ class API:
             level=1,
         )
 
+    # ____________JJ ZONE START
+    def load_binary_images_list_in_PBT_load_dataset_page(self):
+        text = self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.currentText()
+        if (
+            self.raw_and_evaluated_Imagw_sliders_check[0]
+            and self.raw_and_evaluated_Imagw_sliders_check[1]
+        ):
+            datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
+            selected_datasets = dataset.get_selected_datasets_for_PBT_loadDataSet_page(
+                text, datasets_list
+            )
+            if len(selected_datasets) == 0:
+                self.ui.set_warning(
+                    texts.WARNINGS["SELECT_NO_DATASET"][self.language],
+                    "binarylist",
+                    level=2,
+                )
+                return
+
+            (
+                perfect_check,
+                perfect_image_pathes,
+                defect_check,
+                defect_image_pathes,
+                defect_annot_pathes,
+                binary_count,
+                mask_image_pathes,
+                mask_image_check,
+            ) = binary_list_funcs.get_binarylist_image_pathes_list(
+                ds_obj=self.ds, dataset_pathes=selected_datasets
+            )
+
+            if not perfect_check and not defect_check:
+                self.ui.set_warning(
+                    texts.MESSEGES["NO_IMAGE_AVAILABLE_IN_DATASET"][self.language],
+                    "binarylist",
+                    level=2,
+                )
+            else:
+                # msg
+                self.ui.set_warning(
+                    texts.MESSEGES["LOAD_IMAGES_DATASETS"][self.language],
+                    "binarylist",
+                    level=1,
+                )
+
+            if perfect_check or defect_check:
+                if self.perfect_show and self.defect_show:
+                    path_list = perfect_image_pathes + defect_image_pathes
+                elif self.perfect_show and not (self.defect_show):
+                    path_list = perfect_image_pathes
+                elif not (self.perfect_show) and self.defect_show:
+                    path_list = defect_image_pathes
+                else:
+                    path_list = []
+
+                random.shuffle(path_list)
+
+                self.original_and_evaluated_image_in_PBT.add(
+                    mylist=path_list,
+                    name="original",
+                )
+                self.original_image_list_next_func = (
+                    self.original_and_evaluated_image_in_PBT.build_next_func(
+                        name="original"
+                    )
+                )
+                self.original_image_list_prev_func = (
+                    self.original_and_evaluated_image_in_PBT.build_prev_func(
+                        name="original"
+                    )
+                )
+
+                self.ui.BTN_next_original_image_in_PBT_page.setEnabled(True)
+                self.ui.BTN_prev_original_image_in_PBT_page.setEnabled(True)
+                self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT()
+            else:
+                self.ui.BTN_next_original_image_in_PBT_page.setEnabled(False)
+                self.ui.BTN_prev_original_image_in_PBT_page.setEnabled(False)
+
+            self.data_path_to_dataGenerator = os.path.join(
+                selected_datasets[0]["path"], dataset.BINARY_FOLDER
+            )
+
+            if mask_image_check:
+                self.original_and_evaluated_image_in_PBT.add(
+                    mylist=mask_image_pathes,
+                    mylist_annots=defect_annot_pathes,
+                    name="evaluated",
+                )
+                # create next and prev funcs
+                self.evaluated_image_list_next_func = (
+                    self.original_and_evaluated_image_in_PBT.build_next_func(
+                        name="evaluated"
+                    )
+                )
+                self.evaluated_image_list_prev_func = (
+                    self.original_and_evaluated_image_in_PBT.build_prev_func(
+                        name="evaluated"
+                    )
+                )
+                # connect next and prev buttons to funcs
+                self.ui.BTN_prev_predictions_image_in_PBT_page.setEnabled(True)
+                self.ui.BTN_next_predictions_image_in_PBT_page.setEnabled(True)
+                self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(defect=True)
+            else:
+                self.ui.BTN_prev_predictions_image_in_PBT_page.setEnabled(False)
+                self.ui.BTN_next_predictions_image_in_PBT_page.setEnabled(False)
+
+        # # update pie chart
+        # chart_funcs.update_binarylist_piechart(
+        #     ui_obj=self.ui, binary_len=binary_count
+        # )
+
+        # error in building image sliders
+        else:
+            self.ui.set_warning(
+                texts.ERORS["BUILD_BINARYLIST_SLIDER_ERROR"][self.language],
+                "binarylist",
+                level=3,
+            )
+
+    def evaluate_model_on_selected_model(self):
+
+        # ProgressBar creation in ui
+        # vbox = QVBoxLayout()
+        # self.ui.GBox_model_evaluation_details.setLayout(vbox)
+        # pbar = QProgressBar()
+        # vbox.addWidget(pbar)
+        # pbar_value=0
+
+        # batch_size=8
+        # accuracy = Accuracy()
+        # precision=Precision()
+        # recall=Recall()
+        # ______________________________
+
+        batch_size = 8
+
+        dataGen, num_of_founded_img = get_binarygenerator_for_prediction(
+            paths=[self.data_path_to_dataGenerator],
+            target_size=(224, 224),
+            defective_folder=dataset.DEFECT_FOLDER,
+            perfect_folder=dataset.PERFECT_FOLDER,
+            batch_size=batch_size,
+        )
+        if num_of_founded_img != 0:
+            pred = self.binary_model.evaluate(
+                dataGen,
+                batch_size=batch_size,
+                steps=(num_of_founded_img // batch_size),
+            )
+
+            vbox = QVBoxLayout()
+            self.ui.GBox_model_evaluation_details.setLayout(vbox)
+            label = sQLabel("Top")
+            label.setAlignment(Qt.AlignTop)
+            label.setScaledContents(True)
+            label.setWordWrap(True)
+            vbox.addWidget(label)
+            evalution_report = "the selected model on the selected dataset has,"
+            for i in range(len(self.binary_model.metrics_names)):
+                evalution_report += (
+                    " " + str(self.binary_model.metrics_names[i]) + ":{:.2f}"
+                ).format(pred[i])
+            evalution_report += " ,performace"
+            label.setText(evalution_report)
+
+        m = maskGenerator(
+            path=r"E:\JJ\xxxx\localiztion",
+            image_folder="train_images",
+            mask_folder="mask",
+            target_size=(224, 224),
+        )
+        pred_localization = self.localization_model.evaluate(m, batch_size=1, steps=4)
+
+        label_localization = sQLabel("Top")
+        label_localization.setAlignment(Qt.AlignTop)
+        label_localization.setScaledContents(True)
+        label_localization.setWordWrap(True)
+        vbox.addWidget(label_localization)
+        evalution_report = "the selected model on the selected dataset has,"
+        for i in range(len(self.localization_model.metrics_names)):
+            evalution_report += (
+                " " + str(self.localization_model.metrics_names[i]) + ":{:.2f}"
+            ).format(pred_localization[i])
+        evalution_report += " ,performace"
+        label_localization.setText(evalution_report)
+
+    def set_pipline(self):
+
+        selected_binary_model = (
+            self.ui.LBL_of_selected_binary_classifaction_model_in_PBT_page.text()
+        )
+        selected_classification_model = (
+            self.ui.LBL_of_selected_multiClassification_model_in_PBT_page.text()
+        )
+        selected_localization_model = (
+            self.ui.LBL_of_selected_localization_model_in_PBT_page.text()
+        )
+
+        if selected_binary_model != "":
+            self.binary_model = self.create_selected_binary_model(
+                model_architecture=self.algo_name_binary_model,
+                input_size=self.input_size_binary_model,
+                weight_path=self.weight_path_binary_model,
+            )
+        else:
+            self.binary_model = self.create_selected_binary_model(
+                model_architecture="Xbc", input_size=(224, 224, 3)
+            )
+
+        if self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText() == "BLC":
+            if selected_classification_model != "":
+                self.classification_model = self.create_selected_classification_model(
+                    model_architecture=self.algo_name_classification_model,
+                    input_size=self.input_size_classification_model,
+                    weight_path=self.weight_path_classification_model,
+                )
+            else:
+                self.classification_model = self.create_selected_classification_model(
+                    model_architecture="Rce", input_size=(224, 224, 3)
+                )
+
+            if selected_localization_model != "":
+                self.localization_model = self.create_selected_localization_model(
+                    model_architecture=self.algo_name_localization_model,
+                    input_size=self.input_size_localization_model,
+                    weight_path=self.weight_path_localization_model,
+                )
+            else:
+                self.localization_model = self.create_selected_localization_model(
+                    model_architecture="Rleu", input_size=(224, 224, 3)
+                )
+
+        elif self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText() == "BC":
+            print("zereshkkkkkkkkkkkkkk")
+        else:
+            print("what the fuckkkkkk!")
+
+    # ____________JJ ZONE STOP
     # _________________________________________________________________________________________________
     # binary-list page functions
     # load binary images list
@@ -2272,7 +2672,7 @@ class API:
             ) = binary_list_funcs.get_binarylist_image_pathes_list(
                 ds_obj=self.ds, dataset_pathes=selected_datasets
             )
-            print(perfect_check, defect_check)
+            # print(perfect_check, defect_check)
             # validation
             if not perfect_check and not defect_check:
                 self.ui.set_warning(
@@ -2404,6 +2804,69 @@ class API:
                 annot_sub_direcotory="./dataset/annotations",
                 image_path_list=current_image_list,
                 prefix=binary_list_funcs.widjet_prefixes["defect"],
+            )
+        # validate
+        if not res:
+            self.ui.set_warning(
+                texts.ERORS["READ_BINARYLIST_IMAGES_ERROR"][self.language],
+                "binarylist",
+                level=3,
+            )
+
+    def update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
+        self, defect=False, prevornext="False", path=r"E:\Dorsa\xxxx\train\binary"
+    ):
+        # next or prev on list
+        if prevornext == "next":
+            if not defect:
+                self.original_image_list_next_func()
+            else:
+                self.evaluated_image_list_next_func()
+        # prev
+        elif prevornext == "prev":
+            if not defect:
+                self.original_image_list_prev_func()
+            else:
+                self.evaluated_image_list_prev_func()
+
+        # get curent image list to set to UI
+        if not defect:
+            current_image_list = self.original_and_evaluated_image_in_PBT.get_n_current(
+                name="original"
+            )
+            current_annot_list = ["" for i in range(len(current_image_list))]
+        else:
+            # ?????????????????????????????????
+            (
+                current_image_list,
+                current_annot_list,
+            ) = self.original_and_evaluated_image_in_PBT.get_n_current(
+                name="evaluated",
+                get_annots=True,
+            )
+            # ?????????????????????????????????
+
+        # set/update images on UI
+        if not defect:
+            self.dataset_params["dataset_path"] = r"E:\Dorsa\xxxx\train\binary"
+            res = binary_list_funcs.set_image_to_ui_slider_eidted_version(
+                ui_obj=self.ui,
+                sub_directory=os.path.join(
+                    self.dataset_params["dataset_path"], self.ds.perfect_folder
+                ),
+                annot_sub_direcotory="./dataset/annotations",
+                image_path_list=current_image_list,
+                prefix="original",
+            )
+        else:
+            res = binary_list_funcs.set_image_to_ui_slider_eidted_version(
+                ui_obj=self.ui,
+                sub_directory=os.path.join(
+                    self.dataset_params["dataset_path"], self.ds.defect_folder
+                ),
+                annot_sub_direcotory="./dataset/annotations",
+                image_path_list=current_image_list,
+                prefix="evaluated",
             )
         # validate
         if not res:

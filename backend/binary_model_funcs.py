@@ -79,15 +79,6 @@ def get_binary_models_from_db(
 
 # translate binary model to id
 def translate_binary_algorithm_id_to_name(algo_id, model_type="binary", reverse=False):
-    print("model_type:", model_type)
-    print("algo_id:", algo_id)
-    print(
-        " train_api.ALGORITHM_NAMES[model_type]:", train_api.ALGORITHM_NAMES[model_type]
-    )
-    print(
-        " train_api.ALGORITHM_NAMES[model_type][0]:",
-        train_api.ALGORITHM_NAMES[model_type][0],
-    )
     if not reverse:
         return train_api.ALGORITHM_NAMES[model_type][int(algo_id)]
     else:

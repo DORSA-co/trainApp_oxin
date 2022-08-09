@@ -15,6 +15,7 @@ IMAGES_TEMP_FOLDER = "temp_images"
 ANNOTATIONS_TEMP_FOLDER = "temp_annotations"
 IMAGE_FOLDERS = "images"
 ANNOTATIONS_FOLDER = "annotations"
+MASKS_FOLDER = "mask"
 BINARY_FOLDER = "binary"
 DEFECT_FOLDER = "defect"
 PERFECT_FOLDER = "perfect"
@@ -345,6 +346,15 @@ def get_selected_datasets(ui_obj, datasets_list, is_binarylist=False):
             for dataset in datasets_list:
                 if dataset["name"] == table_object.item(i, 0).text():
                     list.append(dataset)
+    return list
+
+
+def get_selected_datasets_for_PBT_loadDataSet_page(datasetname, datasets_list):
+
+    list = []
+    for dataset in datasets_list:
+        if dataset["name"] == datasetname:
+            list.append(dataset)
     return list
 
 
