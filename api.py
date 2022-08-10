@@ -60,7 +60,7 @@ from utils.move_on_list import moveOnList, moveOnImagrList
 import texts  # eror and warnings texts
 from utils import tempMemory, Utils
 
-from backend.dataset import Dataset
+from backend.dataset import DEFECT_FOLDER, Dataset
 from image_splitter import ImageCrops
 import train_api
 
@@ -78,6 +78,7 @@ import dataset_utils
 
 # _______JJ importing:
 import random
+import time
 from PySide6.QtWidgets import QLabel as sQLabel, QProgressBar
 from PySide6.QtWidgets import QVBoxLayout
 from Train_modules.models import xception_cnn, resnet_cnn
@@ -88,7 +89,7 @@ from Train_modules.dataGenerator import (
 )
 import matplotlib.pyplot as plt
 from tensorflow.keras.metrics import Accuracy, Precision, Recall
-
+from Train_modules.deep_utils import metrics
 
 # _______JJ
 
@@ -2523,69 +2524,141 @@ class API:
 
     def evaluate_model_on_selected_model(self):
 
-        # ProgressBar creation in ui
-        # vbox = QVBoxLayout()
-        # self.ui.GBox_model_evaluation_details.setLayout(vbox)
-        # pbar = QProgressBar()
-        # vbox.addWidget(pbar)
-        # pbar_value=0
-
-        # batch_size=8
-        # accuracy = Accuracy()
-        # precision=Precision()
-        # recall=Recall()
-        # ______________________________
-
         batch_size = 8
+        thresh = 0.5
 
-        dataGen, num_of_founded_img = get_binarygenerator_for_prediction(
-            paths=[self.data_path_to_dataGenerator],
-            target_size=(224, 224),
-            defective_folder=dataset.DEFECT_FOLDER,
-            perfect_folder=dataset.PERFECT_FOLDER,
-            batch_size=batch_size,
+        perfect_image_list_file_name = os.listdir(
+            os.path.join(self.data_path_to_dataGenerator, dataset.PERFECT_FOLDER)
         )
-        if num_of_founded_img != 0:
-            pred = self.binary_model.evaluate(
-                dataGen,
-                batch_size=batch_size,
-                steps=(num_of_founded_img // batch_size),
+        defect_image_list_file_name = os.listdir(
+            os.path.join(self.data_path_to_dataGenerator, dataset.DEFECT_FOLDER)
+        )
+
+        perfect_flag = False
+        defect_flag = False
+
+        pred_label = os.path.join(
+            os.path.dirname(self.data_path_to_dataGenerator),
+            dataset.MASKS_FOLDER,
+            "pred_label_of_" + str(self.algo_name_binary_model),
+        )
+        try:
+            os.mkdir(pred_label)
+        except:
+            pass
+
+        pred_binary = []
+        pred_localization = []
+        true_binary = []
+        true_localization = []
+
+        vbox = QVBoxLayout()
+        self.ui.GBox_model_evaluation_details.setLayout(vbox)
+        pbar = QProgressBar()
+        vbox.addWidget(pbar)
+        counter = 0
+        dataset_len = 3  # len(perfect_image_list_file_name)
+        #     + len(defect_image_list_file_name)
+
+        # for i in range(len(defect_image_list_file_name)):
+        for i in range(3):
+
+            img = cv2.imread(
+                os.path.join(
+                    os.path.join(
+                        self.data_path_to_dataGenerator, dataset.DEFECT_FOLDER
+                    ),
+                    os.path.join(defect_image_list_file_name[i]),
+                )
             )
+            temp = cv2.imread(
+                os.path.join(
+                    os.path.dirname(self.data_path_to_dataGenerator),
+                    dataset.MASKS_FOLDER,
+                    "true_label",
+                    defect_image_list_file_name[i],
+                ),
+                0,
+            )
+            temp = cv2.resize(temp, self.binary_model.layers[0].output_shape[0][1:-1])
 
-            vbox = QVBoxLayout()
-            self.ui.GBox_model_evaluation_details.setLayout(vbox)
-            label = sQLabel("Top")
-            label.setAlignment(Qt.AlignTop)
-            label.setScaledContents(True)
-            label.setWordWrap(True)
-            vbox.addWidget(label)
-            evalution_report = "the selected model on the selected dataset has,"
-            for i in range(len(self.binary_model.metrics_names)):
-                evalution_report += (
-                    " " + str(self.binary_model.metrics_names[i]) + ":{:.2f}"
-                ).format(pred[i])
-            evalution_report += " ,performace"
-            label.setText(evalution_report)
+            true_localization.append(temp)
+            true_binary.append([1])
 
-        m = maskGenerator(
-            path=r"E:\JJ\xxxx\localiztion",
-            image_folder="train_images",
-            mask_folder="mask",
-            target_size=(224, 224),
+            img = cv2.resize(img, self.binary_model.layers[0].output_shape[0][1:-1])
+            input_img = np.array([img])
+            pred = self.binary_model.predict(input_img)
+            pred_binary.append(pred)
+
+            temp = cv2.cvtColor(input_img[0], cv2.COLOR_BGR2GRAY)
+            mask_pred = self.localization_model.predict(np.array([temp]))
+            pred_localization.append(mask_pred)
+
+            temp = np.asarray((mask_pred * 255), dtype="float64")
+            ret, thresh1 = cv2.threshold(temp[0], 127, 255, cv2.THRESH_BINARY)
+            mask = cv2.inRange(thresh1, 0, 1)
+            contours = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            cv2.drawContours(img, contours[0], -1, (255, 0, 0), 1)
+
+            mask_path = os.path.join(
+                os.path.join(pred_label, defect_image_list_file_name[i])
+            )
+            cv2.imwrite(mask_path, img)
+            counter += 1
+            pbar.setValue(100 * (counter / dataset_len))
+            time.sleep(0.05)
+
+        # validating
+        pred_matrix_binary = np.concatenate(pred_binary, axis=0)
+        pred_matrix_localization = np.concatenate(pred_localization, axis=0)
+
+        true_matrix_binary = np.array(true_binary)
+        true_matrix_localization = np.array(true_localization)
+
+        iou = metrics.iou()
+        accuracy = Accuracy()
+        precision = Precision()
+        recall = Recall()
+
+        iou_of_unet = iou(
+            true_matrix_localization, pred_matrix_localization[:, :, :, 0]
         )
-        pred_localization = self.localization_model.evaluate(m, batch_size=1, steps=4)
+
+        accuracy.update_state(y_true=true_matrix_binary, y_pred=pred_matrix_binary)
+        acc_of_binary_model = accuracy.result().numpy()
+
+        precision.update_state(y_true=true_matrix_binary, y_pred=pred_matrix_binary)
+        precision_of_binary_model = precision.result().numpy()
+
+        recall.update_state(y_true=true_matrix_binary, y_pred=pred_matrix_binary)
+        recall_of_binary_model = recall.result().numpy()
+
+        label = sQLabel("Top")
+        label.setAlignment(Qt.AlignTop)
+        label.setScaledContents(True)
+        label.setWordWrap(True)
+        vbox.addWidget(label)
+
+        evalution_report = (
+            "the performace of binary model on the selected dataset:accuracy="
+            + str(acc_of_binary_model)
+            + ",precision="
+            + str(precision_of_binary_model)
+            + ",recall="
+            + str(recall_of_binary_model)
+        )
+        label.setText(evalution_report)
 
         label_localization = sQLabel("Top")
         label_localization.setAlignment(Qt.AlignTop)
         label_localization.setScaledContents(True)
         label_localization.setWordWrap(True)
         vbox.addWidget(label_localization)
-        evalution_report = "the selected model on the selected dataset has,"
-        for i in range(len(self.localization_model.metrics_names)):
-            evalution_report += (
-                " " + str(self.localization_model.metrics_names[i]) + ":{:.2f}"
-            ).format(pred_localization[i])
-        evalution_report += " ,performace"
+
+        evalution_report = (
+            "the performace of localization model on the selected dataset:IOU="
+            + str(iou_of_unet.numpy())
+        )
         label_localization.setText(evalution_report)
 
     def set_pipline(self):
