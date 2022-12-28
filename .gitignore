@@ -1,0 +1,12 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+app_logs/
+.venv10/
+models/
+Train_modules/deep_utils/__pycache__/*.*
+Train_modules/deep_utils/__pycache__
+Train_modules/deep_utils/__pycache__/*.*.*
+.qt_for_python/
+oxin_image_grabber/
+evaluated_jsons/
+
