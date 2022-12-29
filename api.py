@@ -352,6 +352,12 @@ class API:
         self.finished_threads = 0
         self.l = self.db.get_image_processing_params()
 
+        #notif manager 
+
+        self.show_save_notif=False
+
+        self.runing_b_model=False
+
         # DEBUG_FUNCTIONS
         # -------------------------------------
         # self.__debug_load_sheet__(["996", "997"])
@@ -978,7 +984,7 @@ class API:
         )
 
         # Language
-        # self.load_language_font()
+        self.load_language_font()
         self.ui.appearance_btn.clicked.connect(self.set_language_font)
         self.itr = 0
 
@@ -1054,6 +1060,7 @@ class API:
     # ----------------------------------------------------------------------------------------
     def load_sheets(self):
         sheets_id = self.ui.load_sheets_win.get_selected_sheetid()
+        print('sheet_id',sheets_id)
         if not sheets_id:
             self.ui.load_sheets_win.close()
             self.ui.set_warning(
@@ -1356,8 +1363,8 @@ class API:
 
         if self.ui.checkBox_all_imgs_SI.isChecked():
             side = ["up", "down"]
-            cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]))
-            frames = list(range(0, self.sheet.nframe))
+            cameras = list(range(self.sheet.cameras[0], int(self.sheet.cameras[1]/2)))
+            frames = list(range(1, self.sheet.nframe))
         else:
             s = self.ui.comboBox_side_SI.currentText()
             if s == "TOP":
@@ -1367,12 +1374,12 @@ class API:
             elif s == "BOTH":
                 side = ["up", "down"]
             if self.ui.checkBox_all_camera_SI.isChecked():
-                cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]))
+                cameras = list(range(self.sheet.cameras[0], int(self.sheet.cameras[1]/2)))
             else:
                 cameras = self.ui.comboBox_ncamera_SI.getValue()
                 cameras = list(map(int, cameras))
             if self.ui.checkBox_all_frame_SI.isChecked():
-                frames = list(range(0, self.sheet.nframe))
+                frames = list(range(1, self.sheet.nframe))
             else:
                 frames = self.ui.comboBox_nframe_SI.getValue()
                 frames = list(map(int, frames))
@@ -1397,8 +1404,8 @@ class API:
 
         for s in side:
             for c in cameras:
-                for f in frames:
-                    self.selected_images_for_label.add(sheet_id, s, (c, f))
+                    for f in frames:
+                        self.selected_images_for_label.add(sheet_id, s, (c, f))
             self.ui.add_selected_image(
                 self.selected_images_for_label.get_all_selections_list()
             )
@@ -1431,7 +1438,7 @@ class API:
         if self.ui.checkBox_all_imgs_SI.isChecked():
             side = ["up", "down"]
             cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]))
-            frames = list(range(0, self.sheet.nframe))
+            frames = list(range(1, self.sheet.nframe))
         else:
             s = self.ui.comboBox_side_SI.currentText()
             if s == "TOP":
@@ -1446,7 +1453,7 @@ class API:
                 cameras = self.ui.comboBox_ncamera_SI.getValue()
                 cameras = list(map(int, cameras))
             if self.ui.checkBox_all_frame_SI.isChecked():
-                frames = list(range(0, self.sheet.nframe))
+                frames = list(range(1, self.sheet.nframe))
             else:
                 frames = self.ui.comboBox_nframe_SI.getValue()
                 frames = list(map(int, frames))
@@ -1742,12 +1749,11 @@ class API:
         defect_name, defect_info = self.get_defects()
         # print(len(defect_info),defect_info)
         for i in range(len(defect_info)):
-            print(defect_name[i], defect_info[i]["color"])
+            # print(defect_name[i], defect_info[i]["color"])
             hex_color = defect_info[i]["color"].lstrip("#")
             rgb_color = tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))
             rgb = (rgb_color[2], rgb_color[1], rgb_color[0])
             self.LABEL_COLOR.update({defect_info[i]["defect_ID"]: rgb})
-        print("******************", self.LABEL_COLOR)
 
     def get_labels_color(self):
         defect_name, defect_info = self.get_defects()
@@ -1889,10 +1895,7 @@ class API:
         label_type = self.ui.get_label_type()
         if self.label_bakcend[label_type].clicked_in_defect(mouse_position):
             current_mouse_position = self.mouse_controll.position
-            print(current_mouse_position)
-
             sign_defect_table = self.db.ret_sign_defect_table()
-            print("sign_defect_table", sign_defect_table)
             if sign_defect_table == 0:
                 print("nochange")
             else:
@@ -1943,7 +1946,6 @@ class API:
             self.login_api = login_API(login_window, main_ui_obj=self.ui)
             # self.login_api.button_connector()
             login_window.login_btn.clicked.connect(partial(self.check_login))
-            print("show_ui")
             self.ui.login_window.show()
         else:
             print("user_loged_in")
@@ -1980,9 +1982,7 @@ class API:
     def check_login(self):
 
         self.login_info = self.login_api.check_login()
-        print("ret 0 ", self.login_info[0])
         if self.login_info[0] == True:
-            print("ok")
             self.ui.user_name.setText(
                 "{} : {}".format(
                     texts.Titles["user_name"][self.language],
@@ -2003,7 +2003,6 @@ class API:
 
     def set_parms_login_page(self, login_info):
 
-        print("login_info", login_info)
         self.ui.user_name_2.setText(str(login_info[1]["user_name"]))
         self.ui.user_name_3.setText(str(login_info[1]["user_name"]))
         self.ui.date_created.setText(str(login_info[1]["date_created"]))
@@ -2024,7 +2023,6 @@ class API:
             self.update_user_datasts()
 
         else:
-            print("first login")
             self.ui.set_warning(
                 texts.WARNINGS["LOGIN_FIRST"][self.language], "setting_eror", level=2
             )
@@ -2034,7 +2032,7 @@ class API:
         self.datasets = self.db.get_all_datasets()
         for i in range(len(self.datasets)):
             dataset_names.append(self.datasets[i]["name"])
-        print("dataset_names", dataset_names)
+        # print("dataset_names", dataset_names)
         self.ui.comboBox_all_datasets.clear()
         self.ui.comboBox_all_datasets.addItems(dataset_names)
         self.update_table_all_datasets()
@@ -2063,11 +2061,11 @@ class API:
     def set_user_databases(self):
         dataset_names = []
         self.user_databases = self.db.get_user_databases(self.login_user_name)
-        print("******************", self.user_databases)
+        # print("******************", self.user_databases)
         self.user_default_databases = self.db.get_default_dataset(self.login_user_name)
         for i in range(len(self.user_databases)):
             dataset_names.append(self.user_databases[i]["name"])
-        print("dataset_names", dataset_names)
+        # print("dataset_names", dataset_names)
         self.ui.comboBox_user_datasets.clear()
         self.ui.comboBox_user_datasets.addItems(dataset_names)
         # self.ui.comboBox_default_dataset.addItems(dataset_names)
@@ -2135,7 +2133,6 @@ class API:
             return
         else:
             parms = self.ui.get_create_dataset_parms()
-            print(parms)
 
             if os.path.exists(os.path.join(parms["path"], parms["dataset_name"])):
                 self.ui.set_warning(
@@ -2177,7 +2174,7 @@ class API:
         mouse_position = self.mouse.get_relative_position()
         selected_label_name = self.labeling_api.ret_selcted_label()
         selected_label = self.db.get_defect_id(selected_label_name)
-        print("***************", selected_label)
+
         sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
         label_type = self.ui.get_label_type()
         self.label_bakcend[label_type].update_label(str(selected_label), mouse_position)
@@ -2187,14 +2184,14 @@ class API:
         img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
         self.ui.show_image_in_label(img, self.scale, self.position)
         self.img = img
-        print("end set_label", selected_label)
+
         self.ui.labeling_win.close_win()
         self.ui.labeling_win = None
-        print(label_type)
+
         # label_type_dict=['masks','bboxs']
 
         labels = self.label_bakcend[label_type].get()
-        # print(labels[1])
+
         self.label_memory.add(img_path, labels, label_type)
 
         labels_name = []
@@ -2233,40 +2230,47 @@ class API:
                 str(round(y * self.lenght, 2))
             )  # zarbar arz varagh ya arzesh pixel
 
-    def get_parent_path(self):
+    # def get_parent_path(self):
 
-        self.db.report_last("default_setting", "id", 30)
-        parent_path = "G:/oxin_image_grabber"  # MUST CHANGED -----------------
-        # print('asdqwdf')
-        return parent_path
+    #     self.db.report_last("default_setting", "id", 30)
+    #     parent_path = "G:/oxin_image_grabber"  # MUST CHANGED -----------------
+    #     return parent_path
 
     def set_b_parms(self):
 
-        b_parms = self.ui.get_binary_parms()
-        # ('Xbc', (300, 300), True, 2, 8, 0.001, 1, 0.2, ['/home/reyhane/PycharmProjects/trainApp_oxin1/dataset/binary', '/home/reyhane/PycharmProjects/trainApp_oxin1/dataset_user/binary'])
-        if b_parms[2]:
-            self.split_binary_dataset(b_parms[-1], b_parms[1])
-        # update chart axes given train data
-        self.update_b_chart_axes(b_parms[3])
+        if not self.runing_b_model :
+            print('statrt training binary model')
+            b_parms = self.ui.get_binary_parms()
+            # ('Xbc', (300, 300), True, 2, 8, 0.001, 1, 0.2, ['/home/reyhane/PycharmProjects/trainApp_oxin1/dataset/binary', '/home/reyhane/PycharmProjects/trainApp_oxin1/dataset_user/binary'])
+            if b_parms[2]:
+                self.split_binary_dataset(b_parms[-1], b_parms[1])
+            # update chart axes given train data
+            self.update_b_chart_axes(b_parms[3])
 
-        self.bmodel_train_thread = sQThread()
-        # Step 3: Create a worker object
-        self.bmodel_train_worker = binary_model_funcs.Binary_model_train_worker()
-        self.bmodel_train_worker.assign_parameters(
-            b_parms=b_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db
-        )
-        # Step 4: Move worker to the thread
-        self.bmodel_train_worker.moveToThread(self.bmodel_train_thread)
-        # Step 5: Connect signals and slots
-        self.bmodel_train_thread.started.connect(self.bmodel_train_worker.train_model)
-        self.bmodel_train_worker.finished.connect(self.bmodel_train_thread.quit)
-        self.bmodel_train_worker.finished.connect(
-            self.bmodel_train_worker.show_bmodel_train_result
-        )
-        self.bmodel_train_worker.finished.connect(self.bmodel_train_worker.deleteLater)
-        self.bmodel_train_thread.finished.connect(self.bmodel_train_thread.deleteLater)
-        # Step 6: Start the thread
-        self.bmodel_train_thread.start()
+            self.bmodel_train_thread = sQThread()
+            # Step 3: Create a worker object
+            self.bmodel_train_worker = binary_model_funcs.Binary_model_train_worker()
+            self.bmodel_train_worker.assign_parameters(
+                b_parms=b_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db
+            )
+            # Step 4: Move worker to the thread
+            self.bmodel_train_worker.moveToThread(self.bmodel_train_thread)
+            # Step 5: Connect signals and slots
+            self.bmodel_train_thread.started.connect(self.bmodel_train_worker.train_model)
+            self.bmodel_train_worker.finished.connect(self.bmodel_train_thread.quit)
+            self.bmodel_train_worker.finished.connect(
+                self.bmodel_train_worker.show_bmodel_train_result
+            )
+            self.bmodel_train_worker.finished.connect(self.bmodel_train_worker.deleteLater)
+            self.bmodel_train_thread.finished.connect(self.bmodel_train_thread.deleteLater)
+            # Step 6: Start the thread
+            self.runing_b_model=True
+            self.bmodel_train_thread.start()
+            
+            self.ui.binary_train.setEnabled(False)
+            self.ui.binary_train.setStyleSheet("background-color: rgb(61, 56, 70);color : white")
+            # self.ui.show_mesagges(self.ui.warning_train_page,text=texts.WARNINGS["Training"][self.language],level=1)
+
 
     def update_b_chart_axes(self, nepoch):
         for chart_postfix in self.ui.chart_names:
@@ -2706,15 +2710,15 @@ class API:
         self.ui.set_enabel(self.ui.disconnect_camera_btn, False)
 
         cam_num = self.ui.get_camera_parms()
-        print("cam num", cam_num)
+        # print("cam num", cam_num)
 
         if cam_num != texts.Titles["all"][self.language]:
 
-            print("cam_num", cam_num)
+            # print("cam_num", cam_num)
 
             cam_parms = self.get_camera_config(str(cam_num))
 
-            print("cam_parms", cam_parms)
+            # print("cam_parms", cam_parms)
 
             ret = self.cameras.add_camera(str(cam_num), cam_parms)
 
@@ -2763,7 +2767,7 @@ class API:
         cam_num = self.ui.get_camera_parms()
         cam_parms = self.get_camera_config(str(cam_num))
 
-        print("cam_num", cam_num)
+        # print("cam_num", cam_num)
 
         ret = self.cameras.disconnect_camera(cam_parms["serial_number"], str(cam_num))
 
@@ -2797,7 +2801,6 @@ class API:
         #     2000, self.auto_connect_all_cameras
         # )
         # self.timer_connect_cameras.start()
-        print("*" * 50)
         self.timer_connect_cameras = QTimer()
         self.timer_connect_cameras.timeout.connect(self.auto_connect_all_cameras)
         self.timer_connect_cameras.start(2000)
@@ -2812,7 +2815,7 @@ class API:
             # self.thread_connecting = threading.Timer(
             #     2, self.auto_connect_all_cameras
             # ).start()
-            print("asd")
+
 
         elif self.index_num == 24:
             self.index_num = 0
@@ -4550,9 +4553,6 @@ class API:
         ############################################################################
         ############################################################################
 
-    def update_cameras(self):
-
-        print("asd")
 
     def get_image(self):
         return self.img
@@ -4840,7 +4840,7 @@ class API:
             # print(self.sensor[0])
             if self.sensor[0] == "-":
                 if not self.ui.manual_plc:
-                    print(";" * 50)
+                    # print(";" * 50)
                     self.sensor = False
             else:
                 self.sensor = bool(self.sensor[0])
@@ -4933,22 +4933,24 @@ class API:
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)
                 self.my_plc.set_cams_and_prejector(n_camera, projectors)
-                self.ui.notif_manager.append_new_notif(
-                    message=str(
-                        texts.MESSEGES["start_captring"][self.ui.language]
-                        + str(n_camera)
-                        + " - "
-                        + str(projectors)
-                    ),
-                    level=1,
-                )
+                if self.show_save_notif:
+                    self.ui.notif_manager.append_new_notif(
+                        message=str(
+                            texts.MESSEGES["start_captring"][self.ui.language]
+                            + str(n_camera)
+                            + " - "
+                            + str(projectors)
+                        ),
+                        level=1,
+                    )
             else:
                 self.ImageManager.update_database()
                 self.stop_capture_func(disable_ui=False)
                 self.my_plc.set_cams_and_prejector(0, 0)
-                self.ui.notif_manager.append_new_notif(
-                    message=str(texts.MESSEGES["save_sheet"][self.ui.language]), level=1
-                )
+                if self.show_save_notif:
+                    self.ui.notif_manager.append_new_notif(
+                        message=str(texts.MESSEGES["save_sheet"][self.ui.language]), level=1
+                    )
 
     def init_check_plc(self):
         # if self.start_capture_flag:

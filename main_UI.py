@@ -586,6 +586,10 @@ class UI_main_window(QMainWindow, ui):
             texts.MESSEGES["setting_applied"][self.language], "setting", level=1
         )
 
+
+        QApplication.instance().setFont(self.fontComboBox.currentText())
+
+
     def change_language_image(self):
         """Update image of language in ui
 
@@ -1195,7 +1199,7 @@ class UI_main_window(QMainWindow, ui):
         for i in range(self.listWidget_append_img_list.rowCount()):
             if (
                 self.listWidget_append_img_list.item(i, 0).checkState()
-                == QtCore.Qt.Checked
+                == sQtCore.Qt.Checked
             ):
                 if i >= 0:
                     selected_list.append(i)

@@ -9,7 +9,7 @@ import inspect
 
 
 class dataBaseUtils:
-    def __init__(self, ui_obj, user_name="root", password="Dorsa1400@"):
+    def __init__(self, ui_obj, user_name="root", password="Dorsa-1400"):
         if ui_obj!='Null':
             self.db = database.dataBase(
                 user_name, password, "localhost", "saba_database", logger_obj=ui_obj.logger
@@ -82,7 +82,7 @@ class dataBaseUtils:
             data = data + (coil_dict[key],)
             db_headers = db_headers + key + ","
         db_headers = "(" + db_headers[:-1] + ")"
-        # print('bmodel_record:', data, 'cols:', db_headers)
+
         try:
             res = self.db.add_record(
                 data,
@@ -233,7 +233,7 @@ class dataBaseUtils:
         try:
             res, record = self.db.search("defects_info", "defect_ID", input_defect_id)
             record = record[0]
-            # print('asd',record)
+
             return record
         except:
             return []
@@ -253,8 +253,6 @@ class dataBaseUtils:
         try:
             res, record = self.db.search(self.table_cameras, "id", input_camera_id)
             record = record[0]
-            # print('camera info:', record)
-            # print('recor',record)
             return record
         except:
             return []
@@ -283,8 +281,6 @@ class dataBaseUtils:
         :return: list of binary model info (in dict)
         :rtype: list of dicts
         """
-        print(type_model)
-        print('69'*69)
         res, bmodels = self.db.get_all_content(
             type_model,
             count=count,
@@ -740,7 +736,6 @@ class dataBaseUtils:
             record_ds = record_ds[0]
             record["default_dataset"] = record_ds["name"]
 
-            # print('asd',record)
             return record
         except:
             return []
@@ -763,25 +758,23 @@ class dataBaseUtils:
             res, record = self.db.search(self.datasets_table, "id", id, int_type=False)
             record = record[0]
 
-            # print('record',record)
 
             return record["name"]
         except:
-            # print('except')
+            print('exept get_dateset_name database utils')
             return []
 
     def get_path_dataset(self, dataset_id):
 
-        # try:
-        res, record = self.db.search(self.dataset, "id", dataset_id, int_type=False)
-        record = record[0]
+        try:
+            res, record = self.db.search(self.dataset, "id", dataset_id, int_type=False)
+            record = record[0]
 
-        # print('record',record)
 
-        return record["path"]
-        # except:
-        #     print('except')
-        #     return []
+            return record["path"]
+        except:
+            print('get_path_dataset eror')
+            return []
 
     def get_all_datasets(self):
 
@@ -791,30 +784,30 @@ class dataBaseUtils:
 
     def get_user_databases(self, user_name, default=True):
 
-        # try:
-        res, record = self.db.search(
-            self.dataset, "user_own", user_name, int_type=False
-        )
+        try:
+            res, record = self.db.search(
+                self.dataset, "user_own", user_name, int_type=False
+            )
 
-        if default:
-            res, default_record = self.db.search(self.dataset, "id", 0, int_type=False)
-            record += default_record
+            if default:
+                res, default_record = self.db.search(self.dataset, "id", 0, int_type=False)
+                record += default_record
 
-        default_ds = self.get_default_dataset(user_name)
-        # print('*********{}**********'.format(default_ds))
+            default_ds = self.get_default_dataset(user_name)
 
-        for i in range(len(record)):
-            if str(record[i]["id"]) == default_ds:
-                break
 
-        record.insert(0, record.pop(i))
+            for i in range(len(record)):
+                if str(record[i]["id"]) == default_ds:
+                    break
 
-        # print('****record',record)
-        return record
+            record.insert(0, record.pop(i))
 
-    # except:
-    #     print('except')
-    #     return []
+
+            return record
+
+        except:
+            print('except get_user_databases database utils')
+            return []
 
     def update_dataset_default(self, dataset_id, user_name):
 
@@ -839,11 +832,16 @@ class dataBaseUtils:
     def set_language(self, name):
         self.db.update_record(self.setting_tabel, "language", str(name), "id", "0")
 
-    def load_language(self):
+
+    def set_language_font(self,lan,font):
+
+        self.db.update_record(self.setting_tabel, "language", str(lan), "id", "0")
+        self.db.update_record(self.setting_tabel, "font_style", str(font), "id", "0")
+
+    def load_language_font(self):
         res, record = self.db.search(self.setting_tabel, "id", "0")
         record = record[0]
-        # print(record)
-        return record["language"]
+        return record["language"],record['font_style']
 
     def load_plc_parms(self):
         """
@@ -856,7 +854,6 @@ class dataBaseUtils:
         """
         try:
             res, parms = self.db.get_all_content(self.plc)
-            # print(parms)
             return parms
 
         except:
@@ -875,9 +872,6 @@ class dataBaseUtils:
 
         try:
             for _, param in enumerate(plc_parms.keys()):
-                # update_record(self,table_name,col_name,value,id,id_value):
-                # print('_',_,'   ',param)
-                # print(plc_parms[param])
 
                 try:
                     min_value = str(int(plc_parms[param][1]))
@@ -948,7 +942,6 @@ class dataBaseUtils:
                 if name['user_own']==spec_name:
                     spec_names.append(name['name'])
 
-        print(names)
         if spec_name==False:
             return names
         

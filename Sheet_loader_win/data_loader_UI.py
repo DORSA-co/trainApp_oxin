@@ -3,6 +3,7 @@ import os
 from select import select
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore as sQtCore
 from PyQt5.QtGui import *
 # from pyqt5_plugins import *
 from PySide6.QtCharts import *
@@ -116,11 +117,11 @@ class data_loader(QMainWindow, ui):
         self.detail_dataset.setText('')
 
         for row,sheet in enumerate(sheets):
-            print('****', sheet.get_info_dict())
+
             for i,(feature, value) in enumerate( sheet.get_info_dict().items()):
                 table_item = QTableWidgetItem(str(feature))
                 table_item.setData(Qt.DisplayRole,str(value))
-                print('value',value)
+
                 if i==0:
                     table_item.setCheckState(Qt.CheckState.Unchecked)
                 self.tableWidget_dataset.setItem(row,i,table_item)
@@ -137,7 +138,14 @@ class data_loader(QMainWindow, ui):
             if self.tableWidget_dataset.item(i, 0).checkState() == QtCore.Qt.Checked:
                 text += texts.MESSEGES['sheet_details'][self.language].format(self.table_sheets[i].get_id(), self.table_sheets[i].get_time_string(), self.table_sheets[i].get_date_string(), self.table_sheets[i].get_user(), self.table_sheets[i].get_nframe(),self.table_sheets[i].get_cameras())
                 text += '\n'
+                print(self.table_sheets[i].get_path())
+                if not os.path.isdir(self.table_sheets[i].get_path()):
+                    print('path not exist')
         self.detail_dataset.setText(text)
+
+        
+
+
                 
     def set_parent_path(self, path='D:/oxin_image_grabber'):
            # api.set_parent_path()
@@ -152,8 +160,8 @@ class data_loader(QMainWindow, ui):
 
     def load(self):
         self.selected_list=[]
-        for i in range(self.tableWidget_dataset.rowCount()):    
-            if self.tableWidget_dataset.item(i, 0).checkState() == QtCore.Qt.Checked:
+        for i in range(self.tableWidget_dataset.rowCount()):   
+            if self.tableWidget_dataset.item(i, 0).checkState() == sQtCore.Qt.Checked:
                 self.selected=i
                 self.selected_list.append(self.tableWidget_dataset.item(i, 0).text())
         return self.selected_list
@@ -164,7 +172,7 @@ class data_loader(QMainWindow, ui):
     def load_images(self):
         
         self.path=os.path.join(self.par_path,str(self.records[self.selected][0]))
-        print('new_path',self.path)
+
         self.coil_number=str(self.records[self.selected][0])
         self.heat_no=str(self.records[self.selected][1])
         self.psn=str(self.records[self.selected][2])
@@ -177,9 +185,9 @@ class data_loader(QMainWindow, ui):
         if len(select) != 1:
             self.set_warning(texts.WARNINGS['SELECT_SHEET'][self.language], level=2)
             return
-        print('select',select,str(select[0]))
+
         path1= os.path.join(self.par_path,str(select[0]))
-        print('path',path1)
+
         # import os
         try:
             if os.path.exists(path1): 
@@ -204,11 +212,11 @@ class data_loader(QMainWindow, ui):
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def search_id(self):
-        print('asd')
+
         itemsTextList =  [str(self.list_show_id.item(i).text()) for i in range(self.list_show_id.count())]
-        print(itemsTextList)
+
         if self.line_search_id.text() in itemsTextList:
-            print('exist')
+
             sheets = []
             for sheet in self.load_sheets:
                 if sheet.get_id() == self.line_search_id.text():
@@ -219,11 +227,11 @@ class data_loader(QMainWindow, ui):
             self.set_warning(texts.WARNINGS['UNAV_ID'][self.language], level=2)
 
     def search_heat(self):
-        print('asd')
+
         itemsTextList =  [str(self.list_heat_number.item(i).text()) for i in range(self.list_heat_number.count())]
-        print(itemsTextList)
+
         if self.line_search_heat.text() in itemsTextList:
-            print('exist')
+
             sheets = []
             for sheet in self.load_sheets:
                 if sheet.get_heatnumber() == self.line_search_heat.text():
@@ -234,14 +242,14 @@ class data_loader(QMainWindow, ui):
             self.set_warning(texts.WARNINGS['UNAV_HEAT'][self.language], level=2)
 
     def search_psn(self):
-        print('asd')
+ 
         itemsTextList =  [str(self.list_ps_number.item(i).text()) for i in range(self.list_ps_number.count())]
-        print(itemsTextList)
+
         if self.line_search_psn.text() in itemsTextList:
-            print('exist')
+
             sheets = []
             for sheet in self.load_sheets:
-                print(sheet.get_psnumber())
+
                 if sheet.get_psnumber() == self.line_search_psn.text():
                     sheets.append(sheet)
             self.show_sheets_info(sheets)
@@ -250,11 +258,11 @@ class data_loader(QMainWindow, ui):
             self.set_warning(texts.WARNINGS['UNAV_PSN'][self.language], level=2)
 
     def search_pdln(self):
-        print('asd')
+
         itemsTextList =  [str(self.list_pdl_number.item(i).text()) for i in range(self.list_pdl_number.count())]
-        print(itemsTextList)
+
         if self.line_search_pdln.text() in itemsTextList:
-            print('exist')
+
             sheets = []
             for sheet in self.load_sheets:
                 if sheet.get_pdlnumber() == self.line_search_pdln.text():
@@ -273,7 +281,7 @@ class data_loader(QMainWindow, ui):
             self.toggleMenu(True)
 
         # PRINT BTN NAME
-        print(f'Button "{btnName}" pressed!')
+
 
     def set_warning(self, text, name='warning', level=1):
         """Show warning with time delay 2 second , all labels for show warning has been set here"""
@@ -281,7 +289,7 @@ class data_loader(QMainWindow, ui):
         waring_labels = {
             "warning": self.warning
         }
-        # print('set_warning')
+
         if text != None:
 
             if level == 1:

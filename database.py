@@ -49,7 +49,8 @@ class dataBase:
             connection = mysql.connector.connect(host=self.host,
                                                 database=self.data_base_name,
                                                 user=self.user_name,
-                                                password=self.password)  
+                                                password=self.password,
+                                                auth_plugin='mysql_native_password')  
             cursor = connection.cursor()
             return cursor,connection     
 

@@ -297,6 +297,7 @@ ERRORS = {
                                
     'REMOVE_PIP_FAILED': {'fa': ' خطا در حذف پایپ لاین ',
                     'en': ' Error while removing pipeline '},
+
 }
 
 WARNINGS = {
@@ -469,6 +470,12 @@ WARNINGS = {
             'en':'Overd Head Temperature Start Air Cooling'},  
     'overhead_temp': {'fa':'دما بیش از حد مجاز فعالسازی سیستم سرمایشی',
             'en':'Overd Head Temperature Start Air Cooling'},  
+
+
+    'Training':{'fa':'در حال آموزش دیدن',
+                        'en':'Training...'}
+
+
 }
 
 MESSEGES = {
@@ -1011,8 +1018,8 @@ Titles = {
     'df_piechart': {'fa': 'نمودار دایره ای معیوب/بدون عیب',
                     'en': 'Defect/Perfect PieChart'},
 
-    'df_barchart': {'fa': 'نمودار میله ای معیوب/بدون عیب',
-                    'en': 'Defect/Perfect BarChart'},
+    'df_barchart': {'fa': 'نمودار میله ای تعداد معیوب/بدون عیب',
+                    'en': 'Defect/Perfect Count BarChart'},
 
     'c_barchart': {'fa': 'نمودار میله ای کلاس های عیب',
                     'en': 'Defect Classes BarChart'},
@@ -1738,23 +1745,23 @@ def set_title(self, lang):
     ## history
 
     self.groupBox_33.setTitle(Titles['sf_training_records'][lang])
-    self.label_80.setText(Titles['name'][lang])
-    self.label_81.setText(Titles['epochs_2'][lang])
+    self.label_102.setText(Titles['name'][lang])
+    self.label_109.setText(Titles['epochs_2'][lang])
     self.label_134_2.setText(Titles['tune_epochs'][lang])
     self.label_134.setText(Titles['batch_size_2'][lang])
-    self.label_87.setText(Titles['split_size'][lang])
-    self.label_191.setText(Titles['start_date'][lang])
-    self.label_194.setText(Titles['end_date'][lang])
+    self.label_145.setText(Titles['split_size'][lang])
+    self.label_312.setText(Titles['start_date'][lang])
+    self.label_315.setText(Titles['end_date'][lang])
     self.binary_filter_btn.setText(Titles['search_filter'][lang])
     self.binary_clearfilter_btn.setText(Titles['clear_filters'][lang])
-    self.label_82.setText(Titles['min'][lang])
-    self.label_83.setText(Titles['max'][lang])
+    self.label_112.setText(Titles['min'][lang])
+    self.label_120.setText(Titles['max'][lang])
     self.label_85_2.setText(Titles['min'][lang])
-    self.label_86.setText(Titles['max'][lang])
+    self.label_133.setText(Titles['max'][lang])
     self.label_135.setText(Titles['min'][lang])
     self.label_136.setText(Titles['max'][lang])
-    self.label_88.setText(Titles['min'][lang])
-    self.label_89.setText(Titles['max'][lang])
+    self.label_151.setText(Titles['min'][lang])
+    self.label_152.setText(Titles['max'][lang])
     self.label_132_2.setText(Titles['min'][lang])
     self.label_133.setText(Titles['max'][lang])
     self.label_146.setText(Titles['min'][lang])
@@ -2047,9 +2054,9 @@ def set_alignment(self, lang):
         self.label_143.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_130.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
-        self.label_80.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.label_191.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.label_194.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.label_80.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.label_191.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.label_194.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_90.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_263.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2101,24 +2108,24 @@ def set_alignment(self, lang):
         self.label_9.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.pipline_name_status.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.pipline_name.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.load_dataset_pbt_btn.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.load_dataset_pbt_btn.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.groupBox_6.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_35.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.chbox_prefectdata_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.chbox_defectdata_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.BTN_load_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.BTN_load_image_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.chbox_prefectdata_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.chbox_defectdata_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.BTN_load_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.BTN_load_image_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.groupBox_7.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.BTN_set_pipline_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.BTN_set_pipline_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_36.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.BTN_set_pipline_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.BTN_evaluate_image_in_PBT_page_2.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.BTN_set_pipline_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.BTN_evaluate_image_in_PBT_page_2.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.GBox_model_evaluation_details.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_37.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_4.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
 
-        self.history_pbt_btn.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.history_pbt_btn.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.LBL_piplines_name_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.LBL_binary_model_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.LBL_binary_accuracy_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2135,7 +2142,7 @@ def set_alignment(self, lang):
         self.label_114.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.LBL_localization_model_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.LBL_localiztion_dice_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.abel_115.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_115.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_116.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.LBL_localiztion_iou_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_117.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2160,8 +2167,8 @@ def set_alignment(self, lang):
         self.label_294.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.pipline_hour_lineedit.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.pipline_minut_lineedit.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.BTN_clear_filter_in_PBT.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.BTN_search_and_filter_in_PBT.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.BTN_clear_filter_in_PBT.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.BTN_search_and_filter_in_PBT.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
 
     elif lang == 'en':
@@ -2212,9 +2219,9 @@ def set_alignment(self, lang):
         self.label_143.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_130.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
-        self.label_80.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.label_191.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.label_194.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.label_80.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.label_191.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.label_194.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         
         self.label_90.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_263.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2266,25 +2273,25 @@ def set_alignment(self, lang):
         self.label_9.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.pipline_name_status.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.pipline_name.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.load_dataset_pbt_btn.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.load_dataset_pbt_btn.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.groupBox_6.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_35.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.chbox_prefectdata_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.chbox_defectdata_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.BTN_load_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.BTN_load_image_in_PBT_pag.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.chbox_prefectdata_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.chbox_defectdata_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.BTN_load_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.BTN_load_image_in_PBT_pag.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.groupBox_7.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.groupBox_7.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.BTN_set_pipline_in_PBT_pag.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.BTN_set_pipline_in_PBT_pag.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_36.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.BTN_set_pipline_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.BTN_evaluate_image_in_PBT_page_2.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.GBox_model_evaluation_detail.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.BTN_set_pipline_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.BTN_evaluate_image_in_PBT_page_2.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.GBox_model_evaluation_detail.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_37.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_40.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
 
-        self.history_pbt_btn.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.history_pbt_btn.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.LBL_piplines_name_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.LBL_binary_model_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.LBL_binary_accuracy_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2301,7 +2308,7 @@ def set_alignment(self, lang):
         self.label_114.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.LBL_localization_model_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.LBL_localiztion_dice_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.abel_115.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_115.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_116.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.LBL_localiztion_iou_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_117.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2326,8 +2333,8 @@ def set_alignment(self, lang):
         self.label_294.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.pipline_hour_lineedit.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.pipline_minut_lineedit.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.BTN_clear_filter_in_PBT.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.BTN_search_and_filter_in_PBT.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.BTN_clear_filter_in_PBT.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.BTN_search_and_filter_in_PBT.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
     
     set_alignment
 

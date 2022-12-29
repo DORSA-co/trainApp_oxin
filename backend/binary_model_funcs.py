@@ -1030,6 +1030,14 @@ class Binary_model_train_worker(sQObject):
             self.api_obj.bmodel_train_result = save_new_binary_model_record(
                 ui_obj=self.ui_obj, db_obj=self.db_obj, bmodel_records=bmodel_records
             )
+
+            #update ui
+
+            self.ui_obj.binary_train.setEnabled(True)
+            self.ui_obj.binary_train.setStyleSheet("background-color:#ff0000;color:white;")
+            # self.ui_obj.show_mesagges(self.ui_obj.warning_train_page,text='Comsssssssssspleted',level=1)
+            self.api_obj.runing_b_model=False
+
         self.finished.emit()
 
     def show_bmodel_train_result(self):

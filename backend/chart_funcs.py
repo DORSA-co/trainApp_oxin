@@ -251,7 +251,7 @@ def update_chart_test(ui_obj, chart_postfixes, scroll_obj):
     nepoch, last_epoch = get_nepochs_and_lastepoch()
     while last_epoch <= nepoch-1:
         #
-        if last_epoch >= axisX_range and not ui_obj.checkBox.isChecked(): 
+        if last_epoch >= axisX_range and not ui_obj.binary_chart_checkbox.isChecked(): 
             scroll_obj.setMaximum(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
             scroll_obj.setValue(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
         #
@@ -268,7 +268,7 @@ def update_chart_test(ui_obj, chart_postfixes, scroll_obj):
 def update_chart(ui_obj, chart_postfixes, last_epoch, logs, scroll_obj):
     params = [logs['loss'], logs['accuracy']*100, logs['Precision']*100, logs['Recall']*100, logs['val_loss'], logs['val_accuracy']*100, logs['val_Precision']*100, logs['val_Recall']*100]
     
-    if last_epoch >= axisX_range and not ui_obj.checkBox.isChecked():
+    if last_epoch >= axisX_range and not ui_obj.binary_chart_checkbox.isChecked():
         scroll_obj.setMaximum(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
         scroll_obj.setValue(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
     #

@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1274</width>
+    <width>1143</width>
     <height>726</height>
    </rect>
   </property>
@@ -30,7 +30,6 @@
    <property name="font">
     <font>
      <pointsize>10</pointsize>
-     <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
@@ -77,7 +76,7 @@ Left Menu */
 }
 #topLogo {
 	background-color: Transparent;
-	background-image: url(:/images/images/images/whiteview.png);
+	
 	background-position: centered;
 	background-repeat: no-repeat;
 }
@@ -694,7 +693,6 @@ Button */
                <font>
                 <family>Segoe UI</family>
                 <pointsize>10</pointsize>
-                <weight>50</weight>
                 <italic>false</italic>
                 <bold>false</bold>
                </font>
@@ -727,7 +725,6 @@ Button */
               <font>
                <family>Segoe UI</family>
                <pointsize>10</pointsize>
-               <weight>50</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -758,7 +755,6 @@ Button */
               <font>
                <family>Segoe UI</family>
                <pointsize>10</pointsize>
-               <weight>50</weight>
                <italic>false</italic>
                <bold>false</bold>
               </font>
@@ -847,7 +843,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -887,7 +882,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -928,7 +922,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -975,7 +968,6 @@ Button */
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1477,7 +1469,6 @@ text-align:center;</string>
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -1933,7 +1924,6 @@ QPushButton:hover {
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                     <stylestrategy>PreferDefault</stylestrategy>
@@ -2480,7 +2470,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
 }</string>
                             </property>
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="tab_5">
                              <attribute name="title">
@@ -2593,14 +2583,14 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                                          </property>
                                          <property name="styleSheet">
                                           <string notr="true">QComboBox{
-	background-color: rgb(200,200,200);
+	background-color: rgb(255, 255, 255);
 	border-radius: 5px;
-	border: 1px solid rgb(33, 37, 43);
+	border: 2px solid rgb(33, 37, 43);
 	padding: 5px;
-	padding-left: 5px;
+	padding-left: 10px;
 }
 QComboBox:hover{
-	border: 1px solid rgb(64, 71, 188);
+	border: 2px solid rgb(64, 71, 88);
 }
 QComboBox::drop-down {
 	subcontrol-origin: padding;
@@ -2617,8 +2607,8 @@ QComboBox::drop-down {
  }
 QComboBox QAbstractItemView {
 	color: rgb(255, 121, 198);	
-	background-color: rgb(33, 37, 43);
-	padding: 5px;
+	background-color: rgb(255, 255, 255);
+	padding: 10px;
 	selection-background-color: rgb(39, 44, 54);
 }</string>
                                          </property>
@@ -3565,7 +3555,7 @@ border:None;</string>
                                       <x>0</x>
                                       <y>0</y>
                                       <width>480</width>
-                                      <height>27</height>
+                                      <height>32</height>
                                      </rect>
                                     </property>
                                     <property name="maximumSize">
@@ -3812,7 +3802,7 @@ QPushButton:disabled {
                                    <x>0</x>
                                    <y>0</y>
                                    <width>688</width>
-                                   <height>17</height>
+                                   <height>26</height>
                                   </rect>
                                  </property>
                                  <layout class="QHBoxLayout" name="horizontalLayout_213">
@@ -7113,326 +7103,349 @@ QCheckBox::indicator:unchecked {
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QWidget" name="widget" native="true">
-                                   <property name="minimumSize">
-                                    <size>
-                                     <width>580</width>
-                                     <height>30</height>
-                                    </size>
+                                  <widget class="QFrame" name="frame_15">
+                                   <property name="frameShape">
+                                    <enum>QFrame::StyledPanel</enum>
                                    </property>
-                                   <property name="maximumSize">
-                                    <size>
-                                     <width>16777215</width>
-                                     <height>30</height>
-                                    </size>
+                                   <property name="frameShadow">
+                                    <enum>QFrame::Raised</enum>
                                    </property>
-                                   <layout class="QHBoxLayout" name="horizontalLayout_151">
+                                   <layout class="QVBoxLayout" name="verticalLayout_37">
                                     <property name="leftMargin">
-                                     <number>3</number>
+                                     <number>0</number>
                                     </property>
                                     <property name="topMargin">
-                                     <number>2</number>
+                                     <number>0</number>
                                     </property>
                                     <property name="rightMargin">
-                                     <number>3</number>
+                                     <number>0</number>
                                     </property>
                                     <property name="bottomMargin">
-                                     <number>2</number>
+                                     <number>0</number>
                                     </property>
                                     <item>
-                                     <widget class="QLabel" name="label_45">
+                                     <widget class="QWidget" name="widget" native="true">
                                       <property name="minimumSize">
                                        <size>
-                                        <width>90</width>
-                                        <height>0</height>
+                                        <width>580</width>
+                                        <height>30</height>
                                        </size>
                                       </property>
                                       <property name="maximumSize">
                                        <size>
                                         <width>16777215</width>
-                                        <height>16777215</height>
+                                        <height>30</height>
                                        </size>
                                       </property>
-                                      <property name="font">
-                                       <font>
-                                        <family>Segoe UI</family>
-                                        <pointsize>10</pointsize>
-                                        <weight>50</weight>
-                                        <italic>false</italic>
-                                        <bold>false</bold>
-                                        <stylestrategy>PreferDefault</stylestrategy>
-                                        <kerning>true</kerning>
-                                       </font>
-                                      </property>
-                                      <property name="contextMenuPolicy">
-                                       <enum>Qt::DefaultContextMenu</enum>
-                                      </property>
-                                      <property name="acceptDrops">
-                                       <bool>false</bool>
-                                      </property>
-                                      <property name="styleSheet">
-                                       <string notr="true"> background-color:black;
+                                      <layout class="QHBoxLayout" name="horizontalLayout_151">
+                                       <property name="leftMargin">
+                                        <number>3</number>
+                                       </property>
+                                       <property name="topMargin">
+                                        <number>2</number>
+                                       </property>
+                                       <property name="rightMargin">
+                                        <number>3</number>
+                                       </property>
+                                       <property name="bottomMargin">
+                                        <number>2</number>
+                                       </property>
+                                       <item>
+                                        <widget class="QLabel" name="label_45">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>90</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>16777215</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>Segoe UI</family>
+                                           <pointsize>10</pointsize>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                           <stylestrategy>PreferDefault</stylestrategy>
+                                           <kerning>true</kerning>
+                                          </font>
+                                         </property>
+                                         <property name="contextMenuPolicy">
+                                          <enum>Qt::DefaultContextMenu</enum>
+                                         </property>
+                                         <property name="acceptDrops">
+                                          <bool>false</bool>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true"> background-color:black;
  border: 1px solid gray;
  border-radius: 5px;
 /* margin-top: 1ex; /* leave space at the top for the title */
 text-Align:left;
 color:white;</string>
-                                      </property>
-                                      <property name="text">
-                                       <string>Position</string>
-                                      </property>
-                                      <property name="alignment">
-                                       <set>Qt::AlignCenter</set>
-                                      </property>
-                                      <property name="wordWrap">
-                                       <bool>false</bool>
-                                      </property>
-                                      <property name="openExternalLinks">
-                                       <bool>false</bool>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QLabel" name="label_234">
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>19</width>
-                                        <height>30</height>
-                                       </size>
-                                      </property>
-                                      <property name="styleSheet">
-                                       <string notr="true"> border: 2px solid gray;
+                                         </property>
+                                         <property name="text">
+                                          <string>Position</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                         <property name="wordWrap">
+                                          <bool>false</bool>
+                                         </property>
+                                         <property name="openExternalLinks">
+                                          <bool>false</bool>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_234">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>19</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true"> border: 2px solid gray;
  border-radius:5px;
 /* margin-top: 1ex; /* leave space at the top for the title */
 text-Align:left;
 color:black;</string>
-                                      </property>
-                                      <property name="text">
-                                       <string/>
-                                      </property>
-                                      <property name="pixmap">
-                                       <pixmap>images/pngaaa.com-4780825 - Copy.png</pixmap>
-                                      </property>
-                                      <property name="scaledContents">
-                                       <bool>true</bool>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QLabel" name="label_221">
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>13</width>
-                                        <height>23</height>
-                                       </size>
-                                      </property>
-                                      <property name="styleSheet">
-                                       <string notr="true"> background-color: Transparent;
+                                         </property>
+                                         <property name="text">
+                                          <string/>
+                                         </property>
+                                         <property name="pixmap">
+                                          <pixmap>images/pngaaa.com-4780825 - Copy.png</pixmap>
+                                         </property>
+                                         <property name="scaledContents">
+                                          <bool>true</bool>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_221">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>13</width>
+                                           <height>23</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true"> background-color: Transparent;
  border: 0px solid gray;
  border-radius: 0px;
 </string>
-                                      </property>
-                                      <property name="text">
-                                       <string>:</string>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QLabel" name="current_pos_y">
-                                      <property name="minimumSize">
-                                       <size>
-                                        <width>45</width>
-                                        <height>25</height>
-                                       </size>
-                                      </property>
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>45</width>
-                                        <height>25</height>
-                                       </size>
-                                      </property>
-                                      <property name="styleSheet">
-                                       <string notr="true"> border: 2px solid gray;
+                                         </property>
+                                         <property name="text">
+                                          <string>:</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="current_pos_y">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>45</width>
+                                           <height>25</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>45</width>
+                                           <height>25</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true"> border: 2px solid gray;
  border-radius: 5px;
 /* margin-top: 1ex; /* leave space at the top for the title */
 text-Align:left;
 color:black;</string>
-                                      </property>
-                                      <property name="text">
-                                       <string>0</string>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QLabel" name="label_222">
-                                      <property name="styleSheet">
-                                       <string notr="true"> background-color: Transparent;
+                                         </property>
+                                         <property name="text">
+                                          <string>0</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_222">
+                                         <property name="styleSheet">
+                                          <string notr="true"> background-color: Transparent;
  border: 0px solid gray;
  border-radius: 0px;
 </string>
-                                      </property>
-                                      <property name="text">
-                                       <string>cm</string>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QLabel" name="label_233">
-                                      <property name="minimumSize">
-                                       <size>
-                                        <width>29</width>
-                                        <height>22</height>
-                                       </size>
-                                      </property>
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>29</width>
-                                        <height>22</height>
-                                       </size>
-                                      </property>
-                                      <property name="styleSheet">
-                                       <string notr="true"> border: 2px solid gray;
+                                         </property>
+                                         <property name="text">
+                                          <string>cm</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_233">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>29</width>
+                                           <height>22</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>29</width>
+                                           <height>22</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true"> border: 2px solid gray;
  border-radius:5px;
 /* margin-top: 1ex; /* leave space at the top for the title */
 text-Align:left;
 color:black;</string>
-                                      </property>
-                                      <property name="text">
-                                       <string/>
-                                      </property>
-                                      <property name="pixmap">
-                                       <pixmap>images/pngaaa.com-4780825.png</pixmap>
-                                      </property>
-                                      <property name="scaledContents">
-                                       <bool>true</bool>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QLabel" name="label_224">
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>13</width>
-                                        <height>23</height>
-                                       </size>
-                                      </property>
-                                      <property name="styleSheet">
-                                       <string notr="true"> background-color: Transparent;
+                                         </property>
+                                         <property name="text">
+                                          <string/>
+                                         </property>
+                                         <property name="pixmap">
+                                          <pixmap>images/pngaaa.com-4780825.png</pixmap>
+                                         </property>
+                                         <property name="scaledContents">
+                                          <bool>true</bool>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_224">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>13</width>
+                                           <height>23</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true"> background-color: Transparent;
  border: 0px solid gray;
  border-radius: 0px;
 </string>
-                                      </property>
-                                      <property name="text">
-                                       <string>:</string>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QLabel" name="current_pos_x">
-                                      <property name="minimumSize">
-                                       <size>
-                                        <width>45</width>
-                                        <height>25</height>
-                                       </size>
-                                      </property>
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>45</width>
-                                        <height>25</height>
-                                       </size>
-                                      </property>
-                                      <property name="styleSheet">
-                                       <string notr="true"> border: 2px solid gray;
+                                         </property>
+                                         <property name="text">
+                                          <string>:</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="current_pos_x">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>45</width>
+                                           <height>25</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>45</width>
+                                           <height>25</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true"> border: 2px solid gray;
  border-radius: 5px;
 /* margin-top: 1ex; /* leave space at the top for the title */
 text-Align:left;
 color:black;</string>
-                                      </property>
-                                      <property name="text">
-                                       <string>0</string>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QLabel" name="label_47">
-                                      <property name="styleSheet">
-                                       <string notr="true"> background-color: Transparent;
+                                         </property>
+                                         <property name="text">
+                                          <string>0</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_47">
+                                         <property name="styleSheet">
+                                          <string notr="true"> background-color: Transparent;
  border: 0px solid gray;
  border-radius: 0px;
 </string>
-                                      </property>
-                                      <property name="text">
-                                       <string>cm</string>
-                                      </property>
+                                         </property>
+                                         <property name="text">
+                                          <string>cm</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="Line" name="line_17">
+                                         <property name="orientation">
+                                          <enum>Qt::Vertical</enum>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <spacer name="horizontalSpacer_14">
+                                         <property name="orientation">
+                                          <enum>Qt::Horizontal</enum>
+                                         </property>
+                                         <property name="sizeHint" stdset="0">
+                                          <size>
+                                           <width>40</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                        </spacer>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="warning_data_page">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>200</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="text">
+                                          <string/>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QProgressBar" name="progressBar_SI">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>0</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>0</width>
+                                           <height>16777215</height>
+                                          </size>
+                                         </property>
+                                         <property name="value">
+                                          <number>0</number>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <spacer name="horizontalSpacer_15">
+                                         <property name="orientation">
+                                          <enum>Qt::Horizontal</enum>
+                                         </property>
+                                         <property name="sizeHint" stdset="0">
+                                          <size>
+                                           <width>40</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                        </spacer>
+                                       </item>
+                                      </layout>
                                      </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="Line" name="line_17">
-                                      <property name="orientation">
-                                       <enum>Qt::Vertical</enum>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <spacer name="horizontalSpacer_14">
-                                      <property name="orientation">
-                                       <enum>Qt::Horizontal</enum>
-                                      </property>
-                                      <property name="sizeHint" stdset="0">
-                                       <size>
-                                        <width>40</width>
-                                        <height>20</height>
-                                       </size>
-                                      </property>
-                                     </spacer>
-                                    </item>
-                                    <item>
-                                     <widget class="QLabel" name="warning_data_page">
-                                      <property name="minimumSize">
-                                       <size>
-                                        <width>200</width>
-                                        <height>0</height>
-                                       </size>
-                                      </property>
-                                      <property name="text">
-                                       <string/>
-                                      </property>
-                                      <property name="alignment">
-                                       <set>Qt::AlignCenter</set>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QProgressBar" name="progressBar_SI">
-                                      <property name="minimumSize">
-                                       <size>
-                                        <width>0</width>
-                                        <height>0</height>
-                                       </size>
-                                      </property>
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>0</width>
-                                        <height>16777215</height>
-                                       </size>
-                                      </property>
-                                      <property name="value">
-                                       <number>0</number>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <spacer name="horizontalSpacer_15">
-                                      <property name="orientation">
-                                       <enum>Qt::Horizontal</enum>
-                                      </property>
-                                      <property name="sizeHint" stdset="0">
-                                       <size>
-                                        <width>40</width>
-                                        <height>20</height>
-                                       </size>
-                                      </property>
-                                     </spacer>
                                     </item>
                                    </layout>
                                   </widget>
@@ -7466,43 +7479,6 @@ color:black;</string>
                                       <property name="spacing">
                                        <number>0</number>
                                       </property>
-                                      <item>
-                                       <widget class="QPushButton" name="label_btn_SI">
-                                        <property name="enabled">
-                                         <bool>true</bool>
-                                        </property>
-                                        <property name="minimumSize">
-                                         <size>
-                                          <width>202</width>
-                                          <height>25</height>
-                                         </size>
-                                        </property>
-                                        <property name="maximumSize">
-                                         <size>
-                                          <width>202</width>
-                                          <height>25</height>
-                                         </size>
-                                        </property>
-                                        <property name="cursor">
-                                         <cursorShape>PointingHandCursor</cursorShape>
-                                        </property>
-                                        <property name="styleSheet">
-                                         <string notr="true">QPushButton{
-background-color:rgb(255,255,255);
-color:rgb(0,0,0);
-}
-QPushButton:disabled {
-background-color:#cccccc;
-}
-QPushButton:enabled {
-    background-color:rgb(255,255,255);
-}</string>
-                                        </property>
-                                        <property name="text">
-                                         <string>Label</string>
-                                        </property>
-                                       </widget>
-                                      </item>
                                       <item>
                                        <widget class="QGroupBox" name="groupBox">
                                         <property name="minimumSize">
@@ -7641,7 +7617,6 @@ QPushButton:enabled-hover{
                                                 <font>
                                                  <family>Segoe UI</family>
                                                  <pointsize>10</pointsize>
-                                                 <weight>50</weight>
                                                  <italic>false</italic>
                                                  <bold>false</bold>
                                                  <stylestrategy>PreferDefault</stylestrategy>
@@ -7932,13 +7907,50 @@ QTableWidget::indicator:unchecked {
                                         </layout>
                                        </widget>
                                       </item>
+                                      <item>
+                                       <widget class="QPushButton" name="label_btn_SI">
+                                        <property name="enabled">
+                                         <bool>true</bool>
+                                        </property>
+                                        <property name="minimumSize">
+                                         <size>
+                                          <width>202</width>
+                                          <height>25</height>
+                                         </size>
+                                        </property>
+                                        <property name="maximumSize">
+                                         <size>
+                                          <width>202</width>
+                                          <height>25</height>
+                                         </size>
+                                        </property>
+                                        <property name="cursor">
+                                         <cursorShape>PointingHandCursor</cursorShape>
+                                        </property>
+                                        <property name="styleSheet">
+                                         <string notr="true">QPushButton{
+background-color:rgb(255,255,255);
+color:rgb(0,0,0);
+}
+QPushButton:disabled {
+background-color:#cccccc;
+}
+QPushButton:enabled {
+    background-color:rgb(255,255,255);
+}</string>
+                                        </property>
+                                        <property name="text">
+                                         <string>Label</string>
+                                        </property>
+                                       </widget>
+                                      </item>
                                      </layout>
                                     </item>
                                     <item>
                                      <widget class="QGroupBox" name="groupBox_2">
                                       <property name="minimumSize">
                                        <size>
-                                        <width>325</width>
+                                        <width>250</width>
                                         <height>0</height>
                                        </size>
                                       </property>
@@ -8535,7 +8547,6 @@ QPushButton:pressed {
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -8573,7 +8584,6 @@ QPushButton:pressed {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>75</weight>
                                        <italic>false</italic>
                                        <bold>true</bold>
                                       </font>
@@ -8619,7 +8629,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>590</height>
+                                     <height>591</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -8781,7 +8791,6 @@ font-size: 30%;</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -8819,7 +8828,6 @@ font-size: 30%;</string>
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>75</weight>
                                        <italic>false</italic>
                                        <bold>true</bold>
                                       </font>
@@ -8865,7 +8873,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>590</height>
+                                     <height>591</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -9986,7 +9994,7 @@ QPushButton:hover {
                                 </size>
                                </property>
                                <property name="title">
-                                <string>Defect/Perfect PieChart</string>
+                                <string>Defect/Perfect Count PieChart</string>
                                </property>
                               </widget>
                              </item>
@@ -10183,8 +10191,9 @@ QPushButton:hover {
                            <widget class="QTextEdit" name="mainHelp">
                             <property name="html">
                              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; background-color:transparent;&quot;&gt;Welcome to SENS TRAINER App&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; background-color:transparent;&quot;&gt;To start working with the software, click on the desired key from the left menu. To see the details of each key, click on the three dots icon or hold the mouse pointer over the desired key.&lt;/span&gt;&lt;/p&gt;
@@ -11082,7 +11091,6 @@ background-color: rgb(212, 212, 212);</string>
                                 <font>
                                  <family>Segoe UI</family>
                                  <pointsize>10</pointsize>
-                                 <weight>75</weight>
                                  <italic>false</italic>
                                  <bold>true</bold>
                                 </font>
@@ -11113,7 +11121,6 @@ background-color: rgb(212, 212, 212);</string>
                                 <font>
                                  <family>Segoe UI</family>
                                  <pointsize>10</pointsize>
-                                 <weight>50</weight>
                                  <italic>false</italic>
                                  <bold>false</bold>
                                 </font>
@@ -12008,9 +12015,15 @@ color : rgb(0,0,0);</string>
                               </item>
                               <item>
                                <widget class="QLineEdit" name="pipline_name">
-                                <property name="maximumSize">
+                                <property name="minimumSize">
                                  <size>
                                   <width>200</width>
+                                  <height>0</height>
+                                 </size>
+                                </property>
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>500</width>
                                   <height>16777215</height>
                                  </size>
                                 </property>
@@ -12444,13 +12457,19 @@ QPushButton:enabled-hover{
                               </size>
                              </property>
                              <property name="frameShape">
-                              <enum>QFrame::StyledPanel</enum>
+                              <enum>QFrame::NoFrame</enum>
                              </property>
                              <property name="frameShadow">
                               <enum>QFrame::Raised</enum>
                              </property>
                              <layout class="QHBoxLayout" name="horizontalLayout_112">
+                              <property name="leftMargin">
+                               <number>0</number>
+                              </property>
                               <property name="topMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="rightMargin">
                                <number>0</number>
                               </property>
                               <property name="bottomMargin">
@@ -12460,7 +12479,7 @@ QPushButton:enabled-hover{
                                <widget class="QGroupBox" name="groupBox_6">
                                 <property name="minimumSize">
                                  <size>
-                                  <width>682</width>
+                                  <width>740</width>
                                   <height>0</height>
                                  </size>
                                 </property>
@@ -12502,72 +12521,74 @@ QPushButton:enabled-hover{
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QFrame" name="frame_94">
-                                   <property name="minimumSize">
+                                  <spacer name="horizontalSpacer_18">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                   <property name="sizeType">
+                                    <enum>QSizePolicy::Fixed</enum>
+                                   </property>
+                                   <property name="sizeHint" stdset="0">
                                     <size>
-                                     <width>60</width>
-                                     <height>36</height>
+                                     <width>19</width>
+                                     <height>20</height>
                                     </size>
                                    </property>
-                                   <property name="maximumSize">
-                                    <size>
-                                     <width>62</width>
-                                     <height>56</height>
-                                    </size>
+                                  </spacer>
+                                 </item>
+                                 <item>
+                                  <widget class="QCheckBox" name="chbox_defectdata_in_PBT_page">
+                                   <property name="enabled">
+                                    <bool>true</bool>
                                    </property>
-                                   <property name="frameShape">
-                                    <enum>QFrame::StyledPanel</enum>
+                                   <property name="text">
+                                    <string>Defect</string>
                                    </property>
-                                   <property name="frameShadow">
-                                    <enum>QFrame::Raised</enum>
+                                   <property name="checked">
+                                    <bool>true</bool>
                                    </property>
-                                   <layout class="QVBoxLayout" name="verticalLayout_50">
-                                    <property name="leftMargin">
-                                     <number>0</number>
-                                    </property>
-                                    <property name="topMargin">
-                                     <number>0</number>
-                                    </property>
-                                    <property name="rightMargin">
-                                     <number>0</number>
-                                    </property>
-                                    <property name="bottomMargin">
-                                     <number>0</number>
-                                    </property>
-                                    <item>
-                                     <widget class="QCheckBox" name="chbox_prefectdata_in_PBT_page">
-                                      <property name="enabled">
-                                       <bool>true</bool>
-                                      </property>
-                                      <property name="text">
-                                       <string>Perfect</string>
-                                      </property>
-                                      <property name="checkable">
-                                       <bool>true</bool>
-                                      </property>
-                                      <property name="checked">
-                                       <bool>true</bool>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QCheckBox" name="chbox_defectdata_in_PBT_page">
-                                      <property name="enabled">
-                                       <bool>true</bool>
-                                      </property>
-                                      <property name="text">
-                                       <string>Defect</string>
-                                      </property>
-                                      <property name="checked">
-                                       <bool>true</bool>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                   </layout>
                                   </widget>
                                  </item>
                                  <item>
+                                  <widget class="QCheckBox" name="chbox_prefectdata_in_PBT_page">
+                                   <property name="enabled">
+                                    <bool>true</bool>
+                                   </property>
+                                   <property name="text">
+                                    <string>Perfect</string>
+                                   </property>
+                                   <property name="checkable">
+                                    <bool>true</bool>
+                                   </property>
+                                   <property name="checked">
+                                    <bool>true</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <spacer name="horizontalSpacer_64">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                   <property name="sizeType">
+                                    <enum>QSizePolicy::Fixed</enum>
+                                   </property>
+                                   <property name="sizeHint" stdset="0">
+                                    <size>
+                                     <width>19</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                  </spacer>
+                                 </item>
+                                 <item>
                                   <widget class="QPushButton" name="BTN_load_in_PBT_page">
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>56</width>
+                                     <height>26</height>
+                                    </size>
+                                   </property>
                                    <property name="maximumSize">
                                     <size>
                                      <width>70</width>
@@ -12608,6 +12629,12 @@ QPushButton:enabled-hover{
                                  </item>
                                  <item>
                                   <widget class="QPushButton" name="BTN_load_image_in_PBT_page">
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>93</width>
+                                     <height>26</height>
+                                    </size>
+                                   </property>
                                    <property name="maximumSize">
                                     <size>
                                      <width>101</width>
@@ -12649,19 +12676,22 @@ QPushButton:enabled-hover{
                                 <property name="orientation">
                                  <enum>Qt::Horizontal</enum>
                                 </property>
+                                <property name="sizeType">
+                                 <enum>QSizePolicy::Fixed</enum>
+                                </property>
                                 <property name="sizeHint" stdset="0">
                                  <size>
-                                  <width>40</width>
+                                  <width>22</width>
                                   <height>20</height>
                                  </size>
                                 </property>
                                </spacer>
                               </item>
-                              <item>
+                              <item alignment="Qt::AlignLeft">
                                <widget class="QGroupBox" name="groupBox_7">
                                 <property name="minimumSize">
                                  <size>
-                                  <width>300</width>
+                                  <width>271</width>
                                   <height>0</height>
                                  </size>
                                 </property>
@@ -12700,6 +12730,12 @@ QPushButton:enabled-hover{
                                  </item>
                                  <item>
                                   <widget class="QPushButton" name="BTN_set_pipline_in_PBT_page">
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>0</width>
+                                     <height>26</height>
+                                    </size>
+                                   </property>
                                    <property name="maximumSize">
                                     <size>
                                      <width>50</width>
@@ -13187,7 +13223,7 @@ border:Transparent</string>
                                    <x>0</x>
                                    <y>0</y>
                                    <width>323</width>
-                                   <height>699</height>
+                                   <height>671</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_64">
@@ -13205,7 +13241,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -13245,7 +13280,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -13282,7 +13316,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -13324,7 +13357,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13352,7 +13384,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13378,7 +13409,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13406,7 +13436,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13447,7 +13476,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -13489,7 +13517,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13517,7 +13544,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13543,7 +13569,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13571,7 +13596,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13612,7 +13636,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -13654,7 +13677,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13682,7 +13704,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13708,7 +13729,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13736,7 +13756,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13777,7 +13796,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -13819,7 +13837,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13847,7 +13864,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13873,7 +13889,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13901,7 +13916,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -13945,7 +13959,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -13982,7 +13995,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -14024,7 +14036,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14052,7 +14063,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14078,7 +14088,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14106,7 +14115,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14147,7 +14155,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -14189,7 +14196,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14217,7 +14223,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14243,7 +14248,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14271,7 +14275,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14315,7 +14318,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -14352,7 +14354,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -14394,7 +14395,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14422,7 +14422,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14448,7 +14447,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14476,7 +14474,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14517,7 +14514,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -14559,7 +14555,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14587,7 +14582,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14613,7 +14607,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14641,7 +14634,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14682,7 +14674,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -14724,7 +14715,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14752,7 +14742,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14778,7 +14767,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14806,7 +14794,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14847,7 +14834,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -14889,7 +14875,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14917,7 +14902,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14943,7 +14927,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -14971,7 +14954,6 @@ border:Transparent</string>
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -15018,7 +15000,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15046,7 +15027,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15074,7 +15054,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15102,7 +15081,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15130,7 +15108,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15158,7 +15135,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15194,7 +15170,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15222,7 +15197,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15250,7 +15224,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15278,7 +15251,6 @@ border:Transparent</string>
                                        <font>
                                         <family>Segoe UI</family>
                                         <pointsize>10</pointsize>
-                                        <weight>50</weight>
                                         <italic>false</italic>
                                         <bold>false</bold>
                                        </font>
@@ -15643,11 +15615,17 @@ color : rgb(0,0,0);</string>
                               <height>16777215</height>
                              </size>
                             </property>
+                            <property name="cursor">
+                             <cursorShape>PointingHandCursor</cursorShape>
+                            </property>
                             <property name="styleSheet">
                              <string notr="true">QPushButton {
-	background-color: rgb(170 , 170,170);
+background-color: rgb(100,100,100);
 	color: rgb(0,0,0);
 	border: none;
+
+	text-align:center;
+
 }
 
 QPushButton:hover {
@@ -15673,15 +15651,21 @@ QPushButton:hover {
                               <height>16777215</height>
                              </size>
                             </property>
+                            <property name="cursor">
+                             <cursorShape>PointingHandCursor</cursorShape>
+                            </property>
                             <property name="styleSheet">
                              <string notr="true">QPushButton {
 background-color: rgb(100,100,100);
 	color: rgb(0,0,0);
 	border: none;
+
+	text-align:center;
+
 }
 
 QPushButton:hover {
-	background-color:  rgb(150, 150, 150);
+	background-color:  rgb(197 , 195,196);
 }</string>
                             </property>
                             <property name="text">
@@ -15703,15 +15687,21 @@ QPushButton:hover {
                               <height>16777215</height>
                              </size>
                             </property>
+                            <property name="cursor">
+                             <cursorShape>PointingHandCursor</cursorShape>
+                            </property>
                             <property name="styleSheet">
                              <string notr="true">QPushButton {
 background-color: rgb(100,100,100);
 	color: rgb(0,0,0);
 	border: none;
+
+	text-align:center;
+
 }
 
 QPushButton:hover {
-	background-color:  rgb(150, 150, 150);
+	background-color:  rgb(197 , 195,196);
 }</string>
                             </property>
                             <property name="text">
@@ -16949,12 +16939,12 @@ QRadioButton::indicator:unchecked {
                               <item>
                                <widget class="QFrame" name="frame_66">
                                 <property name="frameShape">
-                                 <enum>QFrame::StyledPanel</enum>
+                                 <enum>QFrame::NoFrame</enum>
                                 </property>
                                 <property name="frameShadow">
                                  <enum>QFrame::Raised</enum>
                                 </property>
-                                <layout class="QHBoxLayout" name="horizontalLayout_138">
+                                <layout class="QVBoxLayout" name="verticalLayout_47">
                                  <property name="spacing">
                                   <number>20</number>
                                  </property>
@@ -16970,7 +16960,7 @@ QRadioButton::indicator:unchecked {
                                  <property name="bottomMargin">
                                   <number>0</number>
                                  </property>
-                                 <item>
+                                 <item alignment="Qt::AlignHCenter">
                                   <widget class="QPushButton" name="binary_train">
                                    <property name="enabled">
                                     <bool>true</bool>
@@ -16983,13 +16973,13 @@ QRadioButton::indicator:unchecked {
                                    </property>
                                    <property name="minimumSize">
                                     <size>
-                                     <width>120</width>
-                                     <height>30</height>
+                                     <width>199</width>
+                                     <height>0</height>
                                     </size>
                                    </property>
                                    <property name="maximumSize">
                                     <size>
-                                     <width>180</width>
+                                     <width>280</width>
                                      <height>16777215</height>
                                     </size>
                                    </property>
@@ -17003,7 +16993,9 @@ QRadioButton::indicator:unchecked {
                                     <number>-1</number>
                                    </property>
                                    <property name="styleSheet">
-                                    <string notr="true">color:white;</string>
+                                    <string notr="true">
+background-color:#ff0000;
+color:white;</string>
                                    </property>
                                    <property name="text">
                                     <string>TRAIN</string>
@@ -17016,7 +17008,7 @@ QRadioButton::indicator:unchecked {
                                    </property>
                                   </widget>
                                  </item>
-                                 <item>
+                                 <item alignment="Qt::AlignHCenter">
                                   <widget class="QCheckBox" name="binary_chart_checkbox">
                                    <property name="enabled">
                                     <bool>false</bool>
@@ -17033,13 +17025,47 @@ QRadioButton::indicator:unchecked {
                                </widget>
                               </item>
                               <item>
-                               <widget class="QLabel" name="warning_train_page">
-                                <property name="text">
-                                 <string/>
+                               <widget class="QScrollArea" name="scrollArea">
+                                <property name="maximumSize">
+                                 <size>
+                                  <width>16777215</width>
+                                  <height>50</height>
+                                 </size>
                                 </property>
-                                <property name="alignment">
-                                 <set>Qt::AlignCenter</set>
+                                <property name="widgetResizable">
+                                 <bool>true</bool>
                                 </property>
+                                <widget class="QWidget" name="scrollAreaWidgetContents">
+                                 <property name="geometry">
+                                  <rect>
+                                   <x>0</x>
+                                   <y>0</y>
+                                   <width>328</width>
+                                   <height>48</height>
+                                  </rect>
+                                 </property>
+                                 <layout class="QVBoxLayout" name="verticalLayout_46">
+                                  <property name="leftMargin">
+                                   <number>0</number>
+                                  </property>
+                                  <property name="topMargin">
+                                   <number>0</number>
+                                  </property>
+                                  <property name="bottomMargin">
+                                   <number>0</number>
+                                  </property>
+                                  <item>
+                                   <widget class="QLabel" name="warning_train_page">
+                                    <property name="text">
+                                     <string/>
+                                    </property>
+                                    <property name="alignment">
+                                     <set>Qt::AlignCenter</set>
+                                    </property>
+                                   </widget>
+                                  </item>
+                                 </layout>
+                                </widget>
                                </widget>
                               </item>
                              </layout>
@@ -17115,7 +17141,6 @@ QRadioButton::indicator:unchecked {
                                     <font>
                                      <family>Segoe UI</family>
                                      <pointsize>10</pointsize>
-                                     <weight>50</weight>
                                      <italic>false</italic>
                                      <bold>false</bold>
                                     </font>
@@ -17364,7 +17389,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -17401,7 +17425,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -17443,7 +17466,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17471,7 +17493,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17497,7 +17518,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17525,7 +17545,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17566,7 +17585,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -17608,7 +17626,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17636,7 +17653,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17662,7 +17678,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17690,7 +17705,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17731,7 +17745,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -17773,7 +17786,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17801,7 +17813,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17833,7 +17844,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17861,7 +17871,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17902,7 +17911,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -17944,7 +17952,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17972,7 +17979,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -17998,7 +18004,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18026,7 +18031,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18067,7 +18071,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -18109,7 +18112,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18137,7 +18139,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18163,7 +18164,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18191,7 +18191,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18232,7 +18231,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -18274,7 +18272,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18302,7 +18299,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18328,7 +18324,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18356,7 +18351,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18397,7 +18391,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -18439,7 +18432,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18467,7 +18459,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18493,7 +18484,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18521,7 +18511,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18562,7 +18551,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -18604,7 +18592,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18632,7 +18619,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18658,7 +18644,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18686,7 +18671,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -18762,7 +18746,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -18790,7 +18773,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -18818,7 +18800,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -18846,7 +18827,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -18874,7 +18854,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -18902,7 +18881,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -18931,7 +18909,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -18959,7 +18936,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -18990,7 +18966,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -19018,7 +18993,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -19046,7 +19020,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -19074,7 +19047,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -19470,17 +19442,22 @@ color : rgb(0,0,0);</string>
                               <height>16777215</height>
                              </size>
                             </property>
+                            <property name="cursor">
+                             <cursorShape>PointingHandCursor</cursorShape>
+                            </property>
                             <property name="styleSheet">
                              <string notr="true">QPushButton {
-	background-color: rgb(170 , 170,170);
+background-color: rgb(100,100,100);
 	color: rgb(0,0,0);
 	border: none;
+
+	text-align:center;
+
 }
 
 QPushButton:hover {
 	background-color:  rgb(197 , 195,196);
-}
-</string>
+}</string>
                             </property>
                             <property name="text">
                              <string>Training</string>
@@ -19505,22 +19482,26 @@ QPushButton:hover {
                              <font>
                               <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
+                            </property>
+                            <property name="cursor">
+                             <cursorShape>PointingHandCursor</cursorShape>
                             </property>
                             <property name="styleSheet">
                              <string notr="true">QPushButton {
 background-color: rgb(100,100,100);
 	color: rgb(0,0,0);
 	border: none;
+
+	text-align:center;
+
 }
 
 QPushButton:hover {
-	background-color:  rgb(150, 150, 150);
-}
-</string>
+	background-color:  rgb(197 , 195,196);
+}</string>
                             </property>
                             <property name="text">
                              <string>History</string>
@@ -20224,7 +20205,6 @@ QRadioButton::indicator:unchecked {
                                     <font>
                                      <family>Segoe UI</family>
                                      <pointsize>10</pointsize>
-                                     <weight>50</weight>
                                      <italic>false</italic>
                                      <bold>false</bold>
                                     </font>
@@ -20473,7 +20453,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -20510,7 +20489,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -20552,7 +20530,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20580,7 +20557,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20606,7 +20582,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20634,7 +20609,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20675,7 +20649,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -20717,7 +20690,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20745,7 +20717,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20777,7 +20748,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20805,7 +20775,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20846,7 +20815,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -20888,7 +20856,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20916,7 +20883,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20942,7 +20908,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -20970,7 +20935,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21011,7 +20975,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -21053,7 +21016,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21081,7 +21043,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21107,7 +21068,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21135,7 +21095,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21176,7 +21135,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -21218,7 +21176,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21246,7 +21203,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21272,7 +21228,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21300,7 +21255,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21341,7 +21295,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -21383,7 +21336,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21411,7 +21363,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21437,7 +21388,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21465,7 +21415,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21506,7 +21455,6 @@ QRadioButton::indicator:unchecked {
                                       <font>
                                        <family>Segoe UI</family>
                                        <pointsize>10</pointsize>
-                                       <weight>50</weight>
                                        <italic>false</italic>
                                        <bold>false</bold>
                                       </font>
@@ -21548,7 +21496,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21576,7 +21523,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21602,7 +21548,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21630,7 +21575,6 @@ QRadioButton::indicator:unchecked {
                                           <font>
                                            <family>Segoe UI</family>
                                            <pointsize>10</pointsize>
-                                           <weight>50</weight>
                                            <italic>false</italic>
                                            <bold>false</bold>
                                           </font>
@@ -21706,7 +21650,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21734,7 +21677,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21762,7 +21704,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21790,7 +21731,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21818,7 +21758,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21846,7 +21785,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21875,7 +21813,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21903,7 +21840,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21934,7 +21870,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21962,7 +21897,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -21990,7 +21924,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -22018,7 +21951,6 @@ QRadioButton::indicator:unchecked {
                                            <font>
                                             <family>Segoe UI</family>
                                             <pointsize>10</pointsize>
-                                            <weight>50</weight>
                                             <italic>false</italic>
                                             <bold>false</bold>
                                            </font>
@@ -22420,17 +22352,22 @@ color : rgb(0,0,0);</string>
                               <height>16777215</height>
                              </size>
                             </property>
+                            <property name="cursor">
+                             <cursorShape>PointingHandCursor</cursorShape>
+                            </property>
                             <property name="styleSheet">
                              <string notr="true">QPushButton {
-	background-color: rgb(170 , 170,170);
+background-color: rgb(100,100,100);
 	color: rgb(0,0,0);
 	border: none;
+
+	text-align:center;
+
 }
 
 QPushButton:hover {
 	background-color:  rgb(197 , 195,196);
-}
-</string>
+}</string>
                             </property>
                             <property name="text">
                              <string>Classes list</string>
@@ -22451,17 +22388,22 @@ QPushButton:hover {
                               <height>16777215</height>
                              </size>
                             </property>
+                            <property name="cursor">
+                             <cursorShape>PointingHandCursor</cursorShape>
+                            </property>
                             <property name="styleSheet">
                              <string notr="true">QPushButton {
 background-color: rgb(100,100,100);
 	color: rgb(0,0,0);
 	border: none;
+
+	text-align:center;
+
 }
 
 QPushButton:hover {
-	background-color:  rgb(150, 150, 150);
-}
-</string>
+	background-color:  rgb(197 , 195,196);
+}</string>
                             </property>
                             <property name="text">
                              <string>Training</string>
@@ -22486,20 +22428,25 @@ QPushButton:hover {
                              <font>
                               <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
+                            </property>
+                            <property name="cursor">
+                             <cursorShape>PointingHandCursor</cursorShape>
                             </property>
                             <property name="styleSheet">
                              <string notr="true">QPushButton {
 background-color: rgb(100,100,100);
 	color: rgb(0,0,0);
 	border: none;
+
+	text-align:center;
+
 }
 
 QPushButton:hover {
-	background-color:  rgb(150, 150, 150);
+	background-color:  rgb(197 , 195,196);
 }</string>
                             </property>
                             <property name="text">
@@ -24135,7 +24082,6 @@ border:Transparent</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -24179,7 +24125,6 @@ border:Transparent</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -24221,7 +24166,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24249,7 +24193,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24275,7 +24218,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24303,7 +24245,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24344,7 +24285,6 @@ border:Transparent</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -24386,7 +24326,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24414,7 +24353,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24440,7 +24378,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24468,7 +24405,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24509,7 +24445,6 @@ border:Transparent</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -24551,7 +24486,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24579,7 +24513,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24611,7 +24544,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24639,7 +24571,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24680,7 +24611,6 @@ border:Transparent</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -24722,7 +24652,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24750,7 +24679,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24776,7 +24704,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24804,7 +24731,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24845,7 +24771,6 @@ border:Transparent</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -24887,7 +24812,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24915,7 +24839,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24941,7 +24864,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -24969,7 +24891,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25010,7 +24931,6 @@ border:Transparent</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -25052,7 +24972,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25080,7 +24999,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25106,7 +25024,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25134,7 +25051,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25175,7 +25091,6 @@ border:Transparent</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -25217,7 +25132,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25245,7 +25159,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25271,7 +25184,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25299,7 +25211,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25340,7 +25251,6 @@ border:Transparent</string>
                                          <font>
                                           <family>Segoe UI</family>
                                           <pointsize>10</pointsize>
-                                          <weight>50</weight>
                                           <italic>false</italic>
                                           <bold>false</bold>
                                          </font>
@@ -25382,7 +25292,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25410,7 +25319,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25436,7 +25344,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25464,7 +25371,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25521,7 +25427,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25549,7 +25454,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25577,7 +25481,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25605,7 +25508,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25633,7 +25535,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25661,7 +25562,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25690,7 +25590,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25718,7 +25617,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25749,7 +25647,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25777,7 +25674,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25805,7 +25701,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -25833,7 +25728,6 @@ border:Transparent</string>
                                              <font>
                                               <family>Segoe UI</family>
                                               <pointsize>10</pointsize>
-                                              <weight>50</weight>
                                               <italic>false</italic>
                                               <bold>false</bold>
                                              </font>
@@ -26298,7 +26192,7 @@ color : rgb(0,0,0);</string>
                           <widget class="QGroupBox" name="groupBox_10">
                            <property name="minimumSize">
                             <size>
-                             <width>0</width>
+                             <width>340</width>
                              <height>0</height>
                             </size>
                            </property>
@@ -26331,18 +26225,18 @@ color : rgb(0,0,0);</string>
                                 <widget class="QLabel" name="label_5">
                                  <property name="minimumSize">
                                   <size>
-                                   <width>110</width>
+                                   <width>75</width>
                                    <height>0</height>
                                   </size>
                                  </property>
                                  <property name="maximumSize">
                                   <size>
-                                   <width>16777215</width>
+                                   <width>75</width>
                                    <height>16777215</height>
                                   </size>
                                  </property>
                                  <property name="text">
-                                  <string>Language</string>
+                                  <string>Language :</string>
                                  </property>
                                 </widget>
                                </item>
@@ -26350,8 +26244,14 @@ color : rgb(0,0,0);</string>
                                 <widget class="QComboBox" name="combo_change_language">
                                  <property name="minimumSize">
                                   <size>
-                                   <width>185</width>
+                                   <width>140</width>
                                    <height>0</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>140</width>
+                                   <height>16777215</height>
                                   </size>
                                  </property>
                                 </widget>
@@ -26400,18 +26300,18 @@ color : rgb(0,0,0);</string>
                                 <widget class="QLabel" name="label_281">
                                  <property name="minimumSize">
                                   <size>
-                                   <width>110</width>
+                                   <width>75</width>
                                    <height>0</height>
                                   </size>
                                  </property>
                                  <property name="maximumSize">
                                   <size>
-                                   <width>16777215</width>
+                                   <width>75</width>
                                    <height>16777215</height>
                                   </size>
                                  </property>
                                  <property name="text">
-                                  <string>Font</string>
+                                  <string>Font :</string>
                                  </property>
                                 </widget>
                                </item>
@@ -26419,8 +26319,14 @@ color : rgb(0,0,0);</string>
                                 <widget class="QFontComboBox" name="fontComboBox">
                                  <property name="minimumSize">
                                   <size>
-                                   <width>0</width>
+                                   <width>140</width>
                                    <height>0</height>
+                                  </size>
+                                 </property>
+                                 <property name="maximumSize">
+                                  <size>
+                                   <width>16777215</width>
+                                   <height>16777215</height>
                                   </size>
                                  </property>
                                  <property name="styleSheet">
@@ -26483,6 +26389,9 @@ color : rgb(0,0,0);</string>
                                 <height>35</height>
                                </size>
                               </property>
+                              <property name="cursor">
+                               <cursorShape>PointingHandCursor</cursorShape>
+                              </property>
                               <property name="text">
                                <string>Apply/Save Parameters</string>
                               </property>
@@ -26495,7 +26404,7 @@ color : rgb(0,0,0);</string>
                           <widget class="QGroupBox" name="groupBox_5">
                            <property name="minimumSize">
                             <size>
-                             <width>390</width>
+                             <width>300</width>
                              <height>0</height>
                             </size>
                            </property>
@@ -26620,11 +26529,11 @@ QCheckBox::indicator:unchecked {
                                  </property>
                                 </widget>
                                </item>
-                               <item>
+                               <item alignment="Qt::AlignLeft">
                                 <widget class="QLabel" name="plc_status_line">
                                  <property name="minimumSize">
                                   <size>
-                                   <width>209</width>
+                                   <width>135</width>
                                    <height>0</height>
                                   </size>
                                  </property>
@@ -26782,6 +26691,9 @@ QCheckBox::indicator:unchecked {
                                 <height>35</height>
                                </size>
                               </property>
+                              <property name="cursor">
+                               <cursorShape>PointingHandCursor</cursorShape>
+                              </property>
                               <property name="text">
                                <string>Apply/Save Parameters</string>
                               </property>
@@ -26794,7 +26706,7 @@ QCheckBox::indicator:unchecked {
                           <widget class="QGroupBox" name="groupBox_9">
                            <property name="minimumSize">
                             <size>
-                             <width>390</width>
+                             <width>300</width>
                              <height>0</height>
                             </size>
                            </property>
@@ -26955,6 +26867,9 @@ QCheckBox::indicator:unchecked {
                                 <height>35</height>
                                </size>
                               </property>
+                              <property name="cursor">
+                               <cursorShape>PointingHandCursor</cursorShape>
+                              </property>
                               <property name="text">
                                <string>Apply/Save Parameters</string>
                               </property>
@@ -27019,7 +26934,6 @@ QCheckBox::indicator:unchecked {
                              <font>
                               <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>75</weight>
                               <italic>false</italic>
                               <bold>true</bold>
                              </font>
@@ -27050,7 +26964,6 @@ QCheckBox::indicator:unchecked {
                              <font>
                               <family>Segoe UI</family>
                               <pointsize>10</pointsize>
-                              <weight>50</weight>
                               <italic>false</italic>
                               <bold>false</bold>
                              </font>
@@ -27205,7 +27118,6 @@ QCheckBox::indicator:unchecked {
                             <font>
                              <family>Segoe UI</family>
                              <pointsize>10</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -27242,7 +27154,6 @@ QCheckBox::indicator:unchecked {
                             <font>
                              <family>Segoe UI</family>
                              <pointsize>10</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -27279,7 +27190,6 @@ QCheckBox::indicator:unchecked {
                             <font>
                              <family>Segoe UI</family>
                              <pointsize>10</pointsize>
-                             <weight>50</weight>
                              <italic>false</italic>
                              <bold>false</bold>
                             </font>
@@ -27358,7 +27268,6 @@ QCheckBox::indicator:unchecked {
                    <font>
                     <family>Segoe UI</family>
                     <pointsize>10</pointsize>
-                    <weight>50</weight>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>

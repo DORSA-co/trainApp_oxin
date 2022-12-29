@@ -250,13 +250,7 @@ def set_pathes(pathes):
     # tom_info = pathes.get("ProjectorPulseTrig")
     for i, dic in enumerate(pathes):
         if dic['name'] in PLC_items:
-            print(i)
             path_dict.update({dic['name']:dic['path']})
-            # return i
-    # print('tom_info',tom_info)
-    # x=dict(pathes)
-    # z=x['MemUpProjectorOnOff6']
-    # print(path_dict['MemDistanceSensor'])
     return path_dict
 
 

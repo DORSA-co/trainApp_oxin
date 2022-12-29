@@ -488,9 +488,7 @@ class connect_manage_cameras:
 
         # _, available_serials = self.get_all_devices()
         available_serials = self.list_available_serial
-        print("cam_adwdw", cam_parms)
-
-        print("asdw", available_serials, str(cam_parms["serial_number"]))
+        print("camera params", cam_parms)
 
         if str(cam_parms["serial_number"]) in available_serials:
 
