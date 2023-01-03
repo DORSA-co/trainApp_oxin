@@ -90,6 +90,7 @@ class small_neighbouring(QMainWindow, ui):
         return self.ann
 
     def set_image_in_label(self, annotation=True):
+        # print(self.imgs[3].dtype, self.imgs[8].dtype, self.imgs[2].dtype)
         image_u = cv2.hconcat([self.imgs[0], self.imgs[1], self.imgs[2]])
         image_c = cv2.hconcat([self.imgs[3], self.imgs[8], self.imgs[4]])
         image_d = cv2.hconcat([self.imgs[5], self.imgs[6], self.imgs[7]])

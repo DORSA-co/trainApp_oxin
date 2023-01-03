@@ -9,7 +9,7 @@ MOVEMENTS_KEYS = {
     'down_right':(0.2, 0.3),
     }
 
-COLOR_MAP = { 'sheet':(200,200,200), 'none':(20,20,20), 'pointer':(255,0,0), 'sline':(0,0,255), 'select':(255, 255, 255), 
+COLOR_MAP = { 'sheet':(200,200,200), 'none':(20,20,20), 'pointer':(255,0,0), 'sline':(0,0,255), 'select':(2, 2, 28), 
                 'defect':(201,79,79), 'perfect': (3,255,28), 'black': (0, 0, 0)}
-THINKNESS_MAP = {'pointer':1, 'sline':1}
+THINKNESS_MAP = {'pointer':2, 'sline':1}
 

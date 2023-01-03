@@ -9,7 +9,7 @@ import inspect
 
 
 class dataBaseUtils:
-    def __init__(self, ui_obj, user_name="root", password="Dorsa-1400"):
+    def __init__(self, ui_obj, user_name="root", password="Dorsa1400@"):
         if ui_obj!='Null':
             self.db = database.dataBase(
                 user_name, password, "localhost", "saba_database", logger_obj=ui_obj.logger
@@ -99,7 +99,8 @@ class dataBaseUtils:
     #
     # ________________________________________________________________
     def load_sheet(self, id):
-        res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id)
+        res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id, int_type=False)
+        print(res, record)
         record = record[0]
 
         return self.build_sheet(record)

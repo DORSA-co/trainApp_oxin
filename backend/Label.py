@@ -29,6 +29,13 @@ class maskLbl:
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
+
+    def change_radius(self, radius):
+        self.radius = radius
+
+    def change_line_thickness(self, thickness):
+        self.thickness_map['line'] = thickness
+
     def mask_init(self):
         return np.zeros(self.img_size + (3,), dtype=np.uint8)
 
@@ -212,7 +219,7 @@ class maskLbl:
         for i in range(len(self.points)-1):
             pt1 = self.points[i]
             pt2 = self.points[i+1]
-            cv2.line(mask, pt1,pt2, color = self.color_map['line'], thickness=self.thickness_map['line'] )
+            cv2.line(mask, pt1, pt2, color = self.color_map['line'], thickness=self.thickness_map['line'] )
 
 
         for pt in self.points:
@@ -239,7 +246,7 @@ class maskLbl:
             if select_list == ['All'] or i in select_list:
                 cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=-1)
             else:
-                cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=5)
+                cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=self.thickness_map['line'])
             for corner in cnt:
                 corner = tuple(corner[0])
                 cv2.circle( masks_img, corner, self.radius, color=self.color_map['point'], thickness=-1)

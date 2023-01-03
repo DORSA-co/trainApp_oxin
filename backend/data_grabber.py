@@ -159,7 +159,7 @@ class sheetOverView:
     #
     # ______________________________________________________________________________________________________________________________
     def update_selected(self, selecteds):
-        self.select_layer = self.init_img((0, 0, 0))
+        self.select_layer = self.init_img((200, 200, 200))
         for s in selecteds:
             self.select_layer = self.draw_selected(self.select_layer, s)
         # return cv2.cvtColor( self.res, cv2.COLOR_BGR2RGB)
@@ -170,7 +170,7 @@ class sheetOverView:
     # _____________________________________________________________________________________________________________________________
     def update_sheet_img(self):
         # res = self.__add__(self.sheet_layer, self.selec)
-        res = cv2.addWeighted(self.sheet_img, 0.7, self.select_layer, 0.3, 1)
+        res = cv2.addWeighted(self.sheet_img, 0.5, self.select_layer, 0.5, 1)
         # res = self.__add__(res, self.line_layer)
         return res
 
@@ -360,8 +360,9 @@ class sheetOverView:
             (xmin, ymin),
             (xmax, ymax),
             self.__rgb2bgr__(self.color_map["select"]),
-            thickness=2,
+            thickness=-1,
         )
+
 
         # res = cv2.addWeighted(img, 0.7, select_img, 0.3, 1)
         return img

@@ -26,6 +26,7 @@ from PySide6.QtGui import QPixmap as sQPixmap
 from PySide6.QtGui import QIcon as sQIcon
 from PySide6.QtGui import QIntValidator as sQIntValidator
 from PySide6 import QtCore as sQtCore
+from PySide6.QtCore import QSize as sQSize
 import pandas as pd
 from functools import partial
 
@@ -100,7 +101,7 @@ class UI_main_window(QMainWindow, ui):
         # TOGGLE MENU
         # ///////////////////////////////////////////////////////////////
         self.toggleButton.clicked.connect(self.buttonClick)
-        self.btn_technical_move.clicked.connect(self.buttonClick)
+        # self.btn_technical_move.clicked.connect(self.buttonClick)
         # USE CUSTOM TITLE BAR | USE AS "False" FOR MAC OR LINUX
         # ///////////////////////////////////////////////////////////////
         Settings.ENABLE_CUSTOM_TITLE_BAR = False
@@ -146,7 +147,6 @@ class UI_main_window(QMainWindow, ui):
         self.load_sheets_win = data_loader(main_ui_obj=self)
 
         self.labeling_win = None
-        self.labeling_win = labeling()
         self.login_window = UI_login_window()
         self.help_win = help()
 
@@ -190,12 +190,16 @@ class UI_main_window(QMainWindow, ui):
         self.login_btn.clicked.connect(self.buttonClick)
         self.setting_btn.clicked.connect(self.buttonClick)
 
+        # cameras settings info
+        self.selelcted_cameras = [False] * 24
+
         # labeling
 
         self.polygon_btn.clicked.connect(self.buttonClick)
         self.zoomIn_btn.clicked.connect(self.buttonClick)
         self.zoomOut_btn.clicked.connect(self.buttonClick)
         self.drag_btn.clicked.connect(self.buttonClick)
+        self.label_show_help_btn.clicked.connect(self.buttonClick)
         # self.add_label.clicked.connect(self.buttonClick)
         # self.add_label_btn.clicked.connect(self.buttonClick)
 
@@ -493,6 +497,17 @@ class UI_main_window(QMainWindow, ui):
             False  # flag to dont run another thread until one is available
         )
 
+        # Cameras Connection
+        self.checkBox_top.stateChanged.connect(self.buttonClick)
+        self.checkBox_bottom.stateChanged.connect(self.buttonClick)
+        self.checkBox_all.stateChanged.connect(self.buttonClick)
+        for i in range(1, 25):
+            if i < 10:
+                btn_name = eval("self.camera0%s_btn" % i)
+            else:
+                btn_name = eval("self.camera%s_btn" % i)
+            btn_name.clicked.connect(self.buttonClick)
+
         self.start_wind_btn.clicked.connect(self.start_wind)
 
         # ----------------------------------------------------------------------------------------------------
@@ -775,6 +790,18 @@ class UI_main_window(QMainWindow, ui):
         widget.setDisabled(not (status))
         # /////////////////// end
 
+    def set_buttons_enable_or_disable(self, names, enable=True):
+        """
+        this function will enable or disble all the ui elements in the input list
+
+        Inputs:
+            names: ui elements (in list)
+            enable: a boolean value determining wheather to enable/diable the elements
+        """
+
+        for name in names:
+            name.setEnabled(enable)
+
     # TOGGLE MENU
     # ///////////////////////////////////////////////////////////////
     def toggleMenu(self, enable):
@@ -925,6 +952,48 @@ class UI_main_window(QMainWindow, ui):
 
     # Label Dorsa
     # ///////////////////////////////////////////////
+    def label_show_help(self):
+        h = self.label_show_help_frame.height()
+        if h <= 1:
+            self.minHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"minimumHeight")
+            self.minHeight.setDuration(300)
+            self.minHeight.setStartValue(h)
+            self.minHeight.setEndValue(200)
+            self.minHeight.setEasingCurve(sQtCore.QEasingCurve.InOutQuart)
+            self.group = sQtCore.QParallelAnimationGroup()
+            self.group.addAnimation(self.minHeight)
+
+            self.maxHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"maximumHeight")
+            self.maxHeight.setDuration(300)
+            self.maxHeight.setStartValue(h)
+            self.maxHeight.setEndValue(200)
+            self.maxHeight.setEasingCurve(sQtCore.QEasingCurve.InOutQuart)
+            self.group.addAnimation(self.maxHeight)
+            self.group.start()
+
+            icon_path = 'UI/images/bottom_arrow.png'
+            self.label_show_help_btn.setIcon(sQPixmap.fromImage(sQImage(icon_path)))
+
+        else:
+            self.minHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"minimumHeight")
+            self.minHeight.setDuration(300)
+            self.minHeight.setStartValue(h)
+            self.minHeight.setEndValue(1)
+            self.minHeight.setEasingCurve(sQtCore.QEasingCurve.InOutQuart)
+            self.group = sQtCore.QParallelAnimationGroup()
+            self.group.addAnimation(self.minHeight)
+
+            self.maxHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"maximumHeight")
+            self.maxHeight.setDuration(300)
+            self.maxHeight.setStartValue(h)
+            self.maxHeight.setEndValue(1)
+            self.maxHeight.setEasingCurve(sQtCore.QEasingCurve.InOutQuart)
+            self.group.addAnimation(self.maxHeight)
+            self.group.start()
+
+            icon_path = 'UI/images/top_arrow.png'
+            self.label_show_help_btn.setIcon(sQPixmap.fromImage(sQImage(icon_path)))
+
     def label_dorsa_open(self, enable):
         """open dorsa label when program started
 
@@ -1180,6 +1249,7 @@ class UI_main_window(QMainWindow, ui):
             # for i in range(11):
             # print(i)
             record = "{} - {} - {}".format(record[0], record[1], (record[2]))
+            print(record)
             table_item = QTableWidgetItem(str(record))
             # if i ==0:
             table_item.setFlags(
@@ -1306,6 +1376,8 @@ class UI_main_window(QMainWindow, ui):
         """Create Object Labeling and set Title Page language
         Return : labeling object
         """
+        if self.labeling_win:
+            self.labeling_win.close()
         self.labeling_win = labeling()  # LOG
         texts.set_title_labeling(self, self.language)
         return self.labeling_win
@@ -1907,7 +1979,7 @@ class UI_main_window(QMainWindow, ui):
 
         self.comboBox_ncamera_SI.clear()
         i = 0
-        for x in range(min, max):
+        for x in range(min, max+1):
             self.comboBox_ncamera_SI.addItem(str(x))
             self.comboBox_ncamera_SI.setItemChecked(i, False)
             i += 1
@@ -1917,7 +1989,7 @@ class UI_main_window(QMainWindow, ui):
         """set combobox Items in data aquization page for frames with max size"""
         self.comboBox_nframe_SI.clear()
         i = 0
-        for x in range(0, max):
+        for x in range(1, max+1):
             self.comboBox_nframe_SI.addItem(str(x))
             self.comboBox_nframe_SI.setItemChecked(i, False)
             i += 1
@@ -1927,12 +1999,6 @@ class UI_main_window(QMainWindow, ui):
 
     def set_combo_boxes(self):
         """set some combo boxes in settings page"""
-        strings = [str(x) for x in range(1, 25)]
-        strings.append(texts.Titles["all"][self.language])
-        self.comboBox_cam_select.clear()
-        self.comboBox_cam_select.addItems(strings)
-        self.comboBox_cam_select.setCurrentIndex(24)
-
         string = [
             texts.Titles["english"][self.language],
             texts.Titles["persian"][self.language],
@@ -1956,14 +2022,6 @@ class UI_main_window(QMainWindow, ui):
         """Global function refresh content of Combo boxes"""
         combo_name.clear()
         combo_name.addItems(items)
-
-    def get_camera_parms(self):
-        """Get camera id for connect in dataaquization page"""
-        cam_num = self.comboBox_cam_select.currentText()
-        self.logger.create_new_log(
-            message="Camera Select for connect {}".format(cam_num), level=1
-        )
-        return cam_num
 
     def get_create_dataset_parms(self):
         """get parms for create dataset in user page
@@ -2044,6 +2102,7 @@ class UI_main_window(QMainWindow, ui):
                 "background-image: url(./images/icons/graber.png);background-color: rgb(170, 170, 212);color:rgp(0,0,0);"
             )
             self.stackedWidget.setCurrentWidget(self.page_data_auquzation)
+
         if btnName == "label_btn" or btnName == "label_btn_SI":
             print("asdasdasd")
             self.left_bar_clear()
@@ -2051,6 +2110,76 @@ class UI_main_window(QMainWindow, ui):
                 "background-image: url(./images/icons/label.png);background-color: rgb(170, 170, 212);color:rgp(0,0,0);"
             )
             self.stackedWidget.setCurrentWidget(self.page_label)
+
+        if btnName == "checkBox_top":
+            if self.checkBox_top.isChecked():
+                for i in range(1, 13):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setEnabled(False)
+            else:
+                for i in range(1, 13):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setEnabled(True)
+            self.select_unselect_camera(
+                top_flag=True, status=self.checkBox_top.isChecked()
+            )
+
+        if btnName == "checkBox_bottom":
+            if self.checkBox_bottom.isChecked():
+                for i in range(13, 25):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setEnabled(False)
+            else:
+                for i in range(13, 25):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setEnabled(True)
+            self.select_unselect_camera(
+                bottom_flag=True, status=self.checkBox_bottom.isChecked()
+            )
+
+        if btnName == "checkBox_all":
+            if self.checkBox_all.isChecked():
+                self.checkBox_top.setCheckState(Qt.CheckState.Unchecked)
+                self.checkBox_top.setEnabled(False)
+                self.checkBox_bottom.setCheckState(Qt.CheckState.Unchecked)
+                self.checkBox_bottom.setEnabled(False)
+                for i in range(1, 25):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setEnabled(False)
+            else:
+                self.checkBox_top.setEnabled(True)
+                self.checkBox_bottom.setEnabled(True)
+                for i in range(1, 25):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setEnabled(True)
+            self.select_unselect_camera(
+                all_flag=True, status=self.checkBox_all.isChecked()
+            )
+
+        if btnName[:6] == "camera" and btnName[8:] == "_btn":
+            self.select_unselect_camera(
+                cam_number=int(btnName[6:8]),
+                status=not (self.selelcted_cameras[int(btnName[6:8]) - 1]),
+            )
+
         if btnName == "tuning_btn":
             self.left_bar_clear()
             self.tuning_btn.setStyleSheet(
@@ -2209,6 +2338,9 @@ class UI_main_window(QMainWindow, ui):
                                             QPushButton:hover {background-color:  rgb(150 ,150, 150);}"
             )
 
+        if btnName == "label_show_help_btn":
+            self.label_show_help()
+
         if btnName == "yes_defect":
             self.def_yes_defect()
 
@@ -2338,6 +2470,149 @@ class UI_main_window(QMainWindow, ui):
         if btnName == "history_pbt_btn":
             self.stackedWidget_pbt.setCurrentWidget(self.page_history)
             self.set_active_color(wich_tab=2)
+
+    def select_unselect_camera(
+        self,
+        cam_number=-1,
+        top_flag=False,
+        bottom_flag=False,
+        all_flag=False,
+        status=True,
+    ):
+        """This function is used to change camera icons after select or unselect them.
+
+        :param cam_number: Camera number clicked on it, defaults to -1
+        :type cam_number: int, optional
+        :param top_flag: Flag that determine all top cameras are selected or not, defaults to False
+        :type top_flag: bool, optional
+        :param bottom_flag: Flag that determine all bottom cameras are selected or not, defaults to False
+        :type bottom_flag: bool, optional
+        :param all_flag: Flag that determine all cameras are selected or not, defaults to False
+        :type all_flag: bool, optional
+        :param status: Flag that determine camera(s) are selected or unselected, defaults to True
+        :type status: bool, optional
+        """
+        if all_flag:
+            if status:
+                self.selelcted_cameras = [True] * 24
+                for i in range(1, 25):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setStyleSheet(
+                        "background:Transparent; border-color:Transparent; background-color: #a3aeb5; border-radius: 10px;"
+                    )
+            else:
+                self.selelcted_cameras = [False] * 24
+                for i in range(1, 25):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setStyleSheet(
+                        "background:Transparent; border-color:Transparent;"
+                    )
+
+        elif top_flag:
+            if status:
+                self.selelcted_cameras[:12] = [True] * 12
+                for i in range(1, 13):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setStyleSheet(
+                        "background:Transparent; border-color:Transparent; background-color: #a3aeb5; border-radius: 10px;"
+                    )
+            else:
+                self.selelcted_cameras[:12] = [False] * 12
+                for i in range(1, 13):
+                    if i < 10:
+                        btn_name = eval("self.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setStyleSheet(
+                        "background:Transparent; border-color:Transparent;"
+                    )
+
+        elif bottom_flag:
+            if status:
+                self.selelcted_cameras[12:] = [True] * 12
+                for i in range(13, 25):
+                    btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setStyleSheet(
+                        "background:Transparent; border-color:Transparent; background-color: #a3aeb5; border-radius: 10px;"
+                    )
+            else:
+                self.selelcted_cameras[12:] = [False] * 12
+                for i in range(13, 25):
+                    btn_name = eval("self.camera%s_btn" % i)
+                    btn_name.setStyleSheet(
+                        "background:Transparent; border-color:Transparent;"
+                    )
+
+        else:
+            if cam_number < 10:
+                btn_name = eval("self.camera0%s_btn" % cam_number)
+            else:
+                btn_name = eval("self.camera%s_btn" % cam_number)
+            if status:
+                self.selelcted_cameras[cam_number - 1] = True
+                btn_name.setStyleSheet(
+                    "background:Transparent; border-color:Transparent; background-color: #a3aeb5; border-radius: 10px;"
+                )
+            else:
+                self.selelcted_cameras[cam_number - 1] = False
+                btn_name.setStyleSheet(
+                    "background:Transparent; border-color:Transparent;"
+                )
+
+    def set_img_btn_camera(self, cam_num, status="True"):
+        """set image in connection cameras active/deactive with number"""
+        if status == "True":
+            img_top = "UI/images/camtop_actived.png"
+            img_btm = "UI/images/cambtm_actived.png"
+
+        elif status == "Disconnect":
+            img_top = "UI/images/camtop.png"
+            img_btm = "UI/images/cambtm.png"
+
+        else:
+            img_top = "UI/images/camtop_deactive.png"
+            img_btm = "UI/images/cambtm_deactive.png"
+
+        if int(cam_num) <= 12:
+            if int(cam_num) < 10:
+                btn_name = eval("self.camera0%s_btn" % cam_num)
+            else:
+                btn_name = eval("self.camera%s_btn" % cam_num)
+            ico = sQIcon()
+            ico.addFile(img_top, sQSize(30,30), sQIcon.Disabled, sQIcon.Off)
+            btn_name.setIcon(ico)
+
+        else:
+            btn_name = eval("self.camera%s_btn" % cam_num)
+            ico = sQIcon()
+            ico.addFile(img_btm, sQSize(30,30), sQIcon.Disabled, sQIcon.Off)
+            btn_name.setIcon(ico)
+
+    def get_selected_cameras(self):
+        return self.selelcted_cameras
+
+    def change_plc_status(self, status=True):
+        if status == "connect":
+            self.plc_status_label.setStyleSheet(
+                "background: rgb(50, 200, 50); border-radius: 15px; border: 3px solid #434c5d;"
+            )
+        elif status == "disconnect":
+            self.plc_status_label.setStyleSheet(
+                "background: red; border-radius: 15px; border: 3px solid #434c5d;"
+            )
+        elif status == "retry":
+            self.plc_status_label.setStyleSheet(
+                "background: yellow; border-radius: 15px; border: 3px solid #434c5d;"
+            )
 
     def set_active_color(
         self,
@@ -2503,32 +2778,7 @@ class UI_main_window(QMainWindow, ui):
         label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))
 
     def set_btn_image(self, btn_name, path):
-
         btn_name.setIcon(QIcon(path))
-
-    def set_img_btn_camera(self, cam_num, status=True):
-        """set image in connection cameras active/deactive with number"""
-        if status == True:
-            # print('avtive')
-            img_top = "images/camtop_actived.png"
-            img_btm = "images/cambtm_actived.png"
-
-        elif status == "Disconnect":
-            img_top = "images/camtop.png"
-            img_btm = "images/cambtm.png"
-
-        else:
-            img_top = "images/camtop_deactive.png"
-            img_btm = "images/cambtm_deactive.png"
-        if int(cam_num) <= 12:
-
-            btn_name = eval("self.camera%s_btn_2" % cam_num)
-            btn_name.setIcon(QIcon(img_top))
-
-        else:
-
-            btn_name = eval("self.camera%s_btn_2" % cam_num)
-            btn_name.setIcon(QIcon(img_btm))
 
     def set_widget_page(self, widget, page_name):
         """set widget page with page name"""

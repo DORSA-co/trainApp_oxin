@@ -213,6 +213,8 @@ class API:
         # -------------------------------------
         # connect to camera connection
         self.cameras = camera_connection.connect_manage_cameras()
+        self.i = 0
+        self.j = 0
 
         # connecting camera
 
@@ -799,10 +801,9 @@ class API:
         # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
 
         # data aquization
-        self.ui.connect_camera_btn.clicked.connect(partial(self.camera_connection_func))
-        self.ui.disconnect_camera_btn.clicked.connect(
-            partial(self.camera_disconnection_func)
-        )
+        self.ui.connect_camera_btn.clicked.connect(partial(self.connect_camera))
+        self.ui.disconnect_camera_btn.clicked.connect(partial(self.disconnect_camera))
+
         self.ui.start_capture_btn.clicked.connect(partial(self.start_capture_func))
         self.ui.stop_capture_btn.clicked.connect(partial(self.stop_capture_func))
         self.ui.checkBox_save_images.stateChanged.connect(partial(self.save_images))
@@ -811,8 +812,6 @@ class API:
         )
         self.ui.live_tabWidget.currentChanged.connect(partial(self.change_live_type))
         self.ui.checkBox_suggested_defects.stateChanged.connect(partial(self.load_suggestions))
-
-        # self.ui.comboBox_cam_select.currentTextChanged.connect(self.combo_image_preccess)
 
         # binary-model history
         self.ui.binary_tabel_prev.clicked.connect(
@@ -1015,6 +1014,17 @@ class API:
         self.ui.connect_plc_btn.clicked.connect(self.connect_plc)
         self.ui.disconnect_plc_btn.clicked.connect(self.disconnect_plc)
 
+        self.ui.line_thickness_slider.valueChanged.connect(self.change_label_line_thickness)
+        self.ui.point_thickness_slider.valueChanged.connect(self.change_label_point_thickness)
+
+    def change_label_line_thickness(self):
+        x = self.ui.line_thickness_slider.value()
+        self.label_bakcend["mask"].change_line_thickness(x)
+        
+    def change_label_point_thickness(self):
+        x = self.ui.point_thickness_slider.value()
+        self.label_bakcend["mask"].change_radius(x)
+
     def user_access_pages(self, btn_name):
 
         dic = {
@@ -1023,7 +1033,6 @@ class API:
             "Classification_btn": self.ui.page_Classification,
             "pbt_btn": self.ui.page_pbt,
         }
-        print(dic[btn_name])
         if self.logged_in:
             eval(
                 'self.ui.set_widget_page(self.ui.stackedWidget,dic["{}"])'.format(
@@ -1060,7 +1069,6 @@ class API:
     # ----------------------------------------------------------------------------------------
     def load_sheets(self):
         sheets_id = self.ui.load_sheets_win.get_selected_sheetid()
-        print('sheet_id',sheets_id)
         if not sheets_id:
             self.ui.load_sheets_win.close()
             self.ui.set_warning(
@@ -1152,7 +1160,7 @@ class API:
                 self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
 
                 self.n_threads = 4
-                step = int(self.sheet.get_cameras()[1]/self.n_threads)
+                step = 3
 
                 self.threads = []
                 self.workers = []
@@ -1182,6 +1190,7 @@ class API:
                     )
                     self.workers[-1].finished.connect(self.workers[-1].deleteLater)
                     self.threads[-1].finished.connect(self.threads[-1].deleteLater)
+                    self.workers[-1].update_progressbar.connect(self.update_suggestion_progressbar)
                     # Step 6: Start the thread
                     self.threads[-1].start()
 
@@ -1201,9 +1210,11 @@ class API:
         else:
             self.build_sheet_technical(self.sheet)
 
+    def update_suggestion_progressbar(self):
+        self.ui.suggested_defects_progressBar.setValue(self.ui.suggested_defects_progressBar.value() + 1)
+
     def build_sheet_technical(self, sheet):
         try:
-            print(sheet, sheet.get_cameras())
             self.thechnicals_backend = {}
             for side, _ in self.ui.get_technical(name=False).items():
                 self.thechnicals_backend[side] = data_grabber.sheetOverView(
@@ -1363,8 +1374,8 @@ class API:
 
         if self.ui.checkBox_all_imgs_SI.isChecked():
             side = ["up", "down"]
-            cameras = list(range(self.sheet.cameras[0], int(self.sheet.cameras[1]/2)))
-            frames = list(range(1, self.sheet.nframe))
+            cameras = list(range(self.sheet.cameras[0], int(self.sheet.cameras[1])+1))
+            frames = list(range(1, self.sheet.nframe+1))
         else:
             s = self.ui.comboBox_side_SI.currentText()
             if s == "TOP":
@@ -1374,12 +1385,12 @@ class API:
             elif s == "BOTH":
                 side = ["up", "down"]
             if self.ui.checkBox_all_camera_SI.isChecked():
-                cameras = list(range(self.sheet.cameras[0], int(self.sheet.cameras[1]/2)))
+                cameras = list(range(self.sheet.cameras[0], int(self.sheet.cameras[1]+1)))
             else:
                 cameras = self.ui.comboBox_ncamera_SI.getValue()
                 cameras = list(map(int, cameras))
             if self.ui.checkBox_all_frame_SI.isChecked():
-                frames = list(range(1, self.sheet.nframe))
+                frames = list(range(1, self.sheet.nframe+1))
             else:
                 frames = self.ui.comboBox_nframe_SI.getValue()
                 frames = list(map(int, frames))
@@ -1437,8 +1448,8 @@ class API:
 
         if self.ui.checkBox_all_imgs_SI.isChecked():
             side = ["up", "down"]
-            cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]))
-            frames = list(range(1, self.sheet.nframe))
+            cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]+1))
+            frames = list(range(1, self.sheet.nframe+1))
         else:
             s = self.ui.comboBox_side_SI.currentText()
             if s == "TOP":
@@ -1448,12 +1459,12 @@ class API:
             elif s == "BOTH":
                 side = ["up", "down"]
             if self.ui.checkBox_all_camera_SI.isChecked():
-                cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]))
+                cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]+1))
             else:
                 cameras = self.ui.comboBox_ncamera_SI.getValue()
                 cameras = list(map(int, cameras))
             if self.ui.checkBox_all_frame_SI.isChecked():
-                frames = list(range(1, self.sheet.nframe))
+                frames = list(range(1, self.sheet.nframe+1))
             else:
                 frames = self.ui.comboBox_nframe_SI.getValue()
                 frames = list(map(int, frames))
@@ -1703,7 +1714,7 @@ class API:
             if os.path.exists(path):
                 img = Utils.read_image(path, "color")
             else:
-                img = np.zeros((160, 100))
+                img = np.zeros((1200, 1920, 3), dtype='uint8')
             self.n_imgs.append(img)
 
         self.load_neighbour_annotations(neighbours, paths)
@@ -1798,6 +1809,13 @@ class API:
                 self.ui.show_labels(
                     labels, labels_name, label_type, self.selected_defects
                 )
+
+                if len(labels) > 0:
+                    self.ui.yes_defect.setChecked(True)
+                    self.ui.no_defect.setChecked(False)
+                else:
+                    self.ui.yes_defect.setChecked(False)
+                    self.ui.no_defect.setChecked(True)
             except:
                 self.ui.set_warning(
                     texts.WARNINGS["NO_IMAGE_LOADED"][self.language], "label", level=2
@@ -2696,134 +2714,194 @@ class API:
             self.group.start()
 
     def get_camera_config(self, id):
+        """
+        This function returns camera parameters from database
 
+        :param id: Id of camera. a number in range [1, 24]
+        :type id: int
+        :return: Dictionary of camera parameters
+        :rtype: dict
+        """
         cam_parms = self.db.load_cam_params(id)
         return cam_parms
 
     # -------------------------------------------Camera conection and show ----------------------------------------
 
-    def camera_connection_func(self):
+    def connect_camera(self):
+        """
+        This camera is used to connect selected cameras
+        """
+        selected_cameras = self.ui.get_selected_cameras()
 
-        self.ui.set_enabel(self.ui.start_capture_btn, False)
-        self.ui.set_enabel(self.ui.stop_capture_btn, False)
-        self.ui.set_enabel(self.ui.connect_camera_btn, False)
-        self.ui.set_enabel(self.ui.disconnect_camera_btn, False)
+        if not any(selected_cameras):
+            self.ui.set_warning(
+                texts.WARNINGS["no_camera_selected"][self.ui.language],
+                "camera_connection",
+                level=2
+            )
+            return
 
-        cam_num = self.ui.get_camera_parms()
-        # print("cam num", cam_num)
+        if self.i == 0:
+            self.i = np.where(selected_cameras)[0][0]
+            self.ui.set_buttons_enable_or_disable(
+                [self.ui.disconnect_camera_btn, self.ui.connect_camera_btn],
+                enable=False,
+            )
+            self.ui.checkBox_top.setEnabled(False)
+            self.ui.checkBox_bottom.setEnabled(False)
+            self.ui.checkBox_all.setEnabled(False)
+            for i in range(1, 25):
+                if i < 10:
+                    btn_name = eval("self.ui.camera0%s_btn" % i)
+                else:
+                    btn_name = eval("self.ui.camera%s_btn" % i)
+                btn_name.setEnabled(False)
 
-        if cam_num != texts.Titles["all"][self.language]:
-
-            # print("cam_num", cam_num)
-
+        if selected_cameras[self.i]:
+            cam_num = self.i + 1
             cam_parms = self.get_camera_config(str(cam_num))
-
-            # print("cam_parms", cam_parms)
-
             ret = self.cameras.add_camera(str(cam_num), cam_parms)
 
             if ret == "True":
                 self.ui.set_warning(
-                    texts.WARNINGS["Cmamera_successful"][self.language],
+                    texts.MESSEGES["Camera_successful"][self.ui.language].format(cam_num),
                     "camera_connection",
-                    level=1,
+                    level=1
                 )
-
                 self.ui.set_img_btn_camera(cam_num)
 
             else:
                 if ret == "Camera Not Connected":
                     self.ui.set_warning(
-                        texts.WARNINGS["Cmamera_serial_eror"][self.language],
+                        texts.ERRORS["Camera_serial_error"][self.ui.language].format(
+                            cam_num
+                        ),
                         "camera_connection",
-                        level=3,
+                        level=3
                     )
-
                 else:
                     self.ui.set_warning(
-                        "Controlled by another application Or Config Eror ",
+                        texts.ERRORS["control_config_error"][self.ui.language].format(
+                            cam_num
+                        ),
                         "camera_connection",
-                        level=3,
+                        level=3
                     )
 
-                self.ui.set_img_btn_camera(cam_num, status=False)
+                self.ui.set_img_btn_camera(cam_num, status="False")
 
-            if not self.flag_all_camera:
-                self.ui.set_enabel(self.ui.start_capture_btn, True)
-                self.ui.set_enabel(self.ui.connect_camera_btn, True)
-                self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
-        else:
-            self.flag_all_camera = True
-            self.start_auto_connect_all_cameras()
+        while 1:
+            self.i += 1
+            if self.i == len(selected_cameras):
+                self.i = 0
+                self.ui.set_buttons_enable_or_disable(
+                    [self.ui.disconnect_camera_btn, self.ui.connect_camera_btn],
+                    enable=True,
+                )
+                self.ui.checkBox_top.setEnabled(True)
+                self.ui.checkBox_bottom.setEnabled(True)
+                self.ui.checkBox_all.setEnabled(True)
+                for i in range(1, 25):
+                    if i < 10:
+                        btn_name = eval("self.ui.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.ui.camera%s_btn" % i)
+                    btn_name.setEnabled(True)
+                self.set_available_cameras()
+                return
+            if selected_cameras[self.i]:
+                QTimer.singleShot(3000, self.connect_camera)
+                return
 
-        self.set_available_caemras()
+    def disconnect_camera(self):
+        """
+        This camera is used to disconnect selected cameras
+        """
+        selected_cameras = self.ui.get_selected_cameras()
 
-    def camera_disconnection_func(self):
-        self.ui.set_enabel(self.ui.start_capture_btn, False)
-        self.ui.set_enabel(self.ui.stop_capture_btn, False)
-        self.ui.set_enabel(self.ui.connect_camera_btn, False)
-        self.ui.set_enabel(self.ui.disconnect_camera_btn, False)
-
-        cam_num = self.ui.get_camera_parms()
-        cam_parms = self.get_camera_config(str(cam_num))
-
-        # print("cam_num", cam_num)
-
-        ret = self.cameras.disconnect_camera(cam_parms["serial_number"], str(cam_num))
-
-        if ret == "True":
-            self.ui.set_img_btn_camera(cam_num, status="Disconnect")
+        if not any(selected_cameras):
             self.ui.set_warning(
-                texts.WARNINGS["Cmamera_successful"][self.language],
+                texts.WARNINGS["no_camera_selected"][self.ui.language],
                 "camera_connection",
-                level=1,
+                level=2
             )
-        elif ret == "no_connection":
-            self.ui.set_warning(
-                texts.WARNINGS["no_connect"][self.language],
-                "camera_connection",
-                level=2,
+            return
+
+        if self.j == 0:
+            self.j = np.where(selected_cameras)[0][0]
+            self.ui.set_buttons_enable_or_disable(
+                [self.ui.connect_camera_btn, self.ui.disconnect_camera_btn],
+                enable=False,
+            )
+            self.ui.checkBox_top.setEnabled(False)
+            self.ui.checkBox_bottom.setEnabled(False)
+            self.ui.checkBox_all.setEnabled(False)
+            for i in range(1, 25):
+                if i < 10:
+                    btn_name = eval("self.ui.camera0%s_btn" % i)
+                else:
+                    btn_name = eval("self.ui.camera%s_btn" % i)
+                btn_name.setEnabled(False)
+
+        if selected_cameras[self.j]:
+            cam_num = self.j + 1
+            cam_parms = self.get_camera_config(str(cam_num))
+            ret = self.cameras.disconnect_camera(
+                cam_parms["serial_number"], str(cam_num)
             )
 
-        else:
-            self.ui.set_warning(
-                texts.WARNINGS["disconnect_eror"][self.language],
-                "camera_connection",
-                level=3,
-            )
+            if ret == "True":
+                self.ui.set_warning(
+                    texts.MESSEGES["Disconnect_camera_successful"][
+                        self.ui.language
+                    ].format(cam_num),
+                    "camera_connection",
+                    level=1
+                )
+                self.ui.set_img_btn_camera(cam_num, status="Disconnect")
 
-        self.ui.set_enabel(self.ui.start_capture_btn, True)
-        self.ui.set_enabel(self.ui.connect_camera_btn, True)
-        self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
+            elif ret == "no_connection":
+                self.ui.set_warning(
+                    texts.ERRORS["no_connect"][self.ui.language].format(cam_num),
+                    "camera_connection",
+                    level=3
+                )
 
-    def start_auto_connect_all_cameras(self):
-        # self.timer_connect_cameras = QTimer.singleShot(
-        #     2000, self.auto_connect_all_cameras
-        # )
-        # self.timer_connect_cameras.start()
-        self.timer_connect_cameras = QTimer()
-        self.timer_connect_cameras.timeout.connect(self.auto_connect_all_cameras)
-        self.timer_connect_cameras.start(2000)
+            else:
+                self.ui.set_warning(
+                    texts.ERRORS["disconnect_error"][self.ui.language].format(cam_num),
+                    "camera_connection",
+                    level=3
+                )
 
-    def auto_connect_all_cameras(self, first_cam=1):
+        while 1:
+            self.j += 1
+            if self.j == len(selected_cameras):
+                self.j = 0
+                self.ui.set_buttons_enable_or_disable(
+                    [self.ui.connect_camera_btn, self.ui.disconnect_camera_btn],
+                    enable=True,
+                )
+                self.ui.checkBox_top.setEnabled(True)
+                self.ui.checkBox_bottom.setEnabled(True)
+                self.ui.checkBox_all.setEnabled(True)
+                for i in range(1, 25):
+                    if i < 10:
+                        btn_name = eval("self.ui.camera0%s_btn" % i)
+                    else:
+                        btn_name = eval("self.ui.camera%s_btn" % i)
+                    btn_name.setEnabled(True)
+                return
+            if selected_cameras[self.j]:
+                QTimer.singleShot(3000, self.disconnect_camera)
+                return
 
-        if self.index_num < 24:
-
-            self.ui.update_combo_box(self.ui.comboBox_cam_select, self.index_num)
-            self.camera_connection_func()
-            self.index_num += 1
-            # self.thread_connecting = threading.Timer(
-            #     2, self.auto_connect_all_cameras
-            # ).start()
-
-
-        elif self.index_num == 24:
-            self.index_num = 0
-            self.flag_all_camera = False
-            self.ui.set_enabel(self.ui.start_capture_btn, True)
-            self.ui.set_enabel(self.ui.connect_camera_btn, True)
-            self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
-            self.timer_connect_cameras.stop()
+    def set_available_cameras(self):
+        connected_cameras = self.cameras.get_connected_cameras_by_id()
+        sn_available = list(connected_cameras.keys())
+        sn_available = [str(i) for i in range(1, 25)]
+        self.ui.comboBox_connected_cams.clear()
+        self.ui.comboBox_connected_cams.addItems(sn_available)
 
     def start_capture_func(self, disable_ui=True):
         if disable_ui:
@@ -4539,20 +4617,6 @@ class API:
     # _____________________________________________________________________________________________________
 
     # _____________________________________________________________________________________________________
-
-    def set_available_caemras(self):
-        connected_cameras = self.cameras.get_connected_cameras_by_id()
-        sn_available = list(connected_cameras.keys())
-        sn_available = [str(i) for i in range(1, 25)]
-        self.ui.set_list_combo_boxes(self.ui.comboBox_connected_cams, sn_available)
-        ############################################################################
-        ############################################################################
-        ############################################################################
-        ############################################################################
-        ############################################################################
-        ############################################################################
-        ############################################################################
-
 
     def get_image(self):
         return self.img

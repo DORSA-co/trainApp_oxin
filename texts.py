@@ -298,6 +298,17 @@ ERRORS = {
     'REMOVE_PIP_FAILED': {'fa': ' خطا در حذف پایپ لاین ',
                     'en': ' Error while removing pipeline '},
 
+    'Camera_serial_error': {'fa': ' شماره سریال دوربین {} در دسترس نیست ',
+                        'en': ' Serial number of camera {} is not availabla '},
+
+    'disconnect_error': {'fa': ' خطا در قطع اتصال دوربین {} ',
+                'en': ' Disconnectiong Error for camera {} '},
+
+    'no_connect': {'fa': ' اتصالی برای دوربین {} برقرار نمیباشد ',
+                'en': ' There is no connection for camera {} '},
+
+    'control_config_error': {'fa': ' دوربین {} توسط برنامه دیگری کنترل می شود یا خطای پیکربندی ',
+                'en': ' Camera {} controlled by another application Or config error '},
 }
 
 WARNINGS = {
@@ -473,25 +484,24 @@ WARNINGS = {
 
 
     'Training':{'fa':'در حال آموزش دیدن',
-                        'en':'Training...'}
+                        'en':'Training...'},
 
-
+    'no_camera_selected': {'fa': ' دوربینی انتخاب نشده است. ',
+                        'en': ' No camera selected '},
 }
 
 MESSEGES = {
-
-        
-        'Data_Is_Ready' :{'fa': ' مجموعه داده ها آماده است',
-                    'en': ' Data is ready. '},
-        'Data_Is_Not_Ready' :{'fa': 'مجموعه داده ها یافت نشد',
-                    'en': ' Data is not ready. '},
-        'Customized Data is ready': {'fa':'مجموعه داده های سفارشی یافت شد',
-                                        'en':'Customized Data is ready'},
-        'Customized Data is not ready': {'fa':'مجموعه داده های سفارشی یافت نشد',
-                                        'en':'Customized Data is not ready'},
-        'Pipline_Is_Ready':{'fa':'پایپ لاین {} آماده است ',
-                        'en':'pipline {} is ready'},
-        'Pipline_Is_Not_Ready':{'fa':'پایپ لاین آماده نیست',
+    'Data_Is_Ready' :{'fa': ' مجموعه داده ها آماده است',
+                'en': ' Data is ready. '},
+    'Data_Is_Not_Ready' :{'fa': 'مجموعه داده ها یافت نشد',
+                'en': ' Data is not ready. '},
+    'Customized Data is ready': {'fa':'مجموعه داده های سفارشی یافت شد',
+                                'en':'Customized Data is ready'},
+    'Customized Data is not ready': {'fa':'مجموعه داده های سفارشی یافت نشد',
+                                'en':'Customized Data is not ready'},
+    'Pipline_Is_Ready':{'fa':'پایپ لاین {} آماده است ',
+                'en':'pipline {} is ready'},
+    'Pipline_Is_Not_Ready':{'fa':'پایپ لاین آماده نیست',
                                 'en':'the pipeline is not built, and not ready'},
 
     'UI_CREATED': {'fa': ' .شی رابط کاربری برای نرم افزار آموزشی ایجاد شد ',
@@ -685,6 +695,12 @@ MESSEGES = {
                                
     'REMOVE_PIP': {'fa': ' پابپ لاین با موفقیت حذف شد ',
                     'en': ' Pipeline removed successfully '},
+
+    'Camera_successful': {'fa': ' دوربین {} با موفقیت متصل شد ',
+                           'en': ' Camera {} connected successfuly '},
+
+    'Disconnect_camera_successful': {'fa':'قطع اتصال دوربین با م.فقیت انجام شد',
+                        'en':'Camera disconnected successfuly'},
 }
 
 Titles = {
@@ -1337,23 +1353,17 @@ Titles = {
         'date_pbt':{'fa': ': تاریخ','en':'Date  :'},
         'Clear Filters':{'fa':'پاک کرن فیلتر','en':'Clear Filters'},
         'Search/Filter':{'fa':': جست و جو','en':'Search/Filter'},
-        
 
-        
-
-
-
-    
-    'User Profile': {'fa': 'صفحه کاربر',
-                        'en': 'User Profile'},
+        'User Profile': {'fa': 'صفحه کاربر',
+                                'en': 'User Profile'},
+                                
+        'connection_failed': {'fa': 'اتصال ناموفق',
+                                'en': 'Connection failed'},  
                         
-    'connection_failed': {'fa': 'اتصال ناموفق',
-                        'en': 'Connection failed'},  
-                     
-    'software_settings': {'fa': 'تنظیمات نرم افزار',
-                        'en': 'Software Settings'},    
-                     
-    'user_profile': {'fa': 'پروفایل کاربر',
+        'software_settings': {'fa': 'تنظیمات نرم افزار',
+                                'en': 'Software Settings'},    
+                        
+        'user_profile': {'fa': 'پروفایل کاربر',
                         'en': 'User Profile'},  
 
 
@@ -1379,8 +1389,7 @@ Titles = {
     'page_plc': {'fa': 'صفحه پی ال سی',
                         'en': 'PLC'},                        
     'page_storage': {'fa': 'صفحه حافظه',
-                        'en': 'Storage'},  
-
+                        'en': 'Storage'},                       
 }
 
 HELPS = {
@@ -1542,8 +1551,6 @@ HELPS_ADDRESS = {
 }
 
 
-
-
 def set_title(self, lang):
     self.titleLeftApp.setText(Titles['sense'][lang])
     self.titleLeftDescription.setText(Titles['trainer'][lang])
@@ -1597,6 +1604,13 @@ def set_title(self, lang):
 
     self.start_capture_btn.setText(Titles['start_capture'][lang])
     self.stop_capture_btn.setText(Titles['stop_capture'][lang])
+
+    self.checkBox_top.setText(Titles['top_cameras'][lang])
+    self.checkBox_bottom.setText(Titles['bottom_cameras'][lang])
+    self.checkBox_all.setText(Titles['all_cameras'][lang])
+    self.connect_camera_btn.setText(Titles['connect2'][lang])
+    self.disconnect_camera_btn.setText(Titles['disconnect2'][lang])
+
     self.checkBox_save_images.setText(Titles['save_images'][lang])
     self.label_236.setText(Titles['temperature'][lang])
     self.label_237.setText(Titles['plc_status'][lang])
@@ -1983,6 +1997,7 @@ def set_title_labeling(self, lang):
     self.labeling_win.save_btn.setText(Titles['ok'][lang])
     self.labeling_win.cancel_btn.setText(Titles['cancel'][lang])
 
+
 def set_moving_title(self, lang):
     text = self.plc_status_line.text()
     if text == Titles['connect']['fa'] or text == Titles['connect']['en']:
@@ -2005,12 +2020,17 @@ def set_moving_title(self, lang):
         user = text[text.find(':'):]
         self.user_name.setText(Titles['user_name'][lang] + user)
 
+
 def set_alignment(self, lang):
     if lang == 'fa':
         self.titleLeftApp.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.titleLeftDescription.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_237.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
+        self.label_48.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_49.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_50.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_6.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_15.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2176,6 +2196,10 @@ def set_alignment(self, lang):
         self.titleLeftDescription.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_237.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        
+        self.label_48.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_49.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_50.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         
         self.label_6.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_15.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
