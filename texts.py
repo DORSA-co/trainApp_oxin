@@ -701,594 +701,600 @@ MESSEGES = {
 
     'Disconnect_camera_successful': {'fa':'قطع اتصال دوربین با م.فقیت انجام شد',
                         'en':'Camera disconnected successfuly'},
+
+    'changes_not_saved': {'fa': 'تغییرات ذخیره نشده است. میخواهید ادامه دهید؟', 
+                        'en': 'Changes are not saved. Do you want to continue?'},
+
+    'exit_confirm': {'fa': 'آیا مطمئن هستید که میخواهید خارج شوید؟',
+                'en': 'Are you sure you want to exit?'},
 }
 
 Titles = {
 
-    'sense': {'fa': "سنس",
-                'en': 'SENSE'},
+        'sense': {'fa': "سنس",
+                        'en': 'SENSE'},
 
-    'trainer': {'fa': "نرم افزار آموزشی    ",
-                'en': '    Trainer App'},
+        'trainer': {'fa': "نرم افزار آموزشی    ",
+                        'en': '    Trainer App'},
 
-    'message': {'fa': "پیغام",
-                'en': 'Message'},
+        'message': {'fa': "پیغام",
+                        'en': 'Message'},
 
-    'persian': {'fa': "فارسی",
-                'en': 'Persian'},
+        'persian': {'fa': "فارسی",
+                        'en': 'Persian'},
 
-    'english': {'fa': "انگلیسی",
-                'en': 'English'},
+        'english': {'fa': "انگلیسی",
+                        'en': 'English'},
 
-    'language': {'fa': "زبان",
-                'en': 'Language'},
+        'language': {'fa': "زبان",
+                        'en': 'Language'},
 
-    'font': {'fa': "فونت",
-        'en': 'Font'},
+        'font': {'fa': "فونت",
+                'en': 'Font'},
 
-    'manual': {'fa': "غیر خودکار",
-                'en': 'Manual'},
+        'manual': {'fa': "غیر خودکار",
+                        'en': 'Manual'},
 
-    'save_params': {'fa': "اعمال/ذخیره پارامترها",
-                'en': 'Apply/Save Parameters'},
+        'save_params': {'fa': "اعمال/ذخیره پارامترها",
+                        'en': 'Apply/Save Parameters'},
 
-    'wind_duration': {'fa': ": مدت زمان فشار هوا",
-                'en': 'Wind duration :'},
+        'wind_duration': {'fa': ": مدت زمان فشار هوا",
+                        'en': 'Wind duration :'},
 
-    'update_time': {'fa': ": زمان به روز رسانی",
-                'en': 'Update time :'},
+        'update_time': {'fa': ": زمان به روز رسانی",
+                        'en': 'Update time :'},
 
-    'plc': {'fa': "پی ال سی",
-                'en': 'PLC'},
+        'plc': {'fa': "پی ال سی",
+                        'en': 'PLC'},
 
-    'cameras': {'fa': "دوربین ها",
-                'en': 'Cameras'},
+        'cameras': {'fa': "دوربین ها",
+                        'en': 'Cameras'},
 
-    'appearance': {'fa': "ظاهر نرم افزار",
-                'en': 'App appearance'},
+        'appearance': {'fa': "ظاهر نرم افزار",
+                        'en': 'App appearance'},
 
-    'plc_ip': {'fa': ": آی پی پی ال سی",
-                'en': 'PLC IP :'},  
+        'plc_ip': {'fa': ": آی پی پی ال سی",
+                        'en': 'PLC IP :'},  
 
-    'plc_status': {'fa': ': وضعیت پی ال سی',
-                'en': 'PLC Status :'},        
+        'plc_status': {'fa': ': وضعیت پی ال سی',
+                        'en': 'PLC Status :'},        
 
-    'image_update': {'fa': ': زمان به روز رسانی تصویر',
-                'en': 'Image update time :'},        
+        'image_update': {'fa': ': زمان به روز رسانی تصویر',
+                        'en': 'Image update time :'},        
 
-    'live_update': {'fa': ': زمان بروزرسانی نمایش زنده',
-                'en': 'Live show update time :'},             
+        'live_update': {'fa': ': زمان بروزرسانی نمایش زنده',
+                        'en': 'Live show update time :'},             
 
-    'Train Software': {'fa': "نرم افزار آموزشی",
-                        'en': 'Train Software'},
+        'Train Software': {'fa': "نرم افزار آموزشی",
+                                'en': 'Train Software'},
 
-    'Setting Software': {'fa': "نرم افزار تنظیمات",
-                        'en': 'Setting Software'},
+        'Setting Software': {'fa': "نرم افزار تنظیمات",
+                                'en': 'Setting Software'},
 
-    'Data Auquzation': {'fa': "داده برداری",
-                        'en': 'Data Auquzation'},
+        'Data Auquzation': {'fa': "داده برداری",
+                                'en': 'Data Auquzation'},
 
-    'Label': {'fa': "برچسب گذاری",
-              'en': 'Label'},
+        'Label': {'fa': "برچسب گذاری",
+                'en': 'Label'},
 
-    'Label page': {'fa': "صفحه برچسب گذاری",
-              'en': 'Label page'},
+        'Label page': {'fa': "صفحه برچسب گذاری",
+                'en': 'Label page'},
 
-    ' Tuning': {'fa': "تیونینگ",
-                'en': ' Tuning'},
+        ' Tuning': {'fa': "تیونینگ",
+                        'en': ' Tuning'},
 
-    'Pipline Build & Test': {'fa': "ساخت پایپ لاین و تست",
-                             'en': 'Pipline Build and Test'},
+        'Pipline Build & Test': {'fa': "ساخت پایپ لاین و تست",
+                                'en': 'Pipline Build and Test'},
 
-    'Live': {'fa': 'نمایش زنده',
-             'en': 'Live'},
-    'Live tab': {'fa': ' تب نمایش زنده',
-             'en': 'Live tab'},
-    'Technical View': {'fa': 'نمای تکنیکال',
-                       'en': 'Technical View'},
-    'Technical View tab': {'fa': 'تب نمای تکنیکال',
-                       'en': 'Technical View tab'},
-    'TOP Side': {'fa': "سمت بالا",
-                 'en': 'TOP Side'},
+        'Live': {'fa': 'نمایش زنده',
+                'en': 'Live'},
+        'Live tab': {'fa': ' تب نمایش زنده',
+                'en': 'Live tab'},
+        'Technical View': {'fa': 'نمای تکنیکال',
+                        'en': 'Technical View'},
+        'Technical View tab': {'fa': 'تب نمای تکنیکال',
+                        'en': 'Technical View tab'},
+        'TOP Side': {'fa': "سمت بالا",
+                        'en': 'TOP Side'},
 
-    'BOTTOM Side': {'fa': "سمت پایین",
-                    'en': 'BOTTOM Side'},
+        'BOTTOM Side': {'fa': "سمت پایین",
+                        'en': 'BOTTOM Side'},
 
-    'position': {'fa': "موقعیت",
-                 'en': 'Position'},
+        'position': {'fa': "موقعیت",
+                        'en': 'Position'},
 
-    'Load Sheet': {'fa': "بارگزاری ورق",
-                   'en': 'Load Sheet'},
+        'Load Sheet': {'fa': "بارگزاری ورق",
+                        'en': 'Load Sheet'},
 
-    'append': {'fa': "اضافه کردن",
-               'en': 'Append'},
+        'append': {'fa': "اضافه کردن",
+                'en': 'Append'},
 
-    'select all': {'fa': "انتخاب همه",
-                   'en': 'Select All'},
+        'select all': {'fa': "انتخاب همه",
+                        'en': 'Select All'},
 
-    'all': {'fa': "همه",
-            'en': 'All'},
+        'all': {'fa': "همه",
+                'en': 'All'},
 
-    'cm': {'fa': "سانتی متر",
-           'en': 'cm'},
+        'cm': {'fa': "سانتی متر",
+                'en': 'cm'},
 
-    'Append with filter': {'fa': "اضافه کردن با فیلتر",
-                           'en': 'Append with filter'},
+        'Append with filter': {'fa': "اضافه کردن با فیلتر",
+                                'en': 'Append with filter'},
 
-    'Select with filter': {'fa': "انتخاب با فیلتر",
-                           'en': 'Select with filter'},
+        'Select with filter': {'fa': "انتخاب با فیلتر",
+                                'en': 'Select with filter'},
 
-    'side': {'fa': "سمت ورق",
-             'en': 'Side'},
+        'side': {'fa': "سمت ورق",
+                'en': 'Side'},
 
-    'Frame Number': {'fa': "شماره فریم",
-                     'en': 'Frame Number'},
+        'Frame Number': {'fa': "شماره فریم",
+                        'en': 'Frame Number'},
 
-    'Camera Number': {'fa': "شماره دوربین",
-                      'en': 'Camera Number'},
+        'Camera Number': {'fa': "شماره دوربین",
+                        'en': 'Camera Number'},
 
-    'creditsLabel': {'fa': "تهیه شده توسط : شرکت درصا",
-                     'en': 'By: Dorsa-co'},
+        'creditsLabel': {'fa': "تهیه شده توسط : شرکت درصا",
+                        'en': 'By: Dorsa-co'},
 
-    'Sheet ID :': {'fa': " : شماره ورق",
-                   'en': 'Sheet ID : '},
+        'Sheet ID :': {'fa': " : شماره ورق",
+                        'en': 'Sheet ID : '},
 
-    'Heat Number :': {'fa': " : شماره سفارش",
-                      'en': 'Heat Number : '},
+        'Heat Number :': {'fa': " : شماره سفارش",
+                        'en': 'Heat Number : '},
 
-    'Ps Number :': {'fa': " : شماره  سفارش",
-                    'en': 'Ps Number : '},
+        'Ps Number :': {'fa': " : شماره  سفارش",
+                        'en': 'Ps Number : '},
 
-    'Pdl Number :': {'fa': " : شماره  سفارش",
-                     'en': 'Pdl Number : '},
+        'Pdl Number :': {'fa': " : شماره  سفارش",
+                        'en': 'Pdl Number : '},
 
-    'Lenght :': {'fa': " : طول",
-                 'en': 'Lenght :'},
+        'Lenght :': {'fa': " : طول",
+                        'en': 'Lenght :'},
 
-    'Width :': {'fa': " : عرض",
-                'en': 'Width : '},
+        'Width :': {'fa': " : عرض",
+                        'en': 'Width : '},
 
-    'Thickness :': {'fa': " : ضخامت",
-                    'en': 'Thickness : '},
+        'Thickness :': {'fa': " : ضخامت",
+                        'en': 'Thickness : '},
 
-    'start_capture': {'fa': 'شروع نمایش زنده',
-                   'en': 'Start Capture'},
+        'start_capture': {'fa': 'شروع نمایش زنده',
+                        'en': 'Start Capture'},
 
-    'stop_capture': {'fa': 'پایان نمایش زنده',
-                  'en': 'Stop Capture'},
+        'stop_capture': {'fa': 'پایان نمایش زنده',
+                        'en': 'Stop Capture'},
 
-    'save_images': {'fa': 'ذخیره تصاویر',
-                   'en': 'Save Images'},
+        'save_images': {'fa': 'ذخیره تصاویر',
+                        'en': 'Save Images'},
 
-    'temperature': {'fa': ': دما',
-                   'en': 'Temperature :'},
+        'temperature': {'fa': ': دما',
+                        'en': 'Temperature :'},
 
-    'start': {'fa': 'شروع',
-            'en': 'Start'},
+        'start': {'fa': 'شروع',
+                'en': 'Start'},
 
-    'seconds': {'fa': '{} ثانیه',
-            'en': '{} Seconds'},
+        'seconds': {'fa': '{} ثانیه',
+                'en': '{} Seconds'},
 
-    'second': {'fa': '{} ثانیه',
-            'en': '{} Second'},
+        'second': {'fa': '{} ثانیه',
+                'en': '{} Second'},
 
-    'reconnect': {'fa': 'اتصال مجدد {}',
-            'en': 'Reconnect {}'},
+        'reconnect': {'fa': 'اتصال مجدد {}',
+                'en': 'Reconnect {}'},
 
-    'connect': {'fa': 'متصل',
-            'en': 'Connect'},
+        'connect': {'fa': 'متصل',
+                'en': 'Connect'},
 
-    'disconnect': {'fa': 'غیر متصل',
-            'en': 'Diconnect'},
+        'disconnect': {'fa': 'غیر متصل',
+                'en': 'Diconnect'},
 
-    'connect2': {'fa': 'وصل کردن',
-            'en': 'Connect'},
+        'connect2': {'fa': 'وصل کردن',
+                'en': 'Connect'},
 
-    'disconnect2': {'fa': 'قطع کردن',
-            'en': 'Diconnect'},
+        'disconnect2': {'fa': 'قطع کردن',
+                'en': 'Diconnect'},
 
-    'single_camera': {'fa': 'تک دوربین',
-                      'en': 'Single Camera'},
+        'single_camera': {'fa': 'تک دوربین',
+                        'en': 'Single Camera'},
 
-    'top_cameras': {'fa': 'دوربین های بالا',
-                    'en': 'Top Cameras'},
+        'top_cameras': {'fa': 'دوربین های بالا',
+                        'en': 'Top Cameras'},
 
-    'bottom_cameras': {'fa': 'دوربین های پایین',
-                       'en': 'Bottom Cameras'},
+        'bottom_cameras': {'fa': 'دوربین های پایین',
+                        'en': 'Bottom Cameras'},
 
-    'all_cameras': {'fa': 'همه ی دوربین ها',
-                    'en': 'All Cameras'},
+        'all_cameras': {'fa': 'همه ی دوربین ها',
+                        'en': 'All Cameras'},
 
-    'camera_number': {'fa': 'شماره دوربین',
-                      'en': 'Camera Number'},
+        'camera_number': {'fa': 'شماره دوربین',
+                        'en': 'Camera Number'},
 
-    'detect sensor': {'fa': 'سنسور تشخیص',
-                      'en': 'Detect sensor'},
+        'detect sensor': {'fa': 'سنسور تشخیص',
+                        'en': 'Detect sensor'},
 
-    'air cleaning': {'fa': 'فشار هوا',
-                      'en': 'Air cleaning'},
+        'air cleaning': {'fa': 'فشار هوا',
+                        'en': 'Air cleaning'},
 
-    'search by': {'fa': 'جست و جو براساس: ',
-                  'en': 'Search By: '},
+        'search by': {'fa': 'جست و جو براساس: ',
+                        'en': 'Search By: '},
 
-    'search': {'fa': 'جست و جو',
-               'en': 'Search'},
+        'search': {'fa': 'جست و جو',
+                'en': 'Search'},
 
-    'refresh': {'fa': 'به روز رسانی',
-                'en': 'Refresh'},
+        'refresh': {'fa': 'به روز رسانی',
+                        'en': 'Refresh'},
 
-    'open_images': {'fa': 'باز کردن تصاویر',
-                    'en': 'Open Images'},
+        'open_images': {'fa': 'باز کردن تصاویر',
+                        'en': 'Open Images'},
 
-    'load': {'fa': 'بارگذاری',
-             'en': 'Load'},
+        'load': {'fa': 'بارگذاری',
+                'en': 'Load'},
 
-    'detail': {'fa': 'جزئیات مجموعه داده',
-               'en': 'Details Of Dataset'},
+        'detail': {'fa': 'جزئیات مجموعه داده',
+                'en': 'Details Of Dataset'},
 
-    'available_ids': {'fa': 'شماره شناسه های در دسترس :',
-                      'en': 'Availabla ID Numbers :'},
+        'available_ids': {'fa': 'شماره شناسه های در دسترس :',
+                        'en': 'Availabla ID Numbers :'},
 
-    'available_heats': {'fa': 'شماره سفارش های در دسترس :',
-                        'en': 'Availabl HEAT Numbers :'},
+        'available_heats': {'fa': 'شماره سفارش های در دسترس :',
+                                'en': 'Availabl HEAT Numbers :'},
 
-    'available_psns': {'fa': 'شماره سفارش های در دسترس :',
-                        'en': 'Available Product Schedule Numbers :'},
+        'available_psns': {'fa': 'شماره سفارش های در دسترس :',
+                                'en': 'Available Product Schedule Numbers :'},
 
-    'available_pdlns': {'fa': 'شماره سفارش های در دسترس :',
-                        'en': 'Available Product Drift Line Numbers :'},
+        'available_pdlns': {'fa': 'شماره سفارش های در دسترس :',
+                                'en': 'Available Product Drift Line Numbers :'},
 
-    'number': {'fa': ': شماره',
-               'en': 'Number :'},
+        'number': {'fa': ': شماره',
+                'en': 'Number :'},
 
-    'user_login': {'fa': 'ورود کاربر',
-                   'en': 'User Login'},
+        'user_login': {'fa': 'ورود کاربر',
+                        'en': 'User Login'},
 
-    'user_name': {'fa': 'نام کاربری',
-                  'en': 'User Name'},
+        'user_name': {'fa': 'نام کاربری',
+                        'en': 'User Name'},
 
-    'password': {'fa': '    رمز عبور',
-                 'en': 'Password'},
+        'password': {'fa': '    رمز عبور',
+                        'en': 'Password'},
 
-    'login': {'fa': 'ورود',
-              'en': 'Login'},
+        'login': {'fa': 'ورود',
+                'en': 'Login'},
 
-    'forget': {'fa': 'فراموشی نام کاربری/رمز عبور',
-               'en': 'Forget Username/Password'},
+        'forget': {'fa': 'فراموشی نام کاربری/رمز عبور',
+                'en': 'Forget Username/Password'},
 
-    'user_name_2': {'fa': ':نام کاربری',
-                    'en': 'User Name:'},
+        'user_name_2': {'fa': ':نام کاربری',
+                        'en': 'User Name:'},
 
-    'ID': {'fa': ':شناسه',
-           'en': 'ID:'},
+        'ID': {'fa': ':شناسه',
+                'en': 'ID:'},
 
-    'ID2': {'fa': 'شناسه',
-           'en': 'ID'},
+        'ID2': {'fa': 'شناسه',
+                'en': 'ID'},
 
-    'heatn': {'fa': 'ش. سفارش',
-           'en': 'HEAT'},
+        'heatn': {'fa': 'ش. سفارش',
+                'en': 'HEAT'},
 
-    'psn': {'fa': 'ش. سفارش',
-           'en': 'PSN'},
+        'psn': {'fa': 'ش. سفارش',
+                'en': 'PSN'},
 
-    'pdln': {'fa': 'ش. سفارش',
-           'en': 'PDLN'},
+        'pdln': {'fa': 'ش. سفارش',
+                'en': 'PDLN'},
 
-    'role': {'fa': ':نقش',
-             'en': 'Role:'},
+        'role': {'fa': ':نقش',
+                'en': 'Role:'},
 
-    'date_created': {'fa': ':تاریخ ایجاد',
-                     'en': 'Date Created:'},
+        'date_created': {'fa': ':تاریخ ایجاد',
+                        'en': 'Date Created:'},
 
-    'default_sataset': {'fa': ':مجموعه داده پیش فرض',
-                        'en': 'Default Dataset:'},
+        'default_sataset': {'fa': ':مجموعه داده پیش فرض',
+                                'en': 'Default Dataset:'},
 
-    'create_new_ds': {'fa': 'ایجاد مجموعه داده ی جدید',
-                      'en': 'Create New Dataset'},
+        'create_new_ds': {'fa': 'ایجاد مجموعه داده ی جدید',
+                        'en': 'Create New Dataset'},
 
-    'all_ds': {'fa': 'همه ی مجموعه داده ها',
-              'en': 'All Datasets'},
+        'all_ds': {'fa': 'همه ی مجموعه داده ها',
+                'en': 'All Datasets'},
 
-    'my_ds': {'fa': 'مجموعه داده های من',
-              'en': 'My Datasets'},
+        'my_ds': {'fa': 'مجموعه داده های من',
+                'en': 'My Datasets'},
 
-    'pipelines': {'fa': 'پایپ لاین ها',
-                      'en': 'Pipelines'},
+        'pipelines': {'fa': 'پایپ لاین ها',
+                        'en': 'Pipelines'},
 
-    'today_date': {'fa': ':تاریخ امروز',
-                      'en': 'Today Date:'},
+        'today_date': {'fa': ':تاریخ امروز',
+                        'en': 'Today Date:'},
 
-    'creator_username': {'fa': ':نام کاربری سازنده',
-                      'en': 'Creator Username:'},
+        'creator_username': {'fa': ':نام کاربری سازنده',
+                        'en': 'Creator Username:'},
 
-    'dataset_name': {'fa': ':نام مجموعه داده',
-                      'en': 'Dataset Name:'},
+        'dataset_name': {'fa': ':نام مجموعه داده',
+                        'en': 'Dataset Name:'},
 
-    'location': {'fa': ':مکان',
-                      'en': 'Location:'},
+        'location': {'fa': ':مکان',
+                        'en': 'Location:'},
 
-    'create': {'fa': 'ایجاد',
-               'en': 'Create'},
+        'create': {'fa': 'ایجاد',
+                'en': 'Create'},
 
-    'select_ds': {'fa': ':انتخاب مجموعه داده',
-               'en': 'Select Dataset:'},
+        'select_ds': {'fa': ':انتخاب مجموعه داده',
+                'en': 'Select Dataset:'},
 
-    'owner_user': {'fa': ':کاربر مالک',
-               'en': 'Owner User:'},
+        'owner_user': {'fa': ':کاربر مالک',
+                'en': 'Owner User:'},
 
-    'path': {'fa': ':مسیر',
-               'en': 'Path:'},
+        'path': {'fa': ':مسیر',
+                'en': 'Path:'},
 
-    'set_default': {'fa': 'انتخاب به عنوان پیش فرض',
-                    'en': 'Set As Default'},
+        'set_default': {'fa': 'انتخاب به عنوان پیش فرض',
+                        'en': 'Set As Default'},
 
-    'my_pipelines': {'fa': ':پایپ لاین های من',
-                      'en': 'My Pipelines:'},
+        'my_pipelines': {'fa': ':پایپ لاین های من',
+                        'en': 'My Pipelines:'},
 
-    'all_pipelines': {'fa': ':همه ی پایپ لاین ها',
-                      'en': 'All Pipelines:'},
+        'all_pipelines': {'fa': ':همه ی پایپ لاین ها',
+                        'en': 'All Pipelines:'},
 
-    'show_details': {'fa': 'نمایش جزئیات',
-                      'en': 'Show Details'},
+        'show_details': {'fa': 'نمایش جزئیات',
+                        'en': 'Show Details'},
 
-    'df_piechart': {'fa': 'نمودار دایره ای معیوب/بدون عیب',
-                    'en': 'Defect/Perfect PieChart'},
+        'df_piechart': {'fa': 'نمودار دایره ای معیوب/بدون عیب',
+                        'en': 'Defect/Perfect PieChart'},
 
-    'df_barchart': {'fa': 'نمودار میله ای تعداد معیوب/بدون عیب',
-                    'en': 'Defect/Perfect Count BarChart'},
+        'df_barchart': {'fa': 'نمودار میله ای تعداد معیوب/بدون عیب',
+                        'en': 'Defect/Perfect Count BarChart'},
 
-    'c_barchart': {'fa': 'نمودار میله ای کلاس های عیب',
-                    'en': 'Defect Classes BarChart'},
+        'c_barchart': {'fa': 'نمودار میله ای کلاس های عیب',
+                        'en': 'Defect Classes BarChart'},
 
-    'date': {'fa': ':تاریخ',
-             'en': 'Date:'},
+        'date': {'fa': ':تاریخ',
+                'en': 'Date:'},
 
-    'coil_number': {'fa': ':شماره ورق',
-             'en': 'Coil Number:'},
+        'coil_number': {'fa': ':شماره ورق',
+                'en': 'Coil Number:'},
 
-    'cam_number': {'fa': ':شماره دوربین',
-             'en': 'Cam Number:'},
+        'cam_number': {'fa': ':شماره دوربین',
+                'en': 'Cam Number:'},
 
-    'show_neighbours': {'fa': 'نمایش تصاویر همسایه',
-             'en': 'Show Neighbours'},
+        'show_neighbours': {'fa': 'نمایش تصاویر همسایه',
+                'en': 'Show Neighbours'},
 
-    'show_neighbours_labels': {'fa': 'نمایش برچسب تصاویر همسایه',
-             'en': 'Show Neighbours labels'},
+        'show_neighbours_labels': {'fa': 'نمایش برچسب تصاویر همسایه',
+                'en': 'Show Neighbours labels'},
 
-    'defect': {'fa': ':معیوب',
-               'en': 'Defect:'},
+        'defect': {'fa': ':معیوب',
+                'en': 'Defect:'},
 
-    'defect2': {'fa': 'معیوب:',
-               'en': 'Defect:'},
+        'defect2': {'fa': 'معیوب:',
+                'en': 'Defect:'},
 
-    'perfect': {'fa': 'سالم:',
-               'en': 'Perfect:'},
+        'perfect': {'fa': 'سالم:',
+                'en': 'Perfect:'},
 
-    'yes': {'fa': 'بله',
-               'en': 'Yes'},
+        'yes': {'fa': 'بله',
+                'en': 'Yes'},
 
-    'no': {'fa': 'خیر',
-               'en': 'No'},
+        'no': {'fa': 'خیر',
+                'en': 'No'},
 
-    'save': {'fa': 'ذخیره',
-             'en': 'Save'},
+        'save': {'fa': 'ذخیره',
+                'en': 'Save'},
 
-    'masks': {'fa': 'ماسک ها',
-             'en': 'Masks'},
+        'masks': {'fa': 'ماسک ها',
+                'en': 'Masks'},
 
-    'size': {'fa': 'اندازه',
-             'en': 'Size'},
+        'size': {'fa': 'اندازه',
+                'en': 'Size'},
 
-    'defect_id': {'fa': 'شناسه ی عیب',
-                'en': 'Defect ID'},
+        'defect_id': {'fa': 'شناسه ی عیب',
+                        'en': 'Defect ID'},
 
-    'defect_name': {'fa': 'نام عیب',
-                'en': 'Defect Name'},
+        'defect_name': {'fa': 'نام عیب',
+                        'en': 'Defect Name'},
 
-    'search_bar': {'fa': 'نوار جست و جو',
-                   'en': 'Search Bar'},
+        'search_bar': {'fa': 'نوار جست و جو',
+                        'en': 'Search Bar'},
 
-    'ok': {'fa': 'تایید',
-           'en': 'OK'},
+        'ok': {'fa': 'تایید',
+                'en': 'OK'},
 
-    'cancel': {'fa': 'لغو',
-                   'en': 'Cancel'},
+        'cancel': {'fa': 'لغو',
+                        'en': 'Cancel'},
 
-    'binary_list': {'fa': 'لیست باینری',
-                    'en': 'Binary list'},
+        'binary_list': {'fa': 'لیست باینری',
+                        'en': 'Binary list'},
 
-    'Binary': {'fa': 'باینری',
-                    'en': 'Binary'},
+        'Binary': {'fa': 'باینری',
+                        'en': 'Binary'},
 
-    'Localization': {'fa': 'جایابی',
-                    'en': 'Localization'},
+        'Localization': {'fa': 'جایابی',
+                        'en': 'Localization'},
 
-    'Classification': {'fa': 'دسته بندی',
-                    'en': 'Classification'},
+        'Classification': {'fa': 'دسته بندی',
+                        'en': 'Classification'},
 
-    'training': {'fa': 'آموزش',
-                    'en': 'Training'},
+        'training': {'fa': 'آموزش',
+                        'en': 'Training'},
 
-    'binary_training': {'fa': 'آموزش باینری',
-                        'en': 'Binary Training'},
+        'binary_training': {'fa': 'آموزش باینری',
+                                'en': 'Binary Training'},
 
-    'localization_training': {'fa': 'آموزش جایابی',
-                                'en': 'Localization Training'},
+        'localization_training': {'fa': 'آموزش جایابی',
+                                        'en': 'Localization Training'},
 
-    'classification_training': {'fa': 'آموزش کلاس بندی',
-                                'en': 'Classification Training'},
+        'classification_training': {'fa': 'آموزش کلاس بندی',
+                                        'en': 'Classification Training'},
 
-    'history': {'fa': 'تاریخچه',
-                'en': 'History'},
+        'history': {'fa': 'تاریخچه',
+                        'en': 'History'},
 
-    'binary_history': {'fa': 'تاریخچه باینری',
-                        'en': 'Binary History'},
+        'binary_history': {'fa': 'تاریخچه باینری',
+                                'en': 'Binary History'},
 
-    'localization_history': {'fa': 'تاریخچه جایابی',
-                                'en': 'Localization History'},
+        'localization_history': {'fa': 'تاریخچه جایابی',
+                                        'en': 'Localization History'},
 
-    'classification_history': {'fa': 'تاریخچه کلاس بندی',
-                                'en': 'Classification History'},
+        'classification_history': {'fa': 'تاریخچه کلاس بندی',
+                                        'en': 'Classification History'},
 
-    'algorithm_name': {'fa': ':نام الگوریتم',
-                    'en': 'Algorithm Name:'},
+        'algorithm_name': {'fa': ':نام الگوریتم',
+                        'en': 'Algorithm Name:'},
 
-    'input_size': {'fa': ':اندازه ورودی',
-                    'en': 'Input Size:'},
+        'input_size': {'fa': ':اندازه ورودی',
+                        'en': 'Input Size:'},
 
-    'input_type': {'fa': ':نوع ورودی',
-                   'en': 'Input Type:'},
+        'input_type': {'fa': ':نوع ورودی',
+                        'en': 'Input Type:'},
 
-    'resize': {'fa': 'تغییر اندازه',
-                    'en': 'resize'},
+        'resize': {'fa': 'تغییر اندازه',
+                        'en': 'resize'},
 
-    'split': {'fa': 'شکستن',
-                    'en': 'split'},
+        'split': {'fa': 'شکستن',
+                        'en': 'split'},
 
-    'epochs': {'fa': ':تعداد اپوک',
-                    'en': 'Epochs:'},
+        'epochs': {'fa': ':تعداد اپوک',
+                        'en': 'Epochs:'},
 
-    'batch_size': {'fa': ':اندازه ی دسته',
-                    'en': 'Batch Size:'},
+        'batch_size': {'fa': ':اندازه ی دسته',
+                        'en': 'Batch Size:'},
 
-    'learning_rate': {'fa': ':نرخ یادگیری',
-                    'en': 'Learning Rate:'},
+        'learning_rate': {'fa': ':نرخ یادگیری',
+                        'en': 'Learning Rate:'},
 
-    'tuning_epochs': {'fa': ':اپوک های تیونینگ',
-                    'en': 'Tunning Epochs:'},
+        'tuning_epochs': {'fa': ':اپوک های تیونینگ',
+                        'en': 'Tunning Epochs:'},
 
-    'validation_split': {'fa': ' :% تقسیم داده',
-                    'en': 'Validation Split %:'},
+        'validation_split': {'fa': ' :% تقسیم داده',
+                        'en': 'Validation Split %:'},
 
-    'ds_path': {'fa': ':آدرس مجموعه داده',
-                    'en': 'Dataset Path:'},
+        'ds_path': {'fa': ':آدرس مجموعه داده',
+                        'en': 'Dataset Path:'},
 
-    'ds_path_2': {'fa': 'آدرس مجموعه داده',
-                    'en': 'Dataset Path'},
+        'ds_path_2': {'fa': 'آدرس مجموعه داده',
+                        'en': 'Dataset Path'},
 
-    'select_dataset': {'fa': 'انتخاب مجموعه داده',
-                    'en': 'Select Dataset'},
+        'select_dataset': {'fa': 'انتخاب مجموعه داده',
+                        'en': 'Select Dataset'},
 
-    'delete': {'fa': 'حذف',
-                    'en': 'Delete'},
+        'delete': {'fa': 'حذف',
+                        'en': 'Delete'},
 
-    'add': {'fa': 'اضافه',
-                    'en': 'Add'},
+        'add': {'fa': 'اضافه',
+                        'en': 'Add'},
 
-    'train_gpu': {'fa': ':جی پی یو آموزش',
-                    'en': 'Train GPU:'},
+        'train_gpu': {'fa': ':جی پی یو آموزش',
+                        'en': 'Train GPU:'},
 
-    'train': {'fa': 'آموزش',
-                    'en': 'Train'},
+        'train': {'fa': 'آموزش',
+                        'en': 'Train'},
 
-    'chart_full_view': {'fa': 'نمای کامل نمودار',
-                    'en': 'Chart Full View'},
+        'chart_full_view': {'fa': 'نمای کامل نمودار',
+                        'en': 'Chart Full View'},
 
-    'validation': {'fa': 'اعتبار سنجی',
-                    'en': 'Validation'},
+        'validation': {'fa': 'اعتبار سنجی',
+                        'en': 'Validation'},
 
-    'sf_training_records': {'fa': 'جست و جو/فیلتر رکوردهای آموزش دیده',
-                    'en': 'Search/Filter Training Records'},
+        'sf_training_records': {'fa': 'جست و جو/فیلتر رکوردهای آموزش دیده',
+                        'en': 'Search/Filter Training Records'},
 
-    'name': {'fa': 'نام',
-            'en': 'Name'},
+        'name': {'fa': 'نام',
+                'en': 'Name'},
 
-    'epochs_2': {'fa': 'اپوک ها',
-                'en': 'Epochs'},
+        'epochs_2': {'fa': 'اپوک ها',
+                        'en': 'Epochs'},
 
-    'tune_epochs': {'fa': 'اپوک های تیون',
-                    'en': 'Tune Epochs'},
+        'tune_epochs': {'fa': 'اپوک های تیون',
+                        'en': 'Tune Epochs'},
 
-    'batch_size_2': {'fa': 'اندازه ی دسته',
-                    'en': 'Batch Size'},
+        'batch_size_2': {'fa': 'اندازه ی دسته',
+                        'en': 'Batch Size'},
 
-    'split_size': {'fa': 'اندازه قطعه',
-                    'en': 'Split Size'},
+        'split_size': {'fa': 'اندازه قطعه',
+                        'en': 'Split Size'},
 
-    'min': {'fa': 'کمینه',
-            'en': 'Min'},
+        'min': {'fa': 'کمینه',
+                'en': 'Min'},
 
-    'max': {'fa': 'بیشینه',
-            'en': 'Max'},
+        'max': {'fa': 'بیشینه',
+                'en': 'Max'},
 
-    'start_date': {'fa': 'تاریخ شروع',
-                'en': 'Start Date'},
+        'start_date': {'fa': 'تاریخ شروع',
+                        'en': 'Start Date'},
 
-    'end_date': {'fa': 'تاریخ پایان',
-                'en': 'End Date'},
+        'end_date': {'fa': 'تاریخ پایان',
+                        'en': 'End Date'},
 
-    'search_filter': {'fa': 'جست و جو/فیلتر',
-                     'en': 'Search/Filter'},
+        'search_filter': {'fa': 'جست و جو/فیلتر',
+                        'en': 'Search/Filter'},
 
-    'clear_filters': {'fa': 'حذف فیلترها',
-                       'en': 'Clear Filters'},
+        'clear_filters': {'fa': 'حذف فیلترها',
+                        'en': 'Clear Filters'},
 
-    'statistic': {'fa': 'آمار',
-                  'en': 'Statistic'},
+        'statistic': {'fa': 'آمار',
+                        'en': 'Statistic'},
 
-    'search_tab': {'fa': 'برگه ی جست و جو',
-                    'en': 'Search Tab'},
+        'search_tab': {'fa': 'برگه ی جست و جو',
+                        'en': 'Search Tab'},
 
-    'last_row': {'fa': 'آخرین ردیف',
-                'en': 'last row'},
+        'last_row': {'fa': 'آخرین ردیف',
+                        'en': 'last row'},
 
-    'request': {'fa': 'درخواست',
-                'en': 'Request'},
+        'request': {'fa': 'درخواست',
+                        'en': 'Request'},
 
-    'by_name': {'fa': ':بر اساس نام',
-                'en': 'by Name:'},
+        'by_name': {'fa': ':بر اساس نام',
+                        'en': 'by Name:'},
 
-    'by_accuracy': {'fa': ':بر اساس Accuracy',
-                     'en': 'by Accuracy:'},
+        'by_accuracy': {'fa': ':بر اساس Accuracy',
+                        'en': 'by Accuracy:'},
 
-    'by_recall': {'fa': ':بر اساس Recall',
-                  'en': 'by Recall:'},
+        'by_recall': {'fa': ':بر اساس Recall',
+                        'en': 'by Recall:'},
 
-    'by_epoch': {'fa': ':بر اساس Epoch',
-                 'en': 'by Epoch:'},
+        'by_epoch': {'fa': ':بر اساس Epoch',
+                        'en': 'by Epoch:'},
 
-    'min_2': {'fa': ':کمینه',
-            'en': 'Min:'},
+        'min_2': {'fa': ':کمینه',
+                'en': 'Min:'},
 
-    'max_2': {'fa': ':بیشینه',
-            'en': 'Max:'},
+        'max_2': {'fa': ':بیشینه',
+                'en': 'Max:'},
 
-    'classes_list': {'fa': 'لیست کلاس ها',
-                    'en': 'Classes list'},
+        'classes_list': {'fa': 'لیست کلاس ها',
+                        'en': 'Classes list'},
 
-    'defect_classes': {'fa': 'کلاس های عیب',
-            'en': 'Defect Classes'},
+        'defect_classes': {'fa': 'کلاس های عیب',
+                'en': 'Defect Classes'},
 
-    'datasets': {'fa': 'مجموعه داده ها',
-            'en': 'Datasets'},
+        'datasets': {'fa': 'مجموعه داده ها',
+                'en': 'Datasets'},
 
-    'including_class': {'fa': 'کلاس (ها) موجود',
-                        'en': 'Including Class(s)'},
+        'including_class': {'fa': 'کلاس (ها) موجود',
+                                'en': 'Including Class(s)'},
 
 
 
-    'Pipline': {'fa': 'پایپ لاین',
-                        'en': 'Pipline'},
-    'Load Dataset': {'fa': 'بارگذاری داده',
-                        'en': 'Load Dataset'},
-    'History':{'fa':'تاریخچه',
-                'en':'History'},
+        'Pipline': {'fa': 'پایپ لاین',
+                                'en': 'Pipline'},
+        'Load Dataset': {'fa': 'بارگذاری داده',
+                                'en': 'Load Dataset'},
+        'History':{'fa':'تاریخچه',
+                        'en':'History'},
 
-     'binary_pbt':{'fa':' : دوتایی',
-                   'en':'Binary : '},
-     
-     'localization_pbt':{'fa':' : جایابی',
-                        'en':'Localization : '},
-     
-     'classification_pbt':{'fa':' : دسته بندی',
-                        'en':'Classification :'},
-      
-      'pipline_name_pbt':{'fa':' : نام پایپ لاین',
-                        'en':'Name of Pipiline  :'},
-      
-      'warn_of_valid_pipline_name':{'fa':'لطفا نام معتبری بنوسید',
-        'en':'Please Enter Valid Name'},
+        'binary_pbt':{'fa':' : دوتایی',
+                        'en':'Binary : '},
         
+        'localization_pbt':{'fa':' : جایابی',
+                                'en':'Localization : '},
+        
+        'classification_pbt':{'fa':' : دسته بندی',
+                                'en':'Classification :'},
+        
+        'pipline_name_pbt':{'fa':' : نام پایپ لاین',
+                                'en':'Name of Pipiline  :'},
+        
+        'warn_of_valid_pipline_name':{'fa':'لطفا نام معتبری بنوسید',
+                'en':'Please Enter Valid Name'},
+                
         'example_of_pipline_name':{'fa':'برای مثال : تاریخ/ترکیبی از آدرس وزن....'
                                 ,'en':'Example : Date/Mix of weights/....'},
         
@@ -1366,30 +1372,70 @@ Titles = {
         'user_profile': {'fa': 'پروفایل کاربر',
                         'en': 'User Profile'},  
 
-
+        'show_suggested_defects': {'fa': 'نمایش عیوب پیشنهادی', 
+                                'en': 'Show suggested defects'},
+        
+        'next_sheet': {'fa': 'ورق بعدی',
+                'en': 'Next Sheet'},
+        
+        'prev_sheet': {'fa': 'ورق قبلی',
+                'en': 'Previous Sheet'},
+        
+        'add_image': {'fa': 'اضافه کردن تصویر',
+                'en': 'Add Image'},
+        
+        'remove_image': {'fa': 'حذف کردن تصویر',
+                'en': 'Remove Image'},
+        
+        'next': {'fa': 'بعدی',
+                'en': 'Next'},
+        
+        'previous': {'fa': 'قبلی',
+                'en': 'Previous'},
+        
+        'zoom_in': {'fa': 'بزرگنمایی',
+                'en': 'Zoom In'},
+        
+        'zoom_out': {'fa': 'کوچکنمایی',
+                'en': 'Zoom Out'},
+        
+        'drag': {'fa': 'کشیدن',
+                'en': 'Drag'},
+        
+        'polygon': {'fa': 'چند‌ضلعی',
+                'en': 'Polygon'},
+        
+        'suggested_defects': {'fa': 'عیوب پیشنهادی',
+                'en': 'Suggested Defects'},
+        
+        'suggested_defects_heatMap': {'fa': 'هیت‌مپ عیوب پیشنهادی',
+                'en': 'Suggested Defects HeatMap'},
+        
+        'delete_polygons': {'fa': 'حذف چند‌ضلعی‌ها',
+                'en': 'Delete Polygons'},
 
 #---------------------------------------------------------------------
 #----------------------Setting Sofwtare-------------------------------
 #---------------------------------------------------------------------
 
-    'page_dashboard': {'fa': 'صفحه داشبورد',
-                        'en': 'Dashboard'},  
-    'page_camera': {'fa': 'صفحه دوربین',
-                        'en': 'Camera'},  
-    'page_defection': {'fa': 'صفحه عیوب',
-                        'en': 'Defection'},  
-    'page_level2': {'fa': 'صفحه ارتباطات',
-                        'en': 'Level2'},  
-    'page_calibration': {'fa': 'صفحه کالیبراسیون',
-                        'en': 'Calibration'},  
-    'page_settings': {'fa': 'صفحه تنظیمات',
-                        'en': 'Setting'},  
-    'page_users': {'fa': 'صفحه مدیریت کاربران',
-                        'en': 'Users'},  
-    'page_plc': {'fa': 'صفحه پی ال سی',
-                        'en': 'PLC'},                        
-    'page_storage': {'fa': 'صفحه حافظه',
-                        'en': 'Storage'},                       
+        'page_dashboard': {'fa': 'صفحه داشبورد',
+                                'en': 'Dashboard'},  
+        'page_camera': {'fa': 'صفحه دوربین',
+                                'en': 'Camera'},  
+        'page_defection': {'fa': 'صفحه عیوب',
+                                'en': 'Defection'},  
+        'page_level2': {'fa': 'صفحه ارتباطات',
+                                'en': 'Level2'},  
+        'page_calibration': {'fa': 'صفحه کالیبراسیون',
+                                'en': 'Calibration'},  
+        'page_settings': {'fa': 'صفحه تنظیمات',
+                                'en': 'Setting'},  
+        'page_users': {'fa': 'صفحه مدیریت کاربران',
+                                'en': 'Users'},  
+        'page_plc': {'fa': 'صفحه پی ال سی',
+                                'en': 'PLC'},                        
+        'page_storage': {'fa': 'صفحه حافظه',
+                                'en': 'Storage'},                       
 }
 
 HELPS = {
@@ -1556,9 +1602,14 @@ def set_title(self, lang):
     self.titleLeftDescription.setText(Titles['trainer'][lang])
 
     self.Data_auquzation_btn.setText(Titles['Data Auquzation'][lang])
+    self.Data_auquzation_btn.setToolTip(Titles['Data Auquzation'][lang])
     self.label_btn.setText(Titles['Label'][lang])
+    self.label_btn.setToolTip(Titles['Label'][lang])
     self.tuning_btn.setText(Titles[' Tuning'][lang])
+    self.tuning_btn.setToolTip(Titles[' Tuning'][lang])
     self.pbt_btn.setText(Titles['Pipline Build & Test'][lang])
+    self.pbt_btn.setToolTip(Titles['Pipline Build & Test'][lang])
+
     self.btn_software_setting.setText(Titles['software_settings'][lang])
     self.btn_user_profile.setText(Titles['user_profile'][lang])
 
@@ -1601,6 +1652,12 @@ def set_title(self, lang):
     self.label_227.setText(Titles['Width :'][lang])
     self.label_232.setText(Titles['Thickness :'][lang])
     self.label_225.setText(Titles['Thickness :'][lang])
+
+    self.checkBox_suggested_defects.setText(Titles['show_suggested_defects'][lang])
+    self.next_coil_btn.setToolTip(Titles['next_sheet'][lang])
+    self.prev_coil_btn.setToolTip(Titles['prev_sheet'][lang])
+    self.add_btn_SI.setToolTip(Titles['add_image'][lang])
+    self.remove_btn_SI.setToolTip(Titles['remove_image'][lang])
 
     self.start_capture_btn.setText(Titles['start_capture'][lang])
     self.stop_capture_btn.setText(Titles['stop_capture'][lang])
@@ -1718,6 +1775,16 @@ def set_title(self, lang):
 
     self.mask_table_widget.horizontalHeader().setVisible(True)
     self.mask_table_widget.setHorizontalHeaderLabels([Titles['defect_id'][lang], Titles['defect_name'][lang], Titles['size'][lang]])
+
+    self.next_img_label_btn.setToolTip(Titles['next'][lang])
+    self.prev_img_label_btn.setToolTip(Titles['previous'][lang])
+    self.zoomIn_btn.setToolTip(Titles['zoom_in'][lang])
+    self.zoomOut_btn.setToolTip(Titles['zoom_out'][lang])
+    self.drag_btn.setToolTip(Titles['drag'][lang])
+    self.polygon_btn.setToolTip(Titles['polygon'][lang])
+    self.suggested_defects_btn.setToolTip(Titles['suggested_defects'][lang])
+    self.heatmap_btn.setToolTip(Titles['suggested_defects_heatMap'][lang])
+    self.delete_btn.setToolTip(Titles['delete_polygons'][lang])
 
     # binary train page
 

@@ -150,7 +150,7 @@ class UI_main_window(QMainWindow, ui):
         self.login_window = UI_login_window()
         self.help_win = help()
 
-        self.bounding_btn.setIcon(QIcon("UI/images/suggest.png"))
+        self.suggested_defects_btn.setIcon(QIcon("UI/images/suggest.png"))
 
         self.label_dorsa_open(enable=True)
         # /////////Setting
@@ -1085,9 +1085,18 @@ class UI_main_window(QMainWindow, ui):
     def close_win(self):
         """Close window"""
         api.stop_capture_func()
-        self.close()
-        sys.exit()
-        self.logger.create_new_log(message="Close window")
+        ret = api.check_image_saved()
+        if ret:
+            t = self.show_question(
+                    texts.WARNINGS["question"][self.language],
+                    texts.MESSEGES["exit_confirm"][self.language],
+                )
+            if not t:
+                return
+            else:
+                self.logger.create_new_log(message="Close window")
+                self.close()
+                sys.exit()
 
     def maxmize_minimize(self):
         """Maximize or Minimize window"""
@@ -1241,7 +1250,7 @@ class UI_main_window(QMainWindow, ui):
 
         self.checkBox_select.setChecked(False)  # set check statet false
 
-        self.clear_table()  # cleare table
+        # self.clear_table()  # cleare table
 
         self.listWidget_append_img_list.setRowCount(len(records))  # set row count
 
@@ -1391,7 +1400,7 @@ class UI_main_window(QMainWindow, ui):
         """
         LABEL_TABLE = {"mask": self.mask_table_widget}
         print("labe", label_type)
-        self.clear_table()  # clear table
+        # self.clear_table()  # clear table
         self.mask_table_widget.horizontalHeader().setVisible(True)
         LABEL_TABLE[label_type].setHorizontalHeaderLabels(
             ["Defect ID", "Defect Name", "Size"]
@@ -1601,12 +1610,28 @@ class UI_main_window(QMainWindow, ui):
             message (str) : set message of window
         Return (bool) : True/False
         """
-        msg = QMessageBox.question(
-            self, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No
-        )
-        if msg == QMessageBox.Yes:
+        # msg = QMessageBox.question(
+        #     self, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No
+        # )
+        # if msg == QMessageBox.Yes:
+        #     return True
+        # if msg == QMessageBox.No:
+        #     return False
+
+        messageBox = QMessageBox(self)
+        messageBox.setWindowTitle(title)
+        messageBox.setIcon(QMessageBox.Question)
+        messageBox.setInformativeText(message)
+        
+        buttonoptionA = messageBox.addButton(texts.Titles['yes'][self.language], QMessageBox.YesRole)    
+        buttonoptionB = messageBox.addButton(texts.Titles['no'][self.language], QMessageBox.NoRole)  
+        messageBox.setDefaultButton(buttonoptionB)
+        
+        messageBox.exec_()
+
+        if messageBox.clickedButton() == buttonoptionA:
             return True
-        if msg == QMessageBox.No:
+        elif messageBox.clickedButton() == buttonoptionB:
             return False
 
     def show_current_position(self, pt):
@@ -1641,11 +1666,16 @@ class UI_main_window(QMainWindow, ui):
         self.zoomOut_btn.setEnabled(True)
         self.drag_btn.setEnabled(True)
         self.polygon_btn.setEnabled(True)
-        self.bounding_btn.setEnabled(True)
+        self.suggested_defects_btn.setEnabled(True)
         self.delete_btn.setEnabled(True)
         self.heatmap_btn.setEnabled(True)
         self.checkBox_show_neighbours.setEnabled(True)
         self.checkBox_show_neighbours_labels.setEnabled(True)
+        self.yes_defect.setEnabled(True)
+        self.no_defect.setEnabled(True)
+        self.save_dataset_btn.setEnabled(True)
+        # self.yes_defect.setChecked(False)
+        # self.no_defect.setChecked(True)
         self.fs = QImage(
             img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
         )
@@ -2104,7 +2134,6 @@ class UI_main_window(QMainWindow, ui):
             self.stackedWidget.setCurrentWidget(self.page_data_auquzation)
 
         if btnName == "label_btn" or btnName == "label_btn_SI":
-            print("asdasdasd")
             self.left_bar_clear()
             self.label_btn.setStyleSheet(
                 "background-image: url(./images/icons/label.png);background-color: rgb(170, 170, 212);color:rgp(0,0,0);"

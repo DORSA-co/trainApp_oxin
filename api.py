@@ -152,6 +152,7 @@ class API:
 
         # Label.bbox_lbl()
         self.label_memory = tempMemory.manageLabel()
+        self.image_save_status = {}
         # self.technical_backend = {'top': data_grabber()}
         self.thechnicals_backend = {}
         # self.ui.crop_image.mouseDoubleClickEvent = self.fit_image
@@ -764,7 +765,7 @@ class API:
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
-        self.ui.bounding_btn.clicked.connect(partial(self.image_processing_suggest))
+        self.ui.suggested_defects_btn.clicked.connect(partial(self.image_processing_suggest))
         self.ui.checkBox_show_neighbours.stateChanged.connect(
             partial(self.show_neighbours)
         )
@@ -799,6 +800,8 @@ class API:
         # labeling
 
         # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
+        self.ui.no_defect.toggled.connect(self.change_image_save_status)
+        self.ui.yes_defect.toggled.connect(self.change_image_save_status)
 
         # data aquization
         self.ui.connect_camera_btn.clicked.connect(partial(self.connect_camera))
@@ -1063,6 +1066,12 @@ class API:
             [self.update_technical_pointer_keyboard],
             "Technical View",
         )
+
+    def change_image_save_status(self):
+        sheet, pos, img_path = self.move_on_list.get_current(
+            "selected_imgs_for_label"
+        )
+        self.image_save_status[img_path] = False
 
     # ----------------------------------------------------------------------------------------
     # get id of sheets that user select in load_sheet_win and load first one
@@ -1618,9 +1627,11 @@ class API:
                     label = self.ds.get_label_from_annotation(selected_img_pos)
                     f = []
                     for i in label:
-                        f.append([i["class"], np.array(i["mask"])])
+                        f.append([i["class"], np.array(i["mask"]), i['line_thickness'], i['point_thickness']])
                     if f:
                         self.label_memory.add(img_path, f, label_type)
+                
+                self.image_save_status[img_path] = True
 
             self.ui.show_label_page()
             self.ui.show_small_neighbouring()
@@ -1652,6 +1663,7 @@ class API:
         sheet, selected_img_pos, img_path = self.move_on_list.get_current(
             "selected_imgs_for_label"
         )
+
         label_type = self.ui.get_label_type()
         self.img = Utils.read_image(img_path, "color")
         self.load_label_from_memory(img_path)
@@ -1667,6 +1679,13 @@ class API:
         for label in labels:
             labels_name.append(self.defects_name_dict[label[0]])
         self.ui.show_labels(labels, labels_name, label_type, self.selected_defects)
+
+        if len(labels) > 0:
+            self.ui.yes_defect.setChecked(True)
+            self.ui.no_defect.setChecked(False)
+        else:
+            self.ui.yes_defect.setChecked(False)
+            self.ui.no_defect.setChecked(True)
 
         # print(self.label_bakcend[label_type].get())
         # print(label, img_path)
@@ -1730,7 +1749,7 @@ class API:
                 label = self.ds.get_label_from_annotation(selected_img_pos)
                 f = []
                 for i in label:
-                    f.append([i["class"], np.array(i["mask"])])
+                    f.append([i["class"], np.array(i["mask"]), i["line_thickness"], i["point_thickness"]])
                 if f:
                     self.label_memory.add(img_path, f, label_type)
             label = self.label_memory.get_label(label_type, img_path)
@@ -1742,14 +1761,63 @@ class API:
         # print(time.time() - t)
 
     def next_label_img(self):
-        self.selected_defects = []
-        self.move_on_list.next_on_list("selected_imgs_for_label")
-        self.load_image_to_label_page()
+        _, _, img_path = self.move_on_list.get_current(
+            "selected_imgs_for_label"
+        )
+        if not self.image_save_status[img_path]:
+            t = self.ui.show_question(
+                    texts.WARNINGS["question"][self.language],
+                    texts.MESSEGES["changes_not_saved"][self.language],
+                )
+            if not t:
+                return
+            else:
+                self.selected_defects = []
+                self.move_on_list.next_on_list("selected_imgs_for_label")
+                self.load_image_to_label_page()
+        else:
+            self.selected_defects = []
+            self.move_on_list.next_on_list("selected_imgs_for_label")
+            self.load_image_to_label_page()
 
     def prev_label_img(self):
-        self.selected_defects = []
-        self.move_on_list.prev_on_list("selected_imgs_for_label")
-        self.load_image_to_label_page()
+        _, _, img_path = self.move_on_list.get_current(
+            "selected_imgs_for_label"
+        )
+        if not self.image_save_status[img_path]:
+            t = self.ui.show_question(
+                    texts.WARNINGS["question"][self.language],
+                    texts.MESSEGES["changes_not_saved"][self.language],
+                )
+            if not t:
+                return
+            else:
+                self.selected_defects = []
+                self.move_on_list.prev_on_list("selected_imgs_for_label")
+                self.load_image_to_label_page()
+        else:
+            self.selected_defects = []
+            self.move_on_list.prev_on_list("selected_imgs_for_label")
+            self.load_image_to_label_page()
+
+    def check_image_saved(self):
+        try:
+            l = self.move_on_list.get_list("selected_imgs_for_label")
+        except:
+            return True
+        for _, _, img_path in l:
+            if not self.image_save_status[img_path]:
+                t = self.ui.show_question(
+                        texts.WARNINGS["question"][self.language],
+                        texts.MESSEGES["changes_not_saved"][self.language],
+                    )
+                if not t:
+                    return False
+                else:
+                    return True
+        
+        return True
+            
 
     # ----------------------------------------------------------------------------------------
     #
@@ -1791,10 +1859,20 @@ class API:
                 ret = self.label_bakcend[label_type].mouse_event(
                     mouse_status, mouse_button, mouse_pt
                 )
+
+                neighbour_flag = False
+
                 if ret == "mask":
                     self.selected_defects = []
+                    neighbour_flag = True
+
+                elif ret == 'editing':
+                    neighbour_flag = True
+
                 if self.label_bakcend[label_type].is_drawing_finish():
                     self.label_bakcend[label_type].save("0")
+                    neighbour_flag = True
+
                 label_img = self.label_bakcend[label_type].draw(self.selected_defects)
                 # self.ui.update_center_image(img, label_img)
                 img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
@@ -1816,6 +1894,10 @@ class API:
                 else:
                     self.ui.yes_defect.setChecked(False)
                     self.ui.no_defect.setChecked(True)
+                    
+                if neighbour_flag:
+                    self.load_neighbour_images(pos)
+                    self.image_save_status[img_path] = False
             except:
                 self.ui.set_warning(
                     texts.WARNINGS["NO_IMAGE_LOADED"][self.language], "label", level=2
@@ -1875,6 +1957,8 @@ class API:
         self.label_memory.remove_by_value(label_type, img_path)
         self.ui.show_image_in_label(img, self.scale, self.position)
         self.ui.show_labels([], [], label_type, [])
+        self.load_neighbour_images(pos)
+        self.image_save_status[img_path] = False
 
     def select_defect(self):
         # print(self.ui.mask_table_widget.selectedIndexes())
@@ -2217,6 +2301,9 @@ class API:
             labels_name.append(self.defects_name_dict[label[0]])
         self.ui.show_labels(labels, labels_name, label_type, self.selected_defects)
 
+        self.load_neighbour_images(pos)
+        self.image_save_status[img_path] = False
+
     def close_labeling(self):
         self.ui.labeling_win = None
 
@@ -2414,8 +2501,9 @@ class API:
                 "label",
                 level=1,
             )
-            print("no defect")
             self.ds_json.modify_perfect(self.ds.perfect_path)
+            self.image_save_status[img_path] = True
+
         elif self.ui.yes_defect.isChecked():
             if not masks:
                 self.ui.set_warning(
@@ -2441,6 +2529,7 @@ class API:
                 level=1,
             )
             self.ds_json.modify_defect(self.ds.defect_path)
+            self.image_save_status[img_path] = True
         else:
             self.ui.set_warning(
                 texts.WARNINGS["IMAGE_STATUS"][self.language], "label", level=2
@@ -4624,7 +4713,8 @@ class API:
     def create_mask_from_mask(self, img_path):
         labels = self.label_memory.get_label("mask", img_path)
         mask = np.zeros((self.img.shape[0], self.img.shape[1]))
-        for lbl, cnt in labels:
+        for lbl, cnt, line_thickness, point_thickness in labels:
+            cv2.drawContours(mask, [cnt], 0, color=255, thickness=line_thickness)
             cv2.drawContours(mask, [cnt], 0, color=255, thickness=-1)
         return mask
 
@@ -4744,7 +4834,7 @@ class API:
                 self.ui.set_status_plc(
                     auto=False,
                     text=texts.Titles["reconnect"][self.ui.language].format(
-                        self.retry_connecting_plc
+                        11 - self.retry_connecting_plc
                     ),
                 )
             else:

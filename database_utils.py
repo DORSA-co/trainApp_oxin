@@ -100,7 +100,6 @@ class dataBaseUtils:
     # ________________________________________________________________
     def load_sheet(self, id):
         res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id, int_type=False)
-        print(res, record)
         record = record[0]
 
         return self.build_sheet(record)

@@ -20,6 +20,8 @@ BBOX_KEY = 'bbox'
 OBJ_MASKS_KEY = 'obj_masks'
 MASK_KEY = 'mask'
 CLASS_KEY = 'class'
+LINE_THICKNESS_KEY = 'line_thickness'
+POINT_THICKNESS_KEY = 'point_thickness'
 NAME = 'name'
 
 
@@ -251,10 +253,12 @@ class Annotation():
 
     def set_masks(self, masks):
         ms = []
-        for class_id,mask in masks:
+        for class_id, mask, line_thickness, point_thickness in masks:
             mask_dict = {}
             mask_dict[CLASS_KEY] = class_id
             mask_dict[MASK_KEY] = mask.tolist()
+            mask_dict[LINE_THICKNESS_KEY] = line_thickness
+            mask_dict[POINT_THICKNESS_KEY] = point_thickness
             ms.append( mask_dict)
         
         self.annotation[OBJ_MASKS_KEY] = ms

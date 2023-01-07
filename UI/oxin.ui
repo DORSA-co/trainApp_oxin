@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>1527</width>
-    <height>921</height>
+    <height>893</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -759,7 +759,7 @@ Button */
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item alignment="Qt::AlignTop">
+             <item>
               <widget class="QFrame" name="topMenu">
                <property name="frameShape">
                 <enum>QFrame::NoFrame</enum>
@@ -816,7 +816,8 @@ Button */
                    <enum>Qt::LeftToRight</enum>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-image: url(./images/icons/graber.png);</string>
+                   <string notr="true">background-image: url(./images/icons/graber.png);
+background-color: rgb(170, 170, 212);</string>
                   </property>
                   <property name="text">
                    <string>Data Auquzation</string>
@@ -950,6 +951,19 @@ Button */
                    <string>Pipline Build and Test</string>
                   </property>
                  </widget>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_7">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </widget>
@@ -1196,6 +1210,12 @@ Button */
                <layout class="QVBoxLayout" name="verticalLayout_10">
                 <item>
                  <widget class="QPushButton" name="Binary_btn">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -1217,6 +1237,12 @@ text-align:center;</string>
                 </item>
                 <item alignment="Qt::AlignLeft">
                  <widget class="QPushButton" name="Localization_btn">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -1238,6 +1264,12 @@ text-align:center;</string>
                 </item>
                 <item alignment="Qt::AlignLeft">
                  <widget class="QPushButton" name="Classification_btn">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -2175,7 +2207,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>1</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -2434,7 +2466,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
 }</string>
                             </property>
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="tab_5">
                              <attribute name="title">
@@ -4887,16 +4919,22 @@ QPushButton:disabled {
                                      </property>
                                      <item>
                                       <widget class="QLabel" name="label_166">
+                                       <property name="sizePolicy">
+                                        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                         <horstretch>0</horstretch>
+                                         <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                       </property>
                                        <property name="minimumSize">
                                         <size>
-                                         <width>110</width>
+                                         <width>0</width>
                                          <height>0</height>
                                         </size>
                                        </property>
                                        <property name="maximumSize">
                                         <size>
-                                         <width>110</width>
-                                         <height>23</height>
+                                         <width>16777215</width>
+                                         <height>16777215</height>
                                         </size>
                                        </property>
                                        <property name="text">
@@ -7616,7 +7654,7 @@ QComboBox QAbstractItemView {
                                        <cursorShape>PointingHandCursor</cursorShape>
                                       </property>
                                       <property name="toolTip">
-                                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load Sheet From Database&lt;/p&gt;&lt;p&gt;All sheets That Captured&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                       <string/>
                                       </property>
                                       <property name="styleSheet">
                                        <string notr="true">QPushButton{
@@ -7658,7 +7696,7 @@ QPushButton:enabled {
                                          <cursorShape>PointingHandCursor</cursorShape>
                                         </property>
                                         <property name="toolTip">
-                                         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When You select multi sheets &lt;/p&gt;&lt;p&gt;This Button move on them (next)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                         <string>Next Sheet</string>
                                         </property>
                                         <property name="styleSheet">
                                          <string notr="true">background-color: rgb(71, 71, 71);
@@ -7697,7 +7735,7 @@ border-radius: 8px;</string>
                                          <cursorShape>PointingHandCursor</cursorShape>
                                         </property>
                                         <property name="toolTip">
-                                         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When You select multi sheets &lt;/p&gt;&lt;p&gt;This Button move on them (previous)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                         <string>Previous Sheet</string>
                                         </property>
                                         <property name="styleSheet">
                                          <string notr="true">background-color: rgb(71, 71, 71);
@@ -7755,6 +7793,12 @@ border-radius: 8px;</string>
                                         </property>
                                         <item>
                                          <widget class="QLabel" name="label_226">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="text">
                                            <string>Sheet ID :</string>
                                           </property>
@@ -7776,6 +7820,12 @@ border-radius: 8px;</string>
                                         </item>
                                         <item>
                                          <widget class="QLabel" name="label_heat_number_3">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="text">
                                            <string>Heat Number :</string>
                                           </property>
@@ -7797,6 +7847,12 @@ border-radius: 8px;</string>
                                         </item>
                                         <item>
                                          <widget class="QLabel" name="label_228">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="text">
                                            <string>Ps Number :</string>
                                           </property>
@@ -7818,6 +7874,12 @@ border-radius: 8px;</string>
                                         </item>
                                         <item>
                                          <widget class="QLabel" name="label_229">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="text">
                                            <string>Pdl Number :</string>
                                           </property>
@@ -7839,6 +7901,12 @@ border-radius: 8px;</string>
                                         </item>
                                         <item>
                                          <widget class="QLabel" name="label_230">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="text">
                                            <string>Lenght :</string>
                                           </property>
@@ -7860,6 +7928,12 @@ border-radius: 8px;</string>
                                         </item>
                                         <item>
                                          <widget class="QLabel" name="label_231">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="text">
                                            <string>Width :</string>
                                           </property>
@@ -7881,6 +7955,12 @@ border-radius: 8px;</string>
                                         </item>
                                         <item>
                                          <widget class="QLabel" name="label_232">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="text">
                                            <string>Thickness :</string>
                                           </property>
@@ -8068,9 +8148,15 @@ border-radius: 8px;</string>
                                        </property>
                                        <item>
                                         <widget class="QLabel" name="label_45">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
-                                           <width>90</width>
+                                           <width>0</width>
                                            <height>0</height>
                                           </size>
                                          </property>
@@ -8161,16 +8247,22 @@ color:black;</string>
                                        </item>
                                        <item>
                                         <widget class="QLabel" name="current_pos_y">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
-                                           <width>45</width>
-                                           <height>25</height>
+                                           <width>0</width>
+                                           <height>0</height>
                                           </size>
                                          </property>
                                          <property name="maximumSize">
                                           <size>
-                                           <width>45</width>
-                                           <height>25</height>
+                                           <width>16777215</width>
+                                           <height>16777215</height>
                                           </size>
                                          </property>
                                          <property name="styleSheet">
@@ -8187,6 +8279,12 @@ color:black;</string>
                                        </item>
                                        <item>
                                         <widget class="QLabel" name="label_222">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="styleSheet">
                                           <string notr="true"> background-color: Transparent;
  border: 0px solid gray;
@@ -8251,16 +8349,22 @@ color:black;</string>
                                        </item>
                                        <item>
                                         <widget class="QLabel" name="current_pos_x">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
-                                           <width>45</width>
-                                           <height>25</height>
+                                           <width>0</width>
+                                           <height>0</height>
                                           </size>
                                          </property>
                                          <property name="maximumSize">
                                           <size>
-                                           <width>45</width>
-                                           <height>25</height>
+                                           <width>16777215</width>
+                                           <height>16777215</height>
                                           </size>
                                          </property>
                                          <property name="styleSheet">
@@ -8277,6 +8381,12 @@ color:black;</string>
                                        </item>
                                        <item>
                                         <widget class="QLabel" name="label_47">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="styleSheet">
                                           <string notr="true"> background-color: Transparent;
  border: 0px solid gray;
@@ -9127,6 +9237,12 @@ color:white;</string>
                                       </property>
                                       <item>
                                        <widget class="QLabel" name="label_1291">
+                                        <property name="sizePolicy">
+                                         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                          <horstretch>0</horstretch>
+                                          <verstretch>0</verstretch>
+                                         </sizepolicy>
+                                        </property>
                                         <property name="font">
                                          <font>
                                           <family>ubuntu</family>
@@ -9215,7 +9331,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>785</height>
+                                     <height>757</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -9373,6 +9489,12 @@ font-size: 30%;</string>
                                       </property>
                                       <item>
                                        <widget class="QLabel" name="label_124">
+                                        <property name="sizePolicy">
+                                         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                                          <horstretch>0</horstretch>
+                                          <verstretch>0</verstretch>
+                                         </sizepolicy>
+                                        </property>
                                         <property name="font">
                                          <font>
                                           <family>ubuntu</family>
@@ -9461,7 +9583,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>785</height>
+                                     <height>757</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -9684,7 +9806,7 @@ QToolTip {
                                 <cursorShape>PointingHandCursor</cursorShape>
                                </property>
                                <property name="toolTip">
-                                <string notr="true" extracomment="zdvsdvsfbfd">Zoom in</string>
+                                <string notr="true" extracomment="zdvsdvsfbfd">Zoom In</string>
                                </property>
                                <property name="styleSheet">
                                 <string notr="true">QPushButton {
@@ -9736,7 +9858,7 @@ QToolTip {
                                 <cursorShape>PointingHandCursor</cursorShape>
                                </property>
                                <property name="toolTip">
-                                <string notr="true" extracomment="zdvsdvsfbfd">Zoom back</string>
+                                <string notr="true" extracomment="zdvsdvsfbfd">Zoom Out</string>
                                </property>
                                <property name="styleSheet">
                                 <string notr="true">QPushButton {
@@ -9777,6 +9899,12 @@ QToolTip {
                               <widget class="QPushButton" name="drag_btn">
                                <property name="enabled">
                                 <bool>false</bool>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>37</width>
+                                 <height>0</height>
+                                </size>
                                </property>
                                <property name="cursor">
                                 <cursorShape>PointingHandCursor</cursorShape>
@@ -9879,7 +10007,7 @@ QToolTip {
                               </widget>
                              </item>
                              <item>
-                              <widget class="QPushButton" name="bounding_btn">
+                              <widget class="QPushButton" name="suggested_defects_btn">
                                <property name="enabled">
                                 <bool>false</bool>
                                </property>
@@ -9893,7 +10021,7 @@ QToolTip {
                                 <cursorShape>PointingHandCursor</cursorShape>
                                </property>
                                <property name="toolTip">
-                                <string notr="true" extracomment="zdvsdvsfbfd">Bounding Box</string>
+                                <string notr="true" extracomment="zdvsdvsfbfd">Suggested Defects</string>
                                </property>
                                <property name="styleSheet">
                                 <string notr="true">QPushButton {
@@ -9935,8 +10063,17 @@ QToolTip {
                                <property name="enabled">
                                 <bool>false</bool>
                                </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>37</width>
+                                 <height>0</height>
+                                </size>
+                               </property>
                                <property name="cursor">
                                 <cursorShape>PointingHandCursor</cursorShape>
+                               </property>
+                               <property name="toolTip">
+                                <string>Suggested Defects HeatMap</string>
                                </property>
                                <property name="styleSheet">
                                 <string notr="true">QPushButton {
@@ -9995,7 +10132,7 @@ QToolTip {
                                 <cursorShape>PointingHandCursor</cursorShape>
                                </property>
                                <property name="toolTip">
-                                <string notr="true" extracomment="zdvsdvsfbfd">Delete Rec</string>
+                                <string notr="true" extracomment="zdvsdvsfbfd">Delete Polygon</string>
                                </property>
                                <property name="styleSheet">
                                 <string notr="true">QPushButton {
@@ -10259,13 +10396,13 @@ border: None;</string>
                                         </property>
                                         <property name="minimumSize">
                                          <size>
-                                          <width>50</width>
+                                          <width>0</width>
                                           <height>0</height>
                                          </size>
                                         </property>
                                         <property name="maximumSize">
                                          <size>
-                                          <width>50</width>
+                                          <width>16777215</width>
                                           <height>16777215</height>
                                          </size>
                                         </property>
@@ -10304,13 +10441,13 @@ border: None;</string>
                                         </property>
                                         <property name="minimumSize">
                                          <size>
-                                          <width>100</width>
+                                          <width>0</width>
                                           <height>0</height>
                                          </size>
                                         </property>
                                         <property name="maximumSize">
                                          <size>
-                                          <width>100</width>
+                                          <width>16777215</width>
                                           <height>16777215</height>
                                          </size>
                                         </property>
@@ -10349,13 +10486,13 @@ border: None;</string>
                                         </property>
                                         <property name="minimumSize">
                                          <size>
-                                          <width>110</width>
+                                          <width>0</width>
                                           <height>0</height>
                                          </size>
                                         </property>
                                         <property name="maximumSize">
                                          <size>
-                                          <width>110</width>
+                                          <width>16777215</width>
                                           <height>16777215</height>
                                          </size>
                                         </property>
@@ -10443,7 +10580,7 @@ border: None;</string>
                                        <number>1</number>
                                       </property>
                                       <property name="maximum">
-                                       <number>10</number>
+                                       <number>30</number>
                                       </property>
                                       <property name="value">
                                        <number>4</number>
@@ -10546,6 +10683,9 @@ border: None;</string>
                                   </item>
                                   <item>
                                    <widget class="QRadioButton" name="no_defect">
+                                    <property name="enabled">
+                                     <bool>false</bool>
+                                    </property>
                                     <property name="maximumSize">
                                      <size>
                                       <width>70</width>
@@ -10580,25 +10720,23 @@ QRadioButton::indicator:unchecked {
                                     <property name="text">
                                      <string>No</string>
                                     </property>
+                                    <property name="checkable">
+                                     <bool>true</bool>
+                                    </property>
+                                    <property name="checked">
+                                     <bool>false</bool>
+                                    </property>
                                    </widget>
                                   </item>
                                   <item>
                                    <widget class="QRadioButton" name="yes_defect">
-                                    <property name="maximumSize">
-                                     <size>
-                                      <width>70</width>
-                                      <height>16777215</height>
-                                     </size>
-                                    </property>
-                                    <property name="cursor">
-                                     <cursorShape>PointingHandCursor</cursorShape>
+                                    <property name="enabled">
+                                     <bool>false</bool>
                                     </property>
                                     <property name="styleSheet">
                                      <string notr="true">QRadioButton {
     background-color:       Transparent;
     color:                  Black;
-	border: none;
-
 }
 
 QRadioButton::indicator {
@@ -10748,6 +10886,9 @@ QRadioButton::indicator:unchecked {
                                   </item>
                                   <item>
                                    <widget class="QPushButton" name="save_dataset_btn">
+                                    <property name="enabled">
+                                     <bool>false</bool>
+                                    </property>
                                     <property name="minimumSize">
                                      <size>
                                       <width>200</width>
@@ -10765,11 +10906,15 @@ QRadioButton::indicator:unchecked {
                                     </property>
                                     <property name="styleSheet">
                                      <string notr="true">QPushButton {
-background-color: rgb(70,70,70);
+	background-color: rgb(70,70,70);
 	color: rgb(255,255,255);
 	border: none;
-
 	text-align: center
+}
+
+QPushButton:disabled  {
+	background-color: rgb(150, 150, 150);
+	color: rgb(200, 200, 200);
 }
 
 QPushButton:hover {
@@ -12623,7 +12768,7 @@ color : rgb(0,0,0);</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>63</width>
+                                   <width>92</width>
                                    <height>165</height>
                                   </rect>
                                  </property>
@@ -12650,8 +12795,8 @@ color : rgb(0,0,0);</string>
                                       <rect>
                                        <x>0</x>
                                        <y>0</y>
-                                       <width>76</width>
-                                       <height>43</height>
+                                       <width>96</width>
+                                       <height>49</height>
                                       </rect>
                                      </property>
                                      <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -17920,8 +18065,8 @@ color:white;</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>320</width>
-                                   <height>17</height>
+                                   <width>98</width>
+                                   <height>28</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_46">

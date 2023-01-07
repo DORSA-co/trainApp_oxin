@@ -54,10 +54,10 @@ class maskLbl:
         if self.status == 'none': #this codition is for draw new mask
             self.status = 'drawing'
             #check if pt is near to a rect corner mode should be 'editing' and store bbox idx and x and y idx
-            for idex,(lbl,cnt) in enumerate(self.masks):
+            for idex,(lbl, cnt, _, _) in enumerate(self.masks):
                 for i,corner in enumerate(cnt):
                     corner = corner[0] #beacuse shape of cnt is (n,1,2)
-                    if ( (x-corner[0])**2 + (y-corner[1])**2)**0.5 < 20:
+                    if ((x-corner[0])**2 + (y-corner[1])**2)**0.5 < 20:
                         self.status = 'editing'
                         self.edit_mask_idx = idex
                         self.edit_point_idx = i
@@ -71,13 +71,13 @@ class maskLbl:
         if self.status == 'editing':
             self.edit_mask(pt)
 
-
-
-
     def release(self):
+        ret = None
         if self.status == 'editing':
             self.status = 'none'
+            ret = 'editing'
         self.accept_new_point = True
+        return ret
 
     #______________________________________________________________________________________________________
     #
@@ -182,7 +182,7 @@ class maskLbl:
         print('label',label)
         #last point is same as first point so we ignore it
         cnt = np.array(self.points[:-1]).reshape((-1,1,2))
-        self.masks.append([label,cnt])
+        self.masks.append([label,cnt, self.thickness_map['line'], self.radius])
         self.status = 'none'
         self.points = []
 
@@ -195,7 +195,7 @@ class maskLbl:
     def load(self, masks):
         #last point is same as first point so we ignore it
         cnt = np.array(self.points[:-1]).reshape((-1,1,2))
-        self.masks = list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,1,2)], masks))
+        self.masks = list(map(lambda x:[x[0],np.array(x[1]).reshape(-1,1,2), x[2], x[3]], masks))
         self.status = 'none'
         self.points = []
 
@@ -203,10 +203,10 @@ class maskLbl:
     #
     #______________________________________________________________________________________________________
     def get(self):
-        return  list( map (lambda x:[x[0],np.array(x[1]).reshape(-1,2)], self.masks))
+        return list(map(lambda x:[x[0],np.array(x[1]).reshape(-1,2), x[2], x[3]], self.masks))
 
     def get_labels(self):
-        return   self.masks
+        return self.masks
 
     def clear_labels(self):
         self.masks = []
@@ -232,6 +232,7 @@ class maskLbl:
     def draw_c(self, mask):
         cnt = np.array(self.points)
         cnt = cnt.reshape((-1,1,2))
+        cv2.drawContours(mask, [cnt], 0, color=self.label_color['fill'], thickness=self.thickness_map['line'])
         cv2.drawContours(mask, [cnt], 0, color=self.color_map['fill'], thickness=-1)
         return mask
 
@@ -240,16 +241,17 @@ class maskLbl:
         masks_img = self.mask_init()
         # print('color lbl',self.label_color[0])
         i=0
-        for lbl, cnt in self.masks:
+        for lbl, cnt, line_thickness, point_thickness in self.masks:
 
             # print('lastcolor',self.label_color[lbl])
             if select_list == ['All'] or i in select_list:
+                cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=line_thickness)
                 cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=-1)
             else:
-                cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=self.thickness_map['line'])
+                cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=line_thickness)
             for corner in cnt:
                 corner = tuple(corner[0])
-                cv2.circle( masks_img, corner, self.radius, color=self.color_map['point'], thickness=-1)
+                cv2.circle( masks_img, corner, point_thickness, color=self.color_map['point'], thickness=-1)
             i+=1
 
         if len(self.points)>2 and self.points[0]==self.points[-1]:
@@ -257,8 +259,6 @@ class maskLbl:
 
         else:
             masks_img = self.draw_nc(masks_img)
-
-
         return masks_img
 
 
