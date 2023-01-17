@@ -208,7 +208,9 @@ class dataset_json:
         res = {}
 
         for key in file["classification"].keys():
-            res[key] = len(file["classification"][key])
+            x = len(file["classification"][key])
+            if x:
+                res[key] = x
 
         res["total"] = file["binary"]["count_defect"]
         return res

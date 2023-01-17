@@ -35,6 +35,7 @@ class CustomCallback(keras.callbacks.Callback):
         :type logs: dict, optional
         """
         # Set to UI
+        epoch += 1
         if self.model_type == 'binary':
             # Update bianry train charts
             try:

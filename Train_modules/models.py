@@ -602,13 +602,13 @@ def xception_cnn(
     :rtype: keras.models.Model
     """
     preprocess_input = tf.keras.applications.xception.preprocess_input
-    base_model = tf.keras.applications.Xception(
-        include_top=False, weights="imagenet", input_shape=input_size
-    )
+    # base_model = tf.keras.applications.Xception(
+    #     include_top=False, weights="imagenet", input_shape=input_size
+    # )
 
     base_model = tf.keras.applications.Xception(include_top=False, weights=None, input_shape=input_size)
-    # base_model.load_weights(
-    #     '/media/reyhane/782F28BD242E495A/PycharmProjects/pythonProject2/xception_weights_tf_dim_ordering_tf_kernels_notop.h5')
+    base_model.load_weights(
+        '/home/reyhane/PythonProjects/models/binary/xception_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
     base_model.trainable = False
 

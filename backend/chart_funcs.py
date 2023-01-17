@@ -115,10 +115,10 @@ def create_train_chart_on_ui(ui_obj, frame_obj, checkbox_obj, scroll_obj, chart_
     # define axis
     # X
     axisX = sQValueAxis()
-    axisX.setRange(0, axisX_range)
+    axisX.setRange(1, axisX_range)
     axisX.setLabelsFont(sQFont("Times", 6, sQFont.Bold))
     axisX.setLabelFormat("%d")
-    axisX.setTickCount(axisX_range+1)
+    axisX.setTickCount(axisX_range)
     if axisX_visible:
         axisX.setTitleText(axisX_title)
     eval("exec('ui_obj.axisX_%s = axisX')" % chart_postfix)
@@ -200,7 +200,7 @@ def recalculate_range(ui_obj, checkbox_obj, scrolbaer_obj, chart_postfix):
         axisX_obj = eval('ui_obj.axisX_%s' % chart_postfix)
         xmin = scrollbar_obj.value()
         xmax = scrollbar_obj.value() + axisX_range
-        axisX_obj.setRange(xmin, xmax)
+        axisX_obj.setRange(xmin+1, xmax)
     else:
         scrolbaer_obj.setMaximum(0)
         scrolbaer_obj.setValue(0)
@@ -223,15 +223,15 @@ def state_changed(ui_obj, checkbox_obj, scrolbaer_obj, axisX_obj):
     if checkbox_obj.isChecked():
         scrolbaer_obj.setMaximum(0)
         scrolbaer_obj.setValue(0)
-        axisX_obj.setRange(0, nepoch)
-        axisX_obj.setTickCount(nepoch+1)
+        axisX_obj.setRange(1, nepoch)
+        axisX_obj.setTickCount(nepoch)
     else:
-        axisX_obj.setTickCount(axisX_range+1)
+        axisX_obj.setTickCount(axisX_range)
         if (last_epoch//axisX_range - 1)*axisX_range + (last_epoch%axisX_range) >= 0:
             scrolbaer_obj.setMaximum((last_epoch//axisX_range - 1)*axisX_range + (last_epoch%axisX_range)+1)
             scrolbaer_obj.setValue((last_epoch//axisX_range - 1)*axisX_range + (last_epoch%axisX_range)+1)
         else:
-            axisX_obj.setRange(0, axisX_range)
+            axisX_obj.setRange(1, axisX_range)
             scrolbaer_obj.setMaximum(0)
             scrolbaer_obj.setValue(0)
 

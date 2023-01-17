@@ -14,7 +14,7 @@ ERRORS = {
                 'en': ' Name Already in Use '},
 
     'empty_name': {'fa': ' نام پایپ لاین نباید خالی باشد ',
-                'en': ' Name Cant Empty'},
+                'en': ' Name can not Empty'},
     'BUILD_BINARYLIST_SLIDER_ERROR': {'fa': ' خطای ساخت اسلایدر تصاویر ',
                                       'en': ' Error while building slider(s) '},
 
@@ -103,7 +103,7 @@ ERRORS = {
                  'en': 'Failed to load defects from database'},
 
     'annotation_not_exist': {'fa': 'فایل انوتیشن وجود نداشته و یا قابل بارگزاری نیست',
-                 'en': 'Annotation file doesnt exist or cant be loaded'},
+                 'en': 'Annotation file doesnt exist or can not be loaded'},
 
     'load_masks_from_json_failed': {'fa': 'خطای بارگزاری ماسک عیوب از فایل انوتیشن',
                  'en': 'Failed to laod masks from annotation file'},
@@ -309,6 +309,22 @@ ERRORS = {
 
     'control_config_error': {'fa': ' دوربین {} توسط برنامه دیگری کنترل می شود یا خطای پیکربندی ',
                 'en': ' Camera {} controlled by another application Or config error '},
+
+    'date_empty': {'fa': 'فیلد تاریخ خالی است.',
+                'en': ' There is no connection for camera {} '},
+
+    'creator_user_name_empty': {'fa': 'فیلد نام کاربری سازنده خالی است.',
+                'en': ' There is no connection for camera {} '},
+                
+    'dataset_name_empty': {'fa': 'فیلد نام مجموعه داده خالی است.',
+                'en': ' There is no connection for camera {} '},
+
+    'location_empty': {'fa': 'فیلد مسیر خالی است.',
+                'en': ' There is no connection for camera {} '},
+
+    'low_data': {'fa': 'داده‌های آموزشی کمتر از تعداد مورد نیاز است.',
+        'en': 'Training data is less than required'},
+
 }
 
 WARNINGS = {
@@ -396,32 +412,32 @@ WARNINGS = {
     'CREATE_DATABASE': {'fa': ' آیا از ایجاد دیتابیس جدید مطمئن هستید ؟ ',
                         'en': ' Are you sure want to create new database ? '},
 
-    'EPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
-                          'en': ' Epoch range fields cant be empty, Please fill both them or leave them empty '},
+    'EPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به اپوک‌ها را مقدار دهید یا هر دو را خالی بگذارید ',
+                          'en': ' Epoch range fields can not be empty, Please fill both them or leave them empty '},
 
-    'TEPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به تیونیگ اپوک را مقدار دهید یا هر دو را خالی بگذارید ',
-                           'en': ' Tuning epoch range fields cant be empty, Please fill both them or leave them empty '},
+    'TEPOCH_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به اپوک‌های تنظیم را مقدار دهید یا هر دو را خالی بگذارید ',
+                           'en': ' Tuning epoch range fields can not be empty, Please fill both them or leave them empty '},
 
-    'BATCHSIZE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به سایز بچ را مقدار دهید یا هر دو را خالی بگذارید ',
-                              'en': ' Batch-size range fields cant be empty, Please fill both them or leave them empty '},
+    'BATCHSIZE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به اندازه‌ی دسته را مقدار دهید یا هر دو را خالی بگذارید ',
+                              'en': ' Batch-size range fields can not be empty, Please fill both them or leave them empty '},
 
-    'SPLITRATIO_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به نسبت اسپلیت را مقدار دهید یا هر دو را خالی بگذارید ',
-                               'en': ' Split-ratio range fields cant be empty, Please fill both them or leave them empty '},
+    'SPLITRATIO_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به اندازه‌ی قطعه را مقدار دهید یا هر دو را خالی بگذارید ',
+                               'en': ' Split-ratio range fields can not be empty, Please fill both them or leave them empty '},
 
     'LOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطا را مقدار دهید یا هر دو را خالی بگذارید ',
-                         'en': ' Loss range fields cant be empty, Please fill both them or leave them empty '},
+                         'en': ' Loss range fields can not be empty, Please fill both them or leave them empty '},
 
     'ACCU_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به دقت را مقدار دهید یا هر دو را خالی بگذارید ',
-                         'en': ' Accuracy range fields cant be empty, Please fill both them or leave them empty '},
+                         'en': ' Accuracy range fields can not be empty, Please fill both them or leave them empty '},
 
     'PREC_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به پرسیژن را مقدار دهید یا هر دو را خالی بگذارید ',
-                         'en': ' Precision range fields cant be empty, Please fill both them or leave them empty '},
+                         'en': ' Precision range fields can not be empty, Please fill both them or leave them empty '},
 
     'RECA_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به ریکال را مقدار دهید یا هر دو را خالی بگذارید ',
-                         'en': ' Recall range fields cant be empty, Please fill both them or leave them empty '},
+                         'en': ' Recall range fields can not be empty, Please fill both them or leave them empty '},
 
     'SELECT_MORE_THAN_ONE_DEFECT_CLASS': {'fa': ' امکان انتخاب چند کلاس عیب به صورت همزمان وجود ندارد ',
-                                          'en': ' Cant select more than one defect class at same time '},
+                                          'en': ' can not select more than one defect class at same time '},
 
     'SELECT_NO_DEFECT_CLASS': {'fa': ' لطفا یک کلاس عیب انتخاب کنید  ',
                                'en': ' Please select a defect class '},
@@ -707,6 +723,9 @@ MESSEGES = {
 
     'exit_confirm': {'fa': 'آیا مطمئن هستید که میخواهید خارج شوید؟',
                 'en': 'Are you sure you want to exit?'},
+
+    'train_successfuly': {'fa': 'آموزش با موفقیت به پایان رسید',
+        'en': 'Training completed successfully'},
 }
 
 Titles = {
@@ -740,6 +759,9 @@ Titles = {
 
         'wind_duration': {'fa': ": مدت زمان فشار هوا",
                         'en': 'Wind duration :'},
+
+        'automatic_wind_intervals': {'fa': ": فواصل فشار‌هوای خودکار",
+                        'en': 'Automatic wind intervals :'},
 
         'update_time': {'fa': ": زمان به روز رسانی",
                         'en': 'Update time :'},
@@ -1172,6 +1194,12 @@ Titles = {
         'ds_path_2': {'fa': 'آدرس مجموعه داده',
                         'en': 'Dataset Path'},
 
+        'ds_name': {'fa': 'نام مجموعه داده',
+                        'en': 'Dataset Name'},
+
+        'ds_owner': {'fa': 'کاربر مالک',
+                        'en': 'Owner User'},
+
         'select_dataset': {'fa': 'انتخاب مجموعه داده',
                         'en': 'Select Dataset'},
 
@@ -1202,7 +1230,7 @@ Titles = {
         'epochs_2': {'fa': 'اپوک ها',
                         'en': 'Epochs'},
 
-        'tune_epochs': {'fa': 'اپوک های تیون',
+        'tune_epochs': {'fa': 'اپوک های تنظیم',
                         'en': 'Tune Epochs'},
 
         'batch_size_2': {'fa': 'اندازه ی دسته',
@@ -1210,6 +1238,18 @@ Titles = {
 
         'split_size': {'fa': 'اندازه قطعه',
                         'en': 'Split Size'},
+        
+        'loss': {'fa': 'خطا', 
+                'en': 'Loss'},
+
+        'accuracy': {'fa': 'دقت', 
+                'en': 'Accuracy'},
+        
+        'precision': {'fa': 'پرسیژن', 
+                'en': 'Precision'},
+        
+        'recall': {'fa': 'ریکال', 
+                'en': 'Recall'},
 
         'min': {'fa': 'کمینه',
                 'en': 'Min'},
@@ -1596,7 +1636,6 @@ HELPS_ADDRESS = {
                         'en': 'images/helps/binarylist_page.png'}, 
 }
 
-
 def set_title(self, lang):
     self.titleLeftApp.setText(Titles['sense'][lang])
     self.titleLeftDescription.setText(Titles['trainer'][lang])
@@ -1609,6 +1648,10 @@ def set_title(self, lang):
     self.tuning_btn.setToolTip(Titles[' Tuning'][lang])
     self.pbt_btn.setText(Titles['Pipline Build & Test'][lang])
     self.pbt_btn.setToolTip(Titles['Pipline Build & Test'][lang])
+
+    self.Binary_btn.setText(Titles['Binary'][lang])
+    self.Localization_btn.setText(Titles['Localization'][lang])
+    self.Classification_btn.setText(Titles['Classification'][lang])
 
     self.btn_software_setting.setText(Titles['software_settings'][lang])
     self.btn_user_profile.setText(Titles['user_profile'][lang])
@@ -1831,26 +1874,31 @@ def set_title(self, lang):
     self.label_134_2.setText(Titles['tune_epochs'][lang])
     self.label_134.setText(Titles['batch_size_2'][lang])
     self.label_145.setText(Titles['split_size'][lang])
+    self.label_148.setText(Titles['loss'][lang])
+    self.label_150.setText(Titles['accuracy'][lang])
+    self.label_153.setText(Titles['precision'][lang])
+    self.label_309.setText(Titles['recall'][lang])
     self.label_312.setText(Titles['start_date'][lang])
     self.label_315.setText(Titles['end_date'][lang])
     self.binary_filter_btn.setText(Titles['search_filter'][lang])
     self.binary_clearfilter_btn.setText(Titles['clear_filters'][lang])
+
     self.label_112.setText(Titles['min'][lang])
     self.label_120.setText(Titles['max'][lang])
     self.label_85_2.setText(Titles['min'][lang])
     self.label_133.setText(Titles['max'][lang])
     self.label_135.setText(Titles['min'][lang])
     self.label_136.setText(Titles['max'][lang])
-    self.label_151.setText(Titles['min'][lang])
-    self.label_152.setText(Titles['max'][lang])
-    self.label_132_2.setText(Titles['min'][lang])
-    self.label_133.setText(Titles['max'][lang])
     self.label_146.setText(Titles['min'][lang])
     self.label_147.setText(Titles['max'][lang])
-    self.label_149.setText(Titles['min'][lang])
-    self.label_150.setText(Titles['max'][lang])
-    self.label_152.setText(Titles['min'][lang])
-    self.label_153.setText(Titles['max'][lang])
+    self.label_132_2.setText(Titles['min'][lang])
+    self.label_149.setText(Titles['max'][lang])
+    self.label_151.setText(Titles['min'][lang])
+    self.label_152.setText(Titles['max'][lang])
+    self.label_158.setText(Titles['min'][lang])
+    self.label_308.setText(Titles['max'][lang])
+    self.label_310.setText(Titles['min'][lang])
+    self.label_311.setText(Titles['max'][lang])
 
     # localization train page
 
@@ -1963,6 +2011,7 @@ def set_title(self, lang):
     self.manual_plc_check.setText(Titles['manual'][lang])
     self.manual_cameras_check.setText(Titles['manual'][lang])
     self.label_29.setText(Titles['wind_duration'][lang])
+    self.label_299.setText(Titles['automatic_wind_intervals'][lang])
     self.label.setText(Titles['update_time'][lang])
     self.label_10.setText(Titles['plc_ip'][lang])
     self.label_4.setText(Titles['plc_status'][lang])
@@ -2051,19 +2100,23 @@ def set_title(self, lang):
     
     set_alignment(self, lang)
 
-
 def set_title_login(self, lang):
     self.login_window.label.setText(Titles['user_login'][lang])
     self.login_window.user_name.setPlaceholderText(Titles['user_name'][lang])
     self.login_window.password.setPlaceholderText(Titles['password'][lang])
     self.login_window.login_btn.setText(Titles['login'][lang])
 
+def set_title_ds_selection(self, lang):
+    self.select_ds_dialog.ok_btn.setText(Titles['ok'][lang])
+    self.select_ds_dialog.cancel_btn.setText(Titles['cancel'][lang])
+
+    self.select_ds_dialog.table.horizontalHeader().setVisible(True)
+    self.select_ds_dialog.table.setHorizontalHeaderLabels([Titles['ds_name'][lang], Titles['ds_owner'][lang], Titles['ds_path_2'][lang]])
 
 def set_title_labeling(self, lang):
     self.labeling_win.lineEdit.setPlaceholderText(Titles['search_bar'][lang])
     self.labeling_win.save_btn.setText(Titles['ok'][lang])
     self.labeling_win.cancel_btn.setText(Titles['cancel'][lang])
-
 
 def set_moving_title(self, lang):
     text = self.plc_status_line.text()
@@ -2086,7 +2139,6 @@ def set_moving_title(self, lang):
     if text!='':
         user = text[text.find(':'):]
         self.user_name.setText(Titles['user_name'][lang] + user)
-
 
 def set_alignment(self, lang):
     if lang == 'fa':
@@ -2177,6 +2229,7 @@ def set_alignment(self, lang):
         self.label_5.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_281.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_29.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_299.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_10.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_277.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2184,6 +2237,17 @@ def set_alignment(self, lang):
         self.label_46.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_197.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
+        self.label_102.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_109.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_134_2.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_134.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_145.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_148.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_150.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_153.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_309.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_312.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_315.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         #..................PBT....................
         self.label_12_3.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2264,9 +2328,9 @@ def set_alignment(self, lang):
 
         self.label_237.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         
-        self.label_48.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.label_49.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.label_50.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_48.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_49.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_50.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         
         self.label_6.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_15.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2344,6 +2408,7 @@ def set_alignment(self, lang):
         self.label_5.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_281.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_29.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_299.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_10.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_277.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2353,6 +2418,17 @@ def set_alignment(self, lang):
         
         self.help_win.textEdit.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
+        self.label_102.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_109.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_134_2.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_134.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_145.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_148.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_150.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_153.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_309.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_312.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_315.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         #..................PBT....................
         self.label_12_3.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)

@@ -88,7 +88,7 @@ class maskLbl:
     #______________________________________________________________________________________________________
     #
     #______________________________________________________________________________________________________
-    def delete_point_or_mask(self,pt):
+    def delete_point_or_mask(self, pt):
 
 
         # print('delet')
@@ -103,10 +103,21 @@ class maskLbl:
             self.masks.sort(key=lambda b: cv2.contourArea(b[1]))
             for i in range(len(self.masks)):
                 cnt = self.masks[i][1]
-                if cv2.pointPolygonTest(cnt, pt, False)>=0:
+                thickness = self.masks[i][2]
+                x = cv2.pointPolygonTest(cnt, pt, True)
+                x += thickness/2
+                if x >= 0:
                     self.masks.pop(i)
                     return 'mask'
         return 'None'
+
+    def delete_point(self, pt):
+        pt = self.__denormal_pt__(pt)
+        if len(self.points)>0 and  self.status=='drawing':
+            self.points.pop()
+            if len(self.points)==0:
+                self.status = 'none'
+            return 'point'
 
     # ______________________________________________________________________________________________________
     #
@@ -116,7 +127,10 @@ class maskLbl:
         self.masks.sort(key=lambda b: cv2.contourArea(b[1]))
         for i in range(len(self.masks)):
             cnt = self.masks[i][1]
-            if cv2.pointPolygonTest(cnt, pt, False) >= 0:
+            thickness = self.masks[i][2]
+            x = cv2.pointPolygonTest(cnt, pt, True)
+            x += thickness/2
+            if x >= 0:
                 self.masks[i][0] = label
                 break
 
@@ -127,7 +141,10 @@ class maskLbl:
         pt = self.__denormal_pt__(pt)
         for i in range(len(self.masks)):
             cnt = self.masks[i][1]
-            if cv2.pointPolygonTest(cnt, pt, False) >= 0:
+            thickness = self.masks[i][2]
+            x = cv2.pointPolygonTest(cnt, pt, True)
+            x += thickness/2
+            if x >= 0:
                 return True
         return False
 

@@ -82,8 +82,8 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_BWPATH']['en'] + weights_path)
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_BWPATH_FAILED']['en'] + weights_path, level=5)
-        api_obj.ui.set_warning(texts.ERRORS['CREATE_BWPATH_FAILED'][api_obj.language], 'train', level=3)
-        return
+        # api_obj.ui.set_warning(texts.ERRORS['CREATE_BWPATH_FAILED'][api_obj.language], 'train', level=3)
+        return (False, (texts.ERRORS['CREATE_BWPATH_FAILED'][api_obj.language], 'train', 3))
 
     # Get train and test generators
     try:
@@ -108,8 +108,8 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_BINARY_GEN']['en'] + weights_path)
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_BINARY_GEN_FAILED']['en'] + weights_path, level=5)
-        api_obj.ui.set_warning(texts.ERRORS['CREATE_BINARY_GEN_FAILED'][api_obj.language], 'train', level=3)
-        return
+        # api_obj.ui.set_warning(texts.ERRORS['CREATE_BINARY_GEN_FAILED'][api_obj.language], 'train', level=3)
+        return (False, (texts.ERRORS['CREATE_BINARY_GEN_FAILED'][api_obj.language], 'train', 3))
 
     # Create models
     try:
@@ -118,28 +118,37 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         elif binary_algorithm_name == ALGORITHM_NAMES['binary'][1]:
             model = models.resnet_cnn(input_size=binary_input_size + (3,), learning_rate=binary_lr, num_class=1, mode=models.BINARY)
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_MODEL']['en'].format(binary_algorithm_name))
+
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_MODEL_FAILED']['en'].format(binary_algorithm_name), level=5)
-        api_obj.ui.set_warning(texts.ERRORS['CREATE_MODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', level=3)
-        return
+        # api_obj.ui.set_warning(texts.ERRORS['CREATE_MODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', level=3)
+        return (False, (texts.ERRORS['CREATE_MODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', 3))
 
     # Create callback
     my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint_bin.h5'), model_type='binary', api_obj=api_obj)
+
+    spe = (trainGen.n // binary_batch + 1) if ((trainGen.n//8) != (trainGen.n / 8)) else (trainGen.n // binary_batch)
+    vspe = (testGen.n // binary_batch + 1) if ((testGen.n//8) != (testGen.n / 8)) else (testGen.n // binary_batch)
+
+    if spe < 1 or vspe < 1:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['low_data']['en'], level=5)
+        # api_obj.ui.set_warning(texts.ERRORS['low_data'][api_obj.language], 'train', level=3)
+        return (False, (texts.ERRORS['low_data'][api_obj.language], 'train', 3))
     
     # Fit model
     try:
         model.fit(trainGen,
-                steps_per_epoch=trainGen.n// binary_batch + 1,
+                steps_per_epoch=spe,
                 epochs=binary_epoch - binary_te,
                 callbacks=[my_callback],
                 validation_data=testGen,
-                validation_steps=testGen.n // binary_batch + 1,
+                validation_steps=vspe,
                 initial_epoch=0)
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['FIT_MODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['FIT_MODEL_FAILED']['en'], level=5)
-        api_obj.ui.set_warning(texts.ERRORS['FIT_MODEL_FAILED'][api_obj.language], 'train', level=3)
-        return
+        # api_obj.ui.set_warning(texts.ERRORS['FIT_MODEL_FAILED'][api_obj.language], 'train', level=3)
+        return (False, (texts.ERRORS['FIT_MODEL_FAILED'][api_obj.language], 'train', 3))
 
     # Save weights
     try:
@@ -147,8 +156,8 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SAVE_BMODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['SAVE_BMODEL_FAILED']['en'], level=5)
-        api_obj.ui.set_warning(texts.ERRORS['SAVE_BMODEL_FAILED'][api_obj.language], 'train', level=3)
-        return
+        # api_obj.ui.set_warning(texts.ERRORS['SAVE_BMODEL_FAILED'][api_obj.language], 'train', level=3)
+        return (False, (texts.ERRORS['SAVE_BMODEL_FAILED'][api_obj.language], 'train', 3))
 
     # Create model for fine tunning
     if binary_algorithm_name == ALGORITHM_NAMES['binary'][0]:
@@ -158,8 +167,8 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
             api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_FTMODEL']['en'].format(binary_algorithm_name))
         except Exception as e:
             api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_FTMODEL_FAILED']['en'].format(binary_algorithm_name), level=5)
-            api_obj.ui.set_warning(texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', level=3)
-            return
+            # api_obj.ui.set_warning(texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', level=3)
+            return (False, (texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', 3))
 
     if binary_algorithm_name == ALGORITHM_NAMES['binary'][1]:
         try:
@@ -168,8 +177,8 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
             api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_FTMODEL']['en'].format(binary_algorithm_name))
         except Exception as e:
             api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_FTMODEL_FAILED']['en'].format(binary_algorithm_name), level=5)
-            api_obj.ui.set_warning(texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', level=3)
-            return
+            # api_obj.ui.set_warning(texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', level=3)
+            return (False, (texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', 3))
 
     # Create call back
     my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint.h5'), model_type='binary', api_obj=api_obj)
@@ -177,25 +186,25 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
     # Fit model for fine tunning
     try:
         history = model.fit(trainGen,
-                steps_per_epoch=trainGen.n // binary_batch + 1,
+                steps_per_epoch=spe,
                 epochs=binary_epoch,
                 callbacks=[my_callback],
                 validation_data=testGen,
-                validation_steps=testGen.n // binary_batch + 1,
+                validation_steps=vspe,
                 initial_epoch=binary_epoch - binary_te)
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['FIT_FTMODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['FIT_FTMODEL_FAILED']['en'], level=5)
-        api_obj.ui.set_warning(texts.ERRORS['FIT_FTMODEL_FAILED'][api_obj.language], 'train', level=3)
-        return
+        # api_obj.ui.set_warning(texts.ERRORS['FIT_FTMODEL_FAILED'][api_obj.language], 'train', level=3)
+        return (False, (texts.ERRORS['FIT_FTMODEL_FAILED'][api_obj.language], 'train', 3))
        
     try:
         model.save(os.path.join(weights_path, 'binary_model.h5'))
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SAVE_FTBMODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['SAVE_FTBMODEL_FAILED']['en'], level=5)
-        api_obj.ui.set_warning(texts.ERRORS['SAVE_FTBMODEL_FAILED'][api_obj.language], 'train', level=3)
-        return
+        # api_obj.ui.set_warning(texts.ERRORS['SAVE_FTBMODEL_FAILED'][api_obj.language], 'train', level=3)
+        return (False, (texts.ERRORS['SAVE_FTBMODEL_FAILED'][api_obj.language], 'train', 3))
 
     #print('model history:', history.history)
     
@@ -204,7 +213,7 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
     except:
         binary_algorithm_name = -1
 
-    return create_binary_model_record_dict([binary_algorithm_name,
+    return (True, create_binary_model_record_dict([binary_algorithm_name,
                                             '('+str(binary_input_size[0])+','+ str(binary_input_size[1])+')', 
                                             binary_input_type,
                                             binary_epoch,
@@ -221,7 +230,7 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
                                             history.history['val_Recall'][0],
                                             str(binary_dp),
                                             weights_path,
-                                            date_funcs.get_date(persian=True)])
+                                            date_funcs.get_date(persian=True)]))
 
 
 def create_binary_model_record_dict(records):
@@ -320,14 +329,17 @@ def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_e
     # Create call back
     my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint.h5'), model_type='localization', api_obj=api_obj)
 
+    spe = (train_data_count // loc_batch + 1) if ((train_data_count//loc_batch) != (train_data_count / loc_batch)) else (train_data_count // loc_batch)
+    vspe = (test_data_count // loc_batch + 1) if ((test_data_count//loc_batch) != (test_data_count / loc_batch)) else (test_data_count // loc_batch)
+
     # Fit model
     try:
         history = model.fit(trainGen,
-                steps_per_epoch=int(train_data_count/loc_batch) + 1,
+                steps_per_epoch=spe,
                 epochs=loc_epoch,
-                callbacks=[my_callback ],
+                callbacks=[my_callback],
                 validation_data=testGen,
-                validation_steps=test_data_count//loc_batch + 1, 
+                validation_steps=vspe, 
                 initial_epoch=0)
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['FIT_MODEL']['en'])
     except Exception as e:

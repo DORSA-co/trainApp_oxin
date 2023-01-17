@@ -66,6 +66,8 @@ import texts
 from modules import logging_funcs
 from login_win.login_UI import UI_login_window
 
+from Dataset_selection.ds_select_UI import Ds_selection
+
 # from login_win.login_api import
 
 from train_api import ALGORITHM_NAMES
@@ -95,6 +97,8 @@ class UI_main_window(QMainWindow, ui):
         self.setWindowFlags(flags)
         self.activate_()
         self.statusBar().setMaximumHeight(5)
+
+        self.stackedWidget.setCurrentWidget(self.page_data_auquzation)
 
         self.mask_table_widget.horizontalHeader().setVisible(True)
 
@@ -488,6 +492,8 @@ class UI_main_window(QMainWindow, ui):
         self.plc_status = False
         self.update_timer_plc = self.update_timer_plc_line.text()
         self.update_wind_plc = self.update_wind_plc_line.text()
+        self.auto_wind_intervals = self.update_auto_wind_plc_line.text()
+        self.wind_itr = 1
         self.update_timer_camera_frame = self.update_timer_camera_frame_line.text()
         self.update_timer_live_frame = self.update_timer_live_frame_line.text()
         self.manual_plc = self.manual_plc_check.isChecked()
@@ -508,7 +514,7 @@ class UI_main_window(QMainWindow, ui):
                 btn_name = eval("self.camera%s_btn" % i)
             btn_name.clicked.connect(self.buttonClick)
 
-        self.start_wind_btn.clicked.connect(self.start_wind)
+        # self.start_wind_btn.clicked.connect(self.start_wind)
 
         # ----------------------------------------------------------------------------------------------------
         # change_language
@@ -604,7 +610,6 @@ class UI_main_window(QMainWindow, ui):
 
         QApplication.instance().setFont(self.fontComboBox.currentText())
 
-
     def change_language_image(self):
         """Update image of language in ui
 
@@ -631,6 +636,7 @@ class UI_main_window(QMainWindow, ui):
         """
         self.update_timer_plc = self.update_timer_plc_line.text()
         self.update_wind_plc = self.update_wind_plc_line.text()
+        self.auto_wind_intervals = self.update_auto_wind_plc_line.text()
         self.manual_plc = self.manual_plc_check.isChecked()
         self.logger.create_new_log(message="change plc settings.")
         self.set_warning(
@@ -1103,7 +1109,6 @@ class UI_main_window(QMainWindow, ui):
         self.show_image_in_label()
         if self.isMaximized():
             self.showNormal()
-
         else:
             self.showMaximized()
         self.logger.create_new_log(message="Maximize or Minimize window")
@@ -1381,6 +1386,13 @@ class UI_main_window(QMainWindow, ui):
         self.logger.create_new_log(message="create login object")  # LOG
         return self.login_window
 
+    def create_ds_selection_dialog(self):
+        self.select_ds_dialog = Ds_selection()
+        texts.set_title_ds_selection(self, self.language)
+
+        self.logger.create_new_log(message="create dataset selection object")  # LOG
+        return self.select_ds_dialog
+
     def ret_create_labeling(self):
         """Create Object Labeling and set Title Page language
         Return : labeling object
@@ -1399,7 +1411,6 @@ class UI_main_window(QMainWindow, ui):
             labels_type(list[str]) : Type of labels
         """
         LABEL_TABLE = {"mask": self.mask_table_widget}
-        print("labe", label_type)
         # self.clear_table()  # clear table
         self.mask_table_widget.horizontalHeader().setVisible(True)
         LABEL_TABLE[label_type].setHorizontalHeaderLabels(
@@ -1570,7 +1581,6 @@ class UI_main_window(QMainWindow, ui):
             "setting": self.setting_msg_label,
             "profile": self.profile_msg_label,
         }
-        # print('set_warning')
         if text != None:
 
             if level == 1:
@@ -1593,7 +1603,6 @@ class UI_main_window(QMainWindow, ui):
                     "background-color:#D9534F;border-radius:2px;color:black"
                 )
             QTimer.singleShot(2000, lambda: self.set_warning(None, name))
-            # threading.Timer(2, self.set_warning, args=(None, name)).start()
             self.logger.create_new_log(
                 message="waring_labels {} Error {}".format(name, text),
                 level=2,
@@ -1602,7 +1611,9 @@ class UI_main_window(QMainWindow, ui):
         else:
             waring_labels[name].setText("")
             waring_labels[name].setStyleSheet("")
-
+            if name == 'train':
+                waring_labels[name].setStyleSheet("border: 1px solid black; background-color: white;")
+    
     def show_question(self, title, message):
         """Show question window with specefic message
         Args:
@@ -1655,7 +1666,6 @@ class UI_main_window(QMainWindow, ui):
             scale (int): zoom level
             position : offset of image after zoom
         """
-        print("show_image_in_label")
         if img is None:
             img = api.get_image()
             if img is None:
@@ -2060,11 +2070,43 @@ class UI_main_window(QMainWindow, ui):
         :rtype: dictionary
         """
         try:
-            user_name = self.user_name_2.text()
+            user_name = self.user_name_3.text()
             user_id = self.user_id.text()
             dataset_name = self.lineEdit_name_dataset.text()
             path = self.lineEdit_path_dataset.text()
             date = self.today_date.text()
+
+            if not date:
+                self.set_warning(
+                    texts.ERRORS["date_empty"][self.language],
+                    "profile",
+                    level=2,
+                )
+                return {}
+                
+            if not user_name:
+                self.set_warning(
+                    texts.ERRORS["creator_user_name_empty"][self.language],
+                    "profile",
+                    level=2,
+                )
+                return {}
+
+            if not dataset_name:
+                self.set_warning(
+                    texts.ERRORS["dataset_name_empty"][self.language],
+                    "profile",
+                    level=2,
+                )
+                return {}
+
+            if not path:
+                self.set_warning(
+                    texts.ERRORS["location_empty"][self.language],
+                    "profile",
+                    level=2,
+                )
+                return {}
 
             return {
                 "user_name": user_name,

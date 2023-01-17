@@ -88,6 +88,7 @@ import train_api
 
 from labeling.labeling_UI import labeling
 
+from Dataset_selection.ds_select_UI import Ds_selection
 from FileDialog import FileDialog
 
 from labeling import labeling_api
@@ -104,6 +105,7 @@ import random
 import random
 import time
 from PySide6.QtWidgets import QLabel as sQLabel, QProgressBar
+from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
 from PySide6.QtWidgets import QVBoxLayout
 from Train_modules.models import xception_cnn, resnet_cnn
 from Train_modules.models import unet, low_unet, resnet_unet
@@ -326,8 +328,8 @@ class API:
         self.set_plc_ip_to_ui()
         self.connect_plc()
         self.load_plc_parms()  # should be commecnt in finbal version
-        # self.start_wind()
         self.ui.start_wind_btn.clicked.connect(lambda: self.set_wind(True))
+        self.start_auto_wind()
         # self.update_plc_parms()
         self.plc_timer = QTimer()
         self.plc_timer.timeout.connect(self.update_sensor_and_temp)
@@ -1979,7 +1981,7 @@ class API:
             label_type = self.ui.get_label_type()
             if label_type == "mask":
                 mouse_position = self.mouse.get_relative_position()
-                self.label_bakcend[label_type].delete_point_or_mask(mouse_position)
+                self.label_bakcend[label_type].delete_point(mouse_position)
                 self.show_labeling(mouse_position)
 
     def get_defects(self):
@@ -2104,7 +2106,6 @@ class API:
             # print("*" * 50)
 
     def set_parms_login_page(self, login_info):
-
         self.ui.user_name_2.setText(str(login_info[1]["user_name"]))
         self.ui.user_name_3.setText(str(login_info[1]["user_name"]))
         self.ui.date_created.setText(str(login_info[1]["date_created"]))
@@ -2235,6 +2236,9 @@ class API:
             return
         else:
             parms = self.ui.get_create_dataset_parms()
+
+            if not parms:
+                return
 
             if os.path.exists(os.path.join(parms["path"], parms["dataset_name"])):
                 self.ui.set_warning(
@@ -2371,20 +2375,22 @@ class API:
             # Step 6: Start the thread
             self.runing_b_model=True
             self.bmodel_train_thread.start()
+
+            self.bmodel_train_worker.warning.connect(self.ui.set_warning)
             
             self.ui.binary_train.setEnabled(False)
-            self.ui.binary_train.setStyleSheet("background-color: rgb(61, 56, 70);color : white")
+            # self.ui.binary_train.setStyleSheet("background-color: rgb(61, 56, 70);color : white")
             # self.ui.show_mesagges(self.ui.warning_train_page,text=texts.WARNINGS["Training"][self.language],level=1)
 
 
     def update_b_chart_axes(self, nepoch):
         for chart_postfix in self.ui.chart_names:
-            eval("self.ui.axisX_%s" % chart_postfix).setRange(0, nepoch)
+            eval("self.ui.axisX_%s" % chart_postfix).setRange(1, max(nepoch, chart_funcs.axisX_range))
             if self.ui.binary_chart_checkbox.isChecked():
-                eval("self.ui.axisX_%s" % chart_postfix).setTickCount(nepoch + 1)
+                eval("self.ui.axisX_%s" % chart_postfix).setTickCount(nepoch)
             else:
                 eval("self.ui.axisX_%s" % chart_postfix).setTickCount(
-                    chart_funcs.axisX_range + 1
+                    chart_funcs.axisX_range
                 )
         chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
         chart_funcs.clear_series_date(
@@ -2607,42 +2613,58 @@ class API:
                 return
 
     def select_binary_dataset(self, page="train"):
-        self.select_ds_dialog = FileDialog("Select a directory", "/")
-        selected = self.select_ds_dialog.exec()
+        self.ui.create_ds_selection_dialog()
 
-        if selected:
-            dname = self.select_ds_dialog.selectedFiles()[0]
-        else:
-            return
-        if dname == "":
-            return
-        if not self.ds.check_binary_dataset(dname):
-            self.ui.set_warning(
-                texts.WARNINGS["DATASET_FORMAT"][self.language], page, level=2
-            )
-            return
-        #
-        if page == "train":
-            text = self.ui.b_dp.toPlainText()
-            pattern = r"[0-9]+. "
-            datasets = [
-                os.path.abspath(s.rstrip()) for s in re.split(pattern, text)[1:]
-            ]
+        datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)[1]
+        self.ui.select_ds_dialog.table.setRowCount(len(datasets_list))
+        for i, ds in enumerate(datasets_list):
+            # set name
+            table_item = sQTableWidgetItem(str(ds["name"]))
+            table_item.setCheckState(Qt.CheckState.Unchecked)
+            self.ui.select_ds_dialog.table.setItem(i, 0, table_item)
+            # set user_own
+            table_item = sQTableWidgetItem(str(ds["user_own"]))
+            self.ui.select_ds_dialog.table.setItem(i, 1, table_item)
+            # set path
+            table_item = sQTableWidgetItem(str(ds["path"]))
+            self.ui.select_ds_dialog.table.setItem(i, 2, table_item)
+        
 
-            if os.path.abspath(dname) in datasets:
+        self.ui.select_ds_dialog.ok_btn.clicked.connect(lambda: self.ok_selected_binary_datasets(page))
+        self.ui.select_ds_dialog.show()
+    
+    def ok_selected_binary_datasets(self, page="train"):
+        selecteds = self.ui.select_ds_dialog.get_select_datasets()
+
+        for selected in selecteds:
+            dname = os.path.join(selected, 'binary')
+            if not self.ds.check_binary_dataset(dname):
                 self.ui.set_warning(
-                    texts.WARNINGS["DATASET_EXIST"][self.language], page, level=2
+                    texts.WARNINGS["DATASET_FORMAT"][self.language], page, level=2
                 )
-                return
+                continue
+            #
+            if page == "train":
+                text = self.ui.b_dp.toPlainText()
+                pattern = r"[0-9]+. "
+                datasets = [
+                    os.path.abspath(s.rstrip()) for s in re.split(pattern, text)[1:]
+                ]
 
-            n = len(datasets) + 1
-            if text != "":
-                text += " \n"
-            self.ui.b_dp.setPlainText(text + str(n) + ". " + dname)
-        #
-        elif page == "binarylist":
-            self.ui.binarylist_dataset_lineedit.setText(dname)
-            self.ui.binarylist_dataset_annot_lineedit.setText(dname)
+                if os.path.abspath(dname) in datasets:
+                    self.ui.set_warning(
+                        texts.WARNINGS["DATASET_EXIST"][self.language], page, level=2
+                    )
+                    continue
+
+                n = len(datasets) + 1
+                if text != "":
+                    text += " \n"
+                self.ui.b_dp.setPlainText(text + str(n) + ". " + dname)
+            #
+            elif page == "binarylist":
+                self.ui.binarylist_dataset_lineedit.setText(dname)
+                self.ui.binarylist_dataset_annot_lineedit.setText(dname)
 
     def delete_binary_dataset(self):
         ds_n = self.ui.b_ds_num.value() - 1
@@ -3758,8 +3780,26 @@ class API:
                 self.update_binary_images_on_ui()
 
             else:
+                self.binary_image_list.add(
+                    mylist=perfect_image_pathes,
+                    name=binary_list_funcs.image_list_object_names["perfect"],
+                )
+                # create next and prev funcs
+                self.perfect_image_list_next_func = (
+                    self.binary_image_list.build_next_func(
+                        name=binary_list_funcs.image_list_object_names["perfect"]
+                    )
+                )
+                self.perfect_image_list_prev_func = (
+                    self.binary_image_list.build_prev_func(
+                        name=binary_list_funcs.image_list_object_names["perfect"]
+                    )
+                )
+
+                # connect next and prev buttons to funcs
                 self.ui.binary_list_perfect_prev_btn.setEnabled(False)
                 self.ui.binary_list_perfect_next_btn.setEnabled(False)
+                self.update_binary_images_on_ui()
 
             # defect
             if defect_check:
@@ -3785,8 +3825,26 @@ class API:
                 self.update_binary_images_on_ui(defect=True)
 
             else:
+                self.binary_image_list.add(
+                    mylist=defect_image_pathes,
+                    mylist_annots=defect_annot_pathes,
+                    name=binary_list_funcs.image_list_object_names["defect"],
+                )
+                # create next and prev funcs
+                self.defect_image_list_next_func = (
+                    self.binary_image_list.build_next_func(
+                        name=binary_list_funcs.image_list_object_names["defect"]
+                    )
+                )
+                self.defect_image_list_prev_func = (
+                    self.binary_image_list.build_prev_func(
+                        name=binary_list_funcs.image_list_object_names["defect"]
+                    )
+                )
+                # connect next and prev buttons to funcs
                 self.ui.binary_list_defect_prev_btn.setEnabled(False)
                 self.ui.binary_list_defect_next_btn.setEnabled(False)
+                self.update_binary_images_on_ui(defect=True)
 
             # update pie chart
             chart_funcs.update_binarylist_piechart(
@@ -4757,8 +4815,9 @@ class API:
     def maximize_neighbours(self, widget_name=""):
         if self.ui.sn:
             image = self.ui.sn.get_original_img()
-            annt = self.ui.sn.get_img()
-            self.ui.show_neighbouring(image, annt)
+            if image is not None:
+                annt = self.ui.sn.get_img()
+                self.ui.show_neighbouring(image, annt)
 
     def load_language_font(self):
         lan, font = self.db.load_language_font()
@@ -4973,9 +5032,18 @@ class API:
             )
             self.ui.set_plc_ip(self.plc_ip)
 
+    def start_auto_wind(self):
+        self.auto_wind_timer = QTimer()
+        self.auto_wind_timer.timeout.connect(self.set_wind)
+        auto_wind_timer = int(self.ui.update_wind_plc) + int(self.ui.auto_wind_intervals)
+        self.auto_wind_timer.start(auto_wind_timer)
+
     def set_wind(self, mode=True):
         print("set wind", mode)
-        self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+        if self.ui.wind_itr == 1:
+            self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+            if mode:
+                self.ui.start_wind()
 
     def set_start_software_plc(self, mode):
         print("software on plc ", str(mode))

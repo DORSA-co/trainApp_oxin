@@ -805,7 +805,7 @@ def get_filtered_binary_models_from_db(
         #
         try:
             if (
-                int(filter_params["start_date"][0]) < 1402
+                int(filter_params["start_date"][0]) < 1401
                 or int(filter_params["start_date"][0]) > 1500
             ):
                 ui_obj.set_warning(
@@ -863,7 +863,7 @@ def get_filtered_binary_models_from_db(
         # end year
         try:
             if (
-                int(filter_params["end_date"][0]) < 1402
+                int(filter_params["end_date"][0]) < 1401
                 or int(filter_params["end_date"][0]) > 1500
             ):
                 ui_obj.set_warning(
@@ -1009,6 +1009,7 @@ class Binary_model_train_worker(sQObject):
     """
 
     finished = sSignal()
+    warning = sSignal(str, str, int)
 
     def assign_parameters(self, b_parms, api_obj, ui_obj, db_obj):
         self.b_parms = b_parms
@@ -1020,25 +1021,30 @@ class Binary_model_train_worker(sQObject):
         bmodel_records = train_api.train_binary(
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
-        if bmodel_records:
-            # notif
-            self.ui_obj.notif_manager.append_new_notif(
-                message=texts.MESSEGES["bmodel_trained"][self.ui_obj.language], level=1
-            )
+        if not bmodel_records[0]:
+            self.warning.emit(bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2])
+        else:
+            bmodel_records = bmodel_records[1]
+            if bmodel_records:
+                # notif
+                self.ui_obj.notif_manager.append_new_notif(
+                    message=texts.MESSEGES["bmodel_trained"][self.ui_obj.language], level=1
+                )
 
-            # add record to database
-            self.api_obj.bmodel_train_result = save_new_binary_model_record(
-                ui_obj=self.ui_obj, db_obj=self.db_obj, bmodel_records=bmodel_records
-            )
+                # add record to database
+                self.api_obj.bmodel_train_result = save_new_binary_model_record(
+                    ui_obj=self.ui_obj, db_obj=self.db_obj, bmodel_records=bmodel_records
+                )
 
-            #update ui
+                self.warning.emit(texts.MESSEGES['train_successfuly'][self.api_obj.language], 'train', 1)
+                #update ui
 
-            self.ui_obj.binary_train.setEnabled(True)
-            self.ui_obj.binary_train.setStyleSheet("background-color:#ff0000;color:white;")
-            # self.ui_obj.show_mesagges(self.ui_obj.warning_train_page,text='Comsssssssssspleted',level=1)
-            self.api_obj.runing_b_model=False
+        # self.ui_obj.binary_train.setEnabled(True)
+        # self.api_obj.runing_b_model=False
 
         self.finished.emit()
 
     def show_bmodel_train_result(self):
+        self.ui_obj.binary_train.setEnabled(True)
+        self.api_obj.runing_b_model=False
         return

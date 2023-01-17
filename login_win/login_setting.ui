@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>235</width>
-    <height>347</height>
+    <height>373</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1180,6 +1180,12 @@ color:white;</string>
             </property>
             <property name="text">
              <string>Login</string>
+            </property>
+            <property name="autoDefault">
+             <bool>true</bool>
+            </property>
+            <property name="default">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

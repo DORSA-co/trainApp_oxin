@@ -163,6 +163,7 @@ class moveOnImagrList:
 
         mylist = self.lists[ name ]
         mylist_annots = self.lists_annots[name]
+        print(self.lists_annots)
         idx = self.idxs[name]
         list = []
         list_annots = []

@@ -158,7 +158,10 @@ class neighbouring(QMainWindow, ui):
         self.showMinimized()
     
     def maxmize_minimize(self):
-
+        if self.annot_checkbox.isChecked():
+            self.position = self.show_image_in_label(self.annotated_image)
+        else:
+            self.position = self.show_image_in_label(self.img)
         if self.isMaximized():
             self.showNormal()
             # self.sheet_view_down=data_grabber.sheetOverView(h=129,w=1084,nh=12,nw=30)
@@ -206,7 +209,7 @@ class neighbouring(QMainWindow, ui):
 # api = labeling_api.labeling_API(win)
 import cv2
 if __name__ == "__main__":
-    img = cv2.imread('/home/reyhane/oxin_image_grabber/995/BOTTOM/1/5.png')
+    img = cv2.imread('/home/reyhane/PythonProjects/trainApp_oxin/oxin_image_grabber/995/BOTTOM/1/5.png')
     app = QApplication()
     win = neighbouring(img)
     win.show()

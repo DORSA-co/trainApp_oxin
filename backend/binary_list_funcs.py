@@ -16,7 +16,7 @@ from neighbouring_UI import neighbouring
 from backend import Annotation, classification_list_funcs, dataset
 
 
-n_images_per_row = 6  # number of current images on binarylist page slider
+n_images_per_row = 4  # number of current images on binarylist page slider
 n_images_per_row_classlist = (
     5  # number of current images on classification list page slider
 )
@@ -691,6 +691,7 @@ def create_mask_from_annotation_file(ui_obj, db_obj, image, annotation_path):
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1.5,
                     html_to_bgr(defect_info["color"]),
+                    2,
                 )
             else:
                 # image_mask = cv2.fillPoly(image_mask, pts=[pts], color=html_to_bgr(mask_color))
