@@ -9,7 +9,7 @@ import inspect
 
 
 class dataBaseUtils:
-    def __init__(self, ui_obj, user_name="root", password="Dorsa1400@"):
+    def __init__(self, ui_obj, user_name="root", password="Dorsa-1400"):
         if ui_obj!='Null':
             self.db = database.dataBase(
                 user_name, password, "localhost", "saba_database", logger_obj=ui_obj.logger
@@ -983,7 +983,7 @@ class dataBaseUtils:
             table_name=self.setting_tabel, param_name="id", value=value
         )
         record = record[0]
-        return record["pipline_json_path"]
+        return record["pipeline_json_path"]
 
 
 

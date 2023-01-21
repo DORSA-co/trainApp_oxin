@@ -115,7 +115,6 @@ class data_loader(QMainWindow, ui):
 
         self.clear_tables()                  # clear tables
         self.detail_dataset.setText('')
-
         for row,sheet in enumerate(sheets):
 
             for i,(feature, value) in enumerate( sheet.get_info_dict().items()):
@@ -133,6 +132,7 @@ class data_loader(QMainWindow, ui):
         self.table_sheets = sheets
 
     def show_detail(self):
+        exist = False
         text = ''
         for i in range(self.tableWidget_dataset.rowCount()):    
             if self.tableWidget_dataset.item(i, 0).checkState() == QtCore.Qt.Checked:
@@ -141,7 +141,13 @@ class data_loader(QMainWindow, ui):
                 print(self.table_sheets[i].get_path())
                 if not os.path.isdir(self.table_sheets[i].get_path()):
                     print('path not exist')
-        self.detail_dataset.setText(text)
+                    exist = self.table_sheets[i].get_id()
+        if not exist:
+            self.detail_dataset.setText(text)
+            self.load_btn.setEnabled(True)
+        else:
+            self.detail_dataset.setText(str(exist)+'Not Exist')
+            self.load_btn.setEnabled(False)
 
         
 

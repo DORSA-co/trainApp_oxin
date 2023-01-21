@@ -1357,7 +1357,7 @@ class API:
     # ----------------------------------------------------------------------------------------
     def show_sheet_loader(self):
         try:
-            sheets = self.db.report_last_sheets(10)
+            sheets = self.db.report_last_sheets(9999)
             self.ui.load_sheets_win.show_sheets_info(sheets)
             self.ui.data_loader_win_show()
             self.ui.load_sheets_win.set_warning(
