@@ -10,14 +10,17 @@ from tensorflow.keras.optimizers import *
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 
 # from tensorflow.keras import backend as keras
-from Train_modules.deep_utils import metrics
+try:
+    from Train_modules.deep_utils import metrics
+except:
+    from deep_utils import metrics
 
 from tensorflow.keras import layers
 
-import segmentation_models as sm
+# import segmentation_models as sm
 
-sm.set_framework("tf.keras")
-sm.framework()
+# sm.set_framework("tf.keras")
+# sm.framework()
 
 
 BINARY = "binary"
@@ -853,6 +856,6 @@ def efficientnetb2_base_cnn(
 
 
 if __name__ == "__main__":
-    # model = resnet_cnn( (128,800,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
-    model = efficientnetb2_base_cnn((128, 800, 3), num_class=1, mode=BINARY)
+    model = resnet_cnn( (128,800,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
+    # model = efficientnetb2_base_cnn((128, 800, 3), num_class=1, mode=BINARY)
     end = True

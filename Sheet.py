@@ -12,7 +12,7 @@ class Sheet:
                 ps_number=None,
                 pdl_number=None,
                 width=None,
-                lenght=None,
+                length=None,
                 thickness=None,
                 date=None,
                 time=None,
@@ -29,7 +29,7 @@ class Sheet:
         self.ps_number = ps_number #product scechule number
         self.pdl_number = pdl_number #product d??? number
         self.width = width
-        self.lenght = lenght
+        self.length = length
         self.thickness = thickness
         self.date = date
         self.time = time
@@ -54,15 +54,15 @@ class Sheet:
     def set_width(self, w):
         self.width = w
 
-    def set_lenght(self, l):
-        self.lenght = l
+    def set_length(self, l):
+        self.length = l
 
     def set_thickness(self, t):
         self.thickness = t
 
     def set_dimentions(self, w, l, t):
         self.width = w
-        self.lenght = l
+        self.length = l
         self.thickness = t
 
     def set_date(self,y,m,d):
@@ -106,14 +106,14 @@ class Sheet:
     def get_width(self):
         return self.width
 
-    def get_lenght(self):
-        return self.lenght
+    def get_length(self):
+        return self.length
 
     def get_thickness(self):
         return self.thickness
 
     def get_dimentions(self):
-        return self.width, self.lenght, self.thickness
+        return self.width, self.length, self.thickness
 
     def get_date_string(self):
         return str(self.date.strftime('%Y/%m/%d'))
@@ -153,7 +153,7 @@ class Sheet:
         return {
             'sheet_id':self.sheet_id,
             'heat_number': self.heat_number,
-            'lenght': self.lenght,
+            'length': self.length,
             'width' : self.width,
             'ps_number': self.ps_number,
             'pdl_number': self.pdl_number,

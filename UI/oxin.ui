@@ -404,6 +404,7 @@ CheckBox */
 
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 RadioButton */
+/*
 QRadioButton::indicator {
     border: 3px solid rgb(52, 59, 72);
 	width: 15px;
@@ -418,7 +419,7 @@ QRadioButton::indicator:checked {
     background: 3px solid rgb(94, 106, 130);
 	border: 3px solid rgb(52, 59, 72);	
 }
-
+/*
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 ComboBox */
 QComboBox{
@@ -1243,6 +1244,9 @@ text-align:center;</string>
                 </item>
                 <item alignment="Qt::AlignLeft">
                  <widget class="QPushButton" name="Localization_btn">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -1276,6 +1280,9 @@ text-align:center;</string>
                 </item>
                 <item alignment="Qt::AlignLeft">
                  <widget class="QPushButton" name="Classification_btn">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -4821,12 +4828,12 @@ QPushButton:disabled {
                                   <item>
                                    <widget class="QLabel" name="label_223">
                                     <property name="text">
-                                     <string>Lenght :</string>
+                                     <string>length :</string>
                                     </property>
                                    </widget>
                                   </item>
                                   <item>
-                                   <widget class="QLabel" name="label_lenght">
+                                   <widget class="QLabel" name="label_length">
                                     <property name="text">
                                      <string>-</string>
                                     </property>
@@ -7797,7 +7804,7 @@ border-radius: 8px;</string>
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>710</width>
+                                         <width>707</width>
                                          <height>27</height>
                                         </rect>
                                        </property>
@@ -7931,12 +7938,12 @@ border-radius: 8px;</string>
                                            </sizepolicy>
                                           </property>
                                           <property name="text">
-                                           <string>Lenght :</string>
+                                           <string>length :</string>
                                           </property>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="label_lenght_2">
+                                         <widget class="QLabel" name="label_length_2">
                                           <property name="text">
                                            <string>-</string>
                                           </property>
@@ -12857,7 +12864,7 @@ color : rgb(0,0,0);</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>63</width>
+                                   <width>92</width>
                                    <height>165</height>
                                   </rect>
                                  </property>
@@ -12884,8 +12891,8 @@ color : rgb(0,0,0);</string>
                                       <rect>
                                        <x>0</x>
                                        <y>0</y>
-                                       <width>76</width>
-                                       <height>43</height>
+                                       <width>96</width>
+                                       <height>49</height>
                                       </rect>
                                      </property>
                                      <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -16837,7 +16844,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_binary">
                          <property name="currentIndex">
-                          <number>0</number>
+                          <number>1</number>
                          </property>
                          <widget class="QWidget" name="page_binary_list">
                           <layout class="QVBoxLayout" name="verticalLayout_71">
@@ -17648,28 +17655,7 @@ border:Transparent</string>
                                    <item>
                                     <widget class="QRadioButton" name="input_type_resize">
                                      <property name="styleSheet">
-                                      <string notr="true">QRadioButton {
-    background-color:       Transparent;
-    color:                  Black;
-	border: none;
-
-}
-
-QRadioButton::indicator {
-    width:                  10px;
-    height:                 10px;
-    border-radius:          7px;
-}
-
-QRadioButton::indicator:checked {
-	background-color:       black;
-    border:                 2px solid black;
-}
-
-QRadioButton::indicator:unchecked {
-    background-color:      White;
-    border:                 2px solid white;
-}</string>
+                                      <string notr="true"/>
                                      </property>
                                      <property name="text">
                                       <string>resize</string>
@@ -17679,28 +17665,7 @@ QRadioButton::indicator:unchecked {
                                    <item>
                                     <widget class="QRadioButton" name="input_type_split">
                                      <property name="styleSheet">
-                                      <string notr="true">QRadioButton {
-    background-color:       Transparent;
-    color:                  Black;
-	border: none;
-
-}
-
-QRadioButton::indicator {
-    width:                  10px;
-    height:                 10px;
-    border-radius:          7px;
-}
-
-QRadioButton::indicator:checked {
-    background-color:       black;
-    border:                 2px solid black;
-}
-
-QRadioButton::indicator:unchecked {
-    background-color:      White;
-    border:                 2px solid white;
-}</string>
+                                      <string notr="true"/>
                                      </property>
                                      <property name="text">
                                       <string>split</string>
@@ -17819,12 +17784,17 @@ QRadioButton::indicator:unchecked {
                                    <item>
                                     <widget class="QLabel" name="label_130">
                                      <property name="text">
-                                      <string>Train GPU:</string>
+                                      <string>Train Processor:</string>
                                      </property>
                                     </widget>
                                    </item>
                                    <item>
                                     <widget class="QComboBox" name="b_gpu">
+                                     <item>
+                                      <property name="text">
+                                       <string>CPU</string>
+                                      </property>
+                                     </item>
                                      <item>
                                       <property name="text">
                                        <string>GPU 0</string>
@@ -17868,9 +17838,15 @@ QRadioButton::indicator:unchecked {
                                    </item>
                                    <item>
                                     <widget class="QPushButton" name="b_select_dp">
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
                                      <property name="minimumSize">
                                       <size>
-                                       <width>102</width>
+                                       <width>120</width>
                                        <height>0</height>
                                       </size>
                                      </property>
@@ -18154,6 +18130,13 @@ QPushButton:hover {
                                    </property>
                                    <property name="text">
                                     <string>Chart Full View</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QProgressBar" name="binary_train_progressBar">
+                                   <property name="value">
+                                    <number>0</number>
                                    </property>
                                   </widget>
                                  </item>
@@ -18561,13 +18544,13 @@ background-color: white;</string>
                                     <widget class="QLabel" name="label_109">
                                      <property name="minimumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>0</height>
                                       </size>
                                      </property>
                                      <property name="maximumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>16777215</height>
                                       </size>
                                      </property>
@@ -18744,13 +18727,13 @@ background-color: white;</string>
                                      </property>
                                      <property name="minimumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>0</height>
                                       </size>
                                      </property>
                                      <property name="maximumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>16777215</height>
                                       </size>
                                      </property>
@@ -18921,13 +18904,13 @@ background-color: white;</string>
                                     <widget class="QLabel" name="label_134">
                                      <property name="minimumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>0</height>
                                       </size>
                                      </property>
                                      <property name="maximumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>16777215</height>
                                       </size>
                                      </property>
@@ -19104,13 +19087,13 @@ background-color: white;</string>
                                     <widget class="QLabel" name="label_145">
                                      <property name="minimumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>0</height>
                                       </size>
                                      </property>
                                      <property name="maximumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>16777215</height>
                                       </size>
                                      </property>
@@ -19124,7 +19107,7 @@ background-color: white;</string>
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>Split Size</string>
+                                      <string>Split Ratio</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -19281,13 +19264,13 @@ background-color: white;</string>
                                     <widget class="QLabel" name="label_148">
                                      <property name="minimumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>0</height>
                                       </size>
                                      </property>
                                      <property name="maximumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>16777215</height>
                                       </size>
                                      </property>
@@ -19458,13 +19441,13 @@ background-color: white;</string>
                                     <widget class="QLabel" name="label_150">
                                      <property name="minimumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>0</height>
                                       </size>
                                      </property>
                                      <property name="maximumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>16777215</height>
                                       </size>
                                      </property>
@@ -19635,13 +19618,13 @@ background-color: white;</string>
                                     <widget class="QLabel" name="label_153">
                                      <property name="minimumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>0</height>
                                       </size>
                                      </property>
                                      <property name="maximumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>16777215</height>
                                       </size>
                                      </property>
@@ -19812,13 +19795,13 @@ background-color: white;</string>
                                     <widget class="QLabel" name="label_309">
                                      <property name="minimumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>0</height>
                                       </size>
                                      </property>
                                      <property name="maximumSize">
                                       <size>
-                                       <width>95</width>
+                                       <width>110</width>
                                        <height>16777215</height>
                                       </size>
                                      </property>
@@ -28057,15 +28040,21 @@ color : rgb(0,0,0);</string>
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QLineEdit" name="update_timer_plc_line">
-                                 <property name="maximumSize">
-                                  <size>
-                                   <width>16777215</width>
-                                   <height>16777215</height>
-                                  </size>
+                                <widget class="QSpinBox" name="update_timer_plc_spinBox">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
                                  </property>
-                                 <property name="text">
-                                  <string>2000</string>
+                                 <property name="minimum">
+                                  <number>100</number>
+                                 </property>
+                                 <property name="maximum">
+                                  <number>10000</number>
+                                 </property>
+                                 <property name="value">
+                                  <number>2000</number>
                                  </property>
                                 </widget>
                                </item>
@@ -28102,15 +28091,21 @@ color : rgb(0,0,0);</string>
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QLineEdit" name="update_wind_plc_line">
-                                 <property name="maximumSize">
-                                  <size>
-                                   <width>16777215</width>
-                                   <height>16777215</height>
-                                  </size>
+                                <widget class="QSpinBox" name="update_wind_plc_spinBox">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
                                  </property>
-                                 <property name="text">
-                                  <string>5000</string>
+                                 <property name="minimum">
+                                  <number>100</number>
+                                 </property>
+                                 <property name="maximum">
+                                  <number>60000</number>
+                                 </property>
+                                 <property name="value">
+                                  <number>5000</number>
                                  </property>
                                 </widget>
                                </item>
@@ -28122,6 +28117,19 @@ color : rgb(0,0,0);</string>
                                 </widget>
                                </item>
                               </layout>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QCheckBox" name="auto_wind_check">
+                              <property name="styleSheet">
+                               <string notr="true"/>
+                              </property>
+                              <property name="text">
+                               <string>Automatic wind</string>
+                              </property>
+                              <property name="checked">
+                               <bool>true</bool>
+                              </property>
                              </widget>
                             </item>
                             <item>
@@ -28147,15 +28155,21 @@ color : rgb(0,0,0);</string>
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QLineEdit" name="update_auto_wind_plc_line">
-                                 <property name="maximumSize">
-                                  <size>
-                                   <width>16777215</width>
-                                   <height>16777215</height>
-                                  </size>
+                                <widget class="QSpinBox" name="update_auto_wind_plc_spinBox">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
                                  </property>
-                                 <property name="text">
-                                  <string>5000</string>
+                                 <property name="minimum">
+                                  <number>100</number>
+                                 </property>
+                                 <property name="maximum">
+                                  <number>60000</number>
+                                 </property>
+                                 <property name="value">
+                                  <number>5000</number>
                                  </property>
                                 </widget>
                                </item>
@@ -28243,6 +28257,12 @@ color : rgb(0,0,0);</string>
                               <layout class="QHBoxLayout" name="horizontalLayout_231">
                                <item>
                                 <widget class="QLabel" name="label_46">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
+                                 </property>
                                  <property name="minimumSize">
                                   <size>
                                    <width>170</width>
@@ -28250,20 +28270,26 @@ color : rgb(0,0,0);</string>
                                   </size>
                                  </property>
                                  <property name="text">
-                                  <string>Image update time :</string>
+                                  <string>Frame Rate :</string>
                                  </property>
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QLineEdit" name="update_timer_camera_frame_line">
-                                 <property name="maximumSize">
-                                  <size>
-                                   <width>16777215</width>
-                                   <height>16777215</height>
-                                  </size>
+                                <widget class="QSpinBox" name="frame_rate_spinBox">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
                                  </property>
-                                 <property name="text">
-                                  <string>5</string>
+                                 <property name="minimum">
+                                  <number>1</number>
+                                 </property>
+                                 <property name="maximum">
+                                  <number>100</number>
+                                 </property>
+                                 <property name="value">
+                                  <number>7</number>
                                  </property>
                                 </widget>
                                </item>
@@ -28288,6 +28314,12 @@ color : rgb(0,0,0);</string>
                               <layout class="QHBoxLayout" name="horizontalLayout_601">
                                <item>
                                 <widget class="QLabel" name="label_197">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
+                                 </property>
                                  <property name="minimumSize">
                                   <size>
                                    <width>170</width>
@@ -28303,15 +28335,21 @@ color : rgb(0,0,0);</string>
                                 </widget>
                                </item>
                                <item>
-                                <widget class="QLineEdit" name="update_timer_live_frame_line">
-                                 <property name="maximumSize">
-                                  <size>
-                                   <width>16777215</width>
-                                   <height>16777215</height>
-                                  </size>
+                                <widget class="QSpinBox" name="update_timer_live_frame_spinBox">
+                                 <property name="sizePolicy">
+                                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                   <horstretch>0</horstretch>
+                                   <verstretch>0</verstretch>
+                                  </sizepolicy>
                                  </property>
-                                 <property name="text">
-                                  <string>100</string>
+                                 <property name="minimum">
+                                  <number>10</number>
+                                 </property>
+                                 <property name="maximum">
+                                  <number>60000</number>
+                                 </property>
+                                 <property name="value">
+                                  <number>100</number>
                                  </property>
                                 </widget>
                                </item>

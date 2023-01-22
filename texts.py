@@ -238,40 +238,43 @@ ERRORS = {
     'SAVE_LMODEL_EPOCH_FAILED': {'fa': ' اپوک {}: .خطا در ذخیره سازی وزن های مدل آموزش جایابی ',
                             'en': ' Epoch {}: Error while saving localization train model weightss. '},
                     
-    'SAVE_BMODEL_FAILED': {'fa': ' .خطا در ذخیره سازی وزن های مدل آموزش باینری ',
+    'SAVE_BMODEL_FAILED': {'fa': ' خطا در ذخیره سازی وزن های مدل آموزش باینری. ',
                             'en': ' Error while saving binary train model weights. '},
                     
-    'SAVE_LMODEL_FAILED': {'fa': ' .خطا در ذخیره سازی وزن های مدل آموزش جایابی ',
+    'SAVE_LMODEL_FAILED': {'fa': ' خطا در ذخیره سازی وزن های مدل آموزش جایابی. ',
                             'en': ' Error while saving localization train model weights. '},
                     
-    'SAVE_FTBMODEL_FAILED': {'fa': ' .خطا در ذخیره سازی وزن های مدل آموزش باینری تنظیم دقیق',
+    'SAVE_FTBMODEL_FAILED': {'fa': ' خطا در ذخیره سازی وزن های مدل آموزش باینری تنظیم دقیق.',
                             'en': ' Error while saving binary train fine tune model weights. '},
  
-    'CREATE_BWPATH_FAILED': {'fa': ' .خطا در ایجاد آدرس وزن های مدل آموزش باینری ',
+    'CREATE_BWPATH_FAILED': {'fa': ' خطا در ایجاد آدرس وزن های مدل آموزش باینری. ',
                             'en': ' Error while creating binary weights path. '},
  
-    'CREATE_LWPATH_FAILED': {'fa': ' .خطا در ایجاد آدرس وزن های مدل آموزش جایابی ',
+    'SET_PROCESSOR_FAILED': {'fa': ' خطا در تنظیم پردازنده‌ی آموزش. ',
+                            'en': ' Error while setting train processor. '},
+ 
+    'CREATE_LWPATH_FAILED': {'fa': ' خطا در ایجاد آدرس وزن های مدل آموزش جایابی. ',
                             'en': ' Error while creating localization weights path. '},
  
-    'CREATE_BINARY_GEN_FAILED': {'fa': ' .خطا در ایجاد ژنراتور آموزش باینری ',
-                            'en': ' Error while creating binary train generetor '},
+    'CREATE_BINARY_GEN_FAILED': {'fa': ' خطا در آماده سازی داده ی آموزش باینری. ',
+                            'en': ' Error preparing binary training data '},
  
-    'CREATE_LOC_GEN_FAILED': {'fa': ' .خطا در ایجاد ژنراتور آموزش جایابی ',
+    'CREATE_LOC_GEN_FAILED': {'fa': ' خطا در ایجاد ژنراتور آموزش جایابی. ',
                             'en': ' Error while creating localization train generetor '},
 
-    'PREPARE_DATA_FAILED': {'fa': ' .خطا در آماده سازی داده ها برای آموزش ',
+    'PREPARE_DATA_FAILED': {'fa': ' خطا در آماده سازی داده ها برای آموزش. ',
                             'en': ' Error while preparing data for training. '},
 
-    'CREATE_MODEL_FAILED': {'fa': ' .{} خطا در ایجاد مدل برای الگوریتم ',
+    'CREATE_MODEL_FAILED': {'fa': ' خطا در ایجاد مدل برای الگوریتم {}. ',
                             'en': ' Error while creating model for {} algorithm. '},
 
-    'CREATE_FTMODEL_FAILED': {'fa': ' .{} خطا در ایجاد مدل تنظیم دقیق برای الگوریتم ',
+    'CREATE_FTMODEL_FAILED': {'fa': ' خطا در ایجاد مدل تنظیم دقیق برای الگوریتم {}. ',
                             'en': ' Error while creating fine tune model for {} algorithm. '},
 
-    'FIT_MODEL_FAILED': {'fa': ' .خطا در آموزش مدل ',
+    'FIT_MODEL_FAILED': {'fa': ' خطا در آموزش مدل. ',
                             'en': ' Error while model training. '},
 
-    'FIT_FTMODEL_FAILED': {'fa': ' .خطا در آموزش مدل تنظیم دقیق ',
+    'FIT_FTMODEL_FAILED': {'fa': ' خطا در آموزش مدل تنظیم دقیق. ',
                             'en': ' Error while fine tune model training. '}, 
 
     'dataset_splitted_failed': {'fa': '(ها)خطا در تقسیم مجموعه داده.',
@@ -286,8 +289,8 @@ ERRORS = {
     'refresh_failed': {'fa': ' خطا در به روز رسانی ',
                         'en': ' Error while refreshing '},
 
-    'pipline_eror': {'fa': 'خطا در مدل یا دیتابیس',
-                        'en': 'Model/Dataset Eror'},
+    'pipline_eror': {'fa': ' خطا در مدل یا دیتابیس ',
+                        'en': ' Model/Dataset Eror '},
 
     'CREATE_DATASET_FAILED': {'fa': ' خطا در ایجاد مجموعه داده ',
                        'en': ' Error while creating dataset '},
@@ -324,7 +327,6 @@ ERRORS = {
 
     'low_data': {'fa': 'داده‌های آموزشی کمتر از تعداد مورد نیاز است.',
         'en': 'Training data is less than required'},
-
 }
 
 WARNINGS = {
@@ -504,6 +506,9 @@ WARNINGS = {
 
     'no_camera_selected': {'fa': ' دوربینی انتخاب نشده است. ',
                         'en': ' No camera selected '},
+
+    'parameters_error': {'fa': 'پارامتر‌های ورودی به درستی مقدار دهی نشده‌اند.',
+        'en': 'The input parameters are not set correctly.'},        
 }
 
 MESSEGES = {
@@ -571,28 +576,31 @@ MESSEGES = {
     'NO_IMAGE_AVAILABLE_IN_DATASET': {'fa': ' هیچ تصویری در دیتاست های انتخاب شده یافت نشد  ',
                                       'en': ' No image available in selected datasets'},    
  
-    'CREATE_BWPATH': {'fa': ' .آدرس وزن های مدل آموزش باینری ایجاد شد',
-                    'en': ' Binary weights path created. '}, 
+    'CREATE_BWPATH': {'fa': ' آدرس وزن های مدل آموزش باینری ایجاد شد. ',
+                    'en': ' Binary weights path created. '},  
+ 
+    'SET_PROCESSOR': {'fa': ' پردازنده‌ی آموزش تنظیم شد.',
+                    'en': ' Training processor is set. '}, 
 
-    'CREATE_LWPATH': {'fa': ' .آدرس وزن های مدل آموزش جایابی ایجاد شد',
+    'CREATE_LWPATH': {'fa': ' آدرس وزن های مدل آموزش جایابی ایجاد شد. ',
                     'en': ' Localization weights path created. '}, 
  
-    'CREATE_BINARY_GEN': {'fa': ' .ژنراتور آموزش باینری ایجاد شد ',
-                        'en': ' Binary train generetor created. '},
+    'CREATE_BINARY_GEN': {'fa': ' داده‌ی آموزش باینری آماده شد. ',
+                        'en': ' Binary training data is ready. '},
  
-    'CREATE_LOC_GEN': {'fa': ' .ژنراتور آموزش جایابی ایجاد شد ',
+    'CREATE_LOC_GEN': {'fa': ' ژنراتور آموزش جایابی ایجاد شد. ',
                         'en': ' Localization train generetor created. '},
 
-    'CREATE_MODEL': {'fa': ' .ایجاد شد {} مدل برای الگوریتم ',
+    'CREATE_MODEL': {'fa': ' مدل برای الگوریتم {} ایجاد شد. ',
                     'en': ' Model for {} algorithm created. '},
 
-    'CREATE_FTMODEL': {'fa': ' .ایجاد شد {} مدل تنظیم دقیق برای الگوریتم ',
+    'CREATE_FTMODEL': {'fa': ' مدل تنظیم دقیق برای الگوریتم {} ایجاد شد. ',
                         'en': ' Fine tune model for {} algorithm created. '},  
 
-    'FIT_MODEL': {'fa': ' .آموزش مدل با موفقیت انجام شد ',
+    'FIT_MODEL': {'fa': ' آموزش مدل با موفقیت انجام شد. ',
                     'en': ' Model trained successfully. '},
 
-    'FIT_FTMODEL': {'fa': ' .آموزش مدل تنظیم دقیق با موفقیت انجام شد',
+    'FIT_FTMODEL': {'fa': ' آموزش مدل تنظیم دقیق با موفقیت انجام شد. ',
                     'en': ' Fine tune model trained successfully. '},
 
     'plc_connection_apply': {'fa': 'اتصال به پی ال سی برقرار شد',
@@ -757,6 +765,12 @@ Titles = {
         'save_params': {'fa': "اعمال/ذخیره پارامترها",
                         'en': 'Apply/Save Parameters'},
 
+        'save_params': {'fa': "اعمال/ذخیره پارامترها",
+                        'en': 'Apply/Save Parameters'},
+
+        'auto_wind': {'fa': "فشار‌هوای خودکار",
+                        'en': 'Automatic wind'},
+
         'wind_duration': {'fa': ": مدت زمان فشار هوا",
                         'en': 'Wind duration :'},
 
@@ -781,8 +795,8 @@ Titles = {
         'plc_status': {'fa': ': وضعیت پی ال سی',
                         'en': 'PLC Status :'},        
 
-        'image_update': {'fa': ': زمان به روز رسانی تصویر',
-                        'en': 'Image update time :'},        
+        'frame_rate': {'fa': ': نرخ تصویر‌برداری',
+                        'en': 'Frame Rate :'},        
 
         'live_update': {'fa': ': زمان بروزرسانی نمایش زنده',
                         'en': 'Live show update time :'},             
@@ -870,8 +884,8 @@ Titles = {
         'Pdl Number :': {'fa': " : شماره  سفارش",
                         'en': 'Pdl Number : '},
 
-        'Lenght :': {'fa': " : طول",
-                        'en': 'Lenght :'},
+        'length :': {'fa': " : طول",
+                        'en': 'length :'},
 
         'Width :': {'fa': " : عرض",
                         'en': 'Width : '},
@@ -1209,8 +1223,8 @@ Titles = {
         'add': {'fa': 'اضافه',
                         'en': 'Add'},
 
-        'train_gpu': {'fa': ':جی پی یو آموزش',
-                        'en': 'Train GPU:'},
+        'train_processor': {'fa': ':پردازنده‌ی آموزش',
+                        'en': 'Train Processor:'},
 
         'train': {'fa': 'آموزش',
                         'en': 'Train'},
@@ -1236,8 +1250,8 @@ Titles = {
         'batch_size_2': {'fa': 'اندازه ی دسته',
                         'en': 'Batch Size'},
 
-        'split_size': {'fa': 'اندازه قطعه',
-                        'en': 'Split Size'},
+        'split_ratio': {'fa': 'نسبت تقسیم داده',
+                        'en': 'Split Ratio'},
         
         'loss': {'fa': 'خطا', 
                 'en': 'Loss'},
@@ -1689,8 +1703,8 @@ def set_title(self, lang):
     self.label_159.setText(Titles['Ps Number :'][lang])
     self.label_229.setText(Titles['Pdl Number :'][lang])
     self.label_132.setText(Titles['Pdl Number :'][lang])
-    self.label_230.setText(Titles['Lenght :'][lang])
-    self.label_223.setText(Titles['Lenght :'][lang])
+    self.label_230.setText(Titles['length :'][lang])
+    self.label_223.setText(Titles['length :'][lang])
     self.label_231.setText(Titles['Width :'][lang])
     self.label_227.setText(Titles['Width :'][lang])
     self.label_232.setText(Titles['Thickness :'][lang])
@@ -1860,7 +1874,7 @@ def set_title(self, lang):
     self.b_add_cancel.setText(Titles['cancel'][lang])
     self.b_add_ok.setText(Titles['ok'][lang])
     self.b_add_ds_lineedit.setPlaceholderText(Titles['ds_path_2'][lang])
-    self.label_130.setText(Titles['train_gpu'][lang])
+    self.label_130.setText(Titles['train_processor'][lang])
     self.binary_train.setText(Titles['train'][lang])
     self.binary_chart_checkbox.setText(Titles['chart_full_view'][lang])
     self.label_8_2.setText(Titles['train'][lang])
@@ -1873,7 +1887,7 @@ def set_title(self, lang):
     self.label_109.setText(Titles['epochs_2'][lang])
     self.label_134_2.setText(Titles['tune_epochs'][lang])
     self.label_134.setText(Titles['batch_size_2'][lang])
-    self.label_145.setText(Titles['split_size'][lang])
+    self.label_145.setText(Titles['split_ratio'][lang])
     self.label_148.setText(Titles['loss'][lang])
     self.label_150.setText(Titles['accuracy'][lang])
     self.label_153.setText(Titles['precision'][lang])
@@ -1923,7 +1937,7 @@ def set_title(self, lang):
     self.l_add_cancel.setText(Titles['cancel'][lang])
     self.l_add_ok.setText(Titles['ok'][lang])
     self.l_add_ds_lineedit.setPlaceholderText(Titles['ds_path_2'][lang])
-    self.label_249.setText(Titles['train_gpu'][lang])
+    self.label_249.setText(Titles['train_processor'][lang])
     self.localization_train.setText(Titles['train'][lang])
     self.localization_chart_checkbox.setText(Titles['chart_full_view'][lang])
     self.label_8_3.setText(Titles['train'][lang])
@@ -1935,7 +1949,7 @@ def set_title(self, lang):
     self.label_90.setText(Titles['name'][lang])
     self.label_91.setText(Titles['epochs_2'][lang])
     self.label_2471.setText(Titles['batch_size_2'][lang])
-    self.label_95.setText(Titles['split_size'][lang])
+    self.label_95.setText(Titles['split_ratio'][lang])
     self.label_263.setText(Titles['start_date'][lang])
     self.label_266.setText(Titles['end_date'][lang])
     self.localization_filter_btn.setText(Titles['search_filter'][lang])
@@ -1976,7 +1990,7 @@ def set_title(self, lang):
     self.label_161.setText(Titles['epochs_2'][lang])
     self.label_164.setText(Titles['tune_epochs'][lang])
     self.label_167.setText(Titles['batch_size_2'][lang])
-    self.label_170.setText(Titles['split_size'][lang])
+    self.label_170.setText(Titles['split_ratio'][lang])
     self.label_186.setText(Titles['start_date'][lang])
     self.label_185.setText(Titles['end_date'][lang])
     self.cls_filter_btn.setText(Titles['search_filter'][lang])
@@ -2011,11 +2025,12 @@ def set_title(self, lang):
     self.manual_plc_check.setText(Titles['manual'][lang])
     self.manual_cameras_check.setText(Titles['manual'][lang])
     self.label_29.setText(Titles['wind_duration'][lang])
+    self.auto_wind_check.setText(Titles['auto_wind'][lang])
     self.label_299.setText(Titles['automatic_wind_intervals'][lang])
     self.label.setText(Titles['update_time'][lang])
     self.label_10.setText(Titles['plc_ip'][lang])
     self.label_4.setText(Titles['plc_status'][lang])
-    self.label_46.setText(Titles['image_update'][lang])
+    self.label_46.setText(Titles['frame_rate'][lang])
     self.label_197.setText(Titles['live_update'][lang])
     self.appearance_btn.setText(Titles['save_params'][lang])
     self.plc_btn.setText(Titles['save_params'][lang])

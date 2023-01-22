@@ -29,7 +29,7 @@ class dataBaseUtils():
             ps_number   = record['ps_number'],
             pdl_number  = record['pdl_number'],
             width       = record['width'],
-            lenght      = record['lenght'],
+            length      = record['length'],
             thickness   = record['thickness'],
             date        = datetime.date(int(y),int(m),int(d)),
             time        = datetime.time(int(hh),int(mm)),

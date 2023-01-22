@@ -183,8 +183,8 @@ class data_loader(QMainWindow, ui):
         self.heat_no=str(self.records[self.selected][1])
         self.psn=str(self.records[self.selected][2])
         self.pdln=str(self.records[self.selected][3])
-        self.lenght=str(self.records[self.selected][4])
-        self.details={'id':self.coil_number,'heat_no':self.heat_no,'psn':self.psn,'pdln':self.pdln,'lenght':self.lenght}
+        self.length=str(self.records[self.selected][4])
+        self.details={'id':self.coil_number,'heat_no':self.heat_no,'psn':self.psn,'pdln':self.pdln,'length':self.length}
 
     def open_folder_images(self):
         select=self.load()

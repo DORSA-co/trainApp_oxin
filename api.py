@@ -180,7 +180,7 @@ class API:
         self.lfilter_mode = False
         self.flag_all_camera = False
         self.start_capture_flag = False
-        self.ready_capture_flasg = False
+        self.ready_capture_flag = False
         self.live_type = 0
 
         # binarylist dataset parms
@@ -214,6 +214,9 @@ class API:
         # connet keyboard event to correspondings functions in API
         self.keyboard_connector()
         # -------------------------------------
+
+        self.load_settings()
+
         # connect to camera connection
         self.cameras = camera_connection.connect_manage_cameras()
         self.i = 0
@@ -987,10 +990,14 @@ class API:
             partial(lambda: self.user_access_pages(self.ui.pbt_btn.objectName()))
         )
 
+        # Settings
         # Language
-        self.load_language_font()
         self.ui.appearance_btn.clicked.connect(self.set_language_font)
         self.itr = 0
+        # PLC
+        self.ui.plc_btn.clicked.connect(self.set_plc_parms)
+        # Camera
+        self.ui.cameras_btn.clicked.connect(self.set_camera_parms)
 
         # pbt
         self.ui.my_databases_3.clicked.connect(self.update_combo_piplines)
@@ -1293,7 +1300,7 @@ class API:
             self.current_technical_side
         ].get_pos()  # get mouse position normilized between [0,1]
         x *= self.sheet.get_width()
-        y *= self.sheet.get_lenght()
+        y *= self.sheet.get_length()
         y = np.round(y, 1)
         x = np.round(x, 1)
         self.ui.show_current_position((x, y))
@@ -2326,7 +2333,7 @@ class API:
             )  # zarbar arz varagh ya arzesh pixel
 
             self.ui.current_pos_y.setText(
-                str(round(y * self.lenght, 2))
+                str(round(y * self.length, 2))
             )  # zarbar arz varagh ya arzesh pixel
         if self.widget_name == "up_side_technical":
             x, y = self.obj_sheet_up.get_pos()
@@ -2336,7 +2343,7 @@ class API:
             )  # zarbar arz varagh ya arzesh pixel
 
             self.ui.current_pos_y.setText(
-                str(round(y * self.lenght, 2))
+                str(round(y * self.length, 2))
             )  # zarbar arz varagh ya arzesh pixel
 
     # def get_parent_path(self):
@@ -2350,7 +2357,8 @@ class API:
         if not self.runing_b_model :
             print('statrt training binary model')
             b_parms = self.ui.get_binary_parms()
-            # ('Xbc', (300, 300), True, 2, 8, 0.001, 1, 0.2, ['/home/reyhane/PycharmProjects/trainApp_oxin1/dataset/binary', '/home/reyhane/PycharmProjects/trainApp_oxin1/dataset_user/binary'])
+            if not b_parms:
+                return
             if b_parms[2]:
                 self.split_binary_dataset(b_parms[-1], b_parms[1])
             # update chart axes given train data
@@ -2379,8 +2387,9 @@ class API:
             self.bmodel_train_worker.warning.connect(self.ui.set_warning)
             
             self.ui.binary_train.setEnabled(False)
-            # self.ui.binary_train.setStyleSheet("background-color: rgb(61, 56, 70);color : white")
-            # self.ui.show_mesagges(self.ui.warning_train_page,text=texts.WARNINGS["Training"][self.language],level=1)
+
+            self.ui.binary_train_progressBar.setValue(0)
+            self.ui.binary_train_progressBar.setMaximum(b_parms[3])
 
 
     def update_b_chart_axes(self, nepoch):
@@ -2400,7 +2409,7 @@ class API:
         # self.ui.binary_chart_checkbox.setChecked(True)
 
     def assign_new_value_to_b_chart(self, last_epoch, logs):
-        print("here", last_epoch, logs)
+        self.ui.binary_train_progressBar.setValue(self.ui.binary_train_progressBar.value() + 1)
         chart_funcs.update_chart(
             ui_obj=self.ui,
             chart_postfixes=self.ui.chart_names,
@@ -2412,6 +2421,8 @@ class API:
     def set_l_parms(self):
 
         l_parms = self.ui.get_localization_parms()
+        if not l_parms:
+            return
         if l_parms[2]:
             self.split_localization_dataset(l_parms[-1], l_parms[1])
         # update chart axes given train data
@@ -3027,21 +3038,17 @@ class API:
             self.live_timer.timeout.connect(self.ImageManager.show_live)
             self.grab_timer = QTimer(self.ui)
             self.grab_timer.timeout.connect(self.grab_image)
+            self.ImageManager.first_check_finished.connect(self.start_capture_timers)
+            self.ImageManager.second_check_finished.connect(self.stop_capture_timers)
             self.start_capture_flag = True
-            self.ready_capture_flasg = True
+            self.ready_capture_flag = True
 
         if self.sensor:
             self.start_capture_flag = True
             self.ImageManager.set_live_type(self.live_type)
             self.ImageManager.set_save_flag(self.ui.checkBox_save_images.isChecked())
             self.ImageManager.set_manual_flag(self.ui.manual_camera)
-            self.ImageManager.set_frame_update_time(
-                int(self.ui.update_timer_camera_frame)
-            )
-            self.ImageManager.set_start_grab(val=1)
-            self.ImageManager.start()
-            self.live_timer.start(int(self.ui.update_timer_live_frame))
-            self.grab_timer.start(int(1000/FRAME_RATE))
+            QTimer().singleShot(1000, self.ImageManager.start_sheet_checking)
 
             self.init_check_plc()
 
@@ -3051,13 +3058,12 @@ class API:
             self.ui.set_enabel(self.ui.disconnect_camera_btn, True)
             self.ui.set_enabel(self.ui.start_capture_btn, True)
             self.ui.set_enabel(self.ui.stop_capture_btn, False)
-            self.ready_capture_flasg = False
+            self.ready_capture_flag = False
 
         if self.start_capture_flag:
             self.ImageManager.stop()
             try:
-                self.live_timer.stop()
-                self.grab_timer.stop()
+                self.stop_capture_timers()
             except:
                 pass
             # self.camera_thread.quit()
@@ -3065,10 +3071,30 @@ class API:
             self.start_capture_flag = False
             self.set_start_software_plc(False)
 
-    def grab_image(self):
-        self.ImageManager.set_start_grab(val=0)
+    def start_capture_timers(self):
+        self.ImageManager.stop_sheet_checking()
+        try:
+            _, _, speed, _ = self.l2_connection.get_full_info()  # get data from level2
+        except:
+            pass
+        if speed > 0:
+            self.ImageManager.start()
+        self.live_timer.start(self.ui.update_timer_live_frame)
+        self.grab_timer.start(int(1000/self.ui.frame_rate))
+
+    def stop_capture_timers(self):
         self.ImageManager.stop()
-        self.ImageManager.start()
+        self.live_timer.stop()
+        self.grab_timer.stop()
+
+    def grab_image(self):
+        try:
+            _, _, speed, _ = self.l2_connection.get_full_info()  # get data from level2
+        except:
+            pass
+        if speed > 0:
+            self.ImageManager.stop()
+            self.ImageManager.start()
 
     def change_live_camera(self, text):
         try:
@@ -4819,9 +4845,31 @@ class API:
                 annt = self.ui.sn.get_img()
                 self.ui.show_neighbouring(image, annt)
 
-    def load_language_font(self):
-        lan, font = self.db.load_language_font()
-        self.ui.set_language_font(lan, font)
+    def load_settings(self):
+        (
+            lan, 
+            font, 
+            manual_plc,
+            plc_update_time, 
+            wind_duration, 
+            automatic_wind, 
+            auto_wind_intervals, 
+            manual_cameras, 
+            frame_rate, 
+            live_update_time
+        ) = self.db.load_settings()
+        self.ui.set_settings(
+            lan, 
+            font, 
+            manual_plc,
+            plc_update_time, 
+            wind_duration, 
+            automatic_wind, 
+            auto_wind_intervals, 
+            manual_cameras, 
+            frame_rate, 
+            live_update_time
+        )
 
     def set_language_font(self):
         lan = self.ui.combo_change_language.currentText()
@@ -4833,6 +4881,21 @@ class API:
             lan = texts.Titles["english"]["en"]
         font = self.ui.fontComboBox.currentText()
         self.db.set_language_font(lan, font)
+
+    def set_plc_parms(self):
+        self.db.set_plc_params(self.ui.manual_plc,
+                            self.ui.update_timer_plc,
+                            self.ui.update_wind_plc,
+                            self.ui.auto_wind,
+                            self.ui.auto_wind_intervals        
+                            )
+        self.start_auto_wind()
+
+    def set_camera_parms(self):
+        self.db.set_camera_params(self.ui.manual_camera,
+                            self.ui.frame_rate,
+                            self.ui.update_timer_live_frame,      
+                            )
 
     # -----------------------------------------------------PLC setting -------------------------------------------------------
 
@@ -5033,15 +5096,22 @@ class API:
             self.ui.set_plc_ip(self.plc_ip)
 
     def start_auto_wind(self):
-        self.auto_wind_timer = QTimer()
-        self.auto_wind_timer.timeout.connect(self.set_wind)
-        auto_wind_timer = int(self.ui.update_wind_plc) + int(self.ui.auto_wind_intervals)
-        self.auto_wind_timer.start(auto_wind_timer)
+        if self.ui.auto_wind:
+            self.auto_wind_timer = QTimer()
+            self.auto_wind_timer.timeout.connect(self.set_wind)
+            auto_wind_timer = self.ui.update_wind_plc + self.ui.auto_wind_intervals
+            self.auto_wind_timer.start(auto_wind_timer)
+        else:
+            try:
+                self.auto_wind_timer.stop()
+            except:
+                pass
+
 
     def set_wind(self, mode=True):
-        print("set wind", mode)
         if self.ui.wind_itr == 1:
-            self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+            ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+            # if ret and mode:
             if mode:
                 self.ui.start_wind()
 
@@ -5134,14 +5204,15 @@ class API:
             pass
 
     def change_sensor_run(self):
-        # print(self.ready_capture_flasg)
-        if self.ready_capture_flasg:
+        # print(self.ready_capture_flag)
+        if self.ready_capture_flag:
             if self.sensor:
                 self.set_start_software_plc(True)
                 try:
                     (
                         n_camera,
                         projectors,
+                        speed,
                         details,
                     ) = self.l2_connection.get_full_info()  # get data from level2
                 except:
@@ -5183,7 +5254,7 @@ class API:
         except:
             pass
         self.plc_timer.start(500)
-        self.plc_update.start(int(self.ui.update_timer_plc))
+        self.plc_update.start(self.ui.update_timer_plc)
 
     # Mypipline page------------------------------------------------
 

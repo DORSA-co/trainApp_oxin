@@ -36,7 +36,7 @@ def csv_reader( csv_path ):
 #______________________________________________________________________________________________________________________________________________
 def csv2labelDict( csv_list ):
     dict_lbl = {}
-    #Row -> image_name, class_id, mask_row_lenght_code
+    #Row -> image_name, class_id, mask_row_length_code
     for row in csv_list:
         img_name, class_id, encoded_pixel = row
         class_id = int(class_id) - 1 #in csv class start from 1

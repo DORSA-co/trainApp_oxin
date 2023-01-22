@@ -21,7 +21,7 @@ class cameraSetting:
         self.ps_number = ps_number #product scechule number
         self.pdl_number = pdl_number #product d??? number
         self.width = width
-        self.lenght = lenght
+        self.length = length
         self.thickness = thickness
         self.date = date
         self.time = time
@@ -44,15 +44,15 @@ class cameraSetting:
     def set_width(self, w):
         self.width = w
 
-    def set_lenght(self, l):
-        self.lenght = l
+    def set_length(self, l):
+        self.length = l
 
     def set_thickness(self, t):
         self.thickness = t
 
     def set_dimentions(self, w, l, t):
         self.width = w
-        self.lenght = l
+        self.length = l
         self.thickness = t
 
     def set_date(self,y,m,d):
@@ -84,14 +84,14 @@ class cameraSetting:
     def get_width(self):
         return self.width
 
-    def get_lenght(self):
-        return self.lenght
+    def get_length(self):
+        return self.length
 
     def get_thickness(self):
         return self.thickness
 
     def get_dimentions(self):
-        return self.width, self.lenght, self.thickness
+        return self.width, self.length, self.thickness
 
     def get_date(self):
         return self.date

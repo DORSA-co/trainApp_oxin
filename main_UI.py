@@ -10,7 +10,6 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtGui import *
 # from pyqt5_plugins import *
 
 from PySide6.QtCharts import *
@@ -239,6 +238,7 @@ class UI_main_window(QMainWindow, ui):
         # Training_page
 
         self.init_training_page()
+        self.validate_binary_train_params()
         self.b_add_ds.clicked.connect(self.buttonClick)
         self.b_add_cancel.clicked.connect(self.buttonClick)
         self.l_add_ds.clicked.connect(self.buttonClick)
@@ -490,12 +490,13 @@ class UI_main_window(QMainWindow, ui):
         # self.timer_notification.timeout.connect(self.check_nofification_status)
         # self.timer_notification.start(2000)
         self.plc_status = False
-        self.update_timer_plc = self.update_timer_plc_line.text()
-        self.update_wind_plc = self.update_wind_plc_line.text()
-        self.auto_wind_intervals = self.update_auto_wind_plc_line.text()
+        self.update_timer_plc = self.update_timer_plc_spinBox.value()
+        self.update_wind_plc = self.update_wind_plc_spinBox.value()
+        self.auto_wind = self.auto_wind_check.isChecked()
+        self.auto_wind_intervals = self.update_auto_wind_plc_spinBox.value()
         self.wind_itr = 1
-        self.update_timer_camera_frame = self.update_timer_camera_frame_line.text()
-        self.update_timer_live_frame = self.update_timer_live_frame_line.text()
+        self.frame_rate = self.frame_rate_spinBox.value()
+        self.update_timer_live_frame = self.update_timer_live_frame_spinBox.value()
         self.manual_plc = self.manual_plc_check.isChecked()
         self.manual_camera = self.manual_cameras_check.isChecked()
 
@@ -525,6 +526,7 @@ class UI_main_window(QMainWindow, ui):
         self.combo_change_language.currentTextChanged.connect(
             self.change_language_image
         )
+        self.auto_wind_check.clicked.connect(self.change_wind_setting_status)
 
         self.logger.create_new_log(message="UI object for train app created.")
 
@@ -555,7 +557,18 @@ class UI_main_window(QMainWindow, ui):
         # showing it to the label
         # self.sec_label.setText(label_time)
 
-    def set_language_font(self, lang, font):
+    def set_settings(self, 
+                lang, 
+                font,
+                manual_plc,
+                plc_update_time, 
+                wind_duration, 
+                automatic_wind, 
+                auto_wind_intervals, 
+                manual_cameras, 
+                frame_rate, 
+                live_update_time
+            ):
         """set language
 
         Args:
@@ -564,12 +577,32 @@ class UI_main_window(QMainWindow, ui):
 
         Returns: None
         """
-
         self.combo_change_language.setCurrentText(
             texts.Titles[lang.lower()][self.language]
         )
         self.fontComboBox.setCurrentText(font)
         self.change_language_font()
+
+        if manual_plc == 'True':
+            self.manual_plc_check.setCheckState(Qt.CheckState.Checked)
+        else:
+            self.manual_plc_check.setCheckState(Qt.CheckState.Unchecked)
+        self.update_timer_plc_spinBox.setValue(int(plc_update_time))
+        self.update_wind_plc_spinBox.setValue(int(wind_duration))
+        if automatic_wind == 'True':
+            self.auto_wind_check.setCheckState(Qt.CheckState.Checked)
+        else:
+            self.auto_wind_check.setCheckState(Qt.CheckState.Unchecked)
+        self.update_auto_wind_plc_spinBox.setValue(int(auto_wind_intervals))
+        self.change_plc_parms()
+
+        if manual_cameras == 'True':
+            self.manual_cameras_check.setCheckState(Qt.CheckState.Checked)
+        else:
+            self.manual_cameras_check.setCheckState(Qt.CheckState.Unchecked)
+        self.frame_rate_spinBox.setValue(int(frame_rate))
+        self.update_timer_live_frame_spinBox.setValue(int(live_update_time))
+        self.change_cameras_parms()
 
     def change_language_font(self):
         """Change language and font in ui and update image
@@ -628,15 +661,23 @@ class UI_main_window(QMainWindow, ui):
         pixmap = QPixmap(img_path)
         self.label_language.setPixmap(pixmap)
 
+    def change_wind_setting_status(self):
+        self.update_auto_wind_plc_spinBox.setEnabled(self.auto_wind_check.isChecked()) 
+
     def change_plc_parms(self):
         """Change plc timer params in ui
 
         Returns: None
 
         """
-        self.update_timer_plc = self.update_timer_plc_line.text()
-        self.update_wind_plc = self.update_wind_plc_line.text()
-        self.auto_wind_intervals = self.update_auto_wind_plc_line.text()
+        self.update_timer_plc = self.update_timer_plc_spinBox.value()
+        self.update_wind_plc = self.update_wind_plc_spinBox.value()
+        self.auto_wind = self.auto_wind_check.isChecked()
+        self.auto_wind_intervals = self.update_auto_wind_plc_spinBox.value()
+        # try:
+        #     api.start_auto_wind()
+        # except:
+        #     pass
         self.manual_plc = self.manual_plc_check.isChecked()
         self.logger.create_new_log(message="change plc settings.")
         self.set_warning(
@@ -649,8 +690,8 @@ class UI_main_window(QMainWindow, ui):
         Returns: None
 
         """
-        self.update_timer_camera_frame = self.update_timer_camera_frame_line.text()
-        self.update_timer_live_frame = self.update_timer_live_frame_line.text()
+        self.frame_rate = self.frame_rate_spinBox.value()
+        self.update_timer_live_frame = self.update_timer_live_frame_spinBox.value()
         self.manual_camera = self.manual_cameras_check.isChecked()
         self.logger.create_new_log(message="change cameras settings.")
         self.set_warning(
@@ -1487,8 +1528,8 @@ class UI_main_window(QMainWindow, ui):
             + str(details["heat_number"])
             + " || width: "
             + str(details["width"])
-            + " || lenght: "
-            + str(details["lenght"])
+            + " || length: "
+            + str(details["length"])
         )
         try:
             if tab_live:
@@ -1532,11 +1573,11 @@ class UI_main_window(QMainWindow, ui):
             )
         try:
             if tab_live:
-                self.set_label(self.label_lenght, str(details["lenght"]))
+                self.set_label(self.label_length, str(details["length"]))
             else:
-                self.set_label(self.label_lenght_2, str(details["lenght"]))
+                self.set_label(self.label_length_2, str(details["length"]))
         except Exception as e:
-            self.set_label(self.label_lenght_2, "-")
+            self.set_label(self.label_length_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Eror {}".format(e), level=5
             )
@@ -1764,6 +1805,25 @@ class UI_main_window(QMainWindow, ui):
 
         # self.b_algorithms.setCurrentText(str(records[0][0]))   #Must change
 
+    def validate_binary_train_params(self):
+        reg_ex1 = sQtCore.QRegularExpression("[1-9][0-9]+")
+        input_validator = PG.QRegularExpressionValidator(reg_ex1, self.b_epochs)
+        self.b_epochs.setValidator(input_validator)
+        
+        input_validator = PG.QRegularExpressionValidator(reg_ex1, self.b_batch)
+        self.b_batch.setValidator(input_validator)
+
+        reg_ex2 = sQtCore.QRegularExpression("[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?")
+        input_validator = PG.QRegularExpressionValidator(reg_ex2, self.b_lr)
+        self.b_lr.setValidator(input_validator)
+
+        input_validator = PG.QRegularExpressionValidator(reg_ex1, self.b_te)
+        self.b_te.setValidator(input_validator)
+
+        reg_ex3 = sQtCore.QRegularExpression("^([1-9]\d?|100)$")
+        input_validator = PG.QRegularExpressionValidator(reg_ex3, self.b_vs)
+        self.b_vs.setValidator(input_validator)
+
     def set_default_parms(self):
         """set default parms for sub training pages , that show in UI , every parms"""
         b_parms = {
@@ -1838,7 +1898,7 @@ class UI_main_window(QMainWindow, ui):
         self.l_dp.setPlainText("1. " + localization_path)
 
     def get_binary_parms(self):
-        """Get Selected parms that User Selected In Train Binary  UI
+        """Get Selected parms that User Selected In Train Binary UI
         :return: all parms in Binary Train UI / in except return []
         :rtype: tuple of Parms
         """
@@ -1855,6 +1915,8 @@ class UI_main_window(QMainWindow, ui):
             binary_vs = float(self.b_vs.text()) / 100
             if binary_vs > 0.5:
                 binary_vs = 0.5
+            str = self.b_gpu.currentText().split(' ')
+            binary_gpu = int(str[1]) if str[0]=='GPU' else -1
             text = self.b_dp.toPlainText()
             pattern = r"[0-9]+. "
             binary_dp = [s.rstrip() for s in re.split(pattern, text)[1:]]
@@ -1868,12 +1930,18 @@ class UI_main_window(QMainWindow, ui):
                 binary_lr,
                 binary_te,
                 binary_vs,
+                binary_gpu,
                 binary_dp,
             )
 
         except:
             self.logger.create_new_log(
                 message="Except in get Binary parms from UI", level=5
+            )
+            self.set_warning(
+                texts.WARNINGS["parameters_error"][self.language],
+                "train",
+                level=2,
             )
             return []
 
@@ -1912,6 +1980,11 @@ class UI_main_window(QMainWindow, ui):
         except:
             self.logger.create_new_log(
                 message="Except in get Localization parms from UI", level=5
+            )
+            self.set_warning(
+                texts.WARNINGS["parameters_error"][self.language],
+                "l_train",
+                level=2,
             )
             return []
 
@@ -2915,7 +2988,7 @@ class UI_main_window(QMainWindow, ui):
 
     def start_wind(self, end=False):
         if not end:
-            self.wind_itr = round(int(self.update_wind_plc) / 1000)
+            self.wind_itr = round(self.update_wind_plc / 1000)
             self.start_wind_btn.setEnabled(False)
             self.start_wind_btn.setText(
                 texts.Titles["seconds"][self.language].format(self.wind_itr)

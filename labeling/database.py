@@ -287,10 +287,10 @@ if __name__ == "__main__":
     print(x)
     # table_name,parametrs,len_parameters)
 
-    # db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,lenght,width,operator,time,date,main_path)',11)
+    # db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
     # db.add_record(data,'camera_settings','(gain_top,gain_bottom,expo_top,expo_bottom,width,height,offset_x,offset_y,interpacket_delay,packet_size,id)',11)
  
-    #db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,lenght,width,operator,time,date,main_path)',11)
+    #db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
 
     #db.report_last('coils_info','id',30)
 
@@ -315,7 +315,7 @@ if __name__ == "__main__":
 #   `heat_number` VARCHAR(45) NULL,
 #   `ps_number` VARCHAR(45) NULL,
 #   `pdl_number` VARCHAR(45) NULL,
-#   `lenght` VARCHAR(45) NULL,
+#   `length` VARCHAR(45) NULL,
 #   `width` VARCHAR(45) NULL,
 #   `operator` VARCHAR(45) NULL,
 #   `time` VARCHAR(45) NULL,

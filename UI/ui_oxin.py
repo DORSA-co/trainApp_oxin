@@ -2072,10 +2072,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_213.addWidget(self.label_223)
 
-        self.label_lenght = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_lenght.setObjectName(u"label_lenght")
+        self.label_length = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_length.setObjectName(u"label_length")
 
-        self.horizontalLayout_213.addWidget(self.label_lenght)
+        self.horizontalLayout_213.addWidget(self.label_length)
 
         self.line_63 = QFrame(self.scrollAreaWidgetContents_5)
         self.line_63.setObjectName(u"line_63")
@@ -3656,10 +3656,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_228.addWidget(self.label_230)
 
-        self.label_lenght_2 = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_lenght_2.setObjectName(u"label_lenght_2")
+        self.label_length_2 = QLabel(self.scrollAreaWidgetContents_6)
+        self.label_length_2.setObjectName(u"label_length_2")
 
-        self.horizontalLayout_228.addWidget(self.label_lenght_2)
+        self.horizontalLayout_228.addWidget(self.label_length_2)
 
         self.line_69 = QFrame(self.scrollAreaWidgetContents_6)
         self.line_69.setObjectName(u"line_69")
@@ -13600,8 +13600,8 @@ class Ui_MainWindow(object):
         self.label_ps_number.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_132.setText(QCoreApplication.translate("MainWindow", u"Pdl Number :", None))
         self.label_pdl_number.setText(QCoreApplication.translate("MainWindow", u"-", None))
-        self.label_223.setText(QCoreApplication.translate("MainWindow", u"Lenght :", None))
-        self.label_lenght.setText(QCoreApplication.translate("MainWindow", u"-", None))
+        self.label_223.setText(QCoreApplication.translate("MainWindow", u"length :", None))
+        self.label_length.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_227.setText(QCoreApplication.translate("MainWindow", u"Width :", None))
         self.label_width.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_225.setText(QCoreApplication.translate("MainWindow", u"Thickness :", None))
@@ -13730,8 +13730,8 @@ class Ui_MainWindow(object):
         self.label_ps_number_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_229.setText(QCoreApplication.translate("MainWindow", u"Pdl Number :", None))
         self.label_pdl_number_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
-        self.label_230.setText(QCoreApplication.translate("MainWindow", u"Lenght :", None))
-        self.label_lenght_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
+        self.label_230.setText(QCoreApplication.translate("MainWindow", u"length :", None))
+        self.label_length_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_231.setText(QCoreApplication.translate("MainWindow", u"Width :", None))
         self.label_width_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_232.setText(QCoreApplication.translate("MainWindow", u"Thickness :", None))

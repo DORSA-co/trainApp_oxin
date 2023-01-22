@@ -14,7 +14,7 @@ from backend import binary_model_funcs, date_funcs, localization_model_funcs
 
 DEBUG=False
 
-ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbc'], 'localization': ['Blu', 'Rleu', 'Llu', 'uln'], 'classification': ['Xcc', 'Rce']}
+ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Blu', 'Rleu', 'Llu', 'uln'], 'classification': ['Xcc', 'Rce']}
 ALGORITHM_CREATOR={'Xbc':models.xception_cnn,'Rbc':models.resnet_cnn,'Blu':models.base_unet,'Rleu':models.resnet_unet,'Llu':models.low_unet,'uln':models.unet
 ,'Xcc':models.xception_cnn,'Rce':models.resnet_cnn}
 if DEBUG:
@@ -45,7 +45,7 @@ data_gen_args_2 = dict(rotation_range=15,
                     )
 
 
-def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch, binary_lr, binary_te, binary_vs, binary_dp, weights_path, api_obj):
+def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, binary_epoch, binary_batch, binary_lr, binary_te, binary_vs, binary_gpu, binary_dp, weights_path, api_obj):
     """Create and fit binary model
 
     :param binary_algorithm_name: Name of binary algorithm.
@@ -73,6 +73,23 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
     :return: Dictionary of model parameters and metrics.
     :rtype: dict
     """
+
+    try:
+        if binary_gpu >= 0:
+            tf.config.run_functions_eagerly(True)
+            # GPU config
+            gpu = tf.config.list_physical_devices("GPU")
+            tf.config.experimental.set_memory_growth(gpu[binary_gpu], True)
+            tf.config.experimental.set_visible_devices(gpu[binary_gpu], "GPU")
+        else:
+            cpu = tf.config.list_physical_devices("CPU")
+            # tf.config.experimental.set_memory_growth(cpu[0], True)
+            tf.config.experimental.set_visible_devices(cpu[0], "CPU")
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SET_PROCESSOR']['en'])
+    except:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['SET_PROCESSOR_FAILED']['en'], level=5)
+        # api_obj.ui.set_warning(texts.ERRORS['CREATE_BWPATH_FAILED'][api_obj.language], 'train', level=3)
+        return (False, (texts.ERRORS['SET_PROCESSOR_FAILED'][api_obj.language], 'train', 3))
 
     # Create weights path
     weights_path = os.path.join(weights_path, date_funcs.get_datetime(persian=True, folder_path=True))
@@ -105,9 +122,9 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
                                                                 api_obj,
                                                                 batch_size=binary_batch,
                                                                 validation_split=binary_vs)
-        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_BINARY_GEN']['en'] + weights_path)
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_BINARY_GEN']['en'])
     except Exception as e:
-        api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_BINARY_GEN_FAILED']['en'] + weights_path, level=5)
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_BINARY_GEN_FAILED']['en'], level=5)
         # api_obj.ui.set_warning(texts.ERRORS['CREATE_BINARY_GEN_FAILED'][api_obj.language], 'train', level=3)
         return (False, (texts.ERRORS['CREATE_BINARY_GEN_FAILED'][api_obj.language], 'train', 3))
 
@@ -118,7 +135,6 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         elif binary_algorithm_name == ALGORITHM_NAMES['binary'][1]:
             model = models.resnet_cnn(input_size=binary_input_size + (3,), learning_rate=binary_lr, num_class=1, mode=models.BINARY)
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_MODEL']['en'].format(binary_algorithm_name))
-
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_MODEL_FAILED']['en'].format(binary_algorithm_name), level=5)
         # api_obj.ui.set_warning(texts.ERRORS['CREATE_MODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', level=3)

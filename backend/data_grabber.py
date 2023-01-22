@@ -626,7 +626,7 @@ if __name__ == "__main__":
                 ps_number=1111,
                 pdl_number=2222,
                 width=480,
-                lenght=1000,
+                length=1000,
                 thickness=None,
                 date='1400/12/25',
                 time='12:25:00',

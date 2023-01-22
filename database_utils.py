@@ -59,7 +59,7 @@ class dataBaseUtils:
             ps_number=record["ps_number"],
             pdl_number=record["pdl_number"],
             width=record["width"],
-            lenght=record["lenght"],
+            length=record["length"],
             thickness=record["thickness"],
             date=datetime.date(int(y), int(m), int(d)),
             time=datetime.time(int(hh), int(mm)),
@@ -833,15 +833,41 @@ class dataBaseUtils:
         self.db.update_record(self.setting_tabel, "language", str(name), "id", "0")
 
 
-    def set_language_font(self,lan,font):
-
+    def set_language_font(self, lan, font):
         self.db.update_record(self.setting_tabel, "language", str(lan), "id", "0")
         self.db.update_record(self.setting_tabel, "font_style", str(font), "id", "0")
 
-    def load_language_font(self):
+    def set_plc_params(self, 
+                    manual_plc,
+                    plc_update_time, 
+                    wind_duration, 
+                    automatic_wind, 
+                    auto_wind_intervals):
+        self.db.update_record(self.setting_tabel, "manual_plc", str(manual_plc), "id", "0")
+        self.db.update_record(self.setting_tabel, "plc_update_time", str(plc_update_time), "id", "0")
+        self.db.update_record(self.setting_tabel, "wind_duration", str(wind_duration), "id", "0")
+        self.db.update_record(self.setting_tabel, "automatic_wind", str(automatic_wind), "id", "0")
+        self.db.update_record(self.setting_tabel, "auto_wind_intervals", str(auto_wind_intervals), "id", "0")
+
+    def set_camera_params(self, manual_cameras, frame_rate, live_update_time):
+        self.db.update_record(self.setting_tabel, "manual_cameras", str(manual_cameras), "id", "0")
+        self.db.update_record(self.setting_tabel, "frame_rate", str(frame_rate), "id", "0")
+        self.db.update_record(self.setting_tabel, "live_update_time", str(live_update_time), "id", "0")
+
+    def load_settings(self):
         res, record = self.db.search(self.setting_tabel, "id", "0")
         record = record[0]
-        return record["language"],record['font_style']
+        return (record["language"],
+            record['font_style'],
+            record['manual_plc'],
+            record['plc_update_time'],
+            record['wind_duration'],
+            record['automatic_wind'],
+            record['auto_wind_intervals'],
+            record['manual_cameras'],
+            record['frame_rate'],
+            record['live_update_time'],
+        )
 
     def load_plc_parms(self):
         """
