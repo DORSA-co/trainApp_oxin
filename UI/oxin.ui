@@ -915,6 +915,9 @@ background-color: rgb(170, 170, 212);</string>
                 </item>
                 <item>
                  <widget class="QPushButton" name="pbt_btn">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -2237,7 +2240,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>7</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -16844,7 +16847,7 @@ QPushButton:hover {
                        <item>
                         <widget class="QStackedWidget" name="stackedWidget_binary">
                          <property name="currentIndex">
-                          <number>1</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_binary_list">
                           <layout class="QVBoxLayout" name="verticalLayout_71">
@@ -23760,16 +23763,12 @@ color : rgb(0,0,0);</string>
                             </property>
                             <property name="styleSheet">
                              <string notr="true">QPushButton {
-background-color: rgb(100,100,100);
-	color: rgb(0,0,0);
+	background-color: rgb(170 ,170, 170); 
+	color: rgb(0,0,0); 
 	border: none;
-
-	text-align:center;
-
 }
-
 QPushButton:hover {
-	background-color:  rgb(197 , 195,196);
+	background-color:  rgb(197 ,195, 196);
 }</string>
                             </property>
                             <property name="text">
@@ -23795,17 +23794,13 @@ QPushButton:hover {
                              <cursorShape>PointingHandCursor</cursorShape>
                             </property>
                             <property name="styleSheet">
-                             <string notr="true">QPushButton {
-background-color: rgb(100,100,100);
-	color: rgb(0,0,0);
+                             <string notr="true">QPushButton { 
+	background-color: rgb(100, 100, 100); 
+	color: rgb(0,0,0); 
 	border: none;
-
-	text-align:center;
-
-}
-
+} 
 QPushButton:hover {
-	background-color:  rgb(197 , 195,196);
+	background-color:  rgb(150 ,150, 150);
 }</string>
                             </property>
                             <property name="text">
@@ -23840,17 +23835,13 @@ QPushButton:hover {
                              <cursorShape>PointingHandCursor</cursorShape>
                             </property>
                             <property name="styleSheet">
-                             <string notr="true">QPushButton {
-background-color: rgb(100,100,100);
-	color: rgb(0,0,0);
+                             <string notr="true">QPushButton { 
+	background-color: rgb(100, 100, 100); 
+	color: rgb(0,0,0); 
 	border: none;
-
-	text-align:center;
-
-}
-
+} 
 QPushButton:hover {
-	background-color:  rgb(197 , 195,196);
+	background-color:  rgb(150 ,150, 150);
 }</string>
                             </property>
                             <property name="text">
@@ -23890,7 +23881,7 @@ QPushButton:hover {
                           </size>
                          </property>
                          <property name="currentIndex">
-                          <number>1</number>
+                          <number>0</number>
                          </property>
                          <widget class="QWidget" name="page_classification_class_list">
                           <layout class="QVBoxLayout" name="verticalLayout_29">

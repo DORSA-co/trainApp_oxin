@@ -9,6 +9,7 @@ from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 from help_UI import help
 import os
+import texts
 
 ui, _ = loadUiType("UI/neighbour_imgs.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
@@ -19,7 +20,7 @@ class neighbouring(QMainWindow, ui):
     widgets = ui
     x=0
 
-    def __init__(self, img, annotated_image=None, has_annotation=False):
+    def __init__(self, img, annotated_image=None, has_annotation=False, lang='en'):
         super(neighbouring, self).__init__()
         self.setupUi(self)
         flags = Qt.WindowFlags(Qt.FramelessWindowHint)
@@ -49,6 +50,8 @@ class neighbouring(QMainWindow, ui):
         self.n_image.mouseMoveEvent = self.mouseMoveImage()
 
         self.help_win = None
+        
+        self.annot_checkbox.setText(texts.Titles['show_labels'][lang])
 
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:

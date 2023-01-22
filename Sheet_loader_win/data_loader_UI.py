@@ -85,21 +85,12 @@ class data_loader(QMainWindow, ui):
     def activate_(self):
         self.closeButton.clicked.connect(self.close_win)
         self.miniButton.clicked.connect(self.minimize)
-        self.maxiButton.clicked.connect(self.maxmize_minimize)
 
     def minimize(self):
         self.showMinimized()
 
     def close_win(self):
         self.close()
-
-    def maxmize_minimize(self):
-        # self.show_image_in_label()
-        if self.isMaximized():
-            self.showNormal()
-            # self.sheet_view_down=data_grabber.sheetOverView(h=129,w=1084,nh=12,nw=30)
-        else:
-            self.showMaximized()
 
     def set_language(self, lang='en'):
         self.language = lang
@@ -136,22 +127,18 @@ class data_loader(QMainWindow, ui):
         text = ''
         for i in range(self.tableWidget_dataset.rowCount()):    
             if self.tableWidget_dataset.item(i, 0).checkState() == QtCore.Qt.Checked:
-                text += texts.MESSEGES['sheet_details'][self.language].format(self.table_sheets[i].get_id(), self.table_sheets[i].get_time_string(), self.table_sheets[i].get_date_string(), self.table_sheets[i].get_user(), self.table_sheets[i].get_nframe(),self.table_sheets[i].get_cameras())
-                text += '\n'
-                print(self.table_sheets[i].get_path())
                 if not os.path.isdir(self.table_sheets[i].get_path()):
-                    print('path not exist')
-                    exist = self.table_sheets[i].get_id()
+                    text += texts.ERRORS['sheet_not_exist'][self.language].format(self.table_sheets[i].get_id())
+                    text += '\n'
+                    exist = True
+                else:
+                    text += texts.MESSEGES['sheet_details'][self.language].format(self.table_sheets[i].get_id(), self.table_sheets[i].get_time_string(), self.table_sheets[i].get_date_string(), self.table_sheets[i].get_user(), self.table_sheets[i].get_nframe(),self.table_sheets[i].get_cameras())
+                    text += '\n'
+        self.detail_dataset.setText(text) 
         if not exist:
-            self.detail_dataset.setText(text)
             self.load_btn.setEnabled(True)
         else:
-            self.detail_dataset.setText(str(exist)+'Not Exist')
             self.load_btn.setEnabled(False)
-
-        
-
-
                 
     def set_parent_path(self, path='D:/oxin_image_grabber'):
            # api.set_parent_path()

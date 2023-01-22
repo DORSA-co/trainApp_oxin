@@ -410,7 +410,6 @@ class sheetOverView:
                 self.__rgb2bgr__(self.color_map["black"]),
                 thickness=-1,
             )
-
         # res = cv2.addWeighted(img, 0.7, select_img, 0.3, 1)
         return img
 
@@ -490,7 +489,10 @@ class sheetOverView:
                         idx_frame+1,
                         self.json_format
                     )
-                    img = cv2.imread(img_path, 0)
+
+                    img = None  
+                    if os.path.exists(img_path):
+                        img = cv2.imread(img_path, 0)
                     if img is None:  # if image doesnt exist, black image substitute
                         img = np.zeros(IMAGE_SHAPE, np.uint8)
                     else:

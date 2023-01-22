@@ -73,6 +73,7 @@ from backend import (
     plc_managment,
     level2_connection,
     localization_model_funcs,
+    pathStructure
 )
 
 import database_utils
@@ -1192,6 +1193,7 @@ class API:
                         main_path=self.sheet.get_main_path(), 
                         res_main_path=self.sheet.get_main_path()+'_imgProcessing',
                         sheet_id=self.sheet.get_id(), 
+                        active_cameras = self.sheet.get_cameras(),
                         img_format=self.sheet.get_image_format(),
                         img_shape = data_grabber.IMAGE_SHAPE,
                         api_obj=self,
@@ -1229,6 +1231,7 @@ class API:
             self.build_sheet_technical(self.sheet)
 
     def update_suggestion_progressbar(self):
+        print(self.ui.suggested_defects_progressBar.value())
         self.ui.suggested_defects_progressBar.setValue(self.ui.suggested_defects_progressBar.value() + 1)
 
     def build_sheet_technical(self, sheet):
@@ -1557,6 +1560,17 @@ class API:
 
             side = self.thechnicals_backend[self.current_technical_side].get_side()
             main_path = self.sheet.get_path()
+
+            x = os.path.split(main_path)
+            path = pathStructure.sheet_image_path(x[0], x[1], side, cam, frame, '.png')
+
+            if not os.path.exists(path):
+                self.ui.set_warning(
+                texts.WARNINGS["image_not_exist"][self.language],
+                "data_auquzation",
+                level=2,
+                )
+                return
 
             self.selected_images_for_label.add(
                 self.move_on_list.get_current("sheets_id"),

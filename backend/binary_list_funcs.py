@@ -166,12 +166,12 @@ def maximize_image_on_click(ui_obj, db_obj, label, event):
 
             if res:
                 ui_obj.window = neighbouring(
-                    image, annotated_image=annotated_image, has_annotation=True
+                    image, annotated_image=annotated_image, has_annotation=True, lang=ui_obj.language
                 )
                 ui_obj.window.show()
             else:
                 ui_obj.window = neighbouring(
-                    image, annotated_image=annotated_image, has_annotation=False
+                    image, annotated_image=annotated_image, has_annotation=False, lang=ui_obj.language
                 )
                 ui_obj.window.show()
 

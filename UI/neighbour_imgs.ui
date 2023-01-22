@@ -51,7 +51,7 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(44, 49, 58);</string>
+          <string notr="true">background-color: #b7baab;</string>
          </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
@@ -94,7 +94,7 @@
              <string>Help</string>
             </property>
             <property name="styleSheet">
-             <string notr="true">#rightButtons .QPushButton { background-color: rgba(255, 255, 255, 0); border: none;  border-radius: 5px; }
+             <string notr="true">#rightButtons .QPushButton { background-color:rgb(120, 120, 120); border: none;  border-radius: 5px; }
 #rightButtons .QPushButton:hover { background-color: rgb(44, 49, 57); border-style: solid; border-radius: 4px; }
 #rightButtons .QPushButton:pressed { background-color: rgb(23, 26, 30); border-style: solid; border-radius: 4px; }</string>
             </property>
@@ -103,7 +103,7 @@
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>UI/images/icons/icon_help.png</normaloff>UI/images/icons/icon_help.png</iconset>
+              <normaloff>images/icons/icon_help.png</normaloff>images/icons/icon_help.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -134,7 +134,7 @@
              <string>Minimize</string>
             </property>
             <property name="styleSheet">
-             <string notr="true">#rightButtons .QPushButton { background-color: rgba(255, 255, 255, 0); border: none;  border-radius: 5px; }
+             <string notr="true">#rightButtons .QPushButton { background-color:rgb(120, 120, 120); border: none;  border-radius: 5px; }
 #rightButtons .QPushButton:hover { background-color: rgb(44, 49, 57); border-style: solid; border-radius: 4px; }
 #rightButtons .QPushButton:pressed { background-color: rgb(23, 26, 30); border-style: solid; border-radius: 4px; }</string>
             </property>
@@ -174,7 +174,7 @@
              <string>Minimize</string>
             </property>
             <property name="styleSheet">
-             <string notr="true">#rightButtons .QPushButton { background-color: rgba(255, 255, 255, 0); border: none;  border-radius: 5px; }
+             <string notr="true">#rightButtons .QPushButton { background-color:rgb(120, 120, 120); border: none;  border-radius: 5px; }
 #rightButtons .QPushButton:hover { background-color: rgb(44, 49, 57); border-style: solid; border-radius: 4px; }
 #rightButtons .QPushButton:pressed { background-color: rgb(23, 26, 30); border-style: solid; border-radius: 4px; }</string>
             </property>
@@ -214,7 +214,7 @@
              <string>Close</string>
             </property>
             <property name="styleSheet">
-             <string notr="true">#rightButtons .QPushButton { background-color: rgba(255, 255, 255, 0); border: none;  border-radius: 5px; }
+             <string notr="true">#rightButtons .QPushButton { background-color:rgb(120, 120, 120); border: none;  border-radius: 5px; }
 #rightButtons .QPushButton:hover { background-color: rgb(44, 49, 57); border-style: solid; border-radius: 4px; }
 #rightButtons .QPushButton:pressed { background-color: rgb(23, 26, 30); border-style: solid; border-radius: 4px; }</string>
             </property>
@@ -276,7 +276,7 @@
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(44, 49, 58);</string>
+          <string notr="true">background-color: #b7baab;</string>
          </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
@@ -294,10 +294,10 @@
              <enum>Qt::RightToLeft</enum>
             </property>
             <property name="styleSheet">
-             <string notr="true">color:white</string>
+             <string notr="true">color: black;</string>
             </property>
             <property name="text">
-             <string>Show Annotatins/Maks</string>
+             <string>Show Labels</string>
             </property>
            </widget>
           </item>

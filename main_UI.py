@@ -1304,7 +1304,7 @@ class UI_main_window(QMainWindow, ui):
             # for i in range(11):
             # print(i)
             record = "{} - {} - {}".format(record[0], record[1], (record[2]))
-            print(record)
+            
             table_item = QTableWidgetItem(str(record))
             # if i ==0:
             table_item.setFlags(
@@ -1480,10 +1480,10 @@ class UI_main_window(QMainWindow, ui):
             img (array) : neighbour image
         """
         if self.checkBox_show_neighbours_labels.isChecked():
-            self.n = neighbouring(img, annt, True)
+            self.n = neighbouring(img, annt, True, self.language)
             self.n.annot_checkbox.setChecked(True)
         else:
-            self.n = neighbouring(img, has_annotation=False)
+            self.n = neighbouring(img, has_annotation=False, lang=self.language)
         self.n.show()
 
     def show_small_neighbouring(self):

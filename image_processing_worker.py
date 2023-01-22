@@ -14,12 +14,13 @@ class image_processing_worker(sQObject):
     finished = sSignal()
     update_progressbar = sSignal()
 
-    def assign_parameters(self, n_cameras, n_frames, main_path, res_main_path, sheet_id, img_format, img_shape, api_obj, ui_obj, db_obj):
+    def assign_parameters(self, n_cameras, n_frames, main_path, res_main_path, sheet_id, active_cameras, img_format, img_shape, api_obj, ui_obj, db_obj):
         self.n_cameras = n_cameras
         self.n_frames = n_frames
         self.main_path = main_path
         self.res_main_path = res_main_path
         self.sheet_id = sheet_id
+        self.active_cameras = active_cameras
         self.img_format = img_format
         self.img_shape = img_shape
         self.api_obj = api_obj
@@ -27,22 +28,28 @@ class image_processing_worker(sQObject):
         self.db_obj = db_obj
 
     def run_algorithm(self):
+        if self.n_cameras[0] > self.active_cameras[1] or self.n_cameras[1] < self.active_cameras[0]:
+            self.finished.emit()
+            return
         try:
             side=['BOTTOM', 'TOP']
             self.api_obj.l = self.db_obj.get_image_processing_params()
             for s in side:
                 for c in range(self.n_cameras[0], self.n_cameras[1]+1):
-                    for f in range(self.n_frames[0], self.n_frames[1]+1):
-                        # self.ui_obj.suggested_defects_progressBar.setValue(self.ui_obj.suggested_defects_progressBar.value() + 1)
-                        path = os.path.join(self.main_path, self.sheet_id, s, str(c), str(f)+self.img_format)
-                        res_path = os.path.join(self.res_main_path, self.sheet_id, s, str(c))
-                        if not os.path.exists(res_path):
-                            os.makedirs(res_path)
-                        if os.path.exists(path):
-                            img = cv2.imread(path, 0)
-                            img = cv2.resize(img, (self.img_shape[1], self.img_shape[0]))
-                            SSI_2(img, path=os.path.join(res_path, str(f)+'.json'), block_size=self.api_obj.l[0], defect_th=self.api_obj.l[1], noise_th=self.api_obj.l[2])
-                            self.update_progressbar.emit()
+                    if self.active_cameras[0] <= c <= self.active_cameras[1]:
+                        for f in range(self.n_frames[0], self.n_frames[1]+1):
+                            # self.ui_obj.suggested_defects_progressBar.setValue(self.ui_obj.suggested_defects_progressBar.value() + 1)
+                            path = os.path.join(self.main_path, self.sheet_id, s, str(c), str(f)+self.img_format)
+                            res_path = os.path.join(self.res_main_path, self.sheet_id, s, str(c))
+                            if not os.path.exists(res_path):
+                                os.makedirs(res_path)
+                            if os.path.exists(path):
+                                img = cv2.imread(path, 0)
+                                img = cv2.resize(img, (self.img_shape[1], self.img_shape[0]))
+                                SSI_2(img, path=os.path.join(res_path, str(f)+'.json'), block_size=self.api_obj.l[0], defect_th=self.api_obj.l[1], noise_th=self.api_obj.l[2])
+                                self.update_progressbar.emit()
+                            else:
+                                self.update_progressbar.emit()
 
             self.finished.emit()
         except Exception() as e:

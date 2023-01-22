@@ -281,7 +281,10 @@ ERRORS = {
                         'en': 'Error while splitting Dataset(s)'}, 
 
     'path_not_exist': {'fa': ' پوشه ی تصاویر وجود ندارد. ',
-                        'en': 'Images folder not exits'}, 
+                        'en': 'The images folder does not exist'},
+
+    'sheet_not_exist': {'fa': 'فایل‌های مربوط به ورق با شناسه‌ی {} وجود ندارد.',
+                        'en': 'The files related to sheet with ID {} not exists.'},
 
     'open_folder_failed': {'fa': ' خطا در باز کردن پوشه ی تصاویر. ',
                         'en': ' Error while openning images folder '},
@@ -508,7 +511,10 @@ WARNINGS = {
                         'en': ' No camera selected '},
 
     'parameters_error': {'fa': 'پارامتر‌های ورودی به درستی مقدار دهی نشده‌اند.',
-        'en': 'The input parameters are not set correctly.'},        
+        'en': 'The input parameters are not set correctly.'},
+
+    'image_not_exist': {'fa': 'فایل تصویر وجود ندارد.',
+                        'en': 'The image file does not exist'},        
 }
 
 MESSEGES = {
@@ -1489,7 +1495,9 @@ Titles = {
         'page_plc': {'fa': 'صفحه پی ال سی',
                                 'en': 'PLC'},                        
         'page_storage': {'fa': 'صفحه حافظه',
-                                'en': 'Storage'},                       
+                                'en': 'Storage'},                        
+        'show_labels': {'fa': 'نمایش برچسب‌ها',
+                                'en': 'Show Labels'},                       
 }
 
 HELPS = {
