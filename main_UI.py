@@ -2992,7 +2992,7 @@ class UI_main_window(QMainWindow, ui):
 
     def start_wind(self, end=False):
         if not end:
-            self.wind_itr = round(self.update_wind_plc / 1000)
+            self.wind_itr = self.update_wind_plc
             self.start_wind_btn.setEnabled(False)
             self.start_wind_btn.setText(
                 texts.Titles["seconds"][self.language].format(self.wind_itr)

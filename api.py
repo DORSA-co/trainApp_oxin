@@ -5128,8 +5128,8 @@ class API:
     def set_wind(self, mode=True):
         if self.ui.wind_itr == 1:
             ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
-            # if ret and mode:
-            if mode:
+            if ret and mode:
+            # if mode:
                 self.ui.start_wind()
 
     def set_start_software_plc(self, mode):

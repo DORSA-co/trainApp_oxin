@@ -2243,7 +2243,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>0</number>
+                      <number>7</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -28102,20 +28102,20 @@ color : rgb(0,0,0);</string>
                                   </sizepolicy>
                                  </property>
                                  <property name="minimum">
-                                  <number>100</number>
+                                  <number>1</number>
                                  </property>
                                  <property name="maximum">
-                                  <number>60000</number>
+                                  <number>30</number>
                                  </property>
                                  <property name="value">
-                                  <number>5000</number>
+                                  <number>30</number>
                                  </property>
                                 </widget>
                                </item>
                                <item>
                                 <widget class="QLabel" name="label_238">
                                  <property name="text">
-                                  <string>MS</string>
+                                  <string>Sec</string>
                                  </property>
                                 </widget>
                                </item>
