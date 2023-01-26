@@ -1794,6 +1794,9 @@ QPushButton:hover {
                 </item>
                 <item>
                  <widget class="QPushButton" name="login_btn">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>32</width>
@@ -4348,7 +4351,7 @@ border-color:Transparent</string>
                                       </property>
                                       <property name="maximumSize">
                                        <size>
-                                        <width>112</width>
+                                        <width>120</width>
                                         <height>19</height>
                                        </size>
                                       </property>
@@ -4385,7 +4388,7 @@ QPushButton:enabled {
                                       </property>
                                       <property name="maximumSize">
                                        <size>
-                                        <width>112</width>
+                                        <width>120</width>
                                         <height>19</height>
                                        </size>
                                       </property>
@@ -4458,7 +4461,7 @@ border:None;</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>488</width>
+                                      <width>495</width>
                                       <height>32</height>
                                      </rect>
                                     </property>
@@ -4491,7 +4494,7 @@ border:None;</string>
                                       <widget class="QLabel" name="label_27">
                                        <property name="maximumSize">
                                         <size>
-                                         <width>97</width>
+                                         <width>16777215</width>
                                          <height>16777215</height>
                                         </size>
                                        </property>
@@ -11248,19 +11251,25 @@ QPushButton:hover {
                           </item>
                           <item>
                            <widget class="QTextEdit" name="mainHelp">
+                            <property name="enabled">
+                             <bool>true</bool>
+                            </property>
                             <property name="html">
                              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; font-weight:600; background-color:transparent;&quot;&gt;Welcome to SENS TRAINER App&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; font-weight:600; background-color:transparent;&quot;&gt;Welcome to SENS TRAINER App&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;To start working with the software, click on the desired key from the left menu. To see the details of each key, click on the three dots icon or hold the mouse pointer over the desired key.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;First, click on the Data Auquzation button. From the Live tab, check the connection of the cameras and view and save the images taken from the sheets live.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;Then, in the Technical View tab, load the sheets whose images are saved and add the images you want for labeling. Enter the labeling page by clicking on the Label button on this page.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;On the Label page, specify the defects of the selected images and the type of defects and save the images.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;By clicking on the Tuning key, select one of the three keys, Binary, Localization or Classification, and by clicking on it, go to the corresponding page and train your desired model.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;On the Pipeline Build &amp;amp; Test page, set up and test your desired pipeline using the trained models.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;On the top bar of the page, click on the gear icon to see the keys related to software settings and user profile (current page) and go to the desired page by clicking on each key.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;On the software settings page, make settings for the program, PLC and cameras.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;On the user profile page, view the created datasets and select your dataset to save the images (otherwise the images will be saved in the default dataset).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;Log in or out of the program using your username and password by clicking the login icon on the top bar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;&quot;&gt;&lt;span style=&quot; font-family:'Segoe UI'; font-size:10pt; background-color:transparent;&quot;&gt;On each of the pages, click on the question mark icon at the top of the page to see the details of how to work with that page.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                             </property>
                            </widget>
@@ -11332,6 +11341,9 @@ background-color: rgb(212, 212, 212);</string>
                               </item>
                               <item>
                                <widget class="QPushButton" name="my_databases_3">
+                                <property name="enabled">
+                                 <bool>false</bool>
+                                </property>
                                 <property name="minimumSize">
                                  <size>
                                   <width>161</width>
@@ -12867,7 +12879,7 @@ color : rgb(0,0,0);</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>92</width>
+                                   <width>63</width>
                                    <height>165</height>
                                   </rect>
                                  </property>
@@ -12894,8 +12906,8 @@ color : rgb(0,0,0);</string>
                                       <rect>
                                        <x>0</x>
                                        <y>0</y>
-                                       <width>96</width>
-                                       <height>49</height>
+                                       <width>76</width>
+                                       <height>43</height>
                                       </rect>
                                      </property>
                                      <layout class="QHBoxLayout" name="horizontalLayout_72">

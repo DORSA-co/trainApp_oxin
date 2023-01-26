@@ -151,7 +151,7 @@ class UI_main_window(QMainWindow, ui):
 
         self.labeling_win = None
         self.login_window = UI_login_window()
-        self.help_win = help()
+        self.help_win = help(lang=self.language)
 
         self.suggested_defects_btn.setIcon(QIcon("UI/images/suggest.png"))
 
@@ -617,6 +617,7 @@ class UI_main_window(QMainWindow, ui):
             self.language = "en"
             api.language = "en"
             self.sn.language = "en"
+            self.help_win.set_language(lang="en")
             self.load_sheets_win.set_language("en")
             img_path = "UI/images/english.png"
 
@@ -624,6 +625,7 @@ class UI_main_window(QMainWindow, ui):
             self.language = "fa"
             api.language = "fa"
             self.sn.language = "fa"
+            self.help_win.set_language(lang="fa")
             self.load_sheets_win.set_language("fa")
             img_path = "UI/images/persian.png"
 
@@ -1157,7 +1159,10 @@ class UI_main_window(QMainWindow, ui):
     def show_help(self):
         help_image = None
         name = self.stackedWidget.currentWidget().objectName()
-        if name == "page_data_auquzation":
+        if name == "page_software_setting":
+            text = texts.HELPS["SETTINGS_PAGE"][self.language]
+            help_image = cv2.imread(texts.HELPS_ADDRESS["SETTINGS_PAGE"][self.language])
+        elif name == "page_data_auquzation":
             tab_name = self.tabWidget_2.currentWidget().objectName()
             if tab_name == "tab_5":
                 text = texts.HELPS["LIVE_PAGE"][self.language]
@@ -1193,22 +1198,23 @@ class UI_main_window(QMainWindow, ui):
                     texts.HELPS_ADDRESS["PROFILE_MYPIP_PAGE"][self.language]
                 )
         elif name == "page_pbt":
-            tab_name = self.stackedWidget_pbt.currentWidget().objectName()
-            if tab_name == "page_pipeline":
-                text = texts.HELPS["PBT_PIPLINE_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PBT_PIPLINE_PAGE"][self.language]
-                )
-            elif tab_name == "page_load_dataset":
-                text = texts.HELPS["PBT_LOADDATASET_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PBT_LOADDATASET_PAGE"][self.language]
-                )
-            elif tab_name == "page_history":
-                text = texts.HELPS["PBT_HISTORY_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PBT_HISTORY_PAGE"][self.language]
-                )
+            pass
+            # tab_name = self.stackedWidget_pbt.currentWidget().objectName()
+            # if tab_name == "page_pipeline":
+            #     text = texts.HELPS["PBT_PIPLINE_PAGE"][self.language]
+            #     help_image = cv2.imread(
+            #         texts.HELPS_ADDRESS["PBT_PIPLINE_PAGE"][self.language]
+            #     )
+            # elif tab_name == "page_load_dataset":
+            #     text = texts.HELPS["PBT_LOADDATASET_PAGE"][self.language]
+            #     help_image = cv2.imread(
+            #         texts.HELPS_ADDRESS["PBT_LOADDATASET_PAGE"][self.language]
+            #     )
+            # elif tab_name == "page_history":
+            #     text = texts.HELPS["PBT_HISTORY_PAGE"][self.language]
+            #     help_image = cv2.imread(
+            #         texts.HELPS_ADDRESS["PBT_HISTORY_PAGE"][self.language]
+            #     )
         elif name == "page_Binary":
             stack_name = self.stackedWidget_binary.currentWidget().objectName()
             if stack_name == "page_binary_list":
@@ -1227,17 +1233,18 @@ class UI_main_window(QMainWindow, ui):
                     texts.HELPS_ADDRESS["BINARY_HISTORY_PAGE"][self.language]
                 )
         elif name == "page_Localization":
-            stack_name = self.stackedWidget_localization.currentWidget().objectName()
-            if stack_name == "page_localization_training":
-                text = texts.HELPS["LOC_TRAINING_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["LOC_TRAINING_PAGE"][self.language]
-                )
-            elif stack_name == "page_localization_history":
-                text = texts.HELPS["LOC_HISTORY_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["LOC_HISTORY_PAGE"][self.language]
-                )
+            pass
+            # stack_name = self.stackedWidget_localization.currentWidget().objectName()
+            # if stack_name == "page_localization_training":
+            #     text = texts.HELPS["LOC_TRAINING_PAGE"][self.language]
+            #     help_image = cv2.imread(
+            #         texts.HELPS_ADDRESS["LOC_TRAINING_PAGE"][self.language]
+            #     )
+            # elif stack_name == "page_localization_history":
+            #     text = texts.HELPS["LOC_HISTORY_PAGE"][self.language]
+            #     help_image = cv2.imread(
+            #         texts.HELPS_ADDRESS["LOC_HISTORY_PAGE"][self.language]
+            #     )
         elif name == "page_Classification":
             stack_name = self.stackedWidget_classification.currentWidget().objectName()
             if stack_name == "page_classification_class_list":
@@ -1259,9 +1266,6 @@ class UI_main_window(QMainWindow, ui):
                 QImage.Format_BGR888,
             )
             self.help_win.label.setPixmap(QPixmap.fromImage(image))
-            self.help_win.win_set_geometry(
-                width=help_image.shape[1] + 18, height=help_image.shape[0] + 124
-            )
             self.help_win.show()
 
     def left_bar_clear(self):
@@ -1697,7 +1701,7 @@ class UI_main_window(QMainWindow, ui):
     def show_label_page(self):
         self.left_bar_clear()
         self.label_btn.setStyleSheet(
-            "background-image: url(:/icons/images/icons/label.png);background-color: rgb(212, 212, 212);color:rgp(0,0,0);"
+            "background-image: url(./images/icons/label.png);background-color: rgb(170, 170, 212);color:rgp(0,0,0);"
         )
         self.stackedWidget.setCurrentWidget(self.page_label)
 
@@ -1789,9 +1793,9 @@ class UI_main_window(QMainWindow, ui):
         self.localization_name_filter_combo.clear()
         self.cls_name_filter_combo.clear()
 
-        b_algorithms = ["Xbc", "Rbe"]  # Must change
+        b_algorithms = ["Rbe", "Xbc"]  # Must change
         l_algorithms = ["Blu", "Rleu", "Llu", "uln"]
-        class_algorithms = ["Xcc", "Rce"]
+        class_algorithms = ["Rce", "Xcc"]
         self.b_algorithms.addItems(b_algorithms)
         self.l_algorithms.addItems(l_algorithms)
         self.classification_algo_combo.addItems(class_algorithms)

@@ -372,7 +372,7 @@ class API:
         # self.__debug_load_sheet__(["996", "997"])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
-        self.__debug__login__()
+        # self.__debug__login__()
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, "sheets_id")
@@ -1171,8 +1171,10 @@ class API:
             if l != self.l:
                 for key in self.sheet_imgprocessing_mem.keys():
                     self.sheet_imgprocessing_mem[key] = False
+            jsons_path = os.path.join(self.sheet.get_main_path()+'_imgProcessing', self.sheet.get_id())
+            if not os.path.exists(jsons_path):
+                self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
             if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
-
                 self.ui.set_enabel(self.ui.load_coil_btn, False)
                 self.ui.set_enabel(self.ui.next_coil_btn, False)
                 self.ui.set_enabel(self.ui.prev_coil_btn, False)
@@ -1231,7 +1233,6 @@ class API:
             self.build_sheet_technical(self.sheet)
 
     def update_suggestion_progressbar(self):
-        print(self.ui.suggested_defects_progressBar.value())
         self.ui.suggested_defects_progressBar.setValue(self.ui.suggested_defects_progressBar.value() + 1)
 
     def build_sheet_technical(self, sheet):
@@ -2172,15 +2173,16 @@ class API:
                 self.datasets[current]["path"], self.datasets[current]["name"] + ".json"
             )
         )
-        chart_funcs.update_userprofile_piechart(ui_obj=self.ui, binary_len=binary_count)
-        classification_count = self.ds_json.get_classification_count(
-            os.path.join(
-                self.datasets[current]["path"], self.datasets[current]["name"] + ".json"
+        if self.ui.stackedWidget_2.currentIndex() != 0 and self.ui.stackedWidget_2.currentIndex() != 3:
+            chart_funcs.update_userprofile_piechart(ui_obj=self.ui, binary_len=binary_count)
+            classification_count = self.ds_json.get_classification_count(
+                os.path.join(
+                    self.datasets[current]["path"], self.datasets[current]["name"] + ".json"
+                )
             )
-        )
-        chart_funcs.update_userprofile_barchart(
-            ui_obj=self.ui, classification_len=classification_count
-        )
+            chart_funcs.update_userprofile_barchart(
+                ui_obj=self.ui, classification_len=classification_count
+            )
 
     def set_user_databases(self):
         dataset_names = []
@@ -2208,16 +2210,17 @@ class API:
                 self.user_databases[current]["name"] + ".json",
             )
         )
-        chart_funcs.update_userprofile_piechart(ui_obj=self.ui, binary_len=binary_count)
-        classification_count = self.ds_json.get_classification_count(
-            os.path.join(
-                self.user_databases[current]["path"],
-                self.user_databases[current]["name"] + ".json",
+        if self.ui.stackedWidget_2.currentIndex() != 0 and self.ui.stackedWidget_2.currentIndex() != 3:
+            chart_funcs.update_userprofile_piechart(ui_obj=self.ui, binary_len=binary_count)
+            classification_count = self.ds_json.get_classification_count(
+                os.path.join(
+                    self.user_databases[current]["path"],
+                    self.user_databases[current]["name"] + ".json",
+                )
             )
-        )
-        chart_funcs.update_userprofile_barchart(
-            ui_obj=self.ui, classification_len=classification_count
-        )
+            chart_funcs.update_userprofile_barchart(
+                ui_obj=self.ui, classification_len=classification_count
+            )
 
     def set_default_dataset(self):
         try:

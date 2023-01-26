@@ -1422,6 +1422,12 @@ Titles = {
 
         'User Profile': {'fa': 'صفحه کاربر',
                                 'en': 'User Profile'},
+
+        'settings': {'fa': 'تنظیمات',
+                        'en': 'Settings'},
+
+        'settings_page': {'fa': 'صفحه‌ی تنظیمات',
+                        'en': 'Settings page'},
                                 
         'connection_failed': {'fa': 'اتصال ناموفق',
                                 'en': 'Connection failed'},  
@@ -1504,37 +1510,44 @@ HELPS = {
     'MAIN_HELP': {'fa': """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 <html><head><meta name="qrichtext" content="1" /><style type="text/css">
 p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'Segoe UI'; font-size:10pt; font-weight:400; font-style:normal;">
+</style></head><body style=" font-family:'ubuntu'; font-size:11pt; font-weight:400; font-style:normal;">
 <p align="center" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt; font-weight:600;">به نرم‌افزار آموزشی سنس خوش آمدید</span></p>
-<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">برای شروع کار با نرم‌افزار از منوی سمت چپ بر روی کلید مورد نظر کلیک کنید</span><span style=" font-size:12pt;">. </span><span style=" font-family:'B Nazanin'; font-size:12pt;">برای دیدن جزئیات هر کلید روی آيکون سه نقطه کلیک کنید یا نشانگر موس را روی کلید مورد نظر نگه دارید</span><span style=" font-size:12pt;">.</span></p>
-<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در ابتدا روی کلید داده برداری کلیک کنید</span><span style=" font-size:12pt;">. </span><span style=" font-family:'B Nazanin'; font-size:12pt;">از تب نمایش زنده، اتصال دوربین ها را بررسی کنید و تصاویر گرفته شده از ورق ها را به صورت زنده مشاهده و ذخیره کنید</span><span style=" font-size:12pt;">. </span></p>
-<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">سپس در تب نمای تکنیکال، ورق هایی که تصاویر آن‌ها ذخیره شده‌اند را بارگذاری کنید و تصاویر مورد نظر خود را برای برچسب زدن اضافه کنید</span><span style=" font-size:12pt;">. </span><span style=" font-family:'B Nazanin'; font-size:12pt;">با کلیک بر روی کلید برچسب گذاری در این صفحه وارد صفحه ی برچسب گذاری شوید</span><span style=" font-size:12pt;">.</span></p>
-<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه ی برچسب گذاری، عیوب تصاویر انتخاب شده و نوع عیوب را مشخص کنید و تصاویر را ذخیره کنید</span><span style=" font-size:12pt;">.</span></p>
-<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">با کلیک بر روی کلید تیونینگ، یکی از سه کلید باینری، جایابی یا کلاس بندی را انتخاب کنید و با کلیک روی آن به صفحه ی مربوطه بروید و مدل مورد نظر خود را آموزش دهید</span><span style=" font-size:12pt;">.</span></p>
-<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه ی ساخت پایپ لاین و تست، با استفاده از مدل های آموزش داده شده پایپ لاین مورد نظر خود را تنظیم و تست کنید</span><span style=" font-size:12pt;">.</span></p>
-<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه ی پروفایل کاربر، مجموعه داده‌های ایجاد شده را مشاهده کنید و مجموعه داده ی خود را برای ذخیره ی تصاویر انتخاب کنید </span><span style=" font-size:12pt;">(</span><span style=" font-family:'B Nazanin'; font-size:12pt;">در غیر این صورت تصاویر در مجموعه داده ی پیش‌فرض ذخیره می‌شوند</span><span style=" font-size:12pt;">).</span></p>
-<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در هر یک از صفحات با کلیک بر روی آیکون علامت سؤال در بالای صفحه، جزئیات نحوه ی کار با آن صفحه را مشاهده کنید</span><span style=" font-size:12pt;">.</span></p></body></html>""",
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">برای شروع کار با نرم‌افزار از منوی سمت چپ بر روی کلید مورد نظر کلیک کنید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">. </span><span style=" font-family:'B Nazanin'; font-size:12pt;">برای دیدن جزئیات هر کلید روی آيکون سه نقطه کلیک کنید یا نشانگر موس را روی کلید مورد نظر نگه دارید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">.</span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در ابتدا روی کلید داده برداری کلیک کنید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">. </span><span style=" font-family:'B Nazanin'; font-size:12pt;">از تب نمایش زنده، اتصال دوربین ها را بررسی کنید و تصاویر گرفته شده از ورق ها را به صورت زنده مشاهده و ذخیره کنید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">. </span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">سپس در تب نمای تکنیکال، ورق هایی که تصاویر آن‌ها ذخیره شده‌اند را بارگذاری کنید و تصاویر مورد نظر خود را برای برچسب زدن اضافه کنید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">. </span><span style=" font-family:'B Nazanin'; font-size:12pt;">با کلیک بر روی کلید برچسب گذاری در این صفحه وارد صفحه ی برچسب گذاری شوید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">.</span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه ی برچسب گذاری، عیوب تصاویر انتخاب شده و نوع عیوب را مشخص کنید و تصاویر را ذخیره کنید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">.</span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">با کلیک بر روی کلید تیونینگ، یکی از سه کلید باینری، جایابی یا کلاس بندی را انتخاب کنید و با کلیک روی آن به صفحه ی مربوطه بروید و مدل مورد نظر خود را آموزش دهید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">.</span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه ی ساخت پایپ لاین و تست، با استفاده از مدل های آموزش داده شده پایپ لاین مورد نظر خود را تنظیم و تست کنید.</span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در نوار بالایی صفحه با کلیک بر روی آیکون چرخ‌دنده کلید‌های مربوط به تنظیمات نرم‌افزار و پروفایل کاربر(صفحه‌ی جاری) را مشاهده کنید و با کلیک بر روی هر کلید به صفحه‌ی مورد نظر بروید.</span></p>
+<p dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه‌ی تنظیمات نرم‌افزار، تنظیمات مربوط برنامه، پی ال سی و دوربین‌ها را انجام دهید.</span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه ی پروفایل کاربر، مجموعه داده‌های ایجاد شده را مشاهده کنید و مجموعه داده ی خود را برای ذخیره ی تصاویر انتخاب کنید </span><span style=" font-family:'Segoe UI'; font-size:12pt;">(</span><span style=" font-family:'B Nazanin'; font-size:12pt;">در غیر این صورت تصاویر در مجموعه داده ی پیش‌فرض ذخیره می‌شوند).</span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">با کلیک بر روی آیکون لاگین در نوار بالای صفحه با استفاده از نام کاربری و رمزعبور خود به برنامه وارد یا از آن خارج شوید.</span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در هر یک از صفحات با کلیک بر روی آیکون علامت سؤال در بالای صفحه، جزئیات نحوه ی کار با آن صفحه را مشاهده کنید.</span></p></body></html>""",
 
                 'en': """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 <html><head><meta name="qrichtext" content="1" /><style type="text/css">
 p, li { white-space: pre-wrap; }
-</style></head><body style=" font-family:'Segoe UI'; font-size:10pt; font-weight:400; font-style:normal;">
-<p align="center" style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-weight:600; background-color:transparent;">Welcome to SENS TRAINER App</span></p>
-<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" background-color:transparent;">To start working with the software, click on the desired key from the left menu. To see the details of each key, click on the three dots icon or hold the mouse pointer over the desired key.</span></p>
-<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" background-color:transparent;">First, click on the Data Auquzation button. From the Live tab, check the connection of the cameras and view and save the images taken from the sheets live.</span></p>
-<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" background-color:transparent;">Then, in the Technical View tab, load the sheets whose images are saved and add the images you want for labeling. Enter the labeling page by clicking on the Label button on this page.</span></p>
-<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" background-color:transparent;">On the Label page, specify the defects of the selected images and the type of defects and save the images.</span></p>
-<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" background-color:transparent;">By clicking on the Tuning key, select one of the three keys, Binary, Localization or Classification, and by clicking on it, go to the corresponding page and train your desired model.</span></p>
-<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" background-color:transparent;">On the Pipeline Build &amp; Test page, set up and test your desired pipeline using the trained models.</span></p>
-<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" background-color:transparent;">On the user profile page, view the created datasets and select your dataset to save the images (otherwise the images will be saved in the default dataset).</span></p>
-<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" background-color:transparent;">On each of the pages, click on the question mark icon at the top of the page to see the details of how to work with that page.</span></p></body></html>"""},
+</style></head><body style=" font-family:'ubuntu'; font-size:11pt; font-weight:400; font-style:normal;">
+<p align="center" style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; font-weight:600; background-color:transparent;">Welcome to SENS TRAINER App</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">To start working with the software, click on the desired key from the left menu. To see the details of each key, click on the three dots icon or hold the mouse pointer over the desired key.</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">First, click on the Data Auquzation button. From the Live tab, check the connection of the cameras and view and save the images taken from the sheets live.</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">Then, in the Technical View tab, load the sheets whose images are saved and add the images you want for labeling. Enter the labeling page by clicking on the Label button on this page.</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">On the Label page, specify the defects of the selected images and the type of defects and save the images.</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">By clicking on the Tuning key, select one of the three keys, Binary, Localization or Classification, and by clicking on it, go to the corresponding page and train your desired model.</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">On the Pipeline Build &amp; Test page, set up and test your desired pipeline using the trained models.</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">On the top bar of the page, click on the gear icon to see the keys related to software settings and user profile (current page) and go to the desired page by clicking on each key.</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">On the software settings page, make settings for the program, PLC and cameras.</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">On the user profile page, view the created datasets and select your dataset to save the images (otherwise the images will be saved in the default dataset).</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">Log in or out of the program using your username and password by clicking the login icon on the top bar.</span></p>
+<p style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'Segoe UI'; font-size:10pt; background-color:transparent;">On each of the pages, click on the question mark icon at the top of the page to see the details of how to work with that page.</span></p></body></html>"""},
 
 
 #-----------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------Trainig Help---------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 
-
+    'SETTINGS_PAGE': {'fa': 'صفحه‌ی تنظیمات \n این صفحه مربوط به تنظیمات نرم افزار از جمله تنظیمات ظاهری، تنظیمات پی ال سی و تنظیمات تصویربرداری است.',
+                'en': 'Settings Page \n This page is related to software settings including appearance settings, PLC settings and cameras settings.'},
 
     'LIVE_PAGE': {'fa': 'صفحه ی نمایش زنده \n این صفحه مربوط به مدیریت اتصال دوربین ها و ذخیره سازی و نمایش زنده ی تصاویر گرفته شده توسط آن هاست.',
                 'en': 'Live Page \n This page is related to the management of the connection of cameras and the storage and live display of the images taken by them.'},
@@ -1602,7 +1615,8 @@ HELPS_ADDRESS = {
 #-----------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------Training Help---------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
-
+    'SETTINGS_PAGE': {'fa': 'images/helps/settings_page_fa.png',
+                    'en': 'images/helps/settings_page.png'},
     'LIVE_PAGE': {'fa': 'images/helps/live_page_fa.png',
                     'en': 'images/helps/live_page.png'},
     'TECHNICAL_PAGE': {'fa': 'images/helps/technical_page_fa.png',
@@ -1627,12 +1641,12 @@ HELPS_ADDRESS = {
                             'en': 'images/helps/loc_training_page.png'},
     'LOC_HISTORY_PAGE': {'fa': 'images/helps/loc_history_page_fa.png',
                             'en': 'images/helps/loc_history_page.png'},
-    'PBT_PIPLINE_PAGE':{'fa':'images\helps\PBT_pipline_page.png',
-                        'en':'images\helps\PBT_pipline_page.png'},
-    'PBT_LOADDATASET_PAGE' :{'fa':'images\helps\PBT_loaddataset_page.png',
-                              'en':'images\helps\PBT_loaddataset_page.png'},
-    'PBT_HISTORY_PAGE':{'fa':'images\helps\PBT_history_page.png',
-                        'en':'images\helps\PBT_history_page.png'},
+    'PBT_PIPLINE_PAGE':{'fa':'images/helps/PBT_pipline_page.png',
+                        'en':'images/helps/PBT_pipline_page.png'},
+    'PBT_LOADDATASET_PAGE' :{'fa':'images/helps/PBT_loaddataset_page.png',
+                              'en':'images/helps/PBT_loaddataset_page.png'},
+    'PBT_HISTORY_PAGE':{'fa':'images/helps/PBT_history_page.png',
+                        'en':'images/helps/PBT_history_page.png'},
 
 #-----------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------Setting Help---------------------------------------------------------------
@@ -2137,7 +2151,6 @@ def set_title_ds_selection(self, lang):
     self.select_ds_dialog.table.setHorizontalHeaderLabels([Titles['ds_name'][lang], Titles['ds_owner'][lang], Titles['ds_path_2'][lang]])
 
 def set_title_labeling(self, lang):
-    self.labeling_win.lineEdit.setPlaceholderText(Titles['search_bar'][lang])
     self.labeling_win.save_btn.setText(Titles['ok'][lang])
     self.labeling_win.cancel_btn.setText(Titles['cancel'][lang])
 

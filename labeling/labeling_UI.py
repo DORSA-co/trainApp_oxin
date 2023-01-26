@@ -41,6 +41,10 @@ class labeling(QMainWindow, ui):
         # Set old position to None.
         self._old_pos = None
 
+        self.comboBox_defects.setEditable(True) 
+        self.comboBox_defects.completer().setCompletionMode(QCompleter.PopupCompletion) 
+        self.comboBox_defects.setInsertPolicy(QComboBox.NoInsert) 
+
     def mousePressEvent(self, event):
         """Reimplemented function to receive mouse press events.
 

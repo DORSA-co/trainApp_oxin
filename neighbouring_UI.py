@@ -51,6 +51,7 @@ class neighbouring(QMainWindow, ui):
 
         self.help_win = None
         
+        self.language = lang
         self.annot_checkbox.setText(texts.Titles['show_labels'][lang])
 
     def mousePressEvent(self, event):
@@ -176,7 +177,7 @@ class neighbouring(QMainWindow, ui):
 
     def show_help(self):
         if not self.help_win:
-            self.help_win = help()
+            self.help_win = help(lang=self.language)
         self.help_win.set_text('neighbouring page')
         self.help_win.show()
 

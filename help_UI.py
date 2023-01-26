@@ -31,7 +31,7 @@ class help(QMainWindow, ui):
     widgets = ui
     x=0
 
-    def __init__(self):
+    def __init__(self, lang='en'):
         super(help, self).__init__()
         self.setupUi(self)
         flags = Qt.WindowFlags(Qt.FramelessWindowHint)
@@ -39,7 +39,7 @@ class help(QMainWindow, ui):
         self.setWindowFlags(flags)
         self.activate_()
         self.font_size=self.spinBox_font.value()
-        self.language = 'en'
+        self.language = lang
         self.win_set_geometry()
         self.center()
         self._old_pos = None
@@ -47,9 +47,6 @@ class help(QMainWindow, ui):
         self.statusBar().setStyleSheet('background-color:rgb(85, 0, 0);')
         self.set_tree_view()
         
-        string=['English', 'Persian']
-        self.combo_change_language.addItems(string)
-        self.combo_change_language.currentTextChanged.connect(self.change_language)
         self.spinBox_font.valueChanged.connect(self.set_font)
 
     def mousePressEvent(self, event):
@@ -92,7 +89,6 @@ class help(QMainWindow, ui):
     def close_win(self):
         self.close()
 
-
     def set_font(self):
         self.font_size=self.spinBox_font.value()
         style='font-size: {}pt;background-color: rgb(220, 220,220);border-color: rgb(188, 188, 188);'.format(self.font_size)
@@ -108,34 +104,17 @@ class help(QMainWindow, ui):
         frame_geo.moveCenter(center_loc)
         self.move(frame_geo.topLeft())
         # self.move(frame_geo.moveTop)
-
-
-    def change_language(self):
-        """Change language in ui and update image
-
-        Returns: None
-
-        """
-        if self.combo_change_language.currentText()=='English':
-            self.language = 'en'
-            img_path=('UI/images/english.png')
-
-
-        else:
-            self.language='fa'
-            img_path=('UI/images/persian.png')
-
-        pixmap = QPixmap(img_path)
-        self.label_language.setPixmap(pixmap)
-        self.set_tree_view()
         
 
     def set_text(self, text):
         self.textEdit.clear()
         self.textEdit.setText(text)
+    
+    def set_language(self, lang):
+        self.language = lang
+        self.set_tree_view()
 
     def set_tree_view(self):
-        
         self.treeView.setHeaderHidden(True)
 
         treeModel = QStandardItemModel()
@@ -165,6 +144,7 @@ class help(QMainWindow, ui):
         tuning.appendRow(binary)
         localization = StandardItem(texts.Titles['Localization'][self.language], self.font_size)
         tuning.appendRow(localization)
+
         classification = StandardItem(texts.Titles['Classification'][self.language], self.font_size)
         tuning.appendRow(classification)
 
@@ -177,13 +157,16 @@ class help(QMainWindow, ui):
 
         l_training = StandardItem(texts.Titles['localization_training'][self.language], self.font_size-1, color=QColor(185, 0, 0))
         localization.appendRow(l_training)
+
         l_history = StandardItem(texts.Titles['localization_history'][self.language], self.font_size-1, color=QColor(185, 0, 0))
         localization.appendRow(l_history)
 
         c_list = StandardItem('Classes list', self.font_size-1, color=QColor(185, 0, 0))
         classification.appendRow(c_list)
+
         c_training = StandardItem(texts.Titles['classification_training'][self.language], self.font_size-1, color=QColor(185, 0, 0))
         classification.appendRow(c_training)
+
         c_history = StandardItem(texts.Titles['classification_history'][self.language], self.font_size-1, color=QColor(185, 0, 0))
         classification.appendRow(c_history)
 
@@ -193,8 +176,10 @@ class help(QMainWindow, ui):
 
         Pipline = StandardItem(texts.Titles['Pipline'][self.language], self.font_size, color=QColor(155, 0, 0))
         pipline_m.appendRow(Pipline)
+
         load_dataset = StandardItem(texts.Titles['Load Dataset'][self.language], self.font_size, color=QColor(155, 0, 0))
         pipline_m.appendRow(load_dataset)
+
         History = StandardItem(texts.Titles['history'][self.language], self.font_size, color=QColor(185, 0, 0))
         pipline_m.appendRow(History)
 
@@ -209,21 +194,28 @@ class help(QMainWindow, ui):
         user_profile.appendRow(all_dataset)
         my_data = StandardItem(texts.Titles['my_ds'][self.language], self.font_size, color=QColor(155, 0, 0))
         user_profile.appendRow(my_data)
-        my_pipline = StandardItem(texts.Titles['my_pipelines'][self.language], self.font_size, color=QColor(155, 0, 0))
+        my_pipline = StandardItem(texts.Titles['pipelines'][self.language], self.font_size, color=QColor(155, 0, 0))
         user_profile.appendRow(my_pipline)
 
-        # setting_software 
-        setting_software = StandardItem(texts.Titles['Setting Software'][self.language], self.font_size+2, set_bold=True)
+        # ---------------------------Settings Page-------------------------------
+        # settings = StandardItem(texts.Titles['settings'][self.language], self.font_size+1)
+        # main_software.appendRow(settings)
 
-        Dashboard = StandardItem(texts.Titles['page_dashboard'][self.language], self.font_size+1)
-        Camera = StandardItem(texts.Titles['page_camera'][self.language], self.font_size+1)
-        PLC = StandardItem(texts.Titles['page_plc'][self.language], self.font_size+1)
-        Level2 = StandardItem(texts.Titles['page_level2'][self.language], self.font_size+1)
-        Defection = StandardItem(texts.Titles['page_defection'][self.language], self.font_size+1)
-        Calibration = StandardItem(texts.Titles['page_calibration'][self.language], self.font_size+1)
-        Setting = StandardItem(texts.Titles['page_settings'][self.language], self.font_size+1)
-        Storage = StandardItem(texts.Titles['page_storage'][self.language], self.font_size+1)
-        User = StandardItem(texts.Titles['page_users'][self.language], self.font_size+1)
+        # settings_page = StandardItem(texts.Titles['settings_page'][self.language], self.font_size, color=QColor(155, 0, 0))
+        # settings.appendRow(settings_page)
+
+        # # setting_software 
+        # setting_software = StandardItem(texts.Titles['Setting Software'][self.language], self.font_size+2, set_bold=True)
+
+        # Dashboard = StandardItem(texts.Titles['page_dashboard'][self.language], self.font_size+1)
+        # Camera = StandardItem(texts.Titles['page_camera'][self.language], self.font_size+1)
+        # PLC = StandardItem(texts.Titles['page_plc'][self.language], self.font_size+1)
+        # Level2 = StandardItem(texts.Titles['page_level2'][self.language], self.font_size+1)
+        # Defection = StandardItem(texts.Titles['page_defection'][self.language], self.font_size+1)
+        # Calibration = StandardItem(texts.Titles['page_calibration'][self.language], self.font_size+1)
+        # Setting = StandardItem(texts.Titles['page_settings'][self.language], self.font_size+1)
+        # Storage = StandardItem(texts.Titles['page_storage'][self.language], self.font_size+1)
+        # User = StandardItem(texts.Titles['page_users'][self.language], self.font_size+1)
 
         # PLC = StandardItem('PLC', self.font_size+1)
         # PLC = StandardItem('Storage', self.font_size+1)
@@ -232,11 +224,11 @@ class help(QMainWindow, ui):
         # Calibration = StandardItem('Calibration', self.font_size+1)
         # PLC = StandardItem('User', self.font_size+1)
         # Setting = StandardItem('Setting', self.font_size+1)
-        setting_software.appendRows([Dashboard, Camera, PLC,Calibration,Level2,Defection,Storage,User,Setting])
+        # setting_software.appendRows([Dashboard, Camera, PLC,Calibration,Level2,Defection,Storage,User,Setting])
 
 
         rootNode.appendRow(main_software)
-        rootNode.appendRow(setting_software)
+        # rootNode.appendRow(setting_software)
 
         self.treeView.setModel(treeModel)
         self.treeView.expandAll()
@@ -251,7 +243,7 @@ class help(QMainWindow, ui):
         # print(val.column())
         self.set_help(val.data())
 
-    def set_help(self,name):
+    def set_help(self, name):
 #-----------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------Train Help---------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
@@ -277,18 +269,21 @@ class help(QMainWindow, ui):
         elif name ==texts.Titles['my_ds'][self.language]:
             text = texts.HELPS['PROFILE_MYDS_PAGE'][self.language]
             help_image = cv2.imread(texts.HELPS_ADDRESS['PROFILE_MYDS_PAGE'][self.language])
-        elif name ==texts.Titles['my_pipelines'][self.language]:
-            text = texts.HELPS['PROFILE_MYPIP_PAGE'][self.language]
-            help_image = cv2.imread(texts.HELPS_ADDRESS['PROFILE_MYPIP_PAGE'][self.language])
-        elif name==texts.Titles['Pipline'][self.language]:
-            text = texts.HELPS["PBT_PIPLINE_PAGE"][self.language]
-            help_image = cv2.imread(texts.HELPS_ADDRESS["PBT_PIPLINE_PAGE"][self.language])
-        elif name==texts.Titles['Load Dataset'][self.language]:
-            text = texts.HELPS["PBT_LOADDATASET_PAGE"][self.language]
-            help_image = cv2.imread(texts.HELPS_ADDRESS["PBT_LOADDATASET_PAGE"][self.language])
-        elif name==texts.Titles['History'][self.language]:
-            text = texts.HELPS["PBT_HISTORY_PAGE"][self.language]
-            help_image = cv2.imread(texts.HELPS_ADDRESS["PBT_HISTORY_PAGE"][self.language])
+        elif name==texts.Titles['settings_page'][self.language]:
+            text = texts.HELPS['SETTINGS_PAGE'][self.language]
+            help_image = cv2.imread(texts.HELPS_ADDRESS['SETTINGS_PAGE'][self.language])
+        # elif name ==texts.Titles['my_pipelines'][self.language]:
+        #     text = texts.HELPS['PROFILE_MYPIP_PAGE'][self.language]
+        #     help_image = cv2.imread(texts.HELPS_ADDRESS['PROFILE_MYPIP_PAGE'][self.language])
+        # elif name==texts.Titles['Pipline'][self.language]:
+        #     text = texts.HELPS["PBT_PIPLINE_PAGE"][self.language]
+        #     help_image = cv2.imread(texts.HELPS_ADDRESS["PBT_PIPLINE_PAGE"][self.language])
+        # elif name==texts.Titles['Load Dataset'][self.language]:
+        #     text = texts.HELPS["PBT_LOADDATASET_PAGE"][self.language]
+        #     help_image = cv2.imread(texts.HELPS_ADDRESS["PBT_LOADDATASET_PAGE"][self.language])
+        # elif name==texts.Titles['History'][self.language]:
+        #     text = texts.HELPS["PBT_HISTORY_PAGE"][self.language]
+        #     help_image = cv2.imread(texts.HELPS_ADDRESS["PBT_HISTORY_PAGE"][self.language])
         elif name == texts.Titles['binary_list'][self.language]:
             text = texts.HELPS["BINARYLIST_PAGE"][self.language]
             help_image = cv2.imread(texts.HELPS_ADDRESS["BINARYLIST_PAGE"][self.language])
@@ -298,12 +293,12 @@ class help(QMainWindow, ui):
         elif name == texts.Titles["binary_history"][self.language]:
             text = texts.HELPS["BINARY_HISTORY_PAGE"][self.language]
             help_image = cv2.imread(texts.HELPS_ADDRESS["BINARY_HISTORY_PAGE"][self.language])
-        elif name == texts.Titles['localization_training'][self.language]:
-            text = texts.HELPS["LOC_TRAINING_PAGE"][self.language]
-            help_image = cv2.imread(texts.HELPS_ADDRESS["LOC_TRAINING_PAGE"][self.language])
-        elif name == texts.Titles['localization_history'][self.language]:
-            text = texts.HELPS["LOC_HISTORY_PAGE"][self.language]
-            help_image = cv2.imread(texts.HELPS_ADDRESS["LOC_HISTORY_PAGE"][self.language])
+        # elif name == texts.Titles['localization_training'][self.language]:
+        #     text = texts.HELPS["LOC_TRAINING_PAGE"][self.language]
+        #     help_image = cv2.imread(texts.HELPS_ADDRESS["LOC_TRAINING_PAGE"][self.language])
+        # elif name == texts.Titles['localization_history'][self.language]:
+        #     text = texts.HELPS["LOC_HISTORY_PAGE"][self.language]
+        #     help_image = cv2.imread(texts.HELPS_ADDRESS["LOC_HISTORY_PAGE"][self.language])
         # elif name=='page_Classification':
         #     stack_name = self.stackedWidget_classification.currentWidget().objectName()
         # if stack_name == 'page_classification_class_list':
