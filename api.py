@@ -4907,6 +4907,7 @@ class API:
                             self.ui.auto_wind_intervals        
                             )
         self.start_auto_wind()
+        self.init_check_plc()
 
     def set_camera_parms(self):
         self.db.set_camera_params(self.ui.manual_camera,
