@@ -44,7 +44,7 @@ class ImageManager(sQObject):
         self.sheet_check_flag = False
         self.last_frame = 0
         self.camera_length = 280
-        self.chech_length_th = 2
+        self.check_length_th = 2
 
     def set_user(self, user):
         self.user = user
@@ -102,7 +102,7 @@ class ImageManager(sQObject):
         self.images = [np.zeros((1200, 1920))] * 24
         self.stop_cam = stop_cam
         if 'length' in coil_dict.keys() and coil_dict['length']:
-            self.last_frame = 15 - self.chech_length_th #int(coil_dict['length'] / self.camera_length) - self.check_length_th
+            self.last_frame = 15 - self.check_length_th #int(coil_dict['length'] / self.camera_length) - self.check_length_th
         else:
             self.last_frame = 0
         if self.save_flag:
@@ -228,6 +228,10 @@ class ImageManager(sQObject):
                 ret, img = connected_cameras[str(camera_id)].getPictures()
                 if not ret:
                     continue
+                check = self.sheet_check(img)
+                if check:
+                    self.first_check_finished.emit()
+                    return
             else:
                 if self.manual_flag:
                     img = np.zeros((1200, 1920), dtype=np.uint8)
@@ -293,6 +297,10 @@ class ImageManager(sQObject):
 
     def stop(self):
         self.set_stop_capture()
+        try:
+            self.stop_sheet_checking()
+        except:
+            pass
         self.join_all()
 
     def stop_sheet_checking(self):

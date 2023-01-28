@@ -3059,13 +3059,15 @@ class API:
             self.ImageManager.second_check_finished.connect(self.stop_capture_timers)
             self.start_capture_flag = True
             self.ready_capture_flag = True
-
-        if self.sensor:
+        
+        if self.sensor and not disable_ui:
             self.start_capture_flag = True
             self.ImageManager.set_live_type(self.live_type)
             self.ImageManager.set_save_flag(self.ui.checkBox_save_images.isChecked())
             self.ImageManager.set_manual_flag(self.ui.manual_camera)
+            self.ui.set_enabel(self.ui.stop_capture_btn, False)
             QTimer().singleShot(1000, self.ImageManager.start_sheet_checking)
+            QTimer().singleShot(1000, lambda: self.ui.set_enabel(self.ui.stop_capture_btn, True))
 
             self.init_check_plc()
 
@@ -3076,6 +3078,11 @@ class API:
             self.ui.set_enabel(self.ui.start_capture_btn, True)
             self.ui.set_enabel(self.ui.stop_capture_btn, False)
             self.ready_capture_flag = False
+            self.ImageManager.stop()
+            try:
+                self.stop_capture_timers()
+            except:
+                pass
 
         if self.start_capture_flag:
             self.ImageManager.stop()
@@ -5114,23 +5121,21 @@ class API:
             self.ui.set_plc_ip(self.plc_ip)
 
     def start_auto_wind(self):
+        try:
+            self.auto_wind_timer.stop()
+        except:
+            pass
         if self.ui.auto_wind:
             self.auto_wind_timer = QTimer()
             self.auto_wind_timer.timeout.connect(self.set_wind)
-            auto_wind_timer = self.ui.update_wind_plc + self.ui.auto_wind_intervals
+            auto_wind_timer = self.ui.update_wind_plc*1000 + self.ui.auto_wind_intervals
             self.auto_wind_timer.start(auto_wind_timer)
-        else:
-            try:
-                self.auto_wind_timer.stop()
-            except:
-                pass
-
 
     def set_wind(self, mode=True):
         if self.ui.wind_itr == 1:
             ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
-            if ret and mode:
-            # if mode:
+            # if ret and mode:
+            if mode:
                 self.ui.start_wind()
 
     def set_start_software_plc(self, mode):
