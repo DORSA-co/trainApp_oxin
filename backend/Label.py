@@ -91,7 +91,7 @@ class maskLbl:
     def delete_point_or_mask(self, pt):
 
 
-        # print('delet')
+        # #print('delet')
 
         pt = self.__denormal_pt__(pt)
         if len(self.points)>0 and  self.status=='drawing':
@@ -196,7 +196,7 @@ class maskLbl:
     #______________________________________________________________________________________________________
     def save(self, label):
 
-        print('label',label)
+        #print('label',label)
         #last point is same as first point so we ignore it
         cnt = np.array(self.points[:-1]).reshape((-1,1,2))
         self.masks.append([label,cnt, self.thickness_map['line'], self.radius])
@@ -256,11 +256,11 @@ class maskLbl:
 
     def draw(self, select_list=[]):
         masks_img = self.mask_init()
-        # print('color lbl',self.label_color[0])
+        # #print('color lbl',self.label_color[0])
         i=0
         for lbl, cnt, line_thickness, point_thickness in self.masks:
 
-            # print('lastcolor',self.label_color[lbl])
+            # #print('lastcolor',self.label_color[lbl])
             if select_list == ['All'] or i in select_list:
                 cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=line_thickness)
                 cv2.drawContours(masks_img, [cnt], 0, color=self.label_color[lbl], thickness=-1)
@@ -679,7 +679,7 @@ if __name__ == '__main__':
 
 
             if status=='lcn':
-                #print(mask_label.is_drawing_finish())
+                ##print(mask_label.is_drawing_finish())
                 mask_label.release()
 
 

@@ -4,10 +4,12 @@ from PySide6 import QtCore as sQtCore
 from PySide6.QtGui import QColor as sQColor
 from PySide6.QtCore import QObject as sQObject
 from PySide6.QtCore import Signal as sSignal
+from PySide6.QtGui import Qt
 from requests import head
 
 from backend import colors_pallete
 import train_api, texts
+
 
 
 # binary table headers
@@ -210,8 +212,9 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
                     sQtCore.Qt.ItemFlag.ItemIsUserCheckable
                     | sQtCore.Qt.ItemFlag.ItemIsEnabled
                 )
-                table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
+                # table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
             table_item.setForeground(sQColor(text_color))
+            table_item.setTextAlignment(Qt.AlignCenter)
             ui_obj.binary_history_tabel.setItem(row_idx, col_idx, table_item)
 
     try:
@@ -224,7 +227,7 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
 # show/set models history to UI tabel
 def set_bmodels_on_ui_tabel_edited_version(ui_obj, bmodels_list, model_type="binary"):
     # define table parameters
-    # print(len(bmodels_list))
+    # #print(len(bmodels_list))
     ui_obj.table_of_binary_classifaction_in_PBT_page.resizeColumnsToContents()
     ui_obj.table_of_binary_classifaction_in_PBT_page.setColumnCount(binary_table_ncols)
     if len(bmodels_list) != 0:
@@ -300,7 +303,7 @@ def save_new_binary_model_record(ui_obj, db_obj, bmodel_records):
     """
 
     # add
-    print(bmodel_records["weights_path"])
+    # #print(bmodel_records["weights_path"])
     if add_new_binary_model_to_db(db_obj=db_obj, new_bmodel_info=bmodel_records):
         ui_obj.notif_manager.append_new_notif(
             message=texts.MESSEGES["database_add_bmodel"][ui_obj.language], level=1
@@ -352,7 +355,8 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
                     )
                 ]
             else:
-                print("what the fuck!!!!!!!!1")
+                pass
+                # #print("what the fuck!!!!!!!!1")
 
             bmodel_info["epochs"] = ["", ""]
             bmodel_info["tuning_epochs"] = ["", ""]
@@ -975,7 +979,8 @@ def get_filtered_binary_models_from_db(
     elif model_type == "localization":
         model_type = "localiztion_models"
     else:
-        print("what the fuck!!!!!!!!!!!!")
+        pass
+        # #print("what the fuck!!!!!!!!!!!!")
 
     try:
         res, defects_list = db_obj.search_binary_model_by_filter(

@@ -125,7 +125,7 @@ class dataBaseUtils():
 
         defects_info=self.db.get_all_content(self.defects_table)
 
-        print('asdasd',defects_info)
+        #print('asdasd',defects_info)
         name_list=[]
         for i in range(len(defects_info)):
             name_list.append(defects_info[i]['name'])
@@ -142,11 +142,11 @@ if __name__ == '__main__':
     # records = db.load_coil_info(996)
     # db.get_camera_setting()
     db.set_dataset_path('G:/dataset/')
-    # print(db.get_dataset_path())
+    # #print(db.get_dataset_path())
 
     name,defects=db.get_defects()
-    print('name',name)
-    print('defe',defects)
+    #print('name',name)
+    #print('defe',defects)
 
 
     # db.get_path(['997', 'up', (5, 5)])

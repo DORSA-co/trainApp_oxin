@@ -1,5 +1,4 @@
 # from logging import _Level
-from __future__ import print_function
 import ast
 from email.mime import image
 from ntpath import join
@@ -100,6 +99,7 @@ from camera_live_thread import ImageManager
 from multiprocessing import Process
 import dataset_utils
 import image_processing_worker
+import save_all_worker
 import random
 
 # _______JJ importing:
@@ -187,7 +187,7 @@ class API:
         # binarylist dataset parms
         self.dataset_params = {}
 
-        self.ui.set_b_default_db_parms(self.ds.binary_path)
+        # self.ui.set_b_default_db_parms(self.ds.binary_path)
         self.ui.set_l_default_db_parms(self.ds.localization_path)
 
         self.logged_in = False
@@ -541,7 +541,8 @@ class API:
                     )
 
         else:
-            print("name not valid")
+            pass
+            # #print("name not valid")
 
     def check_name_pipline(self):
 
@@ -584,7 +585,7 @@ class API:
     def create_and_add_pipline(self):
 
         try:
-            # print(self.current_b_model)
+            # #print(self.current_b_model)
             # data = pipline_name,user_name,pipline path if save , binary_weight path , local weight path , class weight path
             data = (
                 self.ui.pipline_name.text(),
@@ -595,7 +596,7 @@ class API:
                 self.current_c_model["weights_path"],
             )  # path pipline null
             ret = self.db.add_pipline(data)
-            # print('ret',ret)
+            # #print('ret',ret)
             return ret
 
         except:
@@ -770,6 +771,7 @@ class API:
         self.ui.binary_train.clicked.connect(partial(self.set_b_parms))
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
+        self.ui.save_all_dataset_btn.clicked.connect(partial(self.save_all_train_ds))
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
         self.ui.suggested_defects_btn.clicked.connect(partial(self.image_processing_suggest))
         self.ui.checkBox_show_neighbours.stateChanged.connect(
@@ -806,8 +808,8 @@ class API:
         # labeling
 
         # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
-        self.ui.no_defect.toggled.connect(self.change_image_save_status)
-        self.ui.yes_defect.toggled.connect(self.change_image_save_status)
+        # self.ui.no_defect.toggled.connect(self.change_image_save_status)
+        # self.ui.yes_defect.toggled.connect(self.change_image_save_status)
 
         # data aquization
         self.ui.connect_camera_btn.clicked.connect(partial(self.connect_camera))
@@ -847,9 +849,9 @@ class API:
         self.ui.binary_clearfilter_btn.clicked.connect(partial(self.clear_filters))
 
         # binary-list
-        self.ui.binary_list.clicked.connect(
-            partial(lambda: self.refresh_datasets_table(is_binarylist=True))
-        )
+        # self.ui.binary_list.clicked.connect(
+        #     partial(lambda: self.refresh_datasets_table(is_binarylist=True))
+        # )
         # self.ui.binary_list_dataset_btn.clicked.connect(partial(lambda: self.select_binary_dataset(page='binarylist')))
         self.ui.binary_list_show_btn.clicked.connect(
             partial(self.load_binary_images_list)
@@ -1069,6 +1071,11 @@ class API:
         self.mouse.connet_dbclick(self.ui.crop_image, self.fit_image)
         self.mouse.connet_dbclick(self.ui.sn, self.maximize_neighbours)
 
+        self.mouse.connet_dbclick(self.ui.labeling_help_1, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_2, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_3, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_4, self.maximize_labeling_helps)
+
     def keyboard_connector(self):
         self.keyboard.connet(
             self.ui,
@@ -1258,7 +1265,8 @@ class API:
                 self.refresh_thechnical(fp=1)  #
 
         except:
-            print("Error!: load_sheet() in API")
+            pass
+            # #print("Error!: load_sheet() in API")
 
     # ----------------------------------------------------------------------------------------
     # when next next_coil_btn clicked this function move on next coil id and load it
@@ -1370,6 +1378,7 @@ class API:
         try:
             sheets = self.db.report_last_sheets(9999)
             self.ui.load_sheets_win.show_sheets_info(sheets)
+            self.ui.load_sheets_win.reset_search_lines()
             self.ui.data_loader_win_show()
             self.ui.load_sheets_win.set_warning(
                 texts.MESSEGES["refresh_success"][self.language], level=1
@@ -1550,7 +1559,7 @@ class API:
         cam, frame = self.thechnicals_backend[
             self.current_technical_side
         ].get_current_img_position()
-        # print(cam,frame, '^'*20)
+        # #print(cam,frame, '^'*20)
         if (frame < 0) or (cam < 0):
             self.ui.set_warning(
                 texts.WARNINGS["NO_CHOOSEN_IMG"][self.language],
@@ -1655,7 +1664,7 @@ class API:
                     if f:
                         self.label_memory.add(img_path, f, label_type)
                 
-                self.image_save_status[img_path] = True
+                self.image_save_status[img_path] = False
 
             self.ui.show_label_page()
             self.ui.show_small_neighbouring()
@@ -1683,7 +1692,7 @@ class API:
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
-    def load_image_to_label_page(self):
+    def load_image_to_label_page(self, fast=False):
         sheet, selected_img_pos, img_path = self.move_on_list.get_current(
             "selected_imgs_for_label"
         )
@@ -1692,17 +1701,20 @@ class API:
         self.img = Utils.read_image(img_path, "color")
         self.load_label_from_memory(img_path)
 
-        label_img = self.label_bakcend[label_type].draw(self.selected_defects)
-        self.img = Utils.add_layer_to_img(
-            self.img, label_img, opacity=0.4, compress=0.5
-        )
-        self.ui.show_image_in_label(self.img)
+        if not fast:
+            label_img = self.label_bakcend[label_type].draw(self.selected_defects)
+            self.img = Utils.add_layer_to_img(
+                self.img, label_img, opacity=0.4, compress=0.5
+            )
+            self.ui.show_image_in_label(self.img)
 
         labels = self.label_bakcend[label_type].get()
-        labels_name = []
-        for label in labels:
-            labels_name.append(self.defects_name_dict[label[0]])
-        self.ui.show_labels(labels, labels_name, label_type, self.selected_defects)
+        
+        if not fast:
+            labels_name = []
+            for label in labels:
+                labels_name.append(self.defects_name_dict[label[0]])
+            self.ui.show_labels(labels, labels_name, label_type, self.selected_defects)
 
         if len(labels) > 0:
             self.ui.yes_defect.setChecked(True)
@@ -1711,16 +1723,17 @@ class API:
             self.ui.yes_defect.setChecked(False)
             self.ui.no_defect.setChecked(True)
 
-        # print(self.label_bakcend[label_type].get())
-        # print(label, img_path)
+        # #print(self.label_bakcend[label_type].get())
+        # #print(label, img_path)
 
-        self.load_neighbour_images(selected_img_pos)
+        if not fast:
+            self.load_neighbour_images(selected_img_pos)
 
-        self.ui.show_image_info_lable_page(sheet, selected_img_pos)
+            self.ui.show_image_info_lable_page(sheet, selected_img_pos)
 
-        self.ui.image.setScaledContents(True)
-        self.scale = 1
-        self.position = [0, 0]
+            self.ui.image.setScaledContents(True)
+            self.scale = 1
+            self.position = [0, 0]
 
     def load_label_from_memory(self, img_path):
         for label_type in ["mask"]:
@@ -1782,9 +1795,10 @@ class API:
                 select_list=["All"]
             )
             self.n_anns.append(label_img)
-        # print(time.time() - t)
+        # #print(time.time() - t)
 
     def next_label_img(self):
+        # print(')))))))))))):', self.image_save_status)
         _, _, img_path = self.move_on_list.get_current(
             "selected_imgs_for_label"
         )
@@ -1850,9 +1864,9 @@ class API:
     def create_label_color(self):
         self.LABEL_COLOR = {"black": (0, 0, 0)}
         defect_name, defect_info = self.get_defects()
-        # print(len(defect_info),defect_info)
+        # #print(len(defect_info),defect_info)
         for i in range(len(defect_info)):
-            # print(defect_name[i], defect_info[i]["color"])
+            # #print(defect_name[i], defect_info[i]["color"])
             hex_color = defect_info[i]["color"].lstrip("#")
             rgb_color = tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))
             rgb = (rgb_color[2], rgb_color[1], rgb_color[0])
@@ -1860,7 +1874,7 @@ class API:
 
     def get_labels_color(self):
         defect_name, defect_info = self.get_defects()
-        # print(len(defect_info),defect_info)
+        # #print(len(defect_info),defect_info)
         colors = {}
         for i in range(len(defect_info)):
             hex_color = defect_info[i]["color"]
@@ -1973,19 +1987,26 @@ class API:
                 self.ui.image.setCursor(Qt.OpenHandCursor)
 
     def delete_all_labels(self):
-        label_type = self.ui.get_label_type()
-        sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
-        img = Utils.read_image(img_path, "color")
-        self.img = img
-        self.label_bakcend[label_type].clear_labels()
-        self.label_memory.remove_by_value(label_type, img_path)
-        self.ui.show_image_in_label(img, self.scale, self.position)
-        self.ui.show_labels([], [], label_type, [])
-        self.load_neighbour_images(pos)
-        self.image_save_status[img_path] = False
+        t = self.ui.show_question(
+                    texts.WARNINGS["question"][self.language],
+                    texts.MESSEGES["sure_delete"][self.language],
+                )
+        if not t:
+            return
+        else:
+            label_type = self.ui.get_label_type()
+            sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
+            img = Utils.read_image(img_path, "color")
+            self.img = img
+            self.label_bakcend[label_type].clear_labels()
+            self.label_memory.remove_by_value(label_type, img_path)
+            self.ui.show_image_in_label(img, self.scale, self.position)
+            self.ui.show_labels([], [], label_type, [])
+            self.load_neighbour_images(pos)
+            self.image_save_status[img_path] = False
 
     def select_defect(self):
-        # print(self.ui.mask_table_widget.selectedIndexes())
+        # #print(self.ui.mask_table_widget.selectedIndexes())
         self.selected_defects = []
         for i in range(self.ui.mask_table_widget.rowCount()):
             if self.ui.mask_table_widget.item(i, 0).checkState() == QtCore.Qt.Checked:
@@ -2023,9 +2044,10 @@ class API:
             current_mouse_position = self.mouse_controll.position
             sign_defect_table = self.db.ret_sign_defect_table()
             if sign_defect_table == 0:
-                print("nochange")
+                pass
+                # #print("nochange")
             else:
-                print("change")
+                # #print("change")
                 try:
                     self.defects_name, self.defects_info = self.db.get_defects()
                     self.find_defect_name()
@@ -2045,7 +2067,7 @@ class API:
                 partial(self.close_labeling)
             )
             self.ui.labeling_win.show()
-            print("end show_labeling")
+            # #print("end show_labeling")
 
     def auto_login(self):
         # self.show_login()
@@ -2074,7 +2096,7 @@ class API:
             login_window.login_btn.clicked.connect(partial(self.check_login))
             self.ui.login_window.show()
         else:
-            print("user_loged_in")
+            # #print("user_loged_in")
             self.show_message_logout()
 
     def show_message_logout(self):
@@ -2106,7 +2128,6 @@ class API:
         chart_funcs.clear_userprofile_barchart(self.ui)
 
     def check_login(self):
-
         self.login_info = self.login_api.check_login()
         if self.login_info[0] == True:
             self.ui.user_name.setText(
@@ -2125,7 +2146,7 @@ class API:
             self.set_databases()
             self.set_user_databases()
             self.set_default_dataset()
-            # print("*" * 50)
+            # #print("*" * 50)
 
     def set_parms_login_page(self, login_info):
         self.ui.user_name_2.setText(str(login_info[1]["user_name"]))
@@ -2139,7 +2160,7 @@ class API:
         self.ImageManager.set_user(self.login_user_name)
         self.ui.logger.set_current_user(self.login_user_name)
         self.ds_json.set_user_name_database(self.login_user_name)
-        # print('username:', self.login_user_name)
+        # #print('username:', self.login_user_name)
 
     def set_profile_page(self):
         if self.logged_in == True:
@@ -2157,7 +2178,7 @@ class API:
         self.datasets = self.db.get_all_datasets()
         for i in range(len(self.datasets)):
             dataset_names.append(self.datasets[i]["name"])
-        # print("dataset_names", dataset_names)
+        # #print("dataset_names", dataset_names)
         self.ui.comboBox_all_datasets.clear()
         self.ui.comboBox_all_datasets.addItems(dataset_names)
         self.update_table_all_datasets()
@@ -2187,11 +2208,11 @@ class API:
     def set_user_databases(self):
         dataset_names = []
         self.user_databases = self.db.get_user_databases(self.login_user_name)
-        # print("******************", self.user_databases)
+        # #print("******************", self.user_databases)
         self.user_default_databases = self.db.get_default_dataset(self.login_user_name)
         for i in range(len(self.user_databases)):
             dataset_names.append(self.user_databases[i]["name"])
-        # print("dataset_names", dataset_names)
+        # #print("dataset_names", dataset_names)
         self.ui.comboBox_user_datasets.clear()
         self.ui.comboBox_user_datasets.addItems(dataset_names)
         # self.ui.comboBox_default_dataset.addItems(dataset_names)
@@ -2202,7 +2223,7 @@ class API:
 
     def update_user_datasts(self):
         current = self.ui.comboBox_user_datasets.currentIndex()
-        # print('asd',self.user_databases[current].values)
+        # #print('asd',self.user_databases[current].values)
         self.ui.show_user_datasets(list(self.user_databases[current].values()))
         binary_count = self.ds_json.get_binary_count(
             os.path.join(
@@ -2372,7 +2393,7 @@ class API:
     def set_b_parms(self):
 
         if not self.runing_b_model :
-            print('statrt training binary model')
+            # #print('statrt training binary model')
             b_parms = self.ui.get_binary_parms()
             if not b_parms:
                 return
@@ -2483,7 +2504,7 @@ class API:
         # self.ui.localization_chart_checkbox.setChecked(True)
 
     def assign_new_value_to_l_chart(self, last_epoch, logs):
-        print("here", last_epoch, logs)
+        # #print("here", last_epoch, logs)
         chart_funcs.update_chart(
             ui_obj=self.ui,
             chart_postfixes=self.ui.loc_chart_names,
@@ -2580,6 +2601,47 @@ class API:
         self.ds_json.add_update_classification(image_name, labels)
         binary_count = self.ds_json.get_binary_count(None)
         chart_funcs.update_label_piechart(self.ui, binary_count)
+
+    def save_all_train_ds(self):
+        count = self.move_on_list.get_count("selected_imgs_for_label")
+        self.ui.save_all_progressBar.setValue(0)
+        self.ui.save_all_progressBar.setMaximum(count)
+
+        self.thread = sQThread()
+        # Step 3: Create a worker object
+        self.worker = save_all_worker.save_all_worker()
+        self.worker.assign_parameters(
+            api_obj=self,
+            count = count
+        )
+        # Step 4: Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Step 5: Connect signals and slots
+        self.thread.started.connect(self.worker.run)
+        self.worker.warning.connect(self.ui.set_warning)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker.finished.connect(self.save_all_finished)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.update_progressbar.connect(self.update_save_all_progressbar)
+        self.worker.question.connect(self.save_all_show_question)
+        # Step 6: Start the thread
+        self.thread.start()
+
+    def save_all_show_question(self, title, message):
+        self.save_all_question = self.ui.show_question(title, message)
+
+    def save_all_finished(self):
+        binary_count = self.ds_json.get_binary_count(None)
+        chart_funcs.update_label_piechart(self.ui, binary_count)
+        self.ui.set_warning(
+                texts.WARNINGS["IMAGES_SAVE_SUCCESSFULLY"][self.language],
+                "label",
+                level=1,
+            )
+
+    def update_save_all_progressbar(self):
+        self.ui.save_all_progressBar.setValue(self.ui.save_all_progressBar.value() + 1)
 
     def split_binary_dataset(self, paths, size):
         for path in paths:
@@ -3446,6 +3508,7 @@ class API:
         #
         self.refresh_binary_models_table(get_count=True)
         self.refresh_binary_models_table()
+        self.ui.clear_filters_fields()
         self.ui.set_warning(
             texts.MESSEGES["FILTERED_RESAULTS_CLEAR"][self.language],
             "binary_model_history",
@@ -4869,6 +4932,10 @@ class API:
                 annt = self.ui.sn.get_img()
                 self.ui.show_neighbouring(image, annt)
 
+    def maximize_labeling_helps(self, widget_name=""):
+        n = int(widget_name.split('_')[-1])
+        self.ui.maximize_labeling_help_images(n)
+
     def load_settings(self):
         (
             lan, 
@@ -4939,7 +5006,7 @@ class API:
         self.my_plc = plc_managment.management(ip, ui_obj=self.ui)
         self.connection_status = self.my_plc.connection()
         # parms=self.db.load_plc_parms()
-        # print(parms)
+        # #print(parms)
         #
         if self.connection_status:
             self.retry_connecting_plc = 0
@@ -5021,10 +5088,10 @@ class API:
         )
         # self.
 
-        # print('-'*50,self.up_high_threshold)
-        # print('88888888888888',self.dict_spec_pathes)
+        # #print('-'*50,self.up_high_threshold)
+        # #print('88888888888888',self.dict_spec_pathes)
 
-        # print('parms',self.parms)
+        # #print('parms',self.parms)
         return True
 
     def disconnect_plc(self, on_close=False, force_close=False):
@@ -5139,7 +5206,7 @@ class API:
                 self.ui.start_wind()
 
     def set_start_software_plc(self, mode):
-        print("software on plc ", str(mode))
+        # #print("software on plc ", str(mode))
         try:
 
             self.my_plc.set_value(self.dict_spec_pathes["MemSoftwareStart"], str(mode))
@@ -5152,10 +5219,10 @@ class API:
             self.sensor = self.my_plc.get_value(
                 self.dict_spec_pathes["MemDistanceSensor"]
             )
-            # print(self.sensor[0])
+            # #print(self.sensor[0])
             if self.sensor[0] == "-":
                 if not self.ui.manual_plc:
-                    # print(";" * 50)
+                    # #print(";" * 50)
                     self.sensor = False
             else:
                 self.sensor = bool(self.sensor[0])
@@ -5196,7 +5263,7 @@ class API:
                     message=texts.ERRORS["overhead_temp"][self.ui.language], level=3
                 )
         except:
-            # print('Except self.top_temp > self.up_high_threshold')
+            # #print('Except self.top_temp > self.up_high_threshold')
             pass
         #  self.up_high_threshold = self.my_plc.get_value(self.dict_spec_pathes["UpHighThreshold"])
         # self.up_low_threshold = self.my_plc.get_value(self.dict_spec_pathes["UpLowThreshold"])
@@ -5209,12 +5276,12 @@ class API:
                 self.sensor = False
                 if self.itr >= 20:
                     self.itr = 0
-            # print(self.itr)
+            # #print(self.itr)
             self.itr += 1
 
         # if self.sensor:
         #     self.init_check_plc()
-        # print(self.sensor)
+        # #print(self.sensor)
         if self.last_sensor != self.sensor:
             self.change_sensor_run()
 
@@ -5227,7 +5294,7 @@ class API:
             pass
 
     def change_sensor_run(self):
-        # print(self.ready_capture_flag)
+        # #print(self.ready_capture_flag)
         if self.ready_capture_flag:
             if self.sensor:
                 self.set_start_software_plc(True)

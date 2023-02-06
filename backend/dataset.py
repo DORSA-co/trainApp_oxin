@@ -68,7 +68,7 @@ class Dataset:
 
         self.format_image = ".png"
 
-        # print(self.dataset_path)
+        # #print(self.dataset_path)
 
         self.build_path()
 
@@ -132,7 +132,7 @@ class Dataset:
         #-------------
     
 
-        # print(self.annotations_folder)
+        # #print(self.annotations_folder)
         self.__creat_path__(self.dataset_path)
         self.__creat_path__(self.weights_path)
         self.__creat_path__(self.images_temp_path)

@@ -40,21 +40,21 @@ class dataBase:
             flag=True
             if connection.is_connected():
                 db_Info = connection.get_server_info()
-                print("Connected to MySQL Server version ", db_Info)
+                ##print("Connected to MySQL Server version ", db_Info)
                 cursor = connection.cursor()
                 cursor.execute("select database();")
                 record = cursor.fetchall()
-                print("You're connected to database: ", record)
+                ##print("You're connected to database: ", record)
                 return True
 
         except Error as e:
-            print("Error while connecting to MySQL", e)
+            ##print("Error while connecting to MySQL", e)
             return False
         finally:
             if flag and connection.is_connected():
                 cursor.close()
                 connection.close()
-            print("MySQL connection is closed")
+            ##print("MySQL connection is closed")
 
     
     def execute_quary(self,quary, cursor, connection,need_data=False, close=False):
@@ -72,7 +72,8 @@ class dataBase:
             else:
                 return cursor
         except Error as e:
-            print("Error while connecting to MySQL", e)
+            return e
+            ##print("Error while connecting to MySQL", e)
         
 
 
@@ -95,7 +96,7 @@ class dataBase:
             # mySql_insert_query=(mySql_insert_query,data)
             # self.execute_quary(mySql_insert_query, cursor, connection, close=False,need_data=True )
             connection.commit()
-            print(cursor.rowcount, "Record inserted successfully into images table")
+            ##print(cursor.rowcount, "Record inserted successfully into images table")
             cursor.close()
             return True
 
@@ -117,12 +118,12 @@ class dataBase:
                                     SET {} = {}
                                     WHERE {} ={} """.format(table_name, col_name, ("'"+value+"'"),id,id_value)
             
-            #print(mySql_insert_query)
+            ###print(mySql_insert_query)
             cursor.execute(mySql_insert_query)
             # mySql_insert_query=(mySql_insert_query,data)
             # self.execute_quary(mySql_insert_query, cursor, connection, close=False,need_data=True )
             connection.commit()
-            #print(cursor.rowcount, "Record Updated successfully ")
+            ###print(cursor.rowcount, "Record Updated successfully ")
             cursor.close()
             return True
 
@@ -142,7 +143,7 @@ class dataBase:
 
             self.execute_quary(mySql_delete_query, cursor, connection, False )
             connection.commit()
-            print(cursor.rowcount, "Remove successfully from table {}".format(table_name))
+            ##print(cursor.rowcount, "Remove successfully from table {}".format(table_name))
             cursor.close()
             return True
 
@@ -157,11 +158,11 @@ class dataBase:
             cursor=self.execute_quary(sql_select_Query, cursor, connection)
             # cursor.execute(sql_select_Query)
             records = cursor.fetchall()
-            print("Total number of rows in table: ", cursor.rowcount)
-            print(records)
+            ##print("Total number of rows in table: ", cursor.rowcount)
+            ##print(records)
             connection.close()
             cursor.close()
-            print("MySQL connection is closed")
+            ##print("MySQL connection is closed")
 
             field_names = [col[0] for col in cursor.description]
             res = []
@@ -190,8 +191,8 @@ class dataBase:
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
 
                 records = cursor.fetchall()
-                #print("Total number of rows in table: ", cursor.rowcount)
-                #print(len(records),records)
+                ###print("Total number of rows in table: ", cursor.rowcount)
+                ###print(len(records),records)
                 #----------------------------
                 
                 field_names = [col[0] for col in cursor.description]
@@ -207,7 +208,7 @@ class dataBase:
             return [],[]
 
         except:
-            print('No record Found')
+            ##print('No record Found')
             return [],[]
 
 
@@ -220,9 +221,10 @@ class dataBase:
                 cursor,connection=self.connect()
             sql_Delete_table = "DELETE FROM  {}.{};".format(db_name,table_name)
             cursor=self.execute_quary(sql_Delete_table, cursor, connection)       
-            print('delete')                                   
+            ##print('delete')                                   
         except mysql.connector.Error as e:
-            print("Error reading data from MySQL table", e)
+            return e
+            ##print("Error reading data from MySQL table", e)
 
 
     #--------------------------------------------------------------------------
@@ -238,7 +240,7 @@ class dataBase:
 
             field_names = [col[0] for col in cursor.description]
 
-            print(field_names)
+            ##print(field_names)
 
         return field_names
 
@@ -254,11 +256,11 @@ class dataBase:
             cursor=self.execute_quary(sql_select_Query, cursor, connection)
             # cursor.execute(sql_select_Query)
             records = cursor.fetchall()
-            print("Total number of rows in table: ", cursor.rowcount)
-            # print(records)
+            ##print("Total number of rows in table: ", cursor.rowcount)
+            # ##print(records)
             connection.close()
             cursor.close()
-            print("MySQL connection is closed")
+            ##print("MySQL connection is closed")
 
             field_names = [col[0] for col in cursor.description]
             res = []
@@ -294,7 +296,7 @@ if __name__ == "__main__":
 
     # x=db.report_last('users','id',30)
 
-    # print(x)
+    # ##print(x)
 
     # db.remove_record('1920', 'camera_settings')
 
@@ -307,7 +309,7 @@ if __name__ == "__main__":
     # db.report_last('coils_info','id',30) 
 
     # x=db.search('users','user_name','test')
-    # print(x)
+    # ##print(x)
 
 
 # report_last(self,table_name,parametr,count)

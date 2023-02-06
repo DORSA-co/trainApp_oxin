@@ -37,4 +37,4 @@ if __name__ == "__main__":
     l = [['a'], 'b', 2, 1, 5, 3,'g']
     idxs = [0]
 
-    print( get_selected_value(l,idxs))
+    #print( get_selected_value(l,idxs))

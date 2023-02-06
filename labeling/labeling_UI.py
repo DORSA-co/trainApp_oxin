@@ -127,7 +127,7 @@ class labeling(QMainWindow, ui):
         self.pos_ = self.pos()
         self.setWindowFlags(flags)
         # self.show()
-        print('set_on_top')
+        #print('set_on_top')
 
     def updte_table(self,records):
         """Set defect class information into table.
@@ -143,7 +143,7 @@ class labeling(QMainWindow, ui):
         self.tableWidget_defects.setHorizontalHeaderLabels(self.hh_Labels)
         table_item = QTableWidgetItem(str(records))
 
-        print('roeasdawd',records[self.hh_Labels[1]])
+        #print('roeasdawd',records[self.hh_Labels[1]])
 
         # Set informations to each columns.
         for row in range(len(self.hh_Labels)):
@@ -151,7 +151,7 @@ class labeling(QMainWindow, ui):
             table_item = QTableWidgetItem(records[self.hh_Labels[row]])
             # table_item.setData(Qt.DisplayRole, record)
             self.tableWidget_defects.setItem(0,row,table_item)
-        #     print('eror')
+        #     #print('eror')
 
     def get_label_name(self):
         """Get current selected defect classs from combobox.

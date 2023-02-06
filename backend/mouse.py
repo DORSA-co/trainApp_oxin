@@ -55,7 +55,6 @@ class Mouse:
         widget.mouseReleaseEvent =self.mouse_event(widget , function)
         widget.mouseMoveEvent = self.mouse_event(widget, function)
 
-
     def get_position(self):
         return self.x, self.y
 

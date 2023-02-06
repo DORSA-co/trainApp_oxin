@@ -76,6 +76,7 @@ os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100
 
 
 DEBUG_UI = False
+SHAMSI_DATE = False
 
 
 class UI_main_window(QMainWindow, ui):
@@ -187,8 +188,8 @@ class UI_main_window(QMainWindow, ui):
         self.classification_training.clicked.connect(self.buttonClick)
         self.classification_history.clicked.connect(self.buttonClick)
 
-        self.yes_defect.clicked.connect(self.buttonClick)
-        self.no_defect.clicked.connect(self.buttonClick)
+        self.yes_defect.toggled.connect(self.buttonClick)
+        self.no_defect.toggled.connect(self.buttonClick)
         # login btn
         self.login_btn.clicked.connect(self.buttonClick)
         self.setting_btn.clicked.connect(self.buttonClick)
@@ -544,6 +545,8 @@ class UI_main_window(QMainWindow, ui):
         # self.fontDB.addApplicationFont("font/digital-7.ttf")
         # self.setFont(QtGui.QFont("Bariol", 18))
 
+        self.show_labeling_help()
+
     def showTime(self):
 
         # getting current time
@@ -866,19 +869,19 @@ class UI_main_window(QMainWindow, ui):
 
             # SET MAX WIDTH
             if width == 60:
-                # print('OPEN')
+                # #print('OPEN')
                 self.toggleButton.setStyleSheet(
                     "background-image: url(:/icons/images/icons/t2.png);"
                 )
                 widthExtended = maxExtend
-                # print(widthExtended)
+                # #print(widthExtended)
             else:
                 self.toggleButton.setStyleSheet(
                     "background-image: url(:/icons/images/icons/t1.png);"
                 )
-                # print('Close')
+                # #print('Close')
                 widthExtended = standard
-                # print(widthExtended)
+                # #print(widthExtended)
 
             # ANIMATION
             self.animation = QPropertyAnimation(self.leftMenuBg, b"minimumWidth")
@@ -907,23 +910,23 @@ class UI_main_window(QMainWindow, ui):
 
             # SET MAX WIDTH
             if width != 0:
-                print("OPEN")
+                # #print("OPEN")
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
                 self.set_btn_image(self.btn_technical_move, "UI/images/images/left.png")
                 widthExtended = maxExtend
-                # print(widthExtended)
+                # #print(widthExtended)
             else:
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
                 self.set_btn_image(
                     self.btn_technical_move, "UI/images/images/fast-forward.png"
                 )
 
-                print("Close")
+                # #print("Close")
                 widthExtended = standard
-                # print(widthExtended)
+                # #print(widthExtended)
 
             # ANIMATION
-            print("width", width)
+            # #print("width", width)
             self.animation = QPropertyAnimation(self.frame_413, b"maximumWidth")
             self.animation.setDuration(Settings.TIME_ANIMATION)
             self.animation.setStartValue(width)
@@ -936,7 +939,7 @@ class UI_main_window(QMainWindow, ui):
             # self.animation.setEndValue(widthExtended)
             # self.animation.setEasingCurve(QEasingCurve.InOutQuart)
             # self.animation.start()
-            print("start")
+            # #print("start")
 
     # TOGGLE LEFT BOX
     # ///////////////////////////////////////////////////////////////
@@ -986,14 +989,14 @@ class UI_main_window(QMainWindow, ui):
             right_width = 240
         else:
             right_width = 0
-            # print('ok')
+            # #print('ok')
         # ANIMATION LEFT BOX
         self.left_box = QPropertyAnimation(self.extraLeftBox, b"minimumWidth")
         self.left_box.setDuration(Settings.TIME_ANIMATION)
         self.left_box.setStartValue(left_box_width)
         self.left_box.setEndValue(left_width)
         self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
-        # print('ok',left_width)
+        # #print('ok',left_width)
         self.group = QParallelAnimationGroup()
         self.group.addAnimation(self.left_box)
         # self.group.addAnimation(self.right_box)
@@ -1007,7 +1010,7 @@ class UI_main_window(QMainWindow, ui):
             self.minHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"minimumHeight")
             self.minHeight.setDuration(300)
             self.minHeight.setStartValue(h)
-            self.minHeight.setEndValue(200)
+            self.minHeight.setEndValue(165)
             self.minHeight.setEasingCurve(sQtCore.QEasingCurve.InOutQuart)
             self.group = sQtCore.QParallelAnimationGroup()
             self.group.addAnimation(self.minHeight)
@@ -1015,7 +1018,7 @@ class UI_main_window(QMainWindow, ui):
             self.maxHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"maximumHeight")
             self.maxHeight.setDuration(300)
             self.maxHeight.setStartValue(h)
-            self.maxHeight.setEndValue(200)
+            self.maxHeight.setEndValue(206)
             self.maxHeight.setEasingCurve(sQtCore.QEasingCurve.InOutQuart)
             self.group.addAnimation(self.maxHeight)
             self.group.start()
@@ -1057,15 +1060,15 @@ class UI_main_window(QMainWindow, ui):
 
             # SET MAX WIDTH
             if width == 0:
-                # print('OPEN')
+                # #print('OPEN')
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
                 widthExtended = maxExtend
-                # print(widthExtended)
+                # #print(widthExtended)
             else:
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
-                # print('Close')
+                # #print('Close')
                 widthExtended = standard
-                # print(widthExtended)
+                # #print(widthExtended)
 
             # ANIMATION
             self.animation = QPropertyAnimation(self.label_dorsa, b"minimumWidth")
@@ -1108,7 +1111,7 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.left_box)
             # self.group.addAnimation(self.right_box)
             self.group.start()
-            # print('no ani')
+            # #print('no ani')
         elif height == 40:
             self.left_box = QPropertyAnimation(self.frame_settin2, b"maximumHeight")
             self.left_box.setDuration(Settings.TIME_ANIMATION)
@@ -1306,7 +1309,7 @@ class UI_main_window(QMainWindow, ui):
 
         for row, record in enumerate(records):
             # for i in range(11):
-            # print(i)
+            # #print(i)
             record = "{} - {} - {}".format(record[0], record[1], (record[2]))
             
             table_item = QTableWidgetItem(str(record))
@@ -1317,7 +1320,7 @@ class UI_main_window(QMainWindow, ui):
             table_item.setCheckState(Qt.CheckState.Unchecked)
             table_item.setData(Qt.DisplayRole, record)
             self.listWidget_append_img_list.setItem(row, 0, table_item)
-            # print(table_item)
+            # #print(table_item)
 
     def get_selected_img(self):
         """Return the table of selected Images in Data aquization page
@@ -1489,6 +1492,13 @@ class UI_main_window(QMainWindow, ui):
         else:
             self.n = neighbouring(img, has_annotation=False, lang=self.language)
         self.n.show()
+
+    def maximize_labeling_help_images(self, n):
+        path = 'images/labeling_helps'
+        help_images = os.listdir(path)
+        img = cv2.imread(os.path.join(path, help_images[n-1]))
+        self.n_help = neighbouring(img, annotated_image=texts.ERRORS["annotation_not_exist"][self.language], lang=self.language)
+        self.n_help.show()
 
     def show_small_neighbouring(self):
         """Show neighbours Window"""
@@ -1666,21 +1676,13 @@ class UI_main_window(QMainWindow, ui):
             message (str) : set message of window
         Return (bool) : True/False
         """
-        # msg = QMessageBox.question(
-        #     self, title, message, QMessageBox.Yes | QMessageBox.No, QMessageBox.No
-        # )
-        # if msg == QMessageBox.Yes:
-        #     return True
-        # if msg == QMessageBox.No:
-        #     return False
-
-        messageBox = QMessageBox(self)
+        messageBox = sQMessageBox(self)
         messageBox.setWindowTitle(title)
-        messageBox.setIcon(QMessageBox.Question)
+        messageBox.setIcon(sQMessageBox.Question)
         messageBox.setInformativeText(message)
         
-        buttonoptionA = messageBox.addButton(texts.Titles['yes'][self.language], QMessageBox.YesRole)    
-        buttonoptionB = messageBox.addButton(texts.Titles['no'][self.language], QMessageBox.NoRole)  
+        buttonoptionA = messageBox.addButton(texts.Titles['yes'][self.language], sQMessageBox.YesRole)    
+        buttonoptionB = messageBox.addButton(texts.Titles['no'][self.language], sQMessageBox.NoRole)  
         messageBox.setDefaultButton(buttonoptionB)
         
         messageBox.exec_()
@@ -1726,11 +1728,10 @@ class UI_main_window(QMainWindow, ui):
         self.heatmap_btn.setEnabled(True)
         self.checkBox_show_neighbours.setEnabled(True)
         self.checkBox_show_neighbours_labels.setEnabled(True)
-        self.yes_defect.setEnabled(True)
-        self.no_defect.setEnabled(True)
+        # self.yes_defect.setEnabled(True)
+        # self.no_defect.setEnabled(True)
         self.save_dataset_btn.setEnabled(True)
-        # self.yes_defect.setChecked(False)
-        # self.no_defect.setChecked(True)
+        self.save_all_dataset_btn.setEnabled(True)
         self.fs = QImage(
             img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
         )
@@ -1752,7 +1753,6 @@ class UI_main_window(QMainWindow, ui):
         :return: end draw position
         :rtype: tuple
         """
-        print("updateeeeeeeeeeeeeeeeeeeee")
         pixmap = QPixmap(self.image.size())
         px, py = position
         px = (
@@ -2232,8 +2232,6 @@ class UI_main_window(QMainWindow, ui):
         self.my_ds_owner_user.setText(str(records[2]))
         self.my_ds_path.setText(str(records[3]))
 
-    # def ret_btn_
-
     def buttonClick(self):
         # GET BUTTON CLICKED
         btn = self.sender()
@@ -2496,7 +2494,8 @@ class UI_main_window(QMainWindow, ui):
             self.def_no_defect()
 
         if btnName == "login_btn":
-            print("click")
+            pass
+            # #print("click")
             # self.show_login()
 
         if btnName == "setting_btn":
@@ -2521,11 +2520,11 @@ class UI_main_window(QMainWindow, ui):
             # self.stackedWidget.setCurrentWidget(self.page_software_setting)
 
         if btnName == "load_coil_btn":
-            # print('asdqwdwqd')
+            # #print('asdqwdwqd')
             self.data_loader_win_show()
 
         if btnName == "checkBox_select":
-            # print('asdqwdwqd')
+            # #print('asdqwdwqd')
 
             self.select_unselect_all()
 
@@ -2828,11 +2827,7 @@ class UI_main_window(QMainWindow, ui):
         self.plabel_coil_num_txt.setText(str(sheet.get_id()))
         self.plabel_date_txt.setText(str(sheet.get_date_string()))
         self.plabel_cam_txt.setText(str(pos[-1][0]))
-
-    def show_image_info_lable_page(self, sheet, pos):
-        self.plabel_coil_num_txt.setText(str(sheet.get_id()))
-        self.plabel_date_txt.setText(str(sheet.get_date_string()))
-        self.plabel_cam_txt.setText(str(pos[-1][0]))
+        self.plabel_frame_txt.setText(str(pos[-1][1]))
 
     def show_image_btn(self, label_name, img_path):
         """set pixmap btn icon with input image path"""
@@ -2903,7 +2898,7 @@ class UI_main_window(QMainWindow, ui):
                 self.show_mesagges_thread_lock = True
 
                 # timer to clear the message
-                print("show_mesagges_thread_lock True")
+                # #print("show_mesagges_thread_lock True")
                 QTimer.singleShot(2000, lambda: self.show_mesagges(label_name))
 
         # clear the message after timeout
@@ -3015,6 +3010,37 @@ class UI_main_window(QMainWindow, ui):
                 self.start_wind_btn.setEnabled(True)
                 api.set_wind(False)
 
+    def clear_filters_fields(self):
+        self.binary_epoch_min_filter_lineedit.clear()
+        self.binary_epoch_max_filter_lineedit.clear()
+        self.binary_tepoch_min_filter_lineedit.clear()
+        self.binary_tepoch_max_filter_lineedit.clear()
+        self.binary_batch_min_filter_lineedit.clear()
+        self.binary_batch_max_filter_lineedit.clear()
+        self.binary_split_min_filter_lineedit.clear()
+        self.binary_split_max_filter_lineedit.clear()
+        self.binary_loss_min_filter_lineedit.clear()
+        self.binary_loss_max_filter_lineedit.clear()
+        self.binary_acc_min_filter_lineedit.clear()
+        self.binary_acc_max_filter_lineedit.clear()
+        self.binary_prec_min_filter_lineedit.clear()
+        self.binary_prec_max_filter_lineedit.clear()
+        self.binary_rec_min_filter_lineedit.clear()
+        self.binary_rec_max_filter_lineedit.clear()
+        self.binary_start_year_lineedit.clear()
+        self.binary_start_month_lineedit.clear()
+        self.binary_start_day_lineedit.clear()
+        self.binary_end_year_lineedit.clear()
+        self.binary_end_month_lineedit.clear()
+        self.binary_end_day_lineedit.clear()
+
+    def show_labeling_help(self, n_helps=4):
+        path = 'images/labeling_helps'
+        help_images = os.listdir(path)
+        for i in range(n_helps):
+            img = cv2.imread(os.path.join(path, help_images[i]))
+            image = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
+            exec('self.labeling_help_{}.setPixmap(QPixmap.fromImage(image))'.format(i+1))
 
 if __name__ == "__main__":
     app = QApplication()

@@ -211,7 +211,7 @@ class Pipeline:
         """this function is used to save pipeline json object to path as a file"""
 
         try:
-            print(self.pipline_json[PIPELINE_ROOT])
+            #print(self.pipline_json[PIPELINE_ROOT])
             json_path = os.path.join(
                 self.pipline_json[PIPELINE_ROOT],
                 "%s-%s-%s.json"
@@ -221,12 +221,12 @@ class Pipeline:
                     self.pipline_json[TIME_CREATED],
                 ),
             )
-            print(json_path)
+            #print(json_path)
             with open(json_path, "w") as f:
                 json.dump(self.pipline_json, f)
             f.close()
 
-            print(";" * 50)
+            #print(";" * 50)
 
         except:
             try:
@@ -238,7 +238,8 @@ class Pipeline:
                 f.close()
 
             except Exception as e:
-                print(e)
+                pass
+                #print(e)
 
     def load_json(self):
         """this function is used to load pipline info from json file"""
@@ -263,7 +264,8 @@ class Pipeline:
             return self.pipline_json
 
         except Exception as e:
-            print(e)
+            pass
+            #print(e)
 
     def set(self, key, value):
         self.pipline_json[key] = value
@@ -296,7 +298,7 @@ def load_all_json_files(dir_path):
         for path in os.listdir(dir_path):
             # check if current path is a file
             if os.path.isfile(os.path.join(dir_path, path)) and path[-4:] == "json":
-                print(path)
+                #print(path)
                 with open(os.path.join(dir_path, path), "r") as f:
                     res.append(json.load(f))
         return len(res), res
@@ -403,7 +405,7 @@ def load_all_json_files_by_date(dir_path, reverse=False):
 
         path = os.path.normpath(path)
         if path[-4:] == "json":
-            # print(path)
+            # #print(path)
             with open(path, "r") as f:
                 res.append(json.load(f))
     return len(res), res
@@ -731,9 +733,9 @@ def filter_metrics_min_max(min_filter_param, max_filter_param, value):
 #     #     cv2.waitKey(1000)
 #     #     x.save_json()
 #     # len_,file_paths=load_all_json_files_by_date('evaluated_jsons')
-#     # print(file_paths)
+#     # #print(file_paths)
 #     d=4
 #     s='d;dv'
-#     print(type(x))
-#     print(type(d))
-#     print(type(s))
+#     #print(type(x))
+#     #print(type(d))
+#     #print(type(s))

@@ -28,7 +28,8 @@ class Button(QPushButton):
         super().mousePressEvent(e)
 
         if e.button() == Qt.LeftButton:
-            print('press')
+            pass
+            # #print('press')
 
 
 class Example(QWidget):

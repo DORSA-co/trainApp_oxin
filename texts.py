@@ -355,6 +355,9 @@ WARNINGS = {
     'IMAGE_STATUS': {'fa': ' وضعیت عیب تصویر مشخص نشده است ',
                      'en': ' defect status is not specified '},
 
+    'IMAGE_STATUS_Format': {'fa': ' وضعیت عیب تصویر {} مشخص نشده است ',
+                     'en': ' defect status of image {} is not specified '},
+
     'NO_IMAGE_LOADED': {'fa': ' تصویری بارگذاری نشده است ',
                         'en': ' No image loaded '},
 
@@ -364,16 +367,21 @@ WARNINGS = {
     'question': {'fa': ' سوال ',
                             'en': ' Question '},
 
-    'ALREADY_SAVED_DEFECT':
-        {
-            'fa': ' تصویر قبلا با وضعیت عیب "بله" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "خیر" ذخیره کنید؟ ',
-            'en': 'Image already saved with defect status "Yes". Are you sure you want to save it with defect '
-                  'status "No" '},
+    'ALREADY_SAVED_DEFECT':{
+            'fa': ' تصویر قبلا به عنوان معیوب ذخیره شده است. آیا مطمئنید که می‌خواهید آن را به عنوان سالم ذخیره کنید؟ ',
+            'en': 'The image has already been saved as defective. Are you sure you want to save it as healthy?'},
+
+    'ALREADY_SAVED_DEFECT_Format':{
+            'fa': ' تصویر {} قبلا به عنوان معیوب ذخیره شده است. آیا مطمئنید که می‌خواهید آن را به عنوان سالم ذخیره کنید؟ ',
+            'en': 'The image {} has already been saved as defective. Are you sure you want to save it as healthy?'},
 
     'ALREADY_SAVED_PERFECT': {
-        'fa': ' تصویر قبلا با وضعیت عیب "خیر" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "بله" ذخیره کنید؟ ',
-        'en': 'Image already saved with defect status "No". Are you sure you want to save it with defect '
-              'status "Yes" '},
+        'fa': ' تصویر قبلا به عنوان سالم ذخیره شده است. آیا مطمئنید که می‌خواهید آن را به عنوان معیوب ذخیره کنید؟ ',
+        'en': 'The image has already been saved as healthy. Are you sure you want to save it as defective?'},
+
+    'ALREADY_SAVED_PERFECT_Format': {
+        'fa': ' تصویر {} قبلا به عنوان سالم ذخیره شده است. آیا مطمئنید که می‌خواهید آن را به عنوان معیوب ذخیره کنید؟ ',
+        'en': 'The image {} has already been saved as healthy. Are you sure you want to save it as defective?'},
 
     'INVALID_DATASET': {'fa': ' آدرس مجموعه داده معتبر نیست ',
                         'en': ' Dataset address is invalid '},
@@ -381,8 +389,11 @@ WARNINGS = {
     'DATASET_FORMAT': {'fa': ' قالب مجموعه داده صحیح نیست ',
                        'en': ' Dataset format is incorrect '},
 
-    'IMAGE_SAVE_SUCCESSFULLY': {'fa': 'موفقیت ذخیره شد',
-                                'en': ' Image Saved '},
+    'IMAGE_SAVE_SUCCESSFULLY': {'fa': 'تصویر با موفقیت ذخیره شد',
+                                'en': 'Image saved successfully'},
+
+    'IMAGES_SAVE_SUCCESSFULLY': {'fa': 'تصاویر با موفقیت ذخیره شدند',
+                                'en': 'Images saved successfully'},
 
     'DATASET_NUMBER': {'fa': ' شماره ی مجموعه داده خارج از محدوده است ',
                        'en': ' Dataset number is out of range '},
@@ -487,6 +498,9 @@ WARNINGS = {
 
     'WRONGE_MASK': {'fa': ' وضعیت یا ماسک اشتباه است ',
                     'en': ' Status or mask is wrong '},
+
+    'WRONGE_MASK_Format': {'fa': ' وضعیت یا ماسک تصویر {} اشتباه است ',
+                    'en': ' Status or mask of image {} is wrong '},
 
     'training_params_invalid': {'fa': 'پارامترهای آموزشی نامعتبرند',
                     'en': 'Training a arametrs are invalid'},
@@ -729,11 +743,14 @@ MESSEGES = {
     'Camera_successful': {'fa': ' دوربین {} با موفقیت متصل شد ',
                            'en': ' Camera {} connected successfuly '},
 
-    'Disconnect_camera_successful': {'fa':'قطع اتصال دوربین با م.فقیت انجام شد',
+    'Disconnect_camera_successful': {'fa':'قطع اتصال دوربین با موفقیت انجام شد',
                         'en':'Camera disconnected successfuly'},
 
     'changes_not_saved': {'fa': 'تغییرات ذخیره نشده است. میخواهید ادامه دهید؟', 
                         'en': 'Changes are not saved. Do you want to continue?'},
+
+    'sure_delete': {'fa': 'آیا مطمئن هستید که می خواهید همه چند ضلعی ها را حذف کنید؟', 
+                        'en': 'Are you sure you want to delete all polygons?'},
 
     'exit_confirm': {'fa': 'آیا مطمئن هستید که میخواهید خارج شوید؟',
                 'en': 'Are you sure you want to exit?'},
@@ -1088,20 +1105,29 @@ Titles = {
         'c_barchart': {'fa': 'نمودار میله ای کلاس های عیب',
                         'en': 'Defect Classes BarChart'},
 
-        'date': {'fa': ':تاریخ',
-                'en': 'Date:'},
+        'date': {'fa': ': تاریخ',
+                'en': 'Date :'},
 
-        'coil_number': {'fa': ':شماره ورق',
-                'en': 'Coil Number:'},
+        'coil_number': {'fa': ': شماره ورق',
+                'en': 'Coil Number :'},
 
-        'cam_number': {'fa': ':شماره دوربین',
-                'en': 'Cam Number:'},
+        'cam_number': {'fa': ': شماره دوربین',
+                'en': 'Cam Number :'},
+
+        'frame_number': {'fa': ': شماره فریم',
+                'en': 'Frame Number :'},
 
         'show_neighbours': {'fa': 'نمایش تصاویر همسایه',
                 'en': 'Show Neighbours'},
 
         'show_neighbours_labels': {'fa': 'نمایش برچسب تصاویر همسایه',
                 'en': 'Show Neighbours labels'},
+
+        'line_thickness': {'fa': ': ضخامت خط',
+                'en': 'Line Thickness :'},
+
+        'point_thickness': {'fa': ': ضخامت نقطه',
+                'en': 'Point Thickness :'},
 
         'defect': {'fa': ':معیوب',
                 'en': 'Defect:'},
@@ -1120,6 +1146,9 @@ Titles = {
 
         'save': {'fa': 'ذخیره',
                 'en': 'Save'},
+
+        'save_all': {'fa': 'ذخیره‌ی همه',
+                'en': 'Save All'},
 
         'masks': {'fa': 'ماسک ها',
                 'en': 'Masks'},
@@ -1842,6 +1871,9 @@ def set_title(self, lang):
     self.label_13.setText(Titles['date'][lang])
     self.label_22.setText(Titles['coil_number'][lang])
     self.label_121.setText(Titles['cam_number'][lang])
+    self.label_288.setText(Titles['frame_number'][lang])
+    self.label_285.setText(Titles['line_thickness'][lang])
+    self.label_286.setText(Titles['point_thickness'][lang])
     self.checkBox_show_neighbours.setText(Titles['show_neighbours'][lang])
     self.checkBox_show_neighbours_labels.setText(Titles['show_neighbours_labels'][lang])
 
@@ -1850,6 +1882,7 @@ def set_title(self, lang):
     self.yes_defect.setText(Titles['yes'][lang])
     self.label_220.setText(Titles['masks'][lang])
     self.save_dataset_btn.setText(Titles['save'][lang])
+    self.save_all_dataset_btn.setText(Titles['save_all'][lang])
     self.binary_chart_frame_label.setTitle(Titles['df_piechart'][lang])
 
     self.mask_table_widget.horizontalHeader().setVisible(True)
@@ -2217,6 +2250,9 @@ def set_alignment(self, lang):
         self.label_13.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_22.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_121.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_288.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_285.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_286.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_137.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_144.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2398,6 +2434,9 @@ def set_alignment(self, lang):
         self.label_13.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_22.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_121.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_288.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_285.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_286.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_137.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_144.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)

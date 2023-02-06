@@ -27,8 +27,8 @@ class dataBaseUtils():
 
         try:
             record = self.db.search( self.table_user , 'user_name', str(input_user_name) )[0]
-            #print('asd',record)
-            print('rec',record)
+            ##print('asd',record)
+            # #print('rec',record)
             return record
         except:
             return []
@@ -37,18 +37,18 @@ class dataBaseUtils():
     def search_camera_by_ip(self, input_camera_ip):
         try:
             record = self.db.search( self.table_cameras , 'ip_address', input_camera_ip)[0]
-            #print('asd',record)
+            ##print('asd',record)
             return record
         except:
             return []
     
 
     def load_cam_params(self, input_camera_id):
-        print('asdwa')
+        # #print('asdwa')
         try:
             record = self.db.search( self.table_cameras , 'id', input_camera_id )[0]
-            #print('camera info:', record)
-            print('recor',record)
+            ##print('camera info:', record)
+            # #print('recor',record)
             return record
         except:
             return []
@@ -73,7 +73,7 @@ class dataBaseUtils():
     def load_general_setting_params(self):
         try:
             record = self.db.search( self.table_general_settings , self.general_settings_id, '0' )[0]
-            #print('camera info:', record)
+            ##print('camera info:', record)
             return record
         except:
             return []
@@ -99,7 +99,7 @@ class dataBaseUtils():
 
     def add_user(self,parms):
         data=(parms['user_id'],parms['user_pass'],parms['user_role'])
-        print(data)
+        # #print(data)
         try:
             self.db.add_record(data, table_name='users', parametrs='(user_name,password,role)', len_parameters=3)
             return 'True'
@@ -111,17 +111,17 @@ class dataBaseUtils():
 
     def set_image_processing_parms(self,data):
 
-        # print(data[0])
+        # #print(data[0])
         # self.db.update_record(table_name='image_processing', col_name=col_name[i], value=data[col_name[i]], id='id', id_value='0')
-        print('asd',data)
+        # #print('asd',data)
 
         col_name=['block_size','defect','noise']
 
-        print('asdwqd',data[col_name[0]])
+        # #print('asdwqd',data[col_name[0]])
 
         for i in range(3):
 
-            # print(data[i])
+            # #print(data[i])
 
             self.db.update_record(table_name='image_processing', col_name=col_name[i], value=str(data[col_name[i]]), id='id', id_value='0')
 
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     # records = db.load_coil_info(996)
     # db.get_camera_setting()
     #db.set_dataset_path('G:/dataset/')
-    # print(db.get_dataset_path())
+    # #print(db.get_dataset_path())
 
     # db.get_path(['997', 'up', (5, 5)])
     # pass
@@ -161,4 +161,4 @@ if __name__ == '__main__':
 
     x=db.get_dataset_path()
 
-    print(x)
+    # #print(x)

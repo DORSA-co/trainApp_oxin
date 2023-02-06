@@ -73,6 +73,6 @@ class CustomCallback(keras.callbacks.Callback):
 
         # keys = list(logs.keys())
         # values = list(logs.values())
-        # print("\nEnd epoch {} of training; got log keys: {} got log values {}\n".format(epoch, keys, values))
+        # #print("\nEnd epoch {} of training; got log keys: {} got log values {}\n".format(epoch, keys, values))
 
 

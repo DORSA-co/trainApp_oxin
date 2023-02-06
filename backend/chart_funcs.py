@@ -401,7 +401,7 @@ def update_classlist_piechart(ui_obj, binary_len, classes_len, classes_list):
 
         # classes
         # convert len to percentage
-        #print('defects', classes_list)
+        ##print('defects', classes_list)
         for cls in classes_list:
             cls_id = str(cls['defect_ID'])
             #

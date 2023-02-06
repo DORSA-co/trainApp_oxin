@@ -222,7 +222,7 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         # api_obj.ui.set_warning(texts.ERRORS['SAVE_FTBMODEL_FAILED'][api_obj.language], 'train', level=3)
         return (False, (texts.ERRORS['SAVE_FTBMODEL_FAILED'][api_obj.language], 'train', 3))
 
-    #print('model history:', history.history)
+    ##print('model history:', history.history)
     
     try:
         binary_algorithm_name = ALGORITHM_NAMES['binary'].index(binary_algorithm_name)

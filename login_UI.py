@@ -101,7 +101,7 @@ class UI_main_window(QMainWindow, ui):
 
     #///////////////////// LANGUAGE
     # def set_language(self):
-    #     print(detect_lenguage.language())
+    #     #print(detect_lenguage.language())
     #     if detect_lenguage.language()=='Persian(فارسی)':
     #         detect_lenguage.main_window(self)
     
@@ -117,15 +117,15 @@ class UI_main_window(QMainWindow, ui):
 
     #         # SET MAX WIDTH
     #         if width == 0:
-    #             #print('OPEN')
+    #             ##print('OPEN')
     #             # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
     #             widthExtended = maxExtend
-    #             #print(widthExtended)
+    #             ##print(widthExtended)
     #         else:
     #             # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
-    #             #print('Close')
+    #             ##print('Close')
     #             widthExtended = standard
-    #             #print(widthExtended)
+    #             ##print(widthExtended)
 
     #         # ANIMATION
     #         self.animation = QPropertyAnimation(self.label_dorsa, b"minimumWidth")

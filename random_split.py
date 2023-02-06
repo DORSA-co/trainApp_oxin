@@ -179,7 +179,7 @@ def get_crops_no_defect2(img, n_split, size):
     n_crops = sorted(n_crops)
     for i in n_crops:
         img_crops.append(temp_img_crops[i])
-    # print(n_crops)
+    # #print(n_crops)
     img_crops = np.array(img_crops)
 
     return img_crops
@@ -210,7 +210,7 @@ if __name__ == '__main__':
         img_crops, mask_crops = get_crops(img, mask)
         # img_crops = get_crops_no_defect(img, 10)
         # img_crops = get_crops_no_defect2(img, 10)
-        print((time.time() - t) * 1000)
+        #print((time.time() - t) * 1000)
         # for ic, mc in zip(img_crops, mask_crops):
         #     cv2.imshow('img', ic)
         #     cv2.imshow('mask', mc)

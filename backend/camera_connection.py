@@ -93,7 +93,7 @@ class Collector():
         else:
             for device in devices:
                 camera = pylon.InstantCamera(self.__tl_factory.CreateDevice(device))
-                print(camera.GetDeviceInfo().GetSerialNumber())
+                # print(camera.GetDeviceInfo().GetSerialNumber())
                 if camera.GetDeviceInfo().GetSerialNumber() == self.serial_number:
                     self.camera = camera
                 
@@ -131,8 +131,8 @@ class Collector():
 
 
         try:
-            print(self.camera.IsOpen())
-            print(device_info.GetSerialNumber())
+            # print(self.camera.IsOpen())
+            # print(device_info.GetSerialNumber())
 
             self.camera.Open()
             
@@ -140,7 +140,7 @@ class Collector():
 
                 
                 if model=='PRO':
-                    print('yes pro')
+                    # print('yes pro')
                     # print(self.camera.DeviceTemperature.GetValue())
                     self.camera.ExposureTime.SetValue(self.exposure)
 
@@ -213,10 +213,11 @@ class Collector():
                 self.camera.TriggerSelector.SetValue('FrameStart')
                 self.camera.TriggerMode.SetValue('On')
                 self.camera.TriggerSource.SetValue(self.trigger_source)
-                print('triggeron on %s' % self.trigger_source)
+                # print('triggeron on %s' % self.trigger_source)
             else:
+                pass
                 # self.camera.TriggerMode.SetValue('Off')
-                print('triggeroff')
+                # print('triggeroff')
 
             # if self.manual:
             #     self.camera.ExposureTimeAbs.SetValue(20000)
@@ -343,17 +344,17 @@ class Collector():
         """
         for i ,  camera in enumerate(self.cameras):
             device_info = camera.GetDeviceInfo()
-            print(
-                "Camera #%d %s @ %s (%s) @ %s" % (
-                i,
-                device_info.GetModelName(),
-                device_info.GetIpAddress(),
-                device_info.GetMacAddress(),
-                device_info.GetSerialNumber(),
-                )
+            # print(
+            #     "Camera #%d %s @ %s (%s) @ %s" % (
+            #     i,
+            #     device_info.GetModelName(),
+            #     device_info.GetIpAddress(),
+            #     device_info.GetMacAddress(),
+            #     device_info.GetSerialNumber(),
+            #     )
             
-            )
-            print(device_info)
+            # )
+            # print(device_info)
 
 
     def serialnumber(self):
@@ -412,12 +413,12 @@ class Collector():
                 else:
                     img=np.zeros([1200,1920,3],dtype=np.uint8)
                     self.cont_eror+=1
-                    print('eror',self.cont_eror)
-                    print("Error: ", grabResult.ErrorCode, grabResult.ErrorDescription)
+                    # print('eror',self.cont_eror)
+                    # print("Error: ", grabResult.ErrorCode, grabResult.ErrorDescription)
                     Flag=False
 
             else:
-                    print('erpr')
+                    # print('erpr')
                     img=np.zeros([1200,1920,3],dtype=np.uint8)
                     Flag=False
 
@@ -460,7 +461,7 @@ def get_threading(cameras):
 class connect_manage_cameras:
     def __init__(self):
 
-        print("ok")
+        # print("ok")
 
         self.id_list = []
         # self.db=database_utils.dataBaseUtils()
@@ -488,7 +489,7 @@ class connect_manage_cameras:
 
         # _, available_serials = self.get_all_devices()
         available_serials = self.list_available_serial
-        print("camera params", cam_parms)
+        # print("camera params", cam_parms)
 
         if str(cam_parms["serial_number"]) in available_serials:
 
@@ -511,15 +512,15 @@ class connect_manage_cameras:
                 manual=False,
             )
 
-            print(collector)
+            # print(collector)
 
             ret = collector.start_grabbing()
 
             self.cam_objs[cam_parms["serial_number"]] = collector
             self.cam_ids[id] = collector
-            print("grab_cameras", self.cam_objs)
+            # print("grab_cameras", self.cam_objs)
 
-            print("ret grab", ret)
+            # print("ret grab", ret)
 
             collector.stop_grabbing()
 
@@ -546,9 +547,9 @@ class connect_manage_cameras:
 
         cam_parms = self.db.load_cam_params(id)
 
-        print(cam_parms)
+        # print(cam_parms)
 
-        return cam_parms
+        # return cam_parms
 
     def get_all_devices(self):
 
@@ -595,7 +596,7 @@ class connect_manage_cameras:
         try:
             if sn in self.cam_objs:
                 cam_obj = self.cam_objs[sn]
-                print("cam_obj", cam_obj)
+                # print("cam_obj", cam_obj)
                 cam_obj.stop_grabbing()
                 self.cam_objs.pop(sn)
                 self.cam_ids.pop(id)
@@ -627,7 +628,7 @@ def get_all_devices():
     #     print(tl.GetDeviceClass(), tl.GetFileName(), tl.GetFullName())
     for dev_info in tl_factory.EnumerateDevices():
         if dev_info.GetDeviceClass() == "BaslerGigE":
-            print("using %s @ %s" % (dev_info.GetModelName(), dev_info.GetIpAddress()))
+            # print("using %s @ %s" % (dev_info.GetModelName(), dev_info.GetIpAddress()))
             cam = pylon.InstantCamera(tl_factory.CreateDevice(dev_info))
             # break
     return False
@@ -678,7 +679,7 @@ if __name__ == "__main__":
         #     #print(cam.camera.GetQueuedBufferCount())
         img = cameras.getPictures()
         img=img[1]
-        print(img.shape)
+        # print(img.shape)
         # print(cam.camera.GetQueuedBufferCount())
         cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
         img=np.uint8(img)

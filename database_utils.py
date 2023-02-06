@@ -14,6 +14,10 @@ class dataBaseUtils:
             self.db = database.dataBase(
                 user_name, password, "localhost", "saba_database", logger_obj=ui_obj.logger
             )
+        else:
+            self.db = database.dataBase(
+                user_name, password, "localhost", "saba_database"
+            )
         self.sheets_info_tabel = "sheets_info"
         self.setting_tabel = "settings"
         self.datasets_table = "datasets"
@@ -115,6 +119,15 @@ class dataBaseUtils:
 
             sheets.append(self.build_sheet(record))
         return sheets
+
+    # ________________________________________________________________
+    #
+    # ________________________________________________________________
+    def load_sheet_date(self, id):
+        res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id, int_type=False)
+        record = record[0]
+
+        return record['date']
 
     # ________________________________________________________________
     #
@@ -761,7 +774,7 @@ class dataBaseUtils:
 
             return record["name"]
         except:
-            print('exept get_dateset_name database utils')
+            # #print('exept get_dateset_name database utils')
             return []
 
     def get_path_dataset(self, dataset_id):
@@ -773,7 +786,7 @@ class dataBaseUtils:
 
             return record["path"]
         except:
-            print('get_path_dataset eror')
+            # #print('get_path_dataset eror')
             return []
 
     def get_all_datasets(self):
@@ -806,7 +819,7 @@ class dataBaseUtils:
             return record
 
         except:
-            print('except get_user_databases database utils')
+            # #print('except get_user_databases database utils')
             return []
 
     def update_dataset_default(self, dataset_id, user_name):
@@ -1046,17 +1059,17 @@ class dataBaseUtils:
     # db.get_pipline_names()
     # x = db.load_plc_parms()
     # # x=db.load_language()
-    # print(x)
+    # #print(x)
 
     # db.set_language("Persian")
     # records = db.load_coil_info(996)
     # db.get_camera_setting()
     # db.set_dataset_path('G:/dataset/')
-    # print(db.get_dataset_path())
+    # #print(db.get_dataset_path())
 
     # name,defects=db.get_defects()
-    # print('name',name)
-    # print('defe',defects)
+    # #print('name',name)
+    # #print('defe',defects)
 
     # x=db.get_sign('defects_info')
 
@@ -1064,11 +1077,11 @@ class dataBaseUtils:
     # d=db.get_user_databases('ali')
     # data=('dataset_name','ali','adwad')
     # d=db.add_dataset(data)
-    # print(d)
-    # print(x)
+    # #print(d)
+    # #print(x)
     # name,defects=db.get_defects()
-    # print('name',name)
-    # print('defe',defects)
+    # #print('name',name)
+    # #print('defe',defects)
 
     # db.get_path(['997', 'up', (5, 5)])
     # pass
