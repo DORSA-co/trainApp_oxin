@@ -11,7 +11,7 @@ import cv2
 import numpy as np
 from PIL import ImageColor
 
-import texts
+import texts, texts_codes
 from neighbouring_UI import neighbouring
 from backend import Annotation, classification_list_funcs, dataset
 
@@ -99,16 +99,20 @@ def create_image_slider_on_ui(
         frame_obj.setLayout(eval("ui_obj.%s_layout" % prefix))
 
         ui_obj.logger.create_new_log(
-            message=texts.MESSEGES["BINARYLIST_SLIDER_build"]["en"], level=1
+            message=texts.MESSEGES["BINARYLIST_SLIDER_build"]["en"],
+            code=texts_codes.SubTypes['BINARYLIST_SLIDER_build'],
+            level=1
         )
         return True
 
     except Exception as e:
         ui_obj.set_warning(
-            texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"], "binarylist", level=3
+            texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"], "binarylist", texts_codes.SubTypes['BUILD_BINARYLIST_SLIDER_ERROR'], level=3
         )
         ui_obj.logger.create_new_log(
-            message=texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"], level=5
+            message=texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"],
+            code=texts_codes.SubTypes['BUILD_BINARYLIST_SLIDER_ERROR'],
+            level=5
         )
         return False
 

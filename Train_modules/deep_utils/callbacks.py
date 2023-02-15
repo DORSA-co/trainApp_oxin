@@ -1,7 +1,6 @@
 from cv2 import log
 from tensorflow import keras
 import os
-from backend import logging_funcs
 import texts
 
 class CustomCallback(keras.callbacks.Callback):
@@ -38,37 +37,17 @@ class CustomCallback(keras.callbacks.Callback):
         epoch += 1
         if self.model_type == 'binary':
             # Update bianry train charts
-            try:
-                self.api_obj.assign_new_value_to_b_chart(last_epoch=epoch, logs=logs)
-                self.api_obj.ui.logger.create_new_log(message=texts.MESSEGES['UPDATE_BCHART']['en'].format(epoch))
-            except Exception as e:
-                self.api_obj.ui.logger.create_new_log(message=texts.ERRORS['UPDATE_BCHART_FAILED']['en'].format(epoch), level=5)
-                self.api_obj.ui.set_warning(texts.ERRORS['UPDATE_BCHART_FAILED'][self.api_obj.language].format(epoch), 'train', level=3)
+            self.api_obj.bmodel_train_worker.assign_new_value_to_b_chart(last_epoch=epoch, logs=logs)
 
             # Save model weights to given address
-            try:
-                self.model.save( self.out_path)
-                self.api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SAVE_BMODEL_EPOCH']['en'].format(epoch))
-            except Exception as e:
-                self.api_obj.ui.logger.create_new_log(message=texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED']['en'].format(epoch), level=5)
-                self.api_obj.ui.set_warning(texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED'][self.api_obj.language].format(epoch), 'train', level=3)
+            self.api_obj.bmodel_train_worker.save_b_model(model=self.model, path=self.out_path, epoch=epoch)
 
         if self.model_type == 'localization':
             # Update localization train charts
-            try:
-                self.api_obj.assign_new_value_to_l_chart(last_epoch=epoch, logs=logs)
-                self.api_obj.ui.logger.create_new_log(message=texts.MESSEGES['UPDATE_LCHART']['en'].format(epoch))
-            except Exception as e:
-                self.api_obj.ui.logger.create_new_log(message=texts.ERRORS['UPDATE_LCHART_FAILED']['en'].format(epoch), level=5)
-                self.api_obj.ui.set_warning(texts.ERRORS['UPDATE_LCHART_FAILED'][self.api_obj.language].format(epoch), 'l_train', level=3)
+            self.api_obj.lmodel_train_worker.assign_new_value_to_l_chart(last_epoch=epoch, logs=logs)
 
              # Save model weights to given address
-            try:
-                self.model.save( self.out_path)
-                self.api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SAVE_LMODEL_EPOCH']['en'].format(epoch))
-            except Exception as e:
-                self.api_obj.ui.logger.create_new_log(message=texts.ERRORS['SAVE_LMODEL_EPOCH_FAILED']['en'].format(epoch), level=5)
-                self.api_obj.ui.set_warning(texts.ERRORS['SAVE_LMODEL_EPOCH_FAILED'][self.api_obj.language].format(epoch), 'l_train', level=3)
+            self.api_obj.lmodel_train_worker.save_l_model(model=self.model, path=self.out_path, epoch=epoch)
     
 
         # keys = list(logs.keys())

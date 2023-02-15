@@ -17,7 +17,7 @@ except:
 
 from tensorflow.keras import layers
 
-# import segmentation_models as sm
+import segmentation_models as sm
 
 # sm.set_framework("tf.keras")
 # sm.framework()

@@ -13,12 +13,13 @@ from Train_modules.splitDataset import split_unet_dataset
 from backend import binary_model_funcs, date_funcs, localization_model_funcs
 
 DEBUG=False
+SHAMSI_DATE = False
 
 ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Blu', 'Rleu', 'Llu', 'uln'], 'classification': ['Xcc', 'Rce']}
 ALGORITHM_CREATOR={'Xbc':models.xception_cnn,'Rbc':models.resnet_cnn,'Blu':models.base_unet,'Rleu':models.resnet_unet,'Llu':models.low_unet,'uln':models.unet
 ,'Xcc':models.xception_cnn,'Rce':models.resnet_cnn}
-if DEBUG:
 
+if DEBUG:
     gpu = tf.config.list_physical_devices('GPU')
     cpu = tf.config.list_physical_devices('CPU')
     tf.config.experimental.set_memory_growth(gpu[0], True)
@@ -92,14 +93,13 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         return (False, (texts.ERRORS['SET_PROCESSOR_FAILED'][api_obj.language], 'train', 3))
 
     # Create weights path
-    weights_path = os.path.join(weights_path, date_funcs.get_datetime(persian=True, folder_path=True))
+    weights_path = os.path.join(weights_path, date_funcs.get_datetime(persian=SHAMSI_DATE, folder_path=True))
     try:
         if not os.path.exists(weights_path):
             os.makedirs(weights_path)
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_BWPATH']['en'] + weights_path)
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_BWPATH_FAILED']['en'] + weights_path, level=5)
-        # api_obj.ui.set_warning(texts.ERRORS['CREATE_BWPATH_FAILED'][api_obj.language], 'train', level=3)
         return (False, (texts.ERRORS['CREATE_BWPATH_FAILED'][api_obj.language], 'train', 3))
 
     # Get train and test generators
@@ -125,7 +125,6 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_BINARY_GEN']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_BINARY_GEN_FAILED']['en'], level=5)
-        # api_obj.ui.set_warning(texts.ERRORS['CREATE_BINARY_GEN_FAILED'][api_obj.language], 'train', level=3)
         return (False, (texts.ERRORS['CREATE_BINARY_GEN_FAILED'][api_obj.language], 'train', 3))
 
     # Create models
@@ -143,12 +142,11 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
     # Create callback
     my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint_bin.h5'), model_type='binary', api_obj=api_obj)
 
-    spe = (trainGen.n // binary_batch + 1) if ((trainGen.n//8) != (trainGen.n / 8)) else (trainGen.n // binary_batch)
-    vspe = (testGen.n // binary_batch + 1) if ((testGen.n//8) != (testGen.n / 8)) else (testGen.n // binary_batch)
+    spe = (trainGen.n // binary_batch + 1) if ((trainGen.n//binary_batch) != (trainGen.n / binary_batch)) else (trainGen.n // binary_batch)
+    vspe = (testGen.n // binary_batch + 1) if ((testGen.n//binary_batch) != (testGen.n / binary_batch)) else (testGen.n // binary_batch)
 
     if spe < 1 or vspe < 1:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['low_data']['en'], level=5)
-        # api_obj.ui.set_warning(texts.ERRORS['low_data'][api_obj.language], 'train', level=3)
         return (False, (texts.ERRORS['low_data'][api_obj.language], 'train', 3))
     
     # Fit model
@@ -163,7 +161,6 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['FIT_MODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['FIT_MODEL_FAILED']['en'], level=5)
-        # api_obj.ui.set_warning(texts.ERRORS['FIT_MODEL_FAILED'][api_obj.language], 'train', level=3)
         return (False, (texts.ERRORS['FIT_MODEL_FAILED'][api_obj.language], 'train', 3))
 
     # Save weights
@@ -172,7 +169,6 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SAVE_BMODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['SAVE_BMODEL_FAILED']['en'], level=5)
-        # api_obj.ui.set_warning(texts.ERRORS['SAVE_BMODEL_FAILED'][api_obj.language], 'train', level=3)
         return (False, (texts.ERRORS['SAVE_BMODEL_FAILED'][api_obj.language], 'train', 3))
 
     # Create model for fine tunning
@@ -183,7 +179,6 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
             api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_FTMODEL']['en'].format(binary_algorithm_name))
         except Exception as e:
             api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_FTMODEL_FAILED']['en'].format(binary_algorithm_name), level=5)
-            # api_obj.ui.set_warning(texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', level=3)
             return (False, (texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', 3))
 
     if binary_algorithm_name == ALGORITHM_NAMES['binary'][1]:
@@ -193,7 +188,6 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
             api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_FTMODEL']['en'].format(binary_algorithm_name))
         except Exception as e:
             api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_FTMODEL_FAILED']['en'].format(binary_algorithm_name), level=5)
-            # api_obj.ui.set_warning(texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', level=3)
             return (False, (texts.ERRORS['CREATE_FTMODEL_FAILED'][api_obj.language].format(binary_algorithm_name), 'train', 3))
 
     # Create call back
@@ -211,7 +205,6 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['FIT_FTMODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['FIT_FTMODEL_FAILED']['en'], level=5)
-        # api_obj.ui.set_warning(texts.ERRORS['FIT_FTMODEL_FAILED'][api_obj.language], 'train', level=3)
         return (False, (texts.ERRORS['FIT_FTMODEL_FAILED'][api_obj.language], 'train', 3))
        
     try:
@@ -219,10 +212,7 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SAVE_FTBMODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['SAVE_FTBMODEL_FAILED']['en'], level=5)
-        # api_obj.ui.set_warning(texts.ERRORS['SAVE_FTBMODEL_FAILED'][api_obj.language], 'train', level=3)
         return (False, (texts.ERRORS['SAVE_FTBMODEL_FAILED'][api_obj.language], 'train', 3))
-
-    ##print('model history:', history.history)
     
     try:
         binary_algorithm_name = ALGORITHM_NAMES['binary'].index(binary_algorithm_name)
@@ -246,7 +236,7 @@ def train_binary(binary_algorithm_name, binary_input_size, binary_input_type, bi
                                             history.history['val_Recall'][0],
                                             str(binary_dp),
                                             weights_path,
-                                            date_funcs.get_date(persian=True)]))
+                                            date_funcs.get_date(persian=SHAMSI_DATE)]))
 
 
 def create_binary_model_record_dict(records):
@@ -266,7 +256,7 @@ def create_binary_model_record_dict(records):
     return model_records
 
 
-def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_epoch, loc_batch, loc_lr, loc_vs, loc_dp, weights_path, api_obj):
+def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_epoch, loc_batch, loc_lr, loc_vs, loc_gpu, loc_dp, weights_path, api_obj):
     """Create and fit localization model
 
     :param loc_algorithm_name: Name of localization algorithm.
@@ -293,16 +283,32 @@ def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_e
     :rtype: dict
     """
 
+    try:
+        if loc_gpu >= 0:
+            tf.config.run_functions_eagerly(True)
+            # GPU config
+            gpu = tf.config.list_physical_devices("GPU")
+            tf.config.experimental.set_memory_growth(gpu[loc_gpu], True)
+            tf.config.experimental.set_visible_devices(gpu[loc_gpu], "GPU")
+        else:
+            cpu = tf.config.list_physical_devices("CPU")
+            # tf.config.experimental.set_memory_growth(cpu[0], True)
+            tf.config.experimental.set_visible_devices(cpu[0], "CPU")
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SET_PROCESSOR']['en'])
+    except:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['SET_PROCESSOR_FAILED']['en'], level=5)
+        # api_obj.ui.set_warning(texts.ERRORS['CREATE_BWPATH_FAILED'][api_obj.language], 'train', level=3)
+        return (False, (texts.ERRORS['SET_PROCESSOR_FAILED'][api_obj.language], 'l_train', 3))
+
     # Create weights path
-    weights_path = os.path.join(weights_path, date_funcs.get_datetime(persian=True, folder_path=True))
+    weights_path = os.path.join(weights_path, date_funcs.get_datetime(persian=SHAMSI_DATE, folder_path=True))
     try:
         if not os.path.exists(weights_path):
             os.makedirs(weights_path)
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_LWPATH']['en'] + weights_path)
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_LWPATH_FAILED']['en'] + weights_path, level=5)
-        api_obj.ui.set_warning(texts.ERRORS['CREATE_LWPATH_FAILED'][api_obj.language], 'l_train', level=3)
-        return
+        return (False, (texts.ERRORS['CREATE_LWPATH_FAILED'][api_obj.language], 'l_train', 3))
 
     # Split datasets into train and test
     try:
@@ -313,8 +319,7 @@ def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_e
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['dataset_splitted']['en'] + weights_path)
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['dataset_splitted_failed']['en'] + weights_path, level=5)
-        api_obj.ui.set_warning(texts.ERRORS['dataset_splitted_failed'][api_obj.language], 'l_train', level=3)
-        return
+        return (False, (texts.ERRORS['dataset_splitted_failed'][api_obj.language], 'l_train', 3))
 
     # Get train and test generators
     try:
@@ -323,8 +328,7 @@ def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_e
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_LOC_GEN']['en'] + weights_path)
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_LOC_GEN_FAILED']['en'] + weights_path, level=5)
-        api_obj.ui.set_warning(texts.ERRORS['CREATE_LOC_GEN_FAILED'][api_obj.language], 'l_train', level=3)
-        return
+        return (False, (texts.ERRORS['CREATE_LOC_GEN_FAILED'][api_obj.language], 'l_train', 3))
 
     # Create models
     try:
@@ -339,14 +343,17 @@ def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_e
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_MODEL']['en'].format(loc_algorithm_name))
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_MODEL_FAILED']['en'].format(loc_algorithm_name), level=5)
-        api_obj.ui.set_warning(texts.ERRORS['CREATE_MODEL_FAILED'][api_obj.language].format(loc_algorithm_name), 'l_train', level=3)
-        return
+        return (False, (texts.ERRORS['CREATE_MODEL_FAILED'][api_obj.language].format(loc_algorithm_name), 'l_train', 3))
         
     # Create call back
     my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint.h5'), model_type='localization', api_obj=api_obj)
 
     spe = (train_data_count // loc_batch + 1) if ((train_data_count//loc_batch) != (train_data_count / loc_batch)) else (train_data_count // loc_batch)
     vspe = (test_data_count // loc_batch + 1) if ((test_data_count//loc_batch) != (test_data_count / loc_batch)) else (test_data_count // loc_batch)
+
+    if spe < 1 or vspe < 1:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['low_data']['en'], level=5)
+        return (False, (texts.ERRORS['low_data'][api_obj.language], 'l_train', 3))
 
     # Fit model
     try:
@@ -360,8 +367,7 @@ def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_e
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['FIT_MODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['FIT_MODEL_FAILED']['en'], level=5)
-        api_obj.ui.set_warning(texts.ERRORS['FIT_MODEL_FAILED'][api_obj.language], 'l_train', level=3)
-        return
+        return (False, (texts.ERRORS['FIT_MODEL_FAILED'][api_obj.language], 'l_train', 3))
 
     # Save weights
     try:
@@ -369,15 +375,14 @@ def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_e
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SAVE_LMODEL']['en'])
     except Exception as e:
         api_obj.ui.logger.create_new_log(message=texts.ERRORS['SAVE_LMODEL_FAILED']['en'], level=5)
-        api_obj.ui.set_warning(texts.ERRORS['SAVE_LMODEL_FAILED'][api_obj.language], 'l_train', level=3)
-        return
+        return (False, (texts.ERRORS['SAVE_LMODEL_FAILED'][api_obj.language], 'l_train', 3))
 
     try:
         loc_algorithm_name = ALGORITHM_NAMES['localization'].index(loc_algorithm_name)
     except:
         loc_algorithm_name = -1
     
-    return create_localization_model_record_dict([loc_algorithm_name,
+    return (True, create_localization_model_record_dict([loc_algorithm_name,
                                     '('+str(loc_input_size[0])+','+ str(loc_input_size[1])+')', 
                                     loc_input_type,
                                     loc_epoch,
@@ -393,7 +398,7 @@ def train_localization(loc_algorithm_name, loc_input_size, loc_input_type, loc_e
                                     history.history['val_Recall'][0],
                                     str(loc_dp),
                                     weights_path,
-                                    date_funcs.get_date(persian=True)])
+                                    date_funcs.get_date(persian=SHAMSI_DATE)]))
 
 
 def create_localization_model_record_dict(records):

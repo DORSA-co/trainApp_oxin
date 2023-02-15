@@ -96,7 +96,8 @@ def get_binarygenerator(paths, target_size, defective_folder, perfect_folder, au
         class_mode='binary',
         classes=[perfect_folder, defective_folder],
         seed=42,
-        subset='validation') # set as validation data
+        subset='validation',
+        follow_links=True) # set as validation data
 
     return train_dataset, val_dataset
 

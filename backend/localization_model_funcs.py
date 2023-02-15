@@ -5,7 +5,7 @@ from PySide6.QtGui import QColor as sQColor
 from PySide6.QtCore import QObject as sQObject
 from PySide6.QtCore import Signal as sSignal
 
-from backend import colors_pallete
+from backend import colors_pallete, chart_funcs
 import train_api, texts
 
 # localization table headers
@@ -165,11 +165,15 @@ def save_new_localization_model_record(ui_obj, db_obj, lmodel_records):
 
     # add
     if add_new_localization_model_to_db(db_obj=db_obj, new_lmodel_info=lmodel_records):
-        ui_obj.notif_manager.append_new_notif(message=texts.MESSEGES['database_add_lmodel'][ui_obj.language], level=1)
+        ui_obj.notif_manager.append_new_notif(
+            message=texts.MESSEGES['database_add_lmodel'][ui_obj.language], level=1
+        )
         return True
 
     else:
-        ui_obj.notif_manager.append_new_notif(message=texts.ERRORS['database_add_lmodel_failed'][ui_obj.language], level=3)
+        ui_obj.notif_manager.append_new_notif(
+            message=texts.ERRORS['database_add_lmodel_failed'][ui_obj.language], level=3
+            )
         return False
 
 
@@ -446,6 +450,8 @@ class Localization_model_train_worker(sQObject):
     """
 
     finished = sSignal()
+    warning = sSignal(str, str, str, int)
+    update_charts = sSignal(int, dict)
 
     def assign_parameters(self, l_parms, api_obj, ui_obj, db_obj):
         self.l_parms = l_parms
@@ -453,17 +459,44 @@ class Localization_model_train_worker(sQObject):
         self.ui_obj = ui_obj
         self.db_obj = db_obj
 
-
     def train_model(self):
-        lmodel_records = train_api.train_localization(*self.l_parms, self.api_obj.ds.weights_localization_path, self.api_obj)
-        if lmodel_records:
-            # notif
-            self.ui_obj.notif_manager.append_new_notif(message=texts.MESSEGES['lmodel_trained'][self.ui_obj.language], level=1)
+        lmodel_records = train_api.train_localization(
+            *self.l_parms, self.api_obj.ds.weights_localization_path, self.api_obj
+        )
+        if not lmodel_records[0]:
+            self.warning.emit(lmodel_records[1][0], lmodel_records[1][1], None, lmodel_records[1][2])
+        else:
+            lmodel_records = lmodel_records[1]
+            if lmodel_records:
+                # notif
+                self.ui_obj.notif_manager.append_new_notif(
+                    message=texts.MESSEGES['lmodel_trained'][self.ui_obj.language], level=1
+                )
 
-            # add record to database
-            self.api_obj.lmodel_train_result = save_new_localization_model_record(ui_obj=self.ui_obj, db_obj=self.db_obj, lmodel_records=lmodel_records)
+                # add record to database
+                self.api_obj.lmodel_train_result = save_new_localization_model_record(
+                    ui_obj=self.ui_obj, db_obj=self.db_obj, lmodel_records=lmodel_records
+                )
+
+                if self.api_obj.lmodel_train_result:
+                    self.warning.emit(texts.MESSEGES['train_successfuly'][self.api_obj.language], 'l_train', None, 1)
+                else:
+                    self.warning.emit(texts.ERRORS['database_add_lmodel_failed'][self.api_obj.language], 'l_train', None, 3)
+
         self.finished.emit()
 
+    def assign_new_value_to_l_chart(self, last_epoch, logs):
+        self.update_charts.emit(last_epoch, logs)
        
+    def save_l_model(self, model, path, epoch):
+        try:
+            model.save(path)
+            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['SAVE_LMODEL_EPOCH']['en'].format(epoch))
+        except:
+            self.ui_obj.logger.create_new_log(message=texts.ERRORS['SAVE_LMODEL_EPOCH_FAILED']['en'].format(epoch), level=5)
+            self.warning.emit(texts.ERRORS['SAVE_LMODEL_EPOCH_FAILED'][self.api_obj.language].format(epoch), 'l_train', None, 3)
+    
     def show_lmodel_train_result(self):
+        self.ui_obj.localization_train.setEnabled(True)
+        self.api_obj.runing_l_model=False
         return

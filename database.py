@@ -5,6 +5,7 @@ import mysql.connector
 from mysql.connector import Error
 from numpy import rec
 import texts
+import texts_codes
 # from tenacity import retry_if_exception
 
 
@@ -28,7 +29,7 @@ class dataBase:
 
 
 
-    def get_log(self, message='nothing', level=1):
+    def get_log(self, message='nothing', code='00', level=1):
         """
         this function is used to get log from database tasks
 
@@ -38,7 +39,7 @@ class dataBase:
 
         """
         if self.logger_obj != None:
-            self.logger_obj.create_new_log(message=message, level=level)
+            self.logger_obj.create_new_log(message=message, code=code, level=level)
     
 
 
@@ -75,7 +76,7 @@ class dataBase:
             if connection.is_connected():
                 db_Info = connection.get_server_info() # get informations of database
                 # log
-                self.get_log(message='Connected to MySQL Server version %s' % (db_Info))
+                self.get_log(message='Connected to MySQL Server version %s' % (db_Info), code=texts_codes.SubTypes['connected_to_mysql_server'])
                 #
 
                 cursor = connection.cursor()
@@ -83,14 +84,14 @@ class dataBase:
                 record = cursor.fetchall()
 
                 # log
-                self.get_log(message='Connected to database %s' % (record))
+                self.get_log(message='Connected to database %s' % (record), code=texts_codes.SubTypes['connected_to_database'])
                 #
                 return True
 
         except Exception as e:
             # log
             # #print(e)
-            self.get_log(message='Error while connecting to MySQL', level=5)
+            self.get_log(message='Error while connecting to MySQL', code=texts_codes.SubTypes['error_connecting_to_mysql'], level=5)
             #
             return False
 
@@ -100,7 +101,7 @@ class dataBase:
                 connection.close()
 
             # log
-            self.get_log(message='MySQL connection is closed')
+            self.get_log(message='MySQL connection is closed', code=texts_codes.SubTypes['mysql_connection_closed'])
             
 
     
@@ -134,7 +135,7 @@ class dataBase:
         except Exception as e:
             # log
             # #print(e)
-            self.get_log(message='Error while connecting to MySQL')
+            self.get_log(message='Error while connecting to MySQL', code=texts_codes.SubTypes['error_connecting_to_mysql'], level=5)
             #
         
 
@@ -158,32 +159,32 @@ class dataBase:
         :rtype: bool
         """
 
-        try:
+        # try:
 
-            s ='%s,'*len_parameters
-            s = s[:-1]
-            s = '(' + s + ')'
+        s ='%s,'*len_parameters
+        s = s[:-1]
+        s = '(' + s + ')'
 
-            if self.check_connection:
-                cursor,connection=self.connect()
+        if self.check_connection:
+            cursor,connection=self.connect()
 
-                mySql_insert_query = """INSERT INTO {} {} 
-                                    VALUES 
-                                    {} """.format(table_name,parametrs,s)
-                                    
-                
-                        
-                cursor.execute(mySql_insert_query,data)
-                connection.commit()
-                cursor.close()
+            mySql_insert_query = """INSERT INTO {} {} 
+                                VALUES 
+                                {} """.format(table_name,parametrs,s)
+                                
+            
+                    
+            cursor.execute(mySql_insert_query,data)
+            connection.commit()
+            cursor.close()
 
-                return SUCCESSFULL
+            return SUCCESSFULL
 
-            else:
-                return CONNECTION_ERROR
+        else:
+            return CONNECTION_ERROR
 
-        except Exception as e:
-            return False, e
+        # except Exception as e:
+        #     return e
 
 
     #--------------------------------------------------------------------------
@@ -539,7 +540,7 @@ class dataBase:
             ##print('delete')     
             #                               
         except Exception as e:
-            self.get_log(message='Error reading data from MySQL table', level=5)
+            self.get_log(message='Error reading data from MySQL table', code=texts_codes.SubTypes['error_reading_from_mysql'], level=5)
 
     #--------------------------------------------------------------------------
     #--------------------------------------------------------------------------

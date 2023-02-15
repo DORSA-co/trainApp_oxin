@@ -7,8 +7,8 @@ from PySide6.QtCore import Signal as sSignal
 from PySide6.QtGui import Qt
 from requests import head
 
-from backend import colors_pallete
-import train_api, texts
+from backend import colors_pallete, chart_funcs
+import train_api, texts, texts_codes
 
 
 
@@ -424,7 +424,9 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
         return bmodel_info
     except:
         ui_obj.logger.create_new_log(
-            message=texts.ERRORS["ui_get_bmodel_filter_params_failed"]["en"], level=5
+            message=texts.ERRORS["ui_get_bmodel_filter_params_failed"]["en"], 
+            code=texts_codes.SubTypes['ui_get_bmodel_filter_params_failed'], 
+            level=5
         )
         return []
 
@@ -1014,7 +1016,8 @@ class Binary_model_train_worker(sQObject):
     """
 
     finished = sSignal()
-    warning = sSignal(str, str, int)
+    warning = sSignal(str, str, str, int)
+    update_charts = sSignal(int, dict)
 
     def assign_parameters(self, b_parms, api_obj, ui_obj, db_obj):
         self.b_parms = b_parms
@@ -1027,7 +1030,7 @@ class Binary_model_train_worker(sQObject):
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
         if not bmodel_records[0]:
-            self.warning.emit(bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2])
+            self.warning.emit(bmodel_records[1][0], bmodel_records[1][1], None, bmodel_records[1][2])
         else:
             bmodel_records = bmodel_records[1]
             if bmodel_records:
@@ -1041,13 +1044,23 @@ class Binary_model_train_worker(sQObject):
                     ui_obj=self.ui_obj, db_obj=self.db_obj, bmodel_records=bmodel_records
                 )
 
-                self.warning.emit(texts.MESSEGES['train_successfuly'][self.api_obj.language], 'train', 1)
-                #update ui
-
-        # self.ui_obj.binary_train.setEnabled(True)
-        # self.api_obj.runing_b_model=False
+                if self.api_obj.bmodel_train_result:
+                    self.warning.emit(texts.MESSEGES['train_successfuly'][self.api_obj.language], 'train', None, 1)
+                else:
+                    self.warning.emit(texts.MESSEGES['database_add_bmodel_failed'][self.api_obj.language], 'train', None, 3)
 
         self.finished.emit()
+
+    def assign_new_value_to_b_chart(self, last_epoch, logs):
+        self.update_charts.emit(last_epoch, logs)
+
+    def save_b_model(self, model, path, epoch):
+        try:
+            model.save(path)
+            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['SAVE_BMODEL_EPOCH']['en'].format(epoch))
+        except:
+            self.ui_obj.logger.create_new_log(message=texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED']['en'].format(epoch), level=5)
+            self.warning.emit(texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED'][self.api_obj.language].format(epoch), 'train', None, 3)
 
     def show_bmodel_train_result(self):
         self.ui_obj.binary_train.setEnabled(True)

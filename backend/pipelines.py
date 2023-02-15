@@ -54,6 +54,8 @@ TARGET_CLASSES = "target_classes"
 #
 EVALUATED_DATASETS = "evaluated_datasets"
 
+SHAMSI_DATE = False
+
 
 pipline_headers = [
     "name",
@@ -148,7 +150,7 @@ class Pipeline:
         self,
         pipeline_root,
         pipeline_name,
-        date_created=date_funcs.get_date(persian=True, folder_path=True),
+        date_created=date_funcs.get_date(persian=SHAMSI_DATE, folder_path=True),
         time_created=date_funcs.get_time(folder_path=True),
     ):
         """this class is used to create an object containg all information belonging to a pipeline model

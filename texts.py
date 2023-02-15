@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QHBoxLayout as sQHBoxLayout
 
 ERRORS = {
 
@@ -157,7 +158,7 @@ ERRORS = {
                  'en': 'Failed to update binarylist piechart'},
 
     'update_classlist_piechart_failed': {'fa': 'خطای آپدیت پای چارت صفحه دیتاست دسته بندی',
-                 'en': 'Failed to update classificatiolist piechart'},
+                 'en': 'Failed to update classificationlist piechart'},
 
     'get_images_related_to_defect_failed': {'fa': 'خطای دریافت تصاویر مربوط به عیب',
                  'en': 'Failed to get images related to defect'},
@@ -174,10 +175,10 @@ ERRORS = {
     'piechart_create_failed': {'fa': 'خطای ایجاد پای چارت های موردنیاز',
                  'en': 'Failed to create needed piecharts on UI'},
 
-    'database_add_bmodel_failed': {'fa': 'خطای اضافه نمودن اطلاعات مدل باینری جدید در دیتابیس',
+    'database_add_bmodel_failed': {'fa': 'خطا در اضافه نمودن اطلاعات مدل باینری جدید در دیتابیس',
                  'en': 'Failed to add new binary model info to database'},
 
-    'database_add_lmodel_failed': {'fa': 'خطای اضافه نمودن اطلاعات مدل جایابی جدید در دیتابیس',
+    'database_add_lmodel_failed': {'fa': 'خطا در اضافه نمودن اطلاعات مدل جایابی جدید در دیتابیس',
                  'en': 'Failed to add new localization model info to database'},
 
     'initialize_notif_ui_failed': {'fa': 'خطای ساخت کلاس اعلانات',
@@ -259,8 +260,8 @@ ERRORS = {
     'CREATE_BINARY_GEN_FAILED': {'fa': ' خطا در آماده سازی داده ی آموزش باینری. ',
                             'en': ' Error preparing binary training data '},
  
-    'CREATE_LOC_GEN_FAILED': {'fa': ' خطا در ایجاد ژنراتور آموزش جایابی. ',
-                            'en': ' Error while creating localization train generetor '},
+    'CREATE_LOC_GEN_FAILED': {'fa': ' خطا در آماده سازی داده ی آموزش جایابی. ',
+                            'en': ' Error preparing localization training data '},
 
     'PREPARE_DATA_FAILED': {'fa': ' خطا در آماده سازی داده ها برای آموزش. ',
                             'en': ' Error while preparing data for training. '},
@@ -528,7 +529,10 @@ WARNINGS = {
         'en': 'The input parameters are not set correctly.'},
 
     'image_not_exist': {'fa': 'فایل تصویر وجود ندارد.',
-                        'en': 'The image file does not exist'},        
+                        'en': 'The image file does not exist'},
+
+    'invalid_date_range': {'fa': 'بازه‌ی تاریخ داده شده معتبر نیست.',
+                        'en': 'The given date range is not valid.'},        
 }
 
 MESSEGES = {
@@ -608,8 +612,8 @@ MESSEGES = {
     'CREATE_BINARY_GEN': {'fa': ' داده‌ی آموزش باینری آماده شد. ',
                         'en': ' Binary training data is ready. '},
  
-    'CREATE_LOC_GEN': {'fa': ' ژنراتور آموزش جایابی ایجاد شد. ',
-                        'en': ' Localization train generetor created. '},
+    'CREATE_LOC_GEN': {'fa': ' داده‌ی آموزش جایابی آماده شد. ',
+                        'en': ' Localization training data is ready. '},
 
     'CREATE_MODEL': {'fa': ' مدل برای الگوریتم {} ایجاد شد. ',
                     'en': ' Model for {} algorithm created. '},
@@ -728,8 +732,8 @@ MESSEGES = {
     'sheet_details': {'fa': ' ورق با شناسه ی {} در ساعت {} تاریخ {} توسط کاربر {} ذخیره شده است. تعداد فریم های ذخیره شده برابر با {} و تعداد دوربین ها برابر با {} است. ',
                         'en': ' The sheet with ID {} ​​was saved at time {} date {} by user {}. The number of saved frames is equal to {} and the number of cameras is equal to {}. '},
 
-    'setting_applied': {'fa': 'تنظیمات اعمال شد',
-                        'en': 'Settings Applied Successfully'},
+    'setting_applied': {'fa': 'تنظیمات {} اعمال شد',
+                        'en': '{} settings Applied Successfully'},
 
     'CREATE_DATASET': {'fa': ' مجموعه داده با موفقیت ایجاد شد ',
                        'en': ' Dataset created successfully '},
@@ -803,6 +807,9 @@ Titles = {
         'update_time': {'fa': ": زمان به روز رسانی",
                         'en': 'Update time :'},
 
+        'language_font': {'fa': 'زبان و فونت',
+                       'en': 'language and font'},
+
         'plc': {'fa': "پی ال سی",
                         'en': 'PLC'},
 
@@ -844,6 +851,9 @@ Titles = {
 
         'Pipline Build & Test': {'fa': "ساخت پایپ لاین و تست",
                                 'en': 'Pipline Build and Test'},
+
+        'show_logs': {'fa': "نمایش لاگ‌ها",
+                        'en': 'Show Logs'},
 
         'Live': {'fa': 'نمایش زنده',
                 'en': 'Live'},
@@ -975,9 +985,6 @@ Titles = {
 
         'search by': {'fa': 'جست و جو براساس: ',
                         'en': 'Search By: '},
-
-        'search': {'fa': 'جست و جو',
-                'en': 'Search'},
 
         'refresh': {'fa': 'به روز رسانی',
                         'en': 'Refresh'},
@@ -1509,6 +1516,66 @@ Titles = {
         'delete_polygons': {'fa': 'حذف چند‌ضلعی‌ها',
                 'en': 'Delete Polygons'},
 
+		'search_bar': {'fa': 'نوار جست و جو',
+					'en': 'Search Bar'},
+
+		'date': {'fa': 'تاریخ',
+					'en': 'Date'},
+
+        'all_dates': {'fa': 'همه‌ی تاریخ‌ها',
+                'en': 'All Dates'},
+
+        'from_date': {'fa': ':از تاریخ',
+                'en': 'From Date:'},
+
+        'to_date': {'fa': ':تا تاریخ',
+                'en': 'To Date:'},
+
+        'year': {'fa': ':سال',
+                'en': 'Year:'},
+
+        'month': {'fa': ':ماه',
+                'en': 'Month:'},
+
+        'day': {'fa': ':روز',
+                'en': 'Day:'},
+
+        'levels': {'fa': 'سطح‌ها',
+                'en': 'Levels'},
+
+        'all_levels': {'fa': 'همه‌ی سطح‌ها',
+                'en': 'All Levels'},
+
+        'types': {'fa': 'نوع‌ها',
+                'en': 'Types'},
+
+        'all_types': {'fa': 'همه‌ی نوع‌ها',
+                'en': 'All Types'},
+
+        'lines': {'fa': 'خط‌ها',
+                'en': 'Lines'},
+
+        'line': {'fa': 'خط‌',
+                'en': 'Lines'},
+
+        'from_first': {'fa': 'از ابتدا',
+                'en': 'From First'},
+
+        'from_last': {'fa': 'از انتها',
+                'en': 'From Last'},
+
+        'line': {'fa': 'خط‌',
+                'en': 'Lines'},
+
+        'search': {'fa': 'جست و جو',
+                'en': 'Search'},
+
+        'refresh': {'fa': 'به‌روز رسانی',
+                'en': 'Refresh'},
+
+        'logs': {'fa': 'لاگ‌ها',
+                'en': 'Logs'},
+
 #---------------------------------------------------------------------
 #----------------------Setting Sofwtare-------------------------------
 #---------------------------------------------------------------------
@@ -1713,6 +1780,8 @@ def set_title(self, lang):
     self.tuning_btn.setToolTip(Titles[' Tuning'][lang])
     self.pbt_btn.setText(Titles['Pipline Build & Test'][lang])
     self.pbt_btn.setToolTip(Titles['Pipline Build & Test'][lang])
+    self.log_btn.setText(Titles['show_logs'][lang])
+    self.log_btn.setToolTip(Titles['show_logs'][lang])
 
     self.Binary_btn.setText(Titles['Binary'][lang])
     self.Localization_btn.setText(Titles['Localization'][lang])
@@ -2579,6 +2648,43 @@ def set_alignment(self, lang):
         # self.BTN_search_and_filter_in_PBT.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
     
     set_alignment
+
+def set_show_log(self, lang):
+	self.show_log_win.groupBox.setTitle(Titles['search_bar'][lang])
+	self.show_log_win.groupBox_3.setTitle(Titles['date'][lang])
+
+	self.show_log_win.checkBox_allDates.setText(Titles['all_dates'][lang])
+	self.show_log_win.label.setText(Titles['from_date'][lang])
+	self.show_log_win.label_2.setText(Titles['to_date'][lang])
+	self.show_log_win.label_5.setText(Titles['year'][lang])
+	self.show_log_win.label_8.setText(Titles['year'][lang])
+	self.show_log_win.label_6.setText(Titles['month'][lang])
+	self.show_log_win.label_9.setText(Titles['month'][lang])
+	self.show_log_win.label_7.setText(Titles['day'][lang])
+	self.show_log_win.label_10.setText(Titles['day'][lang])
+
+	self.show_log_win.groupBox_5.setTitle(Titles['levels'][lang])
+	self.show_log_win.checkBox_allLevels.setText(Titles['all_levels'][lang])
+
+	self.show_log_win.groupBox_6.setTitle(Titles['types'][lang])
+	self.show_log_win.checkBox_allTypes.setText(Titles['all_types'][lang])
+
+	self.show_log_win.groupBox_4.setTitle(Titles['lines'][lang])
+	self.show_log_win.label_12.setText(Titles['line'][lang])
+	self.show_log_win.comboBox_linesFL.clear()
+	self.show_log_win.comboBox_linesFL.addItems([Titles['from_last'][lang], Titles['from_first'][lang]])
+	
+	self.show_log_win.search_btn.setText(Titles['search'][lang])
+	self.show_log_win.refresh_btn.setText(Titles['refresh'][lang])
+
+	self.show_log_win.groupBox_2.setTitle(Titles['logs'][lang])
+
+	if lang == 'fa':
+		self.show_log_win.label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+		self.show_log_win.label_2.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+	elif lang == 'en':
+		self.show_log_win.label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+		self.show_log_win.label_2.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
 # def set_help_title(self):
 #     self.Data_auquzation_btn.setText(Titles['Data Auquzation'][lang])

@@ -4,6 +4,8 @@ import os
 
 from backend import date_funcs
 
+SHAMSI_DATE = False
+
 
 class app_logger():
     def __init__(self, name='saba_setting-app_logger', log_mainfolderpath='./app_logs', console_log=True):
@@ -26,8 +28,8 @@ class app_logger():
         # create log folders and files
         self.console_log = console_log
         self.main_folderpath = log_mainfolderpath
-        self.daily_folderpath = date_funcs.get_date(persian=True, folder_path=True)
-        self.current_filepath = os.path.join(self.main_folderpath, self.daily_folderpath, date_funcs.get_datetime(persian=True, folder_path=True)+'.log')
+        self.daily_folderpath = date_funcs.get_date(persian=SHAMSI_DATE, folder_path=True)
+        self.current_filepath = os.path.join(self.main_folderpath, self.daily_folderpath, date_funcs.get_datetime(persian=SHAMSI_DATE, folder_path=True)+'.log')
         self.create_mainfolder()
         self.create_dailyfolder()
 
@@ -110,8 +112,8 @@ class app_logger():
         Returns: None
         """
 
-        self.daily_folderpath = date_funcs.get_date(persian=True, folder_path=True)
-        self.current_filepath = os.path.join(self.main_folderpath, self.daily_folderpath, date_funcs.get_datetime(persian=True, folder_path=True)+'.log')
+        self.daily_folderpath = date_funcs.get_date(persian=SHAMSI_DATE, folder_path=True)
+        self.current_filepath = os.path.join(self.main_folderpath, self.daily_folderpath, date_funcs.get_datetime(persian=SHAMSI_DATE, folder_path=True)+'.log')
         self.create_dailyfolder()
 
         # file handler
@@ -133,7 +135,7 @@ class app_logger():
 
 
     # create new log
-    def create_new_log(self, message='nothing', level=1):
+    def create_new_log(self, message='nothing', code='00', level=1):
         """
         this function creates a log with input message and log level
 
@@ -151,37 +153,37 @@ class app_logger():
         """
         
         # get date and tme
-        datetime = date_funcs.get_datetime(persian=True, folder_path=False)
+        datetime = date_funcs.get_datetime(persian=SHAMSI_DATE, folder_path=False)
 
         # change log path on date change
-        if self.daily_folderpath != date_funcs.get_date(persian=True, folder_path=True):
+        if self.daily_folderpath != date_funcs.get_date(persian=SHAMSI_DATE, folder_path=True):
             self.change_path_on_date_change()
 
 
         # do log by levels
         # debug
         if level == 0:
-            self.logger.debug(msg='%s - %s : %s\n------------------------------------------------------------------------------' % (datetime, self.current_username, message))
+            self.logger.debug(msg='%s - %s : (%s)%s\n' % (datetime, self.current_username, code, message) + '-'*120)
         #
         # info
         elif level == 1:
-            self.logger.info(msg='%s - %s : %s\n------------------------------------------------------------------------------' % (datetime, self.current_username, message))
+            self.logger.info(msg='%s - %s : (%s)%s\n' % (datetime, self.current_username, code, message) + '-'*120)
         #
         # warning
         elif level == 2:
-            self.logger.warning(msg='%s - %s : %s\n------------------------------------------------------------------------------' % (datetime, self.current_username, message))
+            self.logger.warning(msg='%s - %s : (%s)%s\n' % (datetime, self.current_username, code, message) + '-'*120)
         #
         # error
         elif level == 3:
-            self.logger.error(msg='%s - %s : %s\n------------------------------------------------------------------------------' % (datetime, self.current_username, message))
+            self.logger.error(msg='%s - %s : (%s)%s\n' % (datetime, self.current_username, code, message) + '-'*120)
         #
         # critical error
         elif level == 4:
-            self.logger.critical(msg='%s - %s : %s\n------------------------------------------------------------------------------' % (datetime, self.current_username, message))
+            self.logger.critical(msg='%s - %s : (%s)%s\n' % (datetime, self.current_username, code, message) + '-'*120)
         #
         # exception error (with logging exception message)
         elif level == 5:
-            self.logger.exception(msg='%s - %s : %s\n------------------------------------------------------------------------------' % (datetime, self.current_username, message))
+            self.logger.exception(msg='%s - %s : (%s)%s\n' % (datetime, self.current_username, code, message) + '-'*120)
 
     
     # set current logged-in user to logger

@@ -1,23 +1,51 @@
-from PyQt5.Qt import QApplication
-from PyQt5.QtCore import QRegExp
-from PyQt5.QtGui import QRegExpValidator
-from PyQt5.QtWidgets import QWidget, QLineEdit
+import os
+import texts
 
-import sys
+def search_logs(self):
+    last_flag = self.comboBox_linesFL.currentText() == 'Last'
+    log_folders = sorted(os.listdir(self.log_mainfolderpath), reverse=last_flag)
 
-class MyWidget(QWidget):
-    def __init__(self, parent=None):
-        super(QWidget, self).__init__(parent)
-        self.le_input = QLineEdit(self)
+    if not self.checkBox_allDates.isChecked():
+        from_date = str(self.spinBox_fromYear.value()) + '-' + str(self.spinBox_fromMonth.value()).rjust(2, '0') + '-' + str(self.spinBox_fromDay.value()).rjust(2, '0')
+        to_date = str(self.spinBox_toYear.value()) + '-' + str(self.spinBox_toMonth.value()).rjust(2, '0') + '-' + str(self.spinBox_toDay.value()).rjust(2, '0')
+        if from_date > to_date:
+            self.set_warning(text=texts.WARNINGS['invalid_date_range'][self.language], level=2)
+            return
+        log_folders = list(filter(lambda log_folder: from_date <= log_folder <= to_date, log_folders))
+    
+    max_lines = self.spinBox_lineNumbers.value()
+    line_counter = 0
+    text = ''
+    match_flag = True
+    for log_folder in log_folders:
+        log_files = sorted(os.listdir(os.path.join(self.log_mainfolderpath, log_folder)), reverse=last_flag)
+        for log_file in log_files:
+            if line_counter >= max_lines:
+                break
+            with open(os.path.join(self.log_mainfolderpath, log_folder, log_file), 'r') as f:
+                if not last_flag:
+                    l = zip(f, f)
+                else:
+                    l = reversed(list(zip(f, f)))
+                for line, dash in l:
+                    if line_counter >= max_lines:
+                            break
+                    if not self.checkBox_allLevels.isChecked():
+                        match_flag = False
+                        level = line.split(' ')[0]
+                        if self.checkBox_levelInfo.isChecked() and level == 'INFO':
+                            match_flag = True
+                        if self.checkBox_levelWarning.isChecked() and level == 'WARNING':
+                            match_flag = True
+                        if self.checkBox_levelError.isChecked() and level == 'ERROR':
+                            match_flag = True
+                        if self.checkBox_levelCritical.isChecked() and level == 'CRITICAL':
+                            match_flag = True
+                        if self.checkBox_levelException.isChecked() and level not in ['INFO', 'WARNING', 'ERROR', 'CRITICAL']:
+                            match_flag = True
+                    if match_flag:
+                        text += line
+                        text += dash
+                        line_counter += 1
 
-        reg_ex = QRegExp("[0-9]+.?[0-9]{,2}")
-        input_validator = QRegExpValidator(reg_ex, self.le_input)
-        self.le_input.setValidator(input_validator)
-
-if __name__ == '__main__':
-    a = QApplication(sys.argv)
-
-    w = MyWidget()
-    w.show()
-
-    a.exec()
+    self.logs_textEdit.setText(text)
