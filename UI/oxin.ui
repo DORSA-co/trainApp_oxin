@@ -956,7 +956,7 @@ background-color: rgb(170, 170, 212);</string>
                 <item>
                  <widget class="QPushButton" name="pbt_btn">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -4575,7 +4575,7 @@ border:None;</string>
                                       <x>0</x>
                                       <y>0</y>
                                       <width>495</width>
-                                      <height>30</height>
+                                      <height>32</height>
                                      </rect>
                                     </property>
                                     <property name="sizePolicy">
@@ -4843,8 +4843,8 @@ QPushButton:disabled {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>707</width>
-                                   <height>17</height>
+                                   <width>827</width>
+                                   <height>28</height>
                                   </rect>
                                  </property>
                                  <layout class="QHBoxLayout" name="horizontalLayout_213">
@@ -7924,7 +7924,7 @@ border-radius: 8px;</string>
                                          <x>0</x>
                                          <y>0</y>
                                          <width>707</width>
-                                         <height>20</height>
+                                         <height>27</height>
                                         </rect>
                                        </property>
                                        <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -9480,7 +9480,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>28</height>
+                                     <height>784</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -9732,7 +9732,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>28</height>
+                                     <height>784</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -10441,7 +10441,7 @@ QToolTip {
                                <property name="minimumSize">
                                 <size>
                                  <width>0</width>
-                                 <height>1</height>
+                                 <height>0</height>
                                 </size>
                                </property>
                                <property name="maximumSize">
@@ -10481,7 +10481,7 @@ border: None;</string>
                                   <property name="minimumSize">
                                    <size>
                                     <width>0</width>
-                                    <height>150</height>
+                                    <height>100</height>
                                    </size>
                                   </property>
                                   <property name="maximumSize">
@@ -10506,7 +10506,7 @@ border: None;</string>
                                   <property name="minimumSize">
                                    <size>
                                     <width>0</width>
-                                    <height>150</height>
+                                    <height>100</height>
                                    </size>
                                   </property>
                                   <property name="maximumSize">
@@ -10531,7 +10531,7 @@ border: None;</string>
                                   <property name="minimumSize">
                                    <size>
                                     <width>0</width>
-                                    <height>150</height>
+                                    <height>100</height>
                                    </size>
                                   </property>
                                   <property name="maximumSize">
@@ -10556,7 +10556,57 @@ border: None;</string>
                                   <property name="minimumSize">
                                    <size>
                                     <width>0</width>
-                                    <height>150</height>
+                                    <height>100</height>
+                                   </size>
+                                  </property>
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>16777215</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">border: 2px solid black;</string>
+                                  </property>
+                                  <property name="text">
+                                   <string/>
+                                  </property>
+                                  <property name="scaledContents">
+                                   <bool>true</bool>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QLabel" name="labeling_help_5">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>0</width>
+                                    <height>100</height>
+                                   </size>
+                                  </property>
+                                  <property name="maximumSize">
+                                   <size>
+                                    <width>16777215</width>
+                                    <height>16777215</height>
+                                   </size>
+                                  </property>
+                                  <property name="styleSheet">
+                                   <string notr="true">border: 2px solid black;</string>
+                                  </property>
+                                  <property name="text">
+                                   <string/>
+                                  </property>
+                                  <property name="scaledContents">
+                                   <bool>true</bool>
+                                  </property>
+                                 </widget>
+                                </item>
+                                <item>
+                                 <widget class="QLabel" name="labeling_help_6">
+                                  <property name="minimumSize">
+                                   <size>
+                                    <width>0</width>
+                                    <height>100</height>
                                    </size>
                                   </property>
                                   <property name="maximumSize">
@@ -12709,7 +12759,7 @@ QPushButton:hover {
                           </size>
                          </property>
                          <property name="currentIndex">
-                          <number>1</number>
+                          <number>2</number>
                          </property>
                          <widget class="QWidget" name="page_pipeline">
                           <property name="maximumSize">
@@ -13196,7 +13246,7 @@ color : rgb(0,0,0);</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>92</width>
+                                   <width>63</width>
                                    <height>165</height>
                                   </rect>
                                  </property>
@@ -13223,8 +13273,8 @@ color : rgb(0,0,0);</string>
                                       <rect>
                                        <x>0</x>
                                        <y>0</y>
-                                       <width>96</width>
-                                       <height>49</height>
+                                       <width>76</width>
+                                       <height>43</height>
                                       </rect>
                                      </property>
                                      <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -14611,7 +14661,7 @@ border:Transparent</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>329</width>
+                                   <width>340</width>
                                    <height>699</height>
                                   </rect>
                                  </property>
@@ -15626,6 +15676,9 @@ border:Transparent</string>
                                         </item>
                                         <item>
                                          <widget class="QLineEdit" name="localization_iou_min_filter_lineedit">
+                                          <property name="enabled">
+                                           <bool>true</bool>
+                                          </property>
                                           <property name="minimumSize">
                                            <size>
                                             <width>50</width>
@@ -20366,7 +20419,7 @@ QPushButton:hover {
                                           </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>130</width>
+                                            <width>150</width>
                                             <height>20</height>
                                            </size>
                                           </property>
@@ -21323,6 +21376,114 @@ QPushButton:hover {
                                   </layout>
                                  </item>
                                  <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_297">
+                                   <item>
+                                    <widget class="QLabel" name="label_301">
+                                     <property name="text">
+                                      <string>Pretrained weights path:</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_68">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="l_select_prep">
+                                     <property name="enabled">
+                                      <bool>false</bool>
+                                     </property>
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>102</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="cursor">
+                                      <cursorShape>PointingHandCursor</cursorShape>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">QPushButton {
+	background-color: rgb(70,70,70);
+	color: rgb(255,255,255);
+	border: none;
+	text-align: center
+}
+
+QPushButton:disabled  {
+	background-color: rgb(150, 150, 150);
+	color: rgb(200, 200, 200);
+}
+
+QPushButton:hover {
+	background-color:  rgb(150,150,150);
+    color: rgb(0,0,0);
+}</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>Select Dataset</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="QTextEdit" name="l_prep">
+                                   <property name="enabled">
+                                    <bool>false</bool>
+                                   </property>
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>20</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>310</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">QTextEdit:disabled  {
+	background-color: rgb(200, 200, 200);
+	color: rgb(160, 160, 160);
+}</string>
+                                   </property>
+                                   <property name="readOnly">
+                                    <bool>true</bool>
+                                   </property>
+                                   <property name="html">
+                                    <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
                                   <layout class="QHBoxLayout" name="horizontalLayout_236">
                                    <item>
                                     <widget class="QLabel" name="label_243">
@@ -21552,6 +21713,12 @@ QPushButton:hover {
                                    </item>
                                    <item>
                                     <widget class="QPushButton" name="l_select_dp">
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
                                      <property name="minimumSize">
                                       <size>
                                        <width>102</width>
@@ -21559,7 +21726,22 @@ QPushButton:hover {
                                       </size>
                                      </property>
                                      <property name="styleSheet">
-                                      <string notr="true">color:white;</string>
+                                      <string notr="true">QPushButton {
+	background-color: rgb(70,70,70);
+	color: rgb(255,255,255);
+	border: none;
+	text-align: center
+}
+
+QPushButton:disabled  {
+	background-color: rgb(150, 150, 150);
+	color: rgb(200, 200, 200);
+}
+
+QPushButton:hover {
+	background-color:  rgb(150,150,150);
+    color: rgb(0,0,0);
+}color:white;</string>
                                      </property>
                                      <property name="text">
                                       <string>Select Dataset</string>
@@ -21616,6 +21798,12 @@ QPushButton:hover {
                                    </item>
                                    <item>
                                     <widget class="QPushButton" name="l_delete_ds">
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
                                      <property name="maximumSize">
                                       <size>
                                        <width>65</width>
@@ -21623,7 +21811,22 @@ QPushButton:hover {
                                       </size>
                                      </property>
                                      <property name="styleSheet">
-                                      <string notr="true">color:white;</string>
+                                      <string notr="true">QPushButton {
+	background-color: rgb(70,70,70);
+	color: rgb(255,255,255);
+	border: none;
+	text-align: center
+}
+
+QPushButton:disabled  {
+	background-color: rgb(150, 150, 150);
+	color: rgb(200, 200, 200);
+}
+
+QPushButton:hover {
+	background-color:  rgb(150,150,150);
+    color: rgb(0,0,0);
+}</string>
                                      </property>
                                      <property name="text">
                                       <string>Delete</string>
@@ -21632,6 +21835,12 @@ QPushButton:hover {
                                    </item>
                                    <item>
                                     <widget class="QPushButton" name="l_add_ds">
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
                                      <property name="maximumSize">
                                       <size>
                                        <width>65</width>
@@ -21639,7 +21848,22 @@ QPushButton:hover {
                                       </size>
                                      </property>
                                      <property name="styleSheet">
-                                      <string notr="true">color:white;</string>
+                                      <string notr="true">QPushButton {
+	background-color: rgb(70,70,70);
+	color: rgb(255,255,255);
+	border: none;
+	text-align: center
+}
+
+QPushButton:disabled  {
+	background-color: rgb(150, 150, 150);
+	color: rgb(200, 200, 200);
+}
+
+QPushButton:hover {
+	background-color:  rgb(150,150,150);
+    color: rgb(0,0,0);
+}</string>
                                      </property>
                                      <property name="text">
                                       <string>Add</string>
@@ -22119,13 +22343,13 @@ QPushButton:hover {
                             <widget class="QFrame" name="frame_32">
                              <property name="minimumSize">
                               <size>
-                               <width>300</width>
+                               <width>340</width>
                                <height>0</height>
                               </size>
                              </property>
                              <property name="maximumSize">
                               <size>
-                               <width>300</width>
+                               <width>340</width>
                                <height>16777215</height>
                               </size>
                              </property>
@@ -22155,13 +22379,13 @@ QPushButton:hover {
                                <widget class="QGroupBox" name="groupBox_35">
                                 <property name="minimumSize">
                                  <size>
-                                  <width>300</width>
+                                  <width>0</width>
                                   <height>0</height>
                                  </size>
                                 </property>
                                 <property name="maximumSize">
                                  <size>
-                                  <width>300</width>
+                                  <width>16777215</width>
                                   <height>16777215</height>
                                  </size>
                                 </property>
@@ -22234,6 +22458,18 @@ QPushButton:hover {
                                    </property>
                                    <item>
                                     <widget class="QLabel" name="label_91">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
                                      <property name="font">
                                       <font>
                                        <family>ubuntu</family>
@@ -22270,6 +22506,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_111_4">
                                        <item>
                                         <widget class="QLabel" name="label_92">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -22292,6 +22534,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_epoch_min_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -22324,6 +22572,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_121_4">
                                        <item>
                                         <widget class="QLabel" name="label_93">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -22346,6 +22600,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_epoch_max_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -22399,6 +22659,18 @@ QPushButton:hover {
                                    </property>
                                    <item>
                                     <widget class="QLabel" name="label_2471">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
                                      <property name="font">
                                       <font>
                                        <family>ubuntu</family>
@@ -22435,6 +22707,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_249">
                                        <item>
                                         <widget class="QLabel" name="label_2511">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -22457,6 +22735,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_batch_min_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -22495,6 +22779,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_250">
                                        <item>
                                         <widget class="QLabel" name="label_252">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -22517,6 +22807,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_batch_max_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -22570,6 +22866,18 @@ QPushButton:hover {
                                    </property>
                                    <item>
                                     <widget class="QLabel" name="label_95">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
                                      <property name="font">
                                       <font>
                                        <family>ubuntu</family>
@@ -22580,7 +22888,7 @@ QPushButton:hover {
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>Split Size</string>
+                                      <string>Split Ratio</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -22606,6 +22914,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_252">
                                        <item>
                                         <widget class="QLabel" name="label_96">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -22628,6 +22942,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_split_min_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -22660,6 +22980,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_253">
                                        <item>
                                         <widget class="QLabel" name="label_97">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -22682,6 +23008,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_split_max_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -22735,6 +23067,18 @@ QPushButton:hover {
                                    </property>
                                    <item>
                                     <widget class="QLabel" name="label_110">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
                                      <property name="font">
                                       <font>
                                        <family>ubuntu</family>
@@ -22771,6 +23115,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_256">
                                        <item>
                                         <widget class="QLabel" name="label_132_4">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -22793,6 +23143,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_loss_min_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -22825,6 +23181,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_257">
                                        <item>
                                         <widget class="QLabel" name="label_253">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -22847,6 +23209,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_loss_max_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -22900,6 +23268,18 @@ QPushButton:hover {
                                    </property>
                                    <item>
                                     <widget class="QLabel" name="label_254">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
                                      <property name="font">
                                       <font>
                                        <family>ubuntu</family>
@@ -22936,6 +23316,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_260">
                                        <item>
                                         <widget class="QLabel" name="label_255">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -22958,6 +23344,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_acc_min_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -22990,6 +23382,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_261">
                                        <item>
                                         <widget class="QLabel" name="label_256">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -23012,6 +23410,12 @@ QPushButton:hover {
                                        </item>
                                        <item>
                                         <widget class="QLineEdit" name="localization_acc_max_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -23065,6 +23469,18 @@ QPushButton:hover {
                                    </property>
                                    <item>
                                     <widget class="QLabel" name="label_257">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
                                      <property name="font">
                                       <font>
                                        <family>ubuntu</family>
@@ -23075,7 +23491,7 @@ QPushButton:hover {
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>Precision</string>
+                                      <string>IOU</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -23101,6 +23517,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_264">
                                        <item>
                                         <widget class="QLabel" name="label_258">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -23122,7 +23544,13 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_prec_min_filter_lineedit">
+                                        <widget class="QLineEdit" name="localization_iou_min_filter_lineedit_2">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -23176,7 +23604,13 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_prec_max_filter_lineedit">
+                                        <widget class="QLineEdit" name="localization_iou_max_filter_lineedit_2">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -23230,6 +23664,18 @@ QPushButton:hover {
                                    </property>
                                    <item>
                                     <widget class="QLabel" name="label_260">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
                                      <property name="font">
                                       <font>
                                        <family>ubuntu</family>
@@ -23240,7 +23686,7 @@ QPushButton:hover {
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>Recall</string>
+                                      <string>FScore</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -23266,6 +23712,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_268">
                                        <item>
                                         <widget class="QLabel" name="label_261">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -23287,7 +23739,13 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_rec_min_filter_lineedit">
+                                        <widget class="QLineEdit" name="localization_fscore_min_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -23320,6 +23778,12 @@ QPushButton:hover {
                                       <layout class="QHBoxLayout" name="horizontalLayout_269">
                                        <item>
                                         <widget class="QLabel" name="label_262">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -23341,7 +23805,13 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_rec_max_filter_lineedit">
+                                        <widget class="QLineEdit" name="localization_fscore_max_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>50</width>
@@ -23424,9 +23894,15 @@ QPushButton:hover {
                                         </property>
                                         <item>
                                          <widget class="QLabel" name="label_263">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>150</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>16777215</width>
+                                            <width>150</width>
                                             <height>20</height>
                                            </size>
                                           </property>
@@ -23446,16 +23922,22 @@ QPushButton:hover {
                                         </item>
                                         <item>
                                          <widget class="QLineEdit" name="localization_start_year_lineedit">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="minimumSize">
                                            <size>
-                                            <width>55</width>
+                                            <width>70</width>
                                             <height>0</height>
                                            </size>
                                           </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>55</width>
-                                            <height>30</height>
+                                            <width>70</width>
+                                            <height>16777215</height>
                                            </size>
                                           </property>
                                           <property name="font">
@@ -23502,16 +23984,22 @@ QPushButton:hover {
                                         </item>
                                         <item>
                                          <widget class="QLineEdit" name="localization_start_month_lineedit">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="minimumSize">
                                            <size>
-                                            <width>30</width>
+                                            <width>40</width>
                                             <height>0</height>
                                            </size>
                                           </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>30</width>
-                                            <height>30</height>
+                                            <width>40</width>
+                                            <height>16777215</height>
                                            </size>
                                           </property>
                                           <property name="font">
@@ -23558,16 +24046,22 @@ QPushButton:hover {
                                         </item>
                                         <item>
                                          <widget class="QLineEdit" name="localization_start_day_lineedit">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="minimumSize">
                                            <size>
-                                            <width>30</width>
+                                            <width>40</width>
                                             <height>0</height>
                                            </size>
                                           </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>30</width>
-                                            <height>30</height>
+                                            <width>40</width>
+                                            <height>16777215</height>
                                            </size>
                                           </property>
                                           <property name="font">
@@ -23593,9 +24087,15 @@ QPushButton:hover {
                                         </property>
                                         <item>
                                          <widget class="QLabel" name="label_266">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>150</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>16777215</width>
+                                            <width>150</width>
                                             <height>20</height>
                                            </size>
                                           </property>
@@ -23615,16 +24115,22 @@ QPushButton:hover {
                                         </item>
                                         <item>
                                          <widget class="QLineEdit" name="localization_end_year_lineedit">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="minimumSize">
                                            <size>
-                                            <width>55</width>
+                                            <width>70</width>
                                             <height>0</height>
                                            </size>
                                           </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>55</width>
-                                            <height>30</height>
+                                            <width>70</width>
+                                            <height>16777215</height>
                                            </size>
                                           </property>
                                           <property name="font">
@@ -23674,16 +24180,22 @@ QPushButton:hover {
                                         </item>
                                         <item>
                                          <widget class="QLineEdit" name="localization_end_month_lineedit">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="minimumSize">
                                            <size>
-                                            <width>30</width>
+                                            <width>40</width>
                                             <height>0</height>
                                            </size>
                                           </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>30</width>
-                                            <height>30</height>
+                                            <width>40</width>
+                                            <height>16777215</height>
                                            </size>
                                           </property>
                                           <property name="font">
@@ -23730,16 +24242,22 @@ QPushButton:hover {
                                         </item>
                                         <item>
                                          <widget class="QLineEdit" name="localization_end_day_lineedit">
+                                          <property name="sizePolicy">
+                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                           </sizepolicy>
+                                          </property>
                                           <property name="minimumSize">
                                            <size>
-                                            <width>30</width>
+                                            <width>40</width>
                                             <height>0</height>
                                            </size>
                                           </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>30</width>
-                                            <height>30</height>
+                                            <width>40</width>
+                                            <height>16777215</height>
                                            </size>
                                           </property>
                                           <property name="font">

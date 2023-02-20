@@ -173,7 +173,6 @@ class dataBase:
                                 {} """.format(table_name,parametrs,s)
                                 
             
-                    
             cursor.execute(mySql_insert_query,data)
             connection.commit()
             cursor.close()

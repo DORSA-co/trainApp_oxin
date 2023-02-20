@@ -76,8 +76,20 @@ ERRORS = {
     'RECA_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای ریکال صحیح نیست ',
                              'en': ' Recall range is not correct '},
 
-    'RECA_FORMAT_INVALID': {'fa': ' فرمت واردشده برای ریکال نامعتبر است ',
+    'RECA_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای ریکال نامعتبر است ',
                             'en': ' Recall format invalid '},
+
+    'IOU_RANGE_INCORRECT': {'fa': ' بازه‌ی وارد شده برای IOU صحیح نیست ',
+                             'en': ' IOU range is not correct '},
+
+    'IOU_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای IOU نامعتبر است ',
+                            'en': ' IOU format invalid '},
+
+    'FSCORE_RANGE_INCORRECT': {'fa': ' بازه‌ی وارد شده برای FScore صحیح نیست ',
+                             'en': ' FScore range is not correct '},
+
+    'FSCORE_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای FScore نامعتبر است ',
+                            'en': ' FScore format invalid '},
 
     'YEAR_RANGE_INCORRECT': {'fa': ' مقدار وارد شده برای سال خارج از بازه است ',
                              'en': ' Start/end year not in range '},
@@ -268,6 +280,9 @@ ERRORS = {
 
     'CREATE_MODEL_FAILED': {'fa': ' خطا در ایجاد مدل برای الگوریتم {}. ',
                             'en': ' Error while creating model for {} algorithm. '},
+                    
+    'CALLBACK_CREATE_FAILED': {'fa': ' خطا در ایجاد شی CallBack ',
+                    'en': ' Error while creating Callback object. '},
 
     'CREATE_FTMODEL_FAILED': {'fa': ' خطا در ایجاد مدل تنظیم دقیق برای الگوریتم {}. ',
                             'en': ' Error while creating fine tune model for {} algorithm. '},
@@ -453,6 +468,12 @@ WARNINGS = {
     'RECA_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به ریکال را مقدار دهید یا هر دو را خالی بگذارید ',
                          'en': ' Recall range fields can not be empty, Please fill both them or leave them empty '},
 
+    'IOU_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به IOU را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' IOU range fields can not be empty, Please fill both them or leave them empty '},
+
+    'FSCORE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به FScore را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' FScore range fields can not be empty, Please fill both them or leave them empty '},
+
     'SELECT_MORE_THAN_ONE_DEFECT_CLASS': {'fa': ' امکان انتخاب چند کلاس عیب به صورت همزمان وجود ندارد ',
                                           'en': ' can not select more than one defect class at same time '},
 
@@ -552,8 +573,8 @@ MESSEGES = {
     'UI_CREATED': {'fa': ' .شی رابط کاربری برای نرم افزار آموزشی ایجاد شد ',
                     'en': ' UI object for train app created. '},
                     
-    'CCALLBACK_CREATED': {'fa': ' .ایجاد شد CustomCallback شی ',
-                    'en': ' CustomCallback object created. '},
+    'CALLBACK_CREATED': {'fa': ' .ایجاد شد Callback شی ',
+                    'en': ' Callback object created. '},
                     
     'UPDATE_BCHART': {'fa': ' اپوک {}: .نمودار های آموزش باینری به روز شدند ',
                     'en': ' Epoch {}: Binary train charts updated. '},
@@ -1217,6 +1238,12 @@ Titles = {
         'algorithm_name': {'fa': ':نام الگوریتم',
                         'en': 'Algorithm Name:'},
 
+        'pretrained_weights_path': {'fa': ':آدرس وزن‌های آموزش دیده',
+                        'en': 'Pretrained weights path:'},
+
+        'algorithm_name_2': {'fa': 'نام الگوریتم',
+                        'en': 'Algorithm Name'},
+
         'input_size': {'fa': ':اندازه ورودی',
                         'en': 'Input Size:'},
 
@@ -1306,6 +1333,12 @@ Titles = {
         
         'recall': {'fa': 'ریکال', 
                 'en': 'Recall'},
+        
+        'iou': {'fa': 'IOU', 
+                'en': 'IOU'},
+        
+        'fscore': {'fa': 'FScore', 
+                'en': 'FScore'},
 
         'min': {'fa': 'کمینه',
                 'en': 'Min'},
@@ -2007,7 +2040,7 @@ def set_title(self, lang):
     ## history
 
     self.groupBox_33.setTitle(Titles['sf_training_records'][lang])
-    self.label_102.setText(Titles['name'][lang])
+    self.label_102.setText(Titles['algorithm_name_2'][lang])
     self.label_109.setText(Titles['epochs_2'][lang])
     self.label_134_2.setText(Titles['tune_epochs'][lang])
     self.label_134.setText(Titles['batch_size_2'][lang])
@@ -2046,6 +2079,7 @@ def set_title(self, lang):
     ## training
 
     self.label_242.setText(Titles['algorithm_name'][lang])
+    self.label_301.setText(Titles['pretrained_weights_path'][lang])
     self.label_243.setText(Titles['input_size'][lang])
     self.label_33.setText(Titles['input_type'][lang])
     self.l_input_type_resize.setText(Titles['resize'][lang])
@@ -2070,10 +2104,14 @@ def set_title(self, lang):
     ## history
 
     self.groupBox_35.setTitle(Titles['sf_training_records'][lang])
-    self.label_90.setText(Titles['name'][lang])
+    self.label_90.setText(Titles['algorithm_name_2'][lang])
     self.label_91.setText(Titles['epochs_2'][lang])
     self.label_2471.setText(Titles['batch_size_2'][lang])
     self.label_95.setText(Titles['split_ratio'][lang])
+    self.label_110.setText(Titles['loss'][lang])
+    self.label_254.setText(Titles['accuracy'][lang])
+    self.label_257.setText(Titles['iou'][lang])
+    self.label_260.setText(Titles['fscore'][lang])
     self.label_263.setText(Titles['start_date'][lang])
     self.label_266.setText(Titles['end_date'][lang])
     self.localization_filter_btn.setText(Titles['search_filter'][lang])
@@ -2334,15 +2372,19 @@ def set_alignment(self, lang):
         self.label_143.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_130.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
-        # self.label_80.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_191.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_194.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-
         self.label_90.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_91.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_2471.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_95.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_110.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_254.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.label_257.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.label_260.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_263.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_266.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_242.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_301.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_243.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_33.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_244.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2351,14 +2393,6 @@ def set_alignment(self, lang):
         self.label_248.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_249.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_250.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-
-        # self.label_90.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_91.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_92.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_95.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_93.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_96.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_97.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_186.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_185.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2523,10 +2557,18 @@ def set_alignment(self, lang):
         # self.label_194.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         
         self.label_90.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_91.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_2471.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_95.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_110.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_254.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.label_257.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.label_260.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_263.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_266.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_242.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_301.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_243.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_33.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_244.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2535,14 +2577,6 @@ def set_alignment(self, lang):
         self.label_248.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_249.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_250.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-
-        # self.label_90.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_91.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_92.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_95.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_93.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_96.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_97.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_186.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_185.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)

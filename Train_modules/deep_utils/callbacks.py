@@ -22,9 +22,6 @@ class CustomCallback(keras.callbacks.Callback):
         self.model_type = model_type
         self.api_obj = api_obj
 
-        # logger object
-        self.api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CCALLBACK_CREATED']['en'])
-
     def on_epoch_end(self, epoch, logs=None):
         """Called at the end of each epoch and save model weights and update train charts.
 
@@ -47,7 +44,7 @@ class CustomCallback(keras.callbacks.Callback):
             self.api_obj.lmodel_train_worker.assign_new_value_to_l_chart(last_epoch=epoch, logs=logs)
 
              # Save model weights to given address
-            self.api_obj.lmodel_train_worker.save_l_model(model=self.model, path=self.out_path, epoch=epoch)
+            # self.api_obj.lmodel_train_worker.save_l_model(model=self.model, path=self.out_path, epoch=epoch)
     
 
         # keys = list(logs.keys())

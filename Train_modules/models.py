@@ -18,17 +18,53 @@ except:
 from tensorflow.keras import layers
 
 import segmentation_models as sm
+sm.set_framework("tf.keras")
+sm.framework()
 
+# try:
+from Train_modules import Unet
+# except:
+#     import Unet
 # sm.set_framework("tf.keras")
 # sm.framework()
 
 
 BINARY = "binary"
 CATEGORICAL = "categorical"
+LOSS = {"DIFO": sm.losses.DiceLoss() + sm.losses.BinaryFocalLoss()}
 
 __loss__ = {CATEGORICAL: "categorical_crossentropy", BINARY: "binary_crossentropy"}
 #__activation__ = {CATEGORICAL: "softmax", BINARY: "sigmoid"}
 __activation__ = {CATEGORICAL: "sigmoid", BINARY: "sigmoid"}
+
+def unet_model(input_size, learning_rate=1e-4, num_class=1, mode=BINARY, weights_path=None):
+    activation = "sigmoid" if num_class == 1 else "softmax"
+    if weights_path is not None:
+        model = Unet.unet(
+            backbone_name='efficientnetb2',
+            input_shape=input_size,
+            classes=num_class,
+            activation=activation,
+            weights=weights_path,
+            encoder_freeze=False,
+            decoder_use_batchnorm=True,
+        )
+    else:
+        model = Unet.unet(
+            backbone_name='efficientnetb2',
+            input_shape=input_size,
+            classes=num_class,
+            activation=activation,
+            encoder_freeze=False,
+            decoder_use_batchnorm=True,
+        )
+
+    optimizer = tf.keras.optimizers.Adam(learning_rate)
+    metrics = ['accuracy', sm.metrics.IOUScore(threshold=0.5), sm.metrics.FScore(threshold=0.5)]
+    loss = LOSS['DIFO']
+    model.compile(loss=loss, metrics=metrics, optimizer=optimizer)
+    return model
+
 
 def base_unet(
     input_size,

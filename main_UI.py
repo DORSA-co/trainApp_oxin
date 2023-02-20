@@ -202,7 +202,6 @@ class UI_main_window(QMainWindow, ui):
         self.selelcted_cameras = [False] * 24
 
         # labeling
-
         self.polygon_btn.clicked.connect(self.buttonClick)
         self.zoomIn_btn.clicked.connect(self.buttonClick)
         self.zoomOut_btn.clicked.connect(self.buttonClick)
@@ -241,12 +240,12 @@ class UI_main_window(QMainWindow, ui):
         self.set_combo_boxes()
 
         # Training_page
-
         self.init_training_page()
         self.validate_binary_train_params()
         self.validate_localization_train_params()
         self.b_add_ds.clicked.connect(self.buttonClick)
         self.b_add_cancel.clicked.connect(self.buttonClick)
+        self.l_algorithms.currentTextChanged.connect(self.buttonClick)
         self.l_add_ds.clicked.connect(self.buttonClick)
         self.l_add_cancel.clicked.connect(self.buttonClick)
 
@@ -336,8 +335,8 @@ class UI_main_window(QMainWindow, ui):
         self.loc_chart_names = [
             "loc_loss",
             "loc_accuracy",
-            "loc_recall",
-            "loc_precision",
+            "loc_iou",
+            "loc_fscore",
         ]
         # loss
         chart_funcs.create_train_chart_on_ui(
@@ -372,12 +371,12 @@ class UI_main_window(QMainWindow, ui):
             ui_obj=self,
             frame_obj=self.localization_chart_recall_frame,
             chart_postfix=self.loc_chart_names[2],
-            chart_title="Precision",
+            chart_title="IOU",
             legend_train="Train",
             legend_val="Validation",
             scroll_obj=self.localization_chart_scrollbar,
             axisX_title="Epoch",
-            axisY_title="Precision",
+            axisY_title="IOU",
             checkbox_obj=self.localization_chart_checkbox,
         )
         # recall
@@ -385,12 +384,12 @@ class UI_main_window(QMainWindow, ui):
             ui_obj=self,
             frame_obj=self.localization_chart_prec_frame,
             chart_postfix=self.loc_chart_names[3],
-            chart_title="Recall",
+            chart_title="FScore",
             legend_train="Train",
             legend_val="Validation",
             scroll_obj=self.localization_chart_scrollbar,
             axisX_title="Epoch",
-            axisY_title="Recall",
+            axisY_title="FScore",
             checkbox_obj=self.localization_chart_checkbox,
             axisX_visible=True,
         )
@@ -1061,7 +1060,7 @@ class UI_main_window(QMainWindow, ui):
             self.minHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"minimumHeight")
             self.minHeight.setDuration(300)
             self.minHeight.setStartValue(h)
-            self.minHeight.setEndValue(165)
+            self.minHeight.setEndValue(106)
             self.minHeight.setEasingCurve(sQtCore.QEasingCurve.InOutQuart)
             self.group = sQtCore.QParallelAnimationGroup()
             self.group.addAnimation(self.minHeight)
@@ -1069,7 +1068,7 @@ class UI_main_window(QMainWindow, ui):
             self.maxHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"maximumHeight")
             self.maxHeight.setDuration(300)
             self.maxHeight.setStartValue(h)
-            self.maxHeight.setEndValue(206)
+            self.maxHeight.setEndValue(131)
             self.maxHeight.setEasingCurve(sQtCore.QEasingCurve.InOutQuart)
             self.group.addAnimation(self.maxHeight)
             self.group.start()
@@ -1546,7 +1545,7 @@ class UI_main_window(QMainWindow, ui):
 
     def maximize_labeling_help_images(self, n):
         path = 'images/labeling_helps'
-        help_images = os.listdir(path)
+        help_images = sorted(os.listdir(path))
         img = cv2.imread(os.path.join(path, help_images[n-1]))
         self.n_help = neighbouring(img, annotated_image=texts.ERRORS["annotation_not_exist"][self.language], lang=self.language)
         self.n_help.show()
@@ -1833,9 +1832,9 @@ class UI_main_window(QMainWindow, ui):
         self.localization_name_filter_combo.clear()
         self.cls_name_filter_combo.clear()
 
-        b_algorithms = ["Rbe", "Xbc"]  # Must change
-        l_algorithms = ["Blu", "Rleu", "Llu", "uln"]
-        class_algorithms = ["Rce", "Xcc"]
+        b_algorithms = ALGORITHM_NAMES['binary']
+        l_algorithms = ALGORITHM_NAMES['localization']
+        class_algorithms = ALGORITHM_NAMES['classification']
         self.b_algorithms.addItems(b_algorithms)
         self.l_algorithms.addItems(l_algorithms)
         self.classification_algo_combo.addItems(class_algorithms)
@@ -1861,11 +1860,12 @@ class UI_main_window(QMainWindow, ui):
         input_validator = PG.QRegularExpressionValidator(reg_ex2, self.b_lr)
         self.b_lr.setValidator(input_validator)
 
-        input_validator = PG.QRegularExpressionValidator(reg_ex1, self.b_te)
+        reg_ex3 = sQtCore.QRegularExpression("[0-9][0-9]+")
+        input_validator = PG.QRegularExpressionValidator(reg_ex3, self.b_te)
         self.b_te.setValidator(input_validator)
 
-        reg_ex3 = sQtCore.QRegularExpression("^([1-9]\d?|100)$")
-        input_validator = PG.QRegularExpressionValidator(reg_ex3, self.b_vs)
+        reg_ex4 = sQtCore.QRegularExpression("^([1-9]\d?|100)$")
+        input_validator = PG.QRegularExpressionValidator(reg_ex4, self.b_vs)
         self.b_vs.setValidator(input_validator)
 
     def validate_localization_train_params(self):
@@ -1884,6 +1884,12 @@ class UI_main_window(QMainWindow, ui):
         input_validator = PG.QRegularExpressionValidator(reg_ex3, self.l_vs)
         self.l_vs.setValidator(input_validator)
 
+    def localization_algorithm_changed(self):
+        text = self.l_algorithms.currentText()
+        flag = text[-2:] == 'pr'
+        self.l_select_prep.setEnabled(flag)
+        self.l_prep.setEnabled(flag)
+
     def set_default_parms(self):
         """set default parms for sub training pages , that show in UI , every parms"""
         b_parms = {
@@ -1897,7 +1903,7 @@ class UI_main_window(QMainWindow, ui):
         }
 
         l_parms = {
-            "algorithm_name": "Rleu",
+            "algorithm_name": "Ulnim",
             "input_type": True,
             "epochs": "20",
             "batch_size": "8",
@@ -2030,6 +2036,20 @@ class UI_main_window(QMainWindow, ui):
         """
         try:
             localization_algorithm_name = self.l_algorithms.currentText()
+            localization_pretrain_path = self.l_prep.toPlainText()
+            if localization_algorithm_name[-2:] == 'pr' and localization_pretrain_path == '':
+                self.logger.create_new_log(
+                message=texts.WARNINGS["parameters_error"]['en'], 
+                code=texts_codes.SubTypes['parameters_error'],
+                level=5
+                )
+                self.set_warning(
+                    texts.WARNINGS["parameters_error"][self.language],
+                    "l_train",
+                    texts_codes.SubTypes['parameters_error'],
+                    level=2,
+                )
+                return []
             localization_input_size = tuple(
                 (self.l_input_size1.value(), self.l_input_size2.value())
             )
@@ -2061,6 +2081,7 @@ class UI_main_window(QMainWindow, ui):
 
             return (
                 localization_algorithm_name,
+                localization_pretrain_path,
                 localization_input_size,
                 localization_input_type,
                 localization_epoch,
@@ -2659,6 +2680,9 @@ class UI_main_window(QMainWindow, ui):
         if btnName == "b_add_cancel":
             self.cancel_add_binary_ds()
 
+        if btnName == 'l_algorithms':
+            self.localization_algorithm_changed()
+
         if btnName == "l_add_ds":
             self.add_localization_dataset()
 
@@ -3111,33 +3135,56 @@ class UI_main_window(QMainWindow, ui):
                 self.start_wind_btn.setEnabled(True)
                 api.set_wind(False)
 
-    def clear_filters_fields(self):
-        self.binary_epoch_min_filter_lineedit.clear()
-        self.binary_epoch_max_filter_lineedit.clear()
-        self.binary_tepoch_min_filter_lineedit.clear()
-        self.binary_tepoch_max_filter_lineedit.clear()
-        self.binary_batch_min_filter_lineedit.clear()
-        self.binary_batch_max_filter_lineedit.clear()
-        self.binary_split_min_filter_lineedit.clear()
-        self.binary_split_max_filter_lineedit.clear()
-        self.binary_loss_min_filter_lineedit.clear()
-        self.binary_loss_max_filter_lineedit.clear()
-        self.binary_acc_min_filter_lineedit.clear()
-        self.binary_acc_max_filter_lineedit.clear()
-        self.binary_prec_min_filter_lineedit.clear()
-        self.binary_prec_max_filter_lineedit.clear()
-        self.binary_rec_min_filter_lineedit.clear()
-        self.binary_rec_max_filter_lineedit.clear()
-        self.binary_start_year_lineedit.clear()
-        self.binary_start_month_lineedit.clear()
-        self.binary_start_day_lineedit.clear()
-        self.binary_end_year_lineedit.clear()
-        self.binary_end_month_lineedit.clear()
-        self.binary_end_day_lineedit.clear()
+    def clear_binary_filters_fields(self, wich_page='not PBT'):
+        if wich_page != "PBT":
+            self.binary_epoch_min_filter_lineedit.clear()
+            self.binary_epoch_max_filter_lineedit.clear()
+            self.binary_tepoch_min_filter_lineedit.clear()
+            self.binary_tepoch_max_filter_lineedit.clear()
+            self.binary_batch_min_filter_lineedit.clear()
+            self.binary_batch_max_filter_lineedit.clear()
+            self.binary_split_min_filter_lineedit.clear()
+            self.binary_split_max_filter_lineedit.clear()
+            self.binary_loss_min_filter_lineedit.clear()
+            self.binary_loss_max_filter_lineedit.clear()
+            self.binary_acc_min_filter_lineedit.clear()
+            self.binary_acc_max_filter_lineedit.clear()
+            self.binary_prec_min_filter_lineedit.clear()
+            self.binary_prec_max_filter_lineedit.clear()
+            self.binary_rec_min_filter_lineedit.clear()
+            self.binary_rec_max_filter_lineedit.clear()
+            self.binary_start_year_lineedit.clear()
+            self.binary_start_month_lineedit.clear()
+            self.binary_start_day_lineedit.clear()
+            self.binary_end_year_lineedit.clear()
+            self.binary_end_month_lineedit.clear()
+            self.binary_end_day_lineedit.clear()
 
-    def show_labeling_help(self, n_helps=4):
+    def clear_localization_filters_fields(self):
+        self.localization_epoch_min_filter_lineedit.clear()
+        self.localization_epoch_max_filter_lineedit.clear()
+        self.localization_batch_min_filter_lineedit.clear()
+        self.localization_batch_max_filter_lineedit.clear()
+        self.localization_split_min_filter_lineedit.clear()
+        self.localization_split_max_filter_lineedit.clear()
+        self.localization_loss_min_filter_lineedit.clear()
+        self.localization_loss_max_filter_lineedit.clear()
+        self.localization_acc_min_filter_lineedit.clear()
+        self.localization_acc_max_filter_lineedit.clear()
+        self.localization_iou_min_filter_lineedit_2.clear()
+        self.localization_iou_max_filter_lineedit_2.clear()
+        self.localization_fscore_min_filter_lineedit.clear()
+        self.localization_fscore_max_filter_lineedit.clear()
+        self.localization_start_year_lineedit.clear()
+        self.localization_start_month_lineedit.clear()
+        self.localization_start_day_lineedit.clear()
+        self.localization_end_year_lineedit.clear()
+        self.localization_end_month_lineedit.clear()
+        self.localization_end_day_lineedit.clear()
+
+    def show_labeling_help(self, n_helps=6):
         path = 'images/labeling_helps'
-        help_images = os.listdir(path)
+        help_images = sorted(os.listdir(path))
         for i in range(n_helps):
             img = cv2.imread(os.path.join(path, help_images[i]))
             image = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)

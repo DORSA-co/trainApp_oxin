@@ -5,9 +5,14 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 import os
 import copy
-import texts
+# import texts
 import shutil
 import cv2
+import random
+import segmentation_models as sm
+
+sm.set_framework("tf.keras")
+sm.framework()
 
 aug_dict = dict(rotation_range=15,
                 width_shift_range=0.1,
@@ -230,33 +235,102 @@ def maskGenerator(path,
     # -----------------------------------------------------
 
 
+class CustomDataGen(tf.keras.utils.Sequence):
+    def __init__(
+        self,
+        path, 
+        image_folder,
+        mask_folder,
+        batch_size,
+        transforms=None,
+        input_size=(224, 224),
+        shuffle=True,
+    ):
+
+        self.batch_size = batch_size
+        self.input_size = input_size
+        self.shuffle = shuffle
+        self.transforms = transforms
+
+        self.image_path = os.path.join(path, image_folder)
+        self.mask_path = os.path.join(path, mask_folder)
+
+        self.image_list = os.listdir(self.image_path)
+        self.n = len(self.image_list)
+
+    def on_epoch_end(self):
+        if self.shuffle:
+            self.image_list = random.sample(self.image_list, self.n)
+
+    def __get_input(self, path):
+        image = cv2.imread(os.path.join(self.image_path, path))
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        if self.input_size != (image.shape[0], image.shape[1]):
+            image = cv2.resize(image, (self.input_size[1], self.input_size[0]))
+        image = self.transforms(image)
+        return image 
+
+    def __get_output(self, path):
+        mask = cv2.imread(os.path.join(self.mask_path, path), 0)
+        if self.input_size != (mask.shape[0], mask.shape[1]):
+            mask = cv2.resize(mask, (self.input_size[1], self.input_size[0]))
+        return mask / (255.0)
+
+    def __get_data(self, batches):
+        # Generates data containing batch_size samples
+
+        X_batch = np.array([self.__get_input(x) for x in batches])
+        y_batch = np.array([self.__get_output(x) for x in batches])
+
+        return X_batch, y_batch
+
+    def __getitem__(self, index):
+        batches = self.image_list[index * self.batch_size : (index + 1) * self.batch_size]
+        X, y = self.__get_data(batches)
+        return X, y
+
+    def __len__(self):
+        return (self.n//self.batch_size + 1) if ((self.n//self.batch_size) != (self.n/self.batch_size)) else (self.n//self.batch_size)
+
+
 if __name__ == '__main__':
-    train, test = get_binarygenerator('data//binary',
-                                      (128, 800),
-                                      defective_folder='defective',
-                                      perfect_folder='perfect',
-                                      aug_dict=aug_dict,
-                                      validation_split=0.2)
+    # train, test = get_binarygenerator('data//binary',
+    #                                   (128, 800),
+    #                                   defective_folder='defective',
+    #                                   perfect_folder='perfect',
+    #                                   aug_dict=aug_dict,
+    #                                   validation_split=0.2)
 
-    train_c = maskGenerator('data/mask_class/train',
-                            'image',
-                            'label',
-                            aug_dict,
-                            subfolders_mask=['0', '1', '2', '3', '4'],
-                            batch_size=8,
-                            target_size=(128, 800),
-                            bg_idx=0)
+    # train_c = maskGenerator('data/mask_class/train',
+    #                         'image',
+    #                         'label',
+    #                         aug_dict,
+    #                         subfolders_mask=['0', '1', '2', '3', '4'],
+    #                         batch_size=8,
+    #                         target_size=(128, 800),
+    #                         bg_idx=0)
 
-    train_nc = maskGenerator('data/mask/train',
-                             'image',
-                             'label',
-                             aug_dict,
-                             batch_size=1,
-                             target_size=(128, 800))
+    # train_nc = maskGenerator('SymLink/train',
+    #                          'image',
+    #                          'label',
+    #                          aug_dict,
+    #                          batch_size=13,
+    #                          target_size=(256, 256))
+
+    preprocess_input = sm.get_preprocessing("efficientnetb2")
+    train_dataloader = CustomDataGen(
+            path='/home/reyhane/PythonProjects/trainApp_oxin_new/SymLink/train',
+            image_folder='image',
+            mask_folder='label',
+            batch_size=8,
+            transforms=preprocess_input,
+            input_size=(300, 800),
+        )
 
     import cv2
 
-    for x, ys in train_c:
+    for x, ys in train_dataloader:
+        print(len(x), len(ys))
         x = x[0]
         ys = ys[0]
         x = x * 255
@@ -265,8 +339,9 @@ if __name__ == '__main__':
         ys = ys.astype(np.uint8)
 
         cv2.imshow('x', x)
-        ys = np.moveaxis(ys, [-1], [0])
-        for i, y in enumerate(ys):
-            cv2.imshow('y{}'.format(i), y)
+        cv2.imshow('y', ys)
+        # ys = np.moveaxis(ys, [-1], [0])
+        # for i, y in enumerate(ys):
+        #     cv2.imshow('y{}'.format(i), y)
 
         cv2.waitKey(0)

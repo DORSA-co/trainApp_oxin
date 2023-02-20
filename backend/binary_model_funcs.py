@@ -7,16 +7,17 @@ from PySide6.QtCore import Signal as sSignal
 from PySide6.QtGui import Qt
 from requests import head
 
-from backend import colors_pallete, chart_funcs
+from backend import colors_pallete, chart_funcs, date_funcs
 import train_api, texts, texts_codes
 
+SHAMSI_DATE = False
 
 
 # binary table headers
 binary_headers = [
-    "Algorithm",
-    "Input-Size",
-    "Input-Type",
+    "Algorithm Name",
+    "Input Size",
+    "Input Type",
     "N-Epochs",
     "N-Tuning Epochs",
     "Batch-Size",
@@ -43,14 +44,14 @@ binary_headers_fa = [
     "اندازه دسته",
     "نرخ یادگیری",
     "نسبت تقسیم داده",
-    "Loss",
-    "Accuracy",
-    "Precision",
-    "Recall",
-    "اعتبارسنجی Loss",
-    "اعتبارسنجی Accuracy",
-    "اعتبارسنجی Precision",
-    "اعتبارسنجی Recall",
+    "خطا",
+    "دقت",
+    "پرسیژن",
+    "ریکال",
+    "خطا اعتبارسنجی",
+    "دقت اعتبارسنجی",
+    "پرسیژن اعتبارسنجی",
+    "ریکال اعتبارسنجی",
     "آدرس مجموعه داده",
     "آدرس وزن ها",
     "تاریخ ایجاد",
@@ -205,20 +206,24 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
                 ] = translate_binary_algorithm_id_to_name(
                     algo_id=bmodel[binary_headers_db[col_idx]]
                 )
+            if col_idx == 2:
+                bmodel[
+                    binary_headers_db[col_idx]
+                ] = 'Split' if bmodel[binary_headers_db[col_idx]] == '1' else 'Resize'
             table_item = sQTableWidgetItem(str(bmodel[binary_headers_db[col_idx]]))
             # set checkbox (only first col)
-            if col_idx == 0:
-                table_item.setFlags(
-                    sQtCore.Qt.ItemFlag.ItemIsUserCheckable
-                    | sQtCore.Qt.ItemFlag.ItemIsEnabled
-                )
+            # if col_idx == 0:
+            #     table_item.setFlags(
+            #         sQtCore.Qt.ItemFlag.ItemIsUserCheckable
+            #         | sQtCore.Qt.ItemFlag.ItemIsEnabled
+            #     )
                 # table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
             table_item.setForeground(sQColor(text_color))
             table_item.setTextAlignment(Qt.AlignCenter)
             ui_obj.binary_history_tabel.setItem(row_idx, col_idx, table_item)
 
     try:
-        ui_obj.binary_history_tabel.setRowCount(row_idx + 1)
+        ui_obj.binary_history_tabel.setRowCount(row_idx+1)
 
     except Exception as e:
         return
@@ -808,11 +813,12 @@ def get_filtered_binary_models_from_db(
         or filter_params["end_date"][1] != ""
         or filter_params["end_date"][2] != ""
     ):
+        year = int(date_funcs.get_date(persian=SHAMSI_DATE).split('/')[0])
         #
         try:
             if (
-                int(filter_params["start_date"][0]) < 1401
-                or int(filter_params["start_date"][0]) > 1500
+                int(filter_params["start_date"][0]) < year - 10
+                or int(filter_params["start_date"][0]) > year + 10
             ):
                 ui_obj.set_warning(
                     texts.ERRORS["YEAR_RANGE_INCORRECT"][ui_obj.language],
@@ -869,8 +875,8 @@ def get_filtered_binary_models_from_db(
         # end year
         try:
             if (
-                int(filter_params["end_date"][0]) < 1401
-                or int(filter_params["end_date"][0]) > 1500
+                int(filter_params["end_date"][0]) < year - 10 
+                or int(filter_params["end_date"][0]) > year + 10
             ):
                 ui_obj.set_warning(
                     texts.ERRORS["YEAR_RANGE_INCORRECT"][ui_obj.language],

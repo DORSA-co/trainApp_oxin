@@ -789,6 +789,7 @@ class API:
         self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
         self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
 
+        self.ui.l_select_prep.clicked.connect(partial(self.select_localization_pretrain_path))
         self.ui.l_select_dp.clicked.connect(partial(self.select_localization_dataset))
         self.ui.l_delete_ds.clicked.connect(partial(self.delete_localization_dataset))
         self.ui.l_add_ok.clicked.connect(partial(self.ok_add_localization_ds))
@@ -1076,6 +1077,8 @@ class API:
         self.mouse.connet_dbclick(self.ui.labeling_help_2, self.maximize_labeling_helps)
         self.mouse.connet_dbclick(self.ui.labeling_help_3, self.maximize_labeling_helps)
         self.mouse.connet_dbclick(self.ui.labeling_help_4, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_5, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_6, self.maximize_labeling_helps)
 
     def keyboard_connector(self):
         self.keyboard.connet(
@@ -2471,10 +2474,10 @@ class API:
             l_parms = self.ui.get_localization_parms()
             if not l_parms:
                 return
-            if l_parms[2]:
-                self.split_localization_dataset(l_parms[-1], l_parms[1])
+            if l_parms[3]:
+                self.split_localization_dataset(l_parms[-1], l_parms[2])
             # update chart axes given train data
-            self.update_l_chart_axes(l_parms[3])
+            self.update_l_chart_axes(l_parms[4])
 
             self.lmodel_train_thread = sQThread()
             # Step 3: Create a worker object
@@ -2505,7 +2508,7 @@ class API:
             self.ui.localization_train.setEnabled(False)
 
             self.ui.localization_train_progressBar.setValue(0)
-            self.ui.localization_train_progressBar.setMaximum(l_parms[3])
+            self.ui.localization_train_progressBar.setMaximum(l_parms[4])
 
     def update_l_chart_axes(self, nepoch):
         # for chart_postfix in self.ui.loc_chart_names:
@@ -2532,6 +2535,7 @@ class API:
                 last_epoch=last_epoch,
                 logs=logs,
                 scroll_obj=self.ui.localization_chart_scrollbar,
+                chart_type='localization',
             )
             self.ui.logger.create_new_log(message=texts.MESSEGES['UPDATE_LCHART']['en'].format(last_epoch))
         except:
@@ -2840,6 +2844,16 @@ class API:
             self.group = QParallelAnimationGroup()
             self.group.addAnimation(self.left_box)
             self.group.start()
+
+    def select_localization_pretrain_path(self):
+        self.l_select_pre_dialog = QFileDialog()
+        path = "./"
+        filter = "h5(*.h5)"
+        dname = QFileDialog.getOpenFileName(self.l_select_pre_dialog, 'open', path, filter)[0]
+
+        if dname == "":
+            return
+        self.ui.l_prep.setText(dname)
 
     def select_localization_dataset(self, page="l_train"):
         self.ui.create_ds_selection_dialog()
@@ -3255,6 +3269,7 @@ class API:
 
         self.refresh_binary_models_table(get_count=True, wich_page=wich_page)
         self.refresh_binary_models_table(wich_page=wich_page)
+        self.ui.clear_binary_filters_fields(wich_page=wich_page)
         self.filter_mode = False
         self.ui.set_warning(
             texts.MESSEGES["REFRESH_TABLE"][self.language],
@@ -3549,7 +3564,7 @@ class API:
         #
         self.refresh_binary_models_table(get_count=True)
         self.refresh_binary_models_table()
-        self.ui.clear_filters_fields()
+        self.ui.clear_binary_filters_fields()
         self.ui.set_warning(
             texts.MESSEGES["FILTERED_RESAULTS_CLEAR"][self.language],
             "binary_model_history",
@@ -4112,6 +4127,7 @@ class API:
 
         self.refresh_localization_models_table(get_count=True)
         self.refresh_localization_models_table()
+        self.ui.clear_localization_filters_fields()
         self.lfilter_mode = False
         self.ui.set_warning(
             texts.MESSEGES["REFRESH_TABLE"][self.language],
@@ -4369,6 +4385,7 @@ class API:
         #
         self.refresh_localization_models_table(get_count=True)
         self.refresh_localization_models_table()
+        self.ui.clear_localization_filters_fields()
         self.ui.set_warning(
             texts.MESSEGES["FILTERED_RESAULTS_CLEAR"][self.language],
             "localization_model_history",
