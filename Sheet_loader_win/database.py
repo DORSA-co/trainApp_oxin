@@ -44,21 +44,21 @@ class dataBase:
             flag=True
             if connection.is_connected():
                 db_Info = connection.get_server_info()
-                print("Connected to MySQL Server version ", db_Info)
+                #print("Connected to MySQL Server version ", db_Info)
                 cursor = connection.cursor()
                 cursor.execute("select database();")
                 record = cursor.fetchall()
-                print("You're connected to database: ", record)
+                #print("You're connected to database: ", record)
                 return True
 
         except Error as e:
-            print("Error while connecting to MySQL", e)
+            #print("Error while connecting to MySQL", e)
             return False
         finally:
             if flag and connection.is_connected():
                 cursor.close()
                 connection.close()
-            print("MySQL connection is closed")
+            #print("MySQL connection is closed")
 
     
     def execute_quary(self,quary, cursor, connection,need_data=False, close=False):
@@ -76,7 +76,7 @@ class dataBase:
             else:
                 return cursor
         except Error as e:
-            print("Error while connecting to MySQL", e)
+            #print("Error while connecting to MySQL", e)
         
 
 
@@ -94,14 +94,14 @@ class dataBase:
             mySql_insert_query = """INSERT INTO {} {} 
                                 VALUES 
                                 {} """.format(table_name,parametrs,s)
-            print(mySql_insert_query, data)
-            #print('Q:', mySql_insert_query)                   
+            #print(mySql_insert_query, data)
+            ##print('Q:', mySql_insert_query)                   
             cursor.execute(mySql_insert_query,data)
             # mySql_insert_query=(mySql_insert_query,data)
             # self.execute_quary(mySql_insert_query, cursor, connection, close=False,need_data=True )
-            print(mySql_insert_query, data)
+            #print(mySql_insert_query, data)
             connection.commit()
-            print(cursor.rowcount, "Record inserted successfully into images table")
+            #print(cursor.rowcount, "Record inserted successfully into images table")
             cursor.close()
             return True
 
@@ -114,19 +114,19 @@ class dataBase:
 
     def update_record(self,table_name,col_name,value,id_name,id_value):
         
-        print('id_value',table_name,col_name,value,id_name,id_value)
+        #print('id_value',table_name,col_name,value,id_name,id_value)
         if self.check_connection:
             cursor,connection=self.connect()
 
             mySql_insert_query = """UPDATE {} 
                                     SET {} = {}
                                     WHERE {} ={} """.format(table_name,col_name,("'"+value+"'"),id_name,("'"+id_value+"'"))
-            #print(mySql_insert_query)
+            ##print(mySql_insert_query)
             cursor.execute(mySql_insert_query)
             # mySql_insert_query=(mySql_insert_query,data)
             # self.execute_quary(mySql_insert_query, cursor, connection, close=False,need_data=True )
             connection.commit()
-            print(cursor.rowcount, "Record Updated successfully ")
+            #print(cursor.rowcount, "Record Updated successfully ")
             cursor.close()
             return True
 
@@ -143,7 +143,7 @@ class dataBase:
 
             self.execute_quary(mySql_delete_query, cursor, connection, False )
             connection.commit()
-            print(cursor.rowcount, "Remove successfully from table {}".format(table_name))
+            #print(cursor.rowcount, "Remove successfully from table {}".format(table_name))
             cursor.close()
             return True
 
@@ -158,15 +158,15 @@ class dataBase:
             cursor=self.execute_quary(sql_select_Query, cursor, connection)
             # cursor.execute(sql_select_Query)
             records = cursor.fetchall()
-            print("Total number of rows in table: ", cursor.rowcount)
-            print(records)
+            #print("Total number of rows in table: ", cursor.rowcount)
+            #print(records)
 
             field_names = [col[0] for col in cursor.description]
             res = []
 
             connection.close()
             cursor.close()
-            print("MySQL connection is closed")
+            #print("MySQL connection is closed")
 
             for record in records:
                     record_dict = {}
@@ -199,25 +199,25 @@ class dataBase:
                     cursor=self.execute_quary(sql_select_Query, cursor, connection)
 
 
-                print('cursor',cursor)
+                #print('cursor',cursor)
 
                 records = cursor.fetchall()
-                print("Total number of rows in table: ", cursor.rowcount)
-                #print(len(records),records)
+                #print("Total number of rows in table: ", cursor.rowcount)
+                ##print(len(records),records)
                 #----------------------------
-                print('if',records)
+                #print('if',records)
                 
                 field_names = [col[0] for col in cursor.description]
                 res = []
                 for record in records:
-                    # print('record',record)
+                    # #print('record',record)
                     record_dict = {}
                     for i in range( len(field_names) ):
                         record_dict[ field_names[i] ] = record[i]
-                    # print('record_dict',record_dict)
+                    # #print('record_dict',record_dict)
                     
                     res.append( record_dict )
-                # print('res',res)
+                # #print('res',res)
                 return res
 
 
@@ -226,12 +226,12 @@ class dataBase:
             return [],[]
 
         # except:
-        #     print('No record Found')
+        #     #print('No record Found')
         #     return [],[]
     
 
 
-        #     print('No record Found')
+        #     #print('No record Found')
         #     return [],[]
     
 
@@ -282,15 +282,15 @@ class dataBase:
                     sql_select_Query += "LIMIT {} OFFSET {}".format(limit_size, offset)
 
 
-                #print(sql_select_Query)
+                ##print(sql_select_Query)
 
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
 
                 records = cursor.fetchall()
-                #print("Total number of rows in table: ", cursor.rowcount)
-                #print(len(records),records)
+                ##print("Total number of rows in table: ", cursor.rowcount)
+                ##print(len(records),records)
                 #----------------------------
-                # print(records)
+                # #print(records)
                 
                 field_names = [col[0] for col in cursor.description]
                 res = []
@@ -304,12 +304,12 @@ class dataBase:
             return [],[]
 
         except:
-            print('No record Found')
+            #print('No record Found')
             return [],[]
 
     
     def search_with_range_with_classes(self,table_name, col_names, values, limit=False, limit_size=20, offset=0, count=False):
-        print('here')
+        #print('here')
         # SELECT * FROM saba_database.binary_models where (algo_name,accuracy) = (0,0) and epochs between 2 and 4 and split_ratio between 20 and 30 and batch_size between 1 and 8
         try:
             if self.check_connection:
@@ -371,16 +371,16 @@ class dataBase:
                     sql_select_Query += "LIMIT {} OFFSET {}".format(limit_size, offset)
 
 
-                print(sql_select_Query)
+                #print(sql_select_Query)
                 #return
 
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
 
                 records = cursor.fetchall()
-                #print("Total number of rows in table: ", cursor.rowcount)
-                #print(len(records),records)
+                ##print("Total number of rows in table: ", cursor.rowcount)
+                ##print(len(records),records)
                 #----------------------------
-                # print(records)
+                # #print(records)
                 
                 field_names = [col[0] for col in cursor.description]
                 res = []
@@ -394,7 +394,7 @@ class dataBase:
             return [],[]
 
         except:
-            print('No record Found')
+            #print('No record Found')
             return [],[]
             
     #--------------------------------------------------------------------------
@@ -406,9 +406,9 @@ class dataBase:
                 cursor,connection=self.connect()
             sql_Delete_table = "DELETE FROM  {}.{};".format(db_name,table_name)
             cursor=self.execute_quary(sql_Delete_table, cursor, connection)       
-            print('delete')                                   
+            #print('delete')                                   
         except mysql.connector.Error as e:
-            print("Error reading data from MySQL table", e)
+            #print("Error reading data from MySQL table", e)
 
 
     #--------------------------------------------------------------------------
@@ -424,7 +424,7 @@ class dataBase:
 
             field_names = [col[0] for col in cursor.description]
 
-            print(field_names)
+            #print(field_names)
 
         return field_names
 
@@ -449,14 +449,14 @@ class dataBase:
                 cursor=self.execute_quary(sql_select_Query, cursor, connection)
                 # cursor.execute(sql_select_Query)
                 records = cursor.fetchall()
-                print("Total number of rows in table: ", cursor.rowcount)
-                #print(records)
+                #print("Total number of rows in table: ", cursor.rowcount)
+                ##print(records)
 
                 field_names = [col[0] for col in cursor.description]
 
                 connection.close()
                 cursor.close()
-                print("MySQL connection is closed")
+                #print("MySQL connection is closed")
 
                 res = []
                 for record in records:
@@ -473,7 +473,7 @@ class dataBase:
             return []
 
         except mysql.connector.Error as e:
-            print("Error reading data from MySQL table", e)
+            #print("Error reading data from MySQL table", e)
             return []
 
     def check_table_exist(self,table_name):
@@ -483,10 +483,10 @@ class dataBase:
                 cursor,connection=self.connect()
             sql_check_table = "SELECT * FROM {}.{};".format(self.data_base_name,table_name)
             cursor=self.execute_quary(sql_check_table, cursor, connection)       
-            # print('check')    
+            # #print('check')    
             return 'Exist'                              
         except mysql.connector.Error as e:
-            print("Error reading data from MySQL table", e)
+            #print("Error reading data from MySQL table", e)
 
 
 if __name__ == "__main__":
@@ -498,10 +498,10 @@ if __name__ == "__main__":
     # data=(0,0,0,0,1920,1200,0,0,0,0,0)
 
     # x=db.get_all_content('defects_info')
-    # print(x)
+    # #print(x)
 
     record = db.search( 'users' , 'user_name', 'testt')[0]
-    print(record)
+    #print(record)
     # table_name,parametrs,len_parameters)
 
     # db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)

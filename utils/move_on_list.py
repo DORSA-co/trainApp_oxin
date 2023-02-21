@@ -163,7 +163,7 @@ class moveOnImagrList:
 
         mylist = self.lists[ name ]
         mylist_annots = self.lists_annots[name]
-        print(self.lists_annots)
+        #print(self.lists_annots)
         idx = self.idxs[name]
         list = []
         list_annots = []
@@ -205,4 +205,4 @@ if __name__ == '__main__':
     prev_f()
     
     
-    print(obj.get_current('coils'))
+    #print(obj.get_current('coils'))

@@ -51,7 +51,7 @@ class connection_level2():
                 details.update({"thickness": np.random.randint(10,50)})
                 self.details=details
                 self.sheet_id += 1
-                # print(details)
+                # #print(details)
                 return True,details
         except:
             return False,None
@@ -61,5 +61,5 @@ if __name__=='__main__':
 
     conn=connection_level2()
     cameras,projectors,details = conn.get_full_info()
-    print(cameras,projectors,details )
+    #print(cameras,projectors,details )
         

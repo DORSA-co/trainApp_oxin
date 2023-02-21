@@ -43,17 +43,17 @@ class login_API:
 
     def login(self):
         user,password=self.ui.get_user_pass()
-        # print(user,password)
+        # #print(user,password)
 
         if (user!='') and (password!=''):
 
             user_info = self.db.search_user(user)
-            # print(user_info)
+            # #print(user_info)
 
             try:
 
                 if len(user_info)!=0 and str(password)==user_info['password']:
-                    #print('ok')
+                    ##print('ok')
                     
                     self.ui.set_login_message('Login Successfully','019267')
                     cv2.waitKey(1000)

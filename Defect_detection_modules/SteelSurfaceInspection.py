@@ -76,7 +76,7 @@ def SSI(img, block_size='Medium', defect_th=0, noise_th=7, noise=True, heatmap=F
     #     bboxs.append([[x, y], [x+w, y+h]])
 
     # Improve heatmap based on defect mask
-    # print((timeit.default_timer() - start)*1000)
+    # #print((timeit.default_timer() - start)*1000)
     if heatmap:
         hm = cv2.resize(hm, (temp_img.shape[1], temp_img.shape[0]))
         hm[:, :, 0] *= (df / 255).astype('uint8')
@@ -140,7 +140,7 @@ def SSI_2(img, path, block_size='Medium', defect_th=0, noise_th=7, noise=True):
             res_dict = {'status': 'False', 'bboxes':bboxs}
             json.dump(res_dict, f, indent=4, sort_keys=True)
 
-    # print((timeit.default_timer() - start)*1000)
+    # #print((timeit.default_timer() - start)*1000)
     # if bboxs:
     #     return True, bboxs
     # else:
@@ -292,6 +292,6 @@ if __name__ == '__main__':
             for f in range(1, 200):
                 img = cv2.imread(os.path.join(mainPath, sheetID, s, str(c), str(f)+img_format), 0)
                 df = SSI_2(img, path=os.path.join(jsonMainPath, sheetID, s, str(c), str(f)+json_format) ,block_size='Medium', defect_th=0, noise_th=7, noise=True)
-                # print(df)
+                # #print(df)
                 # # cv2.imshow('', img)
                 # cv2.waitKey(0)

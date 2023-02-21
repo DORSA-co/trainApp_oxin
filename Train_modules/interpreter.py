@@ -23,5 +23,5 @@ for _ in range(10):
     interpreter.set_tensor(input_index, test_image)
     interpreter.invoke()
     predictions = interpreter.get_tensor(output_index)
-    print( time.time()- t)
+    #print( time.time()- t)
     

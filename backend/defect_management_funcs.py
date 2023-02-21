@@ -197,7 +197,7 @@ def add_new_defect_to_db(db_obj, new_defect_info, defect_group=False):
 # show/set user info to UI
 def set_defects_on_ui(ui_obj, defects_list, defect_group_name='None'):
     # definr table parameters
-    print('a2',defects_list)
+    #print('a2',defects_list)
     ui_obj.tableWidget_defects.resizeColumnsToContents()
     ui_obj.tableWidget_defects.setColumnCount(defect_table_ncols)
     if len(defects_list) != 0:
@@ -288,7 +288,7 @@ def assign_existing_defect_colors_to_ui(ui_obj, db_obj, current='None'):
         if len(color_info) != 0 and color_info['defect_ID']==current:
             current_color = color
     if current_color != 'None':
-        print(current_color)
+        #print(current_color)
         ui_obj.defect_color_comboBox.setCurrentText(current_color)
     # get n-used colors in defects
     defects_list = get_defects_from_db(db_obj=db_obj)

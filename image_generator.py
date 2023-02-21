@@ -30,5 +30,5 @@ for cnt in range(1001, 1030):
                 #     cv2.FONT_HERSHEY_COMPLEX_SMALL,
                 #     255,
                 # )
-                # print(res_path)
+                # #print(res_path)
                 cv2.imwrite(os.path.join(res_path, str(f) + ".png"), img)

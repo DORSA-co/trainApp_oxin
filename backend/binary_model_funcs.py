@@ -4,17 +4,20 @@ from PySide6 import QtCore as sQtCore
 from PySide6.QtGui import QColor as sQColor
 from PySide6.QtCore import QObject as sQObject
 from PySide6.QtCore import Signal as sSignal
+from PySide6.QtGui import Qt
 from requests import head
 
-from backend import colors_pallete
-import train_api, texts
+from backend import colors_pallete, chart_funcs, date_funcs
+import train_api, texts, texts_codes
+
+SHAMSI_DATE = False
 
 
 # binary table headers
 binary_headers = [
-    "Algorithm",
-    "Input-Size",
-    "Input-Type",
+    "Algorithm Name",
+    "Input Size",
+    "Input Type",
     "N-Epochs",
     "N-Tuning Epochs",
     "Batch-Size",
@@ -41,14 +44,14 @@ binary_headers_fa = [
     "اندازه دسته",
     "نرخ یادگیری",
     "نسبت تقسیم داده",
-    "Loss",
-    "Accuracy",
-    "Precision",
-    "Recall",
-    "اعتبارسنجی Loss",
-    "اعتبارسنجی Accuracy",
-    "اعتبارسنجی Precision",
-    "اعتبارسنجی Recall",
+    "خطا",
+    "دقت",
+    "پرسیژن",
+    "ریکال",
+    "خطا اعتبارسنجی",
+    "دقت اعتبارسنجی",
+    "پرسیژن اعتبارسنجی",
+    "ریکال اعتبارسنجی",
     "آدرس مجموعه داده",
     "آدرس وزن ها",
     "تاریخ ایجاد",
@@ -203,19 +206,24 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
                 ] = translate_binary_algorithm_id_to_name(
                     algo_id=bmodel[binary_headers_db[col_idx]]
                 )
+            if col_idx == 2:
+                bmodel[
+                    binary_headers_db[col_idx]
+                ] = 'Split' if bmodel[binary_headers_db[col_idx]] == '1' else 'Resize'
             table_item = sQTableWidgetItem(str(bmodel[binary_headers_db[col_idx]]))
             # set checkbox (only first col)
-            if col_idx == 0:
-                table_item.setFlags(
-                    sQtCore.Qt.ItemFlag.ItemIsUserCheckable
-                    | sQtCore.Qt.ItemFlag.ItemIsEnabled
-                )
-                table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
+            # if col_idx == 0:
+            #     table_item.setFlags(
+            #         sQtCore.Qt.ItemFlag.ItemIsUserCheckable
+            #         | sQtCore.Qt.ItemFlag.ItemIsEnabled
+            #     )
+                # table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
             table_item.setForeground(sQColor(text_color))
+            table_item.setTextAlignment(Qt.AlignCenter)
             ui_obj.binary_history_tabel.setItem(row_idx, col_idx, table_item)
 
     try:
-        ui_obj.binary_history_tabel.setRowCount(row_idx + 1)
+        ui_obj.binary_history_tabel.setRowCount(row_idx+1)
 
     except Exception as e:
         return
@@ -224,7 +232,7 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
 # show/set models history to UI tabel
 def set_bmodels_on_ui_tabel_edited_version(ui_obj, bmodels_list, model_type="binary"):
     # define table parameters
-    # print(len(bmodels_list))
+    # #print(len(bmodels_list))
     ui_obj.table_of_binary_classifaction_in_PBT_page.resizeColumnsToContents()
     ui_obj.table_of_binary_classifaction_in_PBT_page.setColumnCount(binary_table_ncols)
     if len(bmodels_list) != 0:
@@ -300,7 +308,7 @@ def save_new_binary_model_record(ui_obj, db_obj, bmodel_records):
     """
 
     # add
-    print(bmodel_records["weights_path"])
+    # #print(bmodel_records["weights_path"])
     if add_new_binary_model_to_db(db_obj=db_obj, new_bmodel_info=bmodel_records):
         ui_obj.notif_manager.append_new_notif(
             message=texts.MESSEGES["database_add_bmodel"][ui_obj.language], level=1
@@ -352,7 +360,8 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
                     )
                 ]
             else:
-                print("what the fuck!!!!!!!!1")
+                pass
+                # #print("what the fuck!!!!!!!!1")
 
             bmodel_info["epochs"] = ["", ""]
             bmodel_info["tuning_epochs"] = ["", ""]
@@ -420,7 +429,9 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
         return bmodel_info
     except:
         ui_obj.logger.create_new_log(
-            message=texts.ERRORS["ui_get_bmodel_filter_params_failed"]["en"], level=5
+            message=texts.ERRORS["ui_get_bmodel_filter_params_failed"]["en"], 
+            code=texts_codes.SubTypes['ui_get_bmodel_filter_params_failed'], 
+            level=5
         )
         return []
 
@@ -802,11 +813,12 @@ def get_filtered_binary_models_from_db(
         or filter_params["end_date"][1] != ""
         or filter_params["end_date"][2] != ""
     ):
+        year = int(date_funcs.get_date(persian=SHAMSI_DATE).split('/')[0])
         #
         try:
             if (
-                int(filter_params["start_date"][0]) < 1401
-                or int(filter_params["start_date"][0]) > 1500
+                int(filter_params["start_date"][0]) < year - 10
+                or int(filter_params["start_date"][0]) > year + 10
             ):
                 ui_obj.set_warning(
                     texts.ERRORS["YEAR_RANGE_INCORRECT"][ui_obj.language],
@@ -863,8 +875,8 @@ def get_filtered_binary_models_from_db(
         # end year
         try:
             if (
-                int(filter_params["end_date"][0]) < 1401
-                or int(filter_params["end_date"][0]) > 1500
+                int(filter_params["end_date"][0]) < year - 10 
+                or int(filter_params["end_date"][0]) > year + 10
             ):
                 ui_obj.set_warning(
                     texts.ERRORS["YEAR_RANGE_INCORRECT"][ui_obj.language],
@@ -975,7 +987,8 @@ def get_filtered_binary_models_from_db(
     elif model_type == "localization":
         model_type = "localiztion_models"
     else:
-        print("what the fuck!!!!!!!!!!!!")
+        pass
+        # #print("what the fuck!!!!!!!!!!!!")
 
     try:
         res, defects_list = db_obj.search_binary_model_by_filter(
@@ -1009,7 +1022,8 @@ class Binary_model_train_worker(sQObject):
     """
 
     finished = sSignal()
-    warning = sSignal(str, str, int)
+    warning = sSignal(str, str, str, int)
+    update_charts = sSignal(int, dict)
 
     def assign_parameters(self, b_parms, api_obj, ui_obj, db_obj):
         self.b_parms = b_parms
@@ -1022,7 +1036,7 @@ class Binary_model_train_worker(sQObject):
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
         if not bmodel_records[0]:
-            self.warning.emit(bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2])
+            self.warning.emit(bmodel_records[1][0], bmodel_records[1][1], None, bmodel_records[1][2])
         else:
             bmodel_records = bmodel_records[1]
             if bmodel_records:
@@ -1036,13 +1050,23 @@ class Binary_model_train_worker(sQObject):
                     ui_obj=self.ui_obj, db_obj=self.db_obj, bmodel_records=bmodel_records
                 )
 
-                self.warning.emit(texts.MESSEGES['train_successfuly'][self.api_obj.language], 'train', 1)
-                #update ui
-
-        # self.ui_obj.binary_train.setEnabled(True)
-        # self.api_obj.runing_b_model=False
+                if self.api_obj.bmodel_train_result:
+                    self.warning.emit(texts.MESSEGES['train_successfuly'][self.api_obj.language], 'train', None, 1)
+                else:
+                    self.warning.emit(texts.MESSEGES['database_add_bmodel_failed'][self.api_obj.language], 'train', None, 3)
 
         self.finished.emit()
+
+    def assign_new_value_to_b_chart(self, last_epoch, logs):
+        self.update_charts.emit(last_epoch, logs)
+
+    def save_b_model(self, model, path, epoch):
+        try:
+            model.save(path)
+            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['SAVE_BMODEL_EPOCH']['en'].format(epoch))
+        except:
+            self.ui_obj.logger.create_new_log(message=texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED']['en'].format(epoch), level=5)
+            self.warning.emit(texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED'][self.api_obj.language].format(epoch), 'train', None, 3)
 
     def show_bmodel_train_result(self):
         self.ui_obj.binary_train.setEnabled(True)

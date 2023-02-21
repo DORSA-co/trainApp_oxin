@@ -47,10 +47,10 @@ class labeling_API:
         :param e: Current index of combobox.
         :type e: int
         """
-        # print('asd.,',e)
+        # #print('asd.,',e)
 
         record=self.defects_info[e]
-        # print('record',record)
+        # #print('record',record)
         self.ui.updte_table(record)
 
     def ret_selcted_label(self):

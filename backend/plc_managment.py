@@ -48,17 +48,17 @@ class management():
             resault: a boolean deermining if connected or not
         """
 
-        #print('Start Connecting to {}'.format(self.ip))
+        ##print('Start Connecting to {}'.format(self.ip))
         self.ui_obj.logger.create_new_log(message=texts.MESSEGES['plc_start_connecting']['en'] + ' ip: ' + str(self.ip), level=1)
         self.client = Client(self.ip)
         # client = Client("opc.tcp://admin@localhost:4840/freeopcua/server/") #connect using a user
         try:
             self.client.connect()
-            #print('Connection Successed')
+            ##print('Connection Successed')
             return True
 
         except:
-            #print('Connection Eror')
+            ##print('Connection Eror')
             return False
 
     
@@ -88,14 +88,14 @@ class management():
 
         try:
             var = self.client.get_node(path)
-            # print(var)
+            # #print(var)
             data_value=var.get_data_value() # get value of node as a DataValue object
             value=var.get_value() # get value of node as a python builtin
-            # print('x'*5,value)
+            # #print('x'*5,value)
             return (value, data_value)
 
         except:
-            # print('except')
+            # #print('except')
             return '-', texts.ERRORS['plc_path_error'][self.ui_obj.language]
 
 
@@ -113,16 +113,16 @@ class management():
         var = self.client.get_node(path)
         try:
             if value.isdigit():
-                # print('number')
+                # #print('number')
                 var = self.client.get_node(path)
                 var.set_value(ua.Variant(int(value), ua.VariantType.Int64)) #set node value using explicit data type
                 var.set_value(int(value)) # set node value using implicit data type
 
             else:
-                # print('value:',value)
+                # #print('value:',value)
                 if value=='False':
                     value_=False
-                    #print(value_)
+                    ##print(value_)
                 else:
                     value_=True
 
@@ -155,9 +155,9 @@ class management():
             value (_type_): in dict
         """
         
-        # print('write',path)
+        # #print('write',path)
         path = os.path.join(self.text_plc_parms+'.json')
-        # print('value',value)
+        # #print('value',value)
         with open(str(path), 'w') as f:
             json.dump(value, f,indent=4, sort_keys=True)
 
@@ -169,7 +169,7 @@ class management():
     # def get_MemDistanceSensor(self):
 
     #     x=self.parms[0]['path']
-    #     print(x)
+    #     #print(x)
 
     # def set_pathes(self,pathes):
 
@@ -181,7 +181,7 @@ class management():
 
     def set_cams_and_prejector(self,n_cam,n_projector):
         try:
-            print('Set Camera {}'.format(n_cam))
+            #print('Set Camera {}'.format(n_cam))
             ret_set_ncam=self.set_value(self.spec_pathes['NCamera'], n_cam)
         except:
             ret_set_ncam=False
@@ -193,7 +193,7 @@ class management():
                 else:
                     mode=False
                 try:
-                    print('Projector top/bottom {} set {}'.format(proj,mode))
+                    #print('Projector top/bottom {} set {}'.format(proj,mode))
                     ret_set_ncam=self.set_value(self.spec_pathes['MemDownProjectorOnOff{}'.format(proj)], str(mode))
                     ret_set_ncam=self.set_value(self.spec_pathes['MemUpProjectorOnOff{}'.format(proj)], str(mode))
                 except:
@@ -213,7 +213,7 @@ class management():
 def set_pathes(pathes):
     path_dict={}
     # pathes=pathes[0]
-    # print(pathes)
+    # #print(pathes)
     # value='ProjectorPulseTrig'
     # path_list=
     PLC_items = [
@@ -278,4 +278,4 @@ if __name__=='__main__':
 
 
     x=set_pathes(data)
-    print(x)
+    #print(x)

@@ -58,7 +58,7 @@ class MyApp(QWidget):
             self.combo.addItem('Item {0}'.format(str(i)))
             self.combo.setItemChecked(i, False)
 
-        btn = QPushButton('Print Values')
+        btn = QPushButton('#print Values')
         btn.clicked.connect(self.combo.getValue)
         mainLayout.addWidget(btn)
 
@@ -66,7 +66,7 @@ class MyApp(QWidget):
 
     # def getValue(self):
     #     for i in range(self.combo.count()):
-    #         print('Index: {0} is checked {1}'.format(i, self.combo.itemChecked(i)))
+    #         #print('Index: {0} is checked {1}'.format(i, self.combo.itemChecked(i)))
 
 
 if __name__ == '__main__':

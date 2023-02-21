@@ -152,11 +152,13 @@ class Sheet:
     def get_info_dict(self):
         return {
             'sheet_id':self.sheet_id,
+            'date': self.get_date_string(),
+            'time': self.get_time_string(),
             'heat_number': self.heat_number,
-            'length': self.length,
-            'width' : self.width,
             'ps_number': self.ps_number,
             'pdl_number': self.pdl_number,
-            'thickness': self.thickness 
+            'length': self.length,
+            'width' : self.width,
+            'thickness': self.thickness,
             #'order number': self.order_numb
         }

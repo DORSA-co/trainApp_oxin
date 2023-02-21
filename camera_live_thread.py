@@ -10,6 +10,7 @@ from math import ceil
 import threading
 from PySide6.QtGui import QImage as sQImage
 from PySide6.QtGui import QPixmap as sQPixmap
+from main_UI import SHAMSI_DATE
 
 
 class ImageManager(sQObject):
@@ -116,7 +117,7 @@ class ImageManager(sQObject):
             self.coil_dict['user'] = self.user
             time = self.coil_dict['time'] = date_funcs.get_time(folder_path=False)
             self.coil_dict['time'] = time
-            date = str(date_funcs.get_date(folder_path=False))
+            date = str(date_funcs.get_date(persian=SHAMSI_DATE, folder_path=False))
             self.coil_dict['date'] = date
             self.coil_dict['main_path'] = self.main_path
             self.coil_dict['nframe'] = max(self.nframe)

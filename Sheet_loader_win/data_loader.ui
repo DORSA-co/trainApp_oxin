@@ -832,7 +832,7 @@ color: black;
                 <number>1</number>
                </property>
                <property name="columnCount">
-                <number>7</number>
+                <number>9</number>
                </property>
                <row/>
                <column>
@@ -845,6 +845,8 @@ color: black;
                  <string>2</string>
                 </property>
                </column>
+               <column/>
+               <column/>
                <column/>
                <column/>
                <column/>
@@ -1378,7 +1380,14 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                       <cursorShape>PointingHandCursor</cursorShape>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">color: black;</string>
+                      <string notr="true">QPushButton {
+	color: black;
+}
+
+QPushButton:disabled  {
+	background-color: rgb(153, 156, 143);
+	color: rgb(70, 70, 70);
+}</string>
                      </property>
                      <property name="text">
                       <string>Open Images</string>

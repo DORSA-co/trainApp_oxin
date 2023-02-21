@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QHBoxLayout as sQHBoxLayout
 
 ERRORS = {
 
@@ -75,8 +76,20 @@ ERRORS = {
     'RECA_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای ریکال صحیح نیست ',
                              'en': ' Recall range is not correct '},
 
-    'RECA_FORMAT_INVALID': {'fa': ' فرمت واردشده برای ریکال نامعتبر است ',
+    'RECA_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای ریکال نامعتبر است ',
                             'en': ' Recall format invalid '},
+
+    'IOU_RANGE_INCORRECT': {'fa': ' بازه‌ی وارد شده برای IOU صحیح نیست ',
+                             'en': ' IOU range is not correct '},
+
+    'IOU_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای IOU نامعتبر است ',
+                            'en': ' IOU format invalid '},
+
+    'FSCORE_RANGE_INCORRECT': {'fa': ' بازه‌ی وارد شده برای FScore صحیح نیست ',
+                             'en': ' FScore range is not correct '},
+
+    'FSCORE_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای FScore نامعتبر است ',
+                            'en': ' FScore format invalid '},
 
     'YEAR_RANGE_INCORRECT': {'fa': ' مقدار وارد شده برای سال خارج از بازه است ',
                              'en': ' Start/end year not in range '},
@@ -157,7 +170,7 @@ ERRORS = {
                  'en': 'Failed to update binarylist piechart'},
 
     'update_classlist_piechart_failed': {'fa': 'خطای آپدیت پای چارت صفحه دیتاست دسته بندی',
-                 'en': 'Failed to update classificatiolist piechart'},
+                 'en': 'Failed to update classificationlist piechart'},
 
     'get_images_related_to_defect_failed': {'fa': 'خطای دریافت تصاویر مربوط به عیب',
                  'en': 'Failed to get images related to defect'},
@@ -174,10 +187,10 @@ ERRORS = {
     'piechart_create_failed': {'fa': 'خطای ایجاد پای چارت های موردنیاز',
                  'en': 'Failed to create needed piecharts on UI'},
 
-    'database_add_bmodel_failed': {'fa': 'خطای اضافه نمودن اطلاعات مدل باینری جدید در دیتابیس',
+    'database_add_bmodel_failed': {'fa': 'خطا در اضافه نمودن اطلاعات مدل باینری جدید در دیتابیس',
                  'en': 'Failed to add new binary model info to database'},
 
-    'database_add_lmodel_failed': {'fa': 'خطای اضافه نمودن اطلاعات مدل جایابی جدید در دیتابیس',
+    'database_add_lmodel_failed': {'fa': 'خطا در اضافه نمودن اطلاعات مدل جایابی جدید در دیتابیس',
                  'en': 'Failed to add new localization model info to database'},
 
     'initialize_notif_ui_failed': {'fa': 'خطای ساخت کلاس اعلانات',
@@ -259,14 +272,17 @@ ERRORS = {
     'CREATE_BINARY_GEN_FAILED': {'fa': ' خطا در آماده سازی داده ی آموزش باینری. ',
                             'en': ' Error preparing binary training data '},
  
-    'CREATE_LOC_GEN_FAILED': {'fa': ' خطا در ایجاد ژنراتور آموزش جایابی. ',
-                            'en': ' Error while creating localization train generetor '},
+    'CREATE_LOC_GEN_FAILED': {'fa': ' خطا در آماده سازی داده ی آموزش جایابی. ',
+                            'en': ' Error preparing localization training data '},
 
     'PREPARE_DATA_FAILED': {'fa': ' خطا در آماده سازی داده ها برای آموزش. ',
                             'en': ' Error while preparing data for training. '},
 
     'CREATE_MODEL_FAILED': {'fa': ' خطا در ایجاد مدل برای الگوریتم {}. ',
                             'en': ' Error while creating model for {} algorithm. '},
+                    
+    'CALLBACK_CREATE_FAILED': {'fa': ' خطا در ایجاد شی CallBack ',
+                    'en': ' Error while creating Callback object. '},
 
     'CREATE_FTMODEL_FAILED': {'fa': ' خطا در ایجاد مدل تنظیم دقیق برای الگوریتم {}. ',
                             'en': ' Error while creating fine tune model for {} algorithm. '},
@@ -355,6 +371,9 @@ WARNINGS = {
     'IMAGE_STATUS': {'fa': ' وضعیت عیب تصویر مشخص نشده است ',
                      'en': ' defect status is not specified '},
 
+    'IMAGE_STATUS_Format': {'fa': ' وضعیت عیب تصویر {} مشخص نشده است ',
+                     'en': ' defect status of image {} is not specified '},
+
     'NO_IMAGE_LOADED': {'fa': ' تصویری بارگذاری نشده است ',
                         'en': ' No image loaded '},
 
@@ -364,16 +383,21 @@ WARNINGS = {
     'question': {'fa': ' سوال ',
                             'en': ' Question '},
 
-    'ALREADY_SAVED_DEFECT':
-        {
-            'fa': ' تصویر قبلا با وضعیت عیب "بله" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "خیر" ذخیره کنید؟ ',
-            'en': 'Image already saved with defect status "Yes". Are you sure you want to save it with defect '
-                  'status "No" '},
+    'ALREADY_SAVED_DEFECT':{
+            'fa': ' تصویر قبلا به عنوان معیوب ذخیره شده است. آیا مطمئنید که می‌خواهید آن را به عنوان سالم ذخیره کنید؟ ',
+            'en': 'The image has already been saved as defective. Are you sure you want to save it as healthy?'},
+
+    'ALREADY_SAVED_DEFECT_Format':{
+            'fa': ' تصویر {} قبلا به عنوان معیوب ذخیره شده است. آیا مطمئنید که می‌خواهید آن را به عنوان سالم ذخیره کنید؟ ',
+            'en': 'The image {} has already been saved as defective. Are you sure you want to save it as healthy?'},
 
     'ALREADY_SAVED_PERFECT': {
-        'fa': ' تصویر قبلا با وضعیت عیب "خیر" ذخیره شده است. آیا مطمئنید که می‌خواهید آن را با وضعیت عیب "بله" ذخیره کنید؟ ',
-        'en': 'Image already saved with defect status "No". Are you sure you want to save it with defect '
-              'status "Yes" '},
+        'fa': ' تصویر قبلا به عنوان سالم ذخیره شده است. آیا مطمئنید که می‌خواهید آن را به عنوان معیوب ذخیره کنید؟ ',
+        'en': 'The image has already been saved as healthy. Are you sure you want to save it as defective?'},
+
+    'ALREADY_SAVED_PERFECT_Format': {
+        'fa': ' تصویر {} قبلا به عنوان سالم ذخیره شده است. آیا مطمئنید که می‌خواهید آن را به عنوان معیوب ذخیره کنید؟ ',
+        'en': 'The image {} has already been saved as healthy. Are you sure you want to save it as defective?'},
 
     'INVALID_DATASET': {'fa': ' آدرس مجموعه داده معتبر نیست ',
                         'en': ' Dataset address is invalid '},
@@ -381,8 +405,11 @@ WARNINGS = {
     'DATASET_FORMAT': {'fa': ' قالب مجموعه داده صحیح نیست ',
                        'en': ' Dataset format is incorrect '},
 
-    'IMAGE_SAVE_SUCCESSFULLY': {'fa': 'موفقیت ذخیره شد',
-                                'en': ' Image Saved '},
+    'IMAGE_SAVE_SUCCESSFULLY': {'fa': 'تصویر با موفقیت ذخیره شد',
+                                'en': 'Image saved successfully'},
+
+    'IMAGES_SAVE_SUCCESSFULLY': {'fa': 'تصاویر با موفقیت ذخیره شدند',
+                                'en': 'Images saved successfully'},
 
     'DATASET_NUMBER': {'fa': ' شماره ی مجموعه داده خارج از محدوده است ',
                        'en': ' Dataset number is out of range '},
@@ -441,6 +468,12 @@ WARNINGS = {
     'RECA_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به ریکال را مقدار دهید یا هر دو را خالی بگذارید ',
                          'en': ' Recall range fields can not be empty, Please fill both them or leave them empty '},
 
+    'IOU_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به IOU را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' IOU range fields can not be empty, Please fill both them or leave them empty '},
+
+    'FSCORE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به FScore را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' FScore range fields can not be empty, Please fill both them or leave them empty '},
+
     'SELECT_MORE_THAN_ONE_DEFECT_CLASS': {'fa': ' امکان انتخاب چند کلاس عیب به صورت همزمان وجود ندارد ',
                                           'en': ' can not select more than one defect class at same time '},
 
@@ -488,6 +521,9 @@ WARNINGS = {
     'WRONGE_MASK': {'fa': ' وضعیت یا ماسک اشتباه است ',
                     'en': ' Status or mask is wrong '},
 
+    'WRONGE_MASK_Format': {'fa': ' وضعیت یا ماسک تصویر {} اشتباه است ',
+                    'en': ' Status or mask of image {} is wrong '},
+
     'training_params_invalid': {'fa': 'پارامترهای آموزشی نامعتبرند',
                     'en': 'Training a arametrs are invalid'},
                     
@@ -514,7 +550,10 @@ WARNINGS = {
         'en': 'The input parameters are not set correctly.'},
 
     'image_not_exist': {'fa': 'فایل تصویر وجود ندارد.',
-                        'en': 'The image file does not exist'},        
+                        'en': 'The image file does not exist'},
+
+    'invalid_date_range': {'fa': 'بازه‌ی تاریخ داده شده معتبر نیست.',
+                        'en': 'The given date range is not valid.'},        
 }
 
 MESSEGES = {
@@ -534,8 +573,8 @@ MESSEGES = {
     'UI_CREATED': {'fa': ' .شی رابط کاربری برای نرم افزار آموزشی ایجاد شد ',
                     'en': ' UI object for train app created. '},
                     
-    'CCALLBACK_CREATED': {'fa': ' .ایجاد شد CustomCallback شی ',
-                    'en': ' CustomCallback object created. '},
+    'CALLBACK_CREATED': {'fa': ' .ایجاد شد Callback شی ',
+                    'en': ' Callback object created. '},
                     
     'UPDATE_BCHART': {'fa': ' اپوک {}: .نمودار های آموزش باینری به روز شدند ',
                     'en': ' Epoch {}: Binary train charts updated. '},
@@ -594,8 +633,8 @@ MESSEGES = {
     'CREATE_BINARY_GEN': {'fa': ' داده‌ی آموزش باینری آماده شد. ',
                         'en': ' Binary training data is ready. '},
  
-    'CREATE_LOC_GEN': {'fa': ' ژنراتور آموزش جایابی ایجاد شد. ',
-                        'en': ' Localization train generetor created. '},
+    'CREATE_LOC_GEN': {'fa': ' داده‌ی آموزش جایابی آماده شد. ',
+                        'en': ' Localization training data is ready. '},
 
     'CREATE_MODEL': {'fa': ' مدل برای الگوریتم {} ایجاد شد. ',
                     'en': ' Model for {} algorithm created. '},
@@ -714,8 +753,8 @@ MESSEGES = {
     'sheet_details': {'fa': ' ورق با شناسه ی {} در ساعت {} تاریخ {} توسط کاربر {} ذخیره شده است. تعداد فریم های ذخیره شده برابر با {} و تعداد دوربین ها برابر با {} است. ',
                         'en': ' The sheet with ID {} ​​was saved at time {} date {} by user {}. The number of saved frames is equal to {} and the number of cameras is equal to {}. '},
 
-    'setting_applied': {'fa': 'تنظیمات اعمال شد',
-                        'en': 'Settings Applied Successfully'},
+    'setting_applied': {'fa': 'تنظیمات {} اعمال شد',
+                        'en': '{} settings Applied Successfully'},
 
     'CREATE_DATASET': {'fa': ' مجموعه داده با موفقیت ایجاد شد ',
                        'en': ' Dataset created successfully '},
@@ -729,11 +768,14 @@ MESSEGES = {
     'Camera_successful': {'fa': ' دوربین {} با موفقیت متصل شد ',
                            'en': ' Camera {} connected successfuly '},
 
-    'Disconnect_camera_successful': {'fa':'قطع اتصال دوربین با م.فقیت انجام شد',
+    'Disconnect_camera_successful': {'fa':'قطع اتصال دوربین با موفقیت انجام شد',
                         'en':'Camera disconnected successfuly'},
 
     'changes_not_saved': {'fa': 'تغییرات ذخیره نشده است. میخواهید ادامه دهید؟', 
                         'en': 'Changes are not saved. Do you want to continue?'},
+
+    'sure_delete': {'fa': 'آیا مطمئن هستید که می خواهید همه چند ضلعی ها را حذف کنید؟', 
+                        'en': 'Are you sure you want to delete all polygons?'},
 
     'exit_confirm': {'fa': 'آیا مطمئن هستید که میخواهید خارج شوید؟',
                 'en': 'Are you sure you want to exit?'},
@@ -786,6 +828,9 @@ Titles = {
         'update_time': {'fa': ": زمان به روز رسانی",
                         'en': 'Update time :'},
 
+        'language_font': {'fa': 'زبان و فونت',
+                       'en': 'language and font'},
+
         'plc': {'fa': "پی ال سی",
                         'en': 'PLC'},
 
@@ -827,6 +872,9 @@ Titles = {
 
         'Pipline Build & Test': {'fa': "ساخت پایپ لاین و تست",
                                 'en': 'Pipline Build and Test'},
+
+        'show_logs': {'fa': "نمایش لاگ‌ها",
+                        'en': 'Show Logs'},
 
         'Live': {'fa': 'نمایش زنده',
                 'en': 'Live'},
@@ -959,9 +1007,6 @@ Titles = {
         'search by': {'fa': 'جست و جو براساس: ',
                         'en': 'Search By: '},
 
-        'search': {'fa': 'جست و جو',
-                'en': 'Search'},
-
         'refresh': {'fa': 'به روز رسانی',
                         'en': 'Refresh'},
 
@@ -1088,20 +1133,29 @@ Titles = {
         'c_barchart': {'fa': 'نمودار میله ای کلاس های عیب',
                         'en': 'Defect Classes BarChart'},
 
-        'date': {'fa': ':تاریخ',
-                'en': 'Date:'},
+        'date': {'fa': ': تاریخ',
+                'en': 'Date :'},
 
-        'coil_number': {'fa': ':شماره ورق',
-                'en': 'Coil Number:'},
+        'coil_number': {'fa': ': شماره ورق',
+                'en': 'Coil Number :'},
 
-        'cam_number': {'fa': ':شماره دوربین',
-                'en': 'Cam Number:'},
+        'cam_number': {'fa': ': شماره دوربین',
+                'en': 'Cam Number :'},
+
+        'frame_number': {'fa': ': شماره فریم',
+                'en': 'Frame Number :'},
 
         'show_neighbours': {'fa': 'نمایش تصاویر همسایه',
                 'en': 'Show Neighbours'},
 
         'show_neighbours_labels': {'fa': 'نمایش برچسب تصاویر همسایه',
                 'en': 'Show Neighbours labels'},
+
+        'line_thickness': {'fa': ': ضخامت خط',
+                'en': 'Line Thickness :'},
+
+        'point_thickness': {'fa': ': ضخامت نقطه',
+                'en': 'Point Thickness :'},
 
         'defect': {'fa': ':معیوب',
                 'en': 'Defect:'},
@@ -1120,6 +1174,9 @@ Titles = {
 
         'save': {'fa': 'ذخیره',
                 'en': 'Save'},
+
+        'save_all': {'fa': 'ذخیره‌ی همه',
+                'en': 'Save All'},
 
         'masks': {'fa': 'ماسک ها',
                 'en': 'Masks'},
@@ -1180,6 +1237,12 @@ Titles = {
 
         'algorithm_name': {'fa': ':نام الگوریتم',
                         'en': 'Algorithm Name:'},
+
+        'pretrained_weights_path': {'fa': ':آدرس وزن‌های آموزش دیده',
+                        'en': 'Pretrained weights path:'},
+
+        'algorithm_name_2': {'fa': 'نام الگوریتم',
+                        'en': 'Algorithm Name'},
 
         'input_size': {'fa': ':اندازه ورودی',
                         'en': 'Input Size:'},
@@ -1270,6 +1333,12 @@ Titles = {
         
         'recall': {'fa': 'ریکال', 
                 'en': 'Recall'},
+        
+        'iou': {'fa': 'IOU', 
+                'en': 'IOU'},
+        
+        'fscore': {'fa': 'FScore', 
+                'en': 'FScore'},
 
         'min': {'fa': 'کمینه',
                 'en': 'Min'},
@@ -1480,6 +1549,66 @@ Titles = {
         'delete_polygons': {'fa': 'حذف چند‌ضلعی‌ها',
                 'en': 'Delete Polygons'},
 
+		'search_bar': {'fa': 'نوار جست و جو',
+					'en': 'Search Bar'},
+
+		'date': {'fa': 'تاریخ',
+					'en': 'Date'},
+
+        'all_dates': {'fa': 'همه‌ی تاریخ‌ها',
+                'en': 'All Dates'},
+
+        'from_date': {'fa': ':از تاریخ',
+                'en': 'From Date:'},
+
+        'to_date': {'fa': ':تا تاریخ',
+                'en': 'To Date:'},
+
+        'year': {'fa': ':سال',
+                'en': 'Year:'},
+
+        'month': {'fa': ':ماه',
+                'en': 'Month:'},
+
+        'day': {'fa': ':روز',
+                'en': 'Day:'},
+
+        'levels': {'fa': 'سطح‌ها',
+                'en': 'Levels'},
+
+        'all_levels': {'fa': 'همه‌ی سطح‌ها',
+                'en': 'All Levels'},
+
+        'types': {'fa': 'نوع‌ها',
+                'en': 'Types'},
+
+        'all_types': {'fa': 'همه‌ی نوع‌ها',
+                'en': 'All Types'},
+
+        'lines': {'fa': 'خط‌ها',
+                'en': 'Lines'},
+
+        'line': {'fa': 'خط‌',
+                'en': 'Lines'},
+
+        'from_first': {'fa': 'از ابتدا',
+                'en': 'From First'},
+
+        'from_last': {'fa': 'از انتها',
+                'en': 'From Last'},
+
+        'line': {'fa': 'خط‌',
+                'en': 'Lines'},
+
+        'search': {'fa': 'جست و جو',
+                'en': 'Search'},
+
+        'refresh': {'fa': 'به‌روز رسانی',
+                'en': 'Refresh'},
+
+        'logs': {'fa': 'لاگ‌ها',
+                'en': 'Logs'},
+
 #---------------------------------------------------------------------
 #----------------------Setting Sofwtare-------------------------------
 #---------------------------------------------------------------------
@@ -1684,6 +1813,8 @@ def set_title(self, lang):
     self.tuning_btn.setToolTip(Titles[' Tuning'][lang])
     self.pbt_btn.setText(Titles['Pipline Build & Test'][lang])
     self.pbt_btn.setToolTip(Titles['Pipline Build & Test'][lang])
+    self.log_btn.setText(Titles['show_logs'][lang])
+    self.log_btn.setToolTip(Titles['show_logs'][lang])
 
     self.Binary_btn.setText(Titles['Binary'][lang])
     self.Localization_btn.setText(Titles['Localization'][lang])
@@ -1842,6 +1973,9 @@ def set_title(self, lang):
     self.label_13.setText(Titles['date'][lang])
     self.label_22.setText(Titles['coil_number'][lang])
     self.label_121.setText(Titles['cam_number'][lang])
+    self.label_288.setText(Titles['frame_number'][lang])
+    self.label_285.setText(Titles['line_thickness'][lang])
+    self.label_286.setText(Titles['point_thickness'][lang])
     self.checkBox_show_neighbours.setText(Titles['show_neighbours'][lang])
     self.checkBox_show_neighbours_labels.setText(Titles['show_neighbours_labels'][lang])
 
@@ -1850,6 +1984,7 @@ def set_title(self, lang):
     self.yes_defect.setText(Titles['yes'][lang])
     self.label_220.setText(Titles['masks'][lang])
     self.save_dataset_btn.setText(Titles['save'][lang])
+    self.save_all_dataset_btn.setText(Titles['save_all'][lang])
     self.binary_chart_frame_label.setTitle(Titles['df_piechart'][lang])
 
     self.mask_table_widget.horizontalHeader().setVisible(True)
@@ -1905,7 +2040,7 @@ def set_title(self, lang):
     ## history
 
     self.groupBox_33.setTitle(Titles['sf_training_records'][lang])
-    self.label_102.setText(Titles['name'][lang])
+    self.label_102.setText(Titles['algorithm_name_2'][lang])
     self.label_109.setText(Titles['epochs_2'][lang])
     self.label_134_2.setText(Titles['tune_epochs'][lang])
     self.label_134.setText(Titles['batch_size_2'][lang])
@@ -1944,6 +2079,7 @@ def set_title(self, lang):
     ## training
 
     self.label_242.setText(Titles['algorithm_name'][lang])
+    self.label_301.setText(Titles['pretrained_weights_path'][lang])
     self.label_243.setText(Titles['input_size'][lang])
     self.label_33.setText(Titles['input_type'][lang])
     self.l_input_type_resize.setText(Titles['resize'][lang])
@@ -1968,10 +2104,14 @@ def set_title(self, lang):
     ## history
 
     self.groupBox_35.setTitle(Titles['sf_training_records'][lang])
-    self.label_90.setText(Titles['name'][lang])
+    self.label_90.setText(Titles['algorithm_name_2'][lang])
     self.label_91.setText(Titles['epochs_2'][lang])
     self.label_2471.setText(Titles['batch_size_2'][lang])
     self.label_95.setText(Titles['split_ratio'][lang])
+    self.label_110.setText(Titles['loss'][lang])
+    self.label_254.setText(Titles['accuracy'][lang])
+    self.label_257.setText(Titles['iou'][lang])
+    self.label_260.setText(Titles['fscore'][lang])
     self.label_263.setText(Titles['start_date'][lang])
     self.label_266.setText(Titles['end_date'][lang])
     self.localization_filter_btn.setText(Titles['search_filter'][lang])
@@ -2217,6 +2357,9 @@ def set_alignment(self, lang):
         self.label_13.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_22.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_121.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_288.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_285.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_286.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_137.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_144.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2229,15 +2372,19 @@ def set_alignment(self, lang):
         self.label_143.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_130.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
-        # self.label_80.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_191.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_194.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-
         self.label_90.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_91.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_2471.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_95.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_110.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_254.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.label_257.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.label_260.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_263.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_266.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_242.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_301.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_243.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_33.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_244.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2246,14 +2393,6 @@ def set_alignment(self, lang):
         self.label_248.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_249.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_250.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-
-        # self.label_90.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_91.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_92.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_95.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_93.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_96.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        # self.label_97.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_186.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_185.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2398,6 +2537,9 @@ def set_alignment(self, lang):
         self.label_13.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_22.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_121.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_288.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_285.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_286.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_137.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_144.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2415,10 +2557,18 @@ def set_alignment(self, lang):
         # self.label_194.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         
         self.label_90.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_91.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_2471.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_95.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_110.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_254.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.label_257.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.label_260.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_263.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_266.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_242.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_301.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_243.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_33.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_244.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2427,14 +2577,6 @@ def set_alignment(self, lang):
         self.label_248.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_249.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_250.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-
-        # self.label_90.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_91.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_92.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_95.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_93.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_96.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        # self.label_97.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_186.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_185.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2540,6 +2682,43 @@ def set_alignment(self, lang):
         # self.BTN_search_and_filter_in_PBT.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
     
     set_alignment
+
+def set_show_log(self, lang):
+	self.show_log_win.groupBox.setTitle(Titles['search_bar'][lang])
+	self.show_log_win.groupBox_3.setTitle(Titles['date'][lang])
+
+	self.show_log_win.checkBox_allDates.setText(Titles['all_dates'][lang])
+	self.show_log_win.label.setText(Titles['from_date'][lang])
+	self.show_log_win.label_2.setText(Titles['to_date'][lang])
+	self.show_log_win.label_5.setText(Titles['year'][lang])
+	self.show_log_win.label_8.setText(Titles['year'][lang])
+	self.show_log_win.label_6.setText(Titles['month'][lang])
+	self.show_log_win.label_9.setText(Titles['month'][lang])
+	self.show_log_win.label_7.setText(Titles['day'][lang])
+	self.show_log_win.label_10.setText(Titles['day'][lang])
+
+	self.show_log_win.groupBox_5.setTitle(Titles['levels'][lang])
+	self.show_log_win.checkBox_allLevels.setText(Titles['all_levels'][lang])
+
+	self.show_log_win.groupBox_6.setTitle(Titles['types'][lang])
+	self.show_log_win.checkBox_allTypes.setText(Titles['all_types'][lang])
+
+	self.show_log_win.groupBox_4.setTitle(Titles['lines'][lang])
+	self.show_log_win.label_12.setText(Titles['line'][lang])
+	self.show_log_win.comboBox_linesFL.clear()
+	self.show_log_win.comboBox_linesFL.addItems([Titles['from_last'][lang], Titles['from_first'][lang]])
+	
+	self.show_log_win.search_btn.setText(Titles['search'][lang])
+	self.show_log_win.refresh_btn.setText(Titles['refresh'][lang])
+
+	self.show_log_win.groupBox_2.setTitle(Titles['logs'][lang])
+
+	if lang == 'fa':
+		self.show_log_win.label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+		self.show_log_win.label_2.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+	elif lang == 'en':
+		self.show_log_win.label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+		self.show_log_win.label_2.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
 # def set_help_title(self):
 #     self.Data_auquzation_btn.setText(Titles['Data Auquzation'][lang])

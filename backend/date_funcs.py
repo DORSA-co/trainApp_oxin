@@ -1,8 +1,9 @@
 from persiantools.jdatetime import JalaliDate
 import datetime
 
+SHAMSI_DATE = False
 
-def get_date(persian=True, folder_path=False):
+def get_date(persian=SHAMSI_DATE, folder_path=False):
     """
     this function retrns current date, wheter in persian or miladi.
 
@@ -74,7 +75,7 @@ def get_time(folder_path=False):
     return time
 
 
-def get_datetime(persian=True, folder_path=True):
+def get_datetime(persian=SHAMSI_DATE, folder_path=True):
     """
     this function returns both curent date and time in wheater persian or miladi format
 
@@ -91,6 +92,19 @@ def get_datetime(persian=True, folder_path=True):
 
     return date + "-" + time
 
+
+def get_n_month_days(month=1, persian=SHAMSI_DATE):
+    if persian:
+        if month <= 6:
+            return 31
+        else:
+            return 30
+    else:
+        if month in [1, 3, 5, 7, 8, 10, 12]:
+            return 31
+        if month == 2:
+            return 29
+        return 30
 
 
 if __name__ == "__main__":

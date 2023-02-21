@@ -4,42 +4,46 @@ from PySide6 import QtCore as sQtCore
 from PySide6.QtGui import QColor as sQColor
 from PySide6.QtCore import QObject as sQObject
 from PySide6.QtCore import Signal as sSignal
+from PySide6.QtGui import Qt
 
-from backend import colors_pallete
+from backend import colors_pallete, chart_funcs, date_funcs
 import train_api, texts
 
+SHAMSI_DATE = False
+
 # localization table headers
-localization_headers = ['Algorithm', 'Input-Size', 'Input-Type',
+localization_headers = ['Algorithm Name', 'Pretrained weights Path', 'Input-Size', 'Input-Type',
                     'N-Epochs', 'Batch-Size', 'Learning-Rate',
-                    'Split Ratio', 'Loss', 'Accuracy', 'Precision', 'Recall',
-                    'Val-Loss', 'Val-Accuracy', 'Val-Precision', 'Val-Recall',
+                    'Split Ratio', 'Loss', 'Accuracy', 'IOU', 'FScore',
+                    'Val-Loss', 'Val-Accuracy', 'Val-IOU', 'Val-FScore',
                     'Dataset Path', 'Weights Path', 'Date Created']
 localization_headers_fa = [
     "نام الگوریتم",
+    "آدرس وزن‌های از پیش آموزش دیده",
     "اندازه ورودی",
     "نوع ورودی",
     "تعداد اپوک",
     "اندازه دسته",
     "نرخ یادگیری",
     "نسبت تقسیم داده",
-    "Loss",
-    "Accuracy",
-    "Precision",
-    "Recall",
-    "اعتبارسنجی Loss",
-    "اعتبارسنجی Accuracy",
-    "اعتبارسنجی Precision",
-    "اعتبارسنجی Recall",
+    "خطا",
+    "دقت",
+    "IOU",
+    "FScore",
+    "خطا اعتبارسنجی",
+    "دقت اعتبارسنجی",
+    "اعتبارسنجی IOU",
+    "اعتبارسنجی FScore",
     "آدرس مجموعه داده",
-    "آدرس وزن ها",
+    "آدرس وزن‌ها",
     "تاریخ ایجاد",
 ]
 
 # headers in database
-localization_headers_db = ['algo_name', 'input_size', 'input_type',
+localization_headers_db = ['algo_name', 'pretrain_path', 'input_size', 'input_type',
                     'epochs', 'batch_size', 'lr',
-                    'split_ratio', 'loss', 'accuracy', 'precision_', 'recall',
-                    'val_loss', 'val_accuracy', 'val_precision', 'val_recall',
+                    'split_ratio', 'loss', 'accuracy', 'iou', 'fscore',
+                    'val_loss', 'val_accuracy', 'val_iou', 'val_fscore',
                     'dataset_pathes', 'weights_path', 'date_']
 
 # table number of rows and cols
@@ -120,13 +124,29 @@ def set_lmodels_on_ui_tabel(ui_obj, lmodels_list):
 
             # translate algo-ids to name
             if col_idx == 0:
-                lmodel[localization_headers_db[col_idx]] = translate_localization_algorithm_id_to_name(algo_id=lmodel[localization_headers_db[col_idx]])
+                lmodel[
+                    localization_headers_db[col_idx]
+                ] = translate_localization_algorithm_id_to_name(
+                    algo_id=lmodel[localization_headers_db[col_idx]]
+                )
+            if col_idx == 1:
+                lmodel[
+                    localization_headers_db[col_idx]
+                ] = '-' if lmodel[localization_headers_db[col_idx]] == '' else lmodel[localization_headers_db[col_idx]]
+            if col_idx == 3:
+                lmodel[
+                    localization_headers_db[col_idx]
+                ] = 'Split' if lmodel[localization_headers_db[col_idx]] == '1' else 'Resize'
             table_item = sQTableWidgetItem(str(lmodel[localization_headers_db[col_idx]]))
             # set checkbox (only first col)
-            if col_idx == 0:
-                table_item.setFlags(sQtCore.Qt.ItemFlag.ItemIsUserCheckable | sQtCore.Qt.ItemFlag.ItemIsEnabled)
-                table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
+            # if col_idx == 0:
+                # table_item.setFlags(
+                #     sQtCore.Qt.ItemFlag.ItemIsUserCheckable 
+                #     | sQtCore.Qt.ItemFlag.ItemIsEnabled
+                # )
+                # table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
             table_item.setForeground(sQColor(text_color))
+            table_item.setTextAlignment(Qt.AlignCenter)
             ui_obj.localization_history_tabel.setItem(row_idx, col_idx, table_item)
     try:
         ui_obj.localization_history_tabel.setRowCount(row_idx+1)
@@ -165,11 +185,15 @@ def save_new_localization_model_record(ui_obj, db_obj, lmodel_records):
 
     # add
     if add_new_localization_model_to_db(db_obj=db_obj, new_lmodel_info=lmodel_records):
-        ui_obj.notif_manager.append_new_notif(message=texts.MESSEGES['database_add_lmodel'][ui_obj.language], level=1)
+        ui_obj.notif_manager.append_new_notif(
+            message=texts.MESSEGES['database_add_lmodel'][ui_obj.language], level=1
+        )
         return True
 
     else:
-        ui_obj.notif_manager.append_new_notif(message=texts.ERRORS['database_add_lmodel_failed'][ui_obj.language], level=3)
+        ui_obj.notif_manager.append_new_notif(
+            message=texts.ERRORS['database_add_lmodel_failed'][ui_obj.language], level=3
+            )
         return False
 
 
@@ -192,8 +216,8 @@ def get_localization_model_filter_info_from_ui(ui_obj):
         lmodel_info['split_ratio'] = [ui_obj.localization_split_min_filter_lineedit.text(), ui_obj.localization_split_max_filter_lineedit.text()]
         lmodel_info['val_loss'] = [ui_obj.localization_loss_min_filter_lineedit.text(), ui_obj.localization_loss_max_filter_lineedit.text()]
         lmodel_info['val_accuracy'] = [ui_obj.localization_acc_min_filter_lineedit.text(), ui_obj.localization_acc_max_filter_lineedit.text()]
-        lmodel_info['val_precision'] = [ui_obj.localization_prec_min_filter_lineedit.text(), ui_obj.localization_prec_max_filter_lineedit.text()]
-        lmodel_info['val_recall'] = [ui_obj.localization_rec_min_filter_lineedit.text(), ui_obj.localization_rec_max_filter_lineedit.text()]
+        lmodel_info['val_iou'] = [ui_obj.localization_iou_min_filter_lineedit_2.text(), ui_obj.localization_iou_max_filter_lineedit_2.text()]
+        lmodel_info['val_fscore'] = [ui_obj.localization_fscore_min_filter_lineedit.text(), ui_obj.localization_fscore_max_filter_lineedit.text()]
 
         # date
         lmodel_info['start_date'] = [ui_obj.localization_start_year_lineedit.text(), ui_obj.localization_start_month_lineedit.text(), ui_obj.localization_start_day_lineedit.text()]
@@ -313,41 +337,42 @@ def get_filtered_localization_models_from_db(ui_obj, db_obj, filter_params, limi
 
     # precision
     try:
-        if filter_params['val_precision'][0] != '' and filter_params['val_precision'][1] != '' and float(filter_params['val_precision'][0]) > float(filter_params['val_precision'][1]):
-            ui_obj.set_warning(texts.ERRORS['PREC_RANGE_INCORRECT'][ui_obj.language], 'localization_model_history', level=3)
+        if filter_params['val_iou'][0] != '' and filter_params['val_iou'][1] != '' and float(filter_params['val_iou'][0]) > float(filter_params['val_iou'][1]):
+            ui_obj.set_warning(texts.ERRORS['IOU_RANGE_INCORRECT'][ui_obj.language], 'localization_model_history', level=3)
             return 'error',[]
-        elif bool(filter_params['val_precision'][0] == '') ^ bool(filter_params['val_precision'][1] == ''):
-            ui_obj.set_warning(texts.WARNINGS['PREC_RANGE_EMPTY'][ui_obj.language], 'localization_model_history', level=2)
+        elif bool(filter_params['val_iou'][0] == '') ^ bool(filter_params['val_iou'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['IOU_RANGE_EMPTY'][ui_obj.language], 'localization_model_history', level=2)
             return 'error',[]
-        elif filter_params['val_precision'][0] != '' and filter_params['val_precision'][1] != '':
-            params.append([str(float(filter_params['val_precision'][0])), str(float(filter_params['val_precision'][1]))])
-            cols.append('val_precision')
+        elif filter_params['val_iou'][0] != '' and filter_params['val_iou'][1] != '':
+            params.append([str(float(filter_params['val_iou'][0])), str(float(filter_params['val_iou'][1]))])
+            cols.append('val_iou')
     except:
-        ui_obj.set_warning(texts.ERRORS['PREC_FORMAT_INVALID'][ui_obj.language], 'localization_model_history', level=3)
+        ui_obj.set_warning(texts.ERRORS['IOU_FORMAT_INVALID'][ui_obj.language], 'localization_model_history', level=3)
         return 'error',[]
 
     # recall
     try:
-        if filter_params['val_recall'][0] != '' and filter_params['val_recall'][1] != '' and float(filter_params['val_recall'][0]) > float(filter_params['val_recall'][1]):
-            ui_obj.set_warning(texts.ERRORS['RECA_RANGE_INCORRECT'][ui_obj.language], 'localization_model_history', level=3)
+        if filter_params['val_fscore'][0] != '' and filter_params['val_fscore'][1] != '' and float(filter_params['val_fscore'][0]) > float(filter_params['val_fscore'][1]):
+            ui_obj.set_warning(texts.ERRORS['FSCORE_RANGE_INCORRECT'][ui_obj.language], 'localization_model_history', level=3)
             return 'error',[]
-        elif bool(filter_params['val_recall'][0] == '') ^ bool(filter_params['val_recall'][1] == ''):
-            ui_obj.set_warning(texts.WARNINGS['RECA_RANGE_EMPTY'][ui_obj.language], 'localization_model_history', level=2)
+        elif bool(filter_params['val_fscore'][0] == '') ^ bool(filter_params['val_fscore'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['FSCORE_RANGE_EMPTY'][ui_obj.language], 'localization_model_history', level=2)
             return 'error',[]
-        elif filter_params['val_recall'][0] != '' and filter_params['val_recall'][1] != '':
-            params.append([str(float(filter_params['val_recall'][0])), str(float(filter_params['val_recall'][1]))])
-            cols.append('val_recall')
+        elif filter_params['val_fscore'][0] != '' and filter_params['val_fscore'][1] != '':
+            params.append([str(float(filter_params['val_fscore'][0])), str(float(filter_params['val_fscore'][1]))])
+            cols.append('val_fscore')
     except:
-        ui_obj.set_warning(texts.ERRORS['RECA_FORMAT_INVALID'][ui_obj.language], 'localization_model_history', level=3)
+        ui_obj.set_warning(texts.ERRORS['FSCORE_FORMAT_INVALID'][ui_obj.language], 'localization_model_history', level=3)
         return 'error',[]
 
     # date
-    #start year
+    # start year
     if filter_params['start_date'][0] != '' or filter_params['start_date'][1] != '' or filter_params['start_date'][2] != ''\
         or filter_params['end_date'][0] != '' or filter_params['end_date'][1] != '' or filter_params['end_date'][2] != '':
         #
+        year = int(date_funcs.get_date(persian=SHAMSI_DATE).split('/')[0])
         try:
-            if int(filter_params['start_date'][0]) < 1402 or int(filter_params['start_date'][0]) > 1500:
+            if int(filter_params['start_date'][0]) < year - 10 or int(filter_params['start_date'][0]) > year + 10:
                 ui_obj.set_warning(texts.ERRORS['YEAR_RANGE_INCORRECT'][ui_obj.language], 'localization_model_history', level=3)
                 return 'error',[]
         except:
@@ -372,7 +397,7 @@ def get_filtered_localization_models_from_db(ui_obj, db_obj, filter_params, limi
         #
         # end year
         try:
-            if int(filter_params['end_date'][0]) < 1402 or int(filter_params['end_date'][0]) > 1500:
+            if int(filter_params['end_date'][0]) < year - 10 or int(filter_params['end_date'][0]) > year + 10:
                 ui_obj.set_warning(texts.ERRORS['YEAR_RANGE_INCORRECT'][ui_obj.language], 'localization_model_history', level=3)
                 return 'error',[]
         except:
@@ -431,7 +456,7 @@ def get_filtered_localization_models_from_db(ui_obj, db_obj, filter_params, limi
             return 'filtered', defects_list
         
         else:
-            ui_obj.notif_manager.append_new_notif(message=texts.ERRORS['database_get_bmodels_failed'][ui_obj.language], level=4)
+            ui_obj.notif_manager.append_new_notif(message=texts.ERRORS['database_get_lmodels_failed'][ui_obj.language], level=4)
             return 'error', []
     
     except:
@@ -446,6 +471,8 @@ class Localization_model_train_worker(sQObject):
     """
 
     finished = sSignal()
+    warning = sSignal(str, str, str, int)
+    update_charts = sSignal(int, dict)
 
     def assign_parameters(self, l_parms, api_obj, ui_obj, db_obj):
         self.l_parms = l_parms
@@ -453,17 +480,44 @@ class Localization_model_train_worker(sQObject):
         self.ui_obj = ui_obj
         self.db_obj = db_obj
 
-
     def train_model(self):
-        lmodel_records = train_api.train_localization(*self.l_parms, self.api_obj.ds.weights_localization_path, self.api_obj)
-        if lmodel_records:
-            # notif
-            self.ui_obj.notif_manager.append_new_notif(message=texts.MESSEGES['lmodel_trained'][self.ui_obj.language], level=1)
+        lmodel_records = train_api.train_localization(
+            *self.l_parms, self.api_obj.ds.weights_localization_path, self.api_obj
+        )
+        if not lmodel_records[0]:
+            self.warning.emit(lmodel_records[1][0], lmodel_records[1][1], None, lmodel_records[1][2])
+        else:
+            lmodel_records = lmodel_records[1]
+            if lmodel_records:
+                # notif
+                self.ui_obj.notif_manager.append_new_notif(
+                    message=texts.MESSEGES['lmodel_trained'][self.ui_obj.language], level=1
+                )
 
-            # add record to database
-            self.api_obj.lmodel_train_result = save_new_localization_model_record(ui_obj=self.ui_obj, db_obj=self.db_obj, lmodel_records=lmodel_records)
+                # add record to database
+                self.api_obj.lmodel_train_result = save_new_localization_model_record(
+                    ui_obj=self.ui_obj, db_obj=self.db_obj, lmodel_records=lmodel_records
+                )
+
+                if self.api_obj.lmodel_train_result:
+                    self.warning.emit(texts.MESSEGES['train_successfuly'][self.api_obj.language], 'l_train', None, 1)
+                else:
+                    self.warning.emit(texts.ERRORS['database_add_lmodel_failed'][self.api_obj.language], 'l_train', None, 3)
+
         self.finished.emit()
 
+    def assign_new_value_to_l_chart(self, last_epoch, logs):
+        self.update_charts.emit(last_epoch, logs)
        
+    def save_l_model(self, model, path, epoch):
+        try:
+            model.save(path)
+            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['SAVE_LMODEL_EPOCH']['en'].format(epoch))
+        except:
+            self.ui_obj.logger.create_new_log(message=texts.ERRORS['SAVE_LMODEL_EPOCH_FAILED']['en'].format(epoch), level=5)
+            self.warning.emit(texts.ERRORS['SAVE_LMODEL_EPOCH_FAILED'][self.api_obj.language].format(epoch), 'l_train', None, 3)
+    
     def show_lmodel_train_result(self):
+        self.ui_obj.localization_train.setEnabled(True)
+        self.api_obj.runing_l_model=False
         return

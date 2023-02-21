@@ -33,8 +33,8 @@ if __name__ == '__main__':
         # Stop timer
         end = timeit.default_timer()
         #
-        # # Print time spent
-        print((end - s) * 1000)
+        # # #print time spent
+        #print((end - s) * 1000)
         #
         # Show original image
         cv2.imshow('Original', cv2.resize(img, (968, 528)))
@@ -48,4 +48,4 @@ if __name__ == '__main__':
 
         cv2.waitKey(0)
     end = timeit.default_timer()
-    print((end - start))
+    #print((end - start))

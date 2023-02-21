@@ -2,14 +2,19 @@ from operator import itemgetter
 import cv2
 import numpy as np
 
+IMAGE_SHAPE = (1200, 1920)
+
 def get_selected_value(mylist , idxs):
     return np.array(mylist)[idxs].tolist()
 
 def read_image(path, color='gray'):
     if color == 'color':
-        return cv2.imread(path)
+        img = cv2.imread(path) 
     if color == 'gray':
-        return cv2.imread(path, 0)
+        img = cv2.imread(path, 0)
+    if img.shape != IMAGE_SHAPE:
+        img = cv2.resize(img, (IMAGE_SHAPE[1], IMAGE_SHAPE[0]))
+    return img
 
 def add_layer_to_img(src_img, layer,opacity=0.7, compress=0.5):
     h,w = src_img.shape[:2]
@@ -37,4 +42,4 @@ if __name__ == "__main__":
     l = [['a'], 'b', 2, 1, 5, 3,'g']
     idxs = [0]
 
-    print( get_selected_value(l,idxs))
+    #print( get_selected_value(l,idxs))

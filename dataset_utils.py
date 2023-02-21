@@ -21,7 +21,7 @@ NONE_CLASS = "None"
 
 class dataset_json:
     def read(self, path):
-        print(path)
+        # #print(path)
         with open(path) as jfile:
             file = json.load(jfile)
         return file
@@ -57,7 +57,7 @@ class dataset_json:
         #     path
 
     def write(self, path):
-        print("write", path)
+        # #print("write", path)
         with open(str(path), "w") as f:
             json.dump(self.dataset_details, f, indent=4, sort_keys=True)
             # json.dump(self.classification, f,indent=4, sort_keys=True)
@@ -125,7 +125,7 @@ class dataset_json:
         try:
             file = self.modify_date(file)
         except:
-            print("eror modify date")
+            # #print("eror modify date")
             pass
         self.write_modify(file)
 
@@ -151,8 +151,8 @@ class dataset_json:
 
         # if str(name) in file['classification'].keys():
         #     if AI:
-        #         print('ai')
-        #         print((file['classification'][name]['count']))
+        #         #print('ai')
+        #         #print((file['classification'][name]['count']))
         #         count=int(file['classification'][name]['count'])
         #         count_dict={'count':count+1}
         #         file['classification'][name]=count_dict
@@ -164,7 +164,7 @@ class dataset_json:
         #     count_dict={'count':count}
         #     name_dict={name:count_dict}
         #     file['classification'].update(name_dict)
-        #     print(file)
+        #     #print(file)
         #     # self.add_update_classification(name,AI,count)
         try:
             file = self.modify_date(file)
@@ -173,13 +173,13 @@ class dataset_json:
         self.write_modify(file)
 
     def read_modify(self):
-        print("user_name", self.user_name_database)
+        # #print("user_name", self.user_name_database)
         default_id = self.db.get_default_dataset(self.user_name_database)
         default_name = self.db.get_dateset_name(default_id)
-        print("default_name", default_name)
+        # #print("default_name", default_name)
         path = self.db.get_path_dataset(default_id)
         path = os.path.join(path, default_name)
-        print("path", path)
+        # #print("path", path)
         with open(path + ".json") as jfile:
             file = json.load(jfile)
         return file

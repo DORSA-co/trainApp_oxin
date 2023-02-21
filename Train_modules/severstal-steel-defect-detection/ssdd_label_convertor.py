@@ -61,7 +61,7 @@ def csv2labelDict( csv_list ):
 #       code itself.
 #       link: https://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console
 #______________________________________________________________________________________________________________________________________________
-def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+def #printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', #printEnd = "\r"):
     """
     Call in a loop to create terminal progress bar
     @params:
@@ -72,15 +72,15 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
         decimals    - Optional  : positive number of decimals in percent complete (Int)
         length      - Optional  : character length of bar (Int)
         fill        - Optional  : bar fill character (Str)
-        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+        #printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
     """
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
-    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
-    # Print New Line on Complete
+    #print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = #printEnd)
+    # #print New Line on Complete
     if iteration == total: 
-        print()
+        #print()
 
 #______________________________________________________________________________________________________________________________________________
 #explain:
@@ -155,11 +155,11 @@ def convert_csv_to_json(images_path , csv_path , save_path, singleLine = False):
     csv_file = csv_reader(csv_path)
     dict_lbl = csv2labelDict(csv_file)
 
-    print("Conversion Started. Please Wait...")
+    #print("Conversion Started. Please Wait...")
     counter = 1
     total = len(dict_lbl.items())
     for key, val in dict_lbl.items():
-        printProgressBar (counter, total, prefix = f'{"Converting CSV to JSON": <25}', suffix = 'Completed', decimals = 1, length = 100, fill = '█', printEnd = "\r")
+        #printProgressBar (counter, total, prefix = f'{"Converting CSV to JSON": <25}', suffix = 'Completed', decimals = 1, length = 100, fill = '█', #printEnd = "\r")
         json_dict = _create_jsondict(key , val , images_path)
         _save_json(json_dict , save_path, singleLine)   
         counter += 1
@@ -196,13 +196,13 @@ def create_json_for_unlabeled_image(image_path , json_path , singleLine = False)
         map(lambda inp: reduce_path(inp , image_path) , image_path_list)
     )
 
-    # print(json_path_list_reduced)
+    # #print(json_path_list_reduced)
     total = len(image_path_list_reduced)
     iteration = 1
 
-    print("\n\nCreating label for unlabled images. Please Wait...")
+    #print("\n\nCreating label for unlabled images. Please Wait...")
     for i_fname , i_fname_extension in image_path_list_reduced:
-        printProgressBar (iteration, total, prefix = f'{"Creating JSONS": <25}', suffix = 'Completed', decimals = 1, length = 100, fill = '█', printEnd = "\r")
+        #printProgressBar (iteration, total, prefix = f'{"Creating JSONS": <25}', suffix = 'Completed', decimals = 1, length = 100, fill = '█', #printEnd = "\r")
         if  not i_fname in json_path_list_reduced:
 
             img = cv2.imread( path.join(image_path , i_fname + i_fname_extension) )
@@ -277,7 +277,7 @@ def create_all_json(image_path , csv_path , json_save_path , singleLine = False)
     os.system('clear')
     convert_csv_to_json(image_path , csv_path , json_save_path , singleLine = singleLine)
     create_json_for_unlabeled_image(image_path , json_save_path , singleLine = singleLine )
-    print("\n","\033[92m" + ".::Conversion Finished Successfully!::.\n" + '\033[0m')
+    #print("\n","\033[92m" + ".::Conversion Finished Successfully!::.\n" + '\033[0m')
 
 def main():
     # _pretify_lists(r'.\severstal-steel-defect-detection\annotations\000a4bcdd.json')

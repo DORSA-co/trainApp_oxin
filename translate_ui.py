@@ -32,10 +32,11 @@ def translate_ui(language='fa', ui_file_path_en='main_window.ui', ui_file_path_f
             # save the new transalted file
             qml_tree.write(ui_file_path_fa)
 
-            print('ui translated to persian')
+            # #print('ui translated to persian')
             
         except:
-            print('fialed to translate ui')
+            pass
+            # #print('fialed to translate ui')
         
 
 

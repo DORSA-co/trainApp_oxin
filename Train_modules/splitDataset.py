@@ -12,7 +12,7 @@ split = 0.2
 def bar(counter,n):
     percent = counter/n*100
     os.system('cls')
-    print('percent={:.2f}%  |{}| n={} of {}'.format(percent, int(percent/2)*'◼' + int(50 - percent/2)*'-' ,int(counter), n))
+    #print('percent={:.2f}%  |{}| n={} of {}'.format(percent, int(percent/2)*'◼' + int(50 - percent/2)*'-' ,int(counter), n))
 
 def copy(src, dst):
     """This is function to copy images and symlinks
@@ -85,7 +85,7 @@ def split_unet_dataset(paths, img_folder='image', label_folder='label', mulit_ma
     nimage = len(imgs_list)
     ntest = int(split * nimage)
     ntrain= nimage - ntest
-    print("{} images split into {} train / {} test".format(nimage, ntrain, ntest))
+    #print("{} images split into {} train / {} test".format(nimage, ntrain, ntest))
     #-------------------------------------
     #obtain sources path for image and mask
     images_dir = os.path.join(src_path, img_folder)

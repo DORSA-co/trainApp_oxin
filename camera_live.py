@@ -20,7 +20,7 @@ def read_image(cameras, qimage, qinfo, sheet_id, nframe, start_cam, stop_cam, s,
             if stop.value:
                 return
     while True:
-        print(sheet_id.value)
+        # #print(sheet_id.value)
         if s == 1:
             nframe.value += 1
         for camera_id in range(s, d + 1):
@@ -28,12 +28,12 @@ def read_image(cameras, qimage, qinfo, sheet_id, nframe, start_cam, stop_cam, s,
                 if str(camera_id) in list(connected_cameras.keys()):
                     img = connected_cameras[str(camera_id)].getPictures()
                     qimage.put(img)
-                    print((str(sheet_id.value), str(camera_id), str(nframe.value)))
+                    # #print((str(sheet_id.value), str(camera_id), str(nframe.value)))
                     qinfo.put((str(sheet_id.value), str(camera_id), str(nframe.value)))
                 # else:
                 #     img = np.zeros((1200, 1920))
                 #     qimage.put(img)
-                #     print((str(sheet_id.value), str(camera_id), str(nframe.value)))
+                #     #print((str(sheet_id.value), str(camera_id), str(nframe.value)))
                 #     qinfo.put((str(sheet_id.value), str(camera_id), str(nframe.value)))
             if stop.value:
                 return
@@ -58,7 +58,7 @@ def write_image(qimage, qinfo, main_path, image_format, stop):
             side = 'BOTTOM'
             path = sheet_image_path(main_path, info[0], side, str(int(info[1])-12), info[2],
                                     image_format)
-        print(path)
+        # #print(path)
         cv2.imwrite(path, img)
 
 
@@ -122,11 +122,11 @@ class ImageManager(QObject):
     def read_from_plc(self):
         with open('plc.txt', 'r', encoding='Utf-8') as plc:
             coil_dict = eval(plc.read())
-            print(coil_dict)
+            # #print(coil_dict)
         sheet_id_new = coil_dict['sheet_id']
         if sheet_id_new != self.sheet_id.value:
             self.sheet_id.value = int(sheet_id_new)
-            print('#'*15, self.sheet_id.value)
+            # #print('#'*15, self.sheet_id.value)
             self.total_frames = self.nframe
             self.nframe.value = 1
             self.stop_cam = ceil(coil_dict['width'] / self.camera_width)
@@ -172,5 +172,5 @@ class ImageManager(QObject):
 
     def stop(self):
         self.set_stop_capture()
-        print('***************************************finish')
+        # #print('***************************************finish')
         self.join_all()

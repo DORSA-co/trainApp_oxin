@@ -214,13 +214,13 @@ if __name__ == '__main__':
     # yt = np.random.randint(0,2, 128*800)
     # yt = np.reshape(yt, (1,10,10,1))
     # yp = np.random.randint(1.128,800,1)
-    print(metric.True_Pos(yt, yp))
+    #print(metric.True_Pos(yt, yp))
 
 '''
 data_ = np.random.rand( 100, 8 )
-print(data_)
+#print(data_)
 label_ = np.sum(data_ , axis= 1)
-print(label_)
+#print(label_)
 model = Sequential()
 model.add(Dense(20 , input_dim=8 , activation='relu'))
 model.add(Dense(20 , activation='relu'))
@@ -247,10 +247,10 @@ model.fit(data_, label_, epochs=10, batch_size=1)
 # yp = tf.constant(yp)
 
 # binm = BIN_Metrics()
-# print(binm.False_Neg( yt , yp))
-# print(binm.False_Pos(yt , yp))
-# print(binm.True_Neg(yt , yp))
-# print(binm.True_Pos(yt , yp))
+# #print(binm.False_Neg( yt , yp))
+# #print(binm.False_Pos(yt , yp))
+# #print(binm.True_Neg(yt , yp))
+# #print(binm.True_Pos(yt , yp))
 
 
 # class BIN_TruePos(Metric):

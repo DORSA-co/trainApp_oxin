@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
 from PySide6.QtGui import QColor as sQColor
 from PySide6.QtWidgets import QLabel as sQlabel
 from PySide6 import QtCore as sQtCore
+from utils import Utils
 
 from backend import Annotation, colors_pallete
 import texts
@@ -68,7 +69,7 @@ class Dataset:
 
         self.format_image = ".png"
 
-        # print(self.dataset_path)
+        # #print(self.dataset_path)
 
         self.build_path()
 
@@ -132,7 +133,7 @@ class Dataset:
         #-------------
     
 
-        # print(self.annotations_folder)
+        # #print(self.annotations_folder)
         self.__creat_path__(self.dataset_path)
         self.__creat_path__(self.weights_path)
         self.__creat_path__(self.images_temp_path)
@@ -200,13 +201,17 @@ class Dataset:
         for img_path, sheet, pos in zip(imgs_path, sheets, positions):
             image_name = self.__file_name__(pos) + self.format_image
             res_path = os.path.join(self.images_temp_path, image_name)
-            shutil.copyfile(img_path, res_path)
+            # shutil.copyfile(img_path, res_path)
+            img = Utils.read_image(img_path, 'color')
+            cv2.imwrite(res_path, img)
             self.create_annotation_to_temp(sheet, image_name)
 
     def save(self, img_path, pos, sheet, masks):
         image_name = self.__file_name__(pos) + self.format_image
         res_path = os.path.join(self.images_path, image_name)
-        shutil.copyfile(img_path, res_path)
+        # shutil.copyfile(img_path, res_path)
+        img = Utils.read_image(img_path, 'color')
+        cv2.imwrite(res_path, img)
         self.create_annotation_to_ds(sheet, masks, image_name, pos[-1])
 
     def create_annotation_to_temp(self, sheet, fname):
@@ -275,8 +280,11 @@ class Dataset:
         mask_path = os.path.join(self.defect_mask_path, image_name)
         loc_image_path = os.path.join(self.localization_image_path, image_name)
         loc_label_path = os.path.join(self.localization_label_path, image_name)
-        shutil.copyfile(img_path, res_path)
-        shutil.copyfile(img_path, loc_image_path)
+        img = Utils.read_image(img_path, 'color')
+        # shutil.copyfile(img_path, res_path)
+        cv2.imwrite(res_path, img)
+        # shutil.copyfile(img_path, loc_image_path)
+        cv2.imwrite(loc_image_path, img)
         cv2.imwrite(mask_path, mask)
         shutil.copyfile(mask_path, loc_label_path)
 
@@ -294,7 +302,9 @@ class Dataset:
     def save_to_perfect(self, img_path, pos):
         image_name = self.__file_name__(pos) + self.format_image
         res_path = os.path.join(self.perfect_path, image_name)
-        shutil.copyfile(img_path, res_path)
+        # shutil.copyfile(img_path, res_path)
+        img = Utils.read_image(img_path, 'color')
+        cv2.imwrite(res_path, img)
 
     def delete_from_perfect(self, pos):
         image_name = self.__file_name__(pos) + self.format_image
