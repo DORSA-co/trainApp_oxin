@@ -9,7 +9,7 @@ import inspect
 
 
 class dataBaseUtils:
-    def __init__(self, ui_obj, user_name="root", password="Dorsa1400@"):
+    def __init__(self, ui_obj, user_name="root", password="root"):
         if ui_obj!='Null':
             self.db = database.dataBase(
                 user_name, password, "localhost", "saba_database", logger_obj=ui_obj.logger

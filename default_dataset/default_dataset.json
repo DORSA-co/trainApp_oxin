@@ -1,0 +1,21 @@
+{
+    "basic": {
+        "dataset_name": "default_dataset",
+        "date_created": "1401/12/01",
+        "date_modify": "-",
+        "path": "default_dataset",
+        "user_id": 0,
+        "user_name": "Default"
+    },
+    "binary": {
+        "count_defect": 0,
+        "count_perfect": 0
+    },
+    "classification": {
+        "0": [],
+        "1": [],
+        "2": [],
+        "3": [],
+        "4": []
+    }
+}
