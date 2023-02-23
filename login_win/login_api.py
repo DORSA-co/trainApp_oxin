@@ -11,6 +11,8 @@ from functools import partial
 import cv2
 import database_utils
 
+import texts  # eror and warnings texts
+import texts_codes
 
 
 
@@ -60,16 +62,33 @@ class login_API:
                     self.ui.password.setText('')
                     self.ui.user_name.setText('')
                     self.ui.close()
-                    return True, user_info
+
+                    self.main_ui_obj.logger.create_new_log(
+                        code=texts_codes.SubTypes['Login_successfully'], message=texts.MESSEGES["Login_successfully"]["en"]+'  '+user_info['user_name'], level=1
+                    )
 
                 else:
-                    self.eror_login('Username or Password Incorrect')
+
+                    self.main_ui_obj.logger.create_new_log(
+                        code=texts_codes.SubTypes['Login_eror'], message=texts.MESSEGES["Login_unsuccessfully"]["en"], level=2
+                    )
+
+                    self.eror_login(texts.MESSEGES["Login_unsuccessfully"]["en"])
                     return False, 0
 
             except:
                 self.eror_login()
+
+
+            return True, user_info
+
         else:
             self.eror_login('Username or Password Empty')
+
+            self.main_ui_obj.logger.create_new_log(
+                code=texts_codes.SubTypes['Login_empty_click'], message=texts.MESSEGES["Login_unsuccessfully"]["en"], level=2
+            )
+
             return False, 0
 
 

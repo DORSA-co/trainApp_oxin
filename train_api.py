@@ -19,7 +19,7 @@ sm.framework()
 DEBUG=False
 SHAMSI_DATE = False
 
-ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce']}
+ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'],'yolo':['v5']}
 ALGORITHM_CREATOR={'Xbc':models.xception_cnn,'Rbc':models.resnet_cnn,'Blu':models.base_unet,'Rleu':models.resnet_unet,'Llu':models.low_unet,'uln':models.unet
 ,'Xcc':models.xception_cnn,'Rce':models.resnet_cnn}
 

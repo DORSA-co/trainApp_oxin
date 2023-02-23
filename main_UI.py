@@ -1835,6 +1835,7 @@ class UI_main_window(QMainWindow, ui):
         b_algorithms = ALGORITHM_NAMES['binary']
         l_algorithms = ALGORITHM_NAMES['localization']
         class_algorithms = ALGORITHM_NAMES['classification']
+        yolo_algorithms = ALGORITHM_NAMES['yolo']
         self.b_algorithms.addItems(b_algorithms)
         self.l_algorithms.addItems(l_algorithms)
         self.classification_algo_combo.addItems(class_algorithms)
@@ -2906,6 +2907,14 @@ class UI_main_window(QMainWindow, ui):
         self.cbBox_of_localiztion_model_in_PBT_page.addItems(
             ALGORITHM_NAMES["localization"]
         )
+
+        self.cbBox_of_yolo_model_in_PBT_page.clear()
+        self.cbBox_of_yolo_model_in_PBT_page.addItem("All")
+        self.cbBox_of_yolo_model_in_PBT_page.addItems(
+            ALGORITHM_NAMES["yolo"]
+        )
+
+
         self.cbBox_of_multiClassification_model_in_PBT_page.clear()
         self.cbBox_of_multiClassification_model_in_PBT_page.addItem("All")
         self.cbBox_of_multiClassification_model_in_PBT_page.addItems(
@@ -2922,6 +2931,7 @@ class UI_main_window(QMainWindow, ui):
         self.LBL_of_selected_binary_classifaction_model_in_PBT_page.setText("")
         self.LBL_of_selected_multiClassification_model_in_PBT_page.setText("")
         self.LBL_of_selected_localization_model_in_PBT_page.setText("")
+        self.LBL_of_selected_binary_yolo_model_in_PBT_page.setText("")
 
     def connet_keyboard(self, keys, functions, page_name):
         """Connect keys into specefic function in a page"""

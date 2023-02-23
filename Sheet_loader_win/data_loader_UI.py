@@ -17,7 +17,7 @@ import database
 # from modules import UIFunctions
 import api
 import texts
-
+import texts_codes
 from PyQt5.QtGui import QPainter
 
 try:
@@ -102,35 +102,44 @@ class data_loader(QMainWindow, ui):
             table_name.clear()
 
     def show_sheets_info(self, sheets, full=True):
-        if full:
-            self.load_sheets = sheets
-        self.tableWidget_dataset.setRowCount(len(sheets))
+        try:
+            if full:
+                self.load_sheets = sheets
+            self.tableWidget_dataset.setRowCount(len(sheets))
 
-        self.clear_tables()                  # clear tables
-        self.detail_dataset.setText('')
-        for row,sheet in enumerate(sheets):
+            self.clear_tables()                  # clear tables
+            self.detail_dataset.setText('')
+            for row,sheet in enumerate(sheets):
 
-            for i,(feature, value) in enumerate( sheet.get_info_dict().items()):
-                table_item = QTableWidgetItem(str(feature))
-                table_item.setData(Qt.DisplayRole,str(value))
+                for i,(feature, value) in enumerate( sheet.get_info_dict().items()):
+                    table_item = QTableWidgetItem(str(feature))
+                    table_item.setData(Qt.DisplayRole,str(value))
 
-                if i==0:
-                    table_item.setCheckState(Qt.CheckState.Unchecked)
-                table_item.setTextAlignment(Qt.AlignCenter)
-                self.tableWidget_dataset.setItem(row,i,table_item)
-            self.list_show_id.insertItem(row, str(sheet.sheet_id))   # add id in listwidget
-            self.list_heat_number.insertItem(row, str(sheet.heat_number))   # add id in listwidget
-            self.list_ps_number.insertItem(row, str(sheet.ps_number))   # add id in listwidget
-            self.list_pdl_number.insertItem(row, str(sheet.pdl_number))   # add id in listwidget
+                    if i==0:
+                        table_item.setCheckState(Qt.CheckState.Unchecked)
+                    table_item.setTextAlignment(Qt.AlignCenter)
+                    self.tableWidget_dataset.setItem(row,i,table_item)
+                self.list_show_id.insertItem(row, str(sheet.sheet_id))   # add id in listwidget
+                self.list_heat_number.insertItem(row, str(sheet.heat_number))   # add id in listwidget
+                self.list_ps_number.insertItem(row, str(sheet.ps_number))   # add id in listwidget
+                self.list_pdl_number.insertItem(row, str(sheet.pdl_number))   # add id in listwidget
 
-        self.table_sheets = sheets
+            self.table_sheets = sheets
 
-        if len(sheets) == 0:
-            self.load_btn.setEnabled(False)
-            self.open_folder_image.setEnabled(False)
-        else:
-            self.load_btn.setEnabled(True)
-            self.open_folder_image.setEnabled(True)
+            if len(sheets) == 0:
+                self.load_btn.setEnabled(False)
+                self.open_folder_image.setEnabled(False)
+            else:
+                self.load_btn.setEnabled(True)
+                self.open_folder_image.setEnabled(True)
+            self.main_ui_obj.logger.create_new_log(
+                code=texts_codes.SubTypes['show_sheets_info'], message=texts.MESSEGES["show_sheet_info"]["en"], level=5
+            )
+        except:
+            self.main_ui_obj.logger.create_new_log(
+                code=texts_codes.SubTypes['show_sheets_info_eror'], message=texts.MESSEGES["show_sheet_info_eror"]["en"], level=5
+            )
+
 
     def show_detail(self):
         exist = False
@@ -197,9 +206,16 @@ class data_loader(QMainWindow, ui):
             else : 
                 #print('Path Not Exist  {}'.format(str(path1)))
                 self.set_warning(texts.ERRORS['path_not_exist'][self.language], level=3)
+            self.main_ui_obj.logger.create_new_log(
+                code=texts_codes.SubTypes['Open_folder_eror'], message=texts.ERRORS["path_not_exist"]["en"]+'  '+str(path1), level=3
+            )
         except:
             #print('Cant open folder')
             self.set_warning(texts.ERRORS['open_folder_failed'][self.language], level=3)
+            self.main_ui_obj.logger.create_new_log(
+                code=texts_codes.SubTypes['Open_folder_eror'], message=texts.ERRORS["open_folder_failed"]["en"]+'  '+str(path1), level=5
+            )
+
 
     #LOAD DATBASE --------------
     def show_dataset(self):
@@ -214,65 +230,83 @@ class data_loader(QMainWindow, ui):
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
 
     def search_id(self):
+        try:
+            itemsTextList =  [str(self.list_show_id.item(i).text()) for i in range(self.list_show_id.count())]
 
-        itemsTextList =  [str(self.list_show_id.item(i).text()) for i in range(self.list_show_id.count())]
+            if self.line_search_id.text() in itemsTextList:
 
-        if self.line_search_id.text() in itemsTextList:
+                sheets = []
+                for sheet in self.load_sheets:
+                    if sheet.get_id() == self.line_search_id.text():
+                        sheets.append(sheet)
+                self.show_sheets_info(sheets)
+                self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
+            else:
+                self.set_warning(texts.WARNINGS['UNAV_ID'][self.language], level=2)
 
-            sheets = []
-            for sheet in self.load_sheets:
-                if sheet.get_id() == self.line_search_id.text():
-                    sheets.append(sheet)
-            self.show_sheets_info(sheets)
-            self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
-        else:
-            self.set_warning(texts.WARNINGS['UNAV_ID'][self.language], level=2)
+        except:
+            self.srarch_eror('search_id')
 
     def search_heat(self):
+        try:
+            itemsTextList =  [str(self.list_heat_number.item(i).text()) for i in range(self.list_heat_number.count())]
 
-        itemsTextList =  [str(self.list_heat_number.item(i).text()) for i in range(self.list_heat_number.count())]
+            if self.line_search_heat.text() in itemsTextList:
 
-        if self.line_search_heat.text() in itemsTextList:
+                sheets = []
+                for sheet in self.load_sheets:
+                    if sheet.get_heatnumber() == self.line_search_heat.text():
+                        sheets.append(sheet)
+                self.show_sheets_info(sheets)
+                self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
+            else:
+                self.set_warning(texts.WARNINGS['UNAV_HEAT'][self.language], level=2)
 
-            sheets = []
-            for sheet in self.load_sheets:
-                if sheet.get_heatnumber() == self.line_search_heat.text():
-                    sheets.append(sheet)
-            self.show_sheets_info(sheets)
-            self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
-        else:
-            self.set_warning(texts.WARNINGS['UNAV_HEAT'][self.language], level=2)
+        except:
+            self.srarch_eror('search_heat')
 
     def search_psn(self):
- 
-        itemsTextList =  [str(self.list_ps_number.item(i).text()) for i in range(self.list_ps_number.count())]
+        try:
+            itemsTextList =  [str(self.list_ps_number.item(i).text()) for i in range(self.list_ps_number.count())]
 
-        if self.line_search_psn.text() in itemsTextList:
+            if self.line_search_psn.text() in itemsTextList:
 
-            sheets = []
-            for sheet in self.load_sheets:
+                sheets = []
+                for sheet in self.load_sheets:
 
-                if sheet.get_psnumber() == self.line_search_psn.text():
-                    sheets.append(sheet)
-            self.show_sheets_info(sheets)
-            self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
-        else:
-            self.set_warning(texts.WARNINGS['UNAV_PSN'][self.language], level=2)
-
+                    if sheet.get_psnumber() == self.line_search_psn.text():
+                        sheets.append(sheet)
+                self.show_sheets_info(sheets)
+                self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
+            else:
+                self.set_warning(texts.WARNINGS['UNAV_PSN'][self.language], level=2)
+        except:
+            self.srarch_eror('search_psn')
+            
     def search_pdln(self):
+        try:
+            itemsTextList =  [str(self.list_pdl_number.item(i).text()) for i in range(self.list_pdl_number.count())]
 
-        itemsTextList =  [str(self.list_pdl_number.item(i).text()) for i in range(self.list_pdl_number.count())]
+            if self.line_search_pdln.text() in itemsTextList:
 
-        if self.line_search_pdln.text() in itemsTextList:
+                sheets = []
+                for sheet in self.load_sheets:
+                    if sheet.get_pdlnumber() == self.line_search_pdln.text():
+                        sheets.append(sheet)
+                self.show_sheets_info(sheets)
+                self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
+            else:
+                self.set_warning(texts.WARNINGS['UNAV_PDLN'][self.language], level=2)
+        except:
+            self.srarch_eror('search_pdln')
 
-            sheets = []
-            for sheet in self.load_sheets:
-                if sheet.get_pdlnumber() == self.line_search_pdln.text():
-                    sheets.append(sheet)
-            self.show_sheets_info(sheets)
-            self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
-        else:
-            self.set_warning(texts.WARNINGS['UNAV_PDLN'][self.language], level=2)
+    def srarch_eror(self,name):
+
+        self.main_ui_obj.logger.create_new_log(
+                code=texts_codes.SubTypes['sheet_window_search_error'], message=texts.ERRORS["search_error"]["en"]+'  '+str(name), level=5
+            )
+
+
 
     def buttonClick(self):
         # GET BUTTON CLICKED
