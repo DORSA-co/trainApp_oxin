@@ -56,6 +56,10 @@ SubTypes = {
     'error_connecting_to_mysql': '0628',
     'mysql_connection_closed': '0629',
     'error_reading_from_mysql': '0630',
+    'database_get_ymodels': '06-31',
+    'database_get_ymodels_failed': '06-32',
+    'database_add_ymodel': '06-33',
+    'database_add_ymodel_failed': '06-34',
     # Others
     'SET_DATASET': '071',
     'SET_DATASET_FAILED': '072',

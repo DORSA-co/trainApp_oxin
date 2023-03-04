@@ -277,7 +277,7 @@ def update_chart(ui_obj, chart_postfixes, last_epoch, logs, scroll_obj, chart_ty
         params = [logs['train/box_loss'], logs['train/obj_loss'], logs['train/cls_loss'],
                   110, 110, 110,
                   logs['val/box_loss'], logs['val/obj_loss'], logs['val/cls_loss'],
-                  logs['metrics/recall']*100, logs['metrics/precision']*100, logs['metrics/mAP_0.5']*100,]
+                  logs['metrics/recall']*100, logs['metrics/precision']*100, logs['metrics/mAP_0.5']*100]
 
     if last_epoch >= axisX_range and not ui_obj.binary_chart_checkbox.isChecked():
         scroll_obj.setMaximum(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
