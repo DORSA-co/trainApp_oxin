@@ -72,6 +72,7 @@ from backend import (
     plc_managment,
     level2_connection,
     localization_model_funcs,
+    yolo_model_funcs,
     pathStructure
 )
 
@@ -84,7 +85,7 @@ import texts_codes
 from utils import tempMemory, Utils
 
 from backend.dataset import Dataset
-from random_split import get_crops, get_crops_no_defect, get_crops_no_defect2
+from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2
 import train_api
 
 from labeling.labeling_UI import labeling
@@ -365,6 +366,7 @@ class API:
 
         self.runing_b_model=False
         self.runing_l_model=False
+        self.runing_y_model=False
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -431,8 +433,9 @@ class API:
         binary_count = self.ds_json.get_binary_count(
             os.path.join(parms["path"], parms["dataset_name"] + ".json")
         )
-        self.ui.set_b_default_db_parms(self.ds.binary_path)
-        self.ui.set_l_default_db_parms(self.ds.localization_path)
+        self.ui.set_b_default_db_parms(self.ds.dataset_path)
+        self.ui.set_l_default_db_parms(self.ds.dataset_path)
+        self.ui.set_y_default_db_parms(self.ds.dataset_path)
         chart_funcs.update_label_piechart(self.ui, binary_count)
 
     # _____________________________________________________________________JJ ZONE BEGINE
@@ -668,7 +671,7 @@ class API:
             )
         )
 
-        self.ui.cbBox_of_localiztion_model_in_PBT_page.currentTextChanged.connect(
+        self.ui.cbBox_of_localization_model_in_PBT_page.currentTextChanged.connect(
             lambda: self.refresh_binary_models_table(
                 filter_mode=True, wich_page="PBT", model_type="localization"
             )
@@ -771,6 +774,7 @@ class API:
         self.ui.prev_img_label_btn.clicked.connect(partial(self.prev_label_img))
         self.ui.binary_train.clicked.connect(partial(self.set_b_parms))
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
+        self.ui.yolo_train.clicked.connect(partial(self.set_y_parms))
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
         self.ui.save_all_dataset_btn.clicked.connect(partial(self.save_all_train_ds))
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
@@ -793,6 +797,10 @@ class API:
         self.ui.l_select_dp.clicked.connect(partial(self.select_localization_dataset))
         self.ui.l_delete_ds.clicked.connect(partial(self.delete_localization_dataset))
         self.ui.l_add_ok.clicked.connect(partial(self.ok_add_localization_ds))
+
+        self.ui.y_select_dp.clicked.connect(partial(self.select_yolo_dataset))
+        self.ui.y_delete_ds.clicked.connect(partial(self.delete_yolo_dataset))
+        self.ui.y_add_ok.clicked.connect(partial(self.ok_add_yolo_ds))
 
         # login
         self.login_user_name = "root"
@@ -991,6 +999,11 @@ class API:
                 lambda: self.user_access_pages(self.ui.Classification_btn.objectName())
             )
         )
+        self.ui.Yolo_btn.clicked.connect(
+            partial(
+                lambda: self.user_access_pages(self.ui.Yolo_btn.objectName())
+            )
+        )
         self.ui.pbt_btn.clicked.connect(
             partial(lambda: self.user_access_pages(self.ui.pbt_btn.objectName()))
         )
@@ -1011,9 +1024,9 @@ class API:
         self.ui.toolButton_binary.clicked.connect(
             lambda: self.load_table_with_btn(self.ui.toolButton_binary.objectName())
         )
-        self.ui.toolButton_localiztion.clicked.connect(
+        self.ui.toolButton_localization.clicked.connect(
             lambda: self.load_table_with_btn(
-                self.ui.toolButton_localiztion.objectName()
+                self.ui.toolButton_localization.objectName()
             )
         )
         self.ui.toolButton_multiClassification.clicked.connect(
@@ -1048,11 +1061,24 @@ class API:
             "Binary_btn": self.ui.page_Binary,
             "Localization_btn": self.ui.page_Localization,
             "Classification_btn": self.ui.page_Classification,
+            "Yolo_btn": self.ui.page_Yolo,
             "pbt_btn": self.ui.page_pbt,
         }
         if self.logged_in:
             eval(
                 'self.ui.set_widget_page(self.ui.stackedWidget,dic["{}"])'.format(
+                    btn_name
+                )
+            )
+            for btn in ['Binary_btn', 'Localization_btn', 'Classification_btn', 'Yolo_btn']:
+                eval(
+                'self.ui.{}.setStyleSheet("background-color: rgb(230, 230, 230); color: black; text-align:center;")'.format(
+                    btn
+                )
+            )
+
+            eval(
+                'self.ui.{}.setStyleSheet("background-color: rgb(170, 170, 212); color: black; text-align:center;")'.format(
                     btn_name
                 )
             )
@@ -2264,8 +2290,9 @@ class API:
             self.ui.logger.create_new_log(
                 code=texts_codes.SubTypes['SET_DATASET'], message=texts.MESSEGES["SET_DATASET"]["en"], level=1
             )
-            self.ui.set_b_default_db_parms(self.ds.binary_path)
-            self.ui.set_l_default_db_parms(self.ds.localization_path)
+            self.ui.set_b_default_db_parms(self.ds.dataset_path)
+            self.ui.set_l_default_db_parms(self.ds.dataset_path)
+            self.ui.set_y_default_db_parms(self.ds.dataset_path)
         except:
             self.ui.set_warning(
                 texts.ERRORS["SET_DATASET_FAILED"][self.language], "profile", texts_codes.SubTypes['SET_DATASET_FAILED'], level=3
@@ -2404,8 +2431,7 @@ class API:
             b_parms = self.ui.get_binary_parms()
             if not b_parms:
                 return
-            if b_parms[2]:
-                self.split_binary_dataset(b_parms[-1], b_parms[1])
+
             # update chart axes given train data
             self.update_b_chart_axes(b_parms[3])
 
@@ -2413,7 +2439,7 @@ class API:
             # Step 3: Create a worker object
             self.bmodel_train_worker = binary_model_funcs.Binary_model_train_worker()
             self.bmodel_train_worker.assign_parameters(
-                b_parms=b_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db
+                b_parms=b_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db, ds_obj=self.ds
             )
             # Step 4: Move worker to the thread
             self.bmodel_train_worker.moveToThread(self.bmodel_train_thread)
@@ -2427,6 +2453,8 @@ class API:
             self.bmodel_train_thread.finished.connect(self.bmodel_train_thread.deleteLater)
 
             self.bmodel_train_worker.warning.connect(self.ui.set_warning)
+            self.bmodel_train_worker.reset_progressbar.connect(self.reset_binary_train_progressBar)
+            self.bmodel_train_worker.set_progressbar.connect(self.set_binary_train_progressBar)
             self.bmodel_train_worker.update_charts.connect(self.assign_new_value_to_b_chart)
 
             # Step 6: Start the thread
@@ -2435,28 +2463,23 @@ class API:
             
             self.ui.binary_train.setEnabled(False)
 
-            self.ui.binary_train_progressBar.setValue(0)
-            self.ui.binary_train_progressBar.setMaximum(b_parms[3])
+    def reset_binary_train_progressBar(self, value, text):
+        self.ui.binary_train_progressBar.setValue(0)
+        self.ui.binary_train_progressBar.setMaximum(value)
+        self.ui.binary_train_progressBar_label.setText(text + ' ... ')
+
+    def set_binary_train_progressBar(self):
+        self.ui.binary_train_progressBar.setValue(self.ui.binary_train_progressBar.value() + 1)
 
     def update_b_chart_axes(self, nepoch):
-        # for chart_postfix in self.ui.chart_names:
-        #     eval("self.ui.axisX_%s" % chart_postfix).setRange(1, max(nepoch, chart_funcs.axisX_range))
-        #     if self.ui.binary_chart_checkbox.isChecked():
-        #         eval("self.ui.axisX_%s" % chart_postfix).setTickCount(nepoch)
-        #     else:
-        #         eval("self.ui.axisX_%s" % chart_postfix).setTickCount(
-        #             chart_funcs.axisX_range
-        #         )
         chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
         chart_funcs.clear_series_date(
             ui_obj=self.ui, chart_postfixes=self.ui.chart_names
         )
         self.ui.binary_chart_checkbox.setEnabled(True)
-        # self.ui.binary_chart_checkbox.setChecked(True)
 
     def assign_new_value_to_b_chart(self, last_epoch, logs):
         try:
-            self.ui.binary_train_progressBar.setValue(self.ui.binary_train_progressBar.value() + 1)
             chart_funcs.update_chart(
                 ui_obj=self.ui,
                 chart_postfixes=self.ui.chart_names,
@@ -2474,8 +2497,7 @@ class API:
             l_parms = self.ui.get_localization_parms()
             if not l_parms:
                 return
-            if l_parms[3]:
-                self.split_localization_dataset(l_parms[-1], l_parms[2])
+            
             # update chart axes given train data
             self.update_l_chart_axes(l_parms[4])
 
@@ -2485,7 +2507,7 @@ class API:
                 localization_model_funcs.Localization_model_train_worker()
             )
             self.lmodel_train_worker.assign_parameters(
-                l_parms=l_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db
+                l_parms=l_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db, ds_obj=self.ds
             )
             # Step 4: Move worker to the thread
             self.lmodel_train_worker.moveToThread(self.lmodel_train_thread)
@@ -2499,6 +2521,8 @@ class API:
             self.lmodel_train_thread.finished.connect(self.lmodel_train_thread.deleteLater)
 
             self.lmodel_train_worker.warning.connect(self.ui.set_warning)
+            self.lmodel_train_worker.reset_progressbar.connect(self.reset_localization_train_progressBar)
+            self.lmodel_train_worker.set_progressbar.connect(self.set_localization_train_progressBar)
             self.lmodel_train_worker.update_charts.connect(self.assign_new_value_to_l_chart)
 
             # Step 6: Start the thread
@@ -2507,8 +2531,13 @@ class API:
                 
             self.ui.localization_train.setEnabled(False)
 
-            self.ui.localization_train_progressBar.setValue(0)
-            self.ui.localization_train_progressBar.setMaximum(l_parms[4])
+    def reset_localization_train_progressBar(self, value, text):
+        self.ui.localization_train_progressBar.setValue(0)
+        self.ui.localization_train_progressBar.setMaximum(value)
+        self.ui.localization_train_progressBar_label.setText(text + ' ... ')
+
+    def set_localization_train_progressBar(self):
+        self.ui.localization_train_progressBar.setValue(self.ui.localization_train_progressBar.value() + 1)
 
     def update_l_chart_axes(self, nepoch):
         # for chart_postfix in self.ui.loc_chart_names:
@@ -2528,7 +2557,6 @@ class API:
 
     def assign_new_value_to_l_chart(self, last_epoch, logs):
         try:
-            self.ui.localization_train_progressBar.setValue(self.ui.localization_train_progressBar.value() + 1)
             chart_funcs.update_chart(
                 ui_obj=self.ui,
                 chart_postfixes=self.ui.loc_chart_names,
@@ -2541,6 +2569,84 @@ class API:
         except:
             self.ui.logger.create_new_log(message=texts.ERRORS['UPDATE_LCHART_FAILED']['en'].format(last_epoch), level=5)
             self.ui.set_warning(texts.ERRORS['UPDATE_LCHART_FAILED'][self.ui.language].format(last_epoch), 'l_train', None, 3)
+
+    def set_y_parms(self):
+        if not self.runing_y_model:
+            y_parms = self.ui.get_yolo_parms()
+            if not y_parms:
+                return
+
+            # update chart axes given train data
+            self.update_yolo_chart_axes(y_parms[3])
+
+            self.ymodel_train_thread = sQThread()
+            # Step 3: Create a worker object
+            self.ymodel_train_worker = (
+                yolo_model_funcs.Yolo_model_train_worker()
+            )
+            self.ymodel_train_worker.assign_parameters(
+                y_parms=y_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db, ds_obj=self.ds
+            )
+            # Step 4: Move worker to the thread
+            self.ymodel_train_worker.moveToThread(self.ymodel_train_thread)
+            # Step 5: Connect signals and slots
+            self.ymodel_train_thread.started.connect(self.ymodel_train_worker.train_model)
+            self.ymodel_train_worker.finished.connect(self.ymodel_train_thread.quit)
+            self.ymodel_train_worker.finished.connect(
+                self.ymodel_train_worker.show_ymodel_train_result
+            )
+            self.ymodel_train_worker.finished.connect(self.ymodel_train_worker.deleteLater)
+            self.ymodel_train_thread.finished.connect(self.ymodel_train_thread.deleteLater)
+
+            self.ymodel_train_worker.warning.connect(self.ui.set_warning)
+            self.ymodel_train_worker.reset_progressbar.connect(self.reset_yolo_train_progressBar)
+            self.ymodel_train_worker.set_progressbar.connect(self.set_yolo_train_progressBar)
+            self.ymodel_train_worker.update_charts.connect(self.assign_new_value_to_yolo_chart)
+
+            # Step 6: Start the thread
+            self.runing_y_model=True
+            self.ymodel_train_thread.start()
+                
+            self.ui.yolo_train.setEnabled(False)
+
+    def reset_yolo_train_progressBar(self, value, text):
+        self.ui.yolo_train_progressBar.setValue(0)
+        self.ui.yolo_train_progressBar.setMaximum(value)
+        self.ui.yolo_train_progressBar_label.setText(text + ' ... ')
+
+    def set_yolo_train_progressBar(self):
+        self.ui.yolo_train_progressBar.setValue(self.ui.yolo_train_progressBar.value() + 1)
+
+    def update_yolo_chart_axes(self, nepoch):
+        # for chart_postfix in self.ui.loc_chart_names:
+        #     eval("self.ui.axisX_%s" % chart_postfix).setRange(0, max(nepoch, chart_funcs.axisX_range))
+        #     if self.ui.localization_chart_checkbox.isChecked():
+        #         eval("self.ui.axisX_%s" % chart_postfix).setTickCount(nepoch)
+        #     else:
+        #         eval("self.ui.axisX_%s" % chart_postfix).setTickCount(
+        #             chart_funcs.axisX_range
+        #         )
+        chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
+        chart_funcs.clear_series_date(
+            ui_obj=self.ui, chart_postfixes=self.ui.yolo_chart_names
+        )
+        self.ui.yolo_chart_checkbox.setEnabled(True)
+        # self.ui.localization_chart_checkbox.setChecked(True)
+
+    def assign_new_value_to_yolo_chart(self, last_epoch, logs):
+        try:
+            chart_funcs.update_chart(
+                ui_obj=self.ui,
+                chart_postfixes=self.ui.yolo_chart_names,
+                last_epoch=last_epoch,
+                logs=logs,
+                scroll_obj=self.ui.yolo_chart_scrollbar,
+                chart_type='yolo',
+            )
+            self.ui.logger.create_new_log(message=texts.MESSEGES['UPDATE_YCHART']['en'].format(last_epoch))
+        except:
+            self.ui.logger.create_new_log(message=texts.ERRORS['UPDATE_YCHART_FAILED']['en'].format(last_epoch), level=5)
+            self.ui.set_warning(texts.ERRORS['UPDATE_YCHART_FAILED'][self.ui.language].format(last_epoch), 'y_train', None, 3)
 
     def save_to_dataset(self):
         sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
@@ -2672,65 +2778,6 @@ class API:
     def update_save_all_progressbar(self):
         self.ui.save_all_progressBar.setValue(self.ui.save_all_progressBar.value() + 1)
 
-    def split_binary_dataset(self, paths, size):
-        for path in paths:
-            if self.ds.check_binary_dataset(path):
-                self.ds.create_split_folder(path)
-
-                s_mask = os.path.join(path, self.ds.defect_mask_folder)
-                s_defect = os.path.join(path, self.ds.defect_folder)
-                d_defect = os.path.join(path, self.ds.defect_splitted_folder)
-                imgs = os.listdir(s_defect)
-                for i in imgs:
-                    img = Utils.read_image(os.path.join(s_defect, i), color="gray")
-                    mask = Utils.read_image(os.path.join(s_mask, i), color="gray")
-                    crops, _ = get_crops(img, mask, size)
-                    self.ds.save_to_defect_splitted(
-                        crops, d_defect, name=i.split(".")[0]
-                    )
-
-                s_perfect = os.path.join(path, self.ds.perfect_folder)
-                d_perfect = os.path.join(path, self.ds.perfect_splitted_folder)
-                imgs = os.listdir(s_perfect)
-                if len(os.listdir(s_perfect)):
-                    n_split = np.ceil(
-                        (len(os.listdir(d_defect)) * 1.5) / (len(os.listdir(s_perfect)))
-                    )
-                else:
-                    n_split = 0
-                for i in imgs:
-                    img = Utils.read_image(os.path.join(s_perfect, i), color="color")
-                    crops = get_crops_no_defect(img, n_split, size)
-                    self.ds.save_to_perfect_splitted(crops, d_perfect, i.split(".")[0])
-            else:
-                self.ui.set_warning(
-                    texts.WARNINGS["DATASET_FORMAT"][self.language], "train", level=2
-                )
-                return
-
-    def split_localization_dataset(self, paths, size):
-        for path in paths:
-            if self.ds.check_localization_dataset(path):
-                self.ds.create_l_split_folder(path)
-
-                s_label = os.path.join(path, self.ds.localization_folder_label)
-                s_image = os.path.join(path, self.ds.localization_folder_image)
-                d_label = os.path.join(path, self.ds.localization_folder_label_splitted)
-                d_image = os.path.join(path, self.ds.localization_folder_image_splitted)
-                imgs = os.listdir(s_image)
-                for i in imgs:
-                    img = Utils.read_image(os.path.join(s_image, i), color="gray")
-                    label = Utils.read_image(os.path.join(s_label, i), color="gray")
-                    image_crops, label_crops = get_crops(img, label, size)
-                    self.ds.save_localization_splits(
-                        image_crops, label_crops, d_image, d_label, name=i.split(".")[0]
-                    )
-            else:
-                self.ui.set_warning(
-                    texts.WARNINGS["DATASET_FORMAT"][self.language], "train", level=2
-                )
-                return
-
     def select_binary_dataset(self, page="train"):
         self.ui.create_ds_selection_dialog()
 
@@ -2756,7 +2803,7 @@ class API:
         selecteds = self.ui.select_ds_dialog.get_select_datasets()
 
         for selected in selecteds:
-            dname = os.path.join(selected, 'binary')
+            dname = selected
             if not self.ds.check_binary_dataset(dname):
                 self.ui.set_warning(
                     texts.WARNINGS["DATASET_FORMAT"][self.language], page, level=2
@@ -2880,7 +2927,7 @@ class API:
         selecteds = self.ui.select_ds_dialog.get_select_datasets()
 
         for selected in selecteds:
-            dname = os.path.join(selected, 'localization')
+            dname = selected
             if not self.ds.check_localization_dataset(dname):
                 self.ui.set_warning(
                     texts.WARNINGS["DATASET_FORMAT"][self.language], page, level=2
@@ -2969,6 +3016,122 @@ class API:
             self.group.addAnimation(self.left_box)
             self.group.start()
 
+    def select_yolo_dataset(self, page="y_train"):
+        self.ui.create_ds_selection_dialog()
+
+        datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)[1]
+        self.ui.select_ds_dialog.table.setRowCount(len(datasets_list))
+        for i, ds in enumerate(datasets_list):
+            # set name
+            table_item = sQTableWidgetItem(str(ds["name"]))
+            table_item.setCheckState(Qt.CheckState.Unchecked)
+            self.ui.select_ds_dialog.table.setItem(i, 0, table_item)
+            # set user_own
+            table_item = sQTableWidgetItem(str(ds["user_own"]))
+            self.ui.select_ds_dialog.table.setItem(i, 1, table_item)
+            # set path
+            table_item = sQTableWidgetItem(str(ds["path"]))
+            self.ui.select_ds_dialog.table.setItem(i, 2, table_item)
+        
+
+        self.ui.select_ds_dialog.ok_btn.clicked.connect(lambda: self.ok_selected_yolo_datasets(page))
+        self.ui.select_ds_dialog.show()
+
+    def ok_selected_yolo_datasets(self, page="y_train"):
+        selecteds = self.ui.select_ds_dialog.get_select_datasets()
+
+        for selected in selecteds:
+            dname = selected
+            if not self.ds.check_yolo_dataset(dname):
+                self.ui.set_warning(
+                    texts.WARNINGS["DATASET_FORMAT"][self.language], page, level=2
+                )
+                return
+            #
+            if page == "y_train":
+                text = self.ui.y_dp.toPlainText()
+                pattern = r"[0-9]+. "
+                datasets = [
+                    os.path.abspath(s.rstrip()) for s in re.split(pattern, text)[1:]
+                ]
+
+                if os.path.abspath(dname) in datasets:
+                    self.ui.set_warning(
+                        texts.WARNINGS["DATASET_EXIST"][self.language], page, level=2
+                    )
+                    return
+
+                n = len(datasets) + 1
+                if text != "":
+                    text += " \n"
+                self.ui.y_dp.setPlainText(text + str(n) + ". " + dname)
+                #
+            elif page == "binarylist":
+                self.ui.binarylist_dataset_lineedit.setText(dname)
+                self.ui.binarylist_dataset_annot_lineedit.setText(dname)
+
+    def delete_yolo_dataset(self):
+        ds_n = self.ui.y_ds_num.value() - 1
+        text = self.ui.y_dp.toPlainText()
+        pattern = r"[0-9]+. "
+        datasets = [s.rstrip() for s in re.split(pattern, text)[1:]]
+        if ds_n >= len(datasets):
+            self.ui.set_warning(
+                texts.WARNINGS["DATASET_NUMBER"][self.language], "y_train", level=2
+            )
+            return
+        datasets.pop(ds_n)
+        text = ""
+        for i in range(len(datasets)):
+            text += str(i + 1) + ". " + datasets[i]
+            if i != len(datasets) - 1:
+                text += "\n"
+
+        self.ui.y_dp.setPlainText(text)
+
+    def ok_add_yolo_ds(self):
+        path = self.ui.y_add_ds_lineedit.text().lstrip()
+        path = path.rstrip()
+        if not os.path.exists(path):
+            self.ui.set_warning(
+                texts.WARNINGS["INVALID_DATASET"][self.language], "y_train", level=2
+            )
+            return
+        elif not self.ds.check_yolo_dataset(path):
+            self.ui.set_warning(
+                texts.WARNINGS["DATASET_FORMAT"][self.language], "y_train", level=2
+            )
+            return
+
+        text = self.ui.y_dp.toPlainText()
+        pattern = r"[0-9]+. "
+
+        datasets = [os.path.abspath(s.rstrip()) for s in re.split(pattern, text)[1:]]
+
+        if os.path.abspath(path) in datasets:
+            self.ui.set_warning(
+                texts.WARNINGS["DATASET_EXIST"][self.language], "y_train", level=2
+            )
+        else:
+            n = len(datasets) + 1
+            if text != "":
+                text += " \n"
+            self.ui.y_dp.setPlainText(text + str(n) + ". " + path)
+        self.ui.y_add_ds_lineedit.setText("")
+
+        height = self.ui.y_add_ds_frame.height()
+        if height == 67:
+            self.left_box = QPropertyAnimation(self.ui.y_add_ds_frame, b"maximumHeight")
+            self.left_box.setDuration(Settings.TIME_ANIMATION)
+            self.left_box.setStartValue(100)
+            self.left_box.setEndValue(0)
+            self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
+            self.group = QParallelAnimationGroup()
+            self.group.addAnimation(self.left_box)
+            self.group.start()
+
+ # -------------------------------------------Camera conection and show ----------------------------------------
+
     def get_camera_config(self, id):
         """
         This function returns camera parameters from database
@@ -2980,8 +3143,6 @@ class API:
         """
         cam_parms = self.db.load_cam_params(id)
         return cam_parms
-
-    # -------------------------------------------Camera conection and show ----------------------------------------
 
     def connect_camera(self):
         """
@@ -3303,7 +3464,7 @@ class API:
         elif model_type == "classification":
             model_type_ = "classification_models"
         elif model_type == "localization":
-            model_type_ = "localiztion_models"
+            model_type_ = "localization_models"
         else:
             model_type_ = ""
 
@@ -5795,14 +5956,14 @@ class evaluation_worker(QObject):
         self.pipline_OBJ.set_binary_model(key=pipelines.MODEL_F1, value=-1)
         self.pipline_OBJ.set_binary_model(key=pipelines.MODEL_LOSS, value=-1)
 
-        """probably omit localiztion"""
+        """probably omit localization"""
         # localization part
-        self.pipline_OBJ.set_localiztion_model(key=pipelines.MODEL_ACCURACY, value=-1)
-        self.pipline_OBJ.set_localiztion_model(key=pipelines.MODEL_IOU, value=-1)
-        self.pipline_OBJ.set_localiztion_model(key=pipelines.MODEL_DICE, value=-1)
-        self.pipline_OBJ.set_localiztion_model(key=pipelines.MODEL_F1, value=-1)
-        self.pipline_OBJ.set_localiztion_model(key=pipelines.MODEL_LOSS, value=-1)
-        """probably omit localiztion"""
+        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_ACCURACY, value=-1)
+        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_IOU, value=-1)
+        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_DICE, value=-1)
+        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_F1, value=-1)
+        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_LOSS, value=-1)
+        """probably omit localization"""
 
         # classification part
         self.pipline_OBJ.set_classification_model(
@@ -5920,7 +6081,7 @@ class evaluation_worker(QObject):
             [[0]] * (w * h)
         )  # set binary true label of a single image
 
-        # """set localiztion part"""
+        # """set localization part"""
         # mask_true=np.zeros(localization_shape,dtype=np.uint8)
         # self.true_localization.append(mask_true)
 
@@ -6075,8 +6236,8 @@ class ModelsCreation_worker(QObject):
                 self.db.binary_model, pipline_info[0]["binary_weight_path"]
             )
             if res:
-                res, localiztion_model_info = self.db.get_model(
-                    self.db.localiztion, pipline_info[0]["localization_weight_path"]
+                res, localization_model_info = self.db.get_model(
+                    self.db.localization, pipline_info[0]["localization_weight_path"]
                 )
             if res:
                 res, classification_model_info = self.db.get_model(
@@ -6096,18 +6257,18 @@ class ModelsCreation_worker(QObject):
                 value=binary_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
             )
 
-            self.localiztion_input_size = (
+            self.localization_input_size = (
                 binary_model_funcs.strInputSize_2_intInputSize(
-                    string=localiztion_model_info[0]["input_size"]
+                    string=localization_model_info[0]["input_size"]
                 )
             )
-            # set localiztion model parameter of pipline:
-            self.pipline_OBJ.set_localiztion_model(
-                key=pipelines.MODEL_ID, value=localiztion_model_info[0]["algo_name"]
+            # set localization model parameter of pipline:
+            self.pipline_OBJ.set_localization_model(
+                key=pipelines.MODEL_ID, value=localization_model_info[0]["algo_name"]
             )
-            self.pipline_OBJ.set_localiztion_model(
+            self.pipline_OBJ.set_localization_model(
                 key=pipelines.MODEL_WEIGHTS_PATH,
-                value=localiztion_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
+                value=localization_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
             )
 
             self.classification_input_size = (
@@ -6119,7 +6280,7 @@ class ModelsCreation_worker(QObject):
                 string=classification_model_info[0]["classes"],
                 use_for_other_parameter=True,
             )
-            # set localiztion model parameter of pipline:
+            # set localization model parameter of pipline:
             self.pipline_OBJ.set_classification_model(
                 key=pipelines.MODEL_ID, value=classification_model_info[0]["algo_name"]
             )
@@ -6139,7 +6300,7 @@ class ModelsCreation_worker(QObject):
                     )
                     l_algo_name = (
                         binary_model_funcs.translate_binary_algorithm_id_to_name(
-                            localiztion_model_info[0]["algo_name"],
+                            localization_model_info[0]["algo_name"],
                             model_type="localization",
                         )
                     )
@@ -6155,7 +6316,7 @@ class ModelsCreation_worker(QObject):
                     )
                     self.model_creation_signal.emit(1)
                     self.l_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-                        algo_id=l_algo_name, input_size=self.localiztion_input_size
+                        algo_id=l_algo_name, input_size=self.localization_input_size
                     )
                     self.model_creation_signal.emit(2)
                     self.classes_num = 5  # <------------------temporary

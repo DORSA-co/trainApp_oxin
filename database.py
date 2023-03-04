@@ -172,7 +172,7 @@ class dataBase:
                                 VALUES 
                                 {} """.format(table_name,parametrs,s)
                                 
-            
+            print('$$$$$', mySql_insert_querye)
             cursor.execute(mySql_insert_query,data)
             connection.commit()
             cursor.close()

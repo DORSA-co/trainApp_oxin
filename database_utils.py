@@ -3,7 +3,7 @@ import database
 import datetime
 from Sheet import Sheet
 import os
-from backend import pathStructure, binary_model_funcs, localization_model_funcs
+from backend import pathStructure, binary_model_funcs, localization_model_funcs, yolo_model_funcs
 import texts
 import texts_codes
 import inspect
@@ -36,7 +36,7 @@ class dataBaseUtils:
         self.piplines='piplines'
         self.binary_model='binary_models'
         self.classification='classification_models'
-        self.localiztion='localiztion_models'
+        self.localization='localization_models'
         
         self.piplines_name='name'
         self.weights_path='weights_path'
@@ -216,7 +216,6 @@ class dataBaseUtils:
         return list(img_proc_info.values())[1:]
 
     def get_defects(self):
-
         res, defects_info = self.db.get_all_content(self.defects_table)
 
         name_list = []
@@ -224,6 +223,15 @@ class dataBaseUtils:
             name_list.append(defects_info[i]["name"])
 
         return name_list, defects_info
+
+    def get_defects_id(self):
+        res, defects_info = self.db.get_all_content(self.defects_table)
+
+        id_list = []
+        for i in range(len(defects_info)):
+            id_list.append(defects_info[i]["defect_ID"])
+
+        return id_list
 
     def get_defect_id(self, selected_label):
         try:
@@ -574,6 +582,141 @@ class dataBaseUtils:
         else:
             self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_get_lmodels_failed']['en'], 
                                                 code=texts_codes.SubTypes['database_get_lmodels_failed'],
+                                                level=4
+                                            )
+            self.ui_obj.logger.create_new_log(message=res, level=4)
+
+        return False, record
+
+    # ________________________________________________________________________________________________________
+    # yolo models
+    def get_yolo_models(self, count=False, limit=False, limit_size=20, offset=0):
+        """this function is used to get yolo models info list from database
+
+        :param count: a boolean determining whether to get count of table, defaults to False, defaults to False
+        :type count: bool, optional
+        :param limit: boolean to get table records by limit size, defaults to False
+        :type limit: bool, optional
+        :param limit_size: number of returning rows from database, defaults to 20
+        :type limit_size: int, optional
+        :param offset: start row index in table to return next n rows, defaults to 0
+        :type offset: int, optional
+        :return: list of yolo model info (in dict)
+        :rtype: list of dicts
+        """
+        
+        res, ymodels = self.db.get_all_content('yolo_models', count=count, limit=limit, limit_size=limit_size, offset=offset, reverse_order=True)
+        # validation
+        if res == database.SUCCESSFULL:
+            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['database_get_ymodels']['en'],
+                                                code=texts_codes.SubTypes['database_get_ymodels'],
+                                                level=1
+                                            )
+            return True, ymodels
+        
+        elif res == database.CONNECTION_ERROR:
+            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_conection_failed']['en'], 
+                                                code=texts_codes.SubTypes['database_conection_failed'],
+                                                level=4
+                                            )
+        # exception error
+        else:
+            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_get_ymodels_failed']['en'],
+                                                code=texts_codes.SubTypes['database_get_ymodels_failed'],
+                                                level=4
+                                            )
+            self.ui_obj.logger.create_new_log(message=res, level=4)
+        
+        return False, ymodels
+    
+    def add_yolo_model_record(self, params):
+        """this function is used to add new yolo model parameters to database
+
+        :param params: model parameters (col values)
+        :type params: _type_
+        :return: _description_
+        :rtype: _type_
+        """
+
+        data = ()
+        db_headers = ""
+        for db_header in yolo_model_funcs.yolo_headers_db:
+            data = data + (params[db_header],)
+            db_headers = db_headers + db_header + ","
+        db_headers = "(" + db_headers[:-1] + ")"
+
+        res = self.db.add_record(
+            data,
+            table_name="yolo_models",
+            parametrs=db_headers,
+            len_parameters=len(yolo_model_funcs.yolo_headers_db),
+        )
+
+        # validation
+        if res == database.SUCCESSFULL:
+            self.ui_obj.logger.create_new_log(
+                message=texts.MESSEGES["database_add_ymodel"]["en"], 
+                code=texts_codes.SubTypes['database_add_ymodel'],
+                level=1
+            )
+            return True
+
+        elif res == database.CONNECTION_ERROR:
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_conection_failed"]["en"], 
+                code=texts_codes.SubTypes['database_conection_failed'],
+                level=4
+            )
+        # exception error
+        else:
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_add_ymodel_failed"]["en"], 
+                code=texts_codes.SubTypes['database_add_ymodel_failed'],
+                level=4
+            )
+            self.ui_obj.logger.create_new_log(message=res, level=4)
+
+        return False
+   
+    def search_yolo_model_by_filter(self, parms, cols, limit=False, limit_size=20, offset=0, count=False):
+        """this function is used to search in yolo models table by filtering params
+
+        :param parms: filtering parameters
+        :type parms: list
+        :param cols: coloumn names to filter
+        :type cols: list
+        :param limit: boolean to determine returning a part of table rows, defaults to False
+        :type limit: bool, optional
+        :param limit_size: n returning rows (records), defaults to 20
+        :type limit_size: int, optional
+        :param offset: starting index to return n next rows, defaults to 0
+        :type offset: int, optional
+        :param count: boolean determining whether to get count of table, defaults to False
+        :type count: bool, optional
+        :return:
+            result: boolean to determine result
+            table_content: list of dicts containing table records, if count==True: count of table
+        :rtype: _type_
+        """
+
+        res, record = self.db.search_with_range('yolo_models', cols, parms, limit=limit, limit_size=limit_size, offset=offset, count=count)
+        # validation
+        if res == database.SUCCESSFULL:
+            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['database_get_ymodels']['en'],
+                                                code=texts_codes.SubTypes['database_get_ymodels'],
+                                                level=1)
+            return True, record
+
+        elif res == database.CONNECTION_ERROR:
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_conection_failed"]["en"], 
+                code=texts_codes.SubTypes['database_conection_failed'],
+                level=4
+            )
+        # exception error
+        else:
+            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_get_ymodels_failed']['en'], 
+                                                code=texts_codes.SubTypes['database_get_ymodels_failed'],
                                                 level=4
                                             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
@@ -1127,8 +1270,10 @@ class dataBaseUtils:
 
 
 
-# if __name__ == "__main__":
-    # db = dataBaseUtils('Null')
+if __name__ == "__main__":
+    db = dataBaseUtils('Null')
+    ids = db.get_defects_id()
+    print(ids)
     # db.get_pipline_names()
     # x = db.load_plc_parms()
     # # x=db.load_language()

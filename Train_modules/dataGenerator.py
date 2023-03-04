@@ -10,6 +10,7 @@ import shutil
 import cv2
 import random
 import segmentation_models as sm
+import yaml
 
 sm.set_framework("tf.keras")
 sm.framework()
@@ -22,9 +23,10 @@ aug_dict = dict(rotation_range=15,
                 horizontal_flip=True,
                 fill_mode='constant',
                 )
-symlinkPath = 'SymLink'
+symlinkPath = 'SymLink/binary'
+yolo_data_path = 'SymLink/localization_and_classification/data' #'/home/reyhane/.local/lib/python3.10/site-packages/yolov5/data'
 
-def create_binary_symlink(paths, defect_folder, perfect_folder):
+def create_binary_symlink(paths, binary_folder, defect_folder, perfect_folder):
     """This function is used to create symlinks of binary datasets.
 
     :param paths: Path of binary datasets
@@ -46,6 +48,7 @@ def create_binary_symlink(paths, defect_folder, perfect_folder):
     os.makedirs(symlink_perfect_path)
 
     for path in paths:
+        path = os.path.join(path, binary_folder)
         absPath = os.path.abspath(path)
         defect_path = os.path.join(absPath, defect_folder+'/*')
         os.system('ln -s ' + defect_path + ' ' + symlink_defect_path)
@@ -76,7 +79,8 @@ def get_binarygenerator(paths, target_size, defective_folder, perfect_folder, au
     :return: Two generator trainGen and testGen
     :rtype: tuple
     """
-    create_binary_symlink(paths, defective_folder, perfect_folder)
+    binary_folder = api_obj.ds.binary_folder
+    create_binary_symlink(paths, binary_folder, defective_folder, perfect_folder)
     path = symlinkPath
 
     # For path generate train and val generator
@@ -233,6 +237,22 @@ def maskGenerator(path,
             img, masks = adjustData(img, masks)
             yield (img, masks)
     # -----------------------------------------------------
+
+
+def create_yolo_yaml_file(train_images_path, val_images_path, class_name_to_id_mapping):
+    d = {'train': train_images_path, 
+    'val': val_images_path, 
+    'nc': len(class_name_to_id_mapping),
+    'names': list(class_name_to_id_mapping.keys())}
+
+    name = 'oxin.yaml'
+    if not os.path.exists(yolo_data_path):
+        os.makedirs(yolo_data_path)
+    path = os.path.join(yolo_data_path, name)
+    with open(path, 'w') as f:
+        yaml.dump(d, f)
+
+    return path
 
 
 class CustomDataGen(tf.keras.utils.Sequence):

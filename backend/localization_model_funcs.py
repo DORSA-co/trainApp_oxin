@@ -8,6 +8,11 @@ from PySide6.QtGui import Qt
 
 from backend import colors_pallete, chart_funcs, date_funcs
 import train_api, texts
+import os
+import json
+from utils import Utils
+from random_split import *
+
 
 SHAMSI_DATE = False
 
@@ -472,15 +477,49 @@ class Localization_model_train_worker(sQObject):
 
     finished = sSignal()
     warning = sSignal(str, str, str, int)
+    reset_progressbar = sSignal(int , str)
+    set_progressbar = sSignal()
     update_charts = sSignal(int, dict)
 
-    def assign_parameters(self, l_parms, api_obj, ui_obj, db_obj):
+    def assign_parameters(self, l_parms, api_obj, ui_obj, db_obj, ds_obj):
         self.l_parms = l_parms
         self.api_obj = api_obj
         self.ui_obj = ui_obj
         self.db_obj = db_obj
+        self.ds_obj = ds_obj
+
+    def split_localization_dataset(self, paths, size):
+        for i, path in enumerate(paths):
+            if self.ds_obj.check_localization_dataset(path):
+                self.ds_obj.create_l_split_folder(path)
+
+                s_label = os.path.join(path, self.ds_obj.localization_folder, self.ds_obj.localization_folder_label)
+                s_image = os.path.join(path, self.ds_obj.localization_folder, self.ds_obj.localization_folder_image)
+                d_label = os.path.join(path, self.ds_obj.localization_folder, self.ds_obj.localization_folder_label_splitted)
+                d_image = os.path.join(path, self.ds_obj.localization_folder, self.ds_obj.localization_folder_image_splitted)
+                imgs = os.listdir(s_image)
+                self.reset_progressbar.emit(len(imgs), 'Splitting dataset {}'.format(i+1))
+                for i in imgs:
+                    img = Utils.read_image(os.path.join(s_image, i), color="color")
+                    label = Utils.read_image(os.path.join(s_label, i), color="color")
+                    if img is None or label is None:
+                        continue
+                    image_crops, label_crops, _ = get_crops_random(img, label, size)
+                    self.ds_obj.save_localization_splits(
+                        image_crops, label_crops, d_image, d_label, name=i.split(".")[0]
+                    )
+                    self.set_progressbar.emit()
+            else:
+                self.warning.emit(
+                    texts.WARNINGS["DATASET_FORMAT"][self.language], "l_train", None, 2
+                )
+                return
 
     def train_model(self):
+        if self.l_parms[3]:
+            self.split_localization_dataset(self.l_parms[-1], self.l_parms[2])
+
+        self.reset_progressbar.emit(self.l_parms[4], 'Training')
         lmodel_records = train_api.train_localization(
             *self.l_parms, self.api_obj.ds.weights_localization_path, self.api_obj
         )
@@ -507,6 +546,7 @@ class Localization_model_train_worker(sQObject):
         self.finished.emit()
 
     def assign_new_value_to_l_chart(self, last_epoch, logs):
+        self.set_progressbar.emit()
         self.update_charts.emit(last_epoch, logs)
        
     def save_l_model(self, model, path, epoch):
@@ -518,6 +558,7 @@ class Localization_model_train_worker(sQObject):
             self.warning.emit(texts.ERRORS['SAVE_LMODEL_EPOCH_FAILED'][self.api_obj.language].format(epoch), 'l_train', None, 3)
     
     def show_lmodel_train_result(self):
+        self.reset_progressbar.emit(1, '')
         self.ui_obj.localization_train.setEnabled(True)
         self.api_obj.runing_l_model=False
         return

@@ -176,6 +176,7 @@ class UI_main_window(QMainWindow, ui):
         self.Binary_btn.clicked.connect(self.buttonClick)
         self.Localization_btn.clicked.connect(self.buttonClick)
         self.Classification_btn.clicked.connect(self.buttonClick)
+        self.Yolo_btn.clicked.connect(self.buttonClick)
         # self.stackedWidget.setCurrentWidget(self.page_live)
 
         # binary page
@@ -185,6 +186,9 @@ class UI_main_window(QMainWindow, ui):
         # localization page
         self.localization_training.clicked.connect(self.buttonClick)
         self.localization_history.clicked.connect(self.buttonClick)
+        # yolo page
+        self.yolo_training.clicked.connect(self.buttonClick)
+        self.yolo_history.clicked.connect(self.buttonClick)
 
         # classification page
         self.classification_class_list.clicked.connect(self.buttonClick)
@@ -243,11 +247,14 @@ class UI_main_window(QMainWindow, ui):
         self.init_training_page()
         self.validate_binary_train_params()
         self.validate_localization_train_params()
+        self.validate_yolo_train_params()
         self.b_add_ds.clicked.connect(self.buttonClick)
         self.b_add_cancel.clicked.connect(self.buttonClick)
         self.l_algorithms.currentTextChanged.connect(self.buttonClick)
         self.l_add_ds.clicked.connect(self.buttonClick)
         self.l_add_cancel.clicked.connect(self.buttonClick)
+        self.y_add_ds.clicked.connect(self.buttonClick)
+        self.y_add_cancel.clicked.connect(self.buttonClick)
 
         # user page
 
@@ -302,24 +309,11 @@ class UI_main_window(QMainWindow, ui):
             axisY_title="Accuracy",
             checkbox_obj=self.binary_chart_checkbox,
         )
-        # precission
-        chart_funcs.create_train_chart_on_ui(
-            ui_obj=self,
-            frame_obj=self.binary_chart_prec_frame,
-            chart_postfix=self.chart_names[2],
-            chart_title="Precision",
-            legend_train="Train",
-            legend_val="Validation",
-            scroll_obj=self.binary_chart_scrollbar,
-            axisX_title="Epoch",
-            axisY_title="Precision",
-            checkbox_obj=self.binary_chart_checkbox,
-        )
         # recall
         chart_funcs.create_train_chart_on_ui(
             ui_obj=self,
             frame_obj=self.binary_chart_recall_frame,
-            chart_postfix=self.chart_names[3],
+            chart_postfix=self.chart_names[2],
             chart_title="Recall",
             legend_train="Train",
             legend_val="Validation",
@@ -327,10 +321,23 @@ class UI_main_window(QMainWindow, ui):
             axisX_title="Epoch",
             axisY_title="Recall",
             checkbox_obj=self.binary_chart_checkbox,
+        )
+        # precission
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.binary_chart_prec_frame,
+            chart_postfix=self.chart_names[3],
+            chart_title="Precission",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.binary_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Precission",
+            checkbox_obj=self.binary_chart_checkbox,
             axisX_visible=True,
         )
 
-        # -------------------------
+        # -------------------------------------------------------------------------------------
         # localization chart
         self.loc_chart_names = [
             "loc_loss",
@@ -369,7 +376,7 @@ class UI_main_window(QMainWindow, ui):
         # precission
         chart_funcs.create_train_chart_on_ui(
             ui_obj=self,
-            frame_obj=self.localization_chart_recall_frame,
+            frame_obj=self.localization_chart_iou_frame,
             chart_postfix=self.loc_chart_names[2],
             chart_title="IOU",
             legend_train="Train",
@@ -382,7 +389,7 @@ class UI_main_window(QMainWindow, ui):
         # recall
         chart_funcs.create_train_chart_on_ui(
             ui_obj=self,
-            frame_obj=self.localization_chart_prec_frame,
+            frame_obj=self.localization_chart_fscore_frame,
             chart_postfix=self.loc_chart_names[3],
             chart_title="FScore",
             legend_train="Train",
@@ -394,7 +401,7 @@ class UI_main_window(QMainWindow, ui):
             axisX_visible=True,
         )
 
-        # -------------------------
+        # -------------------------------------------------------------------------------------------------------
         # classification chart
         self.cls_chart_names = [
             "loss_cls",
@@ -430,24 +437,11 @@ class UI_main_window(QMainWindow, ui):
             axisY_title="Accuracy",
             checkbox_obj=self.cls_chart_checkbox,
         )
-        # precission
+        # recall
         chart_funcs.create_train_chart_on_ui(
             ui_obj=self,
             frame_obj=self.cls_chart_recall_frame,
             chart_postfix=self.cls_chart_names[2],
-            chart_title="Precision",
-            legend_train="Train",
-            legend_val="Validation",
-            scroll_obj=self.cls_chart_scrollbar,
-            axisX_title="Epoch",
-            axisY_title="Precision",
-            checkbox_obj=self.cls_chart_checkbox,
-        )
-        # recall
-        chart_funcs.create_train_chart_on_ui(
-            ui_obj=self,
-            frame_obj=self.cls_chart_prec_frame,
-            chart_postfix=self.cls_chart_names[3],
             chart_title="Recall",
             legend_train="Train",
             legend_val="Validation",
@@ -455,15 +449,125 @@ class UI_main_window(QMainWindow, ui):
             axisX_title="Epoch",
             axisY_title="Recall",
             checkbox_obj=self.cls_chart_checkbox,
+        )
+        # precision
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.cls_chart_prec_frame,
+            chart_postfix=self.cls_chart_names[3],
+            chart_title="Precision",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.cls_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Precision",
+            checkbox_obj=self.cls_chart_checkbox,
             axisX_visible=True,
         )
-
+        # -------------------------------------------------------------------------------------------------------
+        # yolo chart
+        self.yolo_chart_names = [
+            "box_loss_yolo",
+            "obj_loss_yolo",
+            "cls_loss_yolo",
+            "recall_yolo",
+            "precision_yolo",
+            "mAP_yolo",
+        ]
+        # loss
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.yolo_chart_boxloss_frame,
+            chart_postfix=self.yolo_chart_names[0],
+            chart_title="Box Loss",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.yolo_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Box Loss",
+            checkbox_obj=self.yolo_chart_checkbox,
+            legend_visible=False,
+            axisY_set_range=False,
+            axisX_visible=True,
+        )
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.yolo_chart_objloss_frame,
+            chart_postfix=self.yolo_chart_names[1],
+            chart_title="Obj Loss",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.yolo_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Obj Loss",
+            checkbox_obj=self.yolo_chart_checkbox,
+            legend_visible=False,
+            axisY_set_range=False,
+            axisX_visible=True,
+        )
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.yolo_chart_clsloss_frame,
+            chart_postfix=self.yolo_chart_names[2],
+            chart_title="Cls Loss",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.yolo_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Cls Loss",
+            checkbox_obj=self.yolo_chart_checkbox,
+            legend_visible=False,
+            axisY_set_range=False,
+            axisX_visible=True,
+        )
+        # recall
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.yolo_chart_recall_frame,
+            chart_postfix=self.yolo_chart_names[3],
+            chart_title="Recall",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.yolo_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Recall",
+            checkbox_obj=self.yolo_chart_checkbox,
+            axisX_visible=True,
+        )
+        # precision
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.yolo_chart_prec_frame,
+            chart_postfix=self.yolo_chart_names[4],
+            chart_title="Precision",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.yolo_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="Precision",
+            checkbox_obj=self.yolo_chart_checkbox,
+            axisX_visible=True,
+        )
+        # mAP
+        chart_funcs.create_train_chart_on_ui(
+            ui_obj=self,
+            frame_obj=self.yolo_chart_mAP_frame,
+            chart_postfix=self.yolo_chart_names[5],
+            chart_title="mAP",
+            legend_train="Train",
+            legend_val="Validation",
+            scroll_obj=self.yolo_chart_scrollbar,
+            axisX_title="Epoch",
+            axisY_title="mAP",
+            checkbox_obj=self.yolo_chart_checkbox,
+            axisX_visible=True,
+        )
+        # ------------------------------------------------------------------------------------------------------
         # storage
         chart_funcs.create_storage_barchart_on_ui(
             ui_obj=self, 
             frame_obj_storage=self.storage_chart_frame,
         )
-
         self.update_storage_chart()
         self.start_storage_timer()
 
@@ -1665,6 +1769,7 @@ class UI_main_window(QMainWindow, ui):
             "label": self.warning_label_page,
             "train": self.warning_train_page,
             "l_train": self.l_warning_train_page,
+            "y_train": self.y_warning_train_page,
             "camera_connection": self.camera_connection_msg,
             "binarylist": self.warning_binarylist_page,
             "setting_eror": self.setting_eror,
@@ -1827,21 +1932,27 @@ class UI_main_window(QMainWindow, ui):
         """set init parms for training page such as comboboxes"""
         self.b_algorithms.clear()
         self.l_algorithms.clear()
+        self.y_algorithms.clear()
         self.classification_algo_combo.clear()
         self.binary_name_filter_combo.clear()
         self.localization_name_filter_combo.clear()
+        self.yolo_name_filter_combo.clear()
         self.cls_name_filter_combo.clear()
 
         b_algorithms = ALGORITHM_NAMES['binary']
         l_algorithms = ALGORITHM_NAMES['localization']
         class_algorithms = ALGORITHM_NAMES['classification']
+        y_algorithms = ALGORITHM_NAMES['yolo']
         self.b_algorithms.addItems(b_algorithms)
         self.l_algorithms.addItems(l_algorithms)
+        self.y_algorithms.addItems(y_algorithms)
         self.classification_algo_combo.addItems(class_algorithms)
         self.binary_name_filter_combo.addItem(texts.Titles["all"][self.language])
         self.binary_name_filter_combo.addItems(b_algorithms)
         self.localization_name_filter_combo.addItem(texts.Titles["all"][self.language])
         self.localization_name_filter_combo.addItems(l_algorithms)
+        self.yolo_name_filter_combo.addItem(texts.Titles["all"][self.language])
+        self.yolo_name_filter_combo.addItems(y_algorithms)
         self.cls_name_filter_combo.addItem(texts.Titles["all"][self.language])
         self.cls_name_filter_combo.addItems(class_algorithms)
         self.set_default_parms()
@@ -1884,6 +1995,22 @@ class UI_main_window(QMainWindow, ui):
         input_validator = PG.QRegularExpressionValidator(reg_ex3, self.l_vs)
         self.l_vs.setValidator(input_validator)
 
+    def validate_yolo_train_params(self):
+        reg_ex1 = sQtCore.QRegularExpression("[1-9][0-9]+")
+        input_validator = PG.QRegularExpressionValidator(reg_ex1, self.y_epochs)
+        self.y_epochs.setValidator(input_validator)
+        
+        input_validator = PG.QRegularExpressionValidator(reg_ex1, self.y_batch)
+        self.y_batch.setValidator(input_validator)
+
+        # reg_ex2 = sQtCore.QRegularExpression("[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?")
+        # input_validator = PG.QRegularExpressionValidator(reg_ex2, self.y_lr)
+        # self.y_lr.setValidator(input_validator)
+
+        reg_ex3 = sQtCore.QRegularExpression("^([1-9]\d?|100)$")
+        input_validator = PG.QRegularExpressionValidator(reg_ex3, self.y_vs)
+        self.y_vs.setValidator(input_validator)
+
     def localization_algorithm_changed(self):
         text = self.l_algorithms.currentText()
         flag = text[-2:] == 'pr'
@@ -1919,6 +2046,15 @@ class UI_main_window(QMainWindow, ui):
             "tuning_epochs": "1",
             "validation_split": "20",
         }
+        
+        y_parms = {
+            "algorithm_name": "5n",
+            "input_type": True,
+            "epochs": "20",
+            "batch_size": "8",
+            # "learning_rate": "1e-3",
+            "validation_split": "20",
+        }
 
         self.b_algorithms.setCurrentText(b_parms["algorithm_name"])
 
@@ -1931,7 +2067,6 @@ class UI_main_window(QMainWindow, ui):
         self.b_te.setText(b_parms["tuning_epochs"])
         self.b_vs.setText(b_parms["validation_split"])
         self.input_size1.setValue(256)
-        self.input_size2.setValue(256)
 
         # localization model params
         self.l_algorithms.setCurrentText(l_parms["algorithm_name"])
@@ -1944,7 +2079,6 @@ class UI_main_window(QMainWindow, ui):
         self.l_lr.setText(l_parms["learning_rate"])
         self.l_vs.setText(l_parms["validation_split"])
         self.l_input_size1.setValue(256)
-        self.l_input_size2.setValue(256)
 
         # classification model params
         self.class_epoch_lineedit.setText(classification_params["epochs"])
@@ -1952,6 +2086,18 @@ class UI_main_window(QMainWindow, ui):
         self.class_lr_lineedit.setText(b_parms["learning_rate"])
         self.class_tepoch_lineedit.setText(b_parms["tuning_epochs"])
         self.class_split_lineedit.setText(b_parms["validation_split"])
+
+        # yolo model params
+        self.y_algorithms.setCurrentText(l_parms["algorithm_name"])
+
+        self.y_input_type_resize.setChecked(not y_parms["input_type"])
+        self.y_input_type_split.setChecked(y_parms["input_type"])
+
+        self.y_epochs.setText(y_parms["epochs"])
+        self.y_batch.setText(y_parms["batch_size"])
+        # self.y_lr.setText(l_parms["learning_rate"])
+        self.y_vs.setText(y_parms["validation_split"])
+        self.y_input_size1.setValue(256)
 
         self.logger.create_new_log(message="Set training default params", code=texts_codes.SubTypes['set_training_default_params'])
 
@@ -1961,9 +2107,14 @@ class UI_main_window(QMainWindow, ui):
         self.b_dp.setPlainText("1. " + binary_path)
 
     def set_l_default_db_parms(self, localization_path):
-        """Add default dataset to binary pathes for train"""
+        """Add default dataset to localization pathes for train"""
         self.l_dp.clear()
         self.l_dp.setPlainText("1. " + localization_path)
+
+    def set_y_default_db_parms(self, yolo_path):
+        """Add default dataset to yolo pathes for train"""
+        self.y_dp.clear()
+        self.y_dp.setPlainText("1. " + yolo_path)
 
     def get_binary_parms(self):
         """Get Selected parms that User Selected In Train Binary UI
@@ -1973,7 +2124,7 @@ class UI_main_window(QMainWindow, ui):
         try:
             binary_algorithm_name = self.b_algorithms.currentText()
             binary_input_size = tuple(
-                (self.input_size1.value(), self.input_size2.value())
+                (self.input_size1.value(), self.input_size1.value())
             )
             binary_input_type = self.input_type_split.isChecked()
             binary_epoch = int(float(self.b_epochs.text()))
@@ -2051,7 +2202,7 @@ class UI_main_window(QMainWindow, ui):
                 )
                 return []
             localization_input_size = tuple(
-                (self.l_input_size1.value(), self.l_input_size2.value())
+                (self.l_input_size1.value(), self.l_input_size1.value())
             )
             localization_input_type = self.l_input_type_split.isChecked()
             localization_epoch = int(float(self.l_epochs.text()))
@@ -2140,6 +2291,69 @@ class UI_main_window(QMainWindow, ui):
             classification_vs,
         )
 
+    def get_yolo_parms(self):
+        """Get Selected parms that User Selected In Train Yolo UI
+        :return: all parms in Yolo Train UI / in except return []
+        :rtype: tuple of Parms
+        """
+        try:
+            yolo_algorithm_name = self.y_algorithms.currentText()
+            yolo_input_size = tuple(
+                (self.y_input_size1.value(), self.y_input_size1.value())
+            )
+            yolo_input_type = self.y_input_type_split.isChecked()
+            yolo_epoch = int(float(self.y_epochs.text()))
+            yolo_batch = int(float(self.y_batch.text()))
+            # yolo_lr = float(self.y_lr.text())
+            yolo_vs = float(self.y_vs.text()) / 100
+            if yolo_vs > 0.5:
+                yolo_vs = 0.5
+            str = self.y_gpu.currentText().split(' ')
+            yolo_gpu = int(str[1]) if str[0]=='GPU' else -1
+            text = self.y_dp.toPlainText()
+            if text == '':
+                self.logger.create_new_log(
+                message=texts.WARNINGS["parameters_error"]['en'], 
+                code=texts_codes.SubTypes['parameters_error'],
+                level=5
+                )
+                self.set_warning(
+                    texts.WARNINGS["parameters_error"][self.language],
+                    "y_train",
+                    texts_codes.SubTypes['parameters_error'],
+                    level=2,
+                )
+                return []
+            pattern = r"[0-9]+. "
+            yolo_dp = [s.rstrip() for s in re.split(pattern, text)[1:]]
+
+            return (
+                yolo_algorithm_name,
+                # yolo_pretrain_path,
+                yolo_input_size,
+                yolo_input_type,
+                yolo_epoch,
+                yolo_batch,
+                # yolo_lr,
+                yolo_vs,
+                yolo_gpu,
+                yolo_dp,
+            )
+
+        except:
+            self.logger.create_new_log(
+                message=texts.WARNINGS["parameters_error"]['en'], 
+                code=texts_codes.SubTypes['parameters_error'],
+                level=5
+            )
+            self.set_warning(
+                texts.WARNINGS["parameters_error"][self.language],
+                "y_train",
+                texts_codes.SubTypes['parameters_error'],
+                level=2,
+            )
+            return []
+
     def add_binary_dataset(self):
         """animation Add dataset into train binary UI"""
 
@@ -2195,6 +2409,34 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.left_box)
             self.group.start()
             self.l_add_ds_lineedit.setText("")
+
+    def add_yolo_dataset(self):
+        """animation Add dataset into train binary UI"""
+
+        height = self.y_add_ds_frame.height()
+        if height == 0:
+            self.left_box = QPropertyAnimation(self.y_add_ds_frame, b"maximumHeight")
+            self.left_box.setDuration(Settings.TIME_ANIMATION)
+            self.left_box.setStartValue(0)
+            self.left_box.setEndValue(67)
+            self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
+            self.group = QParallelAnimationGroup()
+            self.group.addAnimation(self.left_box)
+            self.group.start()
+
+    def cancel_add_yolo_ds(self):
+        """animation close page add dataset into train binary UI"""
+        height = self.y_add_ds_frame.height()
+        if height == 67:
+            self.left_box = QPropertyAnimation(self.y_add_ds_frame, b"maximumHeight")
+            self.left_box.setDuration(Settings.TIME_ANIMATION)
+            self.left_box.setStartValue(100)
+            self.left_box.setEndValue(0)
+            self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
+            self.group = QParallelAnimationGroup()
+            self.group.addAnimation(self.left_box)
+            self.group.start()
+            self.y_add_ds_lineedit.setText("")
 
     def set_side_combobox(self):
         """set combobox Items in data aquization page for select sides"""
@@ -2480,6 +2722,10 @@ class UI_main_window(QMainWindow, ui):
             self.start_box_animation(self.extraLeftBox.width(), 0, "left")
             # self.stackedWidget.setCurrentWidget(self.page_Classification)
 
+        if btnName == "yolo_btn":
+            self.start_box_animation(self.extraLeftBox.width(), 0, "left")
+            # self.stackedWidget.setCurrentWidget(self.page_Classification)
+
         if btnName == "binary_list":
             self.stackedWidget_binary.setCurrentWidget(self.page_binary_list)
             self.binary_list.setStyleSheet(
@@ -2546,6 +2792,32 @@ class UI_main_window(QMainWindow, ui):
                                             QPushButton:hover {background-color:  rgb(197 ,195, 196);}"
             )
             self.localization_training.setStyleSheet(
+                "QPushButton { background-color: rgb(100, 100, 100); color: rgb(0,0,0); border: none;} \
+                                            QPushButton:hover {background-color:  rgb(150 ,150, 150);}"
+            )
+
+        if btnName == "yolo_training":
+            self.stackedWidget_yolo.setCurrentWidget(
+                self.page_yolo_training
+            )
+            self.yolo_training.setStyleSheet(
+                "QPushButton { background-color: rgb(170 ,170, 170); color: rgb(0,0,0); border: none;} \
+                                            QPushButton:hover {background-color:  rgb(197 ,195, 196);}"
+            )
+            self.yolo_history.setStyleSheet(
+                "QPushButton { background-color: rgb(100, 100, 100); color: rgb(0,0,0); border: none;} \
+                                            QPushButton:hover {background-color:  rgb(150 ,150, 150);}"
+            )
+
+        if btnName == "yolo_history":
+            self.stackedWidget_yolo.setCurrentWidget(
+                self.page_yolo_history
+            )
+            self.yolo_history.setStyleSheet(
+                "QPushButton { background-color: rgb(170 ,170, 170); color: rgb(0,0,0); border: none;} \
+                                            QPushButton:hover {background-color:  rgb(197 ,195, 196);}"
+            )
+            self.yolo_training.setStyleSheet(
                 "QPushButton { background-color: rgb(100, 100, 100); color: rgb(0,0,0); border: none;} \
                                             QPushButton:hover {background-color:  rgb(150 ,150, 150);}"
             )
@@ -2688,6 +2960,12 @@ class UI_main_window(QMainWindow, ui):
 
         if btnName == "l_add_cancel":
             self.cancel_add_localization_ds()
+
+        if btnName == "y_add_ds":
+            self.add_yolo_dataset()
+
+        if btnName == "y_add_cancel":
+            self.cancel_add_yolo_ds()
 
         if self.extraLeftBox.width() != 0:
             self.extra_left_box_move()
@@ -2901,9 +3179,9 @@ class UI_main_window(QMainWindow, ui):
         self.cbBox_of_binary_model_in_PBT_page.clear()
         self.cbBox_of_binary_model_in_PBT_page.addItem("All")
         self.cbBox_of_binary_model_in_PBT_page.addItems(ALGORITHM_NAMES["binary"])
-        self.cbBox_of_localiztion_model_in_PBT_page.clear()
-        self.cbBox_of_localiztion_model_in_PBT_page.addItem("All")
-        self.cbBox_of_localiztion_model_in_PBT_page.addItems(
+        self.cbBox_of_localization_model_in_PBT_page.clear()
+        self.cbBox_of_localization_model_in_PBT_page.addItem("All")
+        self.cbBox_of_localization_model_in_PBT_page.addItems(
             ALGORITHM_NAMES["localization"]
         )
         self.cbBox_of_multiClassification_model_in_PBT_page.clear()

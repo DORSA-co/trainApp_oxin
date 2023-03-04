@@ -1,3 +1,16 @@
+import torch
+from IPython.display import Image 
+import os 
+import random
+import shutil
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
+from tqdm import tqdm
+from PIL import Image, ImageDraw
+import numpy as np
+import matplotlib.pyplot as plt
+import yolov5
+
 from tensorflow.python.keras import utils
 import Train_modules.models as models
 import Train_modules.dataGenerator as dataGenerator
@@ -8,10 +21,12 @@ import numpy as np
 import cv2
 import os
 import texts
-from Train_modules.splitDataset import split_unet_dataset
+from Train_modules.splitDataset import split_unet_dataset, split_yolo_dataset
 
-from backend import binary_model_funcs, date_funcs, localization_model_funcs
+from backend import binary_model_funcs, date_funcs, localization_model_funcs, yolo_model_funcs
 import segmentation_models as sm
+
+from Train_modules.train_yolo import run
 
 sm.set_framework("tf.keras")
 sm.framework()
@@ -19,7 +34,7 @@ sm.framework()
 DEBUG=False
 SHAMSI_DATE = False
 
-ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce']}
+ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'], 'yolo': ['5n', '5s', '5m', '5l', '5x']}
 ALGORITHM_CREATOR={'Xbc':models.xception_cnn,'Rbc':models.resnet_cnn,'Blu':models.base_unet,'Rleu':models.resnet_unet,'Llu':models.low_unet,'uln':models.unet
 ,'Xcc':models.xception_cnn,'Rce':models.resnet_cnn}
 
@@ -323,12 +338,12 @@ def train_localization(loc_algorithm_name, loc_pretrain_path, loc_input_size, lo
     # Split datasets into train and test
     try:
         if not loc_input_type:
-            train_path, test_path, train_data_count, test_data_count = split_unet_dataset(paths=loc_dp, img_folder='image', label_folder='label', mulit_mask_class=False, split=loc_vs)
+            train_path, test_path, train_data_count, test_data_count = split_unet_dataset(paths=loc_dp, api_obj=api_obj, img_folder='image', label_folder='label', mulit_mask_class=False, split=loc_vs)
         else:
-            train_path, test_path, train_data_count, test_data_count = split_unet_dataset(paths=loc_dp, img_folder='image_splitted', label_folder='label_splitted', mulit_mask_class=False, split=loc_vs)
-        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['dataset_splitted']['en'] + weights_path)
+            train_path, test_path, train_data_count, test_data_count = split_unet_dataset(paths=loc_dp, api_obj=api_obj, img_folder='image_splitted', label_folder='label_splitted', mulit_mask_class=False, split=loc_vs)
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['dataset_splitted']['en'])
     except Exception as e:
-        api_obj.ui.logger.create_new_log(message=texts.ERRORS['dataset_splitted_failed']['en'] + weights_path, level=5)
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['dataset_splitted_failed']['en'], level=5)
         return (False, (texts.ERRORS['dataset_splitted_failed'][api_obj.language], 'l_train', 3))
 
     # Get train and test generators
@@ -350,9 +365,9 @@ def train_localization(loc_algorithm_name, loc_pretrain_path, loc_input_size, lo
             transforms=preprocess_input,
             input_size=loc_input_size,
         )
-        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_LOC_GEN']['en'] + weights_path)
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_LOC_GEN']['en'])
     except Exception as e:
-        api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_LOC_GEN_FAILED']['en'] + weights_path, level=5)
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_LOC_GEN_FAILED']['en'], level=5)
         return (False, (texts.ERRORS['CREATE_LOC_GEN_FAILED'][api_obj.language], 'l_train', 3))
 
     # Create models
@@ -427,14 +442,14 @@ def train_localization(loc_algorithm_name, loc_pretrain_path, loc_input_size, lo
                                     loc_epoch,
                                     loc_batch,
                                     loc_lr, loc_vs,
-                                    history.history['loss'][0],
-                                    history.history['accuracy'][0],
-                                    history.history['iou_score'][0],
-                                    history.history['f1-score'][0],
-                                    history.history['val_loss'][0],
-                                    history.history['val_accuracy'][0],
-                                    history.history['val_iou_score'][0],
-                                    history.history['val_f1-score'][0],
+                                    history.history['loss'][-1],
+                                    history.history['accuracy'][-1],
+                                    history.history['iou_score'][-1],
+                                    history.history['f1-score'][-1],
+                                    history.history['val_loss'][-1],
+                                    history.history['val_accuracy'][-1],
+                                    history.history['val_iou_score'][-1],
+                                    history.history['val_f1-score'][-1],
                                     str(loc_dp),
                                     weights_path,
                                     date_funcs.get_date(persian=SHAMSI_DATE)]))
@@ -452,5 +467,127 @@ def create_localization_model_record_dict(records):
     """
     model_records = {}
     for i, header_db in enumerate(localization_model_funcs.localization_headers_db):
+        model_records[header_db] = records[i]
+    return model_records
+
+
+def train_yolo(y_algorithm_name, y_input_size, y_input_type, y_epoch, y_batch, y_vs, y_gpu, y_dp, weights_path, class_name_to_id_mapping, api_obj):
+    # try:
+    #     if y_gpu > 0:
+    #         device = torch.device('cuda:{}'.format())
+    #         torch.cuda.set_device(device)
+    #     api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SET_PROCESSOR']['en'])
+    # except:
+    #     api_obj.ui.logger.create_new_log(message=texts.ERRORS['SET_PROCESSOR_FAILED']['en'], level=5)
+    #     return (False, (texts.ERRORS['SET_PROCESSOR_FAILED'][api_obj.language], 'y_train', 3))
+
+    # Create weights path
+    # weights_path = os.path.join(weights_path, date_funcs.get_datetime(persian=SHAMSI_DATE, folder_path=True))
+    # try:
+    #     if not os.path.exists(weights_path):
+    #         os.makedirs(weights_path)
+    #     api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_YWPATH']['en'] + weights_path)
+    # except Exception as e:
+    #     api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_YWPATH_FAILED']['en'] + weights_path, level=5)
+    #     return (False, (texts.ERRORS['CREATE_YWPATH_FAILED'][api_obj.language], 'y_train', 3))
+
+    try:
+        if not y_input_type:
+            train_images_path, val_images_path = split_yolo_dataset(paths=y_dp, api_obj=api_obj, img_folder='image', label_folder='annotations', split=y_vs)
+        else:
+            train_images_path, val_images_path = split_yolo_dataset(paths=y_dp, api_obj=api_obj, img_folder='image_splitted', label_folder='annotations', split=y_vs)
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['dataset_splitted']['en'])
+    except Exception as e:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['dataset_splitted_failed']['en'], level=5)
+        return (False, (texts.ERRORS['dataset_splitted_failed'][api_obj.language], 'y_train', 3))
+
+    try:
+        path = dataGenerator.create_yolo_yaml_file(train_images_path, val_images_path, class_name_to_id_mapping)
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_Y_GEN']['en'])
+    except Exception as e:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_Y_GEN_FAILED']['en'], level=5)
+        return (False, (texts.ERRORS['CREATE_Y_GEN_FAILED'][api_obj.language], 'y_train', 3))
+    
+    # Create callback
+    try:
+        my_callback = callbacks.CustomCallback(os.path.join(weights_path, 'checkpoint_bin.h5'), model_type='yolo', api_obj=api_obj)
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CALLBACK_CREATED']['en'])
+    except:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['CALLBACK_CREATE_FAILED']['en'], level=5)
+        return (False, (texts.ERRORS['CALLBACK_CREATE_FAILED'][api_obj.language], 'y_train', 3))
+    
+    if y_gpu > 0:
+        y_gpu = y_gpu
+    else:
+        y_gpu = 'cpu'
+
+    try:
+        date = date_funcs.get_datetime(persian=SHAMSI_DATE, folder_path=True)
+        results = run(data=path,
+            my_callback=my_callback,
+            epochs=y_epoch, 
+            batch_size = y_batch,
+            imgsz = y_input_size[0], 
+            device=y_gpu,
+            cfg='yolov{}.yaml'.format(y_algorithm_name),
+            weights='models/localization_and_classification/yolov{}.pt'.format(y_algorithm_name),
+            # weights = '',
+            project=weights_path,
+            name=date,
+            noplots=True,
+        )
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['FIT_MODEL']['en'])
+    except:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['FIT_MODEL_FAILED']['en'], level=5)
+        return (False, (texts.ERRORS['FIT_MODEL_FAILED'][api_obj.language], 'y_train', 3))
+
+    # Save weights
+    if os.path.exists(os.path.join(weights_path, date, 'best.pt')) and \
+        os.path.exists(os.path.join(weights_path, date, 'last.pt')):
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SAVE_YMODEL']['en'])
+    else:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['SAVE_YMODEL_FAILED']['en'], level=3)
+        return (False, (texts.ERRORS['SAVE_YMODEL_FAILED'][api_obj.language], 'y_train', 3))
+
+    try:
+        y_algorithm_name = ALGORITHM_NAMES['yolo'].index(y_algorithm_name)
+    except:
+        y_algorithm_name = -1
+    
+    return (True, create_yolo_model_record_dict([y_algorithm_name,
+                                    '('+str(y_input_size[0])+','+ str(y_input_size[1])+')', 
+                                    y_input_type,
+                                    y_epoch,
+                                    y_batch,
+                                    y_vs,
+                                    str(y_dp),
+                                    os.path.join(weights_path, date),
+                                    date_funcs.get_date(persian=SHAMSI_DATE),
+                                    results['train/box_loss'].item(),
+                                    results['train/obj_loss'].item(),
+                                    results['train/cls_loss'].item(),
+                                    results['metrics/precision'].item(),
+                                    results['metrics/recall'].item(),
+                                    results['metrics/mAP_0.5'].item(),
+                                    results['metrics/mAP_0.5:0.95'].item(),
+                                    results['val/box_loss'],
+                                    results['val/obj_loss'],
+                                    results['val/cls_loss'],
+                                    ]))
+
+
+def create_yolo_model_record_dict(records):
+    """Convert yolo model parameters and metrics list to dictionary
+
+    :param records: yolo model parameters and metrics list of the form: ['algo_name','input_size','input_type','epochs','batch_size', 
+    'split_ratio','dataset_pathes','weights_path',  'date_''box_loss', 'obj_loss', 'cls_loss','val_precision','val_recall',
+    'val_mAP_0.5','val_mAP_0.5:0.95','val_box_loss','val_obj_loss','val_cls_loss']
+    :type records: list
+    :return: yolo model parameters dictionary
+    :rtype: dict
+    """
+    model_records = {}
+    for i, header_db in enumerate(yolo_model_funcs.yolo_headers_db):
+        print(i, header_db)
         model_records[header_db] = records[i]
     return model_records
