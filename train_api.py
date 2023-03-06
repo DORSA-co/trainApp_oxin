@@ -553,16 +553,12 @@ def train_yolo(y_algorithm_name, y_input_size, y_input_type, y_epoch, y_batch, y
         y_algorithm_name = ALGORITHM_NAMES['yolo'].index(y_algorithm_name)
     except:
         y_algorithm_name = -1
-    
     return (True, create_yolo_model_record_dict([y_algorithm_name,
                                     '('+str(y_input_size[0])+','+ str(y_input_size[1])+')', 
                                     y_input_type,
                                     y_epoch,
                                     y_batch,
                                     y_vs,
-                                    str(y_dp),
-                                    os.path.join(weights_path, date),
-                                    date_funcs.get_date(persian=SHAMSI_DATE),
                                     results['train/box_loss'].item(),
                                     results['train/obj_loss'].item(),
                                     results['train/cls_loss'].item(),
@@ -573,6 +569,9 @@ def train_yolo(y_algorithm_name, y_input_size, y_input_type, y_epoch, y_batch, y
                                     results['val/box_loss'],
                                     results['val/obj_loss'],
                                     results['val/cls_loss'],
+                                    str(y_dp),
+                                    os.path.join(weights_path, date),
+                                    date_funcs.get_date(persian=SHAMSI_DATE),
                                     ]))
 
 
@@ -588,6 +587,5 @@ def create_yolo_model_record_dict(records):
     """
     model_records = {}
     for i, header_db in enumerate(yolo_model_funcs.yolo_headers_db):
-        print(i, header_db)
         model_records[header_db] = records[i]
     return model_records

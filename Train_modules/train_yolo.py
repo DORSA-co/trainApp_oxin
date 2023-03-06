@@ -273,6 +273,8 @@ def train(hyp, opt, device, callbacks, my_callback):  # hyp is path/to/hyp.yaml 
                 f'Using {train_loader.num_workers * WORLD_SIZE} dataloader workers\n'
                 f"Logging results to {colorstr('bold', save_dir)}\n"
                 f'Starting training for {epochs} epochs...')
+    
+    best_mloss = torch.zeros(3, device=device)
     for epoch in range(start_epoch, epochs):  # epoch ------------------------------------------------------------------
         callbacks.run('on_train_epoch_start')
         model.train()
@@ -288,7 +290,6 @@ def train(hyp, opt, device, callbacks, my_callback):  # hyp is path/to/hyp.yaml 
         # dataset.mosaic_border = [b - imgsz, -b]  # height, width borders
 
         mloss = torch.zeros(3, device=device)  # mean losses
-        best_mloss = torch.zeros(3, device=device)
         if RANK != -1:
             train_loader.sampler.set_epoch(epoch)
         pbar = enumerate(train_loader)

@@ -16,28 +16,45 @@ from random_split import *
 SHAMSI_DATE = False
 
 # yolo table headers
-yolo_headers = ['Algorithm Name', 'Pretrained weights Path', 'Input-Size', 'Input-Type',
-                    'N-Epochs', 'Batch-Size', 'Learning-Rate',
-                    'Split Ratio', 'Loss', 'Accuracy', 'IOU', 'FScore',
-                    'Val-Loss', 'Val-Accuracy', 'Val-IOU', 'Val-FScore',
-                    'Dataset Path', 'Weights Path', 'Date Created']
+yolo_headers = [
+    "Algorithm Name",
+    "Input Size",
+    "Input Type",
+    "N-Epochs",
+    "Batch-Size",
+    "Split Ratio",
+    "Box Loss",
+    "Obj Loss",
+    "Cls Loss",
+    "Val-Precision",
+    "Val-Recall",
+    "Val-mAP_0.5",
+    "Val-mAP_0.5:0.95",
+    "Val-Box Loss",
+    "Val-Obj Loss",
+    "Val-Cls Loss",
+    "Dataset Path",
+    "Weights Path",
+    "Date Created",
+]
+
 yolo_headers_fa = [
     "نام الگوریتم",
-    "آدرس وزن‌های از پیش آموزش دیده",
     "اندازه ورودی",
     "نوع ورودی",
     "تعداد اپوک",
     "اندازه دسته",
-    "نرخ یادگیری",
     "نسبت تقسیم داده",
-    "خطا",
-    "دقت",
-    "IOU",
-    "FScore",
-    "خطا اعتبارسنجی",
-    "دقت اعتبارسنجی",
-    "اعتبارسنجی IOU",
-    "اعتبارسنجی FScore",
+    "خطای باکس",
+    "خطای شی",
+    "خطای دسته‌بندی",
+    "پرسیژن اعتبارسنجی",
+    "ریکال اعتبار‌سنجی",
+    "اعتبارسنجی mAP_0.5",
+    "اعتبارسنجی mAP_0.5:0.95",
+    "خطای باکس اعتبارسنجی",
+    "خطای شئ اعتبارسنجی",
+    "خطای دسته‌بندی اعتبارسنجی",
     "آدرس مجموعه داده",
     "آدرس وزن‌ها",
     "تاریخ ایجاد",
@@ -51,9 +68,6 @@ yolo_headers_db = [
     'epochs',
     'batch_size', 
     'split_ratio',
-    'dataset_pathes',
-    'weights_path',  
-    'date_',
     'box_loss', 
     'obj_loss', 
     'cls_loss',
@@ -64,6 +78,9 @@ yolo_headers_db = [
     'val_box_loss',
     'val_obj_loss',
     'val_cls_loss',
+    'dataset_pathes',
+    'weights_path',  
+    'date_',
 ]
 
 # table number of rows and cols
@@ -149,11 +166,7 @@ def set_ymodels_on_ui_tabel(ui_obj, ymodels_list):
                 ] = translate_yolo_algorithm_id_to_name(
                     algo_id=ymodel[yolo_headers_db[col_idx]]
                 )
-            if col_idx == 1:
-                ymodel[
-                    yolo_headers_db[col_idx]
-                ] = '-' if ymodel[yolo_headers_db[col_idx]] == '' else ymodel[yolo_headers_db[col_idx]]
-            if col_idx == 3:
+            if col_idx == 2:
                 ymodel[
                     yolo_headers_db[col_idx]
                 ] = 'Split' if ymodel[yolo_headers_db[col_idx]] == '1' else 'Resize'
@@ -216,7 +229,6 @@ def save_new_yolo_model_record(ui_obj, db_obj, ymodel_records):
             )
         return False
 
-
 # get yolo model information from UI filter section
 def get_yolo_model_filter_info_from_ui(ui_obj):
     """this function is used to get filter params in yolo models list on UI
@@ -234,10 +246,12 @@ def get_yolo_model_filter_info_from_ui(ui_obj):
         ymodel_info['epochs'] = [ui_obj.yolo_epoch_min_filter_lineedit.text(), ui_obj.yolo_epoch_max_filter_lineedit.text()]
         ymodel_info['batch_size'] = [ui_obj.yolo_batch_min_filter_lineedit.text(), ui_obj.yolo_batch_max_filter_lineedit.text()]
         ymodel_info['split_ratio'] = [ui_obj.yolo_split_min_filter_lineedit.text(), ui_obj.yolo_split_max_filter_lineedit.text()]
-        ymodel_info['val_loss'] = [ui_obj.yolo_loss_min_filter_lineedit.text(), ui_obj.yolo_loss_max_filter_lineedit.text()]
-        ymodel_info['val_accuracy'] = [ui_obj.yolo_acc_min_filter_lineedit.text(), ui_obj.yolo_acc_max_filter_lineedit.text()]
-        ymodel_info['val_iou'] = [ui_obj.yolo_iou_min_filter_lineedit_2.text(), ui_obj.yolo_iou_max_filter_lineedit_2.text()]
-        ymodel_info['val_fscore'] = [ui_obj.yolo_fscore_min_filter_lineedit.text(), ui_obj.yolo_fscore_max_filter_lineedit.text()]
+        ymodel_info['val_box_loss'] = [ui_obj.yolo_boxloss_min_filter_lineedit.text(), ui_obj.yolo_boxloss_max_filter_lineedit.text()]
+        ymodel_info['val_obj_loss'] = [ui_obj.yolo_objloss_min_filter_lineedit.text(), ui_obj.yolo_objloss_max_filter_lineedit.text()]
+        ymodel_info['val_cls_loss'] = [ui_obj.yolo_clsloss_min_filter_lineedit.text(), ui_obj.yolo_clsloss_max_filter_lineedit.text()]
+        ymodel_info['val_precision'] = [ui_obj.yolo_prec_min_filter_lineedit.text(), ui_obj.yolo_prec_max_filter_lineedit.text()]
+        ymodel_info['val_recall'] = [ui_obj.yolo_recall_min_filter_lineedit.text(), ui_obj.yolo_recall_max_filter_lineedit.text()]
+        ymodel_info['val_mAP_50'] = [ui_obj.yolo_map_min_filter_lineedit.text(), ui_obj.yolo_map_max_filter_lineedit.text()]
 
         # date
         ymodel_info['start_date'] = [ui_obj.yolo_start_year_lineedit.text(), ui_obj.yolo_start_month_lineedit.text(), ui_obj.yolo_start_day_lineedit.text()]
@@ -325,62 +339,92 @@ def get_filtered_yolo_models_from_db(ui_obj, db_obj, filter_params, limit_size=y
         ui_obj.set_warning(texts.ERRORS['SPLITRATIO_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
         return 'error',[]
 
-    # loss
+    # box loss
     try:
-        if filter_params['val_loss'][0] != '' and filter_params['val_loss'][1] != '' and float(filter_params['val_loss'][0]) > float(filter_params['val_loss'][1]):
-            ui_obj.set_warning(texts.ERRORS['LOSS_RANGE_INCORRECT'][ui_obj.language], 'yolo_model_history', level=3)
+        if filter_params['val_box_loss'][0] != '' and filter_params['val_box_loss'][1] != '' and float(filter_params['val_box_loss'][0]) > float(filter_params['val_box_loss'][1]):
+            ui_obj.set_warning(texts.ERRORS['‌BOXLOSS_RANGE_INCORRECT'][ui_obj.language], 'yolo_model_history', level=3)
             return 'error',[]
-        elif bool(filter_params['val_loss'][0] == '') ^ bool(filter_params['val_loss'][1] == ''):
-            ui_obj.set_warning(texts.WARNINGS['LOSS_RANGE_EMPTY'][ui_obj.language], 'yolo_model_history', level=2)
+        elif bool(filter_params['val_box_loss'][0] == '') ^ bool(filter_params['val_box_loss'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['BOXLOSS_RANGE_EMPTY'][ui_obj.language], 'yolo_model_history', level=2)
             return 'error',[]
-        elif filter_params['val_loss'][0] != '' and filter_params['val_loss'][1] != '':
-            params.append([str(float(filter_params['val_loss'][0])), str(float(filter_params['val_loss'][1]))])
-            cols.append('val_loss')
+        elif filter_params['val_box_loss'][0] != '' and filter_params['val_box_loss'][1] != '':
+            params.append([str(float(filter_params['val_box_loss'][0])), str(float(filter_params['val_box_loss'][1]))])
+            cols.append('val_box_loss')
     except:
-        ui_obj.set_warning(texts.ERRORS['LOSS_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
+        ui_obj.set_warning(texts.ERRORS['BOXLOSS_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
         return 'error',[]
-
-    # acc
+    
+    # obj loss
     try:
-        if filter_params['val_accuracy'][0] != '' and filter_params['val_accuracy'][1] != '' and float(filter_params['val_accuracy'][0]) > float(filter_params['val_accuracy'][1]):
-            ui_obj.set_warning(texts.ERRORS['ACCU_RANGE_INCORRECT'][ui_obj.language], 'yolo_model_history', level=3)
+        if filter_params['val_obj_loss'][0] != '' and filter_params['val_obj_loss'][1] != '' and float(filter_params['val_obj_loss'][0]) > float(filter_params['val_obj_loss'][1]):
+            ui_obj.set_warning(texts.ERRORS['OBJLOSS_RANGE_INCORRECT'][ui_obj.language], 'yolo_model_history', level=3)
             return 'error',[]
-        elif bool(filter_params['val_accuracy'][0] == '') ^ bool(filter_params['val_accuracy'][1] == ''):
-            ui_obj.set_warning(texts.WARNINGS['ACCU_RANGE_EMPTY'][ui_obj.language], 'yolo_model_history', level=2)
+        elif bool(filter_params['val_obj_loss'][0] == '') ^ bool(filter_params['val_obj_loss'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['OBJLOSS_RANGE_EMPTY'][ui_obj.language], 'yolo_model_history', level=2)
             return 'error',[]
-        elif filter_params['val_accuracy'][0] != '' and filter_params['val_accuracy'][1] != '':
-            params.append([str(float(filter_params['val_accuracy'][0])), str(float(filter_params['val_accuracy'][1]))])
-            cols.append('val_accuracy')
+        elif filter_params['val_obj_loss'][0] != '' and filter_params['val_obj_loss'][1] != '':
+            params.append([str(float(filter_params['val_obj_loss'][0])), str(float(filter_params['val_obj_loss'][1]))])
+            cols.append('val_obj_loss')
     except:
-        ui_obj.set_warning(texts.ERRORS['ACCU_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
+        ui_obj.set_warning(texts.ERRORS['OBJLOSS_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
+        return 'error',[]
+    
+    # cls loss
+    try:
+        if filter_params['val_cls_loss'][0] != '' and filter_params['val_cls_loss'][1] != '' and float(filter_params['val_cls_loss'][0]) > float(filter_params['val_cls_loss'][1]):
+            ui_obj.set_warning(texts.ERRORS['CLSLOSS_RANGE_INCORRECT'][ui_obj.language], 'yolo_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['val_cls_loss'][0] == '') ^ bool(filter_params['val_cls_loss'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['CLSLOSS_RANGE_EMPTY'][ui_obj.language], 'yolo_model_history', level=2)
+            return 'error',[]
+        elif filter_params['val_cls_loss'][0] != '' and filter_params['val_cls_loss'][1] != '':
+            params.append([str(float(filter_params['val_cls_loss'][0])), str(float(filter_params['val_cls_loss'][1]))])
+            cols.append('val_cls_loss')
+    except:
+        ui_obj.set_warning(texts.ERRORS['CLSLOSS_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
         return 'error',[]
 
     # precision
     try:
-        if filter_params['val_iou'][0] != '' and filter_params['val_iou'][1] != '' and float(filter_params['val_iou'][0]) > float(filter_params['val_iou'][1]):
-            ui_obj.set_warning(texts.ERRORS['IOU_RANGE_INCORRECT'][ui_obj.language], 'yolo_model_history', level=3)
+        if filter_params['val_precision'][0] != '' and filter_params['val_precision'][1] != '' and float(filter_params['val_precision'][0]) > float(filter_params['val_precision'][1]):
+            ui_obj.set_warning(texts.ERRORS['PREC_RANGE_INCORRECT'][ui_obj.language], 'yolo_model_history', level=3)
             return 'error',[]
-        elif bool(filter_params['val_iou'][0] == '') ^ bool(filter_params['val_iou'][1] == ''):
-            ui_obj.set_warning(texts.WARNINGS['IOU_RANGE_EMPTY'][ui_obj.language], 'yolo_model_history', level=2)
+        elif bool(filter_params['val_precision'][0] == '') ^ bool(filter_params['val_precision'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['PREC_RANGE_EMPTY'][ui_obj.language], 'yolo_model_history', level=2)
             return 'error',[]
-        elif filter_params['val_iou'][0] != '' and filter_params['val_iou'][1] != '':
-            params.append([str(float(filter_params['val_iou'][0])), str(float(filter_params['val_iou'][1]))])
-            cols.append('val_iou')
+        elif filter_params['val_precision'][0] != '' and filter_params['val_precision'][1] != '':
+            params.append([str(float(filter_params['val_precision'][0])), str(float(filter_params['val_precision'][1]))])
+            cols.append('val_precision')
     except:
-        ui_obj.set_warning(texts.ERRORS['IOU_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
+        ui_obj.set_warning(texts.ERRORS['PREC_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
         return 'error',[]
 
     # recall
     try:
-        if filter_params['val_fscore'][0] != '' and filter_params['val_fscore'][1] != '' and float(filter_params['val_fscore'][0]) > float(filter_params['val_fscore'][1]):
+        if filter_params['val_recall'][0] != '' and filter_params['val_recall'][1] != '' and float(filter_params['val_recall'][0]) > float(filter_params['val_recall'][1]):
+            ui_obj.set_warning(texts.ERRORS['RECA_RANGE_INCORRECT'][ui_obj.language], 'yolo_model_history', level=3)
+            return 'error',[]
+        elif bool(filter_params['val_recall'][0] == '') ^ bool(filter_params['val_recall'][1] == ''):
+            ui_obj.set_warning(texts.WARNINGS['RECA_RANGE_EMPTY'][ui_obj.language], 'yolo_model_history', level=2)
+            return 'error',[]
+        elif filter_params['val_recall'][0] != '' and filter_params['val_recall'][1] != '':
+            params.append([str(float(filter_params['val_recall'][0])), str(float(filter_params['val_recall'][1]))])
+            cols.append('val_recall')
+    except:
+        ui_obj.set_warning(texts.ERRORS['RECA_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
+        return 'error',[]
+
+    # map
+    try:
+        if filter_params['val_mAP_50'][0] != '' and filter_params['val_mAP_50'][1] != '' and float(filter_params['val_mAP_50'][0]) > float(filter_params['val_mAP_50'][1]):
             ui_obj.set_warning(texts.ERRORS['FSCORE_RANGE_INCORRECT'][ui_obj.language], 'yolo_model_history', level=3)
             return 'error',[]
-        elif bool(filter_params['val_fscore'][0] == '') ^ bool(filter_params['val_fscore'][1] == ''):
+        elif bool(filter_params['val_mAP_50'][0] == '') ^ bool(filter_params['val_mAP_50'][1] == ''):
             ui_obj.set_warning(texts.WARNINGS['FSCORE_RANGE_EMPTY'][ui_obj.language], 'yolo_model_history', level=2)
             return 'error',[]
-        elif filter_params['val_fscore'][0] != '' and filter_params['val_fscore'][1] != '':
-            params.append([str(float(filter_params['val_fscore'][0])), str(float(filter_params['val_fscore'][1]))])
-            cols.append('val_fscore')
+        elif filter_params['val_mAP_50'][0] != '' and filter_params['val_mAP_50'][1] != '':
+            params.append([str(float(filter_params['val_mAP_50'][0])), str(float(filter_params['val_mAP_50'][1]))])
+            cols.append('val_mAP_50')
     except:
         ui_obj.set_warning(texts.ERRORS['FSCORE_FORMAT_INVALID'][ui_obj.language], 'yolo_model_history', level=3)
         return 'error',[]
@@ -491,6 +535,7 @@ def class_to_id(db_obj):
 def id_to_class(db_obj):
     ids = db_obj.get_defects_id()
     return dict(zip(range(len(ids)), ids))
+
 
 class Yolo_model_train_worker(sQObject):
     """this class is worker for yolo model training Qthred

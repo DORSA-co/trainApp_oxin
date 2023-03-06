@@ -250,11 +250,14 @@ class UI_main_window(QMainWindow, ui):
         self.validate_yolo_train_params()
         self.b_add_ds.clicked.connect(self.buttonClick)
         self.b_add_cancel.clicked.connect(self.buttonClick)
+        self.binary_reset.clicked.connect(self.reset_binary_default_params)
         self.l_algorithms.currentTextChanged.connect(self.buttonClick)
         self.l_add_ds.clicked.connect(self.buttonClick)
         self.l_add_cancel.clicked.connect(self.buttonClick)
+        self.localization_reset.clicked.connect(self.reset_localization_default_params)
         self.y_add_ds.clicked.connect(self.buttonClick)
         self.y_add_cancel.clicked.connect(self.buttonClick)
+        self.yolo_reset.clicked.connect(self.reset_yolo_default_params)
 
         # user page
 
@@ -1778,6 +1781,7 @@ class UI_main_window(QMainWindow, ui):
             "classlist_msg_label": self.classlist_msg_label,
             "binary_model_history": self.binary_tabel_label,
             "localization_model_history": self.localization_tabel_label,
+            "yolo_model_history": self.yolo_tabel_label,
             "setting": self.setting_msg_label,
             "profile": self.profile_msg_label,
         }
@@ -2082,13 +2086,13 @@ class UI_main_window(QMainWindow, ui):
 
         # classification model params
         self.class_epoch_lineedit.setText(classification_params["epochs"])
-        self.class_batch_lineedit.setText(b_parms["batch_size"])
-        self.class_lr_lineedit.setText(b_parms["learning_rate"])
-        self.class_tepoch_lineedit.setText(b_parms["tuning_epochs"])
-        self.class_split_lineedit.setText(b_parms["validation_split"])
+        self.class_batch_lineedit.setText(classification_params["batch_size"])
+        self.class_lr_lineedit.setText(classification_params["learning_rate"])
+        self.class_tepoch_lineedit.setText(classification_params["tuning_epochs"])
+        self.class_split_lineedit.setText(classification_params["validation_split"])
 
         # yolo model params
-        self.y_algorithms.setCurrentText(l_parms["algorithm_name"])
+        self.y_algorithms.setCurrentText(y_parms["algorithm_name"])
 
         self.y_input_type_resize.setChecked(not y_parms["input_type"])
         self.y_input_type_split.setChecked(y_parms["input_type"])
@@ -2100,6 +2104,110 @@ class UI_main_window(QMainWindow, ui):
         self.y_input_size1.setValue(256)
 
         self.logger.create_new_log(message="Set training default params", code=texts_codes.SubTypes['set_training_default_params'])
+
+    def reset_binary_default_params(self):
+        """set default parms for binary training pages , that show in UI , every parms"""
+        b_parms = {
+            "algorithm_name": "Xbc",
+            "input_type": True,
+            "epochs": "20",
+            "batch_size": "8",
+            "learning_rate": "1e-3",
+            "tuning_epochs": "1",
+            "validation_split": "20",
+            "proc": "CPU"
+            }
+
+        self.b_algorithms.setCurrentText(b_parms["algorithm_name"])
+
+        self.input_type_resize.setChecked(not b_parms["input_type"])
+        self.input_type_split.setChecked(b_parms["input_type"])
+
+        self.b_epochs.setText(b_parms["epochs"])
+        self.b_batch.setText(b_parms["batch_size"])
+        self.b_lr.setText(b_parms["learning_rate"])
+        self.b_te.setText(b_parms["tuning_epochs"])
+        self.b_vs.setText(b_parms["validation_split"])
+        self.input_size1.setValue(256)
+        self.b_gpu.setCurrentText(b_parms["proc"])
+
+        self.logger.create_new_log(message="Reset binary training params", code=texts_codes.SubTypes['reset_binary_training_params'])
+   
+    def reset_localization_default_params(self):
+        """set default parms for localization training pages , that show in UI , every parms"""
+        l_parms = {
+            "algorithm_name": "Ulnim",
+            "input_type": True,
+            "epochs": "20",
+            "batch_size": "8",
+            "learning_rate": "1e-3",
+            "validation_split": "20",
+            "proc": "CPU"
+        }
+
+        # localization model params
+        self.l_algorithms.setCurrentText(l_parms["algorithm_name"])
+
+        self.l_input_type_resize.setChecked(not l_parms["input_type"])
+        self.l_input_type_split.setChecked(l_parms["input_type"])
+
+        self.l_epochs.setText(l_parms["epochs"])
+        self.l_batch.setText(l_parms["batch_size"])
+        self.l_lr.setText(l_parms["learning_rate"])
+        self.l_vs.setText(l_parms["validation_split"])
+        self.l_input_size1.setValue(256)
+        self.l_gpu.setCurrentText(l_parms["proc"])
+
+        self.logger.create_new_log(message="Reset localization training params", code=texts_codes.SubTypes['reset_localization_training_params'])
+
+    def reset_classification_default_params(self):
+        """set default parms for classification training pages , that show in UI , every parms"""
+        classification_params = {
+            "algorithm_name": "Xcc",
+            "epochs": "2",
+            "batch_size": "8",
+            "learning_rate": "1e-3",
+            "tuning_epochs": "1",
+            "validation_split": "20",
+            "proc": "CPU"
+        }
+
+        # classification model params
+        self.class_epoch_lineedit.setText(classification_params["epochs"])
+        self.class_batch_lineedit.setText(classification_params["batch_size"])
+        self.class_lr_lineedit.setText(classification_params["learning_rate"])
+        self.class_tepoch_lineedit.setText(classification_params["tuning_epochs"])
+        self.class_split_lineedit.setText(classification_params["validation_split"])
+        # self.c_gpu.setCurrentText(classification_params["proc"])
+
+        self.logger.create_new_log(message="Reset classification training params", code=texts_codes.SubTypes['reset_classification_training_default_params'])
+   
+    def reset_yolo_default_params(self):
+        """set default parms for yolo training pages , that show in UI , every parms"""
+        y_parms = {
+            "algorithm_name": "5n",
+            "input_type": True,
+            "epochs": "20",
+            "batch_size": "8",
+            # "learning_rate": "1e-3",
+            "validation_split": "20",
+            "proc": "CPU" 
+        }
+
+        # yolo model params
+        self.y_algorithms.setCurrentText(y_parms["algorithm_name"])
+
+        self.y_input_type_resize.setChecked(not y_parms["input_type"])
+        self.y_input_type_split.setChecked(y_parms["input_type"])
+
+        self.y_epochs.setText(y_parms["epochs"])
+        self.y_batch.setText(y_parms["batch_size"])
+        # self.y_lr.setText(l_parms["learning_rate"])
+        self.y_vs.setText(y_parms["validation_split"])
+        self.y_input_size1.setValue(256)
+        self.y_gpu.setCurrentText(y_parms["proc"])
+
+        self.logger.create_new_log(message="Reset yolo training params", code=texts_codes.SubTypes['reset_yolo_training_params'])
 
     def set_b_default_db_parms(self, binary_path):
         """Add default dataset to binary pathes for train"""
@@ -3459,6 +3567,32 @@ class UI_main_window(QMainWindow, ui):
         self.localization_end_year_lineedit.clear()
         self.localization_end_month_lineedit.clear()
         self.localization_end_day_lineedit.clear()
+
+    def clear_yolo_filters_fields(self):
+        self.yolo_epoch_min_filter_lineedit.clear()
+        self.yolo_epoch_max_filter_lineedit.clear()
+        self.yolo_batch_min_filter_lineedit.clear()
+        self.yolo_batch_max_filter_lineedit.clear()
+        self.yolo_split_min_filter_lineedit.clear()
+        self.yolo_split_max_filter_lineedit.clear()
+        self.yolo_boxloss_min_filter_lineedit.clear()
+        self.yolo_boxloss_max_filter_lineedit.clear()
+        self.yolo_objloss_min_filter_lineedit.clear()
+        self.yolo_objloss_max_filter_lineedit.clear()
+        self.yolo_clsloss_min_filter_lineedit.clear()
+        self.yolo_clsloss_max_filter_lineedit.clear()
+        self.yolo_recall_min_filter_lineedit.clear()
+        self.yolo_recall_max_filter_lineedit.clear()
+        self.yolo_prec_min_filter_lineedit.clear()
+        self.yolo_prec_max_filter_lineedit.clear()
+        self.yolo_map_min_filter_lineedit.clear()
+        self.yolo_map_max_filter_lineedit.clear()
+        self.yolo_start_year_lineedit.clear()
+        self.yolo_start_month_lineedit.clear()
+        self.yolo_start_day_lineedit.clear()
+        self.yolo_end_year_lineedit.clear()
+        self.yolo_end_month_lineedit.clear()
+        self.yolo_end_day_lineedit.clear()
 
     def show_labeling_help(self, n_helps=6):
         path = 'images/labeling_helps'

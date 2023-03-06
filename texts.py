@@ -58,7 +58,25 @@ ERRORS = {
     'LOSS_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای خطا صحیح نیست ',
                              'en': ' Loss range is not correct '},
 
+    'BOXLOSS_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای خطای باکس صحیح نیست ',
+                             'en': ' Box Loss range is not correct '},
+
+    'OBJLOSS_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای خطای شئ صحیح نیست ',
+                             'en': ' Obj Loss range is not correct '},
+
+    'CLSLOSS_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای خطای دسته‌بندی صحیح نیست ',
+                             'en': ' Cls Loss range is not correct '},
+
     'LOSS_FORMAT_INVALID': {'fa': ' فرمت واردشده برای خطا نامعتبر است ',
+                            'en': ' Loss format invalid '},
+
+    'BOXLOSS_FORMAT_INVALID': {'fa': ' فرمت واردشده برای خطای باکس نامعتبر است ',
+                            'en': ' Loss format invalid '},
+
+    'OBJLOSS_FORMAT_INVALID': {'fa': ' فرمت واردشده برای خطای شئ نامعتبر است ',
+                            'en': ' Loss format invalid '},
+
+    'CLSLOSS_FORMAT_INVALID': {'fa': ' فرمت واردشده برای خطای دسته‌بندی نامعتبر است ',
                             'en': ' Loss format invalid '},
 
     'ACCU_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای دقت صحیح نیست ',
@@ -90,6 +108,12 @@ ERRORS = {
 
     'FSCORE_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای FScore نامعتبر است ',
                             'en': ' FScore format invalid '},
+
+    'MAP_RANGE_INCORRECT': {'fa': ' بازه‌ی وارد شده برای mAP صحیح نیست ',
+                             'en': ' mAP range is not correct '},
+
+    'MAP_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای mAP نامعتبر است ',
+                            'en': ' mAP format invalid '},
 
     'YEAR_RANGE_INCORRECT': {'fa': ' مقدار وارد شده برای سال خارج از بازه است ',
                              'en': ' Start/end year not in range '},
@@ -483,6 +507,15 @@ WARNINGS = {
     'LOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطا را مقدار دهید یا هر دو را خالی بگذارید ',
                          'en': ' Loss range fields can not be empty, Please fill both them or leave them empty '},
 
+    'BOXLOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطای باکس را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Box Loss range fields can not be empty, Please fill both them or leave them empty '},
+
+    'OBJLOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطای شئ را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Obj Loss range fields can not be empty, Please fill both them or leave them empty '},
+
+    'CLSLOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطای دسته‌بندی را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Cls Loss range fields can not be empty, Please fill both them or leave them empty '},
+
     'ACCU_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به دقت را مقدار دهید یا هر دو را خالی بگذارید ',
                          'en': ' Accuracy range fields can not be empty, Please fill both them or leave them empty '},
 
@@ -497,6 +530,9 @@ WARNINGS = {
 
     'FSCORE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به FScore را مقدار دهید یا هر دو را خالی بگذارید ',
                          'en': ' FScore range fields can not be empty, Please fill both them or leave them empty '},
+
+    'MAP_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به mAP را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' mAP range fields can not be empty, Please fill both them or leave them empty '},
 
     'SELECT_MORE_THAN_ONE_DEFECT_CLASS': {'fa': ' امکان انتخاب چند کلاس عیب به صورت همزمان وجود ندارد ',
                                           'en': ' can not select more than one defect class at same time '},
@@ -1378,6 +1414,15 @@ Titles = {
         
         'loss': {'fa': 'خطا', 
                 'en': 'Loss'},
+        
+        'box_loss': {'fa': 'خطای باکس', 
+                'en': 'Box Loss'},
+        
+        'obj_loss': {'fa': 'خطای شئ', 
+                'en': 'Obj Loss'},
+        
+        'cls_loss': {'fa': 'خطای دسته‌بندی', 
+                'en': 'Cls Loss'},
 
         'accuracy': {'fa': 'دقت', 
                 'en': 'Accuracy'},
@@ -1393,6 +1438,9 @@ Titles = {
         
         'fscore': {'fa': 'FScore', 
                 'en': 'FScore'},
+        
+        'map_0.5': {'fa': 'mAP_0.5', 
+                'en': 'mAP_0.5'},
 
         'min': {'fa': 'کمینه',
                 'en': 'Min'},
@@ -2219,33 +2267,40 @@ def set_title(self, lang):
 
     ## history
 
-    # self.groupBox_35.setTitle(Titles['sf_training_records'][lang])
-    # self.label_90.setText(Titles['algorithm_name_2'][lang])
-    # self.label_91.setText(Titles['epochs_2'][lang])
-    # self.label_2471.setText(Titles['batch_size_2'][lang])
-    # self.label_95.setText(Titles['split_ratio'][lang])
-    # self.label_110.setText(Titles['loss'][lang])
-    # self.label_254.setText(Titles['accuracy'][lang])
-    # self.label_257.setText(Titles['iou'][lang])
-    # self.label_260.setText(Titles['fscore'][lang])
-    # self.label_263.setText(Titles['start_date'][lang])
-    # self.label_266.setText(Titles['end_date'][lang])
-    # self.localization_filter_btn.setText(Titles['search_filter'][lang])
-    # self.localization_clearfilter_btn.setText(Titles['clear_filters'][lang])
-    # self.label_92.setText(Titles['min'][lang])
-    # self.label_93.setText(Titles['max'][lang])
-    # self.label_2511.setText(Titles['min'][lang])
-    # self.label_252.setText(Titles['max'][lang])
-    # self.label_96.setText(Titles['min'][lang])
-    # self.label_97.setText(Titles['max'][lang])
-    # self.label_132_4.setText(Titles['min'][lang])
-    # self.label_253.setText(Titles['max'][lang])
-    # self.label_255.setText(Titles['min'][lang])
-    # self.label_256.setText(Titles['max'][lang])
-    # self.label_258.setText(Titles['min'][lang])
-    # self.label_259.setText(Titles['max'][lang])
-    # self.label_261.setText(Titles['min'][lang])
-    # self.label_262.setText(Titles['max'][lang])
+    self.groupBox_36.setTitle(Titles['sf_training_records'][lang])
+    self.label_325.setText(Titles['algorithm_name_2'][lang])
+    self.label_326.setText(Titles['epochs_2'][lang])
+    self.label_2472.setText(Titles['batch_size_2'][lang])
+    self.label_330.setText(Titles['split_ratio'][lang])
+    self.label_333.setText(Titles['box_loss'][lang])
+    self.label_350.setText(Titles['obj_loss'][lang])
+    self.label_353.setText(Titles['cls_loss'][lang])
+    self.label_335.setText(Titles['precision'][lang])
+    self.label_338.setText(Titles['recall'][lang])
+    self.label_341.setText(Titles['map_0.5'][lang])
+    self.label_344.setText(Titles['start_date'][lang])
+    self.label_347.setText(Titles['end_date'][lang])
+    self.yolo_filter_btn.setText(Titles['search_filter'][lang])
+    self.yolo_clearfilter_btn.setText(Titles['clear_filters'][lang])
+
+    self.label_327.setText(Titles['min'][lang])
+    self.label_328.setText(Titles['max'][lang])
+    self.label_2512.setText(Titles['min'][lang])
+    self.label_329.setText(Titles['max'][lang])
+    self.label_331.setText(Titles['min'][lang])
+    self.label_332.setText(Titles['max'][lang])
+    self.label_132_5.setText(Titles['min'][lang])
+    self.label_334.setText(Titles['max'][lang])
+    self.label_351.setText(Titles['min'][lang])
+    self.label_352.setText(Titles['max'][lang])
+    self.label_354.setText(Titles['min'][lang])
+    self.label_355.setText(Titles['max'][lang])
+    self.label_336.setText(Titles['min'][lang])
+    self.label_337.setText(Titles['max'][lang])
+    self.label_339.setText(Titles['min'][lang])
+    self.label_340.setText(Titles['max'][lang])
+    self.label_342.setText(Titles['min'][lang])
+    self.label_343.setText(Titles['max'][lang])
 
     # classification training
 
@@ -2499,6 +2554,20 @@ def set_alignment(self, lang):
         self.label_263.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_266.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
+        self.groupBox_36.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_325.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_326.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_2472.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_330.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_333.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_350.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_353.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_335.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_338.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.label_341.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_344.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_347.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
         self.label_242.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_301.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_243.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2691,6 +2760,20 @@ def set_alignment(self, lang):
         # self.label_260.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_263.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_266.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
+        self.groupBox_36.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_325.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_326.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_2472.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_330.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_333.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_350.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_353.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_335.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_338.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.label_341.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_344.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_347.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_242.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_301.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)

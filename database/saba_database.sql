@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 04, 2023 at 09:40 AM
+-- Generation Time: Mar 06, 2023 at 08:08 AM
 -- Server version: 8.0.32-0ubuntu0.22.04.2
--- PHP Version: 8.1.2-1ubuntu2.10
+-- PHP Version: 8.1.2-1ubuntu2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -451,7 +451,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `parent_path`, `path_dataset`, `font_style`, `font_size`, `window_style`, `window_color`, `language`, `large_rect_area`, `small_rect_area`, `rect_accuracy`, `split_size`, `n_defect_colors`, `path_dataset_user`, `path_weights`, `camera_live_drive`, `live_drive_max_used_ratio`, `live_drive_remove_stop_ratio`, `plc_ip`, `pipline_json_path`, `pipeline_json_path_o`, `result_path`, `manual_plc`, `plc_update_time`, `wind_duration`, `automatic_wind`, `auto_wind_intervals`, `manual_cameras`, `frame_rate`, `live_update_time`, `sound_warning`, `warning_alarm`, `nonallowed_frames`, `defect_percent`, `width_up_th`, `width_down_th`) VALUES
-(0, 'oxin_image_grabber', 'dataset', 'Ubuntu', 11, 'Windows', '#144475', 'Persian', 2000, 1000, 0.9, '(100, 100)', 6, 'dataset', 'weights', 'D:', 63, 60, 'opc.tcp://127.0.0.1:8081', 'evaluated_jsons', 'pipelines', 'oxin_image_grabber', 'True', 2000, 5, 'True', 5000, 'True', 7, 130, 'False', '3.mp3', 5, 20, 50, 50);
+(0, 'oxin_image_grabber', 'dataset', 'Ubuntu', 11, 'Windows', '#144475', 'English', 2000, 1000, 0.9, '(100, 100)', 6, 'dataset', 'weights', 'D:', 63, 60, 'opc.tcp://127.0.0.1:8081', 'evaluated_jsons', 'pipelines', 'oxin_image_grabber', 'True', 2000, 5, 'True', 5000, 'True', 7, 130, 'False', '3.mp3', 5, 20, 50, 50);
 
 -- --------------------------------------------------------
 
@@ -541,9 +541,6 @@ CREATE TABLE `yolo_models` (
   `epochs` int NOT NULL,
   `batch_size` int NOT NULL,
   `split_ratio` float NOT NULL,
-  `dataset_pathes` varchar(2000) NOT NULL,
-  `weights_path` varchar(2000) NOT NULL,
-  `date_` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `box_loss` float NOT NULL,
   `obj_loss` float NOT NULL,
   `cls_loss` float NOT NULL,
@@ -553,15 +550,39 @@ CREATE TABLE `yolo_models` (
   `val_mAP_50_95` float NOT NULL,
   `val_box_loss` float NOT NULL,
   `val_obj_loss` float NOT NULL,
-  `val_cls_loss` float NOT NULL
+  `val_cls_loss` float NOT NULL,
+  `dataset_pathes` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `weights_path` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `date_` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `yolo_models`
 --
 
-INSERT INTO `yolo_models` (`id`, `algo_name`, `input_size`, `input_type`, `epochs`, `batch_size`, `split_ratio`, `dataset_pathes`, `weights_path`, `date_`, `box_loss`, `obj_loss`, `cls_loss`, `val_precision`, `val_recall`, `val_mAP_50`, `val_mAP_50_95`, `val_box_loss`, `val_obj_loss`, `val_cls_loss`) VALUES
-(4, '0', '(256,256)', '1', 2, 8, 0.2, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-04-13-09-04', '2023/03/04', 0.124609, 0.0156259, 0.0534474, 0.00366109, 0.75, 0.0247254, 0.00526959, 0.123512, 0.00622512, 0.0484125);
+INSERT INTO `yolo_models` (`id`, `algo_name`, `input_size`, `input_type`, `epochs`, `batch_size`, `split_ratio`, `box_loss`, `obj_loss`, `cls_loss`, `val_precision`, `val_recall`, `val_mAP_50`, `val_mAP_50_95`, `val_box_loss`, `val_obj_loss`, `val_cls_loss`, `dataset_pathes`, `weights_path`, `date_`) VALUES
+(12, '0', '(256,256)', '1', 5, 16, 0.2, 0.123063, 0.0161485, 0.0536708, 0.000855065, 0.375, 0.0447805, 0.0186162, 0.118778, 0.00725914, 0.0523676, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-14-58-00', '2023/03/05'),
+(13, '0', '(256,256)', '1', 20, 8, 0.2, 0.106677, 0.0185349, 0.0536978, 0.00436983, 0.916667, 0.187527, 0.0363611, 0.0941895, 0.00836772, 0.0544923, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-15-01-52', '2023/03/05'),
+(14, '0', '(256,256)', '1', 2, 32, 0.2, 0.124175, 0.0183719, 0.0548606, 0.00156457, 0.583333, 0.00554461, 0.00244525, 0.129368, 0.00578719, 0.0485159, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-15-19-25', '2023/03/05'),
+(15, '1', '(256,256)', '1', 5, 8, 0.3, 0.108646, 0.0220919, 0.051974, 0.00281771, 0.741667, 0.0171093, 0.00448128, 0.10548, 0.00926232, 0.0475607, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-15-21-30', '2023/03/05'),
+(16, '2', '(256,256)', '0', 10, 4, 0.3, 0.12859, 0.0198422, 0.0507925, 0.00152672, 0.2, 0.04975, 0.024875, 0.127452, 0.0184363, 0.0503598, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-15-27-44', '2023/03/05'),
+(17, '0', '(256,256)', '1', 1, 8, 0.2, 0.12585, 0.0189259, 0.053382, 0.00306098, 0.666667, 0.00574254, 0.0018457, 0.124571, 0.006136, 0.0474245, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-18-32', '2023/03/05'),
+(18, '0', '(256,256)', '1', 1, 1, 0.2, 0.101614, 0.0158262, 0.0445821, 0.00317305, 0.75, 0.0329392, 0.00734397, 0.105507, 0.00623818, 0.0418865, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-22-09', '2023/03/05'),
+(19, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(20, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(21, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(22, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(23, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(24, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(25, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(26, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(27, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(28, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(29, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(30, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(31, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(32, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05'),
+(33, '0', '(256,256)', '1', 2, 2, 0.2, 0.122742, 0.0173663, 0.0537956, 0.001679, 0.458333, 0.0194206, 0.00238898, 0.110805, 0.00667135, 0.0445913, '[\'default_dataset\']', 'default_dataset/weights/localization_and_classification/2023-03-05-18-25-29', '2023/03/05');
 
 --
 -- Indexes for dumped tables
@@ -744,7 +765,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `yolo_models`
 --
 ALTER TABLE `yolo_models`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

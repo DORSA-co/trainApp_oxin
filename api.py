@@ -20,7 +20,6 @@ from PySide6.QtCharts import QPieSeries, QPieSlice, QChart, QChartView
 from PySide6.QtCore import *
 from PySide6.QtCore import QThread as sQThread
 from PySide6.QtGui import QPen, QPainter
-from PySide6.QtWidgets import QFileDialog
 from matplotlib import pyplot as plt
 from matplotlib.style import use
 from pyautogui import PRIMARY
@@ -177,10 +176,13 @@ class API:
         self.bmodel_tabel_itr = 1
         # iterator for localization-model history tabel
         self.lmodel_tabel_itr = 1
+        self.ymodel_tabel_itr = 1
         self.bmodel_count = 0
         self.lmodel_count = 0
+        self.ymodel_count = 0
         self.filter_mode = False
         self.lfilter_mode = False
+        self.yfilter_mode = False
         self.flag_all_camera = False
         self.start_capture_flag = False
         self.ready_capture_flag = False
@@ -904,6 +906,29 @@ class API:
         )
         self.ui.localization_clearfilter_btn.clicked.connect(
             partial(self.clear_localization_filters)
+        )
+
+        # yolo-model history
+        self.ui.yolo_tabel_prev.clicked.connect(
+            partial(lambda: self.yolo_model_tabel_nextorprev(next=False))
+        )
+        self.ui.yolo_tabel_next.clicked.connect(
+            partial(lambda: self.yolo_model_tabel_nextorprev(next=True))
+        )
+        self.ui.Yolo_btn.clicked.connect(
+            partial(self.refresh_yolo_models_table_onevent)
+        )
+        self.ui.yolo_history.clicked.connect(
+            partial(self.refresh_yolo_models_table_onevent)
+        )
+        self.ui.yolo_table_refresh_btn.clicked.connect(
+            partial(self.refresh_yolo_models_table_onevent)
+        )
+        self.ui.yolo_filter_btn.clicked.connect(
+            partial(lambda: self.refresh_yolo_models_table(filter_mode=True))
+        )
+        self.ui.yolo_clearfilter_btn.clicked.connect(
+            partial(self.clear_yolo_filters)
         )
 
         # ______________________________________________JJ ZONE START
@@ -4585,7 +4610,287 @@ class API:
         #         level=3,
         #     )
 
-    # classification page
+    # ------------------------------------------------------------------------------------------------------------------------
+    # yolo-model history page functions
+
+    def refresh_yolo_models_table_onevent(self):
+        """this function is used to refresh yolo models table"""
+
+        self.ymodel_tabel_itr = 1  # reset page number to first (1)
+        self.ui.yolo_tabel_page.setText(str(self.ymodel_tabel_itr))
+
+        self.refresh_yolo_models_table(get_count=True)
+        self.refresh_yolo_models_table()
+        self.ui.clear_yolo_filters_fields()
+        self.yfilter_mode = False
+        self.ui.set_warning(
+            texts.MESSEGES["REFRESH_TABLE"][self.language],
+            "yolo_model_history",
+            level=1,
+        )
+
+    def refresh_yolo_models_table(
+        self, nextorprev=False, get_count=False, filter_mode=False
+    ):
+        """this function is used to refresh/update yolo models table on UI
+
+        :param nextorprev: boolean determining if get next/prev page of records on table, defaults to False
+        :type nextorprev: bool, optional
+        :param get_count: boolean determining whether to get count of records in table in database, defaults to False
+        :type get_count: bool, optional
+        :param filter_mode: boolean determining if in table filter mode, defaults to False
+        :type filter_mode: bool, optional
+        :return:
+            get_count==True: None
+            get_count==False: boolean determining if done
+        :rtype: _type_
+        """
+
+        if get_count:
+            try:
+                (
+                    res,
+                    self.ymodel_count,
+                ) = yolo_model_funcs.get_yolo_models_from_db(
+                    db_obj=self.db, count=get_count
+                )
+                self.ymodel_count = self.ymodel_count[0]["count(*)"]
+
+                # validation
+                if not res:
+                    self.ui.notif_manager.append_new_notif(
+                        message=texts.ERRORS["database_get_ymodels_failed"][
+                            self.ui.language
+                        ],
+                        level=3,
+                    )
+                #
+                self.yolo_model_tabel_nextorprev(check=True)
+                return
+            except:
+                return
+        # load filterd models
+        if filter_mode:
+            # reset table page number to first (1)
+            self.ymodel_tabel_itr = 1
+            self.ui.yolo_tabel_page.setText(str(self.ymodel_tabel_itr))
+
+            res = self.filter_yolo_models(filter_signal=True, count=True)
+
+            if res[0]:
+                self.ymodel_count = res[1][0]["count(*)"]
+                self.yolo_model_tabel_nextorprev(check=True)
+
+                res = self.filter_yolo_models(filter_signal=True)
+
+                if res[0]:
+                    ymodels_list = res[1]
+                else:
+                    self.refresh_yolo_models_table(get_count=True)
+                    (
+                        res,
+                        ymodels_list,
+                    ) = yolo_model_funcs.get_yolo_models_from_db(
+                        db_obj=self.db
+                    )
+                    if not res:
+                        self.ui.notif_manager.append_new_notif(
+                            message=texts.ERRORS["database_get_ymodels_failed"][
+                                self.ui.language
+                            ],
+                            level=3,
+                        )
+
+            else:
+                self.refresh_yolo_models_table(get_count=True)
+                (
+                    res,
+                    ymodels_list,
+                ) = yolo_model_funcs.get_yolo_models_from_db(
+                    db_obj=self.db
+                )
+                if not res:
+                    self.ui.notif_manager.append_new_notif(
+                        message=texts.ERRORS["database_get_ymodels_failed"][
+                            self.ui.language
+                        ],
+                        level=3,
+                    )
+
+        else:
+            if not nextorprev:
+                (
+                    res,
+                    ymodels_list,
+                ) = yolo_model_funcs.get_yolo_models_from_db(
+                    db_obj=self.db
+                )
+                if not res:
+                    self.ui.notif_manager.append_new_notif(
+                        message=texts.ERRORS["database_get_ymodels_failed"][
+                            self.ui.language
+                        ],
+                        level=3,
+                    )
+
+            else:
+                if not self.yfilter_mode:
+                    (
+                        res,
+                        ymodels_list,
+                    ) = yolo_model_funcs.get_yolo_models_from_db(
+                        db_obj=self.db,
+                        limit_size=yolo_model_funcs.yolo_table_nrows,
+                        offset=(self.ymodel_tabel_itr - 1)
+                        * yolo_model_funcs.yolo_table_nrows,
+                    )
+                    if not res:
+                        self.ui.notif_manager.append_new_notif(
+                            message=texts.ERRORS["database_get_ymodels_failed"][
+                                self.ui.language
+                            ],
+                            level=3,
+                        )
+
+                else:
+                    res = self.filter_yolo_models(
+                        limit_size=yolo_model_funcs.yolo_table_nrows,
+                        offset=(self.ymodel_tabel_itr - 1)
+                        * yolo_model_funcs.yolo_table_nrows,
+                    )
+                    ymodels_list = res[1]
+
+        if len(ymodels_list) == 0 and nextorprev:
+            return False
+
+        # set returned models to UI table
+        else:
+            yolo_model_funcs.set_ymodels_on_ui_tabel(
+                ui_obj=self.ui, ymodels_list=ymodels_list
+            )
+            return True
+
+    # next and prev buttons for yolo models table functionality
+    def yolo_model_tabel_nextorprev(self, next=True, check=False):
+        """this function is used to get next/prev page for yolo models table
+
+        :param next: boolean determining whether to get next page, defaults to True
+        :type next: bool, optional
+        :param check: _description_, defaults to False
+        :type check: bool, optional
+        """
+        if check:
+            page_max = int(
+                math.ceil(
+                    self.ymodel_count
+                    / yolo_model_funcs.yolo_table_nrows
+                )
+            )
+
+            if self.ymodel_tabel_itr >= page_max:
+                self.ui.yolo_tabel_next.setEnabled(False)
+            else:
+                self.ui.yolo_tabel_next.setEnabled(True)
+            #
+            if self.ymodel_tabel_itr > 1:
+                self.ui.yolo_tabel_prev.setEnabled(True)
+            else:
+                self.ui.yolo_tabel_prev.setEnabled(False)
+
+            return
+
+        #
+        if next:
+            self.ymodel_tabel_itr += 1
+
+        elif self.ymodel_tabel_itr > 1:
+            self.ymodel_tabel_itr -= 1
+
+        #
+        res = self.refresh_yolo_models_table(nextorprev=True)
+        self.yolo_model_tabel_nextorprev(check=True)
+        self.ui.yolo_tabel_page.setText(str(self.ymodel_tabel_itr))
+
+    # filter function for yolo models
+    def filter_yolo_models(
+        self,
+        limit_size=yolo_model_funcs.yolo_table_nrows,
+        offset=0,
+        filter_signal=False,
+        count=False,
+    ):
+        """this function is used to filter yolo models given filter params on UI
+
+        :param limit_size: n table rows in database to return, defaults to yolo_model_funcs.yolo_table_nrows
+        :type limit_size: int, optional
+        :param offset: starting row index in table to return n next rows, defaults to 0
+        :type offset: int, optional
+        :param filter_signal: boolean determining wheter to get/update filter params from UI, defaults to False
+        :type filter_signal: bool, optional
+        :param count: boolean determinig whether to get count of results, defaults to False
+        :type count: bool, optional
+        :return:
+            result: boolean determining id done
+            filtered_binary_models: list of dicts
+        :rtype: _type_
+        """
+
+        if filter_signal:
+            self.filter_params = (
+                yolo_model_funcs.get_yolo_model_filter_info_from_ui(
+                    ui_obj=self.ui
+                )
+            )
+        #
+        if not self.filter_params:
+            return False, filter_signal
+
+        res = yolo_model_funcs.get_filtered_yolo_models_from_db(
+            ui_obj=self.ui,
+            db_obj=self.db,
+            filter_params=self.filter_params,
+            limit_size=limit_size,
+            offset=offset,
+            count=count,
+        )
+
+        if res[0] == "error":
+            self.yfilter_mode = False
+            return False, res[1]
+
+        if res[0] == "all":
+            self.yfilter_mode = False
+            return False, res[1]
+
+        else:
+            self.yfilter_mode = True
+            self.ui.set_warning(
+                texts.MESSEGES["FILTERED_RESAULTS_SUCCUSSFULL"][self.language],
+                "yolo_model_history",
+                level=1,
+            )
+            return True, res[1]
+
+    # clear filters for yolo models
+    def clear_yolo_filters(self):
+        """this function is used tp clear filters for yolo models list"""
+
+        self.yfilter_mode = False  # diactive filter mode
+        # reset table page number
+        self.ymodel_tabel_itr = 1
+        self.ui.yolo_tabel_page.setText(str(self.ymodel_tabel_itr))
+        #
+        self.refresh_yolo_models_table(get_count=True)
+        self.refresh_yolo_models_table()
+        self.ui.clear_yolo_filters_fields()
+        self.ui.set_warning(
+            texts.MESSEGES["FILTERED_RESAULTS_CLEAR"][self.language],
+            "yolo_model_history",
+            level=1,
+        )
+
+
+   # classification page
     # ------------------------------------------------------------------------------------------------------------------------
     # get defects from database and apply to defects table
     def refresh_classes_table(self):

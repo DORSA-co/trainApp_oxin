@@ -2399,7 +2399,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>7</number>
+                      <number>4</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -4886,8 +4886,8 @@ QPushButton:disabled {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>707</width>
-                                   <height>17</height>
+                                   <width>827</width>
+                                   <height>28</height>
                                   </rect>
                                  </property>
                                  <layout class="QHBoxLayout" name="horizontalLayout_213">
@@ -7967,7 +7967,7 @@ border-radius: 8px;</string>
                                          <x>0</x>
                                          <y>0</y>
                                          <width>707</width>
-                                         <height>17</height>
+                                         <height>20</height>
                                         </rect>
                                        </property>
                                        <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -9523,7 +9523,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>17</height>
+                                     <height>784</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -9775,7 +9775,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>17</height>
+                                     <height>784</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -13289,7 +13289,7 @@ color : rgb(0,0,0);</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>63</width>
+                                   <width>92</width>
                                    <height>165</height>
                                   </rect>
                                  </property>
@@ -13316,8 +13316,8 @@ color : rgb(0,0,0);</string>
                                       <rect>
                                        <x>0</x>
                                        <y>0</y>
-                                       <width>76</width>
-                                       <height>43</height>
+                                       <width>96</width>
+                                       <height>49</height>
                                       </rect>
                                      </property>
                                      <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -14704,7 +14704,7 @@ border:Transparent</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>329</width>
+                                   <width>340</width>
                                    <height>699</height>
                                   </rect>
                                  </property>
@@ -18364,6 +18364,68 @@ border:Transparent</string>
                                    </item>
                                   </layout>
                                  </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_122">
+                                   <item>
+                                    <spacer name="horizontalSpacer_69">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="binary_reset">
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>130</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">background-color: None</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>Reset to default</string>
+                                     </property>
+                                     <property name="icon">
+                                      <iconset>
+                                       <normaloff>images/reset.png</normaloff>images/reset.png</iconset>
+                                     </property>
+                                     <property name="iconSize">
+                                      <size>
+                                       <width>12</width>
+                                       <height>16</height>
+                                      </size>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_81">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                  </layout>
+                                 </item>
                                 </layout>
                                </widget>
                               </item>
@@ -20894,6 +20956,9 @@ QPushButton:hover {
                                        <height>30</height>
                                       </size>
                                      </property>
+                                     <property name="cursor">
+                                      <cursorShape>PointingHandCursor</cursorShape>
+                                     </property>
                                      <property name="styleSheet">
                                       <string notr="true">color:white;</string>
                                      </property>
@@ -20915,6 +20980,9 @@ QPushButton:hover {
                                        <width>16777215</width>
                                        <height>30</height>
                                       </size>
+                                     </property>
+                                     <property name="cursor">
+                                      <cursorShape>PointingHandCursor</cursorShape>
                                      </property>
                                      <property name="styleSheet">
                                       <string notr="true">color:white;</string>
@@ -21865,6 +21933,68 @@ QPushButton:hover {
                                       <string>Add</string>
                                      </property>
                                     </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_123">
+                                   <item>
+                                    <spacer name="horizontalSpacer_82">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="localization_reset">
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>130</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">background-color: None</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>Reset to default</string>
+                                     </property>
+                                     <property name="icon">
+                                      <iconset>
+                                       <normaloff>images/reset.png</normaloff>images/reset.png</iconset>
+                                     </property>
+                                     <property name="iconSize">
+                                      <size>
+                                       <width>12</width>
+                                       <height>16</height>
+                                      </size>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_83">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
                                    </item>
                                   </layout>
                                  </item>
@@ -24314,6 +24444,9 @@ QPushButton:hover {
                                        <height>30</height>
                                       </size>
                                      </property>
+                                     <property name="cursor">
+                                      <cursorShape>PointingHandCursor</cursorShape>
+                                     </property>
                                      <property name="styleSheet">
                                       <string notr="true">color:white;</string>
                                      </property>
@@ -24335,6 +24468,9 @@ QPushButton:hover {
                                        <width>16777215</width>
                                        <height>30</height>
                                       </size>
+                                     </property>
+                                     <property name="cursor">
+                                      <cursorShape>PointingHandCursor</cursorShape>
                                      </property>
                                      <property name="styleSheet">
                                       <string notr="true">color:white;</string>
@@ -29122,6 +29258,68 @@ QPushButton:hover {
                                    </item>
                                   </layout>
                                  </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_125">
+                                   <item>
+                                    <spacer name="horizontalSpacer_84">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <widget class="QPushButton" name="yolo_reset">
+                                     <property name="sizePolicy">
+                                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                       <horstretch>0</horstretch>
+                                       <verstretch>0</verstretch>
+                                      </sizepolicy>
+                                     </property>
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>130</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="styleSheet">
+                                      <string notr="true">background-color: None</string>
+                                     </property>
+                                     <property name="text">
+                                      <string>Reset to default</string>
+                                     </property>
+                                     <property name="icon">
+                                      <iconset>
+                                       <normaloff>images/reset.png</normaloff>images/reset.png</iconset>
+                                     </property>
+                                     <property name="iconSize">
+                                      <size>
+                                       <width>12</width>
+                                       <height>16</height>
+                                      </size>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_85">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                  </layout>
+                                 </item>
                                 </layout>
                                </widget>
                               </item>
@@ -29811,7 +30009,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_epoch_min_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_epoch_min_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -29877,7 +30075,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_epoch_max_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_epoch_max_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30012,7 +30210,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_batch_min_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_batch_min_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30084,7 +30282,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_batch_max_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_batch_max_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30219,7 +30417,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_split_min_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_split_min_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30285,7 +30483,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_split_max_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_split_max_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30367,7 +30565,7 @@ QPushButton:hover {
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>Loss</string>
+                                      <string>Box Loss</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -30420,7 +30618,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_loss_min_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_boxloss_min_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30486,7 +30684,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_loss_max_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_boxloss_max_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30540,6 +30738,408 @@ QPushButton:hover {
                                   </widget>
                                  </item>
                                  <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_360">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QLabel" name="label_350">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
+                                     <property name="font">
+                                      <font>
+                                       <family>ubuntu</family>
+                                       <pointsize>11</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Obj Loss</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_79">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_120">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_111_17">
+                                       <item>
+                                        <widget class="QLabel" name="label_351">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>ubuntu</family>
+                                           <pointsize>11</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="yolo_objloss_min_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>ubuntu</family>
+                                           <pointsize>11</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="maxLength">
+                                          <number>4</number>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_121_17">
+                                       <item>
+                                        <widget class="QLabel" name="label_352">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>ubuntu</family>
+                                           <pointsize>11</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="yolo_objloss_max_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>ubuntu</family>
+                                           <pointsize>11</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="maxLength">
+                                          <number>4</number>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                   <item>
+                                    <widget class="Line" name="line_73">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_142">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <layout class="QHBoxLayout" name="horizontalLayout_361">
+                                   <property name="spacing">
+                                    <number>0</number>
+                                   </property>
+                                   <item>
+                                    <widget class="QLabel" name="label_353">
+                                     <property name="minimumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>0</height>
+                                      </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                      <size>
+                                       <width>110</width>
+                                       <height>16777215</height>
+                                      </size>
+                                     </property>
+                                     <property name="font">
+                                      <font>
+                                       <family>ubuntu</family>
+                                       <pointsize>11</pointsize>
+                                       <weight>50</weight>
+                                       <italic>false</italic>
+                                       <bold>false</bold>
+                                      </font>
+                                     </property>
+                                     <property name="text">
+                                      <string>Cls Loss</string>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                   <item>
+                                    <spacer name="horizontalSpacer_80">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>40</width>
+                                       <height>20</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
+                                   </item>
+                                   <item>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_121">
+                                     <property name="spacing">
+                                      <number>10</number>
+                                     </property>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_111_18">
+                                       <item>
+                                        <widget class="QLabel" name="label_354">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>ubuntu</family>
+                                           <pointsize>11</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Min</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="yolo_clsloss_min_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>ubuntu</family>
+                                           <pointsize>11</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="maxLength">
+                                          <number>4</number>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                     <item>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_121_18">
+                                       <item>
+                                        <widget class="QLabel" name="label_355">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>ubuntu</family>
+                                           <pointsize>11</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="text">
+                                          <string>Max</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLineEdit" name="yolo_clsloss_max_filter_lineedit">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                         <property name="font">
+                                          <font>
+                                           <family>ubuntu</family>
+                                           <pointsize>11</pointsize>
+                                           <weight>50</weight>
+                                           <italic>false</italic>
+                                           <bold>false</bold>
+                                          </font>
+                                         </property>
+                                         <property name="maxLength">
+                                          <number>4</number>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </item>
+                                    </layout>
+                                   </item>
+                                   <item>
+                                    <widget class="Line" name="line_74">
+                                     <property name="orientation">
+                                      <enum>Qt::Horizontal</enum>
+                                     </property>
+                                    </widget>
+                                   </item>
+                                  </layout>
+                                 </item>
+                                 <item>
+                                  <widget class="Line" name="line_141">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
                                   <layout class="QHBoxLayout" name="horizontalLayout_347">
                                    <property name="spacing">
                                     <number>0</number>
@@ -30568,7 +31168,7 @@ QPushButton:hover {
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>Accuracy</string>
+                                      <string>Precision</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -30621,7 +31221,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_acc_min_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_prec_min_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30687,7 +31287,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_acc_max_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_prec_max_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30769,7 +31369,7 @@ QPushButton:hover {
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>IOU</string>
+                                      <string>Recall</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -30822,7 +31422,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_iou_min_filter_lineedit_3">
+                                        <widget class="QLineEdit" name="yolo_recall_min_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30882,7 +31482,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_iou_max_filter_lineedit_3">
+                                        <widget class="QLineEdit" name="yolo_recall_max_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -30964,7 +31564,7 @@ QPushButton:hover {
                                       </font>
                                      </property>
                                      <property name="text">
-                                      <string>FScore</string>
+                                      <string>mAP_0.5</string>
                                      </property>
                                     </widget>
                                    </item>
@@ -31017,7 +31617,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_fscore_min_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_map_min_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -31083,7 +31683,7 @@ QPushButton:hover {
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLineEdit" name="localization_fscore_max_filter_lineedit_2">
+                                        <widget class="QLineEdit" name="yolo_map_max_filter_lineedit">
                                          <property name="sizePolicy">
                                           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                            <horstretch>0</horstretch>
@@ -31199,7 +31799,7 @@ QPushButton:hover {
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLineEdit" name="localization_start_year_lineedit_2">
+                                         <widget class="QLineEdit" name="yolo_start_year_lineedit">
                                           <property name="sizePolicy">
                                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                             <horstretch>0</horstretch>
@@ -31261,7 +31861,7 @@ QPushButton:hover {
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLineEdit" name="localization_start_month_lineedit_2">
+                                         <widget class="QLineEdit" name="yolo_start_month_lineedit">
                                           <property name="sizePolicy">
                                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                             <horstretch>0</horstretch>
@@ -31323,7 +31923,7 @@ QPushButton:hover {
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLineEdit" name="localization_start_day_lineedit_2">
+                                         <widget class="QLineEdit" name="yolo_start_day_lineedit">
                                           <property name="sizePolicy">
                                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                             <horstretch>0</horstretch>
@@ -31392,7 +31992,7 @@ QPushButton:hover {
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLineEdit" name="localization_end_year_lineedit_2">
+                                         <widget class="QLineEdit" name="yolo_end_year_lineedit">
                                           <property name="sizePolicy">
                                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                             <horstretch>0</horstretch>
@@ -31457,7 +32057,7 @@ QPushButton:hover {
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLineEdit" name="localization_end_month_lineedit_2">
+                                         <widget class="QLineEdit" name="yolo_end_month_lineedit">
                                           <property name="sizePolicy">
                                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                             <horstretch>0</horstretch>
@@ -31519,7 +32119,7 @@ QPushButton:hover {
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLineEdit" name="localization_end_day_lineedit_2">
+                                         <widget class="QLineEdit" name="yolo_end_day_lineedit">
                                           <property name="sizePolicy">
                                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                             <horstretch>0</horstretch>
@@ -31572,7 +32172,7 @@ QPushButton:hover {
                                     <number>20</number>
                                    </property>
                                    <item>
-                                    <widget class="QPushButton" name="localization_filter_btn_2">
+                                    <widget class="QPushButton" name="yolo_filter_btn">
                                      <property name="minimumSize">
                                       <size>
                                        <width>0</width>
@@ -31584,6 +32184,9 @@ QPushButton:hover {
                                        <width>16777215</width>
                                        <height>30</height>
                                       </size>
+                                     </property>
+                                     <property name="cursor">
+                                      <cursorShape>PointingHandCursor</cursorShape>
                                      </property>
                                      <property name="styleSheet">
                                       <string notr="true">color:white;</string>
@@ -31594,7 +32197,7 @@ QPushButton:hover {
                                     </widget>
                                    </item>
                                    <item>
-                                    <widget class="QPushButton" name="localization_clearfilter_btn_2">
+                                    <widget class="QPushButton" name="yolo_clearfilter_btn">
                                      <property name="minimumSize">
                                       <size>
                                        <width>0</width>
@@ -31606,6 +32209,9 @@ QPushButton:hover {
                                        <width>16777215</width>
                                        <height>30</height>
                                       </size>
+                                     </property>
+                                     <property name="cursor">
+                                      <cursorShape>PointingHandCursor</cursorShape>
                                      </property>
                                      <property name="styleSheet">
                                       <string notr="true">color:white;</string>
@@ -31661,12 +32267,15 @@ QPushButton:hover {
                                <number>0</number>
                               </property>
                               <item>
-                               <widget class="QTableWidget" name="localization_history_tabel_2">
+                               <widget class="QTableWidget" name="yolo_history_tabel">
+                                <property name="enabled">
+                                 <bool>true</bool>
+                                </property>
                                 <property name="rowCount">
                                  <number>0</number>
                                 </property>
                                 <property name="columnCount">
-                                 <number>19</number>
+                                 <number>18</number>
                                 </property>
                                 <attribute name="horizontalHeaderCascadingSectionResizes">
                                  <bool>true</bool>
@@ -31677,7 +32286,6 @@ QPushButton:hover {
                                 <attribute name="horizontalHeaderDefaultSectionSize">
                                  <number>150</number>
                                 </attribute>
-                                <column/>
                                 <column/>
                                 <column/>
                                 <column/>
@@ -31708,7 +32316,7 @@ QPushButton:hover {
                                 </property>
                                 <layout class="QHBoxLayout" name="horizontalLayout_109">
                                  <item>
-                                  <widget class="QPushButton" name="localization_table_refresh_btn_2">
+                                  <widget class="QPushButton" name="yolo_table_refresh_btn">
                                    <property name="cursor">
                                     <cursorShape>PointingHandCursor</cursorShape>
                                    </property>
@@ -31743,7 +32351,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QPushButton" name="localization_tabel_prev_2">
+                                  <widget class="QPushButton" name="yolo_tabel_prev">
                                    <property name="enabled">
                                     <bool>false</bool>
                                    </property>
@@ -31771,7 +32379,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QLineEdit" name="localization_tabel_page_2">
+                                  <widget class="QLineEdit" name="yolo_tabel_page">
                                    <property name="enabled">
                                     <bool>false</bool>
                                    </property>
@@ -31799,7 +32407,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QPushButton" name="localization_tabel_next_2">
+                                  <widget class="QPushButton" name="yolo_tabel_next">
                                    <property name="enabled">
                                     <bool>true</bool>
                                    </property>
@@ -31834,7 +32442,7 @@ color : rgb(0,0,0);</string>
                                   </widget>
                                  </item>
                                  <item>
-                                  <widget class="QLabel" name="localization_tabel_label_2">
+                                  <widget class="QLabel" name="yolo_tabel_label">
                                    <property name="minimumSize">
                                     <size>
                                      <width>600</width>

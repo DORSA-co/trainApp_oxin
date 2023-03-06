@@ -25,6 +25,10 @@ SubTypes = {
     # Training
     'set_training_default_params': '051',
     'parameters_error': '052',
+    'reset_binary_training_params': '05-3',
+    'reset_localization_training_params': '05-4',
+    'reset_classification_training_params': '05-5',
+    'reset_yolo_training_params': '05-6',
     # Database
     'database_get_plc_params_failed': '061',
     'database_get_plc_params': '062',

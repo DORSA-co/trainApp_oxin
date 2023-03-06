@@ -340,7 +340,7 @@ def get_filtered_localization_models_from_db(ui_obj, db_obj, filter_params, limi
         ui_obj.set_warning(texts.ERRORS['ACCU_FORMAT_INVALID'][ui_obj.language], 'localization_model_history', level=3)
         return 'error',[]
 
-    # precision
+    # iou
     try:
         if filter_params['val_iou'][0] != '' and filter_params['val_iou'][1] != '' and float(filter_params['val_iou'][0]) > float(filter_params['val_iou'][1]):
             ui_obj.set_warning(texts.ERRORS['IOU_RANGE_INCORRECT'][ui_obj.language], 'localization_model_history', level=3)
