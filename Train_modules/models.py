@@ -17,10 +17,10 @@ except:
 
 from tensorflow.keras import layers
 
-# import segmentation_models as sm
+import segmentation_models as sm
 
-# sm.set_framework("tf.keras")
-# sm.framework()
+sm.set_framework("tf.keras")
+sm.framework()
 
 
 BINARY = "binary"
@@ -610,8 +610,8 @@ def xception_cnn(
     # )
 
     base_model = tf.keras.applications.Xception(include_top=False, weights=None, input_shape=input_size)
-    base_model.load_weights(
-        '/home/reyhane/PythonProjects/models/binary/xception_weights_tf_dim_ordering_tf_kernels_notop.h5')
+    # base_model.load_weights(
+    #     '/home/reyhane/PythonProjects/models/binary/xception_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
     base_model.trainable = False
 

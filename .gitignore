@@ -9,4 +9,5 @@ Train_modules/deep_utils/__pycache__/*.*.*
 .qt_for_python/
 oxin_image_grabber/
 evaluated_jsons/
+default_dataset/
 

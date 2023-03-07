@@ -10,9 +10,13 @@ import inspect
 
 class dataBaseUtils:
     def __init__(self, ui_obj, user_name="root", password="Dorsa1400@"):
-        if ui_obj!='Null':
+        if ui_obj != "Null":
             self.db = database.dataBase(
-                user_name, password, "localhost", "saba_database", logger_obj=ui_obj.logger
+                user_name,
+                password,
+                "localhost",
+                "saba_database",
+                logger_obj=ui_obj.logger,
             )
         self.sheets_info_tabel = "sheets_info"
         self.setting_tabel = "settings"
@@ -26,16 +30,17 @@ class dataBaseUtils:
         self.dataset = "datasets "
         self.plc = "plc_path"
         self.ui_obj = ui_obj
-        self.piplines_evaluation_info='piplines_info'
-       #________________________
-        self.piplines='piplines'
-        self.binary_model='binary_models'
-        self.classification='classification_models'
-        self.localiztion='localiztion_models'
-        
-        self.piplines_name='name'
-        self.weights_path='weights_path'
-    
+        self.piplines_evaluation_info = "piplines_info"
+        # ________________________
+        self.piplines = "piplines"
+        self.binary_model = "binary_models"
+        self.classification = "classification_models"
+        self.localiztion = "localiztion_models"
+        self.yolo = "yolo_models"
+
+        self.piplines_name = "name"
+        self.weights_path = "weights_path"
+
     def check_table_exist(self, table_name):
         ret = self.db.check_table_exist(table_name)
         return ret
@@ -99,7 +104,9 @@ class dataBaseUtils:
     #
     # ________________________________________________________________
     def load_sheet(self, id):
-        res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id, int_type=False)
+        res, record = self.db.search(
+            self.sheets_info_tabel, "sheet_id", id, int_type=False
+        )
         record = record[0]
 
         return self.build_sheet(record)
@@ -309,7 +316,7 @@ class dataBaseUtils:
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False, bmodels
-    
+
     def add_binary_model_record(self, params):
         """this function is used to add new binary model parameters to database
 
@@ -352,7 +359,6 @@ class dataBaseUtils:
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False
-
 
     def search_binary_model_by_filter(
         self,
@@ -415,7 +421,9 @@ class dataBaseUtils:
 
     # ________________________________________________________________________________________________________
     # localization models
-    def get_localization_models(self, count=False, limit=False, limit_size=20, offset=0):
+    def get_localization_models(
+        self, count=False, limit=False, limit_size=20, offset=0
+    ):
         """this function is used to get localization models info list from database
 
         :param count: a boolean determining whether to get count of table, defaults to False, defaults to False
@@ -429,22 +437,35 @@ class dataBaseUtils:
         :return: list of localization model info (in dict)
         :rtype: list of dicts
         """
-        
-        res, lmodels = self.db.get_all_content('localization_models', count=count, limit=limit, limit_size=limit_size, offset=offset, reverse_order=True)
+
+        res, lmodels = self.db.get_all_content(
+            "localization_models",
+            count=count,
+            limit=limit,
+            limit_size=limit_size,
+            offset=offset,
+            reverse_order=True,
+        )
         # validation
         if res == database.SUCCESSFULL:
-            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['database_get_lmodels']['en'], level=1)
+            self.ui_obj.logger.create_new_log(
+                message=texts.MESSEGES["database_get_lmodels"]["en"], level=1
+            )
             return True, lmodels
-        
+
         elif res == database.CONNECTION_ERROR:
-            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_conection_failed']['en'], level=4)
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_conection_failed"]["en"], level=4
+            )
         # exception error
         else:
-            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_get_lmodels_failed']['en'], level=4)
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_get_lmodels_failed"]["en"], level=4
+            )
             self.ui_obj.logger.create_new_log(message=res, level=4)
-        
+
         return False, lmodels
-    
+
     def add_localization_model_record(self, params):
         """this function is used to add new localization model parameters to database
 
@@ -487,8 +508,10 @@ class dataBaseUtils:
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False
-   
-    def search_localization_model_by_filter(self, parms, cols, limit=False, limit_size=20, offset=0, count=False):
+
+    def search_localization_model_by_filter(
+        self, parms, cols, limit=False, limit_size=20, offset=0, count=False
+    ):
         """this function is used to search in localization models table by filtering params
 
         :param parms: filtering parameters
@@ -509,10 +532,20 @@ class dataBaseUtils:
         :rtype: _type_
         """
 
-        res, record = self.db.search_with_range('localization_models', cols, parms, limit=limit, limit_size=limit_size, offset=offset, count=count)
+        res, record = self.db.search_with_range(
+            "localization_models",
+            cols,
+            parms,
+            limit=limit,
+            limit_size=limit_size,
+            offset=offset,
+            count=count,
+        )
         # validation
         if res == database.SUCCESSFULL:
-            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['database_get_lmodels']['en'], level=1)
+            self.ui_obj.logger.create_new_log(
+                message=texts.MESSEGES["database_get_lmodels"]["en"], level=1
+            )
             return True, record
 
         elif res == database.CONNECTION_ERROR:
@@ -521,7 +554,9 @@ class dataBaseUtils:
             )
         # exception error
         else:
-            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_get_lmodels_failed']['en'], level=4)
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_get_lmodels_failed"]["en"], level=4
+            )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False, record
@@ -758,10 +793,9 @@ class dataBaseUtils:
             res, record = self.db.search(self.datasets_table, "id", id, int_type=False)
             record = record[0]
 
-
             return record["name"]
         except:
-            print('exept get_dateset_name database utils')
+            print("exept get_dateset_name database utils")
             return []
 
     def get_path_dataset(self, dataset_id):
@@ -770,10 +804,9 @@ class dataBaseUtils:
             res, record = self.db.search(self.dataset, "id", dataset_id, int_type=False)
             record = record[0]
 
-
             return record["path"]
         except:
-            print('get_path_dataset eror')
+            print("get_path_dataset eror")
             return []
 
     def get_all_datasets(self):
@@ -790,11 +823,12 @@ class dataBaseUtils:
             )
 
             if default:
-                res, default_record = self.db.search(self.dataset, "id", 0, int_type=False)
+                res, default_record = self.db.search(
+                    self.dataset, "id", 0, int_type=False
+                )
                 record += default_record
 
             default_ds = self.get_default_dataset(user_name)
-
 
             for i in range(len(record)):
                 if str(record[i]["id"]) == default_ds:
@@ -802,11 +836,10 @@ class dataBaseUtils:
 
             record.insert(0, record.pop(i))
 
-
             return record
 
         except:
-            print('except get_user_databases database utils')
+            print("except get_user_databases database utils")
             return []
 
     def update_dataset_default(self, dataset_id, user_name):
@@ -832,41 +865,63 @@ class dataBaseUtils:
     def set_language(self, name):
         self.db.update_record(self.setting_tabel, "language", str(name), "id", "0")
 
-
     def set_language_font(self, lan, font):
         self.db.update_record(self.setting_tabel, "language", str(lan), "id", "0")
         self.db.update_record(self.setting_tabel, "font_style", str(font), "id", "0")
 
-    def set_plc_params(self, 
-                    manual_plc,
-                    plc_update_time, 
-                    wind_duration, 
-                    automatic_wind, 
-                    auto_wind_intervals):
-        self.db.update_record(self.setting_tabel, "manual_plc", str(manual_plc), "id", "0")
-        self.db.update_record(self.setting_tabel, "plc_update_time", str(plc_update_time), "id", "0")
-        self.db.update_record(self.setting_tabel, "wind_duration", str(wind_duration), "id", "0")
-        self.db.update_record(self.setting_tabel, "automatic_wind", str(automatic_wind), "id", "0")
-        self.db.update_record(self.setting_tabel, "auto_wind_intervals", str(auto_wind_intervals), "id", "0")
+    def set_plc_params(
+        self,
+        manual_plc,
+        plc_update_time,
+        wind_duration,
+        automatic_wind,
+        auto_wind_intervals,
+    ):
+        self.db.update_record(
+            self.setting_tabel, "manual_plc", str(manual_plc), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "plc_update_time", str(plc_update_time), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "wind_duration", str(wind_duration), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "automatic_wind", str(automatic_wind), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel,
+            "auto_wind_intervals",
+            str(auto_wind_intervals),
+            "id",
+            "0",
+        )
 
     def set_camera_params(self, manual_cameras, frame_rate, live_update_time):
-        self.db.update_record(self.setting_tabel, "manual_cameras", str(manual_cameras), "id", "0")
-        self.db.update_record(self.setting_tabel, "frame_rate", str(frame_rate), "id", "0")
-        self.db.update_record(self.setting_tabel, "live_update_time", str(live_update_time), "id", "0")
+        self.db.update_record(
+            self.setting_tabel, "manual_cameras", str(manual_cameras), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "frame_rate", str(frame_rate), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "live_update_time", str(live_update_time), "id", "0"
+        )
 
     def load_settings(self):
         res, record = self.db.search(self.setting_tabel, "id", "0")
         record = record[0]
-        return (record["language"],
-            record['font_style'],
-            record['manual_plc'],
-            record['plc_update_time'],
-            record['wind_duration'],
-            record['automatic_wind'],
-            record['auto_wind_intervals'],
-            record['manual_cameras'],
-            record['frame_rate'],
-            record['live_update_time'],
+        return (
+            record["language"],
+            record["font_style"],
+            record["manual_plc"],
+            record["plc_update_time"],
+            record["wind_duration"],
+            record["automatic_wind"],
+            record["auto_wind_intervals"],
+            record["manual_cameras"],
+            record["frame_rate"],
+            record["live_update_time"],
         )
 
     def load_plc_parms(self):
@@ -957,27 +1012,23 @@ class dataBaseUtils:
         except:
             return False
 
-
-    def get_pipline_names(self,spec_name=False):
-        names=[]
-        spec_names=[]
+    def get_pipline_names(self, spec_name=False):
+        names = []
+        spec_names = []
         records = self.db.report_last(self.piplines, "name", 999, side="ASC")
         for name in records:
-            names.append(name['name'])
-            if spec_name!=False:
-                if name['user_own']==spec_name:
-                    spec_names.append(name['name'])
+            names.append(name["name"])
+            if spec_name != False:
+                if name["user_own"] == spec_name:
+                    spec_names.append(name["name"])
 
-        if spec_name==False:
+        if spec_name == False:
             return names
-        
+
         else:
-            return names,spec_names
-    
+            return names, spec_names
 
-
-
-    def add_pipline(self,data):
+    def add_pipline(self, data):
         try:
             res = self.db.add_record(
                 data,
@@ -989,19 +1040,26 @@ class dataBaseUtils:
         except:
             return False
 
+    def remove_pipline(self, name):
 
+        res = self.db.remove_record(col_name="name", id=name, table_name=self.piplines)
 
-    def remove_pipline(self,name):
-        
-        res = self.db.remove_record(col_name='name',id=name,table_name=self.piplines)
-
-
-
-    def get_selected_pipline_record(self,value):
-        pipline_info=self.db.search(table_name=self.piplines,param_name=self.piplines_name,value=value,int_type=False)
+    def get_selected_pipline_record(self, value):
+        pipline_info = self.db.search(
+            table_name=self.piplines,
+            param_name=self.piplines_name,
+            value=value,
+            int_type=False,
+        )
         return pipline_info
-    def get_model(self,table_name,value):
-        model_info=self.db.search(table_name=table_name,param_name=self.weights_path,value=value,int_type=False)
+
+    def get_model(self, table_name, value):
+        model_info = self.db.search(
+            table_name=table_name,
+            param_name=self.weights_path,
+            value=value,
+            int_type=False,
+        )
         return model_info
 
     def get_json_parent_path(self, value=0):
@@ -1011,15 +1069,13 @@ class dataBaseUtils:
         record = record[0]
         return record["pipeline_json_path"]
 
-
-
     # #____________________________________JJ ZONE
     # def update_piplines_info_database(self,record):
     #     y, m, d = record["date"].split("/")
     #     hh, mm, _ = record["time"].split(":")
     #     date=datetime.date(int(y), int(m), int(d))
     #     time=datetime.time(int(hh), int(mm))
-        
+
     #     pipline_name=record['pipline_name']
     #     binary_model=record['binary_model']
     #     localization_model=record['localization_model']
@@ -1040,35 +1096,34 @@ class dataBaseUtils:
     # #____________________________________JJ ZONE
 
 
-
 # if __name__ == "__main__":
-    # db = dataBaseUtils('Null')
-    # db.get_pipline_names()
-    # x = db.load_plc_parms()
-    # # x=db.load_language()
-    # print(x)
+# db = dataBaseUtils('Null')
+# db.get_pipline_names()
+# x = db.load_plc_parms()
+# # x=db.load_language()
+# print(x)
 
-    # db.set_language("Persian")
-    # records = db.load_coil_info(996)
-    # db.get_camera_setting()
-    # db.set_dataset_path('G:/dataset/')
-    # print(db.get_dataset_path())
+# db.set_language("Persian")
+# records = db.load_coil_info(996)
+# db.get_camera_setting()
+# db.set_dataset_path('G:/dataset/')
+# print(db.get_dataset_path())
 
-    # name,defects=db.get_defects()
-    # print('name',name)
-    # print('defe',defects)
+# name,defects=db.get_defects()
+# print('name',name)
+# print('defe',defects)
 
-    # x=db.get_sign('defects_info')
+# x=db.get_sign('defects_info')
 
-    # db.update_sign_table('defects_info','4')
-    # d=db.get_user_databases('ali')
-    # data=('dataset_name','ali','adwad')
-    # d=db.add_dataset(data)
-    # print(d)
-    # print(x)
-    # name,defects=db.get_defects()
-    # print('name',name)
-    # print('defe',defects)
+# db.update_sign_table('defects_info','4')
+# d=db.get_user_databases('ali')
+# data=('dataset_name','ali','adwad')
+# d=db.add_dataset(data)
+# print(d)
+# print(x)
+# name,defects=db.get_defects()
+# print('name',name)
+# print('defe',defects)
 
-    # db.get_path(['997', 'up', (5, 5)])
-    # pass
+# db.get_path(['997', 'up', (5, 5)])
+# pass

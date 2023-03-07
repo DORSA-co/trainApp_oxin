@@ -76,6 +76,264 @@ binary_headers_db = [
     "weights_path",
     "date_",
 ]
+# _______________________________________________________________________
+binary_headers_dic = {
+    "en": [
+        "Algorithm",
+        "Input-Size",
+        "Input-Type",
+        "N-Epochs",
+        "Batch-Size",
+        "Learning-Rate",
+        "Split Ratio",
+        "Loss",
+        "Accuracy",
+        "Precision",
+        "Recall",
+        "Val-Loss",
+        "Val-Accuracy",
+        "Val-Precision",
+        "Val-Recall",
+        "Dataset Path",
+        "Weights Path",
+        "Date Created",
+    ],
+    "fa": [
+        "نام الگوریتم",
+        "اندازه ورودی",
+        "نوع ورودی",
+        "تعداد اپوک",
+        "اندازه دسته",
+        "نرخ یادگیری",
+        "نسبت تقسیم داده",
+        "Loss",
+        "Accuracy",
+        "Precision",
+        "Recall",
+        "اعتبارسنجی Loss",
+        "اعتبارسنجی Accuracy",
+        "اعتبارسنجی Precision",
+        "اعتبارسنجی Recall",
+        "آدرس مجموعه داده",
+        "آدرس وزن ها",
+        "تاریخ ایجاد",
+    ],
+    "db": [
+        "algo_name",
+        "input_size",
+        "input_type",
+        "epochs",
+        "batch_size",
+        "lr",
+        "split_ratio",
+        "loss",
+        "accuracy",
+        "precision_",
+        "recall",
+        "val_loss",
+        "val_accuracy",
+        "val_precision",
+        "val_recall",
+        "dataset_pathes",
+        "weights_path",
+        "date_",
+    ],
+}
+
+localization_headers = {
+    "en": [
+        "Algorithm",
+        "Pretrain Weights",
+        "Input-Size",
+        "Input-Type",
+        "N-Epochs",
+        "Batch-Size",
+        "Learning-Rate",
+        "Split Ratio",
+        "Loss",
+        "Accuracy",
+        "Iou",
+        "Fscore",
+        "Val-Loss",
+        "Val-Accuracy",
+        "Val-Iou",
+        "Val-Fscore",
+        "Dataset Path",
+        "Weights Path",
+        "Date Created",
+    ],
+    "fa": [
+        "نام الگوریتم",
+        "آدرس وزن از قبل آموزش دیده",
+        "اندازه ورودی",
+        "نوع ورودی",
+        "تعداد اپوک",
+        "اندازه دسته",
+        "نرخ یادگیری",
+        "نسبت تقسیم داده",
+        "Loss",
+        "Accuracy",
+        "Iou",
+        "Fscore",
+        "اعتبارسنجی Loss",
+        "اعتبارسنجی Accuracy",
+        "اعتبارسنجی Iou",
+        "اعتبارسنجی Fscore",
+        "آدرس مجموعه داده",
+        "آدرس وزن ها",
+        "تاریخ ایجاد",
+    ],
+    "db": [
+        "algo_name",
+        "pretrain_path",
+        "input_size",
+        "input_type",
+        "epochs",
+        "batch_size",
+        "lr",
+        "split_ratio",
+        "loss",
+        "accuracy",
+        "iou",
+        "fscore",
+        "val_loss",
+        "val_accuracy",
+        "val_iou",
+        "val_fscore",
+        "dataset_pathes",
+        "weights_path",
+        "date_",
+    ],
+}
+# classification table headers
+classification_headers = {
+    "en": [
+        "Algorithm",
+        "Input-Size",
+        "Input-Type",
+        "N-Epochs",
+        "N-Tuning Epochs",
+        "Batch-Size",
+        "Learning-Rate",
+        "Split Ratio",
+        "Loss",
+        "Accuracy",
+        "Precision",
+        "Recall",
+        "Val-Loss",
+        "Val-Accuracy",
+        "Val-Precision",
+        "Val-Recall",
+        "Dataset Path",
+        "Weights Path",
+        "Date Created",
+    ],
+    "fa": [
+        "نام الگوریتم",
+        "اندازه ورودی",
+        "نوع ورودی",
+        "تعداد اپوک",
+        "تعداد اپوک تنظیم",
+        "اندازه دسته",
+        "نرخ یادگیری",
+        "نسبت تقسیم داده",
+        "Loss",
+        "Accuracy",
+        "Precision",
+        "Recall",
+        "اعتبارسنجی Loss",
+        "اعتبارسنجی Accuracy",
+        "اعتبارسنجی Precision",
+        "اعتبارسنجی Recall",
+        "آدرس مجموعه داده",
+        "آدرس وزن ها",
+        "تاریخ ایجاد",
+    ],
+    "db": [
+        "algo_name",
+        "input_size",
+        "input_type",
+        "epochs",
+        "tuning_epochs",
+        "batch_size",
+        "lr",
+        "split_ratio",
+        "loss",
+        "accuracy",
+        "precision_",
+        "recall",
+        "val_loss",
+        "val_accuracy",
+        "val_precision",
+        "val_recall",
+        "dataset_pathes",
+        "weights_path",
+        "date_",
+    ],
+}
+# yolo table headers
+yolo_headers = {
+    "en": [
+        "Algorithm",
+        "Input-Size",
+        "Input-Type" "N-Epochs",
+        "Batch-Size",
+        "Learning-Rate",
+        "Split Ratio",
+        "Dataset Path",
+        "Weights Path",
+        "Date Created",
+        "BOX-Loss" "OBJ-Loss",
+        "CLS_Loss",
+        "Val_Precision",
+        "Val_Recall",
+        "Val_mAP05",
+        "Val_mAP0595",
+        "Val_BOX-Loss" "Val_OBJ-Loss",
+        "Val_CLS_Loss",
+    ],
+    "fa": [
+        "نام الگوریتم",
+        "اندازه ورودی",
+        "تعداد اپوک",
+        "اندازه دسته",
+        "نرخ یادگیری",
+        "نسبت تقسیم داده",
+        "آدرس مجموعه داده",
+        "آدرس وزن ها",
+        "تاریخ ایجاد",
+        "BOX-Loss" "OBJ-Loss",
+        "CLS_Loss",
+        "اعتبارسنجی Precision",
+        "اعتبارسنجی Recall",
+        "اعتبارسنجی mAP05",
+        "اعتبارسنجی mAP0595",
+        "اعتبارسنجی BOX-Loss" "اعتبارسنجی OBJ-Loss",
+        "اعتبارسنجی CLS_Loss",
+    ],
+    "db": [
+        "algo_name",
+        "input_size",
+        "input_type",
+        "epochs",
+        "batch_size",
+        "lr",
+        "split_ratio",
+        "dataset_pathes",
+        "weights_path",
+        "date_",
+        "classes" "box_loss",
+        "obj_loss",
+        "cls_loss",
+        "val_precision",
+        "val_recall",
+        "val_mAP_0.5",
+        "val_mAP_0.5:0.95",
+        "val_box_loss",
+        "val_obj_loss",
+        "val_cls_loss",
+    ],
+}
 
 # table number of rows and cols
 binary_table_ncols = len(binary_headers)
@@ -137,30 +395,29 @@ def translate_binary_algorithm_id_to_name(
             return train_api.ALGORITHM_NAMES[model_type].index(algo_id)
         except:
             return -1
-#____________________________________________________________________JJ ZONE
+
+
+# ____________________________________________________________________JJ ZONE
 def translate_model_algorithm_id_to_creator_function(
-    algo_id,
-    input_size,
-    num_class=1,
-    mode='binary',
-    weights_path=None
+    algo_id, input_size, num_class=1, mode="binary", weights_path=None
 ):
-        creator= train_api.ALGORITHM_CREATOR[algo_id]
-        model=creator(input_size=input_size,num_class=num_class,mode=mode)
-        if weights_path !=None:
-           model.load_weights(weights_path)
-        return model
+    creator = train_api.ALGORITHM_CREATOR[algo_id]
+    model = creator(input_size=input_size, num_class=num_class, mode=mode)
+    if weights_path != None:
+        model.load_weights(weights_path)
+    return model
 
 
-def strInputSize_2_intInputSize(string,use_for_other_parameter=False):
-        
-        string=string[1:-1].split(',')
-        if not use_for_other_parameter: 
-            return(int(string[0]),int(string[1]),3)
-        else:
-            return len(string),[ int(x) for x in string ]
+def strInputSize_2_intInputSize(string, use_for_other_parameter=False):
 
-#____________________________________________________________________JJ ZONE
+    string = string[1:-1].split(",")
+    if not use_for_other_parameter:
+        return (int(string[0]), int(string[1]), 3)
+    else:
+        return len(string), [int(x) for x in string]
+
+
+# ____________________________________________________________________JJ ZONE
 
 # show/set models history to UI tabel
 def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
@@ -222,11 +479,30 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
 
 
 # show/set models history to UI tabel
-def set_bmodels_on_ui_tabel_edited_version(ui_obj, bmodels_list, model_type="binary"):
+def set_bmodels_on_ui_tabel_edited_version(
+    ui_obj, bmodels_list, model_type="binary", language="en"
+):
+
+    if model_type == "binary":
+        headers = binary_headers_dic[language]
+        headers_db = binary_headers_dic["db"]
+        table_ncols = len(binary_headers_dic[language])
+    elif model_type == "yolo":
+        headers = yolo_headers[language]
+        table_ncols = len(yolo_headers[language])
+        headers_db = yolo_headers["db"]
+    elif model_type == "localization":
+        headers = localization_headers[language]
+        table_ncols = len(localization_headers[language])
+        headers_db = localization_headers["db"]
+    else:
+        headers = classification_headers[language]
+        table_ncols = len(classification_headers[language])
+        headers_db = classification_headers["db"]
+
     # define table parameters
-    # print(len(bmodels_list))
     ui_obj.table_of_binary_classifaction_in_PBT_page.resizeColumnsToContents()
-    ui_obj.table_of_binary_classifaction_in_PBT_page.setColumnCount(binary_table_ncols)
+    ui_obj.table_of_binary_classifaction_in_PBT_page.setColumnCount(table_ncols)
     if len(bmodels_list) != 0:
         ui_obj.table_of_binary_classifaction_in_PBT_page.setRowCount(binary_table_nrows)
     else:
@@ -235,23 +511,20 @@ def set_bmodels_on_ui_tabel_edited_version(ui_obj, bmodels_list, model_type="bin
     ui_obj.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setSectionResizeMode(
         sQHeaderView.Stretch
     )
-    ui_obj.table_of_binary_classifaction_in_PBT_page.setHorizontalHeaderLabels(
-        binary_headers
-    )
+
+    ui_obj.table_of_binary_classifaction_in_PBT_page.setHorizontalHeaderLabels(headers)
     # text color
     text_color = colors_pallete.black
 
     # add users to table
     for row_idx, bmodel in enumerate(bmodels_list):
-        for col_idx in range(binary_table_ncols):
+        for col_idx in range(table_ncols):
             # translate algo-ids to name
             if col_idx == 0:
-                bmodel[
-                    binary_headers_db[col_idx]
-                ] = translate_binary_algorithm_id_to_name(
-                    algo_id=bmodel[binary_headers_db[col_idx]], model_type=model_type
+                bmodel[headers_db[col_idx]] = translate_binary_algorithm_id_to_name(
+                    algo_id=bmodel[headers_db[col_idx]], model_type=model_type
                 )
-            table_item = sQTableWidgetItem(str(bmodel[binary_headers_db[col_idx]]))
+            table_item = sQTableWidgetItem(str(bmodel[headers_db[col_idx]]))
             # set checkbox (only first col)
             if col_idx == 0:
                 table_item.setFlags(
@@ -263,7 +536,6 @@ def set_bmodels_on_ui_tabel_edited_version(ui_obj, bmodels_list, model_type="bin
             ui_obj.table_of_binary_classifaction_in_PBT_page.setItem(
                 row_idx, col_idx, table_item
             )
-
     try:
         ui_obj.table_of_binary_classifaction_in_PBT_page.setRowCount(row_idx + 1)
     except:
@@ -1022,22 +1294,31 @@ class Binary_model_train_worker(sQObject):
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
         if not bmodel_records[0]:
-            self.warning.emit(bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2])
+            self.warning.emit(
+                bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2]
+            )
         else:
             bmodel_records = bmodel_records[1]
             if bmodel_records:
                 # notif
                 self.ui_obj.notif_manager.append_new_notif(
-                    message=texts.MESSEGES["bmodel_trained"][self.ui_obj.language], level=1
+                    message=texts.MESSEGES["bmodel_trained"][self.ui_obj.language],
+                    level=1,
                 )
 
                 # add record to database
                 self.api_obj.bmodel_train_result = save_new_binary_model_record(
-                    ui_obj=self.ui_obj, db_obj=self.db_obj, bmodel_records=bmodel_records
+                    ui_obj=self.ui_obj,
+                    db_obj=self.db_obj,
+                    bmodel_records=bmodel_records,
                 )
 
-                self.warning.emit(texts.MESSEGES['train_successfuly'][self.api_obj.language], 'train', 1)
-                #update ui
+                self.warning.emit(
+                    texts.MESSEGES["train_successfuly"][self.api_obj.language],
+                    "train",
+                    1,
+                )
+                # update ui
 
         # self.ui_obj.binary_train.setEnabled(True)
         # self.api_obj.runing_b_model=False
@@ -1046,5 +1327,5 @@ class Binary_model_train_worker(sQObject):
 
     def show_bmodel_train_result(self):
         self.ui_obj.binary_train.setEnabled(True)
-        self.api_obj.runing_b_model=False
+        self.api_obj.runing_b_model = False
         return

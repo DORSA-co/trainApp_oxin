@@ -2083,7 +2083,7 @@ def set_title(self, lang):
     self.groupBox_6.setTitle(Titles['title_of_gb_pbt'][lang])
     self.label_35.setText(Titles['dataset_pbt'][lang])
     self.chbox_prefectdata_in_PBT_page.setText(Titles['perfect_pbt'][lang])
-    self.chbox_defectdata_in_PBT_page.setText(Titles['defect_pbt'][lang])  
+    #self.chbox_defectdata_in_PBT_page.setText(Titles['defect_pbt'][lang])  
     self.BTN_load_in_PBT_page.setText(Titles['load_pbt'][lang])
     self.BTN_load_image_in_PBT_page.setText(Titles['load_img_pbt'][lang])
     self.groupBox_7.setTitle(Titles['select_pipline'][lang])

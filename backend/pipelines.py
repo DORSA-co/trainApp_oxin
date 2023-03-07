@@ -33,10 +33,12 @@ PIPELINE_NAME = "name"
 DATE_CREATED = "date_created"
 TIME_CREATED = "time_created"
 OWNER = "owner"
+USE_YOLO = "use_yolo"
 #
 BINARY_MODEL = "binary_model"
 CALSSIFICATION_MODEL = "classification_model"
 LOCALIZATION_MODEL = "localization_model"
+YOLO_MODEL = "yolo_model"
 #
 MODEL_ID = "id"
 MODEL_WEIGHTS_PATH = "weights_path"
@@ -48,7 +50,11 @@ MODEL_LOSS = "loss"
 MODEL_DICE = "dice"
 MODEL_IOU = "iou"
 MODEL_PERCLASSS_ACCURACY = "perclass_accuracy"
-MODEL_CONFUSION_MATRIX = "confusion_matrix"
+MODEL_BOXLOSS = "box_loss"
+MODEL_OBJLOSS = "obj_loss"
+MODEL_CLSLOSS = "cls_loss"
+MODEL_MAP05 = "mAP_0.5"
+MODEL_MAP0595 = "mAP_0.5:0.95"
 #
 TARGET_CLASSES = "target_classes"
 #
@@ -166,6 +172,7 @@ class Pipeline:
         self.pipline_json[DATE_CREATED] = date_created
         self.pipline_json[TIME_CREATED] = time_created
         self.pipline_json[OWNER] = None
+        self.pipline_json[USE_YOLO] = None
 
         # target classes
         self.pipline_json[TARGET_CLASSES] = None
@@ -194,7 +201,6 @@ class Pipeline:
             MODEL_LOSS: None,
             MODEL_F1: None,
             MODEL_PERCLASSS_ACCURACY: None,
-            MODEL_CONFUSION_MATRIX: None,
         }
 
         # localization model
@@ -207,11 +213,24 @@ class Pipeline:
             MODEL_IOU: None,
         }
 
+        # yolo model
+        self.pipline_json[YOLO_MODEL] = {
+            MODEL_ID: None,
+            MODEL_WEIGHTS_PATH: None,
+            MODEL_BOXLOSS: None,
+            MODEL_OBJLOSS: None,
+            MODEL_CLSLOSS: None,
+            MODEL_PRECISION: None,
+            MODEL_RECALL: None,
+            MODEL_MAP05: None,
+            MODEL_MAP0595: None,
+        }
+
     def save_json(self):
         """this function is used to save pipeline json object to path as a file"""
 
         try:
-            print(self.pipline_json[PIPELINE_ROOT])
+            # print(self.pipline_json[PIPELINE_ROOT])
             json_path = os.path.join(
                 self.pipline_json[PIPELINE_ROOT],
                 "%s-%s-%s.json"
@@ -221,12 +240,12 @@ class Pipeline:
                     self.pipline_json[TIME_CREATED],
                 ),
             )
-            print(json_path)
+            # print(json_path)
             with open(json_path, "w") as f:
                 json.dump(self.pipline_json, f)
             f.close()
 
-            print(";" * 50)
+            # print(";" * 50)
 
         except:
             try:
@@ -279,6 +298,12 @@ class Pipeline:
 
     def set_classification_model(self, key, value):
         self.pipline_json[CALSSIFICATION_MODEL][key] = value
+
+    def set_yolo_model(self, key, value):
+        self.pipline_json[YOLO_MODEL][key] = value
+
+    def get_yolo_model(self, key):
+        return self.pipline_json[YOLO_MODEL][key]
 
     def get_classification_model(self, key):
         return self.pipline_json[CALSSIFICATION_MODEL][key]

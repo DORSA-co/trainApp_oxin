@@ -14,7 +14,7 @@ from backend import binary_model_funcs, date_funcs, localization_model_funcs
 
 DEBUG=False
 
-ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Blu', 'Rleu', 'Llu', 'uln'], 'classification': ['Xcc', 'Rce']}
+ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Blu', 'Rleu', 'Llu', 'uln'], 'classification': ['Xcc', 'Rce'],'yolo':['yolos','yolom','yolol']}
 ALGORITHM_CREATOR={'Xbc':models.xception_cnn,'Rbc':models.resnet_cnn,'Blu':models.base_unet,'Rleu':models.resnet_unet,'Llu':models.low_unet,'uln':models.unet
 ,'Xcc':models.xception_cnn,'Rce':models.resnet_cnn}
 if DEBUG:

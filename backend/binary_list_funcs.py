@@ -621,7 +621,6 @@ def set_image_to_ui(label_name, image, no_image=False):
     :param no_image: a boolean determinign wheater to assign defaults raw image to label. Defaults to False., defaults to False
     :type no_image: bool, optional
     """
-
     if no_image:
         image = cv2.imread(no_image_path)
     if len(image.shape) == 2:

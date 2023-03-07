@@ -916,7 +916,7 @@ background-color: rgb(170, 170, 212);</string>
                 <item>
                  <widget class="QPushButton" name="pbt_btn">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -2243,7 +2243,7 @@ QPushButton:hover {
                       <string notr="true">color : rgb(20,20,20);</string>
                      </property>
                      <property name="currentIndex">
-                      <number>7</number>
+                      <number>3</number>
                      </property>
                      <widget class="QWidget" name="page_data_auquzation">
                       <property name="styleSheet">
@@ -4461,8 +4461,8 @@ border:None;</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>495</width>
-                                      <height>32</height>
+                                      <width>488</width>
+                                      <height>30</height>
                                      </rect>
                                     </property>
                                     <property name="sizePolicy">
@@ -4730,8 +4730,8 @@ QPushButton:disabled {
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>827</width>
-                                   <height>28</height>
+                                   <width>692</width>
+                                   <height>18</height>
                                   </rect>
                                  </property>
                                  <layout class="QHBoxLayout" name="horizontalLayout_213">
@@ -7810,8 +7810,8 @@ border-radius: 8px;</string>
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>707</width>
-                                         <height>27</height>
+                                         <width>692</width>
+                                         <height>20</height>
                                         </rect>
                                        </property>
                                        <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -9367,7 +9367,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>757</height>
+                                     <height>28</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -9619,7 +9619,7 @@ font-size: 30%;</string>
                                      <x>0</x>
                                      <y>0</y>
                                      <width>288</width>
-                                     <height>757</height>
+                                     <height>28</height>
                                     </rect>
                                    </property>
                                    <property name="minimumSize">
@@ -10343,8 +10343,8 @@ border: None;</string>
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>971</width>
-                                  <height>39</height>
+                                  <width>92</width>
+                                  <height>40</height>
                                  </rect>
                                 </property>
                                 <layout class="QHBoxLayout" name="horizontalLayout_100">
@@ -12879,7 +12879,7 @@ color : rgb(0,0,0);</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>63</width>
+                                   <width>92</width>
                                    <height>165</height>
                                   </rect>
                                  </property>
@@ -12906,8 +12906,8 @@ color : rgb(0,0,0);</string>
                                       <rect>
                                        <x>0</x>
                                        <y>0</y>
-                                       <width>76</width>
-                                       <height>43</height>
+                                       <width>96</width>
+                                       <height>49</height>
                                       </rect>
                                      </property>
                                      <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -12951,7 +12951,7 @@ color : rgb(0,0,0);</string>
                                       <rect>
                                        <x>0</x>
                                        <y>0</y>
-                                       <width>109</width>
+                                       <width>107</width>
                                        <height>43</height>
                                       </rect>
                                      </property>
@@ -12996,7 +12996,7 @@ color : rgb(0,0,0);</string>
                                       <rect>
                                        <x>0</x>
                                        <y>0</y>
-                                       <width>108</width>
+                                       <width>106</width>
                                        <height>43</height>
                                       </rect>
                                      </property>
@@ -13609,19 +13609,6 @@ QPushButton:enabled-hover{
                                   </spacer>
                                  </item>
                                  <item>
-                                  <widget class="QCheckBox" name="chbox_defectdata_in_PBT_page">
-                                   <property name="enabled">
-                                    <bool>true</bool>
-                                   </property>
-                                   <property name="text">
-                                    <string>Defect</string>
-                                   </property>
-                                   <property name="checked">
-                                    <bool>true</bool>
-                                   </property>
-                                  </widget>
-                                 </item>
-                                 <item>
                                   <widget class="QCheckBox" name="chbox_prefectdata_in_PBT_page">
                                    <property name="enabled">
                                     <bool>true</bool>
@@ -13633,7 +13620,7 @@ QPushButton:enabled-hover{
                                     <bool>true</bool>
                                    </property>
                                    <property name="checked">
-                                    <bool>true</bool>
+                                    <bool>false</bool>
                                    </property>
                                   </widget>
                                  </item>
@@ -14294,8 +14281,8 @@ border:Transparent</string>
                                   <rect>
                                    <x>0</x>
                                    <y>0</y>
-                                   <width>329</width>
-                                   <height>699</height>
+                                   <width>319</width>
+                                   <height>715</height>
                                   </rect>
                                  </property>
                                  <layout class="QVBoxLayout" name="verticalLayout_64">
