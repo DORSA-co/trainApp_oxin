@@ -9,7 +9,8 @@ from shutil import which
 from stat import FILE_ATTRIBUTE_NORMAL
 import sys
 from ast import Try
-from email import utils
+
+
 from tkinter import NO, PIESLICE
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QFileDialog
