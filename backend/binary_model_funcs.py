@@ -10,7 +10,7 @@ from requests import head
 from backend import colors_pallete, chart_funcs, date_funcs
 import train_api, texts, texts_codes
 import os
-from utils import Utils
+from utils1 import Utils
 import json
 from random_split import *
 

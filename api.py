@@ -76,12 +76,12 @@ from backend import (
 )
 
 import database_utils
-from utils import *
-from utils.move_on_list import moveOnList, moveOnImagrList
+from utils1 import *
+from utils1.move_on_list import moveOnList, moveOnImagrList
 
 import texts  # eror and warnings texts
 import texts_codes
-from utils import tempMemory, Utils
+from utils1 import tempMemory, Utils
 
 from backend.dataset import Dataset
 from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2

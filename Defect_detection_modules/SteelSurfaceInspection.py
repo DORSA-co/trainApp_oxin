@@ -324,7 +324,6 @@ if __name__ == "__main__":
             if not os.path.exists(os.path.join(jsonMainPath, sheetID, s, str(c))):
                 os.makedirs(os.path.join(jsonMainPath, sheetID, s, str(c)))
             for f in range(1, 200):
-<<<<<<< HEAD
                 img = cv2.imread(
                     os.path.join(mainPath, sheetID, s, str(c), str(f) + img_format), 0
                 )
@@ -339,10 +338,5 @@ if __name__ == "__main__":
                     noise=True,
                 )
                 # print(df)
-=======
-                img = cv2.imread(os.path.join(mainPath, sheetID, s, str(c), str(f)+img_format), 0)
-                df = SSI_2(img, path=os.path.join(jsonMainPath, sheetID, s, str(c), str(f)+json_format) ,block_size='Medium', defect_th=0, noise_th=7, noise=True)
-                # #print(df)
->>>>>>> origin/r_abtahi
                 # # cv2.imshow('', img)
                 # cv2.waitKey(0)
