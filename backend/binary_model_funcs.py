@@ -6,8 +6,14 @@ from PySide6.QtCore import QObject as sQObject
 from PySide6.QtCore import Signal as sSignal
 from requests import head
 
-from backend import colors_pallete
-import train_api, texts
+from backend import colors_pallete, chart_funcs, date_funcs
+import train_api, texts, texts_codes
+import os
+from utils1 import Utils
+import json
+from random_split import *
+
+SHAMSI_DATE = False
 
 
 # binary table headers
@@ -561,7 +567,7 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
             elif model_type == "localization":
                 bmodel_info["algo_name"] = [
                     translate_binary_algorithm_id_to_name(
-                        algo_id=ui_obj.cbBox_of_localiztion_model_in_PBT_page.currentText(),
+                        algo_id=ui_obj.cbBox_of_localization_model_in_PBT_page.currentText(),
                         model_type="localization",
                         reverse=True,
                     )
@@ -1196,7 +1202,7 @@ def get_filtered_binary_models_from_db(
     elif model_type == "classification":
         model_type = "classification_models"
     elif model_type == "localization":
-        model_type = "localiztion_models"
+        model_type = "localization_models"
     else:
         print("what the fuck!!!!!!!!!!!!")
 
@@ -1232,15 +1238,65 @@ class Binary_model_train_worker(sQObject):
     """
 
     finished = sSignal()
-    warning = sSignal(str, str, int)
+    warning = sSignal(str, str, str, int)
+    reset_progressbar = sSignal(int , str)
+    set_progressbar = sSignal()
+    update_charts = sSignal(int, dict)
 
-    def assign_parameters(self, b_parms, api_obj, ui_obj, db_obj):
+    def assign_parameters(self, b_parms, api_obj, ui_obj, db_obj, ds_obj):
         self.b_parms = b_parms
         self.api_obj = api_obj
         self.ui_obj = ui_obj
         self.db_obj = db_obj
+        self.ds_obj = ds_obj
+
+    def split_binary_dataset(self, paths, size):
+        for i, path in enumerate(paths):
+            if self.ds_obj.check_binary_dataset(path):
+                self.ds_obj.create_split_folder(path)
+
+                s_mask = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.defect_mask_folder)
+                s_defect = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.defect_folder)
+                d_defect = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.defect_splitted_folder)
+
+                s_perfect = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.perfect_folder)
+                d_perfect = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.perfect_splitted_folder)
+
+                imgs = os.listdir(s_defect)
+                self.reset_progressbar.emit(len(imgs) + len(os.listdir(s_perfect)), 'Splitting dataset {}'.format(i+1))
+                for i in imgs:
+                    img = Utils.read_image(os.path.join(s_defect, i), color="color")
+                    mask = Utils.read_image(os.path.join(s_mask, i), color="color")
+                    if img is None or mask is None:
+                        continue
+                    crops, _, _ = get_crops_random(img, mask, size)
+                    self.ds_obj.save_to_defect_splitted(
+                        crops, d_defect, name=i.split(".")[0]
+                    )
+                    self.set_progressbar.emit()
+
+                imgs = os.listdir(s_perfect)
+                if len(os.listdir(s_perfect)):
+                    n_split = np.ceil(
+                        (len(os.listdir(d_defect)) * 1.5) / (len(os.listdir(s_perfect)))
+                    )
+                else:
+                    n_split = 0
+                for i in imgs:
+                    img = Utils.read_image(os.path.join(s_perfect, i), color="color")
+                    crops = get_crops_no_defect(img, n_split, size)
+                    self.ds_obj.save_to_perfect_splitted(crops, d_perfect, i.split(".")[0])
+                    self.set_progressbar.emit()
+            else:
+                self.warning.emit(
+                    texts.WARNINGS["DATASET_FORMAT"][self.language], "train", None, 2
+                )
 
     def train_model(self):
+        if self.b_parms[2]:
+            self.split_binary_dataset(self.b_parms[-1], self.b_parms[1])
+
+        self.reset_progressbar.emit(self.b_parms[3], 'Training')
         bmodel_records = train_api.train_binary(
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
@@ -1276,7 +1332,20 @@ class Binary_model_train_worker(sQObject):
 
         self.finished.emit()
 
+    def assign_new_value_to_b_chart(self, last_epoch, logs):
+        self.set_progressbar.emit()
+        self.update_charts.emit(last_epoch, logs)
+
+    def save_b_model(self, model, path, epoch):
+        try:
+            model.save(path)
+            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['SAVE_BMODEL_EPOCH']['en'].format(epoch))
+        except:
+            self.ui_obj.logger.create_new_log(message=texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED']['en'].format(epoch), level=5)
+            self.warning.emit(texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED'][self.api_obj.language].format(epoch), 'train', None, 3)
+
     def show_bmodel_train_result(self):
+        self.reset_progressbar.emit(1, '')
         self.ui_obj.binary_train.setEnabled(True)
         self.api_obj.runing_b_model = False
         return

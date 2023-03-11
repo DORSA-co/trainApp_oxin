@@ -39,12 +39,16 @@ class CustomCallback(keras.callbacks.Callback):
             # Save model weights to given address
             self.api_obj.bmodel_train_worker.save_b_model(model=self.model, path=self.out_path, epoch=epoch)
 
-        if self.model_type == 'localization':
+        elif self.model_type == 'localization':
             # Update localization train charts
             self.api_obj.lmodel_train_worker.assign_new_value_to_l_chart(last_epoch=epoch, logs=logs)
 
              # Save model weights to given address
             # self.api_obj.lmodel_train_worker.save_l_model(model=self.model, path=self.out_path, epoch=epoch)
+
+        elif self.model_type == 'yolo':
+            # Update yolo train charts
+            self.api_obj.ymodel_train_worker.assign_new_value_to_yolo_chart(last_epoch=epoch, logs=logs)
     
 
         # keys = list(logs.keys())

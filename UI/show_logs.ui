@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1163</width>
-    <height>704</height>
+    <height>735</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -840,7 +840,7 @@
                 <number>1</number>
                </property>
                <property name="maximum">
-                <number>100</number>
+                <number>500</number>
                </property>
                <property name="value">
                 <number>100</number>
@@ -906,6 +906,13 @@
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="export_btn">
+            <property name="text">
+             <string>Export</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="message_label">

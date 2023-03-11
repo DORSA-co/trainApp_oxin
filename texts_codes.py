@@ -63,6 +63,12 @@ SubTypes = {
     'error_connecting_to_mysql': '06-28',
     'mysql_connection_closed': '06-29',
     'error_reading_from_mysql': '06-30',
+
+    'reset_binary_training_params': '05-3',
+    'reset_localization_training_params': '05-4',
+    'reset_classification_training_params': '05-5',
+    'reset_yolo_training_params': '05-6',
+
     # Others
     'SET_DATASET': '071',
     'SET_DATASET_FAILED': '07-2',

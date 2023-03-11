@@ -9,7 +9,7 @@ from PySide6.QtGui import *
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 from backend.mouse import Mouse
-from utils import Utils
+from utils1 import Utils
 import os
 
 ui, _ = loadUiType("UI/small_neighbour_imgs.ui")

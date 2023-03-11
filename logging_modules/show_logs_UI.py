@@ -45,11 +45,13 @@ class show_logs(QMainWindow, ui):
 
         self.set_date()
 
-        self.checkBox_allDates.clicked.connect(self.enable_disable_date)
-        self.checkBox_allLevels.clicked.connect(self.enable_disable_levels)
-        self.checkBox_allTypes.clicked.connect(self.enable_disable_types)
+        self.checkBox_allDates.stateChanged.connect(self.enable_disable_date)
+        self.checkBox_allLevels.stateChanged.connect(self.enable_disable_levels)
+        self.checkBox_allTypes.stateChanged.connect(self.enable_disable_types)
 
         self.search_btn.clicked.connect(self.search_logs)
+        self.refresh_btn.clicked.connect(self.refresh_logs)
+        self.export_btn.clicked.connect(self.export_logs)
 
         self.search_logs()
 
@@ -262,6 +264,21 @@ class show_logs(QMainWindow, ui):
                                 buffer.append(line)
                             
         self.logs_textEdit.setText(text)
+
+    def refresh_logs(self):
+        self.checkBox_allDates.setCheckState(Qt.CheckState.Checked)
+        self.checkBox_allLevels.setCheckState(Qt.CheckState.Checked)
+        self.checkBox_allTypes.setCheckState(Qt.CheckState.Checked)
+        self.spinBox_lineNumbers.setValue(100)
+        self.comboBox_linesFL.setCurrentText('From Last')
+        self.search_logs()
+
+    def export_logs(self):
+        text = self.logs_textEdit.toPlainText()
+        path = QFileDialog.getSaveFileName(self, "Save file", "", ".log")
+        path = path[0] + path[1]
+        with open(path, 'w') as f:
+            f.write(text)
 
 if __name__ == "__main__":
     app = QApplication()

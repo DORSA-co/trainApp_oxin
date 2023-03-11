@@ -287,10 +287,10 @@ class Pipeline:
     def get_classification_model(self, key):
         return self.pipline_json[CALSSIFICATION_MODEL][key]
 
-    def set_localiztion_model(self, key, value):
+    def set_localization_model(self, key, value):
         self.pipline_json[LOCALIZATION_MODEL][key] = value
 
-    def get_localiztion_model(self, key):
+    def get_localization_model(self, key):
         return self.pipline_json[LOCALIZATION_MODEL][key]
 
 
@@ -494,7 +494,7 @@ def get_pipline_info_from_ui(ui_obj):
             ui_obj.binary_recall_max_filter_lineedit.text(),
         ]
 
-    # localiztion
+    # localization
     pipline_info[LOCALIZATION_MODEL] = {}
     if ui_obj.cbBox_localization_model_in_PBT_page.currentText() != "":
         id = ui_obj.cbBox_localization_model_in_PBT_page.currentText()
@@ -624,7 +624,7 @@ def filter_piplines(all_content, param_filter):
         check = filter_model(
             param_filter_model=param_filter[LOCALIZATION_MODEL],
             pipline=pipline[LOCALIZATION_MODEL],
-            localiztion=True,
+            localization=True,
         )
         if check:
             # all_content.remove(pipline)
@@ -646,7 +646,7 @@ def filter_piplines(all_content, param_filter):
     # return all_content
 
 
-def filter_model(param_filter_model, pipline, localiztion=False):
+def filter_model(param_filter_model, pipline, localization=False):
     param = param_filter_model.keys()
     if param != []:
 
@@ -654,7 +654,7 @@ def filter_model(param_filter_model, pipline, localiztion=False):
             if pipline[MODEL_ID] != param_filter_model[MODEL_ID]:
                 return True
 
-        if localiztion:
+        if localization:
             if MODEL_DICE in param:
                 check = filter_metrics_min_max(
                     min_filter_param=param_filter_model[MODEL_DICE][0],

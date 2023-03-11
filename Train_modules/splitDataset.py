@@ -3,16 +3,13 @@ import random
 import sys
 import shutil
 import numpy as np
+from sklearn.model_selection import train_test_split
 
-src_path = 'data/steel_defects/all/'
-dst_path = 'data/steel_defects'
-symlinkPath = 'SymLink'
+symlinkPath = 'SymLink/localization'
+symlinkPath2 = 'SymLink/localization_and_classification'
+partition_folder = 'partitions'
 split = 0.2
 
-def bar(counter,n):
-    percent = counter/n*100
-    os.system('cls')
-    #print('percent={:.2f}%  |{}| n={} of {}'.format(percent, int(percent/2)*'◼' + int(50 - percent/2)*'-' ,int(counter), n))
 
 def copy(src, dst):
     """This is function to copy images and symlinks
@@ -30,7 +27,12 @@ def copy(src, dst):
     else:
         shutil.copy(src, dst)
 
-def create_localization_symlink(paths, image_folder='image', label_folder='label'):
+def move_files_to_folder(list_of_files, destination_folder):
+    for f in list_of_files:
+        name = f.split('/')[-1]
+        copy(f, os.path.join(destination_folder, name))
+
+def create_localization_symlink(paths, localization_folder='localization', image_folder='image', label_folder='label'):
     """This function is used to create symlinks of localization datasets.
 
     :param paths: Paths of localization datasets.
@@ -52,6 +54,7 @@ def create_localization_symlink(paths, image_folder='image', label_folder='label
     os.makedirs(symlink_label_path)
 
     for path in paths:
+        path = os.path.join(path, localization_folder)
         absPath = os.path.abspath(path)
         image_path = os.path.join(absPath, image_folder+'/*')
         os.system('ln -s ' + image_path + ' ' + symlink_image_path)
@@ -59,7 +62,7 @@ def create_localization_symlink(paths, image_folder='image', label_folder='label
         label_path = os.path.join(absPath, label_folder+'/*')
         os.system('ln -s ' + label_path + ' ' + symlink_label_path)
        
-def split_unet_dataset(paths, img_folder='image', label_folder='label', mulit_mask_class=False, split=0.2):
+def split_unet_dataset(paths, api_obj, img_folder='image', label_folder='label', mulit_mask_class=False, split=0.2):
     """Split mask dataset into train and test.
 
     :param paths: Paths of localization datasets.
@@ -74,7 +77,8 @@ def split_unet_dataset(paths, img_folder='image', label_folder='label', mulit_ma
     :param split: Split percentage for Test, defaults to 0.2
     :type split: float, optional
     """
-    create_localization_symlink(paths, img_folder, label_folder)
+    localization_folder = api_obj.ds.localization_folder
+    create_localization_symlink(paths, localization_folder, img_folder, label_folder)
 
     src_path = os.path.abspath(symlinkPath)
     dst_path = os.path.abspath(symlinkPath)
@@ -171,13 +175,81 @@ def split_unet_dataset(paths, img_folder='image', label_folder='label', mulit_ma
     #             bar(counter,nimage)
     # bar(counter,nimage)
 
+def create_yolo_symlink(paths, localization_folder='localization', image_folder='image', label_folder='annotations'):
+    """This function is used to create symlinks of yolo datasets.
 
+    :param paths: Paths of localization datasets.
+    :type paths: list
+    :param image_folder: Image subfolder in symlink path, defaults to 'image'
+    :type image_folder: str, optional
+    :param label_folder: Label subfolder in symlink path, defaults to 'annotations'
+    :type label_folder: str, optional
+    """
+    symlink_image_path = os.path.join(symlinkPath2, image_folder)
+    symlink_label_path = os.path.join(symlinkPath2, label_folder)
 
+    if os.path.exists(symlink_image_path):
+        shutil.rmtree(symlink_image_path)
+    os.makedirs(symlink_image_path)
 
+    if os.path.exists(symlink_label_path):
+        shutil.rmtree(symlink_label_path)
+    os.makedirs(symlink_label_path)
 
+    for path in paths:
+        path = os.path.join(path, localization_folder)
+        absPath = os.path.abspath(path)
+        image_path = os.path.join(absPath, image_folder+'/*')
+        os.system('ln -s ' + image_path + ' ' + symlink_image_path)
 
+        label_path = os.path.join(absPath, label_folder+'/*')
+        os.system('ln -s ' + label_path + ' ' + symlink_label_path)
 
+def split_yolo_dataset(paths, api_obj, img_folder='image', label_folder='annotations', split=0.2):
+    localization_folder = api_obj.ds.localization_folder
+    create_yolo_symlink(paths, localization_folder, img_folder, label_folder)
 
+    src_path = os.path.abspath(symlinkPath2)
+
+    images_source = os.path.join(src_path, img_folder)
+    labels_source = os.path.join(src_path, label_folder)
+
+    images_dir = os.path.join(src_path, partition_folder, 'images')
+    labels_dir = os.path.join(src_path, partition_folder, 'labels')
+
+    images = [os.path.join(images_source, x) for x in os.listdir(images_source)]
+    labels = [os.path.join(labels_source, x) for x in os.listdir(labels_source) if x[-3:] == "txt"]
+
+    images.sort()
+    labels.sort()
+
+    # Split the dataset into train-valid-test splits 
+    train_images, val_images, train_annotations, val_annotations = train_test_split(images, labels, test_size = split, random_state = 1)
+
+    train_images_path = os.path.join(images_dir, 'train')
+    if os.path.exists(train_images_path):
+        shutil.rmtree(train_images_path)
+    os.makedirs(train_images_path)
+    val_images_path = os.path.join(images_dir, 'val')
+    if os.path.exists(val_images_path):
+        shutil.rmtree(val_images_path)
+    os.makedirs(val_images_path)
+    train_labels_path = os.path.join(labels_dir, 'train')
+    if os.path.exists(train_labels_path):
+        shutil.rmtree(train_labels_path)
+    os.makedirs(train_labels_path)
+    val_labels_path = os.path.join(labels_dir, 'val')
+    if os.path.exists(val_labels_path):
+        shutil.rmtree(val_labels_path)
+    os.makedirs(val_labels_path)
+
+    # Move the splits into their folders
+    move_files_to_folder(train_images, train_images_path)
+    move_files_to_folder(val_images, val_images_path)
+    move_files_to_folder(train_annotations, train_labels_path)
+    move_files_to_folder(val_annotations, val_labels_path)
+
+    return train_images_path, val_images_path
 
 
 

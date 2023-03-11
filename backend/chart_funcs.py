@@ -227,6 +227,7 @@ def state_changed(ui_obj, checkbox_obj, scrolbaer_obj, axisX_obj):
         scrolbaer_obj.setValue(0)
         axisX_obj.setRange(1, nepoch)
         axisX_obj.setTickCount(nepoch)
+        # axisX_obj.setLabelsFont(sQFont("Times", 4, sQFont.Normal))
     else:
         axisX_obj.setTickCount(axisX_range)
         if (last_epoch//axisX_range - 1)*axisX_range + (last_epoch%axisX_range) >= 0:
@@ -269,9 +270,14 @@ def update_chart_test(ui_obj, chart_postfixes, scroll_obj):
 
 def update_chart(ui_obj, chart_postfixes, last_epoch, logs, scroll_obj, chart_type='binary'):
     if chart_type == 'binary':
-        params = [logs['loss'], logs['accuracy']*100, logs['Precision']*100, logs['Recall']*100, logs['val_loss'], logs['val_accuracy']*100, logs['val_Precision']*100, logs['val_Recall']*100]
+        params = [logs['loss'], logs['accuracy']*100, logs['Recall']*100, logs['Precision']*100, logs['val_loss'], logs['val_accuracy']*100, logs['val_Recall']*100, logs['val_Precision']*100]
     elif chart_type == 'localization':
         params = [logs['loss'], logs['accuracy']*100, logs['iou_score']*100, logs['f1-score']*100, logs['val_loss'], logs['val_accuracy']*100, logs['val_iou_score']*100, logs['val_f1-score']*100]
+    elif chart_type == 'yolo':
+        params = [logs['train/box_loss'], logs['train/obj_loss'], logs['train/cls_loss'],
+                  110, 110, 110,
+                  logs['val/box_loss'], logs['val/obj_loss'], logs['val/cls_loss'],
+                  logs['metrics/recall']*100, logs['metrics/precision']*100, logs['metrics/mAP_0.5']*100]
 
     if last_epoch >= axisX_range and not ui_obj.binary_chart_checkbox.isChecked():
         scroll_obj.setMaximum(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
@@ -535,6 +541,7 @@ def update_binarylist_piechart(ui_obj, binary_len):
                                     code=texts_codes.SubTypes['update_binarylist_piechart_failed'],
                                     level=5)
         return
+
 
 def create_binarylist_barchart_on_ui(ui_obj, frame_obj_binary, chart_title='Chart'):
     # creat chart

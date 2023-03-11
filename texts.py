@@ -60,7 +60,25 @@ ERRORS = {
     'LOSS_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای خطا صحیح نیست ',
                              'en': ' Loss range is not correct '},
 
+    'BOXLOSS_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای خطای باکس صحیح نیست ',
+                             'en': ' Box Loss range is not correct '},
+
+    'OBJLOSS_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای خطای شئ صحیح نیست ',
+                             'en': ' Obj Loss range is not correct '},
+
+    'CLSLOSS_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای خطای دسته‌بندی صحیح نیست ',
+                             'en': ' Cls Loss range is not correct '},
+
     'LOSS_FORMAT_INVALID': {'fa': ' فرمت واردشده برای خطا نامعتبر است ',
+                            'en': ' Loss format invalid '},
+
+    'BOXLOSS_FORMAT_INVALID': {'fa': ' فرمت واردشده برای خطای باکس نامعتبر است ',
+                            'en': ' Loss format invalid '},
+
+    'OBJLOSS_FORMAT_INVALID': {'fa': ' فرمت واردشده برای خطای شئ نامعتبر است ',
+                            'en': ' Loss format invalid '},
+
+    'CLSLOSS_FORMAT_INVALID': {'fa': ' فرمت واردشده برای خطای دسته‌بندی نامعتبر است ',
                             'en': ' Loss format invalid '},
 
     'ACCU_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای دقت صحیح نیست ',
@@ -92,6 +110,12 @@ ERRORS = {
 
     'FSCORE_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای FScore نامعتبر است ',
                             'en': ' FScore format invalid '},
+
+    'MAP_RANGE_INCORRECT': {'fa': ' بازه‌ی وارد شده برای mAP صحیح نیست ',
+                             'en': ' mAP range is not correct '},
+
+    'MAP_FORMAT_INVALID': {'fa': ' فرمت وارد شده برای mAP نامعتبر است ',
+                            'en': ' mAP format invalid '},
 
     'YEAR_RANGE_INCORRECT': {'fa': ' مقدار وارد شده برای سال خارج از بازه است ',
                              'en': ' Start/end year not in range '},
@@ -141,6 +165,9 @@ ERRORS = {
     'database_get_classmodels_failed': {'fa': 'خطای دریافت لیست مدل های دسته بندی از دیتابیس',
                  'en': 'Failed to get classification models list from database'},
 
+    'database_get_ymodels_failed': {'fa': 'خطای دریافت لیست مدل های جایابی و دسته‌بندی از دیتابیس',
+                 'en': 'Failed to get localization and classification models list from database'},
+
     'database_get_datasets_failed': {'fa': 'خطای دریافت لیست دیتاست ها از دیتابیس',
                  'en': 'Failed to get datasets list from database'},
 
@@ -168,6 +195,9 @@ ERRORS = {
     'ui_get_lmodel_filter_params_failed': {'fa': 'خطای دریافت پارامترهای فیلتر مدل های جایابی',
                  'en': 'Failed to get localization model filter params from UI'},
 
+    'ui_get_ymodel_filter_params_failed': {'fa': 'خطای دریافت پارامترهای فیلتر مدل های جایابی و دسته‌بندی',
+                 'en': 'Failed to get localization and classification model filter params from UI'},
+
     'update_binarylist_piechart_failed': {'fa': 'خطای آپدیت پای چارت صفحه دیتاست باینری',
                  'en': 'Failed to update binarylist piechart'},
 
@@ -194,6 +224,9 @@ ERRORS = {
 
     'database_add_lmodel_failed': {'fa': 'خطا در اضافه نمودن اطلاعات مدل جایابی جدید در دیتابیس',
                  'en': 'Failed to add new localization model info to database'},
+
+    'database_add_ymodel_failed': {'fa': 'خطا در اضافه نمودن اطلاعات مدل جایابی و دسته‌بندی جدید در دیتابیس',
+                 'en': 'Failed to add new localization and classification model info to database'},
 
     'initialize_notif_ui_failed': {'fa': 'خطای ساخت کلاس اعلانات',
                  'en': 'Failed to initialize notification object.'},
@@ -246,18 +279,27 @@ ERRORS = {
 
     'UPDATE_LCHART_FAILED': {'fa': ' اپوک {}: .خطا در به روز رسانی نمودارهای آموزش جایابی ',
                              'en': ' Epoch {}: Error while updating localization train charts. '},
+
+    'UPDATE_YCHART_FAILED': {'fa': ' اپوک {}: .خطا در به روز رسانی نمودارهای آموزش جایابی و دسته‌بندی ',
+                             'en': ' Epoch {}: Error while updating localization and classification train charts. '},
                     
     'SAVE_BMODEL_EPOCH_FAILED': {'fa': ' اپوک {}: .خطا در ذخیره سازی وزن های مدل آموزش باینری ',
-                            'en': ' Epoch {}: Error while saving binary train model weightss. '},
+                            'en': ' Epoch {}: Error while saving binary train model weights. '},
                     
     'SAVE_LMODEL_EPOCH_FAILED': {'fa': ' اپوک {}: .خطا در ذخیره سازی وزن های مدل آموزش جایابی ',
-                            'en': ' Epoch {}: Error while saving localization train model weightss. '},
+                            'en': ' Epoch {}: Error while saving localization train model weights. '},
+                    
+    'SAVE_YMODEL_EPOCH_FAILED': {'fa': ' اپوک {}: .خطا در ذخیره سازی وزن های مدل آموزش جایابی و دسته‌بندی ',
+                            'en': ' Epoch {}: Error while saving localization and classification train model weights. '},
                     
     'SAVE_BMODEL_FAILED': {'fa': ' خطا در ذخیره سازی وزن های مدل آموزش باینری. ',
                             'en': ' Error while saving binary train model weights. '},
                     
     'SAVE_LMODEL_FAILED': {'fa': ' خطا در ذخیره سازی وزن های مدل آموزش جایابی. ',
                             'en': ' Error while saving localization train model weights. '},
+                    
+    'SAVE_YMODEL_FAILED': {'fa': ' خطا در ذخیره سازی وزن های مدل آموزش جایابی و دسته‌بندی. ',
+                            'en': ' Error while saving localization and classification train model weights. '},
                     
     'SAVE_FTBMODEL_FAILED': {'fa': ' خطا در ذخیره سازی وزن های مدل آموزش باینری تنظیم دقیق.',
                             'en': ' Error while saving binary train fine tune model weights. '},
@@ -271,11 +313,17 @@ ERRORS = {
     'CREATE_LWPATH_FAILED': {'fa': ' خطا در ایجاد آدرس وزن های مدل آموزش جایابی. ',
                             'en': ' Error while creating localization weights path. '},
  
+    'CREATE_YWPATH_FAILED': {'fa': ' خطا در ایجاد آدرس وزن های مدل آموزش جایابی و دسته‌بندی. ',
+                            'en': ' Error while creating localization and classification weights path. '},
+ 
     'CREATE_BINARY_GEN_FAILED': {'fa': ' خطا در آماده سازی داده ی آموزش باینری. ',
                             'en': ' Error preparing binary training data '},
  
     'CREATE_LOC_GEN_FAILED': {'fa': ' خطا در آماده سازی داده ی آموزش جایابی. ',
                             'en': ' Error preparing localization training data '},
+ 
+    'CREATE_Y_GEN_FAILED': {'fa': ' خطا در آماده سازی داده ی آموزش جایابی و دسته‌بندی. ',
+                            'en': ' Error preparing localization and classification training data. '},
 
     'PREPARE_DATA_FAILED': {'fa': ' خطا در آماده سازی داده ها برای آموزش. ',
                             'en': ' Error while preparing data for training. '},
@@ -461,6 +509,15 @@ WARNINGS = {
     'LOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطا را مقدار دهید یا هر دو را خالی بگذارید ',
                          'en': ' Loss range fields can not be empty, Please fill both them or leave them empty '},
 
+    'BOXLOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطای باکس را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Box Loss range fields can not be empty, Please fill both them or leave them empty '},
+
+    'OBJLOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطای شئ را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Obj Loss range fields can not be empty, Please fill both them or leave them empty '},
+
+    'CLSLOSS_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به خطای دسته‌بندی را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' Cls Loss range fields can not be empty, Please fill both them or leave them empty '},
+
     'ACCU_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به دقت را مقدار دهید یا هر دو را خالی بگذارید ',
                          'en': ' Accuracy range fields can not be empty, Please fill both them or leave them empty '},
 
@@ -475,6 +532,9 @@ WARNINGS = {
 
     'FSCORE_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به FScore را مقدار دهید یا هر دو را خالی بگذارید ',
                          'en': ' FScore range fields can not be empty, Please fill both them or leave them empty '},
+
+    'MAP_RANGE_EMPTY': {'fa': ' لطفا هر دو فیلد مربوط به mAP را مقدار دهید یا هر دو را خالی بگذارید ',
+                         'en': ' mAP range fields can not be empty, Please fill both them or leave them empty '},
 
     'SELECT_MORE_THAN_ONE_DEFECT_CLASS': {'fa': ' امکان انتخاب چند کلاس عیب به صورت همزمان وجود ندارد ',
                                           'en': ' can not select more than one defect class at same time '},
@@ -613,17 +673,26 @@ MESSEGES = {
     'UPDATE_LCHART': {'fa': ' اپوک {}: .نمودار های آموزش جایابی به روز شدند ',
                     'en': ' Epoch {}: Localization train charts updated. '},
                     
+    'UPDATE_YCHART': {'fa': ' اپوک {}: .نمودار های آموزش جایابی و دسته‌بندی به روز شدند ',
+                    'en': ' Epoch {}: Localization and classification train charts updated. '},
+                    
     'SAVE_BMODEL_EPOCH': {'fa': ' اپوک {}: .وزن های مدل آموزش باینری ذخیره شدند ',
                     'en': ' Epoch {}: Binary train model weights saved. '},
                     
     'SAVE_LMODEL_EPOCH': {'fa': ' اپوک {}: .وزن های مدل آموزش جایابی ذخیره شدند ',
                     'en': ' Epoch {}: Localization train model weights saved. '},
                     
+    'SAVE_YMODEL_EPOCH': {'fa': ' اپوک {}: .وزن های مدل آموزش جایابی و دسته‌بندی ذخیره شدند ',
+                    'en': ' Epoch {}: Localization and Classification train model weights saved. '},
+                    
     'SAVE_BMODEL': {'fa': ' .وزن های مدل آموزش باینری ذخیره شدند ',
                     'en': ' Binary train model weights saved. '},
                     
     'SAVE_LMODEL': {'fa': ' .وزن های مدل آموزش جایابی ذخیره شدند ',
                     'en': ' Localization train model weights saved. '},
+                    
+    'SAVE_YMODEL': {'fa': ' .وزن های مدل آموزش جایابی و دسته‌بندی ذخیره شدند ',
+                    'en': ' Localization and Classification train model weights saved. '},
 
     'SAVE_FTBMODEL': {'fa': ' .وزن های مدل آموزش باینری تنظیم دقیق ذخیره شدند ',
                     'en': ' Binary train fine tune model weights saved. '},
@@ -659,13 +728,19 @@ MESSEGES = {
                     'en': ' Training processor is set. '}, 
 
     'CREATE_LWPATH': {'fa': ' آدرس وزن های مدل آموزش جایابی ایجاد شد. ',
-                    'en': ' Localization weights path created. '}, 
+                    'en': ' Localization weights path created. '},
+
+    'CREATE_YWPATH': {'fa': ' آدرس وزن های مدل آموزش جایابی و دسته‌بندی ایجاد شد. ',
+                    'en': ' Localization and Classification weights path created. '}, 
  
     'CREATE_BINARY_GEN': {'fa': ' داده‌ی آموزش باینری آماده شد. ',
                         'en': ' Binary training data is ready. '},
  
     'CREATE_LOC_GEN': {'fa': ' داده‌ی آموزش جایابی آماده شد. ',
                         'en': ' Localization training data is ready. '},
+
+    'CREATE_Y_GEN': {'fa': ' داده‌ی آموزش جایابی و دسته‌بندی آماده شد. ',
+                        'en': ' Localization and Classification training data is ready. '},
 
     'CREATE_MODEL': {'fa': ' مدل برای الگوریتم {} ایجاد شد. ',
                     'en': ' Model for {} algorithm created. '},
@@ -717,6 +792,9 @@ MESSEGES = {
     'database_get_classmodels': {'fa': 'لیست مدل های دسته بندی از دیتابیس دریافت شد',
                  'en': 'Classification models list were returned from database'},
 
+    'database_get_ymodels': {'fa': 'لیست مدل های جایابی‌ و دسته‌بندی از دیتابیس دریافت شد',
+                 'en': 'Localization and Classification models list were returned from database'},
+
     'database_get_datasets': {'fa': 'لیست دیتاست ها از دیتابیس دریافت شد',
                  'en': 'Datasets list were returned from database'},
 
@@ -741,11 +819,17 @@ MESSEGES = {
     'database_add_lmodel': {'fa': 'اطلاعات مدل جایابی جدید در دیتابیس اضافه شدند',
                  'en': 'New localization model info record was added to database'},
 
+    'database_add_ymodel': {'fa': 'اطلاعات مدل جایابی و دسته‌بندی جدید در دیتابیس اضافه شدند',
+                 'en': 'New localization and classification model info record was added to database'},
+
     'bmodel_trained': {'fa': 'آموزش مدل باینری به اتمام رسید',
                  'en': 'Binary model training was finished'},
 
     'lmodel_trained': {'fa': 'آموزش مدل جایابی به اتمام رسید',
                  'en': 'Localization model training was finished'},
+
+    'ymodel_trained': {'fa': 'آموزش مدل جایابی و دسته‌بندی به اتمام رسید',
+                 'en': 'Localization and Classification model training was finished'},
 
     'initialize_notif_ui': {'fa': 'ساخت کلاس اعلانات',
                  'en': 'Notficaion object initialized.'},
@@ -1242,6 +1326,9 @@ Titles = {
         'Classification': {'fa': 'دسته بندی',
                         'en': 'Classification'},
 
+        'Yolo': {'fa': 'جایابی \n + \n دسته بندی',
+                'en': 'Localization \n + \n Classification'},
+
         'training': {'fa': 'آموزش',
                         'en': 'Training'},
 
@@ -1251,7 +1338,7 @@ Titles = {
         'localization_training': {'fa': 'آموزش جایابی',
                                         'en': 'Localization Training'},
 
-        'classification_training': {'fa': 'آموزش کلاس بندی',
+        'classification_training': {'fa': 'آموزش دسته‌بندی',
                                         'en': 'Classification Training'},
 
         'history': {'fa': 'تاریخچه',
@@ -1263,7 +1350,7 @@ Titles = {
         'localization_history': {'fa': 'تاریخچه جایابی',
                                         'en': 'Localization History'},
 
-        'classification_history': {'fa': 'تاریخچه کلاس بندی',
+        'classification_history': {'fa': 'تاریخچه دسته‌بندی',
                                         'en': 'Classification History'},
 
         'algorithm_name': {'fa': ':نام الگوریتم',
@@ -1271,6 +1358,9 @@ Titles = {
 
         'pretrained_weights_path': {'fa': ':آدرس وزن‌های آموزش دیده',
                         'en': 'Pretrained weights path:'},
+
+        'select_file': {'fa': 'انتخاب فایل',
+                        'en': 'Select File'},
 
         'algorithm_name_2': {'fa': 'نام الگوریتم',
                         'en': 'Algorithm Name'},
@@ -1355,6 +1445,15 @@ Titles = {
         
         'loss': {'fa': 'خطا', 
                 'en': 'Loss'},
+        
+        'box_loss': {'fa': 'خطای باکس', 
+                'en': 'Box Loss'},
+        
+        'obj_loss': {'fa': 'خطای شئ', 
+                'en': 'Obj Loss'},
+        
+        'cls_loss': {'fa': 'خطای دسته‌بندی', 
+                'en': 'Cls Loss'},
 
         'accuracy': {'fa': 'دقت', 
                 'en': 'Accuracy'},
@@ -1370,6 +1469,9 @@ Titles = {
         
         'fscore': {'fa': 'FScore', 
                 'en': 'FScore'},
+        
+        'map_0.5': {'fa': 'mAP_0.5', 
+                'en': 'mAP_0.5'},
 
         'min': {'fa': 'کمینه',
                 'en': 'Min'},
@@ -1676,7 +1778,7 @@ p, li { white-space: pre-wrap; }
 <p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در ابتدا روی کلید داده برداری کلیک کنید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">. </span><span style=" font-family:'B Nazanin'; font-size:12pt;">از تب نمایش زنده، اتصال دوربین ها را بررسی کنید و تصاویر گرفته شده از ورق ها را به صورت زنده مشاهده و ذخیره کنید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">. </span></p>
 <p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">سپس در تب نمای تکنیکال، ورق هایی که تصاویر آن‌ها ذخیره شده‌اند را بارگذاری کنید و تصاویر مورد نظر خود را برای برچسب زدن اضافه کنید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">. </span><span style=" font-family:'B Nazanin'; font-size:12pt;">با کلیک بر روی کلید برچسب گذاری در این صفحه وارد صفحه ی برچسب گذاری شوید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">.</span></p>
 <p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه ی برچسب گذاری، عیوب تصاویر انتخاب شده و نوع عیوب را مشخص کنید و تصاویر را ذخیره کنید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">.</span></p>
-<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">با کلیک بر روی کلید تیونینگ، یکی از سه کلید باینری، جایابی یا کلاس بندی را انتخاب کنید و با کلیک روی آن به صفحه ی مربوطه بروید و مدل مورد نظر خود را آموزش دهید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">.</span></p>
+<p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">با کلیک بر روی کلید تیونینگ، یکی از سه کلید باینری، جایابی یا دسته‌بندی را انتخاب کنید و با کلیک روی آن به صفحه ی مربوطه بروید و مدل مورد نظر خود را آموزش دهید</span><span style=" font-family:'Segoe UI'; font-size:12pt;">.</span></p>
 <p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه ی ساخت پایپ لاین و تست، با استفاده از مدل های آموزش داده شده پایپ لاین مورد نظر خود را تنظیم و تست کنید.</span></p>
 <p align="right" dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; line-height:100%; background-color:transparent;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در نوار بالایی صفحه با کلیک بر روی آیکون چرخ‌دنده کلید‌های مربوط به تنظیمات نرم‌افزار و پروفایل کاربر(صفحه‌ی جاری) را مشاهده کنید و با کلیک بر روی هر کلید به صفحه‌ی مورد نظر بروید.</span></p>
 <p dir='rtl' style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:'B Nazanin'; font-size:12pt;">در صفحه‌ی تنظیمات نرم‌افزار، تنظیمات مربوط برنامه، پی ال سی و دوربین‌ها را انجام دهید.</span></p>
@@ -1850,6 +1952,7 @@ def set_title(self, lang):
     self.Binary_btn.setText(Titles['Binary'][lang])
     self.Localization_btn.setText(Titles['Localization'][lang])
     self.Classification_btn.setText(Titles['Classification'][lang])
+    self.Yolo_btn.setText(Titles['Yolo'][lang])
 
     self.btn_software_setting.setText(Titles['software_settings'][lang])
     self.btn_user_profile.setText(Titles['user_profile'][lang])
@@ -2111,6 +2214,7 @@ def set_title(self, lang):
 
     self.label_242.setText(Titles['algorithm_name'][lang])
     self.label_301.setText(Titles['pretrained_weights_path'][lang])
+    self.l_select_prep.setText(Titles['select_file'][lang])
     self.label_243.setText(Titles['input_size'][lang])
     self.label_33.setText(Titles['input_type'][lang])
     self.l_input_type_resize.setText(Titles['resize'][lang])
@@ -2161,6 +2265,73 @@ def set_title(self, lang):
     self.label_259.setText(Titles['max'][lang])
     self.label_261.setText(Titles['min'][lang])
     self.label_262.setText(Titles['max'][lang])
+
+    # yolo train page
+
+    self.yolo_training.setText(Titles['training'][lang])
+    self.yolo_history.setText(Titles['history'][lang])
+
+    ## training
+
+    self.label_302.setText(Titles['algorithm_name'][lang])
+    # self.label_301.setText(Titles['pretrained_weights_path'][lang])
+    self.label_304.setText(Titles['input_size'][lang])
+    self.label_306.setText(Titles['input_type'][lang])
+    self.y_input_type_resize.setText(Titles['resize'][lang])
+    self.y_input_type_split.setText(Titles['split'][lang])
+    self.label_307.setText(Titles['epochs'][lang])
+    self.label_318.setText(Titles['batch_size'][lang])
+    # self.label_246.setText(Titles['learning_rate'][lang])
+    self.label_320.setText(Titles['validation_split'][lang])
+    self.label_322.setText(Titles['ds_path'][lang])
+    self.y_select_dp.setText(Titles['select_dataset'][lang])
+    self.y_delete_ds.setText(Titles['delete'][lang])
+    self.y_add_ds.setText(Titles['add'][lang])
+    self.y_add_cancel.setText(Titles['cancel'][lang])
+    self.y_add_ok.setText(Titles['ok'][lang])
+    self.y_add_ds_lineedit.setPlaceholderText(Titles['ds_path_2'][lang])
+    self.label_321.setText(Titles['train_processor'][lang])
+    self.yolo_train.setText(Titles['train'][lang])
+    self.yolo_chart_checkbox.setText(Titles['chart_full_view'][lang])
+    self.label_8_4.setText(Titles['train'][lang])
+    self.label_324.setText(Titles['validation'][lang])
+
+    ## history
+
+    self.groupBox_36.setTitle(Titles['sf_training_records'][lang])
+    self.label_325.setText(Titles['algorithm_name_2'][lang])
+    self.label_326.setText(Titles['epochs_2'][lang])
+    self.label_2472.setText(Titles['batch_size_2'][lang])
+    self.label_330.setText(Titles['split_ratio'][lang])
+    self.label_333.setText(Titles['box_loss'][lang])
+    self.label_350.setText(Titles['obj_loss'][lang])
+    self.label_353.setText(Titles['cls_loss'][lang])
+    self.label_335.setText(Titles['precision'][lang])
+    self.label_338.setText(Titles['recall'][lang])
+    self.label_341.setText(Titles['map_0.5'][lang])
+    self.label_344.setText(Titles['start_date'][lang])
+    self.label_347.setText(Titles['end_date'][lang])
+    self.yolo_filter_btn.setText(Titles['search_filter'][lang])
+    self.yolo_clearfilter_btn.setText(Titles['clear_filters'][lang])
+
+    self.label_327.setText(Titles['min'][lang])
+    self.label_328.setText(Titles['max'][lang])
+    self.label_2512.setText(Titles['min'][lang])
+    self.label_329.setText(Titles['max'][lang])
+    self.label_331.setText(Titles['min'][lang])
+    self.label_332.setText(Titles['max'][lang])
+    self.label_132_5.setText(Titles['min'][lang])
+    self.label_334.setText(Titles['max'][lang])
+    self.label_351.setText(Titles['min'][lang])
+    self.label_352.setText(Titles['max'][lang])
+    self.label_354.setText(Titles['min'][lang])
+    self.label_355.setText(Titles['max'][lang])
+    self.label_336.setText(Titles['min'][lang])
+    self.label_337.setText(Titles['max'][lang])
+    self.label_339.setText(Titles['min'][lang])
+    self.label_340.setText(Titles['max'][lang])
+    self.label_342.setText(Titles['min'][lang])
+    self.label_343.setText(Titles['max'][lang])
 
     # classification training
 
@@ -2282,10 +2453,10 @@ def set_title(self, lang):
     self.label_113.setText(Titles['min'][lang])
     self.label_114.setText(Titles['max'][lang])
     self.LBL_localization_model_in_PBT_page.setText(Titles['localization_pbt'][lang])
-    self.LBL_localiztion_dice_in_PBT_page.setText(Titles['localization dice'][lang])
+    self.LBL_localization_dice_in_PBT_page.setText(Titles['localization dice'][lang])
     self.label_115.setText(Titles['min'][lang])
     self.label_116.setText(Titles['max'][lang])
-    self.LBL_localiztion_iou_in_PBT_page.setText(Titles['localization iou'][lang])
+    self.LBL_localization_iou_in_PBT_page.setText(Titles['localization iou'][lang])
     self.label_117.setText(Titles['min'][lang])
     self.label_118.setText(Titles['max'][lang])
     self.LBL_classification_model_in_PBT_page.setText(Titles['classify model'][lang])
@@ -2414,6 +2585,20 @@ def set_alignment(self, lang):
         self.label_263.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_266.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
+        self.groupBox_36.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_325.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_326.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_2472.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_330.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_333.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_350.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_353.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_335.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_338.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.label_341.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_344.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_347.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
         self.label_242.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_301.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_243.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2424,6 +2609,15 @@ def set_alignment(self, lang):
         self.label_248.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_249.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_250.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
+        self.label_302.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_304.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_306.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_307.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_318.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_320.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_321.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_322.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_186.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_185.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2498,10 +2692,10 @@ def set_alignment(self, lang):
         self.label_113.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_114.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.LBL_localization_model_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.LBL_localiztion_dice_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.LBL_localization_dice_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_115.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_116.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.LBL_localiztion_iou_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.LBL_localization_iou_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_117.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_118.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.LBL_classification_model_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2598,6 +2792,20 @@ def set_alignment(self, lang):
         self.label_263.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_266.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
+        self.groupBox_36.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_325.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_326.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_2472.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_330.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_333.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_350.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_353.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_335.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_338.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.label_341.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_344.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_347.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
         self.label_242.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_301.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_243.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2608,6 +2816,15 @@ def set_alignment(self, lang):
         self.label_248.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_249.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_250.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
+        self.label_302.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_304.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_306.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_307.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_318.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_320.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_321.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_322.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_186.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_185.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -2683,10 +2900,10 @@ def set_alignment(self, lang):
         self.label_113.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_114.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.LBL_localization_model_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.LBL_localiztion_dice_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.LBL_localization_dice_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_115.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_116.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.LBL_localiztion_iou_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.LBL_localization_iou_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_117.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_118.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.LBL_classification_model_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)

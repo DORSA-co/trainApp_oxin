@@ -1,6 +1,4 @@
-import cv2
+import tensorflow as tf
 
-path = '/home/reyhane/Desktop/1.png'
-img = cv2.imread(path)
-cv2.imshow('', img)
-cv2.waitKey(0)
+gpu = tf.config.list_physical_devices("GPU")
+print(gpu)
