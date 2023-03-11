@@ -1,1 +1,0 @@
-/home/reyhane/PythonProjects/trainApp_oxin_new/default_dataset/localization/annotations/900wBdown3_7_(1).txt
