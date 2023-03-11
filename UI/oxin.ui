@@ -2425,7 +2425,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>3</number>
+                         <number>2</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -4644,7 +4644,7 @@ border:None;</string>
                                          <x>0</x>
                                          <y>0</y>
                                          <width>488</width>
-                                         <height>30</height>
+                                         <height>32</height>
                                         </rect>
                                        </property>
                                        <property name="sizePolicy">
@@ -4912,8 +4912,8 @@ QPushButton:disabled {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>692</width>
-                                      <height>18</height>
+                                      <width>721</width>
+                                      <height>28</height>
                                      </rect>
                                     </property>
                                     <layout class="QHBoxLayout" name="horizontalLayout_213">
@@ -7993,7 +7993,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>692</width>
-                                            <height>20</height>
+                                            <height>27</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -9549,7 +9549,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>28</height>
+                                        <height>781</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -9801,7 +9801,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>28</height>
+                                        <height>781</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -12828,7 +12828,7 @@ QPushButton:hover {
                              </size>
                             </property>
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>2</number>
                             </property>
                             <widget class="QWidget" name="page_pipeline">
                              <property name="maximumSize">
@@ -14276,6 +14276,19 @@ QPushButton:enabled-hover{
                                        </size>
                                       </property>
                                      </spacer>
+                                    </item>
+                                    <item>
+                                     <widget class="QCheckBox" name="chbox_defectdata_in_PBT_page">
+                                      <property name="enabled">
+                                       <bool>true</bool>
+                                      </property>
+                                      <property name="text">
+                                       <string>Defect</string>
+                                      </property>
+                                      <property name="checked">
+                                       <bool>true</bool>
+                                      </property>
+                                     </widget>
                                     </item>
                                     <item>
                                      <widget class="QCheckBox" name="chbox_prefectdata_in_PBT_page">

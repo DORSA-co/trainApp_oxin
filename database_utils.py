@@ -329,7 +329,9 @@ class dataBaseUtils:
         # validation
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
-                message=texts.MESSEGES["database_get_bmodels"]["en"],
+                message=texts.MESSEGES["database_get_bmodels"]["en"]
+                + "  "
+                + type_model,
                 code=texts_codes.SubTypes["database_get_bmodels"],
                 level=1,
             )
@@ -337,14 +339,18 @@ class dataBaseUtils:
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"],
+                message=texts.ERRORS["database_conection_failed"]["en"]
+                + "  "
+                + type_model,
                 code=texts_codes.SubTypes["database_conection_failed"],
                 level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_get_bmodels_failed"]["en"],
+                message=texts.ERRORS["database_get_bmodels_failed"]["en"]
+                + "  "
+                + type_model,
                 code=texts_codes.SubTypes["database_get_bmodels_failed"],
                 level=4,
             )
@@ -1019,8 +1025,11 @@ class dataBaseUtils:
             res, record_ds = self.db.search(
                 self.datasets_table, "id", record["default_dataset"], int_type=False
             )
-            record_ds = record_ds[0]
-            record["default_dataset"] = record_ds["name"]
+            if record_ds != []:
+                record_ds = record_ds[0]
+                record["default_dataset"] = record_ds["name"]
+            else:
+                record["default_dataset"] = "default_dataset"
 
             return record
         except:

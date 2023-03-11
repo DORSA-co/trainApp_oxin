@@ -4,7 +4,6 @@ from email.policy import default
 import os
 import sys
 
-import pecan
 
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)

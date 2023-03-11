@@ -72,6 +72,7 @@ from Dataset_selection.ds_select_UI import Ds_selection
 # from login_win.login_api import
 
 from train_api import ALGORITHM_NAMES
+from train_api import ALGORITHM_NAMES
 
 ui, _ = loadUiType("UI/oxin.ui")
 os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
@@ -1946,6 +1947,7 @@ class UI_main_window(QMainWindow, ui):
         b_algorithms = ALGORITHM_NAMES['binary']
         l_algorithms = ALGORITHM_NAMES['localization']
         class_algorithms = ALGORITHM_NAMES['classification']
+        yolo_algorithms = ALGORITHM_NAMES['yolo']
         y_algorithms = ALGORITHM_NAMES['yolo']
         self.b_algorithms.addItems(b_algorithms)
         self.l_algorithms.addItems(l_algorithms)
@@ -2796,16 +2798,16 @@ class UI_main_window(QMainWindow, ui):
         if btnName == "tuning_btn":
             self.left_bar_clear()
             self.tuning_btn.setStyleSheet(
-                "background-image: url(./images/icons/tuning.png);background-color: rgb(170, 170, 212);color:rgp(0,0,0);"
+                "background-image: url(./images/icons/tuning.png);background-color: rgb(170, 170, 212);color:rgb(0,0,0);"
             )
             # self.stackedWidget.setCurrentWidget(self.page_tuning)
             self.extra_left_box_move()
 
         if btnName == "pbt_btn":
             self.left_bar_clear()
-            self.pbt_btn.setStyleSheet(
-                "background-image: url(./images/icons/PBT.png);background-color: rgb(170, 170, 212);color:rgp(0,0,0);"
-            )
+            # self.pbt_btn.setStyleSheet(
+            #     "background-image: url(./images/icons/PBT.png);background-color: rgb(170, 170, 212);color:rgb(0,0,0);"
+            # )
             # self.stackedWidget.setCurrentWidget(self.page_pbt)
         
         if btnName == 'log_btn':
@@ -3292,6 +3294,14 @@ class UI_main_window(QMainWindow, ui):
         self.cbBox_of_localization_model_in_PBT_page.addItems(
             ALGORITHM_NAMES["localization"]
         )
+
+        self.cbBox_of_yolo_model_in_PBT_page.clear()
+        self.cbBox_of_yolo_model_in_PBT_page.addItem("All")
+        self.cbBox_of_yolo_model_in_PBT_page.addItems(
+            ALGORITHM_NAMES["yolo"]
+        )
+
+
         self.cbBox_of_multiClassification_model_in_PBT_page.clear()
         self.cbBox_of_multiClassification_model_in_PBT_page.addItem("All")
         self.cbBox_of_multiClassification_model_in_PBT_page.addItems(
@@ -3308,6 +3318,7 @@ class UI_main_window(QMainWindow, ui):
         self.LBL_of_selected_binary_classifaction_model_in_PBT_page.setText("")
         self.LBL_of_selected_multiClassification_model_in_PBT_page.setText("")
         self.LBL_of_selected_localization_model_in_PBT_page.setText("")
+        self.LBL_of_selected_binary_yolo_model_in_PBT_page.setText("")
 
     def connet_keyboard(self, keys, functions, page_name):
         """Connect keys into specefic function in a page"""

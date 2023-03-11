@@ -9,7 +9,8 @@ from shutil import which
 from stat import FILE_ATTRIBUTE_NORMAL
 import sys
 from ast import Try
-from email import utils
+
+
 from tkinter import NO, PIESLICE
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QFileDialog
@@ -55,7 +56,6 @@ from PyQt5.QtGui import QPixmap, QImage
 
 # from backend import add_remove_label
 from PyQt5 import QtCore, QtWidgets
-from Sheet_loader_win import get_data
 from PySide6.QtCore import QThread
 from functools import partial
 from backend import (
@@ -391,12 +391,27 @@ class API:
         self.runing_l_model = False
         self.runing_y_model = False
 
+        self.ui.radioButton_one.toggled.connect(lambda: self.set_pipline_mode("yolo"))
+        self.ui.radioButton_two.toggled.connect(
+            lambda: self.set_pipline_mode("localization")
+        )
+        self.set_pipline_mode("yolo")
+
         # DEBUG_FUNCTIONS
         # -------------------------------------
         # self.__debug_load_sheet__(["996", "997"])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
         self.__debug__login__()
+
+    def set_pipline_mode(self, key):
+        self.pipline_dict = {
+            "yolo": [self.ui.page_yolo, self.ui.page_yolo_2],
+            "localization": [self.ui.page_localization, self.ui.page_localization_2],
+        }
+        self.pipline_selected = key
+        self.ui.stackedWidget_3.setCurrentWidget(self.pipline_dict[key][0])
+        self.ui.stackedWidget_4.setCurrentWidget(self.pipline_dict[key][1])
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, "sheets_id")
@@ -684,6 +699,12 @@ class API:
         self.ui.cbBox_of_localization_model_in_PBT_page.currentTextChanged.connect(
             lambda: self.refresh_binary_models_table(
                 filter_mode=True, wich_page="PBT", model_type="localization"
+            )
+        )
+
+        self.ui.cbBox_of_yolo_model_in_PBT_page.currentTextChanged.connect(
+            lambda: self.refresh_binary_models_table(
+                filter_mode=True, wich_page="PBT", model_type="yolo"
             )
         )
 
@@ -1173,6 +1194,13 @@ class API:
             self.ui.set_warning(
                 texts.WARNINGS["NO_SHEET"][self.language], "data_auquzation", level=2
             )
+
+            self.ui.logger.create_new_log(
+                code=texts_codes.SubTypes["Sheet_empty"],
+                message=texts.MESSEGES["No_sheet_load"]["en"],
+                level=1,
+            )
+
             return
         self.move_on_list.add(sheets_id, "sheets_id")
         for sheet_id in sheets_id:
@@ -1188,20 +1216,33 @@ class API:
     # load sheet by its id in software
     # ----------------------------------------------------------------------------------------
     def load_sheet(self):
-        selceted_sheets_id = self.move_on_list.get_current(
-            "sheets_id"
-        )  # get current value on list that corespond to "coils_id" name
-        self.sheet = self.db.load_sheet(
-            selceted_sheets_id
-        )  # load inference of Sheet class from database by sheet id
-        self.build_sheet_technical(self.sheet)  # build technical sheet
-        if self.ui.checkBox_suggested_defects.isChecked():
-            self.load_suggestions()
-        self.ui.show_sheet_details(
-            self.sheet.get_info_dict()
-        )  # show sheet details in UI.details_label
-        self.load_filter_params()
-        self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
+        try:
+            selceted_sheets_id = self.move_on_list.get_current(
+                "sheets_id"
+            )  # get current value on list that corespond to "coils_id" name
+            self.sheet = self.db.load_sheet(
+                selceted_sheets_id
+            )  # load inference of Sheet class from database by sheet id
+            self.build_sheet_technical(self.sheet)  # build technical sheet
+            if self.ui.checkBox_suggested_defects.isChecked():
+                self.load_suggestions()
+            self.ui.show_sheet_details(
+                self.sheet.get_info_dict()
+            )  # show sheet details in UI.details_label
+            self.load_filter_params()
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
+
+            self.ui.logger.create_new_log(
+                code=texts_codes.SubTypes["Sheet_loaded"],
+                message=texts.MESSEGES["sheet_loaded"]["en"],
+                level=1,
+            )
+        except:
+            self.ui.logger.create_new_log(
+                code=texts_codes.SubTypes["Sheet_loaded_eror"],
+                message=texts.MESSEGES["sheet_load_eror"]["en"],
+                level=1,
+            )
 
     # ----------------------------------------------------------------------------------------
     #
@@ -1469,6 +1510,11 @@ class API:
         except:
             self.ui.load_sheets_win.set_warning(
                 texts.ERRORS["refresh_failed"][self.language], level=3
+            )
+            self.ui.logger.create_new_log(
+                code=texts_codes.SubTypes["Sheet_page_eror"],
+                message=texts.MESSEGES["sheet_page_eror"]["en"],
+                level=5,
             )
 
     # ----------------------------------------------------------------------------------------
@@ -2207,21 +2253,36 @@ class API:
             self.log_out()
 
     def log_out(self):
-        self.logged_in = False
-        self.ui.show_image_btn(self.ui.login_btn, "images/icons/person.png")
-        self.ui.user_name.setText("")
-        self.ui.stackedWidget.setCurrentWidget(self.ui.page_label)
-        self.ui.comboBox_user_datasets.clear()
-        self.ui.comboBox_all_datasets.clear()
+        try:
+            self.logged_in = False
+            self.ui.show_image_btn(self.ui.login_btn, "images/icons/person.png")
+            self.ui.user_name.setText("")
+            self.ui.stackedWidget.setCurrentWidget(self.ui.page_label)
+            self.ui.comboBox_user_datasets.clear()
+            self.ui.comboBox_all_datasets.clear()
 
-        self.login_user_name = "root"
-        self.ImageManager.set_user("root")
-        self.ui.logger.set_current_user("root")
-        self.ui.notif_manager.append_new_notif(
-            message=texts.MESSEGES["user_logedout"][self.ui.language], level=0
-        )
-        self.create_default_ds()
-        chart_funcs.clear_userprofile_barchart(self.ui)
+            self.login_user_name = "root"
+            self.ImageManager.set_user("root")
+            self.ui.logger.set_current_user("root")
+            self.ui.notif_manager.append_new_notif(
+                message=texts.MESSEGES["user_logedout"][self.ui.language], level=0
+            )
+            self.create_default_ds()
+            chart_funcs.clear_userprofile_barchart(self.ui)
+
+            self.ui.logger.create_new_log(
+                code=texts_codes.SubTypes["Logout_successfully"],
+                message=texts.MESSEGES["Logout_successfully"]["en"],
+                level=1,
+            )
+
+        except:
+
+            self.ui.logger.create_new_log(
+                code=texts_codes.SubTypes["Logout_unsuccessfully"],
+                message=texts.MESSEGES["Logout_unsuccessfully"]["en"],
+                level=5,
+            )
 
     def check_login(self):
         self.login_info = self.login_api.check_login()
@@ -5773,7 +5834,7 @@ class API:
             # self.connect_plc()
             if self.retry_connecting_plc < 10:
                 self.retry_connecting_plc += 1
-                QTimer().singleShot(1000, self.connect_plc)
+                # QTimer().singleShot(1000,self.connect_plc)
                 self.ui.set_status_plc(
                     auto=False,
                     text=texts.Titles["reconnect"][self.ui.language].format(

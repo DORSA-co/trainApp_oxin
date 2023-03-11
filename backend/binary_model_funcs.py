@@ -4,7 +4,6 @@ from PySide6 import QtCore as sQtCore
 from PySide6.QtGui import QColor as sQColor
 from PySide6.QtCore import QObject as sQObject
 from PySide6.QtCore import Signal as sSignal
-from PySide6.QtGui import Qt
 from requests import head
 
 from backend import colors_pallete, chart_funcs, date_funcs
@@ -19,9 +18,9 @@ SHAMSI_DATE = False
 
 # binary table headers
 binary_headers = [
-    "Algorithm Name",
-    "Input Size",
-    "Input Type",
+    "Algorithm",
+    "Input-Size",
+    "Input-Type",
     "N-Epochs",
     "N-Tuning Epochs",
     "Batch-Size",
@@ -48,14 +47,14 @@ binary_headers_fa = [
     "اندازه دسته",
     "نرخ یادگیری",
     "نسبت تقسیم داده",
-    "خطا",
-    "دقت",
-    "پرسیژن",
-    "ریکال",
-    "خطا اعتبارسنجی",
-    "دقت اعتبارسنجی",
-    "پرسیژن اعتبارسنجی",
-    "ریکال اعتبارسنجی",
+    "Loss",
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "اعتبارسنجی Loss",
+    "اعتبارسنجی Accuracy",
+    "اعتبارسنجی Precision",
+    "اعتبارسنجی Recall",
     "آدرس مجموعه داده",
     "آدرس وزن ها",
     "تاریخ ایجاد",
@@ -90,6 +89,7 @@ binary_headers_dic = {
         "Input-Size",
         "Input-Type",
         "N-Epochs",
+        "N-Tuning Epochs",
         "Batch-Size",
         "Learning-Rate",
         "Split Ratio",
@@ -110,6 +110,7 @@ binary_headers_dic = {
         "اندازه ورودی",
         "نوع ورودی",
         "تعداد اپوک",
+        "تعداد اپوک تنظیم",
         "اندازه دسته",
         "نرخ یادگیری",
         "نسبت تقسیم داده",
@@ -130,6 +131,7 @@ binary_headers_dic = {
         "input_size",
         "input_type",
         "epochs",
+        "tuning_epochs",
         "batch_size",
         "lr",
         "split_ratio",
@@ -467,20 +469,15 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
                 ] = translate_binary_algorithm_id_to_name(
                     algo_id=bmodel[binary_headers_db[col_idx]]
                 )
-            if col_idx == 2:
-                bmodel[binary_headers_db[col_idx]] = (
-                    "Split" if bmodel[binary_headers_db[col_idx]] == "1" else "Resize"
-                )
             table_item = sQTableWidgetItem(str(bmodel[binary_headers_db[col_idx]]))
             # set checkbox (only first col)
-            # if col_idx == 0:
-            #     table_item.setFlags(
-            #         sQtCore.Qt.ItemFlag.ItemIsUserCheckable
-            #         | sQtCore.Qt.ItemFlag.ItemIsEnabled
-            #     )
-            # table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
+            if col_idx == 0:
+                table_item.setFlags(
+                    sQtCore.Qt.ItemFlag.ItemIsUserCheckable
+                    | sQtCore.Qt.ItemFlag.ItemIsEnabled
+                )
+                table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
             table_item.setForeground(sQColor(text_color))
-            table_item.setTextAlignment(Qt.AlignCenter)
             ui_obj.binary_history_tabel.setItem(row_idx, col_idx, table_item)
 
     try:
@@ -584,7 +581,7 @@ def save_new_binary_model_record(ui_obj, db_obj, bmodel_records):
     """
 
     # add
-    # #print(bmodel_records["weights_path"])
+    print(bmodel_records["weights_path"])
     if add_new_binary_model_to_db(db_obj=db_obj, new_bmodel_info=bmodel_records):
         ui_obj.notif_manager.append_new_notif(
             message=texts.MESSEGES["database_add_bmodel"][ui_obj.language], level=1
@@ -635,9 +632,16 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
                         reverse=True,
                     )
                 ]
+            elif model_type == "yolo":
+                bmodel_info["algo_name"] = [
+                    translate_binary_algorithm_id_to_name(
+                        algo_id=ui_obj.cbBox_of_localiztion_model_in_PBT_page.currentText(),
+                        model_type="yolo",
+                        reverse=True,
+                    )
+                ]
             else:
-                pass
-                # #print("what the fuck!!!!!!!!1")
+                print("what the fuck!!!!!!!!1")
 
             bmodel_info["epochs"] = ["", ""]
             bmodel_info["tuning_epochs"] = ["", ""]
@@ -705,9 +709,7 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
         return bmodel_info
     except:
         ui_obj.logger.create_new_log(
-            message=texts.ERRORS["ui_get_bmodel_filter_params_failed"]["en"],
-            code=texts_codes.SubTypes["ui_get_bmodel_filter_params_failed"],
-            level=5,
+            message=texts.ERRORS["ui_get_bmodel_filter_params_failed"]["en"], level=5
         )
         return []
 
@@ -1089,12 +1091,11 @@ def get_filtered_binary_models_from_db(
         or filter_params["end_date"][1] != ""
         or filter_params["end_date"][2] != ""
     ):
-        year = int(date_funcs.get_date(persian=SHAMSI_DATE).split("/")[0])
         #
         try:
             if (
-                int(filter_params["start_date"][0]) < year - 10
-                or int(filter_params["start_date"][0]) > year + 10
+                int(filter_params["start_date"][0]) < 1401
+                or int(filter_params["start_date"][0]) > 1500
             ):
                 ui_obj.set_warning(
                     texts.ERRORS["YEAR_RANGE_INCORRECT"][ui_obj.language],
@@ -1151,8 +1152,8 @@ def get_filtered_binary_models_from_db(
         # end year
         try:
             if (
-                int(filter_params["end_date"][0]) < year - 10
-                or int(filter_params["end_date"][0]) > year + 10
+                int(filter_params["end_date"][0]) < 1401
+                or int(filter_params["end_date"][0]) > 1500
             ):
                 ui_obj.set_warning(
                     texts.ERRORS["YEAR_RANGE_INCORRECT"][ui_obj.language],
@@ -1263,8 +1264,7 @@ def get_filtered_binary_models_from_db(
     elif model_type == "localization":
         model_type = "localization_models"
     else:
-        pass
-        # #print("what the fuck!!!!!!!!!!!!")
+        print("what the fuck!!!!!!!!!!!!")
 
     try:
         res, defects_list = db_obj.search_binary_model_by_filter(
@@ -1377,7 +1377,7 @@ class Binary_model_train_worker(sQObject):
         )
         if not bmodel_records[0]:
             self.warning.emit(
-                bmodel_records[1][0], bmodel_records[1][1], None, bmodel_records[1][2]
+                bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2]
             )
         else:
             bmodel_records = bmodel_records[1]
@@ -1395,22 +1395,15 @@ class Binary_model_train_worker(sQObject):
                     bmodel_records=bmodel_records,
                 )
 
-                if self.api_obj.bmodel_train_result:
-                    self.warning.emit(
-                        texts.MESSEGES["train_successfuly"][self.api_obj.language],
-                        "train",
-                        None,
-                        1,
-                    )
-                else:
-                    self.warning.emit(
-                        texts.MESSEGES["database_add_bmodel_failed"][
-                            self.api_obj.language
-                        ],
-                        "train",
-                        None,
-                        3,
-                    )
+                self.warning.emit(
+                    texts.MESSEGES["train_successfuly"][self.api_obj.language],
+                    "train",
+                    1,
+                )
+                # update ui
+
+        # self.ui_obj.binary_train.setEnabled(True)
+        # self.api_obj.runing_b_model=False
 
         self.finished.emit()
 

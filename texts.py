@@ -2,6 +2,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout as sQHBoxLayout
 
 ERRORS = {
+    'search_error' :{'fa': 'عملیات جست و جو دچلر مشکل گردید',
+                'en': 'search_error'}, 
 
     'data_not_ready': {'fa': ' تصویری انتخاب نشده است',
                 'en': ' Data Isnot Selected '},
@@ -617,6 +619,35 @@ WARNINGS = {
 }
 
 MESSEGES = {
+
+    'Login_successfully' :{'fa': ' ورود کاربر با موفقت ایجاد شد',
+                'en': 'Login successfully '},
+
+    'Login_unsuccessfully' :{'fa': ' نام کاربری یا رمز عبور اشتباه است',
+                'en': 'Username or Password Incorrect '},
+
+    'Logout_successfully' :{'fa': ' خروج کاربر با موفقت انجام شد',
+                'en': 'Logout successfully '},
+
+    'Logout_unsuccessfully' :{'fa': ' عملیات خروج کاربر با مشکل روبرو شد',
+                'en': 'Logout Eror '},     
+
+    'sheet_page_eror' :{'fa': ' مشکل در باز شدن صفحه لود ورق',
+                'en': 'Sheet page eror'}, 
+    'No_sheet_load' :{'fa': ' ورقی لود نشده است',
+                'en': 'No sheet loaded'}, 
+    'show_sheet_info' :{'fa': 'اطلاعات ورق با موفقیت نمایش داده شد',
+                'en': 'show_sheet_info'}, 
+    'show_sheet_info_eror' :{'fa': 'نمایش اطلاعات ورق ها با شکست مواجه شد',
+                'en': 'show_sheet_info_eror'}, 
+
+
+    'sheet_loaded' :{'fa': ' ورق با موفقیت لود شد',
+                'en': 'sheet loaded'}, 
+
+    'sheet_load_eror' :{'fa': ' لود ورق با مشکل مواجه شد',
+                'en': 'eror in sheet load'}, 
+
     'Data_Is_Ready' :{'fa': ' مجموعه داده ها آماده است',
                 'en': ' Data is ready. '},
     'Data_Is_Not_Ready' :{'fa': 'مجموعه داده ها یافت نشد',
