@@ -25,6 +25,8 @@ try:
 except:
     pass
 
+from backend.pathStructure import sheet_path
+
 ui, _ = loadUiType("Sheet_loader_win/data_loader.ui")
 # ui, _ = loadUiType("UI/data_loader.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
@@ -114,6 +116,7 @@ class data_loader(QMainWindow, ui):
 
                 if i==0:
                     table_item.setCheckState(Qt.CheckState.Unchecked)
+                table_item.setTextAlignment(Qt.AlignCenter)
                 self.tableWidget_dataset.setItem(row,i,table_item)
             self.list_show_id.insertItem(row, str(sheet.sheet_id))   # add id in listwidget
             self.list_heat_number.insertItem(row, str(sheet.heat_number))   # add id in listwidget
@@ -121,6 +124,13 @@ class data_loader(QMainWindow, ui):
             self.list_pdl_number.insertItem(row, str(sheet.pdl_number))   # add id in listwidget
 
         self.table_sheets = sheets
+
+        if len(sheets) == 0:
+            self.load_btn.setEnabled(False)
+            self.open_folder_image.setEnabled(False)
+        else:
+            self.load_btn.setEnabled(True)
+            self.open_folder_image.setEnabled(True)
 
     def show_detail(self):
         exist = False
@@ -179,23 +189,22 @@ class data_loader(QMainWindow, ui):
             self.set_warning(texts.WARNINGS['SELECT_SHEET'][self.language], level=2)
             return
 
-        path1= os.path.join(self.par_path,str(select[0]))
-
+        path1 = sheet_path(self.par_path, str(select[0]))
         # import os
         try:
             if os.path.exists(path1): 
                 os.system('nautilus {}'.format(path1))
             else : 
-                print('Path Not Exist  {}'.format(str(path1)))
+                #print('Path Not Exist  {}'.format(str(path1)))
                 self.set_warning(texts.ERRORS['path_not_exist'][self.language], level=3)
         except:
-            print('Cant open folder')
+            #print('Cant open folder')
             self.set_warning(texts.ERRORS['open_folder_failed'][self.language], level=3)
 
     #LOAD DATBASE --------------
     def show_dataset(self):
-        self.hh_Labels=['ID', 'HEAT Number', 'Length', 'Width', 'Product Schedule Number', 'Product Drift Line Number', 'Thickness']
-        self.hh_Labels_fa=['شناسه', 'شماره سفارش', 'طول', 'عرض', 'شماره سفارش', 'شماره سفارش', 'ضخامت']
+        self.hh_Labels=['ID', 'Date', 'Time', 'HEAT Number', 'Product Schedule Number', 'Product Drift Line Number', 'Length', 'Width', 'Thickness']
+        self.hh_Labels_fa=['شناسه', 'تاریخ', 'زمان', 'شماره سفارش', 'شماره سفارش', 'شماره سفارش', 'طول', 'عرض', 'ضخامت']
         if self.language=='en':
             self.tableWidget_dataset.setHorizontalHeaderLabels(self.hh_Labels)
         if self.language=='fa':
@@ -273,7 +282,7 @@ class data_loader(QMainWindow, ui):
         if btnName =='toggleButton':
             self.toggleMenu(True)
 
-        # PRINT BTN NAME
+        # #print BTN NAME
 
 
     def set_warning(self, text, name='warning', level=1):
@@ -308,26 +317,11 @@ class data_loader(QMainWindow, ui):
             waring_labels[name].setText("")
             waring_labels[name].setStyleSheet("")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def reset_search_lines(self):
+        self.line_search_id.clear()
+        self.line_search_heat.clear()
+        self.line_search_psn.clear()
+        self.line_search_pdln.clear()
 
 if __name__ == "__main__":
     app = QApplication()

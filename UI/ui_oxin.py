@@ -6143,17 +6143,17 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_40.addWidget(self.label_122)
 
-        self.cbBox_of_localiztion_model_in_PBT_page = QComboBox(self.frame_55)
-        self.cbBox_of_localiztion_model_in_PBT_page.setObjectName(u"cbBox_of_localiztion_model_in_PBT_page")
-        self.cbBox_of_localiztion_model_in_PBT_page.setMinimumSize(QSize(105, 25))
-        self.cbBox_of_localiztion_model_in_PBT_page.setMaximumSize(QSize(200, 25))
+        self.cbBox_of_localization_model_in_PBT_page = QComboBox(self.frame_55)
+        self.cbBox_of_localization_model_in_PBT_page.setObjectName(u"cbBox_of_localization_model_in_PBT_page")
+        self.cbBox_of_localization_model_in_PBT_page.setMinimumSize(QSize(105, 25))
+        self.cbBox_of_localization_model_in_PBT_page.setMaximumSize(QSize(200, 25))
 
-        self.horizontalLayout_40.addWidget(self.cbBox_of_localiztion_model_in_PBT_page)
+        self.horizontalLayout_40.addWidget(self.cbBox_of_localization_model_in_PBT_page)
 
-        self.toolButton_localiztion = QToolButton(self.frame_55)
-        self.toolButton_localiztion.setObjectName(u"toolButton_localiztion")
+        self.toolButton_localization = QToolButton(self.frame_55)
+        self.toolButton_localization.setObjectName(u"toolButton_localization")
 
-        self.horizontalLayout_40.addWidget(self.toolButton_localiztion)
+        self.horizontalLayout_40.addWidget(self.toolButton_localization)
 
 
         self.horizontalLayout_199.addWidget(self.frame_55)
@@ -7288,11 +7288,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_279 = QHBoxLayout()
         self.horizontalLayout_279.setSpacing(0)
         self.horizontalLayout_279.setObjectName(u"horizontalLayout_279")
-        self.LBL_localiztion_dice_in_PBT_page = QLabel(self.scrollAreaWidgetContents_4)
-        self.LBL_localiztion_dice_in_PBT_page.setObjectName(u"LBL_localiztion_dice_in_PBT_page")
-        self.LBL_localiztion_dice_in_PBT_page.setFont(font1)
+        self.LBL_localization_dice_in_PBT_page = QLabel(self.scrollAreaWidgetContents_4)
+        self.LBL_localization_dice_in_PBT_page.setObjectName(u"LBL_localization_dice_in_PBT_page")
+        self.LBL_localization_dice_in_PBT_page.setFont(font1)
 
-        self.horizontalLayout_279.addWidget(self.LBL_localiztion_dice_in_PBT_page)
+        self.horizontalLayout_279.addWidget(self.LBL_localization_dice_in_PBT_page)
 
         self.horizontalSpacer_55 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -7366,11 +7366,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_281 = QHBoxLayout()
         self.horizontalLayout_281.setSpacing(0)
         self.horizontalLayout_281.setObjectName(u"horizontalLayout_281")
-        self.LBL_localiztion_iou_in_PBT_page = QLabel(self.scrollAreaWidgetContents_4)
-        self.LBL_localiztion_iou_in_PBT_page.setObjectName(u"LBL_localiztion_iou_in_PBT_page")
-        self.LBL_localiztion_iou_in_PBT_page.setFont(font1)
+        self.LBL_localization_iou_in_PBT_page = QLabel(self.scrollAreaWidgetContents_4)
+        self.LBL_localization_iou_in_PBT_page.setObjectName(u"LBL_localization_iou_in_PBT_page")
+        self.LBL_localization_iou_in_PBT_page.setFont(font1)
 
-        self.horizontalLayout_281.addWidget(self.LBL_localiztion_iou_in_PBT_page)
+        self.horizontalLayout_281.addWidget(self.LBL_localization_iou_in_PBT_page)
 
         self.horizontalSpacer_56 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -13378,17 +13378,17 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_14.addWidget(self.btn_message)
 
-        self.btn_print = QPushButton(self.topMenus)
-        self.btn_print.setObjectName(u"btn_print")
-        sizePolicy1.setHeightForWidth(self.btn_print.sizePolicy().hasHeightForWidth())
-        self.btn_print.setSizePolicy(sizePolicy1)
-        self.btn_print.setMinimumSize(QSize(0, 45))
-        self.btn_print.setFont(font1)
-        self.btn_print.setCursor(QCursor(Qt.PointingHandCursor))
-        self.btn_print.setLayoutDirection(Qt.LeftToRight)
-        self.btn_print.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-print.png);")
+        self.btn_#print = QPushButton(self.topMenus)
+        self.btn_#print.setObjectName(u"btn_#print")
+        sizePolicy1.setHeightForWidth(self.btn_#print.sizePolicy().hasHeightForWidth())
+        self.btn_#print.setSizePolicy(sizePolicy1)
+        self.btn_#print.setMinimumSize(QSize(0, 45))
+        self.btn_#print.setFont(font1)
+        self.btn_#print.setCursor(QCursor(Qt.PointingHandCursor))
+        self.btn_#print.setLayoutDirection(Qt.LeftToRight)
+        self.btn_#print.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-#print.png);")
 
-        self.verticalLayout_14.addWidget(self.btn_print)
+        self.verticalLayout_14.addWidget(self.btn_#print)
 
         self.btn_logout = QPushButton(self.topMenus)
         self.btn_logout.setObjectName(u"btn_logout")
@@ -13891,7 +13891,7 @@ class Ui_MainWindow(object):
         self.label_12_3.setText(QCoreApplication.translate("MainWindow", u"Binary : ", None))
         self.toolButton_binary.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.label_122.setText(QCoreApplication.translate("MainWindow", u"Localization : ", None))
-        self.toolButton_localiztion.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.toolButton_localization.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.label_123.setText(QCoreApplication.translate("MainWindow", u"Classification :", None))
         self.toolButton_multiClassification.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.BTN_of_goToPreviouspage_in_PBT_page.setText("")
@@ -13947,10 +13947,10 @@ class Ui_MainWindow(object):
         self.label_113.setText(QCoreApplication.translate("MainWindow", u"Min", None))
         self.label_114.setText(QCoreApplication.translate("MainWindow", u"Max", None))
         self.LBL_localization_model_in_PBT_page.setText(QCoreApplication.translate("MainWindow", u"localization model  :", None))
-        self.LBL_localiztion_dice_in_PBT_page.setText(QCoreApplication.translate("MainWindow", u"localization dice  :", None))
+        self.LBL_localization_dice_in_PBT_page.setText(QCoreApplication.translate("MainWindow", u"localization dice  :", None))
         self.label_115.setText(QCoreApplication.translate("MainWindow", u"Min", None))
         self.label_116.setText(QCoreApplication.translate("MainWindow", u"Max", None))
-        self.LBL_localiztion_iou_in_PBT_page.setText(QCoreApplication.translate("MainWindow", u"localization iou  :", None))
+        self.LBL_localization_iou_in_PBT_page.setText(QCoreApplication.translate("MainWindow", u"localization iou  :", None))
         self.label_117.setText(QCoreApplication.translate("MainWindow", u"Min", None))
         self.label_118.setText(QCoreApplication.translate("MainWindow", u"Max", None))
         self.LBL_classification_model_in_PBT_page.setText(QCoreApplication.translate("MainWindow", u"classify model  :", None))
@@ -14231,7 +14231,7 @@ class Ui_MainWindow(object):
         self.label_277.setText(QCoreApplication.translate("MainWindow", u"Message", None))
         self.setting_msg_label.setText("")
         self.btn_message.setText(QCoreApplication.translate("MainWindow", u"Message", None))
-        self.btn_print.setText(QCoreApplication.translate("MainWindow", u"Print", None))
+        self.btn_#print.setText(QCoreApplication.translate("MainWindow", u"#print", None))
         self.btn_logout.setText(QCoreApplication.translate("MainWindow", u"Logout", None))
         self.creditsLabel.setText(QCoreApplication.translate("MainWindow", u"By: Dorsa-co", None))
         self.version.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))

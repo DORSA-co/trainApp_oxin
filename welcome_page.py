@@ -50,7 +50,7 @@ class UI_welcome_window(QMainWindow, ui):
         self.eror_image=cv2.imread('UI/images/success.png')
         # self.label_9.setStyleSheet('background-color:Transparent;')
         # self.eror_image='asd'
-        # print('asdwdawd',self.eror_image)
+        # #print('asdwdawd',self.eror_image)
    
         self.load_dataset_parms()
         self.load_programs()
@@ -146,7 +146,7 @@ class UI_welcome_window(QMainWindow, ui):
     def other_libs(self):
         import io
         file1 = io.open("requirements.txt", mode="r", encoding='utf-16-le')
-        print(file1)
+        # #print(file1)
         Lines = file1.readlines()
         cou=0
         count = 0
@@ -156,24 +156,24 @@ class UI_welcome_window(QMainWindow, ui):
         for line in Lines:
             count += 1
             libs=(line.strip().split("="))[0]
-            print(libs)
+            # #print(libs)
             # try:
             #     eval('import {}'.format(libs))
             # except:
             #     cou+=1
-            #     print(cou)
+            #     #print(cou)
 
             
             spam_spec = importlib.util.find_spec(libs)
             found = spam_spec is not None
-            print(found)
+            # #print(found)
 
             if not found:
 
                 lis.append(line)
 
 
-        print('lis',lis)
+        # #print('lis',lis)
         self.label_10.setToolTip(str(lis))
         if len(lis)>5:
             self.label_10.setText('Packages Not found')
@@ -200,7 +200,7 @@ class UI_welcome_window(QMainWindow, ui):
             # self.timer_run.stop()
             # self.run_btn.setDisabled(True)
             self.eror=True
-            print('self.eror',self.eror)
+            # #print('self.eror',self.eror)
             self.timer=-1
 
 
@@ -215,7 +215,7 @@ class UI_welcome_window(QMainWindow, ui):
         eror_count=0
         for i in range(len(list_parms)):
             ret=self.db.check_table_exist(list_parms[i])
-            print('ret',ret)
+            # #print('ret',ret)
             if ret:
                 check_list.append(str(list_parms[i]+' : '+ret))
             else:
@@ -224,9 +224,9 @@ class UI_welcome_window(QMainWindow, ui):
                 eror_count+=1
 
 
-        print(check_list)
+        # #print(check_list)
         listToStr = ' \n'.join(map(str, check_list))
-        print(listToStr)
+        # #print(listToStr)
         self.textEdit_sql.setText(listToStr)
         if eror_count==0:
             self.show_eror_sql.setText(eror_text)
@@ -239,7 +239,7 @@ class UI_welcome_window(QMainWindow, ui):
             self.check_btn.setDisabled(True)
             # self.run_btn.setDisabled(True)
             self.eror=True
-            print(self.eror,self.eror)
+            # #print(self.eror,self.eror)
         str1=''    
         # for i in check_list:
         #     str1 = str1 + '\n'+ str(check_list[i])   
@@ -257,7 +257,7 @@ class UI_welcome_window(QMainWindow, ui):
             self.timer-=1
         else :
             self.timer_run.stop()
-            print('else',self.eror)
+            # #print('else',self.eror)
             if self.eror==False:
 
                 self.run_btn.setText(str('Run Train App  ('+str(self.timer)+')'))
@@ -268,7 +268,7 @@ class UI_welcome_window(QMainWindow, ui):
                 self.close()
                 # self.asdw.show()
                 # self.load_sheets_win = data_loader()
-                # print(self.asdw)
+                # #print(self.asdw)
                 # self.load_sheets_win.show()
                 b=hasan()
                 # sys.exit()
@@ -283,7 +283,7 @@ class UI_welcome_window(QMainWindow, ui):
 
 class hasan():
     def a(self):
-        print('asdaw')
+        # #print('asdaw')
         os.system('python .\main_UI.py')
 
 

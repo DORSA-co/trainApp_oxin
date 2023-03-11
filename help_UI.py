@@ -100,7 +100,7 @@ class help(QMainWindow, ui):
         frame_geo = self.frameGeometry()
         screen = self.window().screen()
         center_loc = screen.geometry().center()
-        #print(center_loc)
+        ##print(center_loc)
         frame_geo.moveCenter(center_loc)
         self.move(frame_geo.topLeft())
         # self.move(frame_geo.moveTop)
@@ -237,10 +237,10 @@ class help(QMainWindow, ui):
         # self.setCentralWidget(treeView)
 
     def getValue(self, val):
-        # print('69'*69)
-        # print(val.data())
-        # print(val.row())
-        # print(val.column())
+        # #print('69'*69)
+        # #print(val.data())
+        # #print(val.row())
+        # #print(val.column())
         self.set_help(val.data())
 
     def set_help(self, name):

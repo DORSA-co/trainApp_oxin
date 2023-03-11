@@ -60,6 +60,8 @@ TARGET_CLASSES = "target_classes"
 #
 EVALUATED_DATASETS = "evaluated_datasets"
 
+SHAMSI_DATE = False
+
 
 pipline_headers = [
     "name",
@@ -154,7 +156,7 @@ class Pipeline:
         self,
         pipeline_root,
         pipeline_name,
-        date_created=date_funcs.get_date(persian=True, folder_path=True),
+        date_created=date_funcs.get_date(persian=SHAMSI_DATE, folder_path=True),
         time_created=date_funcs.get_time(folder_path=True),
     ):
         """this class is used to create an object containg all information belonging to a pipeline model
@@ -257,7 +259,8 @@ class Pipeline:
                 f.close()
 
             except Exception as e:
-                print(e)
+                pass
+                # print(e)
 
     def load_json(self):
         """this function is used to load pipline info from json file"""
@@ -282,7 +285,8 @@ class Pipeline:
             return self.pipline_json
 
         except Exception as e:
-            print(e)
+            pass
+            # print(e)
 
     def set(self, key, value):
         self.pipline_json[key] = value
@@ -308,10 +312,10 @@ class Pipeline:
     def get_classification_model(self, key):
         return self.pipline_json[CALSSIFICATION_MODEL][key]
 
-    def set_localiztion_model(self, key, value):
+    def set_localization_model(self, key, value):
         self.pipline_json[LOCALIZATION_MODEL][key] = value
 
-    def get_localiztion_model(self, key):
+    def get_localization_model(self, key):
         return self.pipline_json[LOCALIZATION_MODEL][key]
 
 
@@ -321,7 +325,7 @@ def load_all_json_files(dir_path):
         for path in os.listdir(dir_path):
             # check if current path is a file
             if os.path.isfile(os.path.join(dir_path, path)) and path[-4:] == "json":
-                print(path)
+                # print(path)
                 with open(os.path.join(dir_path, path), "r") as f:
                     res.append(json.load(f))
         return len(res), res
@@ -428,7 +432,7 @@ def load_all_json_files_by_date(dir_path, reverse=False):
 
         path = os.path.normpath(path)
         if path[-4:] == "json":
-            # print(path)
+            # #print(path)
             with open(path, "r") as f:
                 res.append(json.load(f))
     return len(res), res
@@ -515,7 +519,7 @@ def get_pipline_info_from_ui(ui_obj):
             ui_obj.binary_recall_max_filter_lineedit.text(),
         ]
 
-    # localiztion
+    # localization
     pipline_info[LOCALIZATION_MODEL] = {}
     if ui_obj.cbBox_localization_model_in_PBT_page.currentText() != "":
         id = ui_obj.cbBox_localization_model_in_PBT_page.currentText()
@@ -645,7 +649,7 @@ def filter_piplines(all_content, param_filter):
         check = filter_model(
             param_filter_model=param_filter[LOCALIZATION_MODEL],
             pipline=pipline[LOCALIZATION_MODEL],
-            localiztion=True,
+            localization=True,
         )
         if check:
             # all_content.remove(pipline)
@@ -667,7 +671,7 @@ def filter_piplines(all_content, param_filter):
     # return all_content
 
 
-def filter_model(param_filter_model, pipline, localiztion=False):
+def filter_model(param_filter_model, pipline, localization=False):
     param = param_filter_model.keys()
     if param != []:
 
@@ -675,7 +679,7 @@ def filter_model(param_filter_model, pipline, localiztion=False):
             if pipline[MODEL_ID] != param_filter_model[MODEL_ID]:
                 return True
 
-        if localiztion:
+        if localization:
             if MODEL_DICE in param:
                 check = filter_metrics_min_max(
                     min_filter_param=param_filter_model[MODEL_DICE][0],
@@ -756,9 +760,9 @@ def filter_metrics_min_max(min_filter_param, max_filter_param, value):
 #     #     cv2.waitKey(1000)
 #     #     x.save_json()
 #     # len_,file_paths=load_all_json_files_by_date('evaluated_jsons')
-#     # print(file_paths)
+#     # #print(file_paths)
 #     d=4
 #     s='d;dv'
-#     print(type(x))
-#     print(type(d))
-#     print(type(s))
+#     #print(type(x))
+#     #print(type(d))
+#     #print(type(s))

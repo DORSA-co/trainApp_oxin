@@ -66,22 +66,22 @@ val_output_label=np.concatenate((out,perfect_out),axis=0)
 
 
 
-# print(train_input_img.shape)
-# print(train_output_label.shape)
+# #print(train_input_img.shape)
+# #print(train_output_label.shape)
 
 
-# print(val_input_img.shape)
-# print(val_output_label.shape)
+# #print(val_input_img.shape)
+# #print(val_output_label.shape)
 
 
 
 
 classifing_model=resnet_cnn(input_size=(256,1600,3), learning_rate=1e-3, num_class=3, mode=CATEGORICAL)
-# print(classifing_model.layers[-1].output.shape[1])
+# #print(classifing_model.layers[-1].output.shape[1])
 # classifing_model.fit(x=train_input_img,y=train_output_label, epochs=2,validation_data=(val_input_img,val_output_label),)
 l=[100, 104, 122, 123, 124, 128]
-# print((4 in l))
-# print(l)
+# #print((4 in l))
+# #print(l)
 # thresh=0.2
 # pred=classifing_model.predict(val_input_img)
 # pred=(pred > thresh).astype('int32')
@@ -93,22 +93,22 @@ l=[100, 104, 122, 123, 124, 128]
 # f1_=f1_score(y_true=val_output_label, y_pred=pred,average='micro')
 
 
-# print(acc_)
-# print(precision_)
-# print(recall_)
-# print(f1_)
+# #print(acc_)
+# #print(precision_)
+# #print(recall_)
+# #print(f1_)
 
 x=[]
 x.extend([[1]]*3)
-print(x)
+# #print(x)
 x.extend([[1]]*3)
-print(x)
+# #print(x)
 x.append([0])
-print(x)
+# #print(x)
 
 
-# print(val_output_label)
-# print('----------------------------------------------')
-# print(pred)
+# #print(val_output_label)
+# #print('----------------------------------------------')
+# #print(pred)
 
 

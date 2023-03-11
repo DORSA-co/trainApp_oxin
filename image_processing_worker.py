@@ -52,5 +52,5 @@ class image_processing_worker(sQObject):
                                 self.update_progressbar.emit()
 
             self.finished.emit()
-        except Exception() as e:
-            print(e)
+        except:
+            self.finished.emit()

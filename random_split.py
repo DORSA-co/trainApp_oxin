@@ -34,8 +34,8 @@ def FindNormalCrops(img, mask, size, annotation):
     crops_annotations = []
     points = []
 
-    jj = list(range(0, img.shape[0], size[0]))
-    ii = list(range(0, img.shape[1], size[1]))
+    jj = list(range(0, img.shape[0], SIZE[0]))
+    ii = list(range(0, img.shape[1], SIZE[1]))
     points = list(itertools.product(jj, ii))
     points = sorted(points, key=lambda k: [k[0], k[1]])
 
@@ -325,14 +325,10 @@ def get_crops_no_defect2(img, n_split, size):
 
 
 def main():
-    imgFolder = (
-        "/home/reyhane/PythonProjects/trainApp_oxin/default_dataset/localization/image"
-    )
-    maskFolder = (
-        "/home/reyhane/PythonProjects/trainApp_oxin/default_dataset/localization/label"
-    )
+    imgFolder = "/home/reyhane/PythonProjects/trainApp_oxin_new/default_dataset/localization/image"
+    maskFolder = "/home/reyhane/PythonProjects/trainApp_oxin_new/default_dataset/localization/label"
     annotFolder = (
-        "/home/reyhane/PythonProjects/trainApp_oxin/default_dataset/annotations"
+        "/home/reyhane/PythonProjects/trainApp_oxin_new/default_dataset/annotations"
     )
 
     # List files in folder
@@ -350,10 +346,11 @@ def main():
 
         t = time.time()
         # img_crops, mask_crops, crops_annotations = get_crops_random(img, mask, SIZE, annotation)
-        img_crops, mask_crops, crops_annotations = get_crops_random(
+        img_crops, mask_crops, crops_annotations = get_crops_normal(
             img, mask, SIZE, annotation
         )
-        print((time.time() - t) * 1000)
+        print(len(img_crops))
+        # print((time.time() - t)*1000)
         # img_crops = get_crops_no_defect(img, 10)
         # img_crops = get_crops_no_defect2(img, 10)
 

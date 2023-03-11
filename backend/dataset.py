@@ -5,12 +5,14 @@ from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
 from PySide6.QtGui import QColor as sQColor
 from PySide6.QtWidgets import QLabel as sQlabel
 from PySide6 import QtCore as sQtCore
+from utils import Utils
 
 from backend import Annotation, colors_pallete
 import texts
 import string
 import random
 import cv2
+import json
 
 IMAGES_TEMP_FOLDER = "temp_images"
 ANNOTATIONS_TEMP_FOLDER = "temp_annotations"
@@ -54,10 +56,12 @@ class Dataset:
         self.localization_folder_label = "label"
         self.localization_folder_image_splitted = "image_splitted"
         self.localization_folder_label_splitted = "label_splitted"
+        self.localization_folder_annotations = "annotations"
         self.weights = "weights"
         self.weights_binary = "binary"
         self.weights_localization = "localization"
         self.weights_classification = "classification"
+        self.weights_yolo = "localization_and_classification"
         self.dataset_path = dataset_path
 
         #--------------
@@ -68,7 +72,7 @@ class Dataset:
 
         self.format_image = ".png"
 
-        # print(self.dataset_path)
+        # #print(self.dataset_path)
 
         self.build_path()
 
@@ -110,6 +114,9 @@ class Dataset:
         self.localization_label_splitted_path = os.path.join(
             self.localization_path, self.localization_folder_label_splitted
         )
+        self.localization_annotations_path = os.path.join(
+            self.localization_path, self.localization_folder_annotations
+        )
         self.weights_path = os.path.join(self.dataset_path, self.weights)
         self.weights_binary_path = os.path.join(self.weights_path, self.weights_binary)
         self.weights_localization_path = os.path.join(
@@ -117,6 +124,9 @@ class Dataset:
         )
         self.weights_classification_path = os.path.join(
             self.weights_path, self.weights_classification
+        )
+        self.weights_yolo_path = os.path.join(
+            self.weights_path, self.weights_yolo
         )
 
         #-------------
@@ -132,7 +142,7 @@ class Dataset:
         #-------------
     
 
-        # print(self.annotations_folder)
+        # #print(self.annotations_folder)
         self.__creat_path__(self.dataset_path)
         self.__creat_path__(self.weights_path)
         self.__creat_path__(self.images_temp_path)
@@ -150,10 +160,12 @@ class Dataset:
         self.__creat_path__(self.localization_label_path)
         self.__creat_path__(self.localization_image_splitted_path)
         self.__creat_path__(self.localization_label_splitted_path)
+        self.__creat_path__(self.localization_annotations_path)
         self.__creat_path__(self.weights_path)
         self.__creat_path__(self.weights_binary_path)
         self.__creat_path__(self.weights_localization_path)
         self.__creat_path__(self.weights_classification_path)
+        self.__creat_path__(self.weights_yolo_path)
         #--------------- 
         self.__creat_path__(self.wrong_images_path)
         # self.__creat_path__(self.wrong_iamges_fp_path)
@@ -200,13 +212,17 @@ class Dataset:
         for img_path, sheet, pos in zip(imgs_path, sheets, positions):
             image_name = self.__file_name__(pos) + self.format_image
             res_path = os.path.join(self.images_temp_path, image_name)
-            shutil.copyfile(img_path, res_path)
+            # shutil.copyfile(img_path, res_path)
+            img = Utils.read_image(img_path, 'color')
+            cv2.imwrite(res_path, img)
             self.create_annotation_to_temp(sheet, image_name)
 
     def save(self, img_path, pos, sheet, masks):
         image_name = self.__file_name__(pos) + self.format_image
         res_path = os.path.join(self.images_path, image_name)
-        shutil.copyfile(img_path, res_path)
+        # shutil.copyfile(img_path, res_path)
+        img = Utils.read_image(img_path, 'color')
+        cv2.imwrite(res_path, img)
         self.create_annotation_to_ds(sheet, masks, image_name, pos[-1])
 
     def create_annotation_to_temp(self, sheet, fname):
@@ -275,8 +291,11 @@ class Dataset:
         mask_path = os.path.join(self.defect_mask_path, image_name)
         loc_image_path = os.path.join(self.localization_image_path, image_name)
         loc_label_path = os.path.join(self.localization_label_path, image_name)
-        shutil.copyfile(img_path, res_path)
-        shutil.copyfile(img_path, loc_image_path)
+        img = Utils.read_image(img_path, 'color')
+        # shutil.copyfile(img_path, res_path)
+        cv2.imwrite(res_path, img)
+        # shutil.copyfile(img_path, loc_image_path)
+        cv2.imwrite(loc_image_path, img)
         cv2.imwrite(mask_path, mask)
         shutil.copyfile(mask_path, loc_label_path)
 
@@ -294,7 +313,9 @@ class Dataset:
     def save_to_perfect(self, img_path, pos):
         image_name = self.__file_name__(pos) + self.format_image
         res_path = os.path.join(self.perfect_path, image_name)
-        shutil.copyfile(img_path, res_path)
+        # shutil.copyfile(img_path, res_path)
+        img = Utils.read_image(img_path, 'color')
+        cv2.imwrite(res_path, img)
 
     def delete_from_perfect(self, pos):
         image_name = self.__file_name__(pos) + self.format_image
@@ -348,18 +369,53 @@ class Dataset:
             res_path = os.path.join(label_path, image_name)
             cv2.imwrite(res_path, label_crops[i])
 
+    def save_yolo_splits(
+        self, image_crops, label_crops, crops_annotations, image_path, label_path, annotation_path, name=""
+    ):
+        for i in range(image_crops.shape[0]):
+            image_name = name + "_(" + str(i) + ")" + self.format_image
+            ann_name = name + "_(" + str(i) + ")" + '.txt'
+
+            res_path = os.path.join(image_path, image_name)
+            cv2.imwrite(res_path, image_crops[i])
+
+            res_path = os.path.join(label_path, image_name)
+            cv2.imwrite(res_path, label_crops[i])
+
+            res_path = os.path.join(annotation_path, ann_name)
+            with open(res_path, 'w') as f:
+                f.write(crops_annotations[i])
+
+    def save_yolo_resizes(
+        self, annotation, annotation_path, name=""
+    ):
+        ann_name = name + '.txt'
+        res_path = os.path.join(annotation_path, ann_name)
+        with open(res_path, 'w') as f:
+            f.write(annotation)
+
     def check_binary_dataset(self, dataset_path):
-        defect_path = os.path.join(dataset_path, self.defect_folder)
-        perfect_path = os.path.join(dataset_path, self.perfect_folder)
-        defect_mask_path = os.path.join(dataset_path, self.defect_mask_folder)
-        return os.path.exists(defect_path) and os.path.exists(perfect_path)
+        binary_path = os.path.join(dataset_path, self.binary_folder)
+        defect_path = os.path.join(binary_path, self.defect_folder)
+        perfect_path = os.path.join(binary_path, self.perfect_folder)
+        defect_mask_path = os.path.join(binary_path, self.defect_mask_folder)
+        return os.path.exists(defect_path) and os.path.exists(defect_path) and os.path.exists(perfect_path) and os.path.exists(defect_mask_path)
 
     def check_localization_dataset(self, dataset_path):
-        image_path = os.path.join(dataset_path, self.localization_folder_image)
-        label_path = os.path.join(dataset_path, self.localization_folder_label)
-        return os.path.exists(image_path) and os.path.exists(label_path)
+        localization_path = os.path.join(dataset_path, self.localization_folder)
+        image_path = os.path.join(localization_path, self.localization_folder_image)
+        label_path = os.path.join(localization_path, self.localization_folder_label)
+        return os.path.exists(localization_path) and os.path.exists(image_path) and os.path.exists(label_path)
+
+    def check_yolo_dataset(self, dataset_path):
+        annotation_path = os.path.join(dataset_path, self.annotations_folder)
+        localization_path = os.path.join(dataset_path, self.localization_folder)
+        image_path = os.path.join(localization_path, self.localization_folder_image)
+        label_path = os.path.join(localization_path, self.localization_folder_label)
+        return os.path.exists(annotation_path) and os.path.exists(localization_path) and os.path.exists(image_path) and os.path.exists(label_path)
 
     def create_split_folder(self, dataset_path):
+        dataset_path = os.path.join(dataset_path, self.binary_folder)
         defect_splitted_path = os.path.join(dataset_path, self.defect_splitted_folder)
         perfect_splitted_path = os.path.join(dataset_path, self.perfect_splitted_folder)
         if os.path.exists(defect_splitted_path):
@@ -370,6 +426,7 @@ class Dataset:
         self.__creat_path__(perfect_splitted_path)
 
     def create_l_split_folder(self, dataset_path):
+        dataset_path = os.path.join(dataset_path, self.localization_folder)
         image_splitted_path = os.path.join(
             dataset_path, self.localization_folder_image_splitted
         )
@@ -382,6 +439,29 @@ class Dataset:
             shutil.rmtree(label_splitted_path)
         self.__creat_path__(image_splitted_path)
         self.__creat_path__(label_splitted_path)
+
+    def create_y_split_folder(self, dataset_path, ann=False):
+        dataset_path = os.path.join(dataset_path, self.localization_folder)
+        image_splitted_path = os.path.join(
+            dataset_path, self.localization_folder_image_splitted
+        )
+        label_splitted_path = os.path.join(
+            dataset_path, self.localization_folder_label_splitted
+        )
+        annotations_path = os.path.join(
+            dataset_path, self.localization_folder_annotations
+        )
+        if not ann:
+            if os.path.exists(image_splitted_path):
+                shutil.rmtree(image_splitted_path)
+            if os.path.exists(label_splitted_path):
+                shutil.rmtree(label_splitted_path)
+        if os.path.exists(annotations_path):
+            shutil.rmtree(annotations_path)
+        if not ann:
+            self.__creat_path__(image_splitted_path)
+            self.__creat_path__(label_splitted_path)
+        self.__creat_path__(annotations_path)
 
     # ---------------------------------------------------
 

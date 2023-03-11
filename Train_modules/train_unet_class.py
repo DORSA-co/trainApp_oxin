@@ -76,7 +76,7 @@ if inpt in ['Y','y']:
                 validation_steps=test_data_count//batch + 1, 
                 initial_epoch=0)
     
-    print(history.history.keys())
+    #print(history.history.keys())
     figure(figsize=(8, 6))
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])

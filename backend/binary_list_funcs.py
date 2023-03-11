@@ -11,14 +11,14 @@ import cv2
 import numpy as np
 from PIL import ImageColor
 
-import texts
+import texts, texts_codes
 from neighbouring_UI import neighbouring
 from backend import Annotation, classification_list_funcs, dataset
 
 
 n_images_per_row = 4  # number of current images on binarylist page slider
 n_images_per_row_classlist = (
-    5  # number of current images on classification list page slider
+    3  # number of current images on classification list page slider
 )
 no_image_path = (
     "./images/no_image.png"  # path for a raw image (using for labels default image)
@@ -99,16 +99,20 @@ def create_image_slider_on_ui(
         frame_obj.setLayout(eval("ui_obj.%s_layout" % prefix))
 
         ui_obj.logger.create_new_log(
-            message=texts.MESSEGES["BINARYLIST_SLIDER_build"]["en"], level=1
+            message=texts.MESSEGES["BINARYLIST_SLIDER_build"]["en"],
+            code=texts_codes.SubTypes['BINARYLIST_SLIDER_build'],
+            level=1
         )
         return True
 
     except Exception as e:
         ui_obj.set_warning(
-            texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"], "binarylist", level=3
+            texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"], "binarylist", texts_codes.SubTypes['BUILD_BINARYLIST_SLIDER_ERROR'], level=3
         )
         ui_obj.logger.create_new_log(
-            message=texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"], level=5
+            message=texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"],
+            code=texts_codes.SubTypes['BUILD_BINARYLIST_SLIDER_ERROR'],
+            level=5
         )
         return False
 
@@ -675,13 +679,14 @@ def create_mask_from_annotation_file(ui_obj, db_obj, image, annotation_path):
             pts = pts.reshape((-1, 1, 2))
             # Draw a line nofilled polygon
             # draw a filled polygon
+            line_thickness = obj_mask['line_thickness']
             if res:
                 image_mask = cv2.polylines(
                     image_mask,
                     [pts],
                     isClosed=True,
                     color=html_to_bgr(defect_info["color"]),
-                    thickness=line_tickness,
+                    thickness=line_thickness,
                 )
                 image_mask2 = cv2.putText(
                     image_mask2,
@@ -699,7 +704,7 @@ def create_mask_from_annotation_file(ui_obj, db_obj, image, annotation_path):
                     [pts],
                     isClosed=True,
                     color=html_to_bgr(mask_color),
-                    thickness=line_tickness,
+                    thickness=line_thickness,
                 )
 
         # masks

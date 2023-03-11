@@ -4,6 +4,7 @@ from PySide6.QtCharts import QPieSeries as sQPieSeries
 from PySide6.QtCharts import QLineSeries as sQLineSeries
 from PySide6.QtCharts import QScatterSeries as sQScatterSeries
 from PySide6.QtCharts import QBarSeries as sQBarSeries
+from PySide6.QtCharts import QHorizontalPercentBarSeries as sQHorizontalPercentBarSeries
 from PySide6.QtCharts import QBarSet as sQBarSet
 from PySide6.QtCharts import QValueAxis as sQValueAxis
 from PySide6.QtCore import QPointF as sQPointF
@@ -15,13 +16,14 @@ from PySide6.QtGui import QColor as sQColor
 from PySide6.QtGui import QPen as sQPen
 from PySide6.QtGui import QPainter as sQPainter
 from PySide6.QtGui import QFont as sQFont
+from PySide6.QtCore import Qt
 
 import cv2
 import numpy as np
 import random
 
 from backend import dataset
-import texts
+import texts, texts_codes
 
 
 # chart colors and appearance
@@ -225,6 +227,7 @@ def state_changed(ui_obj, checkbox_obj, scrolbaer_obj, axisX_obj):
         scrolbaer_obj.setValue(0)
         axisX_obj.setRange(1, nepoch)
         axisX_obj.setTickCount(nepoch)
+        # axisX_obj.setLabelsFont(sQFont("Times", 4, sQFont.Normal))
     else:
         axisX_obj.setTickCount(axisX_range)
         if (last_epoch//axisX_range - 1)*axisX_range + (last_epoch%axisX_range) >= 0:
@@ -265,9 +268,17 @@ def update_chart_test(ui_obj, chart_postfixes, scroll_obj):
         nepoch, last_epoch = get_nepochs_and_lastepoch()
 
 
-def update_chart(ui_obj, chart_postfixes, last_epoch, logs, scroll_obj):
-    params = [logs['loss'], logs['accuracy']*100, logs['Precision']*100, logs['Recall']*100, logs['val_loss'], logs['val_accuracy']*100, logs['val_Precision']*100, logs['val_Recall']*100]
-    
+def update_chart(ui_obj, chart_postfixes, last_epoch, logs, scroll_obj, chart_type='binary'):
+    if chart_type == 'binary':
+        params = [logs['loss'], logs['accuracy']*100, logs['Recall']*100, logs['Precision']*100, logs['val_loss'], logs['val_accuracy']*100, logs['val_Recall']*100, logs['val_Precision']*100]
+    elif chart_type == 'localization':
+        params = [logs['loss'], logs['accuracy']*100, logs['iou_score']*100, logs['f1-score']*100, logs['val_loss'], logs['val_accuracy']*100, logs['val_iou_score']*100, logs['val_f1-score']*100]
+    elif chart_type == 'yolo':
+        params = [logs['train/box_loss'], logs['train/obj_loss'], logs['train/cls_loss'],
+                  110, 110, 110,
+                  logs['val/box_loss'], logs['val/obj_loss'], logs['val/cls_loss'],
+                  logs['metrics/recall']*100, logs['metrics/precision']*100, logs['metrics/mAP_0.5']*100]
+
     if last_epoch >= axisX_range and not ui_obj.binary_chart_checkbox.isChecked():
         scroll_obj.setMaximum(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
         scroll_obj.setValue(((last_epoch+1)//axisX_range - 1)*axisX_range + ((last_epoch+1)%axisX_range))
@@ -358,7 +369,10 @@ def create_classlist_piechart_on_ui(ui_obj, frame_obj_binary, frame_obj_classlis
     frame_obj_classlist.setLayout(pievbox2)
     frame_obj_classlist.layout().setContentsMargins(0, 0, 0, 0)
 
-    ui_obj.logger.create_new_log(message=texts.MESSEGES['clslist_piechart_created']['en'], level=1)
+    ui_obj.logger.create_new_log(message=texts.MESSEGES['clslist_piechart_created']['en'],
+                                code=texts_codes.SubTypes['clslist_piechart_created'],
+                                level=1
+                                )
 
 
 # update pie chart
@@ -401,7 +415,7 @@ def update_classlist_piechart(ui_obj, binary_len, classes_len, classes_list):
 
         # classes
         # convert len to percentage
-        #print('defects', classes_list)
+        ##print('defects', classes_list)
         for cls in classes_list:
             cls_id = str(cls['defect_ID'])
             #
@@ -429,7 +443,9 @@ def update_classlist_piechart(ui_obj, binary_len, classes_len, classes_list):
             # my_slice.setLabelVisible(True)
     
     except Exception as e:
-        ui_obj.logger.create_new_log(message=texts.ERRORS['update_classlist_piechart_failed']['en'], level=5)
+        ui_obj.logger.create_new_log(message=texts.ERRORS['update_classlist_piechart_failed']['en'],
+                                    code=texts_codes.SubTypes['update_classlist_piechart_failed'],
+                                    level=5)
         return
 
 
@@ -478,8 +494,9 @@ def create_binarylist_piechart_on_ui(ui_obj, frame_obj_binary, chart_title='Char
     frame_obj_binary.setLayout(bpievbox)
     frame_obj_binary.layout().setContentsMargins(0, 0, 0, 0)
 
-    ui_obj.logger.create_new_log(message=texts.MESSEGES['binarylist_piechart_created']['en'], level=1)
-
+    ui_obj.logger.create_new_log(message=texts.MESSEGES['binarylist_piechart_created']['en'],
+                                code=texts_codes.SubTypes['binarylist_piechart_created'],
+                                level=1)
 
 # update binarylist pie chart
 def update_binarylist_piechart(ui_obj, binary_len):
@@ -520,8 +537,11 @@ def update_binarylist_piechart(ui_obj, binary_len):
         ui_obj.pie_binarylist_series.setLabelsPosition(QPieSlice.LabelInsideHorizontal)
     
     except Exception as e:
-        ui_obj.logger.create_new_log(message=texts.ERRORS['update_binarylist_piechart_failed']['en'], level=5)
+        ui_obj.logger.create_new_log(message=texts.ERRORS['update_binarylist_piechart_failed']['en'],
+                                    code=texts_codes.SubTypes['update_binarylist_piechart_failed'],
+                                    level=5)
         return
+
 
 def create_binarylist_barchart_on_ui(ui_obj, frame_obj_binary, chart_title='Chart'):
     # creat chart
@@ -788,6 +808,66 @@ def update_label_piechart(ui_obj, binary_len):
 
     except:
         return
+
+
+def create_storage_barchart_on_ui(ui_obj, frame_obj_storage, chart_title='Storage Status'):
+    # creat chart
+    # binary
+    ui_obj.storage_barchart = sQChart()
+    # ui_obj.storage_barchart.setAnimationOptions(sQChart.SeriesAnimations)
+    ui_obj.storage_barchart.setMargins(sQMargins(0, 0, 0, 0))
+    ui_obj.storage_barchart.layout().setContentsMargins(0, 0, 0, 0)
+    # ui_obj.binary_barchart.setTitle(chart_title)
+    # ui_obj.binary_barchart.setTheme(sQChart.ChartThemeDark)
+    ui_obj.storage_barchart.legend().setVisible(True)
+    ui_obj.storage_barchart.legend().setAlignment(Qt.AlignRight)
+    ui_obj.storage_barchart.legend().setLabelBrush(sQColor(pie_label_color))
+    ui_obj.storage_barchart.setBackgroundBrush(sQColor('#14165c'))
+    ui_obj.storage_barchart.setBackgroundRoundness(0)
+
+    # binary series
+    ui_obj.bar_storage_series = sQHorizontalPercentBarSeries()
+
+    # add series to chart
+    ui_obj.storage_barchart.addSeries(ui_obj.bar_storage_series)
+
+    # set to ui
+    ui_obj.storage_barchartview = sQChartView(ui_obj.storage_barchart)
+    ui_obj.storage_barchartview.setContentsMargins(0, 0, 0, 0)
+    #
+    
+    frame_obj_storage.layout().addWidget(ui_obj.storage_barchartview)
+
+
+def update_storage_barchart(ui_obj, storage_status):
+    ui_obj.bar_storage_series.clear()
+    
+    categories = list(storage_status.keys())
+    ui_obj.axisX = QBarCategoryAxis()
+    ui_obj.axisX.append(categories)
+    ui_obj.storage_barchart.setAxisY(ui_obj.axisX, ui_obj.bar_storage_series)
+    ui_obj.axisX.setLabelsColor(sQColor(pie_label_color))
+    ui_obj.axisX.setLabelsVisible(False)
+
+    ui_obj.axisY = QValueAxis()
+    ui_obj.storage_barchart.setAxisX(ui_obj.axisY, ui_obj.bar_storage_series)
+    ui_obj.axisY.setRange(0, 100)
+    ui_obj.axisY.setLabelsColor(sQColor(pie_label_color))
+    ui_obj.axisY.setLabelsFont(sQFont("Times", 8, sQFont.Normal))
+
+    set0 = QBarSet('used')
+    set1 = QBarSet('free')
+
+    for k in categories:
+        set0.append(storage_status[k]['used'])
+        set1.append(storage_status[k]['free'])
+
+    set0.setBrush(sQColor(defect_color))
+    set1.setBrush(sQColor(perfect_color))
+
+    ui_obj.bar_storage_series.append(set0)
+    ui_obj.bar_storage_series.append(set1)
+
 
 # # chart (must be add in main_ui.py)
 # # chart ---------------------------------------------------------------------------------------------

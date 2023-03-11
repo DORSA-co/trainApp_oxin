@@ -185,7 +185,7 @@ class neighbouring(QMainWindow, ui):
         frame_geo = self.frameGeometry()
         screen = self.window().screen()
         center_loc = screen.geometry().center()
-        #print(center_loc)
+        ##print(center_loc)
         frame_geo.moveCenter(center_loc)
         self.move(frame_geo.topLeft())
         # self.move(frame_geo.moveTop)

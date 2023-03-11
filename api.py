@@ -1,5 +1,4 @@
 # from logging import _Level
-from __future__ import print_function
 import ast
 from email.mime import image
 from ntpath import join
@@ -21,7 +20,6 @@ from PySide6.QtCharts import QPieSeries, QPieSlice, QChart, QChartView
 from PySide6.QtCore import *
 from PySide6.QtCore import QThread as sQThread
 from PySide6.QtGui import QPen, QPainter
-from PySide6.QtWidgets import QFileDialog
 from matplotlib import pyplot as plt
 from matplotlib.style import use
 from pyautogui import PRIMARY
@@ -73,6 +71,7 @@ from backend import (
     plc_managment,
     level2_connection,
     localization_model_funcs,
+    yolo_model_funcs,
     pathStructure,
 )
 
@@ -81,10 +80,11 @@ from utils import *
 from utils.move_on_list import moveOnList, moveOnImagrList
 
 import texts  # eror and warnings texts
+import texts_codes
 from utils import tempMemory, Utils
 
 from backend.dataset import Dataset
-from random_split import get_crops_normal
+from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2
 import train_api
 
 from labeling.labeling_UI import labeling
@@ -100,6 +100,7 @@ from camera_live_thread import ImageManager
 from multiprocessing import Process
 import dataset_utils
 import image_processing_worker
+import save_all_worker
 import random
 
 # _______JJ importing:
@@ -196,10 +197,13 @@ class API:
         self.bmodel_tabel_itr = 1
         # iterator for localization-model history tabel
         self.lmodel_tabel_itr = 1
+        self.ymodel_tabel_itr = 1
         self.bmodel_count = 0
         self.lmodel_count = 0
+        self.ymodel_count = 0
         self.filter_mode = False
         self.lfilter_mode = False
+        self.yfilter_mode = False
         self.flag_all_camera = False
         self.start_capture_flag = False
         self.ready_capture_flag = False
@@ -207,9 +211,6 @@ class API:
 
         # binarylist dataset parms
         self.dataset_params = {}
-
-        self.ui.set_b_default_db_parms(self.ds.binary_path)
-        self.ui.set_l_default_db_parms(self.ds.localization_path)
 
         self.logged_in = False
         # Create labeling window
@@ -387,6 +388,8 @@ class API:
         self.show_save_notif = False
 
         self.runing_b_model = False
+        self.runing_l_model = False
+        self.runing_y_model = False
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -453,6 +456,9 @@ class API:
         binary_count = self.ds_json.get_binary_count(
             os.path.join(parms["path"], parms["dataset_name"] + ".json")
         )
+        self.ui.set_b_default_db_parms(self.ds.dataset_path)
+        self.ui.set_l_default_db_parms(self.ds.dataset_path)
+        self.ui.set_y_default_db_parms(self.ds.dataset_path)
         chart_funcs.update_label_piechart(self.ui, binary_count)
 
     # _____________________________________________________________________JJ ZONE BEGINE
@@ -562,7 +568,8 @@ class API:
                     )
 
         else:
-            print("name not valid")
+            pass
+            # #print("name not valid")
 
     def check_name_pipline(self):
 
@@ -605,7 +612,7 @@ class API:
     def create_and_add_pipline(self):
 
         try:
-            # print(self.current_b_model)
+            # #print(self.current_b_model)
             # data = pipline_name,user_name,pipline path if save , binary_weight path , local weight path , class weight path
             data = (
                 self.ui.pipline_name.text(),
@@ -616,7 +623,7 @@ class API:
                 self.current_c_model["weights_path"],
             )  # path pipline null
             ret = self.db.add_pipline(data)
-            # print('ret',ret)
+            # #print('ret',ret)
             return ret
 
         except:
@@ -674,7 +681,7 @@ class API:
             )
         )
 
-        self.ui.cbBox_of_localiztion_model_in_PBT_page.currentTextChanged.connect(
+        self.ui.cbBox_of_localization_model_in_PBT_page.currentTextChanged.connect(
             lambda: self.refresh_binary_models_table(
                 filter_mode=True, wich_page="PBT", model_type="localization"
             )
@@ -777,7 +784,9 @@ class API:
         self.ui.prev_img_label_btn.clicked.connect(partial(self.prev_label_img))
         self.ui.binary_train.clicked.connect(partial(self.set_b_parms))
         self.ui.localization_train.clicked.connect(partial(self.set_l_parms))
+        self.ui.yolo_train.clicked.connect(partial(self.set_y_parms))
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
+        self.ui.save_all_dataset_btn.clicked.connect(partial(self.save_all_train_ds))
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
         self.ui.suggested_defects_btn.clicked.connect(
             partial(self.image_processing_suggest)
@@ -796,9 +805,16 @@ class API:
         self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
         self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
 
+        self.ui.l_select_prep.clicked.connect(
+            partial(self.select_localization_pretrain_path)
+        )
         self.ui.l_select_dp.clicked.connect(partial(self.select_localization_dataset))
         self.ui.l_delete_ds.clicked.connect(partial(self.delete_localization_dataset))
         self.ui.l_add_ok.clicked.connect(partial(self.ok_add_localization_ds))
+
+        self.ui.y_select_dp.clicked.connect(partial(self.select_yolo_dataset))
+        self.ui.y_delete_ds.clicked.connect(partial(self.delete_yolo_dataset))
+        self.ui.y_add_ok.clicked.connect(partial(self.ok_add_yolo_ds))
 
         # login
         self.login_user_name = "root"
@@ -816,8 +832,8 @@ class API:
         # labeling
 
         # self.labaling_UI.save_btn.clicked.connect(partial(self.set_label))
-        self.ui.no_defect.toggled.connect(self.change_image_save_status)
-        self.ui.yes_defect.toggled.connect(self.change_image_save_status)
+        # self.ui.no_defect.toggled.connect(self.change_image_save_status)
+        # self.ui.yes_defect.toggled.connect(self.change_image_save_status)
 
         # data aquization
         self.ui.connect_camera_btn.clicked.connect(partial(self.connect_camera))
@@ -859,9 +875,9 @@ class API:
         self.ui.binary_clearfilter_btn.clicked.connect(partial(self.clear_filters))
 
         # binary-list
-        self.ui.binary_list.clicked.connect(
-            partial(lambda: self.refresh_datasets_table(is_binarylist=True))
-        )
+        # self.ui.binary_list.clicked.connect(
+        #     partial(lambda: self.refresh_datasets_table(is_binarylist=True))
+        # )
         # self.ui.binary_list_dataset_btn.clicked.connect(partial(lambda: self.select_binary_dataset(page='binarylist')))
         self.ui.binary_list_show_btn.clicked.connect(
             partial(self.load_binary_images_list)
@@ -905,6 +921,27 @@ class API:
         self.ui.localization_clearfilter_btn.clicked.connect(
             partial(self.clear_localization_filters)
         )
+
+        # yolo-model history
+        self.ui.yolo_tabel_prev.clicked.connect(
+            partial(lambda: self.yolo_model_tabel_nextorprev(next=False))
+        )
+        self.ui.yolo_tabel_next.clicked.connect(
+            partial(lambda: self.yolo_model_tabel_nextorprev(next=True))
+        )
+        self.ui.Yolo_btn.clicked.connect(
+            partial(self.refresh_yolo_models_table_onevent)
+        )
+        self.ui.yolo_history.clicked.connect(
+            partial(self.refresh_yolo_models_table_onevent)
+        )
+        self.ui.yolo_table_refresh_btn.clicked.connect(
+            partial(self.refresh_yolo_models_table_onevent)
+        )
+        self.ui.yolo_filter_btn.clicked.connect(
+            partial(lambda: self.refresh_yolo_models_table(filter_mode=True))
+        )
+        self.ui.yolo_clearfilter_btn.clicked.connect(partial(self.clear_yolo_filters))
 
         # ______________________________________________JJ ZONE START
 
@@ -1000,6 +1037,9 @@ class API:
                 lambda: self.user_access_pages(self.ui.Classification_btn.objectName())
             )
         )
+        self.ui.Yolo_btn.clicked.connect(
+            partial(lambda: self.user_access_pages(self.ui.Yolo_btn.objectName()))
+        )
         self.ui.pbt_btn.clicked.connect(
             partial(lambda: self.user_access_pages(self.ui.pbt_btn.objectName()))
         )
@@ -1020,9 +1060,9 @@ class API:
         self.ui.toolButton_binary.clicked.connect(
             lambda: self.load_table_with_btn(self.ui.toolButton_binary.objectName())
         )
-        self.ui.toolButton_localiztion.clicked.connect(
+        self.ui.toolButton_localization.clicked.connect(
             lambda: self.load_table_with_btn(
-                self.ui.toolButton_localiztion.objectName()
+                self.ui.toolButton_localization.objectName()
             )
         )
         self.ui.toolButton_multiClassification.clicked.connect(
@@ -1061,11 +1101,29 @@ class API:
             "Binary_btn": self.ui.page_Binary,
             "Localization_btn": self.ui.page_Localization,
             "Classification_btn": self.ui.page_Classification,
+            "Yolo_btn": self.ui.page_Yolo,
             "pbt_btn": self.ui.page_pbt,
         }
         if self.logged_in:
             eval(
                 'self.ui.set_widget_page(self.ui.stackedWidget,dic["{}"])'.format(
+                    btn_name
+                )
+            )
+            for btn in [
+                "Binary_btn",
+                "Localization_btn",
+                "Classification_btn",
+                "Yolo_btn",
+            ]:
+                eval(
+                    'self.ui.{}.setStyleSheet("background-color: rgb(230, 230, 230); color: black; text-align:center;")'.format(
+                        btn
+                    )
+                )
+
+            eval(
+                'self.ui.{}.setStyleSheet("background-color: rgb(170, 170, 212); color: black; text-align:center;")'.format(
                     btn_name
                 )
             )
@@ -1085,6 +1143,13 @@ class API:
 
         self.mouse.connet_dbclick(self.ui.crop_image, self.fit_image)
         self.mouse.connet_dbclick(self.ui.sn, self.maximize_neighbours)
+
+        self.mouse.connet_dbclick(self.ui.labeling_help_1, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_2, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_3, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_4, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_5, self.maximize_labeling_helps)
+        self.mouse.connet_dbclick(self.ui.labeling_help_6, self.maximize_labeling_helps)
 
     def keyboard_connector(self):
         self.keyboard.connet(
@@ -1283,7 +1348,8 @@ class API:
                 self.refresh_thechnical(fp=1)  #
 
         except:
-            print("Error!: load_sheet() in API")
+            pass
+            # #print("Error!: load_sheet() in API")
 
     # ----------------------------------------------------------------------------------------
     # when next next_coil_btn clicked this function move on next coil id and load it
@@ -1395,6 +1461,7 @@ class API:
         try:
             sheets = self.db.report_last_sheets(9999)
             self.ui.load_sheets_win.show_sheets_info(sheets)
+            self.ui.load_sheets_win.reset_search_lines()
             self.ui.data_loader_win_show()
             self.ui.load_sheets_win.set_warning(
                 texts.MESSEGES["refresh_success"][self.language], level=1
@@ -1577,7 +1644,7 @@ class API:
         cam, frame = self.thechnicals_backend[
             self.current_technical_side
         ].get_current_img_position()
-        # print(cam,frame, '^'*20)
+        # #print(cam,frame, '^'*20)
         if (frame < 0) or (cam < 0):
             self.ui.set_warning(
                 texts.WARNINGS["NO_CHOOSEN_IMG"][self.language],
@@ -1589,8 +1656,8 @@ class API:
             side = self.thechnicals_backend[self.current_technical_side].get_side()
             main_path = self.sheet.get_path()
 
-            x = os.path.split(main_path)
-            path = pathStructure.sheet_image_path(x[0], x[1], side, cam, frame, ".png")
+            x = main_path.split("/")
+            path = pathStructure.sheet_image_path(x[0], x[-1], side, cam, frame, ".png")
 
             if not os.path.exists(path):
                 self.ui.set_warning(
@@ -1689,7 +1756,7 @@ class API:
                     if f:
                         self.label_memory.add(img_path, f, label_type)
 
-                self.image_save_status[img_path] = True
+                self.image_save_status[img_path] = False
 
             self.ui.show_label_page()
             self.ui.show_small_neighbouring()
@@ -1717,7 +1784,7 @@ class API:
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
-    def load_image_to_label_page(self):
+    def load_image_to_label_page(self, fast=False):
         sheet, selected_img_pos, img_path = self.move_on_list.get_current(
             "selected_imgs_for_label"
         )
@@ -1726,17 +1793,20 @@ class API:
         self.img = Utils.read_image(img_path, "color")
         self.load_label_from_memory(img_path)
 
-        label_img = self.label_bakcend[label_type].draw(self.selected_defects)
-        self.img = Utils.add_layer_to_img(
-            self.img, label_img, opacity=0.4, compress=0.5
-        )
-        self.ui.show_image_in_label(self.img)
+        if not fast:
+            label_img = self.label_bakcend[label_type].draw(self.selected_defects)
+            self.img = Utils.add_layer_to_img(
+                self.img, label_img, opacity=0.4, compress=0.5
+            )
+            self.ui.show_image_in_label(self.img)
 
         labels = self.label_bakcend[label_type].get()
-        labels_name = []
-        for label in labels:
-            labels_name.append(self.defects_name_dict[label[0]])
-        self.ui.show_labels(labels, labels_name, label_type, self.selected_defects)
+
+        if not fast:
+            labels_name = []
+            for label in labels:
+                labels_name.append(self.defects_name_dict[label[0]])
+            self.ui.show_labels(labels, labels_name, label_type, self.selected_defects)
 
         if len(labels) > 0:
             self.ui.yes_defect.setChecked(True)
@@ -1745,16 +1815,17 @@ class API:
             self.ui.yes_defect.setChecked(False)
             self.ui.no_defect.setChecked(True)
 
-        # print(self.label_bakcend[label_type].get())
-        # print(label, img_path)
+        # #print(self.label_bakcend[label_type].get())
+        # #print(label, img_path)
 
-        self.load_neighbour_images(selected_img_pos)
+        if not fast:
+            self.load_neighbour_images(selected_img_pos)
 
-        self.ui.show_image_info_lable_page(sheet, selected_img_pos)
+            self.ui.show_image_info_lable_page(sheet, selected_img_pos)
 
-        self.ui.image.setScaledContents(True)
-        self.scale = 1
-        self.position = [0, 0]
+            self.ui.image.setScaledContents(True)
+            self.scale = 1
+            self.position = [0, 0]
 
     def load_label_from_memory(self, img_path):
         for label_type in ["mask"]:
@@ -1823,9 +1894,10 @@ class API:
                 select_list=["All"]
             )
             self.n_anns.append(label_img)
-        # print(time.time() - t)
+        # #print(time.time() - t)
 
     def next_label_img(self):
+        # print(')))))))))))):', self.image_save_status)
         _, _, img_path = self.move_on_list.get_current("selected_imgs_for_label")
         if not self.image_save_status[img_path]:
             t = self.ui.show_question(
@@ -1886,9 +1958,9 @@ class API:
     def create_label_color(self):
         self.LABEL_COLOR = {"black": (0, 0, 0)}
         defect_name, defect_info = self.get_defects()
-        # print(len(defect_info),defect_info)
+        # #print(len(defect_info),defect_info)
         for i in range(len(defect_info)):
-            # print(defect_name[i], defect_info[i]["color"])
+            # #print(defect_name[i], defect_info[i]["color"])
             hex_color = defect_info[i]["color"].lstrip("#")
             rgb_color = tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))
             rgb = (rgb_color[2], rgb_color[1], rgb_color[0])
@@ -1896,7 +1968,7 @@ class API:
 
     def get_labels_color(self):
         defect_name, defect_info = self.get_defects()
-        # print(len(defect_info),defect_info)
+        # #print(len(defect_info),defect_info)
         colors = {}
         for i in range(len(defect_info)):
             hex_color = defect_info[i]["color"]
@@ -2009,19 +2081,28 @@ class API:
                 self.ui.image.setCursor(Qt.OpenHandCursor)
 
     def delete_all_labels(self):
-        label_type = self.ui.get_label_type()
-        sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
-        img = Utils.read_image(img_path, "color")
-        self.img = img
-        self.label_bakcend[label_type].clear_labels()
-        self.label_memory.remove_by_value(label_type, img_path)
-        self.ui.show_image_in_label(img, self.scale, self.position)
-        self.ui.show_labels([], [], label_type, [])
-        self.load_neighbour_images(pos)
-        self.image_save_status[img_path] = False
+        t = self.ui.show_question(
+            texts.WARNINGS["question"][self.language],
+            texts.MESSEGES["sure_delete"][self.language],
+        )
+        if not t:
+            return
+        else:
+            label_type = self.ui.get_label_type()
+            sheet, pos, img_path = self.move_on_list.get_current(
+                "selected_imgs_for_label"
+            )
+            img = Utils.read_image(img_path, "color")
+            self.img = img
+            self.label_bakcend[label_type].clear_labels()
+            self.label_memory.remove_by_value(label_type, img_path)
+            self.ui.show_image_in_label(img, self.scale, self.position)
+            self.ui.show_labels([], [], label_type, [])
+            self.load_neighbour_images(pos)
+            self.image_save_status[img_path] = False
 
     def select_defect(self):
-        # print(self.ui.mask_table_widget.selectedIndexes())
+        # #print(self.ui.mask_table_widget.selectedIndexes())
         self.selected_defects = []
         for i in range(self.ui.mask_table_widget.rowCount()):
             if self.ui.mask_table_widget.item(i, 0).checkState() == QtCore.Qt.Checked:
@@ -2059,9 +2140,10 @@ class API:
             current_mouse_position = self.mouse_controll.position
             sign_defect_table = self.db.ret_sign_defect_table()
             if sign_defect_table == 0:
-                print("nochange")
+                pass
+                # #print("nochange")
             else:
-                print("change")
+                # #print("change")
                 try:
                     self.defects_name, self.defects_info = self.db.get_defects()
                     self.find_defect_name()
@@ -2081,7 +2163,7 @@ class API:
                 partial(self.close_labeling)
             )
             self.ui.labeling_win.show()
-            print("end show_labeling")
+            # #print("end show_labeling")
 
     def auto_login(self):
         # self.show_login()
@@ -2110,7 +2192,7 @@ class API:
             login_window.login_btn.clicked.connect(partial(self.check_login))
             self.ui.login_window.show()
         else:
-            print("user_loged_in")
+            # #print("user_loged_in")
             self.show_message_logout()
 
     def show_message_logout(self):
@@ -2142,7 +2224,6 @@ class API:
         chart_funcs.clear_userprofile_barchart(self.ui)
 
     def check_login(self):
-
         self.login_info = self.login_api.check_login()
         if self.login_info[0] == True:
             self.ui.user_name.setText(
@@ -2161,7 +2242,7 @@ class API:
             self.set_databases()
             self.set_user_databases()
             self.set_default_dataset()
-            # print("*" * 50)
+            # #print("*" * 50)
 
     def set_parms_login_page(self, login_info):
         self.ui.user_name_2.setText(str(login_info[1]["user_name"]))
@@ -2175,7 +2256,7 @@ class API:
         self.ImageManager.set_user(self.login_user_name)
         self.ui.logger.set_current_user(self.login_user_name)
         self.ds_json.set_user_name_database(self.login_user_name)
-        # print('username:', self.login_user_name)
+        # #print('username:', self.login_user_name)
 
     def set_profile_page(self):
         if self.logged_in == True:
@@ -2193,7 +2274,7 @@ class API:
         self.datasets = self.db.get_all_datasets()
         for i in range(len(self.datasets)):
             dataset_names.append(self.datasets[i]["name"])
-        # print("dataset_names", dataset_names)
+        # #print("dataset_names", dataset_names)
         self.ui.comboBox_all_datasets.clear()
         self.ui.comboBox_all_datasets.addItems(dataset_names)
         self.update_table_all_datasets()
@@ -2229,11 +2310,11 @@ class API:
     def set_user_databases(self):
         dataset_names = []
         self.user_databases = self.db.get_user_databases(self.login_user_name)
-        # print("******************", self.user_databases)
+        # #print("******************", self.user_databases)
         self.user_default_databases = self.db.get_default_dataset(self.login_user_name)
         for i in range(len(self.user_databases)):
             dataset_names.append(self.user_databases[i]["name"])
-        # print("dataset_names", dataset_names)
+        # #print("dataset_names", dataset_names)
         self.ui.comboBox_user_datasets.clear()
         self.ui.comboBox_user_datasets.addItems(dataset_names)
         # self.ui.comboBox_default_dataset.addItems(dataset_names)
@@ -2244,7 +2325,7 @@ class API:
 
     def update_user_datasts(self):
         current = self.ui.comboBox_user_datasets.currentIndex()
-        # print('asd',self.user_databases[current].values)
+        # #print('asd',self.user_databases[current].values)
         self.ui.show_user_datasets(list(self.user_databases[current].values()))
         binary_count = self.ds_json.get_binary_count(
             os.path.join(
@@ -2281,17 +2362,30 @@ class API:
             )
             chart_funcs.update_label_piechart(self.ui, binary_count)
             self.ui.set_warning(
-                texts.MESSEGES["SET_DATASET"][self.language], "profile", level=1
+                texts.MESSEGES["SET_DATASET"][self.language],
+                "profile",
+                texts_codes.SubTypes["SET_DATASET"],
+                level=1,
             )
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["SET_DATASET"]["en"], level=1
+                code=texts_codes.SubTypes["SET_DATASET"],
+                message=texts.MESSEGES["SET_DATASET"]["en"],
+                level=1,
             )
+            self.ui.set_b_default_db_parms(self.ds.dataset_path)
+            self.ui.set_l_default_db_parms(self.ds.dataset_path)
+            self.ui.set_y_default_db_parms(self.ds.dataset_path)
         except:
             self.ui.set_warning(
-                texts.ERRORS["SET_DATASET_FAILED"][self.language], "profile", level=3
+                texts.ERRORS["SET_DATASET_FAILED"][self.language],
+                "profile",
+                texts_codes.SubTypes["SET_DATASET_FAILED"],
+                level=3,
             )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["SET_DATASET_FAILED"]["en"], level=5
+                code=texts_codes.SubTypes["SET_DATASET_FAILED"],
+                message=texts.ERRORS["SET_DATASET_FAILED"]["en"],
+                level=5,
             )
 
     # ---------------------------------------------------------------------///////////////////////////////////////////
@@ -2315,10 +2409,13 @@ class API:
                 self.ui.set_warning(
                     texts.WARNINGS["CREATE_DATASET_EXIST"][self.language],
                     "profile",
+                    texts_codes.SubTypes["CREATE_DATASET_EXIST"],
                     level=2,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.WARNINGS["CREATE_DATASET_EXIST"]["en"], level=2
+                    message=texts.WARNINGS["CREATE_DATASET_EXIST"]["en"],
+                    code=texts_codes.SubTypes["CREATE_DATASET_EXIST"],
+                    level=2,
                 )
                 return
             try:
@@ -2330,19 +2427,27 @@ class API:
                 self.db.add_dataset(data)
 
                 self.ui.set_warning(
-                    texts.MESSEGES["CREATE_DATASET"][self.language], "profile", level=1
+                    texts.MESSEGES["CREATE_DATASET"][self.language],
+                    "profile",
+                    texts_codes.SubTypes["CREATE_DATASET"],
+                    level=1,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.MESSEGES["CREATE_DATASET"]["en"], level=1
+                    message=texts.MESSEGES["CREATE_DATASET"]["en"],
+                    code=texts_codes.SubTypes["CREATE_DATASET"],
+                    level=1,
                 )
             except:
                 self.ui.set_warning(
                     texts.ERRORS["CREATE_DATASET_FAILED"][self.language],
                     "profile",
+                    texts_codes.SubTypes["CREATE_DATASET_FAILED"],
                     level=3,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.ERRORS["CREATE_DATASET_FAILED"]["en"], level=5
+                    message=texts.ERRORS["CREATE_DATASET_FAILED"]["en"],
+                    code=texts_codes.SubTypes["CREATE_DATASET_FAILED"],
+                    level=5,
                 )
 
     # ----------------------------------------------------------------------///////////////////////
@@ -2417,14 +2522,12 @@ class API:
     #     return parent_path
 
     def set_b_parms(self):
-
         if not self.runing_b_model:
-            print("statrt training binary model")
+            # #print('statrt training binary model')
             b_parms = self.ui.get_binary_parms()
             if not b_parms:
                 return
-            if b_parms[2]:
-                self.split_binary_dataset(b_parms[-1], b_parms[1])
+
             # update chart axes given train data
             self.update_b_chart_axes(b_parms[3])
 
@@ -2432,7 +2535,11 @@ class API:
             # Step 3: Create a worker object
             self.bmodel_train_worker = binary_model_funcs.Binary_model_train_worker()
             self.bmodel_train_worker.assign_parameters(
-                b_parms=b_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db
+                b_parms=b_parms,
+                api_obj=self,
+                ui_obj=self.ui,
+                db_obj=self.db,
+                ds_obj=self.ds,
             )
             # Step 4: Move worker to the thread
             self.bmodel_train_worker.moveToThread(self.bmodel_train_thread)
@@ -2450,87 +2557,139 @@ class API:
             self.bmodel_train_thread.finished.connect(
                 self.bmodel_train_thread.deleteLater
             )
+
+            self.bmodel_train_worker.warning.connect(self.ui.set_warning)
+            self.bmodel_train_worker.reset_progressbar.connect(
+                self.reset_binary_train_progressBar
+            )
+            self.bmodel_train_worker.set_progressbar.connect(
+                self.set_binary_train_progressBar
+            )
+            self.bmodel_train_worker.update_charts.connect(
+                self.assign_new_value_to_b_chart
+            )
+
             # Step 6: Start the thread
             self.runing_b_model = True
             self.bmodel_train_thread.start()
 
-            self.bmodel_train_worker.warning.connect(self.ui.set_warning)
-
             self.ui.binary_train.setEnabled(False)
 
-            self.ui.binary_train_progressBar.setValue(0)
-            self.ui.binary_train_progressBar.setMaximum(b_parms[3])
+    def reset_binary_train_progressBar(self, value, text):
+        self.ui.binary_train_progressBar.setValue(0)
+        self.ui.binary_train_progressBar.setMaximum(value)
+        self.ui.binary_train_progressBar_label.setText(text + " ... ")
+
+    def set_binary_train_progressBar(self):
+        self.ui.binary_train_progressBar.setValue(
+            self.ui.binary_train_progressBar.value() + 1
+        )
 
     def update_b_chart_axes(self, nepoch):
-        for chart_postfix in self.ui.chart_names:
-            eval("self.ui.axisX_%s" % chart_postfix).setRange(
-                1, max(nepoch, chart_funcs.axisX_range)
-            )
-            if self.ui.binary_chart_checkbox.isChecked():
-                eval("self.ui.axisX_%s" % chart_postfix).setTickCount(nepoch)
-            else:
-                eval("self.ui.axisX_%s" % chart_postfix).setTickCount(
-                    chart_funcs.axisX_range
-                )
         chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
         chart_funcs.clear_series_date(
             ui_obj=self.ui, chart_postfixes=self.ui.chart_names
         )
         self.ui.binary_chart_checkbox.setEnabled(True)
-        # self.ui.binary_chart_checkbox.setChecked(True)
 
     def assign_new_value_to_b_chart(self, last_epoch, logs):
-        self.ui.binary_train_progressBar.setValue(
-            self.ui.binary_train_progressBar.value() + 1
-        )
-        chart_funcs.update_chart(
-            ui_obj=self.ui,
-            chart_postfixes=self.ui.chart_names,
-            last_epoch=last_epoch,
-            logs=logs,
-            scroll_obj=self.ui.binary_chart_scrollbar,
-        )
+        try:
+            chart_funcs.update_chart(
+                ui_obj=self.ui,
+                chart_postfixes=self.ui.chart_names,
+                last_epoch=last_epoch,
+                logs=logs,
+                scroll_obj=self.ui.binary_chart_scrollbar,
+            )
+            self.ui.logger.create_new_log(
+                message=texts.MESSEGES["UPDATE_BCHART"]["en"].format(last_epoch)
+            )
+        except:
+            self.ui.logger.create_new_log(
+                message=texts.ERRORS["UPDATE_BCHART_FAILED"]["en"].format(last_epoch),
+                level=5,
+            )
+            self.ui.set_warning(
+                texts.ERRORS["UPDATE_BCHART_FAILED"][self.language].format(last_epoch),
+                "train",
+                None,
+                3,
+            )
 
     def set_l_parms(self):
+        if not self.runing_l_model:
+            l_parms = self.ui.get_localization_parms()
+            if not l_parms:
+                return
 
-        l_parms = self.ui.get_localization_parms()
-        if not l_parms:
-            return
-        if l_parms[2]:
-            self.split_localization_dataset(l_parms[-1], l_parms[1])
-        # update chart axes given train data
-        self.update_l_chart_axes(l_parms[3])
+            # update chart axes given train data
+            self.update_l_chart_axes(l_parms[4])
 
-        self.lmodel_train_thread = sQThread()
-        # Step 3: Create a worker object
-        self.lmodel_train_worker = (
-            localization_model_funcs.Localization_model_train_worker()
+            self.lmodel_train_thread = sQThread()
+            # Step 3: Create a worker object
+            self.lmodel_train_worker = (
+                localization_model_funcs.Localization_model_train_worker()
+            )
+            self.lmodel_train_worker.assign_parameters(
+                l_parms=l_parms,
+                api_obj=self,
+                ui_obj=self.ui,
+                db_obj=self.db,
+                ds_obj=self.ds,
+            )
+            # Step 4: Move worker to the thread
+            self.lmodel_train_worker.moveToThread(self.lmodel_train_thread)
+            # Step 5: Connect signals and slots
+            self.lmodel_train_thread.started.connect(
+                self.lmodel_train_worker.train_model
+            )
+            self.lmodel_train_worker.finished.connect(self.lmodel_train_thread.quit)
+            self.lmodel_train_worker.finished.connect(
+                self.lmodel_train_worker.show_lmodel_train_result
+            )
+            self.lmodel_train_worker.finished.connect(
+                self.lmodel_train_worker.deleteLater
+            )
+            self.lmodel_train_thread.finished.connect(
+                self.lmodel_train_thread.deleteLater
+            )
+
+            self.lmodel_train_worker.warning.connect(self.ui.set_warning)
+            self.lmodel_train_worker.reset_progressbar.connect(
+                self.reset_localization_train_progressBar
+            )
+            self.lmodel_train_worker.set_progressbar.connect(
+                self.set_localization_train_progressBar
+            )
+            self.lmodel_train_worker.update_charts.connect(
+                self.assign_new_value_to_l_chart
+            )
+
+            # Step 6: Start the thread
+            self.runing_l_model = True
+            self.lmodel_train_thread.start()
+
+            self.ui.localization_train.setEnabled(False)
+
+    def reset_localization_train_progressBar(self, value, text):
+        self.ui.localization_train_progressBar.setValue(0)
+        self.ui.localization_train_progressBar.setMaximum(value)
+        self.ui.localization_train_progressBar_label.setText(text + " ... ")
+
+    def set_localization_train_progressBar(self):
+        self.ui.localization_train_progressBar.setValue(
+            self.ui.localization_train_progressBar.value() + 1
         )
-        self.lmodel_train_worker.assign_parameters(
-            l_parms=l_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db
-        )
-        # Step 4: Move worker to the thread
-        self.lmodel_train_worker.moveToThread(self.lmodel_train_thread)
-        # Step 5: Connect signals and slots
-        self.lmodel_train_thread.started.connect(self.lmodel_train_worker.train_model)
-        self.lmodel_train_worker.finished.connect(self.lmodel_train_thread.quit)
-        self.lmodel_train_worker.finished.connect(
-            self.lmodel_train_worker.show_lmodel_train_result
-        )
-        self.lmodel_train_worker.finished.connect(self.lmodel_train_worker.deleteLater)
-        self.lmodel_train_thread.finished.connect(self.lmodel_train_thread.deleteLater)
-        # Step 6: Start the thread
-        self.lmodel_train_thread.start()
 
     def update_l_chart_axes(self, nepoch):
-        for chart_postfix in self.ui.loc_chart_names:
-            eval("self.ui.axisX_%s" % chart_postfix).setRange(0, nepoch)
-            if self.ui.localization_chart_checkbox.isChecked():
-                eval("self.ui.axisX_%s" % chart_postfix).setTickCount(nepoch + 1)
-            else:
-                eval("self.ui.axisX_%s" % chart_postfix).setTickCount(
-                    chart_funcs.axisX_range + 1
-                )
+        # for chart_postfix in self.ui.loc_chart_names:
+        #     eval("self.ui.axisX_%s" % chart_postfix).setRange(0, max(nepoch, chart_funcs.axisX_range))
+        #     if self.ui.localization_chart_checkbox.isChecked():
+        #         eval("self.ui.axisX_%s" % chart_postfix).setTickCount(nepoch)
+        #     else:
+        #         eval("self.ui.axisX_%s" % chart_postfix).setTickCount(
+        #             chart_funcs.axisX_range
+        #         )
         chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
         chart_funcs.clear_series_date(
             ui_obj=self.ui, chart_postfixes=self.ui.loc_chart_names
@@ -2539,14 +2698,137 @@ class API:
         # self.ui.localization_chart_checkbox.setChecked(True)
 
     def assign_new_value_to_l_chart(self, last_epoch, logs):
-        print("here", last_epoch, logs)
-        chart_funcs.update_chart(
-            ui_obj=self.ui,
-            chart_postfixes=self.ui.loc_chart_names,
-            last_epoch=last_epoch,
-            logs=logs,
-            scroll_obj=self.ui.localization_chart_scrollbar,
+        try:
+            chart_funcs.update_chart(
+                ui_obj=self.ui,
+                chart_postfixes=self.ui.loc_chart_names,
+                last_epoch=last_epoch,
+                logs=logs,
+                scroll_obj=self.ui.localization_chart_scrollbar,
+                chart_type="localization",
+            )
+            self.ui.logger.create_new_log(
+                message=texts.MESSEGES["UPDATE_LCHART"]["en"].format(last_epoch)
+            )
+        except:
+            self.ui.logger.create_new_log(
+                message=texts.ERRORS["UPDATE_LCHART_FAILED"]["en"].format(last_epoch),
+                level=5,
+            )
+            self.ui.set_warning(
+                texts.ERRORS["UPDATE_LCHART_FAILED"][self.ui.language].format(
+                    last_epoch
+                ),
+                "l_train",
+                None,
+                3,
+            )
+
+    def set_y_parms(self):
+        if not self.runing_y_model:
+            y_parms = self.ui.get_yolo_parms()
+            if not y_parms:
+                return
+
+            # update chart axes given train data
+            self.update_yolo_chart_axes(y_parms[3])
+
+            self.ymodel_train_thread = sQThread()
+            # Step 3: Create a worker object
+            self.ymodel_train_worker = yolo_model_funcs.Yolo_model_train_worker()
+            self.ymodel_train_worker.assign_parameters(
+                y_parms=y_parms,
+                api_obj=self,
+                ui_obj=self.ui,
+                db_obj=self.db,
+                ds_obj=self.ds,
+            )
+            # Step 4: Move worker to the thread
+            self.ymodel_train_worker.moveToThread(self.ymodel_train_thread)
+            # Step 5: Connect signals and slots
+            self.ymodel_train_thread.started.connect(
+                self.ymodel_train_worker.train_model
+            )
+            self.ymodel_train_worker.finished.connect(self.ymodel_train_thread.quit)
+            self.ymodel_train_worker.finished.connect(
+                self.ymodel_train_worker.show_ymodel_train_result
+            )
+            self.ymodel_train_worker.finished.connect(
+                self.ymodel_train_worker.deleteLater
+            )
+            self.ymodel_train_thread.finished.connect(
+                self.ymodel_train_thread.deleteLater
+            )
+
+            self.ymodel_train_worker.warning.connect(self.ui.set_warning)
+            self.ymodel_train_worker.reset_progressbar.connect(
+                self.reset_yolo_train_progressBar
+            )
+            self.ymodel_train_worker.set_progressbar.connect(
+                self.set_yolo_train_progressBar
+            )
+            self.ymodel_train_worker.update_charts.connect(
+                self.assign_new_value_to_yolo_chart
+            )
+
+            # Step 6: Start the thread
+            self.runing_y_model = True
+            self.ymodel_train_thread.start()
+
+            self.ui.yolo_train.setEnabled(False)
+
+    def reset_yolo_train_progressBar(self, value, text):
+        self.ui.yolo_train_progressBar.setValue(0)
+        self.ui.yolo_train_progressBar.setMaximum(value)
+        self.ui.yolo_train_progressBar_label.setText(text + " ... ")
+
+    def set_yolo_train_progressBar(self):
+        self.ui.yolo_train_progressBar.setValue(
+            self.ui.yolo_train_progressBar.value() + 1
         )
+
+    def update_yolo_chart_axes(self, nepoch):
+        # for chart_postfix in self.ui.loc_chart_names:
+        #     eval("self.ui.axisX_%s" % chart_postfix).setRange(0, max(nepoch, chart_funcs.axisX_range))
+        #     if self.ui.localization_chart_checkbox.isChecked():
+        #         eval("self.ui.axisX_%s" % chart_postfix).setTickCount(nepoch)
+        #     else:
+        #         eval("self.ui.axisX_%s" % chart_postfix).setTickCount(
+        #             chart_funcs.axisX_range
+        #         )
+        chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
+        chart_funcs.clear_series_date(
+            ui_obj=self.ui, chart_postfixes=self.ui.yolo_chart_names
+        )
+        self.ui.yolo_chart_checkbox.setEnabled(True)
+        # self.ui.localization_chart_checkbox.setChecked(True)
+
+    def assign_new_value_to_yolo_chart(self, last_epoch, logs):
+        try:
+            chart_funcs.update_chart(
+                ui_obj=self.ui,
+                chart_postfixes=self.ui.yolo_chart_names,
+                last_epoch=last_epoch,
+                logs=logs,
+                scroll_obj=self.ui.yolo_chart_scrollbar,
+                chart_type="yolo",
+            )
+            self.ui.logger.create_new_log(
+                message=texts.MESSEGES["UPDATE_YCHART"]["en"].format(last_epoch)
+            )
+        except:
+            self.ui.logger.create_new_log(
+                message=texts.ERRORS["UPDATE_YCHART_FAILED"]["en"].format(last_epoch),
+                level=5,
+            )
+            self.ui.set_warning(
+                texts.ERRORS["UPDATE_YCHART_FAILED"][self.ui.language].format(
+                    last_epoch
+                ),
+                "y_train",
+                None,
+                3,
+            )
 
     def save_to_dataset(self):
         sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
@@ -2637,64 +2919,43 @@ class API:
         binary_count = self.ds_json.get_binary_count(None)
         chart_funcs.update_label_piechart(self.ui, binary_count)
 
-    def split_binary_dataset(self, paths, size):
-        for path in paths:
-            if self.ds.check_binary_dataset(path):
-                self.ds.create_split_folder(path)
+    def save_all_train_ds(self):
+        count = self.move_on_list.get_count("selected_imgs_for_label")
+        self.ui.save_all_progressBar.setValue(0)
+        self.ui.save_all_progressBar.setMaximum(count)
 
-                s_mask = os.path.join(path, self.ds.defect_mask_folder)
-                s_defect = os.path.join(path, self.ds.defect_folder)
-                d_defect = os.path.join(path, self.ds.defect_splitted_folder)
-                imgs = os.listdir(s_defect)
-                for i in imgs:
-                    img = Utils.read_image(os.path.join(s_defect, i), color="gray")
-                    mask = Utils.read_image(os.path.join(s_mask, i), color="gray")
-                    crops, _ = get_crops(img, mask, size)
-                    self.ds.save_to_defect_splitted(
-                        crops, d_defect, name=i.split(".")[0]
-                    )
+        self.thread = sQThread()
+        # Step 3: Create a worker object
+        self.worker = save_all_worker.save_all_worker()
+        self.worker.assign_parameters(api_obj=self, count=count)
+        # Step 4: Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Step 5: Connect signals and slots
+        self.thread.started.connect(self.worker.run)
+        self.worker.warning.connect(self.ui.set_warning)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker.finished.connect(self.save_all_finished)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.update_progressbar.connect(self.update_save_all_progressbar)
+        self.worker.question.connect(self.save_all_show_question)
+        # Step 6: Start the thread
+        self.thread.start()
 
-                s_perfect = os.path.join(path, self.ds.perfect_folder)
-                d_perfect = os.path.join(path, self.ds.perfect_splitted_folder)
-                imgs = os.listdir(s_perfect)
-                if len(os.listdir(s_perfect)):
-                    n_split = np.ceil(
-                        (len(os.listdir(d_defect)) * 1.5) / (len(os.listdir(s_perfect)))
-                    )
-                else:
-                    n_split = 0
-                for i in imgs:
-                    img = Utils.read_image(os.path.join(s_perfect, i), color="color")
-                    crops = get_crops_no_defect(img, n_split, size)
-                    self.ds.save_to_perfect_splitted(crops, d_perfect, i.split(".")[0])
-            else:
-                self.ui.set_warning(
-                    texts.WARNINGS["DATASET_FORMAT"][self.language], "train", level=2
-                )
-                return
+    def save_all_show_question(self, title, message):
+        self.save_all_question = self.ui.show_question(title, message)
 
-    def split_localization_dataset(self, paths, size):
-        for path in paths:
-            if self.ds.check_localization_dataset(path):
-                self.ds.create_l_split_folder(path)
+    def save_all_finished(self):
+        binary_count = self.ds_json.get_binary_count(None)
+        chart_funcs.update_label_piechart(self.ui, binary_count)
+        self.ui.set_warning(
+            texts.WARNINGS["IMAGES_SAVE_SUCCESSFULLY"][self.language],
+            "label",
+            level=1,
+        )
 
-                s_label = os.path.join(path, self.ds.localization_folder_label)
-                s_image = os.path.join(path, self.ds.localization_folder_image)
-                d_label = os.path.join(path, self.ds.localization_folder_label_splitted)
-                d_image = os.path.join(path, self.ds.localization_folder_image_splitted)
-                imgs = os.listdir(s_image)
-                for i in imgs:
-                    img = Utils.read_image(os.path.join(s_image, i), color="gray")
-                    label = Utils.read_image(os.path.join(s_label, i), color="gray")
-                    image_crops, label_crops = get_crops(img, label, size)
-                    self.ds.save_localization_splits(
-                        image_crops, label_crops, d_image, d_label, name=i.split(".")[0]
-                    )
-            else:
-                self.ui.set_warning(
-                    texts.WARNINGS["DATASET_FORMAT"][self.language], "train", level=2
-                )
-                return
+    def update_save_all_progressbar(self):
+        self.ui.save_all_progressBar.setValue(self.ui.save_all_progressBar.value() + 1)
 
     def select_binary_dataset(self, page="train"):
         self.ui.create_ds_selection_dialog()
@@ -2722,7 +2983,7 @@ class API:
         selecteds = self.ui.select_ds_dialog.get_select_datasets()
 
         for selected in selecteds:
-            dname = os.path.join(selected, "binary")
+            dname = selected
             if not self.ds.check_binary_dataset(dname):
                 self.ui.set_warning(
                     texts.WARNINGS["DATASET_FORMAT"][self.language], page, level=2
@@ -2811,43 +3072,72 @@ class API:
             self.group.addAnimation(self.left_box)
             self.group.start()
 
-    def select_localization_dataset(self, page="l_train"):
-        self.l_select_ds_dialog = FileDialog("Select a directory", "/")
-        selected = self.l_select_ds_dialog.exec()
+    def select_localization_pretrain_path(self):
+        self.l_select_pre_dialog = QFileDialog()
+        path = "./"
+        filter = "h5(*.h5)"
+        dname = QFileDialog.getOpenFileName(
+            self.l_select_pre_dialog, "open", path, filter
+        )[0]
 
-        if selected:
-            dname = self.l_select_ds_dialog.selectedFiles()[0]
-        else:
-            return
         if dname == "":
             return
-        if not self.ds.check_localization_dataset(dname):
-            self.ui.set_warning(
-                texts.WARNINGS["DATASET_FORMAT"][self.language], page, level=2
-            )
-            return
-        #
-        if page == "l_train":
-            text = self.ui.l_dp.toPlainText()
-            pattern = r"[0-9]+. "
-            datasets = [
-                os.path.abspath(s.rstrip()) for s in re.split(pattern, text)[1:]
-            ]
+        self.ui.l_prep.setText(dname)
 
-            if os.path.abspath(dname) in datasets:
+    def select_localization_dataset(self, page="l_train"):
+        self.ui.create_ds_selection_dialog()
+
+        datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)[1]
+        self.ui.select_ds_dialog.table.setRowCount(len(datasets_list))
+        for i, ds in enumerate(datasets_list):
+            # set name
+            table_item = sQTableWidgetItem(str(ds["name"]))
+            table_item.setCheckState(Qt.CheckState.Unchecked)
+            self.ui.select_ds_dialog.table.setItem(i, 0, table_item)
+            # set user_own
+            table_item = sQTableWidgetItem(str(ds["user_own"]))
+            self.ui.select_ds_dialog.table.setItem(i, 1, table_item)
+            # set path
+            table_item = sQTableWidgetItem(str(ds["path"]))
+            self.ui.select_ds_dialog.table.setItem(i, 2, table_item)
+
+        self.ui.select_ds_dialog.ok_btn.clicked.connect(
+            lambda: self.ok_selected_localization_datasets(page)
+        )
+        self.ui.select_ds_dialog.show()
+
+    def ok_selected_localization_datasets(self, page="l_train"):
+        selecteds = self.ui.select_ds_dialog.get_select_datasets()
+
+        for selected in selecteds:
+            dname = selected
+            if not self.ds.check_localization_dataset(dname):
                 self.ui.set_warning(
-                    texts.WARNINGS["DATASET_EXIST"][self.language], page, level=2
+                    texts.WARNINGS["DATASET_FORMAT"][self.language], page, level=2
                 )
                 return
+            #
+            if page == "l_train":
+                text = self.ui.l_dp.toPlainText()
+                pattern = r"[0-9]+. "
+                datasets = [
+                    os.path.abspath(s.rstrip()) for s in re.split(pattern, text)[1:]
+                ]
 
-            n = len(datasets) + 1
-            if text != "":
-                text += " \n"
-            self.ui.l_dp.setPlainText(text + str(n) + ". " + dname)
-        #
-        elif page == "binarylist":
-            self.ui.binarylist_dataset_lineedit.setText(dname)
-            self.ui.binarylist_dataset_annot_lineedit.setText(dname)
+                if os.path.abspath(dname) in datasets:
+                    self.ui.set_warning(
+                        texts.WARNINGS["DATASET_EXIST"][self.language], page, level=2
+                    )
+                    return
+
+                n = len(datasets) + 1
+                if text != "":
+                    text += " \n"
+                self.ui.l_dp.setPlainText(text + str(n) + ". " + dname)
+                #
+            elif page == "binarylist":
+                self.ui.binarylist_dataset_lineedit.setText(dname)
+                self.ui.binarylist_dataset_annot_lineedit.setText(dname)
 
     def delete_localization_dataset(self):
         ds_n = self.ui.l_ds_num.value() - 1
@@ -2909,6 +3199,123 @@ class API:
             self.group.addAnimation(self.left_box)
             self.group.start()
 
+    def select_yolo_dataset(self, page="y_train"):
+        self.ui.create_ds_selection_dialog()
+
+        datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)[1]
+        self.ui.select_ds_dialog.table.setRowCount(len(datasets_list))
+        for i, ds in enumerate(datasets_list):
+            # set name
+            table_item = sQTableWidgetItem(str(ds["name"]))
+            table_item.setCheckState(Qt.CheckState.Unchecked)
+            self.ui.select_ds_dialog.table.setItem(i, 0, table_item)
+            # set user_own
+            table_item = sQTableWidgetItem(str(ds["user_own"]))
+            self.ui.select_ds_dialog.table.setItem(i, 1, table_item)
+            # set path
+            table_item = sQTableWidgetItem(str(ds["path"]))
+            self.ui.select_ds_dialog.table.setItem(i, 2, table_item)
+
+        self.ui.select_ds_dialog.ok_btn.clicked.connect(
+            lambda: self.ok_selected_yolo_datasets(page)
+        )
+        self.ui.select_ds_dialog.show()
+
+    def ok_selected_yolo_datasets(self, page="y_train"):
+        selecteds = self.ui.select_ds_dialog.get_select_datasets()
+
+        for selected in selecteds:
+            dname = selected
+            if not self.ds.check_yolo_dataset(dname):
+                self.ui.set_warning(
+                    texts.WARNINGS["DATASET_FORMAT"][self.language], page, level=2
+                )
+                return
+            #
+            if page == "y_train":
+                text = self.ui.y_dp.toPlainText()
+                pattern = r"[0-9]+. "
+                datasets = [
+                    os.path.abspath(s.rstrip()) for s in re.split(pattern, text)[1:]
+                ]
+
+                if os.path.abspath(dname) in datasets:
+                    self.ui.set_warning(
+                        texts.WARNINGS["DATASET_EXIST"][self.language], page, level=2
+                    )
+                    return
+
+                n = len(datasets) + 1
+                if text != "":
+                    text += " \n"
+                self.ui.y_dp.setPlainText(text + str(n) + ". " + dname)
+                #
+            elif page == "binarylist":
+                self.ui.binarylist_dataset_lineedit.setText(dname)
+                self.ui.binarylist_dataset_annot_lineedit.setText(dname)
+
+    def delete_yolo_dataset(self):
+        ds_n = self.ui.y_ds_num.value() - 1
+        text = self.ui.y_dp.toPlainText()
+        pattern = r"[0-9]+. "
+        datasets = [s.rstrip() for s in re.split(pattern, text)[1:]]
+        if ds_n >= len(datasets):
+            self.ui.set_warning(
+                texts.WARNINGS["DATASET_NUMBER"][self.language], "y_train", level=2
+            )
+            return
+        datasets.pop(ds_n)
+        text = ""
+        for i in range(len(datasets)):
+            text += str(i + 1) + ". " + datasets[i]
+            if i != len(datasets) - 1:
+                text += "\n"
+
+        self.ui.y_dp.setPlainText(text)
+
+    def ok_add_yolo_ds(self):
+        path = self.ui.y_add_ds_lineedit.text().lstrip()
+        path = path.rstrip()
+        if not os.path.exists(path):
+            self.ui.set_warning(
+                texts.WARNINGS["INVALID_DATASET"][self.language], "y_train", level=2
+            )
+            return
+        elif not self.ds.check_yolo_dataset(path):
+            self.ui.set_warning(
+                texts.WARNINGS["DATASET_FORMAT"][self.language], "y_train", level=2
+            )
+            return
+
+        text = self.ui.y_dp.toPlainText()
+        pattern = r"[0-9]+. "
+
+        datasets = [os.path.abspath(s.rstrip()) for s in re.split(pattern, text)[1:]]
+
+        if os.path.abspath(path) in datasets:
+            self.ui.set_warning(
+                texts.WARNINGS["DATASET_EXIST"][self.language], "y_train", level=2
+            )
+        else:
+            n = len(datasets) + 1
+            if text != "":
+                text += " \n"
+            self.ui.y_dp.setPlainText(text + str(n) + ". " + path)
+        self.ui.y_add_ds_lineedit.setText("")
+
+        height = self.ui.y_add_ds_frame.height()
+        if height == 67:
+            self.left_box = QPropertyAnimation(self.ui.y_add_ds_frame, b"maximumHeight")
+            self.left_box.setDuration(Settings.TIME_ANIMATION)
+            self.left_box.setStartValue(100)
+            self.left_box.setEndValue(0)
+            self.left_box.setEasingCurve(QEasingCurve.InOutQuart)
+            self.group = QParallelAnimationGroup()
+            self.group.addAnimation(self.left_box)
+            self.group.start()
+
+    # -------------------------------------------Camera conection and show ----------------------------------------
+
     def get_camera_config(self, id):
         """
         This function returns camera parameters from database
@@ -2920,8 +3327,6 @@ class API:
         """
         cam_parms = self.db.load_cam_params(id)
         return cam_parms
-
-    # -------------------------------------------Camera conection and show ----------------------------------------
 
     def connect_camera(self):
         """
@@ -3213,6 +3618,7 @@ class API:
 
         self.refresh_binary_models_table(get_count=True, wich_page=wich_page)
         self.refresh_binary_models_table(wich_page=wich_page)
+        self.ui.clear_binary_filters_fields(wich_page=wich_page)
         self.filter_mode = False
         self.ui.set_warning(
             texts.MESSEGES["REFRESH_TABLE"][self.language],
@@ -3510,6 +3916,7 @@ class API:
         #
         self.refresh_binary_models_table(get_count=True)
         self.refresh_binary_models_table()
+        self.ui.clear_binary_filters_fields()
         self.ui.set_warning(
             texts.MESSEGES["FILTERED_RESAULTS_CLEAR"][self.language],
             "binary_model_history",
@@ -3999,10 +4406,13 @@ class API:
             self.ui.set_warning(
                 texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"][self.language],
                 "binarylist",
+                texts_codes.SubTypes["BUILD_BINARYLIST_SLIDER_ERROR"],
                 level=3,
             )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"], level=4
+                message=texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"],
+                code=texts_codes.SubTypes["BUILD_BINARYLIST_SLIDER_ERROR"],
+                level=4,
             )
 
     # update slider images
@@ -4069,20 +4479,26 @@ class API:
                 self.ui.set_warning(
                     texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"][self.language],
                     "binarylist",
+                    texts_codes.SubTypes["READ_BINARYLIST_IMAGES_ERROR"],
                     level=3,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"]["en"], level=4
+                    message=texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"]["en"],
+                    code=texts_codes.SubTypes["READ_BINARYLIST_IMAGES_ERROR"],
+                    level=4,
                 )
 
         except Exception as e:
             self.ui.set_warning(
                 texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"][self.language],
                 "binarylist",
+                texts_codes.SubTypes["READ_BINARYLIST_IMAGES_ERROR"],
                 level=3,
             )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"]["en"], level=5
+                message=texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"]["en"],
+                code=texts_codes.SubTypes["READ_BINARYLIST_IMAGES_ERROR"],
+                level=5,
             )
 
     # ------------------------------------------------------------------------------------------------------------------------
@@ -4095,6 +4511,7 @@ class API:
 
         self.refresh_localization_models_table(get_count=True)
         self.refresh_localization_models_table()
+        self.ui.clear_localization_filters_fields()
         self.lfilter_mode = False
         self.ui.set_warning(
             texts.MESSEGES["REFRESH_TABLE"][self.language],
@@ -4352,6 +4769,7 @@ class API:
         #
         self.refresh_localization_models_table(get_count=True)
         self.refresh_localization_models_table()
+        self.ui.clear_localization_filters_fields()
         self.ui.set_warning(
             texts.MESSEGES["FILTERED_RESAULTS_CLEAR"][self.language],
             "localization_model_history",
@@ -4389,6 +4807,268 @@ class API:
         #         "binarylist",
         #         level=3,
         #     )
+
+    # ------------------------------------------------------------------------------------------------------------------------
+    # yolo-model history page functions
+
+    def refresh_yolo_models_table_onevent(self):
+        """this function is used to refresh yolo models table"""
+
+        self.ymodel_tabel_itr = 1  # reset page number to first (1)
+        self.ui.yolo_tabel_page.setText(str(self.ymodel_tabel_itr))
+
+        self.refresh_yolo_models_table(get_count=True)
+        self.refresh_yolo_models_table()
+        self.ui.clear_yolo_filters_fields()
+        self.yfilter_mode = False
+        self.ui.set_warning(
+            texts.MESSEGES["REFRESH_TABLE"][self.language],
+            "yolo_model_history",
+            level=1,
+        )
+
+    def refresh_yolo_models_table(
+        self, nextorprev=False, get_count=False, filter_mode=False
+    ):
+        """this function is used to refresh/update yolo models table on UI
+
+        :param nextorprev: boolean determining if get next/prev page of records on table, defaults to False
+        :type nextorprev: bool, optional
+        :param get_count: boolean determining whether to get count of records in table in database, defaults to False
+        :type get_count: bool, optional
+        :param filter_mode: boolean determining if in table filter mode, defaults to False
+        :type filter_mode: bool, optional
+        :return:
+            get_count==True: None
+            get_count==False: boolean determining if done
+        :rtype: _type_
+        """
+
+        if get_count:
+            try:
+                (res, self.ymodel_count,) = yolo_model_funcs.get_yolo_models_from_db(
+                    db_obj=self.db, count=get_count
+                )
+                self.ymodel_count = self.ymodel_count[0]["count(*)"]
+
+                # validation
+                if not res:
+                    self.ui.notif_manager.append_new_notif(
+                        message=texts.ERRORS["database_get_ymodels_failed"][
+                            self.ui.language
+                        ],
+                        level=3,
+                    )
+                #
+                self.yolo_model_tabel_nextorprev(check=True)
+                return
+            except:
+                return
+        # load filterd models
+        if filter_mode:
+            # reset table page number to first (1)
+            self.ymodel_tabel_itr = 1
+            self.ui.yolo_tabel_page.setText(str(self.ymodel_tabel_itr))
+
+            res = self.filter_yolo_models(filter_signal=True, count=True)
+
+            if res[0]:
+                self.ymodel_count = res[1][0]["count(*)"]
+                self.yolo_model_tabel_nextorprev(check=True)
+
+                res = self.filter_yolo_models(filter_signal=True)
+
+                if res[0]:
+                    ymodels_list = res[1]
+                else:
+                    self.refresh_yolo_models_table(get_count=True)
+                    (
+                        res,
+                        ymodels_list,
+                    ) = yolo_model_funcs.get_yolo_models_from_db(db_obj=self.db)
+                    if not res:
+                        self.ui.notif_manager.append_new_notif(
+                            message=texts.ERRORS["database_get_ymodels_failed"][
+                                self.ui.language
+                            ],
+                            level=3,
+                        )
+
+            else:
+                self.refresh_yolo_models_table(get_count=True)
+                (
+                    res,
+                    ymodels_list,
+                ) = yolo_model_funcs.get_yolo_models_from_db(db_obj=self.db)
+                if not res:
+                    self.ui.notif_manager.append_new_notif(
+                        message=texts.ERRORS["database_get_ymodels_failed"][
+                            self.ui.language
+                        ],
+                        level=3,
+                    )
+
+        else:
+            if not nextorprev:
+                (
+                    res,
+                    ymodels_list,
+                ) = yolo_model_funcs.get_yolo_models_from_db(db_obj=self.db)
+                if not res:
+                    self.ui.notif_manager.append_new_notif(
+                        message=texts.ERRORS["database_get_ymodels_failed"][
+                            self.ui.language
+                        ],
+                        level=3,
+                    )
+
+            else:
+                if not self.yfilter_mode:
+                    (res, ymodels_list,) = yolo_model_funcs.get_yolo_models_from_db(
+                        db_obj=self.db,
+                        limit_size=yolo_model_funcs.yolo_table_nrows,
+                        offset=(self.ymodel_tabel_itr - 1)
+                        * yolo_model_funcs.yolo_table_nrows,
+                    )
+                    if not res:
+                        self.ui.notif_manager.append_new_notif(
+                            message=texts.ERRORS["database_get_ymodels_failed"][
+                                self.ui.language
+                            ],
+                            level=3,
+                        )
+
+                else:
+                    res = self.filter_yolo_models(
+                        limit_size=yolo_model_funcs.yolo_table_nrows,
+                        offset=(self.ymodel_tabel_itr - 1)
+                        * yolo_model_funcs.yolo_table_nrows,
+                    )
+                    ymodels_list = res[1]
+
+        if len(ymodels_list) == 0 and nextorprev:
+            return False
+
+        # set returned models to UI table
+        else:
+            yolo_model_funcs.set_ymodels_on_ui_tabel(
+                ui_obj=self.ui, ymodels_list=ymodels_list
+            )
+            return True
+
+    # next and prev buttons for yolo models table functionality
+    def yolo_model_tabel_nextorprev(self, next=True, check=False):
+        """this function is used to get next/prev page for yolo models table
+
+        :param next: boolean determining whether to get next page, defaults to True
+        :type next: bool, optional
+        :param check: _description_, defaults to False
+        :type check: bool, optional
+        """
+        if check:
+            page_max = int(
+                math.ceil(self.ymodel_count / yolo_model_funcs.yolo_table_nrows)
+            )
+
+            if self.ymodel_tabel_itr >= page_max:
+                self.ui.yolo_tabel_next.setEnabled(False)
+            else:
+                self.ui.yolo_tabel_next.setEnabled(True)
+            #
+            if self.ymodel_tabel_itr > 1:
+                self.ui.yolo_tabel_prev.setEnabled(True)
+            else:
+                self.ui.yolo_tabel_prev.setEnabled(False)
+
+            return
+
+        #
+        if next:
+            self.ymodel_tabel_itr += 1
+
+        elif self.ymodel_tabel_itr > 1:
+            self.ymodel_tabel_itr -= 1
+
+        #
+        res = self.refresh_yolo_models_table(nextorprev=True)
+        self.yolo_model_tabel_nextorprev(check=True)
+        self.ui.yolo_tabel_page.setText(str(self.ymodel_tabel_itr))
+
+    # filter function for yolo models
+    def filter_yolo_models(
+        self,
+        limit_size=yolo_model_funcs.yolo_table_nrows,
+        offset=0,
+        filter_signal=False,
+        count=False,
+    ):
+        """this function is used to filter yolo models given filter params on UI
+
+        :param limit_size: n table rows in database to return, defaults to yolo_model_funcs.yolo_table_nrows
+        :type limit_size: int, optional
+        :param offset: starting row index in table to return n next rows, defaults to 0
+        :type offset: int, optional
+        :param filter_signal: boolean determining wheter to get/update filter params from UI, defaults to False
+        :type filter_signal: bool, optional
+        :param count: boolean determinig whether to get count of results, defaults to False
+        :type count: bool, optional
+        :return:
+            result: boolean determining id done
+            filtered_binary_models: list of dicts
+        :rtype: _type_
+        """
+
+        if filter_signal:
+            self.filter_params = yolo_model_funcs.get_yolo_model_filter_info_from_ui(
+                ui_obj=self.ui
+            )
+        #
+        if not self.filter_params:
+            return False, filter_signal
+
+        res = yolo_model_funcs.get_filtered_yolo_models_from_db(
+            ui_obj=self.ui,
+            db_obj=self.db,
+            filter_params=self.filter_params,
+            limit_size=limit_size,
+            offset=offset,
+            count=count,
+        )
+
+        if res[0] == "error":
+            self.yfilter_mode = False
+            return False, res[1]
+
+        if res[0] == "all":
+            self.yfilter_mode = False
+            return False, res[1]
+
+        else:
+            self.yfilter_mode = True
+            self.ui.set_warning(
+                texts.MESSEGES["FILTERED_RESAULTS_SUCCUSSFULL"][self.language],
+                "yolo_model_history",
+                level=1,
+            )
+            return True, res[1]
+
+    # clear filters for yolo models
+    def clear_yolo_filters(self):
+        """this function is used tp clear filters for yolo models list"""
+
+        self.yfilter_mode = False  # diactive filter mode
+        # reset table page number
+        self.ymodel_tabel_itr = 1
+        self.ui.yolo_tabel_page.setText(str(self.ymodel_tabel_itr))
+        #
+        self.refresh_yolo_models_table(get_count=True)
+        self.refresh_yolo_models_table()
+        self.ui.clear_yolo_filters_fields()
+        self.ui.set_warning(
+            texts.MESSEGES["FILTERED_RESAULTS_CLEAR"][self.language],
+            "yolo_model_history",
+            level=1,
+        )
 
     # classification page
     # ------------------------------------------------------------------------------------------------------------------------
@@ -4566,10 +5246,13 @@ class API:
                 self.ui.set_warning(
                     texts.MESSEGES["LOAD_IMAGES_WITH_DEFECT"][self.language],
                     "classlist_msg_label",
+                    texts_codes.SubTypes["LOAD_IMAGES_WITH_DEFECT"],
                     level=1,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.MESSEGES["LOAD_IMAGES_WITH_DEFECT"]["en"], level=1
+                    message=texts.MESSEGES["LOAD_IMAGES_WITH_DEFECT"]["en"],
+                    code=texts_codes.SubTypes["LOAD_IMAGES_WITH_DEFECT"],
+                    level=1,
                 )
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(True)
@@ -4672,7 +5355,9 @@ class API:
 
         except Exception as e:
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["piechart_create_failed"]["en"], level=5
+                message=texts.ERRORS["piechart_create_failed"]["en"],
+                code=texts_codes.SubTypes["piechart_create_failed"],
+                level=5,
             )
 
     # _________________________________________________________________________________________________
@@ -4875,10 +5560,13 @@ class API:
             self.ui.set_warning(
                 texts.MESSEGES["FILTERED_RESAULTS_SUCCUSSFULL"][self.language],
                 "classification_model_history",
+                texts_codes.SubTypes["FILTERED_RESAULTS_SUCCUSSFULL"],
                 level=1,
             )
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["FILTERED_RESAULTS_SUCCUSSFULL"]["en"], level=1
+                message=texts.MESSEGES["FILTERED_RESAULTS_SUCCUSSFULL"]["en"],
+                code=texts_codes.SubTypes["FILTERED_RESAULTS_SUCCUSSFULL"],
+                level=1,
             )
             return True, res[1]
 
@@ -4959,6 +5647,10 @@ class API:
                 annt = self.ui.sn.get_img()
                 self.ui.show_neighbouring(image, annt)
 
+    def maximize_labeling_helps(self, widget_name=""):
+        n = int(widget_name.split("_")[-1])
+        self.ui.maximize_labeling_help_images(n)
+
     def load_settings(self):
         (
             lan,
@@ -5031,16 +5723,22 @@ class API:
         self.my_plc = plc_managment.management(ip, ui_obj=self.ui)
         self.connection_status = self.my_plc.connection()
         # parms=self.db.load_plc_parms()
-        # print(parms)
+        # #print(parms)
         #
         if self.connection_status:
             self.retry_connecting_plc = 0
             self.ui.set_status_plc(mode=True)
             res = self.load_plc_parms()
             if not res:
-                # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['database_get_plc_params_failed'][self.ui.language], level=2)
+                self.ui.set_warning(
+                    texts.ERRORS["database_get_plc_params_failed"][self.ui.language],
+                    "camera_connection",
+                    texts_codes.SubTypes["database_get_plc_params_failed"],
+                    level=2,
+                )
                 self.ui.logger.create_new_log(
                     message=texts.ERRORS["database_get_plc_params_failed"]["en"],
+                    code=texts_codes.SubTypes["database_get_plc_params_failed"],
                     level=3,
                 )
                 return
@@ -5048,12 +5746,16 @@ class API:
                 # self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['database_get_plc_params'][self.ui.language], level=0)
 
                 self.ui.logger.create_new_log(
-                    message=texts.MESSEGES["database_get_plc_params"]["en"], level=1
+                    message=texts.MESSEGES["database_get_plc_params"]["en"],
+                    code=texts_codes.SubTypes["database_get_plc_params"],
+                    level=1,
                 )
 
             # self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_connection_apply'][self.ui.language], level=0)
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["plc_connection_apply"]["en"], level=1
+                message=texts.MESSEGES["plc_connection_apply"]["en"],
+                code=texts_codes.SubTypes["plc_connection_apply"],
+                level=1,
             )
             self.plc_connection_status = True
             self.ui.disconnect_plc_btn.setEnabled(True)
@@ -5063,7 +5765,9 @@ class API:
             self.ui.set_status_plc(mode=False)
             # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_connection_apply_failed'][self.ui.language], level=2)
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["plc_connection_apply_failed"]["en"], level=4
+                message=texts.ERRORS["plc_connection_apply_failed"]["en"],
+                code=texts_codes.SubTypes["plc_connection_apply_failed"],
+                level=4,
             )
 
             # self.connect_plc()
@@ -5113,10 +5817,10 @@ class API:
         )
         # self.
 
-        # print('-'*50,self.up_high_threshold)
-        # print('88888888888888',self.dict_spec_pathes)
+        # #print('-'*50,self.up_high_threshold)
+        # #print('88888888888888',self.dict_spec_pathes)
 
-        # print('parms',self.parms)
+        # #print('parms',self.parms)
         return True
 
     def disconnect_plc(self, on_close=False, force_close=False):
@@ -5145,7 +5849,9 @@ class API:
                 level=3,
             )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["plc_disconnected_by_error"]["en"], level=4
+                message=texts.ERRORS["plc_disconnected_by_error"]["en"],
+                code=texts_codes.SubTypes["plc_disconnected_by_error"],
+                level=4,
             )
             #
             self.ui.disconnect_plc_btn.setEnabled(False)
@@ -5166,7 +5872,9 @@ class API:
                 message=texts.MESSEGES["plc_disconnected"][self.ui.language], level=1
             )
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["plc_disconnected"]["en"], level=1
+                message=texts.MESSEGES["plc_disconnected"]["en"],
+                code=texts_codes.SubTypes["plc_disconnected"],
+                level=1,
             )
             #
             self.ui.disconnect_plc_btn.setEnabled(False)
@@ -5181,7 +5889,9 @@ class API:
                     level=3,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.ERRORS["plc_disconnected_failed"]["en"], level=3
+                    message=texts.ERRORS["plc_disconnected_failed"]["en"],
+                    code=texts_codes.SubTypes["plc_disconnected_failed"],
+                    level=3,
                 )
 
         #
@@ -5200,15 +5910,24 @@ class API:
 
         # failed to get ip from database
         if not self.plc_ip:
-            # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['database_get_plc_ip_failed'][self.ui.language], level=2)
+            self.ui.set_warning(
+                texts.ERRORS["database_get_plc_ip_failed"][self.ui.language],
+                "camera_connection",
+                texts_codes.SubTypes["database_get_plc_ip_failed"],
+                level=2,
+            )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["database_get_plc_ip_failed"]["en"], level=4
+                message=texts.ERRORS["database_get_plc_ip_failed"]["en"],
+                code=texts_codes.SubTypes["database_get_plc_ip_failed"],
+                level=4,
             )
             return
         #
         else:
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["database_get_plc_ip"]["en"], level=1
+                message=texts.MESSEGES["database_get_plc_ip"]["en"],
+                code=texts_codes.SubTypes["database_get_plc_ip"],
+                level=1,
             )
             self.ui.set_plc_ip(self.plc_ip)
 
@@ -5233,7 +5952,7 @@ class API:
                 self.ui.start_wind()
 
     def set_start_software_plc(self, mode):
-        print("software on plc ", str(mode))
+        # #print("software on plc ", str(mode))
         try:
 
             self.my_plc.set_value(self.dict_spec_pathes["MemSoftwareStart"], str(mode))
@@ -5246,10 +5965,10 @@ class API:
             self.sensor = self.my_plc.get_value(
                 self.dict_spec_pathes["MemDistanceSensor"]
             )
-            # print(self.sensor[0])
+            # #print(self.sensor[0])
             if self.sensor[0] == "-":
                 if not self.ui.manual_plc:
-                    # print(";" * 50)
+                    # #print(";" * 50)
                     self.sensor = False
             else:
                 self.sensor = bool(self.sensor[0])
@@ -5290,7 +6009,7 @@ class API:
                     message=texts.ERRORS["overhead_temp"][self.ui.language], level=3
                 )
         except:
-            # print('Except self.top_temp > self.up_high_threshold')
+            # #print('Except self.top_temp > self.up_high_threshold')
             pass
         #  self.up_high_threshold = self.my_plc.get_value(self.dict_spec_pathes["UpHighThreshold"])
         # self.up_low_threshold = self.my_plc.get_value(self.dict_spec_pathes["UpLowThreshold"])
@@ -5303,12 +6022,12 @@ class API:
                 self.sensor = False
                 if self.itr >= 20:
                     self.itr = 0
-            # print(self.itr)
+            # #print(self.itr)
             self.itr += 1
 
         # if self.sensor:
         #     self.init_check_plc()
-        # print(self.sensor)
+        # #print(self.sensor)
         if self.last_sensor != self.sensor:
             self.change_sensor_run()
 
@@ -5321,7 +6040,7 @@ class API:
             pass
 
     def change_sensor_run(self):
-        # print(self.ready_capture_flag)
+        # #print(self.ready_capture_flag)
         if self.ready_capture_flag:
             if self.sensor:
                 self.set_start_software_plc(True)
@@ -5393,23 +6112,44 @@ class API:
                 texts.WARNINGS["Remove_pipline"][self.language] + select_pipline + ")",
             ):
                 try:
-                    self.db.remove_pipline(select_pipline)
+                    res = self.db.remove_pipline(select_pipline)
+
+                    if not res:
+                        self.ui.set_warning(
+                            texts.ERRORS["REMOVE_PIP_FAILED"][self.language],
+                            "profile",
+                            texts_codes.SubTypes["REMOVE_PIP_FAILED"],
+                            level=3,
+                        )
+                        self.ui.logger.create_new_log(
+                            message=texts.ERRORS["REMOVE_PIP_FAILED"]["en"],
+                            code=texts_codes.SubTypes["REMOVE_PIP_FAILED"],
+                            level=5,
+                        )
 
                     self.update_combo_piplines()
                     self.ui.set_warning(
-                        texts.MESSEGES["REMOVE_PIP"][self.language], "profile", level=1
+                        texts.MESSEGES["REMOVE_PIP"][self.language],
+                        "profile",
+                        texts_codes.SubTypes["REMOVE_PIP"],
+                        level=1,
                     )
                     self.ui.logger.create_new_log(
-                        message=texts.MESSEGES["REMOVE_PIP"]["en"], level=1
+                        message=texts.MESSEGES["REMOVE_PIP"]["en"],
+                        code=texts_codes.SubTypes["REMOVE_PIP"],
+                        level=1,
                     )
                 except:
                     self.ui.set_warning(
                         texts.ERRORS["REMOVE_PIP_FAILED"][self.language],
                         "profile",
+                        texts_codes.SubTypes["REMOVE_PIP_FAILED"],
                         level=3,
                     )
                     self.ui.logger.create_new_log(
-                        message=texts.ERRORS["REMOVE_PIP_FAILED"]["en"], level=5
+                        message=texts.ERRORS["REMOVE_PIP_FAILED"]["en"],
+                        code=texts_codes.SubTypes["REMOVE_PIP_FAILED"],
+                        level=5,
                     )
 
     # PBT Evaluate -----------------------------------------------

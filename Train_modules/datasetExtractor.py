@@ -7,7 +7,7 @@ import os
 def bar(counter,n):
     percent = counter/n*100
     os.system('cls')
-    print('percent={:.2f}%  |{}| n={} of {}'.format(percent, int(percent/2)*'◼' + int(50 - percent/2)*'-' ,int(counter), n))
+    #print('percent={:.2f}%  |{}| n={} of {}'.format(percent, int(percent/2)*'◼' + int(50 - percent/2)*'-' ,int(counter), n))
     
 #_________________________________________________________________________________________________________________
 #explain:
@@ -49,7 +49,7 @@ def binary(src_path, dst_path, image_folder='image', annotation_folder='anonatio
     #-------------------------------------
     #Extract binary Dataset
     for i, name in enumerate(annotations_name):
-        #print(nannonation)
+        ##print(nannonation)
         annotation = dr.read_annotation( annotation_path, name)
         fname = annotation.get_fname()
         img = annotation.get_img()
@@ -132,7 +132,7 @@ def mask(src_path,
     #-------------------------------------
     #Extract binary Dataset
     for i, name in enumerate(annotations_name):
-        #print(nannonation)
+        ##print(nannonation)
         annotation = dr.read_annotation( annotation_path, name)
         fname = annotation.get_fname()
         if not annotation.have_object():

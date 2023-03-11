@@ -54,14 +54,14 @@ class sheetOverView:
             int(self.sheet_shape[0] / self.sheet_grid[0]),
             int(self.sheet_shape[1] / self.sheet_grid[1]),
         )
-        print(self.sheet_shape, self.sheet_grid, self.cell_shape)
+        # #print(self.sheet_shape, self.sheet_grid, self.cell_shape)
         assert (
             self.cell_shape[0] % 2 == 1 and self.cell_shape[1] % 2 == 1
         ), "cell shape should be odd"
 
         self.n = 0
 
-        print(self.cell_shape)
+        # #print(self.cell_shape)
 
         self.pt = (0, 0)
         self.real_imgs = []
@@ -152,7 +152,7 @@ class sheetOverView:
         y = min(max(y, start_h + cell_h // 2), end_h - cell_h // 2)
 
         self.pt = (x, y)
-        # print('pt',self.pt)
+        # #print('pt',self.pt)
         self.update_real_imgs()
 
     # ______________________________________________________________________________________________________________________________
@@ -436,7 +436,7 @@ class sheetOverView:
         # -----------
         start_frame = center_frame - 1
         end_frame = center_frame + 1
-        # print('start_frame',start_frame,'end_frame',end_frame)
+        # #print('start_frame',start_frame,'end_frame',end_frame)
         # -------------------------------------------
         # -------------------------------------------
         start_cam = min(
@@ -446,7 +446,7 @@ class sheetOverView:
         # -----------
         start_frame = min(max(start_frame, 0), self.sheet_grid[0] - 3)
         end_frame = min(max(end_frame, start_frame + 2), self.sheet_grid[0] - 1)
-        # print(start_frame,end_frame)
+        # #print(start_frame,end_frame)
         # -------------------------------------------
         # -------------------------------------------
 
@@ -509,11 +509,11 @@ class sheetOverView:
                                     cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
                     new_imgs.append(img)
 
-        # print(new_idxs)
+        # #print(new_idxs)
         self.real_idxs = new_idxs
         self.real_imgs = new_imgs
         # except:
-        #     print("error load image")
+        #     #print("error load image")
 
     # _____________________________________________________________________________________________________________________________
     #
@@ -691,6 +691,6 @@ if __name__ == "__main__":
     # #     t = time.time() - t
     # #     all_t+=t
 
-    # # #print(all_t/100)
+    # # ##print(all_t/100)
     # # cv2.imshow('res', cv2.cvtColor( img, cv2.COLOR_RGB2BGR))
     # # cv2.waitKey(0)

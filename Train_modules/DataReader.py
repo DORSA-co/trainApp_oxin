@@ -643,7 +643,7 @@ if __name__ == '__main__':
     
     count = len(annonations_name)
     for i, nannonation in enumerate(annonations_name):
-        #print(nannonation)
+        ##print(nannonation)
         annonation = read_annotation( lbls_path, nannonation)
         if annonation.have_object() == False:
             continue
@@ -651,7 +651,7 @@ if __name__ == '__main__':
         res_mask = np.sum(msks.astype(np.int32), axis=-1)
 
         res_mask = np.clip(res_mask,0,255).astype(np.uint8)
-        #print(res_mask.shape)
+        ##print(res_mask.shape)
         #cv2.imshow('msk', res_mask)
         #cv2.imshow('img', img)
         #cv2.waitKey(0)
@@ -660,14 +660,14 @@ if __name__ == '__main__':
         cv2.imwrite(os.path.join(res_imgs_path, fname), img)
         cv2.imwrite(os.path.join(res_lbls_path, fname), res_mask)
         
-        print(np.float16(i/count*100), '%')
+        #print(np.float16(i/count*100), '%')
         os.system('cls')
         
 
     end
-    #print('Start filter by class 1')
+    ##print('Start filter by class 1')
     #annonations_name = filter_annonations( lbls_path, filter_arg={'class':[1]})
-    #print('End filter')
+    ##print('End filter')
 
     extractor_func1 = extact_binary()
     gen = generator( lbls_path, extractor_func1, annonations_name=annonations_name, batch_size=32, aug=None, rescale=255)
@@ -677,7 +677,7 @@ if __name__ == '__main__':
         img = img.astype( np.uint8 )  
         cv2.imshow('img', img)
         cv2.waitKey(0)
-        print('BINARY',y[i])
+        #print('BINARY',y[i])
 
 
 
@@ -691,7 +691,7 @@ if __name__ == '__main__':
         img = img.astype( np.uint8 )  
         cv2.imshow('img', img)
         cv2.waitKey(0)
-        print(y[i])
+        #print(y[i])
 
 
 
