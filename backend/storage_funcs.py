@@ -46,7 +46,7 @@ def get_available_drives():
     available_drives = []
     if platform == "linux" or platform == "linux2":
         for drive in psutil.disk_partitions():
-            if '/media/' in drive.mountpoint and drive.device == '/dev/sda1':
+            if '/media/' in drive.mountpoint and drive.device.startswith('/dev/sda'):
                 available_drives.append(drive.mountpoint)
     
     # on windows

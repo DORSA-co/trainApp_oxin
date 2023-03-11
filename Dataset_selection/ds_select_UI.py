@@ -1,6 +1,7 @@
 
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore as sQtCore
 from PyQt5.QtWidgets import * 
 from PyQt5.QtGui import * 
 from PyQt5.QtGui import *
@@ -45,11 +46,11 @@ class Ds_selection(QMainWindow, ui):
         self.selected_datasets = []    
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):

@@ -60,7 +60,7 @@ import cv2
 import time
 
 from PyQt5.QtGui import QPainter
-
+from PySide6 import QtCore as sQtCore
 from consts.keyboards_keys import KEYS
 from consts.pages_indexs import PAGES_IDX
 import texts, texts_codes
@@ -889,7 +889,7 @@ class UI_main_window(QMainWindow, ui):
             event (event): left or right click for drag window
         Returns: None
         """
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
@@ -900,7 +900,7 @@ class UI_main_window(QMainWindow, ui):
             event (event): release Event for update drag window
         Returns: None
         """
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):

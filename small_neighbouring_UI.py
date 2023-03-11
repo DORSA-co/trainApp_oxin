@@ -2,6 +2,7 @@ import time
 
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore as sQtCore
 # from pyqt5_plugins import *
 from PySide6.QtCharts import *
 from PySide6.QtCore import *
@@ -43,11 +44,11 @@ class small_neighbouring(QMainWindow, ui):
         # btn connector
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):

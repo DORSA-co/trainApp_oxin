@@ -2,6 +2,7 @@ import enum
 import os
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore as sQtCore
 from PyQt5.QtGui import *
 # from pyqt5_plugins import *
 from PySide6.QtCharts import *
@@ -52,7 +53,7 @@ class labeling(QMainWindow, ui):
         :type event: QMouseEvent
         """
         # Update old position if mouse left button pressed.
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
@@ -62,7 +63,7 @@ class labeling(QMainWindow, ui):
         :type event: QMouseEvent
         """
         # Set old position to None if mouse left button released.
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):

@@ -4,6 +4,7 @@ from select import select
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PySide6 import QtCore as sQtCore
+from PySide6 import QtCore as sQtCore
 from PyQt5.QtGui import *
 # from pyqt5_plugins import *
 from PySide6.QtCharts import *
@@ -70,11 +71,11 @@ class data_loader(QMainWindow, ui):
         self._old_pos = None
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):
