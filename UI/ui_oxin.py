@@ -613,6 +613,9 @@ class Ui_MainWindow(object):
         self.toggleButton.setLayoutDirection(Qt.LeftToRight)
         self.toggleButton.setStyleSheet(u"background-image: url(:/icons/images/icons/t1.png);\n"
 "")
+        icon = QIcon()
+        icon.addFile(u"images/icons/cil-airplane-mode-off.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.toggleButton.setIcon(icon)
         self.titleLeftApp = QLabel(self.topLogoInfo)
         self.titleLeftApp.setObjectName(u"titleLeftApp")
         self.titleLeftApp.setGeometry(QRect(70, 8, 160, 20))
@@ -752,7 +755,7 @@ class Ui_MainWindow(object):
 
         self.extraLeftBox = QFrame(self.bgApp)
         self.extraLeftBox.setObjectName(u"extraLeftBox")
-        self.extraLeftBox.setMinimumSize(QSize(104, 0))
+        self.extraLeftBox.setMinimumSize(QSize(0, 0))
         self.extraLeftBox.setMaximumSize(QSize(0, 16777215))
         self.extraLeftBox.setStyleSheet(u"bacground-color: (20, 68, 117)")
         self.extraLeftBox.setFrameShape(QFrame.NoFrame)
@@ -821,7 +824,7 @@ class Ui_MainWindow(object):
 
         self.extraCenter = QFrame(self.extraContent)
         self.extraCenter.setObjectName(u"extraCenter")
-        self.extraCenter.setMinimumSize(QSize(22, 0))
+        self.extraCenter.setMinimumSize(QSize(0, 0))
         self.extraCenter.setFrameShape(QFrame.NoFrame)
         self.extraCenter.setFrameShadow(QFrame.Raised)
         self.verticalLayout_10 = QVBoxLayout(self.extraCenter)
@@ -1033,9 +1036,9 @@ class Ui_MainWindow(object):
 "QPushButton:hover {\n"
 "	background-color:  rgb(197 , 195,196);\n"
 "}")
-        icon = QIcon()
-        icon.addFile(u"images/enter.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.pushButton_7.setIcon(icon)
+        icon1 = QIcon()
+        icon1.addFile(u"images/enter.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.pushButton_7.setIcon(icon1)
         self.pushButton_7.setIconSize(QSize(24, 24))
 
         self.horizontalLayout_36.addWidget(self.pushButton_7, 0, Qt.AlignHCenter|Qt.AlignVCenter)
@@ -1088,9 +1091,9 @@ class Ui_MainWindow(object):
         self.login_btn.setMinimumSize(QSize(32, 28))
         self.login_btn.setMaximumSize(QSize(28, 28))
         self.login_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        icon1 = QIcon()
-        icon1.addFile(u"images/icons/person.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.login_btn.setIcon(icon1)
+        icon2 = QIcon()
+        icon2.addFile(u"images/icons/person.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.login_btn.setIcon(icon2)
         self.login_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_2.addWidget(self.login_btn)
@@ -1100,9 +1103,9 @@ class Ui_MainWindow(object):
         self.setting_btn.setMinimumSize(QSize(28, 28))
         self.setting_btn.setMaximumSize(QSize(28, 28))
         self.setting_btn.setCursor(QCursor(Qt.PointingHandCursor))
-        icon2 = QIcon()
-        icon2.addFile(u":/icons/images/icons/icon_settings.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.setting_btn.setIcon(icon2)
+        icon3 = QIcon()
+        icon3.addFile(u":/icons/images/icons/icon_settings.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.setting_btn.setIcon(icon3)
         self.setting_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_2.addWidget(self.setting_btn)
@@ -1113,9 +1116,9 @@ class Ui_MainWindow(object):
         self.helpButton.setMaximumSize(QSize(28, 28))
         self.helpButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.helpButton.setStyleSheet(u"")
-        icon3 = QIcon()
-        icon3.addFile(u"images/icons/icon_help.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.helpButton.setIcon(icon3)
+        icon4 = QIcon()
+        icon4.addFile(u"images/icons/icon_help.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.helpButton.setIcon(icon4)
         self.helpButton.setIconSize(QSize(17, 17))
 
         self.horizontalLayout_2.addWidget(self.helpButton)
@@ -1125,9 +1128,9 @@ class Ui_MainWindow(object):
         self.miniButton.setMinimumSize(QSize(28, 28))
         self.miniButton.setMaximumSize(QSize(28, 28))
         self.miniButton.setCursor(QCursor(Qt.PointingHandCursor))
-        icon4 = QIcon()
-        icon4.addFile(u"images/icons/icon_minimize.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.miniButton.setIcon(icon4)
+        icon5 = QIcon()
+        icon5.addFile(u"images/icons/icon_minimize.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.miniButton.setIcon(icon5)
         self.miniButton.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_2.addWidget(self.miniButton)
@@ -1144,9 +1147,9 @@ class Ui_MainWindow(object):
         font2.setStyleStrategy(QFont.PreferDefault)
         self.maxiButton.setFont(font2)
         self.maxiButton.setCursor(QCursor(Qt.PointingHandCursor))
-        icon5 = QIcon()
-        icon5.addFile(u"images/icons/icon_maximize.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.maxiButton.setIcon(icon5)
+        icon6 = QIcon()
+        icon6.addFile(u"images/icons/icon_maximize.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.maxiButton.setIcon(icon6)
         self.maxiButton.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_2.addWidget(self.maxiButton)
@@ -1156,9 +1159,9 @@ class Ui_MainWindow(object):
         self.closeButton.setMinimumSize(QSize(28, 28))
         self.closeButton.setMaximumSize(QSize(28, 28))
         self.closeButton.setCursor(QCursor(Qt.PointingHandCursor))
-        icon6 = QIcon()
-        icon6.addFile(u"images/icons/cil-x.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.closeButton.setIcon(icon6)
+        icon7 = QIcon()
+        icon7.addFile(u"images/icons/cil-x.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.closeButton.setIcon(icon7)
         self.closeButton.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_2.addWidget(self.closeButton)
@@ -1257,6 +1260,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.verticalLayout_88 = QVBoxLayout(self.frame)
         self.verticalLayout_88.setObjectName(u"verticalLayout_88")
+        self.verticalLayout_88.setContentsMargins(0, 0, 0, 0)
         self.pagesContainer = QFrame(self.frame)
         self.pagesContainer.setObjectName(u"pagesContainer")
         self.pagesContainer.setToolTipDuration(-1)
@@ -1469,9 +1473,9 @@ class Ui_MainWindow(object):
 "	border: 2px solid rgb(61, 70, 86);\n"
 "}\n"
 "")
-        icon7 = QIcon()
-        icon7.addFile(u"../../Users/DORSA-PC1/Desktop/images/link.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.connect_camera_btn.setIcon(icon7)
+        icon8 = QIcon()
+        icon8.addFile(u"../../Users/DORSA-PC1/Desktop/images/link.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.connect_camera_btn.setIcon(icon8)
 
         self.verticalLayout_52.addWidget(self.connect_camera_btn)
 
@@ -1504,9 +1508,9 @@ class Ui_MainWindow(object):
 "	border: 2px solid rgb(61, 70, 86);\n"
 "}\n"
 "")
-        icon8 = QIcon()
-        icon8.addFile(u"../../Users/DORSA-PC1/Desktop/images/disconnected-chains.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.disconnect_camera_btn.setIcon(icon8)
+        icon9 = QIcon()
+        icon9.addFile(u"../../Users/DORSA-PC1/Desktop/images/disconnected-chains.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.disconnect_camera_btn.setIcon(icon9)
         self.disconnect_camera_btn.setIconSize(QSize(20, 18))
 
         self.verticalLayout_52.addWidget(self.disconnect_camera_btn)
@@ -1675,9 +1679,9 @@ class Ui_MainWindow(object):
         self.camera01_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera01_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        icon9 = QIcon()
-        icon9.addFile(u"../../Users/DORSA-PC1/Desktop/images/camtop.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.camera01_btn.setIcon(icon9)
+        icon10 = QIcon()
+        icon10.addFile(u"images/camtop.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.camera01_btn.setIcon(icon10)
         self.camera01_btn.setIconSize(QSize(20, 20))
         self.camera01_btn.setFlat(False)
 
@@ -1688,7 +1692,7 @@ class Ui_MainWindow(object):
         self.camera02_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera02_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera02_btn.setIcon(icon9)
+        self.camera02_btn.setIcon(icon10)
         self.camera02_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera02_btn)
@@ -1698,7 +1702,7 @@ class Ui_MainWindow(object):
         self.camera03_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera03_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera03_btn.setIcon(icon9)
+        self.camera03_btn.setIcon(icon10)
         self.camera03_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera03_btn)
@@ -1708,7 +1712,7 @@ class Ui_MainWindow(object):
         self.camera04_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera04_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera04_btn.setIcon(icon9)
+        self.camera04_btn.setIcon(icon10)
         self.camera04_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera04_btn)
@@ -1718,7 +1722,7 @@ class Ui_MainWindow(object):
         self.camera05_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera05_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera05_btn.setIcon(icon9)
+        self.camera05_btn.setIcon(icon10)
         self.camera05_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera05_btn)
@@ -1728,7 +1732,7 @@ class Ui_MainWindow(object):
         self.camera06_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera06_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera06_btn.setIcon(icon9)
+        self.camera06_btn.setIcon(icon10)
         self.camera06_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera06_btn)
@@ -1738,7 +1742,7 @@ class Ui_MainWindow(object):
         self.camera07_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera07_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera07_btn.setIcon(icon9)
+        self.camera07_btn.setIcon(icon10)
         self.camera07_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera07_btn)
@@ -1748,7 +1752,7 @@ class Ui_MainWindow(object):
         self.camera08_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera08_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera08_btn.setIcon(icon9)
+        self.camera08_btn.setIcon(icon10)
         self.camera08_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera08_btn)
@@ -1758,7 +1762,7 @@ class Ui_MainWindow(object):
         self.camera09_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera09_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera09_btn.setIcon(icon9)
+        self.camera09_btn.setIcon(icon10)
         self.camera09_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera09_btn)
@@ -1768,7 +1772,7 @@ class Ui_MainWindow(object):
         self.camera10_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera10_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera10_btn.setIcon(icon9)
+        self.camera10_btn.setIcon(icon10)
         self.camera10_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera10_btn)
@@ -1778,7 +1782,7 @@ class Ui_MainWindow(object):
         self.camera11_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera11_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera11_btn.setIcon(icon9)
+        self.camera11_btn.setIcon(icon10)
         self.camera11_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera11_btn)
@@ -1796,7 +1800,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "")
-        self.camera12_btn.setIcon(icon9)
+        self.camera12_btn.setIcon(icon10)
         self.camera12_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_81.addWidget(self.camera12_btn)
@@ -1833,9 +1837,9 @@ class Ui_MainWindow(object):
         self.camera13_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera13_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        icon10 = QIcon()
-        icon10.addFile(u"../../Users/DORSA-PC1/Desktop/images/cambtm.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.camera13_btn.setIcon(icon10)
+        icon11 = QIcon()
+        icon11.addFile(u"images/cambtm.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.camera13_btn.setIcon(icon11)
         self.camera13_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera13_btn)
@@ -1845,7 +1849,7 @@ class Ui_MainWindow(object):
         self.camera14_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera14_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera14_btn.setIcon(icon10)
+        self.camera14_btn.setIcon(icon11)
         self.camera14_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera14_btn)
@@ -1855,7 +1859,7 @@ class Ui_MainWindow(object):
         self.camera15_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera15_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera15_btn.setIcon(icon10)
+        self.camera15_btn.setIcon(icon11)
         self.camera15_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera15_btn)
@@ -1865,7 +1869,7 @@ class Ui_MainWindow(object):
         self.camera16_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera16_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera16_btn.setIcon(icon10)
+        self.camera16_btn.setIcon(icon11)
         self.camera16_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera16_btn)
@@ -1875,7 +1879,7 @@ class Ui_MainWindow(object):
         self.camera17_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera17_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera17_btn.setIcon(icon10)
+        self.camera17_btn.setIcon(icon11)
         self.camera17_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera17_btn)
@@ -1885,7 +1889,7 @@ class Ui_MainWindow(object):
         self.camera18_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera18_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera18_btn.setIcon(icon10)
+        self.camera18_btn.setIcon(icon11)
         self.camera18_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera18_btn)
@@ -1895,7 +1899,7 @@ class Ui_MainWindow(object):
         self.camera19_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera19_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera19_btn.setIcon(icon10)
+        self.camera19_btn.setIcon(icon11)
         self.camera19_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera19_btn)
@@ -1905,7 +1909,7 @@ class Ui_MainWindow(object):
         self.camera20_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera20_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera20_btn.setIcon(icon10)
+        self.camera20_btn.setIcon(icon11)
         self.camera20_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera20_btn)
@@ -1915,7 +1919,7 @@ class Ui_MainWindow(object):
         self.camera21_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera21_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera21_btn.setIcon(icon10)
+        self.camera21_btn.setIcon(icon11)
         self.camera21_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera21_btn)
@@ -1925,7 +1929,7 @@ class Ui_MainWindow(object):
         self.camera22_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera22_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera22_btn.setIcon(icon10)
+        self.camera22_btn.setIcon(icon11)
         self.camera22_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera22_btn)
@@ -1935,7 +1939,7 @@ class Ui_MainWindow(object):
         self.camera23_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera23_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera23_btn.setIcon(icon10)
+        self.camera23_btn.setIcon(icon11)
         self.camera23_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera23_btn)
@@ -1945,7 +1949,7 @@ class Ui_MainWindow(object):
         self.camera24_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.camera24_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
-        self.camera24_btn.setIcon(icon10)
+        self.camera24_btn.setIcon(icon11)
         self.camera24_btn.setIconSize(QSize(20, 20))
 
         self.horizontalLayout_83.addWidget(self.camera24_btn)
@@ -2369,7 +2373,7 @@ class Ui_MainWindow(object):
         self.scrollArea_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_5 = QWidget()
         self.scrollAreaWidgetContents_5.setObjectName(u"scrollAreaWidgetContents_5")
-        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 703, 28))
+        self.scrollAreaWidgetContents_5.setGeometry(QRect(0, 0, 721, 28))
         self.horizontalLayout_213 = QHBoxLayout(self.scrollAreaWidgetContents_5)
         self.horizontalLayout_213.setObjectName(u"horizontalLayout_213")
         self.horizontalLayout_213.setContentsMargins(9, 0, 0, 0)
@@ -3935,9 +3939,9 @@ class Ui_MainWindow(object):
         self.next_coil_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.next_coil_btn.setStyleSheet(u"background-color: rgb(71, 71, 71);\n"
 "border-radius: 8px;")
-        icon11 = QIcon()
-        icon11.addFile(u"../../Users/DORSA-PC1/Desktop/images/icons/cil-arrow-circle-right.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.next_coil_btn.setIcon(icon11)
+        icon12 = QIcon()
+        icon12.addFile(u"images/icons/cil-arrow-circle-right.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.next_coil_btn.setIcon(icon12)
         self.next_coil_btn.setIconSize(QSize(13, 13))
 
         self.verticalLayout_67.addWidget(self.next_coil_btn)
@@ -3949,9 +3953,9 @@ class Ui_MainWindow(object):
         self.prev_coil_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.prev_coil_btn.setStyleSheet(u"background-color: rgb(71, 71, 71);\n"
 "border-radius: 8px;")
-        icon12 = QIcon()
-        icon12.addFile(u"../../Users/DORSA-PC1/Desktop/images/icons/cil-arrow-circle-left.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.prev_coil_btn.setIcon(icon12)
+        icon13 = QIcon()
+        icon13.addFile(u"images/icons/cil-arrow-circle-left.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.prev_coil_btn.setIcon(icon13)
         self.prev_coil_btn.setIconSize(QSize(13, 13))
 
         self.verticalLayout_67.addWidget(self.prev_coil_btn)
@@ -3965,7 +3969,7 @@ class Ui_MainWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 692, 18))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 692, 27))
         self.horizontalLayout_228 = QHBoxLayout(self.scrollAreaWidgetContents_6)
         self.horizontalLayout_228.setObjectName(u"horizontalLayout_228")
         self.horizontalLayout_228.setContentsMargins(9, 0, 0, 0)
@@ -4201,7 +4205,7 @@ class Ui_MainWindow(object):
 "/* margin-top: 1ex; /* leave space at the top for the title */\n"
 "text-Align:left;\n"
 "color:black;")
-        self.label_234.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825 - Copy.png"))
+        self.label_234.setPixmap(QPixmap(u"images/pngaaa.com-4780825 - Copy.png"))
         self.label_234.setScaledContents(True)
 
         self.horizontalLayout_151.addWidget(self.label_234)
@@ -4250,7 +4254,7 @@ class Ui_MainWindow(object):
 "/* margin-top: 1ex; /* leave space at the top for the title */\n"
 "text-Align:left;\n"
 "color:black;")
-        self.label_233.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825.png"))
+        self.label_233.setPixmap(QPixmap(u"images/pngaaa.com-4780825.png"))
         self.label_233.setScaledContents(True)
 
         self.horizontalLayout_151.addWidget(self.label_233)
@@ -4357,9 +4361,9 @@ class Ui_MainWindow(object):
         self.add_btn_SI.setCursor(QCursor(Qt.PointingHandCursor))
         self.add_btn_SI.setStyleSheet(u"background-color: None;\n"
 "border: None")
-        icon13 = QIcon()
-        icon13.addFile(u"../../Users/DORSA-PC1/Desktop/images/plus.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.add_btn_SI.setIcon(icon13)
+        icon14 = QIcon()
+        icon14.addFile(u"images/plus.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.add_btn_SI.setIcon(icon14)
         self.add_btn_SI.setIconSize(QSize(26, 26))
 
         self.horizontalLayout_22.addWidget(self.add_btn_SI)
@@ -4390,9 +4394,9 @@ class Ui_MainWindow(object):
         self.remove_btn_SI.setCursor(QCursor(Qt.PointingHandCursor))
         self.remove_btn_SI.setStyleSheet(u"background-color: None;\n"
 "border: None")
-        icon14 = QIcon()
-        icon14.addFile(u"../../Users/DORSA-PC1/Desktop/images/minus.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.remove_btn_SI.setIcon(icon14)
+        icon15 = QIcon()
+        icon15.addFile(u"images/minus.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.remove_btn_SI.setIcon(icon15)
         self.remove_btn_SI.setIconSize(QSize(26, 26))
 
         self.horizontalLayout_22.addWidget(self.remove_btn_SI)
@@ -4760,7 +4764,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 763))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 781))
         self.scrollAreaWidgetContents_2.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_2.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_90_2 = QHBoxLayout(self.scrollAreaWidgetContents_2)
@@ -4848,7 +4852,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_51 = QWidget()
         self.scrollAreaWidgetContents_51.setObjectName(u"scrollAreaWidgetContents_51")
-        self.scrollAreaWidgetContents_51.setGeometry(QRect(0, 0, 288, 763))
+        self.scrollAreaWidgetContents_51.setGeometry(QRect(0, 0, 288, 781))
         self.scrollAreaWidgetContents_51.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_51.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_1141 = QHBoxLayout(self.scrollAreaWidgetContents_51)
@@ -4921,9 +4925,9 @@ class Ui_MainWindow(object):
 "	margin: 0px;\n"
 "}\n"
 "")
-        icon15 = QIcon()
-        icon15.addFile(u"../../Users/DORSA-PC1/Desktop/images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.next_img_label_btn.setIcon(icon15)
+        icon16 = QIcon()
+        icon16.addFile(u"images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.next_img_label_btn.setIcon(icon16)
         self.next_img_label_btn.setIconSize(QSize(24, 31))
 
         self.verticalLayout_27_2.addWidget(self.next_img_label_btn)
@@ -4954,9 +4958,9 @@ class Ui_MainWindow(object):
 "	margin: 0px;\n"
 "}\n"
 "")
-        icon16 = QIcon()
-        icon16.addFile(u"../../Users/DORSA-PC1/Desktop/images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.prev_img_label_btn.setIcon(icon16)
+        icon17 = QIcon()
+        icon17.addFile(u"images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.prev_img_label_btn.setIcon(icon17)
         self.prev_img_label_btn.setIconSize(QSize(24, 31))
 
         self.verticalLayout_27_2.addWidget(self.prev_img_label_btn)
@@ -4994,9 +4998,9 @@ class Ui_MainWindow(object):
 "	margin: 0px;\n"
 "}\n"
 "")
-        icon17 = QIcon()
-        icon17.addFile(u"../../Users/DORSA-PC1/Desktop/images/zoom-in.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.zoomIn_btn.setIcon(icon17)
+        icon18 = QIcon()
+        icon18.addFile(u"images/zoom-in.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.zoomIn_btn.setIcon(icon18)
         self.zoomIn_btn.setIconSize(QSize(24, 31))
 
         self.verticalLayout_27_2.addWidget(self.zoomIn_btn)
@@ -5027,9 +5031,9 @@ class Ui_MainWindow(object):
 "	margin: 0px;\n"
 "}\n"
 "")
-        icon18 = QIcon()
-        icon18.addFile(u"../../Users/DORSA-PC1/Desktop/images/zoom-out.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.zoomOut_btn.setIcon(icon18)
+        icon19 = QIcon()
+        icon19.addFile(u"images/zoom-out.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.zoomOut_btn.setIcon(icon19)
         self.zoomOut_btn.setIconSize(QSize(36, 31))
 
         self.verticalLayout_27_2.addWidget(self.zoomOut_btn)
@@ -5060,9 +5064,9 @@ class Ui_MainWindow(object):
 "	margin: 0px;\n"
 "}\n"
 "")
-        icon19 = QIcon()
-        icon19.addFile(u"../../Users/DORSA-PC1/Desktop/images/drag3.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.drag_btn.setIcon(icon19)
+        icon20 = QIcon()
+        icon20.addFile(u"images/drag3.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.drag_btn.setIcon(icon20)
         self.drag_btn.setIconSize(QSize(30, 22))
 
         self.verticalLayout_27_2.addWidget(self.drag_btn)
@@ -5100,9 +5104,9 @@ class Ui_MainWindow(object):
 "	margin: 0px;\n"
 "}\n"
 "")
-        icon20 = QIcon()
-        icon20.addFile(u"../../Users/DORSA-PC1/Desktop/images/clipart1919813.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.polygon_btn.setIcon(icon20)
+        icon21 = QIcon()
+        icon21.addFile(u"images/clipart1919813.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.polygon_btn.setIcon(icon21)
         self.polygon_btn.setIconSize(QSize(28, 27))
 
         self.verticalLayout_27_2.addWidget(self.polygon_btn)
@@ -5133,9 +5137,9 @@ class Ui_MainWindow(object):
 "	margin: 0px;\n"
 "}\n"
 "")
-        icon21 = QIcon()
-        icon21.addFile(u"../../Users/DORSA-PC1/Desktop/images/suggest.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.suggested_defects_btn.setIcon(icon21)
+        icon22 = QIcon()
+        icon22.addFile(u"images/suggest.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.suggested_defects_btn.setIcon(icon22)
         self.suggested_defects_btn.setIconSize(QSize(45, 45))
 
         self.verticalLayout_27_2.addWidget(self.suggested_defects_btn)
@@ -5163,9 +5167,9 @@ class Ui_MainWindow(object):
 "	margin: 0px;\n"
 "}\n"
 "")
-        icon22 = QIcon()
-        icon22.addFile(u"../../Users/DORSA-PC1/Desktop/images/heatmap.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.heatmap_btn.setIcon(icon22)
+        icon23 = QIcon()
+        icon23.addFile(u"images/heatmap.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.heatmap_btn.setIcon(icon23)
         self.heatmap_btn.setIconSize(QSize(70, 30))
 
         self.verticalLayout_27_2.addWidget(self.heatmap_btn)
@@ -5203,9 +5207,9 @@ class Ui_MainWindow(object):
 "	margin: 0px;\n"
 "}\n"
 "")
-        icon23 = QIcon()
-        icon23.addFile(u"../../Users/DORSA-PC1/Desktop/images/x-mark.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.delete_btn.setIcon(icon23)
+        icon24 = QIcon()
+        icon24.addFile(u"images/x-mark.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.delete_btn.setIcon(icon24)
         self.delete_btn.setIconSize(QSize(22, 27))
 
         self.verticalLayout_27_2.addWidget(self.delete_btn)
@@ -5244,9 +5248,9 @@ class Ui_MainWindow(object):
         self.label_show_help_btn.setMinimumSize(QSize(20, 20))
         self.label_show_help_btn.setMaximumSize(QSize(20, 20))
         self.label_show_help_btn.setStyleSheet(u"background-color: white;")
-        icon24 = QIcon()
-        icon24.addFile(u"../../Users/DORSA-PC1/Desktop/images/top_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.label_show_help_btn.setIcon(icon24)
+        icon25 = QIcon()
+        icon25.addFile(u"images/top_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.label_show_help_btn.setIcon(icon25)
         self.label_show_help_btn.setIconSize(QSize(15, 15))
 
         self.horizontalLayout_93.addWidget(self.label_show_help_btn)
@@ -6743,9 +6747,9 @@ class Ui_MainWindow(object):
         self.BTN_of_goToPreviouspage_in_PBT_page.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        icon25 = QIcon()
-        icon25.addFile(u"D:/trainApp_oxin/UI/images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.BTN_of_goToPreviouspage_in_PBT_page.setIcon(icon25)
+        icon26 = QIcon()
+        icon26.addFile(u"D:/trainApp_oxin/UI/images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.BTN_of_goToPreviouspage_in_PBT_page.setIcon(icon26)
         self.BTN_of_goToPreviouspage_in_PBT_page.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_67.addWidget(self.BTN_of_goToPreviouspage_in_PBT_page)
@@ -6768,9 +6772,9 @@ class Ui_MainWindow(object):
         self.BTN_of_goToNextpage_in_PBT_page.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        icon26 = QIcon()
-        icon26.addFile(u"D:/trainApp_oxin/UI/images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.BTN_of_goToNextpage_in_PBT_page.setIcon(icon26)
+        icon27 = QIcon()
+        icon27.addFile(u"D:/trainApp_oxin/UI/images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.BTN_of_goToNextpage_in_PBT_page.setIcon(icon27)
         self.BTN_of_goToNextpage_in_PBT_page.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_67.addWidget(self.BTN_of_goToNextpage_in_PBT_page)
@@ -6792,7 +6796,7 @@ class Ui_MainWindow(object):
         self.scrollArea_6.setWidgetResizable(True)
         self.scrollAreaWidgetContents_7 = QWidget()
         self.scrollAreaWidgetContents_7.setObjectName(u"scrollAreaWidgetContents_7")
-        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 1294, 200))
+        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 92, 165))
         self.verticalLayout_107 = QVBoxLayout(self.scrollAreaWidgetContents_7)
         self.verticalLayout_107.setObjectName(u"verticalLayout_107")
         self.verticalLayout_107.setContentsMargins(0, 0, 0, 0)
@@ -6801,7 +6805,7 @@ class Ui_MainWindow(object):
         self.scrollArea_7.setWidgetResizable(True)
         self.scrollAreaWidgetContents_8 = QWidget()
         self.scrollAreaWidgetContents_8.setObjectName(u"scrollAreaWidgetContents_8")
-        self.scrollAreaWidgetContents_8.setGeometry(QRect(0, 0, 1292, 84))
+        self.scrollAreaWidgetContents_8.setGeometry(QRect(0, 0, 96, 49))
         self.horizontalLayout_72 = QHBoxLayout(self.scrollAreaWidgetContents_8)
         self.horizontalLayout_72.setObjectName(u"horizontalLayout_72")
         self.label_12_4 = QLabel(self.scrollAreaWidgetContents_8)
@@ -6886,7 +6890,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_11 = QWidget()
         self.scrollAreaWidgetContents_11.setObjectName(u"scrollAreaWidgetContents_11")
-        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 1292, 106))
+        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 90, 43))
         self.horizontalLayout_139 = QHBoxLayout(self.scrollAreaWidgetContents_11)
         self.horizontalLayout_139.setObjectName(u"horizontalLayout_139")
         self.label_12_6 = QLabel(self.scrollAreaWidgetContents_11)
@@ -7342,7 +7346,7 @@ class Ui_MainWindow(object):
         self.BTN_prev_original_image_in_PBT_page.setCursor(QCursor(Qt.PointingHandCursor))
         self.BTN_prev_original_image_in_PBT_page.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
-        self.BTN_prev_original_image_in_PBT_page.setIcon(icon25)
+        self.BTN_prev_original_image_in_PBT_page.setIcon(icon26)
         self.BTN_prev_original_image_in_PBT_page.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_198.addWidget(self.BTN_prev_original_image_in_PBT_page)
@@ -7390,7 +7394,7 @@ class Ui_MainWindow(object):
         self.BTN_next_original_image_in_PBT_page.setCursor(QCursor(Qt.PointingHandCursor))
         self.BTN_next_original_image_in_PBT_page.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
-        self.BTN_next_original_image_in_PBT_page.setIcon(icon26)
+        self.BTN_next_original_image_in_PBT_page.setIcon(icon27)
         self.BTN_next_original_image_in_PBT_page.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_198.addWidget(self.BTN_next_original_image_in_PBT_page)
@@ -8493,9 +8497,9 @@ class Ui_MainWindow(object):
         self.pipline_table_refresh_btn.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        icon27 = QIcon()
-        icon27.addFile(u"D:/trainApp_oxin/UI/images/free-arrows-refresh-icon-2847-thumb.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.pipline_table_refresh_btn.setIcon(icon27)
+        icon28 = QIcon()
+        icon28.addFile(u"D:/trainApp_oxin/UI/images/free-arrows-refresh-icon-2847-thumb.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.pipline_table_refresh_btn.setIcon(icon28)
         self.pipline_table_refresh_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_368.addWidget(self.pipline_table_refresh_btn)
@@ -8514,7 +8518,7 @@ class Ui_MainWindow(object):
         self.pipline_tabel_prev_PBT.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.pipline_tabel_prev_PBT.setIcon(icon25)
+        self.pipline_tabel_prev_PBT.setIcon(icon26)
         self.pipline_tabel_prev_PBT.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_368.addWidget(self.pipline_tabel_prev_PBT)
@@ -8536,7 +8540,7 @@ class Ui_MainWindow(object):
         self.pipline_tabel_next_PBT.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.pipline_tabel_next_PBT.setIcon(icon26)
+        self.pipline_tabel_next_PBT.setIcon(icon27)
         self.pipline_tabel_next_PBT.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_368.addWidget(self.pipline_tabel_next_PBT)
@@ -8778,7 +8782,7 @@ class Ui_MainWindow(object):
         self.binary_list_perfect_prev_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.binary_list_perfect_prev_btn.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
-        self.binary_list_perfect_prev_btn.setIcon(icon16)
+        self.binary_list_perfect_prev_btn.setIcon(icon17)
         self.binary_list_perfect_prev_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_40_12312.addWidget(self.binary_list_perfect_prev_btn)
@@ -8799,7 +8803,7 @@ class Ui_MainWindow(object):
         self.binary_list_perfect_next_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.binary_list_perfect_next_btn.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
-        self.binary_list_perfect_next_btn.setIcon(icon15)
+        self.binary_list_perfect_next_btn.setIcon(icon16)
         self.binary_list_perfect_next_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_40_12312.addWidget(self.binary_list_perfect_next_btn)
@@ -8823,7 +8827,7 @@ class Ui_MainWindow(object):
         self.binary_list_defect_prev_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.binary_list_defect_prev_btn.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
-        self.binary_list_defect_prev_btn.setIcon(icon16)
+        self.binary_list_defect_prev_btn.setIcon(icon17)
         self.binary_list_defect_prev_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_32_1232.addWidget(self.binary_list_defect_prev_btn)
@@ -8845,7 +8849,7 @@ class Ui_MainWindow(object):
         self.binary_list_defect_next_btn.setCursor(QCursor(Qt.PointingHandCursor))
         self.binary_list_defect_next_btn.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
-        self.binary_list_defect_next_btn.setIcon(icon15)
+        self.binary_list_defect_next_btn.setIcon(icon16)
         self.binary_list_defect_next_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_32_1232.addWidget(self.binary_list_defect_next_btn)
@@ -9172,9 +9176,9 @@ class Ui_MainWindow(object):
         self.binary_reset.setSizePolicy(sizePolicy1)
         self.binary_reset.setMinimumSize(QSize(130, 0))
         self.binary_reset.setStyleSheet(u"background-color: None")
-        icon28 = QIcon()
-        icon28.addFile(u"../../Users/DORSA-PC1/Desktop/images/reset.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.binary_reset.setIcon(icon28)
+        icon29 = QIcon()
+        icon29.addFile(u"../../Users/DORSA-PC1/Desktop/images/reset.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.binary_reset.setIcon(icon29)
         self.binary_reset.setIconSize(QSize(12, 16))
 
         self.horizontalLayout_122.addWidget(self.binary_reset)
@@ -10349,9 +10353,9 @@ class Ui_MainWindow(object):
         self.binary_table_refresh_btn.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        icon29 = QIcon()
-        icon29.addFile(u"../../Users/DORSA-PC1/Desktop/images/free-arrows-refresh-icon-2847-thumb.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.binary_table_refresh_btn.setIcon(icon29)
+        icon30 = QIcon()
+        icon30.addFile(u"images/free-arrows-refresh-icon-2847-thumb.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.binary_table_refresh_btn.setIcon(icon30)
         self.binary_table_refresh_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_343.addWidget(self.binary_table_refresh_btn)
@@ -10370,7 +10374,7 @@ class Ui_MainWindow(object):
         self.binary_tabel_prev.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.binary_tabel_prev.setIcon(icon16)
+        self.binary_tabel_prev.setIcon(icon17)
         self.binary_tabel_prev.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_343.addWidget(self.binary_tabel_prev)
@@ -10392,7 +10396,7 @@ class Ui_MainWindow(object):
         self.binary_tabel_next.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.binary_tabel_next.setIcon(icon15)
+        self.binary_tabel_next.setIcon(icon16)
         self.binary_tabel_next.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_343.addWidget(self.binary_tabel_next)
@@ -10830,7 +10834,7 @@ class Ui_MainWindow(object):
         self.localization_reset.setSizePolicy(sizePolicy1)
         self.localization_reset.setMinimumSize(QSize(130, 0))
         self.localization_reset.setStyleSheet(u"background-color: None")
-        self.localization_reset.setIcon(icon28)
+        self.localization_reset.setIcon(icon29)
         self.localization_reset.setIconSize(QSize(12, 16))
 
         self.horizontalLayout_123.addWidget(self.localization_reset)
@@ -11952,9 +11956,9 @@ class Ui_MainWindow(object):
         self.localization_table_refresh_btn.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        icon30 = QIcon()
-        icon30.addFile(u"../../Users/DORSA-PC1/Desktop/images/refresh.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.localization_table_refresh_btn.setIcon(icon30)
+        icon31 = QIcon()
+        icon31.addFile(u"images/refresh.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.localization_table_refresh_btn.setIcon(icon31)
         self.localization_table_refresh_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_58.addWidget(self.localization_table_refresh_btn)
@@ -11973,7 +11977,7 @@ class Ui_MainWindow(object):
         self.localization_tabel_prev.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.localization_tabel_prev.setIcon(icon16)
+        self.localization_tabel_prev.setIcon(icon17)
         self.localization_tabel_prev.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_58.addWidget(self.localization_tabel_prev)
@@ -11995,7 +11999,7 @@ class Ui_MainWindow(object):
         self.localization_tabel_next.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.localization_tabel_next.setIcon(icon15)
+        self.localization_tabel_next.setIcon(icon16)
         self.localization_tabel_next.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_58.addWidget(self.localization_tabel_next)
@@ -12257,7 +12261,9 @@ class Ui_MainWindow(object):
         self.classlist_prev_btn.setMaximumSize(QSize(30, 30))
         self.classlist_prev_btn.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
-        self.classlist_prev_btn.setIcon(icon16)
+        icon32 = QIcon()
+        icon32.addFile(u"../../Users/DORSA-PC1/Desktop/images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.classlist_prev_btn.setIcon(icon32)
         self.classlist_prev_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_21.addWidget(self.classlist_prev_btn)
@@ -12276,7 +12282,9 @@ class Ui_MainWindow(object):
         self.classlist_next_btn.setMaximumSize(QSize(30, 30))
         self.classlist_next_btn.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
-        self.classlist_next_btn.setIcon(icon15)
+        icon33 = QIcon()
+        icon33.addFile(u"../../Users/DORSA-PC1/Desktop/images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.classlist_next_btn.setIcon(icon33)
         self.classlist_next_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_21.addWidget(self.classlist_next_btn)
@@ -13671,7 +13679,7 @@ class Ui_MainWindow(object):
         self.cls_table_refresh_btn.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.cls_table_refresh_btn.setIcon(icon30)
+        self.cls_table_refresh_btn.setIcon(icon31)
         self.cls_table_refresh_btn.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_109_3.addWidget(self.cls_table_refresh_btn)
@@ -13691,7 +13699,7 @@ class Ui_MainWindow(object):
         self.cls_tabel_prev.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.cls_tabel_prev.setIcon(icon16)
+        self.cls_tabel_prev.setIcon(icon17)
         self.cls_tabel_prev.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_109_3.addWidget(self.cls_tabel_prev)
@@ -13713,7 +13721,7 @@ class Ui_MainWindow(object):
         self.cls_tabel_next.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.cls_tabel_next.setIcon(icon15)
+        self.cls_tabel_next.setIcon(icon16)
         self.cls_tabel_next.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_109_3.addWidget(self.cls_tabel_next)
@@ -14085,7 +14093,7 @@ class Ui_MainWindow(object):
         self.yolo_reset.setSizePolicy(sizePolicy1)
         self.yolo_reset.setMinimumSize(QSize(130, 0))
         self.yolo_reset.setStyleSheet(u"background-color: None")
-        self.yolo_reset.setIcon(icon28)
+        self.yolo_reset.setIcon(icon29)
         self.yolo_reset.setIconSize(QSize(12, 16))
 
         self.horizontalLayout_125.addWidget(self.yolo_reset)
@@ -15419,7 +15427,7 @@ class Ui_MainWindow(object):
         self.yolo_tabel_prev.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.yolo_tabel_prev.setIcon(icon16)
+        self.yolo_tabel_prev.setIcon(icon17)
         self.yolo_tabel_prev.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_109.addWidget(self.yolo_tabel_prev)
@@ -15441,7 +15449,7 @@ class Ui_MainWindow(object):
         self.yolo_tabel_next.setStyleSheet(u"background-color: Transparent;\n"
 "border : 0px;\n"
 "color : rgb(0,0,0);")
-        self.yolo_tabel_next.setIcon(icon15)
+        self.yolo_tabel_next.setIcon(icon16)
         self.yolo_tabel_next.setIconSize(QSize(30, 30))
 
         self.horizontalLayout_109.addWidget(self.yolo_tabel_next)
@@ -15517,7 +15525,7 @@ class Ui_MainWindow(object):
         self.label_language.setMinimumSize(QSize(47, 50))
         self.label_language.setMaximumSize(QSize(47, 50))
         self.label_language.setStyleSheet(u"")
-        self.label_language.setPixmap(QPixmap(u"../../Users/trainApp_oxin8 (copy)/UI/C:/Users/DORSA-PC1/Desktop/UI/images/persian.png"))
+        self.label_language.setPixmap(QPixmap(u"images/persian.png"))
         self.label_language.setScaledContents(True)
 
         self.horizontalLayout_2931.addWidget(self.label_language)
@@ -16091,15 +16099,15 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(3)
-        self.tabWidget_2.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(2)
+        self.tabWidget_2.setCurrentIndex(1)
         self.live_tabWidget.setCurrentIndex(0)
         self.stackedWidget_defect.setCurrentIndex(0)
         self.stackedWidget_2.setCurrentIndex(2)
         self.stackedWidget_pbt.setCurrentIndex(2)
         self.stackedWidget_3.setCurrentIndex(1)
         self.stackedWidget_4.setCurrentIndex(1)
-        self.stackedWidget_binary.setCurrentIndex(0)
+        self.stackedWidget_binary.setCurrentIndex(2)
         self.binary_train.setDefault(False)
         self.stackedWidget_localization.setCurrentIndex(0)
         self.localization_train.setDefault(False)
