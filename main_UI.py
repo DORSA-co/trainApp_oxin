@@ -72,6 +72,7 @@ from Dataset_selection.ds_select_UI import Ds_selection
 # from login_win.login_api import
 
 from train_api import ALGORITHM_NAMES
+from train_api import ALGORITHM_NAMES
 
 ui, _ = loadUiType("UI/oxin.ui")
 os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
