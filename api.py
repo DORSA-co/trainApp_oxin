@@ -84,7 +84,7 @@ import texts_codes
 from utils1 import tempMemory, Utils
 
 from backend.dataset import Dataset
-from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2
+from random_split import get_crops_normal, get_crops_no_defect, get_crops_no_defect2
 import train_api
 
 from labeling.labeling_UI import labeling
@@ -6413,6 +6413,9 @@ class API:
 
 # ____________________________JJ ZONE
 class evaluation_worker(QObject):
+    """class worker ,for separating
+    thread of evalution operation
+    """
 
     # vars for handling thread
     finished = Signal()
@@ -6464,7 +6467,6 @@ class evaluation_worker(QObject):
 
         # define metrics,in an in the var instantiates,????
         ymetrics = []
-
         for i, path in enumerate(self.paths):
             if path.find("defect") != -1:  # check image is perfect or defect
                 flag = True
@@ -6478,6 +6480,7 @@ class evaluation_worker(QObject):
             ) = self.model2binary(
                 filepath=path, defect=flag
             )  # data to binary model and get output to prepare for LC(location&classification)
+            print("j" * 30, self.use_yolo, len(splitsid))
             if self.use_yolo and (len(splitsid) != 0):  # if we use yolo in pipline
                 flag2yolo, val_data = self.prepare_binary_model_output2yolo(
                     imgs2yolo=split2yolo,
@@ -6485,18 +6488,18 @@ class evaluation_worker(QObject):
                     SplitsId=splitsid,
                     ImageFileName=file_name,
                 )  # prepare data for yolo
-                if flag2yolo:
-                    stats, names, losses, dataloaderlen = self.binaryoutput2yolo(
-                        path=val_data
-                    )  # give binary output to yolo
-                    # compute yolo metrics
-                    mp, mr, map50, map, losses, maps = self.compute_yolo_metrics(
-                        names=names,
-                        stats=stats,
-                        loss=losses,
-                        DataloaderLen=dataloaderlen,
-                    )
-                    ymetrics = [loss, mp, mr, map50, map]
+            # if flag2yolo:
+            #     stats, names, losses, dataloaderlen = self.binaryoutput2yolo(
+            #         path=val_data
+            #     )  # give binary output to yolo
+            #     # compute yolo metrics
+            #     mp, mr, map50, map, losses, maps = self.compute_yolo_metrics(
+            #         names=names,
+            #         stats=stats,
+            #         loss=losses,
+            #         DataloaderLen=dataloaderlen,
+            #     )
+            #     ymetrics = [losses, mp, mr, map50, map]
 
             # update progress bar for each image ,go to model
             percentage = (80 * (i + 1)) / len(self.paths)
@@ -6504,30 +6507,30 @@ class evaluation_worker(QObject):
 
         # after the loop ,compute metrics
         # compute binary metrics
-        loss, accuracy, recall, precision, f1 = self.compute_binary_metrics()
-        bmetrics = [loss, accuracy, recall, precision, f1]
+        # loss, accuracy, recall, precision, f1 = self.compute_binary_metrics()
+        # bmetrics = [loss, accuracy, recall, precision, f1]
 
         # set pipline metrics value in json
-        self.update_pipline_info(bmetrics=bmetrics, ymetrics=ymetrics, use_yolo=True)
+        # self.update_pipline_info(bmetrics=bmetrics, ymetrics=ymetrics, use_yolo=True)
 
         # evalution is completed and  the progressbar is full
-        self.pgb_bar_signal.emit(100)
+        # self.pgb_bar_signal.emit(100)
 
-        # UI REPORT
-        # PREPARE INFO OF MODELS THAT SHOW ON UI
-        binary_report = "BINARY: \n accuracy:{:.1f} \n precision:{:.1f} \n recall;{:.1f} \n f1:{:.1f}".format(
-            accuracy, precision, recall, f1
-        )
-        if ymetrics != []:
-            yolo_report = "BINARY: \n precision:{:.1f} \n recall;{:.1f} \n map:{:.1f},map0595:{:.1f}".format(
-                mp, mr, map50, map
-            )
-        else:
-            yolo_report = "binary model predict all image perfect \nthen, there is no data for giveing to LC part"
-        ListReport = [binary_report, yolo_report]
-        # SEND MODEL METRICS&OUTPUT
-        self.progress.emit(ListReport)
-        self.finished.emit()  # FINISHED THREAD
+        # # UI REPORT
+        # # PREPARE INFO OF MODELS THAT SHOW ON UI
+        # binary_report = "BINARY: \n accuracy:{:.1f} \n precision:{:.1f} \n recall;{:.1f} \n f1:{:.1f}".format(
+        #     accuracy, precision, recall, f1
+        # )
+        # if ymetrics != []:
+        #     yolo_report = "BINARY: \n precision:{:.1f} \n recall;{:.1f} \n map:{:.1f},map0595:{:.1f}".format(
+        #         mp, mr, map50, map
+        #     )
+        # else:
+        #     yolo_report = "binary model predict all image perfect \nthen, there is no data for giveing to LC part"
+        # ListReport = [binary_report, yolo_report]
+        # # SEND MODEL METRICS&OUTPUT
+        # self.progress.emit(ListReport)
+        # self.finished.emit()  # FINISHED THREAD
 
     def update_pipline_info(
         self, bmetrics, ymetrics, use_yolo, lmetrics=None, cmetrics=None
@@ -6642,7 +6645,6 @@ class evaluation_worker(QObject):
         grand_truth = np.zeros(
             pred.shape, dtype=np.float16
         )  # 0 for perfect split and 1 for defect split
-
         split2yolo = []
         annotationSplit2yolo = []
         defects_inx = np.where(pred[:] == 1)[0]
@@ -6663,7 +6665,6 @@ class evaluation_worker(QObject):
 
         self.binary_pred.append(pred)
         self.binary_grandtruth.append(grand_truth)
-
         return split2yolo, annotationSplit2yolo, defects_inx, file_name
 
     def compute_binary_metrics(self):
@@ -7122,23 +7123,22 @@ class ModelsCreation_worker(QObject):
                 # send notif of there is problem in creating models of pipline(here binary)
                 self.model_creation_signal.emit(6)
                 self.finished.emit()
-
             if LC_model_info[0] == "yolo":
-                # try:
-                # set yolo model parameter of pipline:
-                self.set_param_of_pipline(
-                    flag="yolo",
-                    modelid=LC_model_info[1][0]["algo_name"],
-                    modelweight=LC_model_info[1][0]["weights_path"],
-                )
-                # create yolo model object
-                self.yolo_creator(yolo_info=LC_model_info[1])
-                # send signal for updataing progress bar
-                self.model_creation_signal.emit(4)
-            # except:
-            #     # send notif of there is problem in creating models of pipline(here yolo)
-            #     self.model_creation_signal.emit(6)
-            #     self.finished.emit()
+                try:
+                    # set yolo model parameter of pipline:
+                    self.set_param_of_pipline(
+                        flag="yolo",
+                        modelid=LC_model_info[1][0]["algo_name"],
+                        modelweight=LC_model_info[1][0]["weights_path"],
+                    )
+                    # create yolo model object
+                    self.yolo_creator(yolo_info=LC_model_info[1])
+                    # send signal for updataing progress bar
+                    self.model_creation_signal.emit(4)
+                except:
+                    # send notif of there is problem in creating models of pipline(here yolo)
+                    self.model_creation_signal.emit(6)
+                    self.finished.emit()
             else:
                 try:
                     self.pipline_OBJ.set(key=pipelines.USE_YOLO, value=False)

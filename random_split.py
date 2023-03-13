@@ -34,8 +34,8 @@ def FindNormalCrops(img, mask, size, annotation):
     crops_annotations = []
     points = []
 
-    jj = list(range(0, img.shape[0], SIZE[0]))
-    ii = list(range(0, img.shape[1], SIZE[1]))
+    jj = list(range(0, img.shape[0], size[0]))
+    ii = list(range(0, img.shape[1], size[1]))
     points = list(itertools.product(jj, ii))
     points = sorted(points, key=lambda k: [k[0], k[1]])
 
