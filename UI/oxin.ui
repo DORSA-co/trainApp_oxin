@@ -14982,7 +14982,7 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>329</width>
+                                      <width>340</width>
                                       <height>699</height>
                                      </rect>
                                     </property>
@@ -18679,7 +18679,7 @@ border:Transparent</string>
                                         </property>
                                         <property name="icon">
                                          <iconset>
-                                          <normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</iconset>
+                                          <normaloff>images/reset.png</normaloff>images/reset.png</iconset>
                                         </property>
                                         <property name="iconSize">
                                          <size>
@@ -22251,7 +22251,7 @@ QPushButton:hover {
                                         </property>
                                         <property name="icon">
                                          <iconset>
-                                          <normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</iconset>
+                                          <normaloff>images/reset.png</normaloff>images/reset.png</iconset>
                                         </property>
                                         <property name="iconSize">
                                          <size>
@@ -29573,7 +29573,7 @@ QPushButton:hover {
                                         </property>
                                         <property name="icon">
                                          <iconset>
-                                          <normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</iconset>
+                                          <normaloff>images/reset.png</normaloff>images/reset.png</iconset>
                                         </property>
                                         <property name="iconSize">
                                          <size>
