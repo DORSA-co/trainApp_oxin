@@ -115,7 +115,7 @@ class UI_main_window(QMainWindow, ui):
 
         # APP NAME
         # ///////////////////////////////////////////////////////////////
-        title = "SABA - trainer"
+        title = "SENSE-Trainer"
         description = "PyDracula APP - Theme with colors based on Dracula for Python."
         # APPLY TEXTS
         self.setWindowTitle(title)
@@ -1319,6 +1319,7 @@ class UI_main_window(QMainWindow, ui):
 
     def show_help(self):
         help_image = None
+        text = ''
         name = self.stackedWidget.currentWidget().objectName()
         if name == "page_software_setting":
             text = texts.HELPS["SETTINGS_PAGE"][self.language]
@@ -1359,23 +1360,22 @@ class UI_main_window(QMainWindow, ui):
                     texts.HELPS_ADDRESS["PROFILE_MYPIP_PAGE"][self.language]
                 )
         elif name == "page_pbt":
-            pass
-            # tab_name = self.stackedWidget_pbt.currentWidget().objectName()
-            # if tab_name == "page_pipeline":
-            #     text = texts.HELPS["PBT_PIPLINE_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["PBT_PIPLINE_PAGE"][self.language]
-            #     )
-            # elif tab_name == "page_load_dataset":
-            #     text = texts.HELPS["PBT_LOADDATASET_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["PBT_LOADDATASET_PAGE"][self.language]
-            #     )
-            # elif tab_name == "page_history":
-            #     text = texts.HELPS["PBT_HISTORY_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["PBT_HISTORY_PAGE"][self.language]
-            #     )
+            tab_name = self.stackedWidget_pbt.currentWidget().objectName()
+            if tab_name == "page_pipeline":
+                text = texts.HELPS["PBT_PIPLINE_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["PBT_PIPLINE_PAGE"][self.language]
+                )
+            elif tab_name == "page_load_dataset":
+                text = texts.HELPS["PBT_LOADDATASET_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["PBT_LOADDATASET_PAGE"][self.language]
+                )
+            elif tab_name == "page_history":
+                text = texts.HELPS["PBT_HISTORY_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["PBT_HISTORY_PAGE"][self.language]
+                )
         elif name == "page_Binary":
             stack_name = self.stackedWidget_binary.currentWidget().objectName()
             if stack_name == "page_binary_list":
@@ -1394,40 +1394,43 @@ class UI_main_window(QMainWindow, ui):
                     texts.HELPS_ADDRESS["BINARY_HISTORY_PAGE"][self.language]
                 )
         elif name == "page_Localization":
-            pass
-            # stack_name = self.stackedWidget_localization.currentWidget().objectName()
-            # if stack_name == "page_localization_training":
-            #     text = texts.HELPS["LOC_TRAINING_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["LOC_TRAINING_PAGE"][self.language]
-            #     )
-            # elif stack_name == "page_localization_history":
-            #     text = texts.HELPS["LOC_HISTORY_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["LOC_HISTORY_PAGE"][self.language]
-            #     )
+            stack_name = self.stackedWidget_localization.currentWidget().objectName()
+            if stack_name == "page_localization_training":
+                text = texts.HELPS["LOC_TRAINING_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["LOC_TRAINING_PAGE"][self.language]
+                )
+            elif stack_name == "page_localization_history":
+                text = texts.HELPS["LOC_HISTORY_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["LOC_HISTORY_PAGE"][self.language]
+                )
+        elif name == "page_Yolo":
+            stack_name = self.stackedWidget_yolo.currentWidget().objectName()
+            if stack_name == "page_yolo_training":
+                text = texts.HELPS["YOLO_TRAINING_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["YOLO_TRAINING_PAGE"][self.language]
+                )
+            elif stack_name == "page_yolo_history":
+                text = texts.HELPS["YOLO_HISTORY_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["YOLO_HISTORY_PAGE"][self.language]
+                )
         elif name == "page_Classification":
             stack_name = self.stackedWidget_classification.currentWidget().objectName()
             if stack_name == "page_classification_class_list":
-                pass
+                text = texts.HELPS["CLASSLIST_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["CLASSLIST_PAGE"][self.language]
+                )
             elif stack_name == "page_classification_training":
                 pass
             elif stack_name == "page_classification_history":
                 pass
-        elif name == "page_software_setting":
-            pass
-        if help_image is not None:
-            self.help_win.textEdit.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            self.help_win.textEdit.setText(text)
-            image = QImage(
-                help_image,
-                help_image.shape[1],
-                help_image.shape[0],
-                help_image.strides[0],
-                QImage.Format_BGR888,
-            )
-            self.help_win.label.setPixmap(QPixmap.fromImage(image))
-            self.help_win.show()
+        
+        self.help_win.set_help_image(help_image, text)
+        self.help_win.show()
 
     def left_bar_clear(self):
         """change left bar image with base color (white)"""

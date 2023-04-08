@@ -684,5 +684,5 @@ class Yolo_model_train_worker(sQObject):
     def show_ymodel_train_result(self):
         self.reset_progressbar.emit(1, '')
         self.ui_obj.yolo_train.setEnabled(True)
-        self.api_obj.runing_y_model=False
+        self.api_obj.running_y_model=False
         return

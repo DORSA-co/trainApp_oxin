@@ -46,7 +46,7 @@ class UI_main_window(QMainWindow, ui):
 
         # APP NAME
         # ///////////////////////////////////////////////////////////////
-        title = "SABA - logim"
+        title = "SENSE-Login"
 
         self.setWindowTitle(title)
 

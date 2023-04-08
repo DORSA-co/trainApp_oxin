@@ -137,7 +137,7 @@ color: black;</string>
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="font_label">
            <property name="styleSheet">
             <string notr="true"/>
            </property>

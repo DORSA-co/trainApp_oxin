@@ -979,9 +979,6 @@ Titles = {
         'Label': {'fa': "برچسب گذاری",
                 'en': 'Label'},
 
-        'Label page': {'fa': "صفحه برچسب گذاری",
-                'en': 'Label page'},
-
         ' Tuning': {'fa': "تیونینگ",
                         'en': ' Tuning'},
 
@@ -993,12 +990,10 @@ Titles = {
 
         'Live': {'fa': 'نمایش زنده',
                 'en': 'Live'},
-        'Live tab': {'fa': ' تب نمایش زنده',
-                'en': 'Live tab'},
+
         'Technical View': {'fa': 'نمای تکنیکال',
                         'en': 'Technical View'},
-        'Technical View tab': {'fa': 'تب نمای تکنیکال',
-                        'en': 'Technical View tab'},
+
         'TOP Side': {'fa': "سمت بالا",
                         'en': 'TOP Side'},
 
@@ -1329,6 +1324,9 @@ Titles = {
         'Yolo': {'fa': 'جایابی \n + \n دسته بندی',
                 'en': 'Localization \n + \n Classification'},
 
+        'Yolo2': {'fa': 'جایابی + دسته بندی',
+                'en': 'Localization + Classification'},
+
         'training': {'fa': 'آموزش',
                         'en': 'Training'},
 
@@ -1341,6 +1339,9 @@ Titles = {
         'classification_training': {'fa': 'آموزش دسته‌بندی',
                                         'en': 'Classification Training'},
 
+        'yolo_training': {'fa': 'آموزش جایابی و دسته‌بندی',
+                                'en': 'Localization and Classification Training'},
+
         'history': {'fa': 'تاریخچه',
                         'en': 'History'},
 
@@ -1352,6 +1353,9 @@ Titles = {
 
         'classification_history': {'fa': 'تاریخچه دسته‌بندی',
                                         'en': 'Classification History'},
+
+        'yolo_history': {'fa': 'تاریخچه جایابی و دسته‌بندی',
+                                'en': 'Localization and Classification History'},
 
         'algorithm_name': {'fa': ':نام الگوریتم',
                         'en': 'Algorithm Name:'},
@@ -1628,6 +1632,12 @@ Titles = {
         'settings': {'fa': 'تنظیمات',
                         'en': 'Settings'},
 
+        'load_sheet': {'fa': 'بارگذاری ورق',
+                        'en': 'Load Sheet'},
+
+        'image_enlargement': {'fa': 'بزرگنمایی تصویر',
+                        'en': 'Image Enlargement'},
+
         'settings_page': {'fa': 'صفحه‌ی تنظیمات',
                         'en': 'Settings page'},
                                 
@@ -1742,6 +1752,12 @@ Titles = {
         'logs': {'fa': 'لاگ‌ها',
                 'en': 'Logs'},
 
+        'export': {'fa': 'خروجی گرفتن',
+                'en': 'Export'},
+
+        'reset_to_default': {'fa': 'بازگشت به مقدار پیش‌فرض',
+                'en': 'Reset to default'},
+
 #---------------------------------------------------------------------
 #----------------------Setting Sofwtare-------------------------------
 #---------------------------------------------------------------------
@@ -1830,11 +1846,17 @@ p, li { white-space: pre-wrap; }
     'BINARY_HISTORY_PAGE': {'fa': 'صفحه ی تاریخچه ی آموزش باینری \n این صفحه مربوط به تاریخچه ی آموزش مدل‌های باینری است.',
                             'en': 'Binary History Page \n This page is about history of training binary models.'},
     'BINARYLIST_PAGE': {'fa': 'صفحه ی لیست باینری \n این صفحه مربوط به مشاهده ی جزئیات مجموعه داده های باینری موجود است.',
-                            'en': 'Binary List Page \n This page is about viewing the details of the available binary data sets.'},
+                            'en': 'Binary List Page \n This page is about viewing the details of the available binary datasets.'},
     'LOC_TRAINING_PAGE': {'fa': 'صفحه ی آموزش جایابی \n این صفحه مربوط به آموزش مدل‌های جایابی است.',
                             'en': 'Localization Training Page \n This page is about training localization models.'},
     'LOC_HISTORY_PAGE': {'fa': 'صفحه ی تاریخچه ی آموزش جایابی \n این صفحه مربوط به تاریخچه ی آموزش مدل‌های جایابی است.',
                             'en': 'Localization History Page \n This page is about history of training localization models.'},
+    'CLASSLIST_PAGE': {'fa': 'صفحه ی لیست کلاس‌ها \n این صفحه مربوط به مشاهده ی جزئیات مجموعه داده های دسته‌بندی موجود است.',
+                            'en': 'Classes List Page \n This page is about viewing the details of the available classification datasets.'},
+    'YOLO_HISTORY_PAGE': {'fa': 'صفحه ی تاریخچه ی آموزش جایابی و دسته‌بندی \n این صفحه مربوط به تاریخچه ی آموزش مدل‌های جایابی و دسته‌بندی است.',
+                            'en': 'Localization and Classification History Page \n This page is about history of training localization and classification models.'},
+    'YOLO_TRAINING_PAGE': {'fa': 'صفحه ی آموزش جایابی و دسته‌بندی \n این صفحه مربوط به آموزش مدل‌های جایابی و دسته‌بندی است.',
+                            'en': 'Localization and Classification Training Page \n This page is about training localization and classification models.'},
 
     'PBT_PIPLINE_PAGE':{'fa':'این صفحه برای ساخت پایپ لاین سفارشی شده است\nبه این صورت که با استفاده از سه لیست زیر ،مدل های از قبل آموزش دیده شده موجود در نرم افزار  را براساس معماری آنها فیلتر کرده\nو در جدول زیر لیست ها  عملکرد هر مدل  بر اساس معماری انتخاب شده نمایش داده میشود\nو از طریق جدول، مدل هر جز از پایپ لاین را انتخاب کرده \nو در پایان،در جای خالی زیر صفحه یک نام برای پایپ لاین انتخاب کرده و با زدن دکمه اعمال پایپ لاین راساخته.',
                         'en':'this page is for a customized pipline. \nIn such a way that: useing the following three list,fliter the pre-trained models in the software based on their architecture,\nthe performace of each model is shown in the table blow the lists, \nuseing the model table,select each part, \nfinaly choose a suitable name for pipeline in the empty space below and hit the apply buttom and build the pipline '},
@@ -1842,6 +1864,15 @@ p, li { white-space: pre-wrap; }
                               'en':'This page is for validating pipelines in the software on existing data sets.\nIn this way, first of all, from the upper left part of the software, the settings related to loading the data set have been made\nThen, using the list on the right, select the desired pipeline\nBy pressing the evaluate button, the evaluating operation is done'},
     'PBT_HISTORY_PAGE':{'fa':' این صفحه برای مشاهده تاریخچه تمامی اعتبار سنجی های انجام شده در نرم افزار است،\nکه این تاریخچه با استفاده ابزار سمت چپ صفحه قابل فیلتر است.',
                         'en':'This page is for viewing the history of all evaluating , done in the software.\nThis history can be filtered using the tool on the left side of the page.'},
+
+    'LOADSHEET_PAGE':{'fa': 'صفحه ی بارگذاری ورق \n این صفحه مربوط به بارگذاری ورق برای مشاهده‌ و برچسب‌زدن تصاویر آن است.',
+                        'en': "Load Sheet Page \n This page is about loading the sheet for viewing and labeling it's images."},
+
+    'IMAGEENLARGEMENT_PAGE':{'fa': 'صفحه ی بزرگنمایی تصویر \n این صفحه مربوط به بزرگنمایی و تمام صفحه کردن تصاویری است که در نرم‌افزار با اندازه‌ی کوچک نمایش داده شده‌اند و با دابل کلیک کردن روی تصاویر کوچک نمایان می‌شود.',
+                                'en': 'Image Enlargement Page \n This page is about zooming and full-screen images that are displayed in the software with a small size and can be displayed by double-clicking on the small images.'},
+
+    'SHOWLOGS_PAGE':{'fa': 'صفحه ی نمایش لاگ‌ها \n این صفحه مربوط به جست‌وجو و نمایش لاگ‌های ذخیره شده است.',
+                                'en': 'Show Logs Page \n This page is about searching and displaying saved logs.'},
 
 #-----------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------Setting Help---------------------------------------------------------------
@@ -1867,10 +1898,6 @@ p, li { white-space: pre-wrap; }
                             'en': 'Dashboard Page \n This page is main page and show the brief content of all program.'},
     'page_storage': {'fa': 'در این صفحه تنظیمات مربوط به حافظه برای حذف داده های قدیمی اعمال میشود.',
                             'en': 'Dashboard Page \n This page is main page and show the brief content of all program.'},
-
-
-
-
 }
 
 HELPS_ADDRESS = {
@@ -1903,12 +1930,24 @@ HELPS_ADDRESS = {
                             'en': 'images/helps/loc_training_page.png'},
     'LOC_HISTORY_PAGE': {'fa': 'images/helps/loc_history_page_fa.png',
                             'en': 'images/helps/loc_history_page.png'},
+    'CLASSLIST_PAGE': {'fa': 'images/helps/classlist_page_fa.png',
+                            'en': 'images/helps/classlist_page.png'},
+    'YOLO_TRAINING_PAGE': {'fa': 'images/helps/yolo_training_page_fa.png',
+                            'en': 'images/helps/yolo_training_page.png'},
+    'YOLO_HISTORY_PAGE': {'fa': 'images/helps/yolo_history_page_fa.png',
+                            'en': 'images/helps/yolo_history_page.png'},
     'PBT_PIPLINE_PAGE':{'fa':'images/helps/PBT_pipline_page.png',
                         'en':'images/helps/PBT_pipline_page.png'},
     'PBT_LOADDATASET_PAGE' :{'fa':'images/helps/PBT_loaddataset_page.png',
                               'en':'images/helps/PBT_loaddataset_page.png'},
     'PBT_HISTORY_PAGE':{'fa':'images/helps/PBT_history_page.png',
                         'en':'images/helps/PBT_history_page.png'},
+    'LOADSHEET_PAGE':{'fa':'images/helps/loadsheet_page_fa.png',
+                        'en':'images/helps/loadsheet_page.png'},
+    'IMAGEENLARGEMENT_PAGE': {'fa':'images/helps/imageenlargement_page_fa.png',
+                                'en':'images/helps/imageenlargement_page.png'},
+    'SHOWLOGS_PAGE': {'fa':'images/helps/showlogs_page_fa.png',
+                                'en':'images/helps/showlogs_page.png'},
 
 #-----------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------Setting Help---------------------------------------------------------------
@@ -2094,7 +2133,7 @@ def set_title(self, lang):
 
     self.label_28.setText(Titles['all_pipelines'][lang])
     self.label_61.setText(Titles['my_pipelines'][lang])
-    self.show_details_pipline.setText(Titles['show_details'][lang])
+#     self.show_details_pipline.setText(Titles['show_details'][lang])
     self.remove_pipline.setText(Titles['delete'][lang])
 
     self.binary_chart_frame_profile.setTitle(Titles['df_piechart'][lang])
@@ -2170,6 +2209,7 @@ def set_title(self, lang):
     self.binary_chart_checkbox.setText(Titles['chart_full_view'][lang])
     self.label_8_2.setText(Titles['train'][lang])
     self.label_11.setText(Titles['validation'][lang])
+    self.binary_reset.setText(Titles['reset_to_default'][lang])
 
     ## history
 
@@ -2235,6 +2275,7 @@ def set_title(self, lang):
     self.localization_chart_checkbox.setText(Titles['chart_full_view'][lang])
     self.label_8_3.setText(Titles['train'][lang])
     self.label_19.setText(Titles['validation'][lang])
+    self.localization_reset.setText(Titles['reset_to_default'][lang])
 
     ## history
 
@@ -2295,6 +2336,7 @@ def set_title(self, lang):
     self.yolo_chart_checkbox.setText(Titles['chart_full_view'][lang])
     self.label_8_4.setText(Titles['train'][lang])
     self.label_324.setText(Titles['validation'][lang])
+    self.yolo_reset.setText(Titles['reset_to_default'][lang])
 
     ## history
 
@@ -2932,44 +2974,42 @@ def set_alignment(self, lang):
     set_alignment
 
 def set_show_log(self, lang):
-	self.show_log_win.groupBox.setTitle(Titles['search_bar'][lang])
-	self.show_log_win.groupBox_3.setTitle(Titles['date'][lang])
+    self.show_log_win.groupBox.setTitle(Titles['search_bar'][lang])
+    self.show_log_win.groupBox_3.setTitle(Titles['date'][lang])
 
-	self.show_log_win.checkBox_allDates.setText(Titles['all_dates'][lang])
-	self.show_log_win.label.setText(Titles['from_date'][lang])
-	self.show_log_win.label_2.setText(Titles['to_date'][lang])
-	self.show_log_win.label_5.setText(Titles['year'][lang])
-	self.show_log_win.label_8.setText(Titles['year'][lang])
-	self.show_log_win.label_6.setText(Titles['month'][lang])
-	self.show_log_win.label_9.setText(Titles['month'][lang])
-	self.show_log_win.label_7.setText(Titles['day'][lang])
-	self.show_log_win.label_10.setText(Titles['day'][lang])
+    self.show_log_win.checkBox_allDates.setText(Titles['all_dates'][lang])
+    self.show_log_win.label.setText(Titles['from_date'][lang])
+    self.show_log_win.label_2.setText(Titles['to_date'][lang])
+    self.show_log_win.label_5.setText(Titles['year'][lang])
+    self.show_log_win.label_8.setText(Titles['year'][lang])
+    self.show_log_win.label_6.setText(Titles['month'][lang])
+    self.show_log_win.label_9.setText(Titles['month'][lang])
+    self.show_log_win.label_7.setText(Titles['day'][lang])
+    self.show_log_win.label_10.setText(Titles['day'][lang])
 
-	self.show_log_win.groupBox_5.setTitle(Titles['levels'][lang])
-	self.show_log_win.checkBox_allLevels.setText(Titles['all_levels'][lang])
+    self.show_log_win.groupBox_5.setTitle(Titles['levels'][lang])
+    self.show_log_win.checkBox_allLevels.setText(Titles['all_levels'][lang])
 
-	self.show_log_win.groupBox_6.setTitle(Titles['types'][lang])
-	self.show_log_win.checkBox_allTypes.setText(Titles['all_types'][lang])
+    self.show_log_win.groupBox_6.setTitle(Titles['types'][lang])
+    self.show_log_win.checkBox_allTypes.setText(Titles['all_types'][lang])
 
-	self.show_log_win.groupBox_4.setTitle(Titles['lines'][lang])
-	self.show_log_win.label_12.setText(Titles['line'][lang])
-	self.show_log_win.comboBox_linesFL.clear()
-	self.show_log_win.comboBox_linesFL.addItems([Titles['from_last'][lang], Titles['from_first'][lang]])
-	
-	self.show_log_win.search_btn.setText(Titles['search'][lang])
-	self.show_log_win.refresh_btn.setText(Titles['refresh'][lang])
+    self.show_log_win.groupBox_4.setTitle(Titles['lines'][lang])
+    self.show_log_win.label_12.setText(Titles['line'][lang])
+    self.show_log_win.comboBox_linesFL.clear()
+    self.show_log_win.comboBox_linesFL.addItems([Titles['from_last'][lang], Titles['from_first'][lang]])
 
-	self.show_log_win.groupBox_2.setTitle(Titles['logs'][lang])
+    self.show_log_win.search_btn.setText(Titles['search'][lang])
+    self.show_log_win.refresh_btn.setText(Titles['refresh'][lang])
+    self.show_log_win.export_btn.setText(Titles['export'][lang])
 
-	if lang == 'fa':
-		self.show_log_win.label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-		self.show_log_win.label_2.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-	elif lang == 'en':
-		self.show_log_win.label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-		self.show_log_win.label_2.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+    self.show_log_win.groupBox_2.setTitle(Titles['logs'][lang])
 
-# def set_help_title(self):
-#     self.Data_auquzation_btn.setText(Titles['Data Auquzation'][lang])
-#     self.label_btn.setText(Titles['Label'][lang])
-#     self.tuning_btn.setText(Titles[' Tuning'][lang])
-#     self.pbt_btn.setText(Titles['Pipline Build & Test'][lang])
+    if lang == 'fa':
+            self.show_log_win.label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            self.show_log_win.label_2.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+    elif lang == 'en':
+            self.show_log_win.label.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+            self.show_log_win.label_2.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
+def set_help_title(self, lang):
+    self.font_label.setText(Titles['font'][lang])

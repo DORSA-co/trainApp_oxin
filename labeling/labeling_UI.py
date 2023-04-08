@@ -33,6 +33,8 @@ class labeling(QMainWindow, ui):
         # Set flags. window is frameless and always stay on top of other windows.
         flags = Qt.WindowFlags(Qt.FramelessWindowHint|Qt.WindowStaysOnTopHint)
         self.setWindowFlags(flags)
+        title = "SENSE-Labeling"
+        self.setWindowTitle(title)
         # Find and save position of window.
         self.pos_ = self.pos()
         # Connect buttons.

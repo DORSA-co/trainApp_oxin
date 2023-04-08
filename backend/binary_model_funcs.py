@@ -1284,6 +1284,8 @@ class Binary_model_train_worker(sQObject):
                     n_split = 0
                 for i in imgs:
                     img = Utils.read_image(os.path.join(s_perfect, i), color="color")
+                    if img is None:
+                        continue
                     crops = get_crops_no_defect(img, n_split, size)
                     self.ds_obj.save_to_perfect_splitted(crops, d_perfect, i.split(".")[0])
                     self.set_progressbar.emit()
@@ -1328,7 +1330,7 @@ class Binary_model_train_worker(sQObject):
                 # update ui
 
         # self.ui_obj.binary_train.setEnabled(True)
-        # self.api_obj.runing_b_model=False
+        # self.api_obj.running_b_model=False
 
         self.finished.emit()
 
@@ -1347,5 +1349,5 @@ class Binary_model_train_worker(sQObject):
     def show_bmodel_train_result(self):
         self.reset_progressbar.emit(1, '')
         self.ui_obj.binary_train.setEnabled(True)
-        self.api_obj.runing_b_model = False
+        self.api_obj.running_b_model = False
         return

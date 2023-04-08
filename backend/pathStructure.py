@@ -51,6 +51,19 @@ def sheet_image_path(main_path,id, side, camera_numbers, n_frame, format_img):
     
     elif 'bot' in side.lower() or 'down' in side.lower():
         return(os.path.join(main_path, year, month, day, str(id), 'BOTTOM', str(camera_numbers), str(n_frame) + str(format_img)))
+    
+def sheet_camera_path(main_path,id, side, camera_numbers):
+    try:
+        db = dataBaseUtils(ui_obj='Null')
+        date = db.load_sheet_date(id)
+    except:
+        date = date_funcs.get_date(persian=SHAMSI_DATE)
+    year, month, day = date.split('/')
+    if 'top' in side.lower() or 'up' in side.lower():
+        return(os.path.join(main_path, year, month, day, str(id), 'TOP', str(camera_numbers)))
+    
+    elif 'bot' in side.lower() or 'down' in side.lower():
+        return(os.path.join(main_path, year, month, day, str(id), 'BOTTOM', str(camera_numbers)))
 
 def sheet_path(main_path, id):
     db = dataBaseUtils(ui_obj='Null')
