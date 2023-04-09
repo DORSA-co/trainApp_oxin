@@ -405,6 +405,9 @@ WARNINGS = {
     'Create_pipline': {'fa': ' آیا از ساخت پایپ لاین جدید مطمئن هستید ؟ نام (',
                 'en': ' Are you sure want to create new Pilpline?  (Name : '},
 
+        'Have_Classification_model':{'fa':'پایپلات شما مدل دسته بندی مجزا ندارد',
+                                     'en':'your pipline does not have raw Classification model'},
+
 
     'Remove_pipline': {'fa': ' آیا از حذف پایپ لاین مطمئن هستید ؟ نام (',
                 'en': ' Are you sure want to Remove Pilpline?  (Name : '},

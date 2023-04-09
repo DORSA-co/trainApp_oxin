@@ -12828,7 +12828,7 @@ QPushButton:hover {
                              </size>
                             </property>
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="page_pipeline">
                              <property name="maximumSize">
@@ -12893,16 +12893,16 @@ QPushButton:hover {
                                      <number>0</number>
                                     </property>
                                     <item>
-                                     <widget class="QRadioButton" name="radioButton_one">
+                                     <widget class="QRadioButton" name="radioButton_use_yolo">
                                       <property name="text">
-                                       <string>One</string>
+                                       <string>use yolo</string>
                                       </property>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QRadioButton" name="radioButton_two">
+                                     <widget class="QRadioButton" name="radioButton_use_unet">
                                       <property name="text">
-                                       <string>Two</string>
+                                       <string>use unet</string>
                                       </property>
                                      </widget>
                                     </item>
@@ -12998,7 +12998,7 @@ QPushButton:hover {
                                     </size>
                                    </property>
                                    <property name="currentIndex">
-                                    <number>1</number>
+                                    <number>0</number>
                                    </property>
                                    <widget class="QWidget" name="page_yolo">
                                     <layout class="QHBoxLayout" name="horizontalLayout_112">
@@ -14950,7 +14950,7 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>340</width>
+                                      <width>319</width>
                                       <height>715</height>
                                      </rect>
                                     </property>

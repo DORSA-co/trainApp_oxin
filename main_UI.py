@@ -280,6 +280,9 @@ class UI_main_window(QMainWindow, ui):
         self.pipeline_pbt_btn.clicked.connect(self.buttonClick)
 
         self.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
+        self.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(0)
+        self.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(0)
+
         self.load_dataset_pbt_btn.clicked.connect(self.buttonClick)
         self.history_pbt_btn.clicked.connect(self.buttonClick)
         # charts ---------------------------------------------------------------------------------------------
