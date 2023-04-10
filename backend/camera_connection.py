@@ -664,44 +664,44 @@ if __name__ == "__main__":
 
     # collector.start_grabbing()
     # collector.start_grabbing()
-    cameras = collector
-
-    cameras.start_grabbing()
-    cameras.getPictures()
+    # cameras = collector
+    collector.listDevices()
+    # cameras.start_grabbing()
+    # cameras.getPictures()
     # print(cameras.)
 
-    while True:
+    # while True:
 
-        #     # for cam in cameras:
-        #     #         cam.trigg_exec()
+    #     #     # for cam in cameras:
+    #     #     #         cam.trigg_exec()
 
-        #     # for cam in cameras:
-        #     #print(cam.camera.GetQueuedBufferCount())
-        img = cameras.getPictures()
-        img=img[1]
-        # print(img.shape)
-        # print(cam.camera.GetQueuedBufferCount())
-        cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
-        img=np.uint8(img)
-        # cv2.imshow('img',img)
-        cv2.waitKey(50)
-        # img = cameras[1].getPictures()
-        # #print(cam.camera.GetQueuedBufferCount())
-        # cv2.imshow('img2', cv2.resize( img, None, fx=0.5, fy=0.5 ))
-        # cv2.waitKey(50)
-        # img = cameras[2].getPictures()
-        # #print(cam.camera.GetQueuedBufferCount())
-        # cv2.imshow('img3', cv2.resize( img, None, fx=0.5, fy=0.5 ))
-        # cv2.waitKey(50)
-        # img = cameras[3].getPictures()
-        # #print(cam.camera.GetQueuedBufferCount())
-        # cv2.imshow('img4', cv2.resize( img, None, fx=0.5, fy=0.5 ))
-        # cv2.waitKey(50)
+    #     #     # for cam in cameras:
+    #     #     #print(cam.camera.GetQueuedBufferCount())
+    #     img = cameras.getPictures()
+    #     img=img[1]
+    #     # print(img.shape)
+    #     # print(cam.camera.GetQueuedBufferCount())
+    #     cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
+    #     img=np.uint8(img)
+    #     # cv2.imshow('img',img)
+    #     cv2.waitKey(50)
+    #     # img = cameras[1].getPictures()
+    #     # #print(cam.camera.GetQueuedBufferCount())
+    #     # cv2.imshow('img2', cv2.resize( img, None, fx=0.5, fy=0.5 ))
+    #     # cv2.waitKey(50)
+    #     # img = cameras[2].getPictures()
+    #     # #print(cam.camera.GetQueuedBufferCount())
+    #     # cv2.imshow('img3', cv2.resize( img, None, fx=0.5, fy=0.5 ))
+    #     # cv2.waitKey(50)
+    #     # img = cameras[3].getPictures()
+    #     # #print(cam.camera.GetQueuedBufferCount())
+    #     # cv2.imshow('img4', cv2.resize( img, None, fx=0.5, fy=0.5 ))
+    #     # cv2.waitKey(50)
 
-        # time.sleep(0.330)
-        # while cam.camera.GetQueuedBufferCount()!=10:
-        #     pass
-        # print(cam.camera.GetQueuedBufferCount(), 'f'*100)
-        # print('-'*100)
-    # func = get_threading(cameras)
-    # func()
+    #     # time.sleep(0.330)
+    #     # while cam.camera.GetQueuedBufferCount()!=10:
+    #     #     pass
+    #     # print(cam.camera.GetQueuedBufferCount(), 'f'*100)
+    #     # print('-'*100)
+    # # func = get_threading(cameras)
+    # # func()

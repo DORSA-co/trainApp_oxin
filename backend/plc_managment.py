@@ -89,10 +89,10 @@ class management():
         try:
             var = self.client.get_node(path)
             # #print(var)
-            data_value=var.get_data_value() # get value of node as a DataValue object
+            # data_value=var.get_data_value() # get value of node as a DataValue object   this line is not imporant
             value=var.get_value() # get value of node as a python builtin
             # #print('x'*5,value)
-            return (value, data_value)
+            return (value, None)
 
         except:
             # #print('except')

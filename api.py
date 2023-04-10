@@ -5791,11 +5791,14 @@ class API:
             self.auto_wind_timer.start(auto_wind_timer)
 
     def set_wind(self, mode=True):
-        if self.ui.wind_itr == 1:
-            ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
-            # if ret and mode:
-            if mode:
-                self.ui.start_wind()
+        print(type(self.sensor),self.sensor)
+        if self.sensor :
+            if self.ui.wind_itr == 1:
+                ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+                ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(mode))
+                # if ret and mode:
+                if mode:
+                    self.ui.start_wind()
 
     def set_start_software_plc(self, mode):
         # #print("software on plc ", str(mode))
@@ -5807,26 +5810,34 @@ class API:
             pass
 
     def get_sensor_and_temp(self):
+        t1 = time.time()
         try:
-            self.sensor = self.my_plc.get_value(
-                self.dict_spec_pathes["MemDistanceSensor"]
-            )
-            # #print(self.sensor[0])
-            if self.sensor[0] == "-":
-                if not self.ui.manual_plc:
-                    # #print(";" * 50)
-                    self.sensor = False
-            else:
-                self.sensor = bool(self.sensor[0])
+            if not self.ui.manual_plc:
+                
+            
+                self.sensor = self.my_plc.get_value(
+                    self.dict_spec_pathes["MemDistanceSensor"]
+                )
+                # #print(self.sensor[0])
+                if self.sensor[0] == "-":
+                    if not self.ui.manual_plc:
+                        # #print(";" * 50)
+                        self.sensor = False
+                else:
+                    self.sensor = bool(self.sensor[0])
+
+            
+
         except:
             self.sensor = False
-
+        t2=time.time()
         try:
+
             self.top_temp = str(
-                self.my_plc.get_value(self.dict_spec_pathes["UpTemperature"])[0]
+                round(self.my_plc.get_value(self.dict_spec_pathes["UpTemperature"])[0],2)
             )
             self.bottom_temp = str(
-                self.my_plc.get_value(self.dict_spec_pathes["DownTemperature"])[0]
+                round(self.my_plc.get_value(self.dict_spec_pathes["DownTemperature"])[0],2)
             )
         except:
             self.top_temp = "0"
@@ -5840,6 +5851,7 @@ class API:
         # threading.Thread(target=self.get_sensor_and_temp)
 
     def update_plc_values(self):
+
         threading.Thread(target=self.get_sensor_and_temp).start()
         # self.get_sensor_and_temp()
 
@@ -5855,7 +5867,7 @@ class API:
                     message=texts.ERRORS["overhead_temp"][self.ui.language], level=3
                 )
         except:
-            # #print('Except self.top_temp > self.up_high_threshold')
+            # print('Except self.top_temp > self.up_high_threshold')
             pass
         #  self.up_high_threshold = self.my_plc.get_value(self.dict_spec_pathes["UpHighThreshold"])
         # self.up_low_threshold = self.my_plc.get_value(self.dict_spec_pathes["UpLowThreshold"])
@@ -5866,11 +5878,10 @@ class API:
                 self.sensor = True
             else:
                 self.sensor = False
-                if self.itr >= 20:
+                if self.itr >= 30:
                     self.itr = 0
             # #print(self.itr)
             self.itr += 1
-
         # if self.sensor:
         #     self.init_check_plc()
         # #print(self.sensor)

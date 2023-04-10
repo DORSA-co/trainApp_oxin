@@ -209,8 +209,10 @@ class ImageManager(sQObject):
     def check_thread_func(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
         cameras_id = sorted(connected_cameras.keys())
+        print(cameras_id)
         camera_id = -1
         for id in cameras_id:
+            id = int(id)
             if self.start_cam <= id <= self.stop_cam or self.start_cam + 12 <= id <= self.stop_cam + 12:
                 camera_id = id
                 connected_cameras[str(camera_id)].start_grabbing()

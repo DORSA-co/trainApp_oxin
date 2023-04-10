@@ -2425,7 +2425,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>2</number>
+                         <number>0</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -2684,7 +2684,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
 }</string>
                                </property>
                                <property name="currentIndex">
-                                <number>1</number>
+                                <number>0</number>
                                </property>
                                <widget class="QWidget" name="tab_5">
                                 <attribute name="title">
@@ -4641,9 +4641,9 @@ border:None;</string>
                                       <widget class="QWidget" name="scrollAreaWidgetContents_3">
                                        <property name="geometry">
                                         <rect>
-                                         <x>0</x>
+                                         <x>-248</x>
                                          <y>0</y>
-                                         <width>488</width>
+                                         <width>718</width>
                                          <height>32</height>
                                         </rect>
                                        </property>
@@ -4815,7 +4815,7 @@ QPushButton:disabled {
                                         <item>
                                          <widget class="QLabel" name="label_236">
                                           <property name="text">
-                                           <string>Temperature  :</string>
+                                           <string>Temperature   Top :</string>
                                           </property>
                                          </widget>
                                         </item>
@@ -4823,6 +4823,29 @@ QPushButton:disabled {
                                          <widget class="QLabel" name="label_up_temperature">
                                           <property name="text">
                                            <string>-</string>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <spacer name="horizontalSpacer_87">
+                                          <property name="orientation">
+                                           <enum>Qt::Horizontal</enum>
+                                          </property>
+                                          <property name="sizeType">
+                                           <enum>QSizePolicy::Fixed</enum>
+                                          </property>
+                                          <property name="sizeHint" stdset="0">
+                                           <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                           </size>
+                                          </property>
+                                         </spacer>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="label_297">
+                                          <property name="text">
+                                           <string>Temperature   Bottom :</string>
                                           </property>
                                          </widget>
                                         </item>
@@ -4912,7 +4935,7 @@ QPushButton:disabled {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>721</width>
+                                      <width>825</width>
                                       <height>28</height>
                                      </rect>
                                     </property>
@@ -7992,7 +8015,7 @@ border-radius: 8px;</string>
                                            <rect>
                                             <x>0</x>
                                             <y>0</y>
-                                            <width>692</width>
+                                            <width>707</width>
                                             <height>27</height>
                                            </rect>
                                           </property>
@@ -9549,7 +9572,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>781</height>
+                                        <height>782</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -9801,7 +9824,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>781</height>
+                                        <height>782</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -13464,7 +13487,7 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>92</width>
+                                      <width>63</width>
                                       <height>165</height>
                                      </rect>
                                     </property>
@@ -13491,8 +13514,8 @@ color : rgb(0,0,0);</string>
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>96</width>
-                                          <height>49</height>
+                                          <width>76</width>
+                                          <height>43</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -13555,7 +13578,7 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>107</width>
+                                              <width>109</width>
                                               <height>43</height>
                                              </rect>
                                             </property>
@@ -13600,7 +13623,7 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>106</width>
+                                              <width>108</width>
                                               <height>43</height>
                                              </rect>
                                             </property>
@@ -13661,8 +13684,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>90</width>
-                                              <height>43</height>
+                                              <width>76</width>
+                                              <height>98</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">
@@ -14964,7 +14987,7 @@ border:Transparent</string>
                                       <x>0</x>
                                       <y>0</y>
                                       <width>340</width>
-                                      <height>715</height>
+                                      <height>699</height>
                                      </rect>
                                     </property>
                                     <layout class="QVBoxLayout" name="verticalLayout_64">
