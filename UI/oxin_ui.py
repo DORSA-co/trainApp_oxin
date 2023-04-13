@@ -2229,7 +2229,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 488, 30))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 488, 32))
         sizePolicy7 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy7.setHorizontalStretch(0)
         sizePolicy7.setVerticalStretch(0)
@@ -3969,7 +3969,7 @@ class Ui_MainWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 692, 20))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 692, 18))
         self.horizontalLayout_228 = QHBoxLayout(self.scrollAreaWidgetContents_6)
         self.horizontalLayout_228.setObjectName(u"horizontalLayout_228")
         self.horizontalLayout_228.setContentsMargins(9, 0, 0, 0)
@@ -4764,7 +4764,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 28))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 18))
         self.scrollAreaWidgetContents_2.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_2.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_90_2 = QHBoxLayout(self.scrollAreaWidgetContents_2)
@@ -4852,7 +4852,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_51 = QWidget()
         self.scrollAreaWidgetContents_51.setObjectName(u"scrollAreaWidgetContents_51")
-        self.scrollAreaWidgetContents_51.setGeometry(QRect(0, 0, 288, 28))
+        self.scrollAreaWidgetContents_51.setGeometry(QRect(0, 0, 288, 18))
         self.scrollAreaWidgetContents_51.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_51.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_1141 = QHBoxLayout(self.scrollAreaWidgetContents_51)
@@ -6670,17 +6670,17 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_31.addWidget(self.label_123)
 
-        self.cbBox_of_multiClassification_model_in_PBT_page = QComboBox(self.frame_53)
-        self.cbBox_of_multiClassification_model_in_PBT_page.setObjectName(u"cbBox_of_multiClassification_model_in_PBT_page")
-        self.cbBox_of_multiClassification_model_in_PBT_page.setMinimumSize(QSize(105, 25))
-        self.cbBox_of_multiClassification_model_in_PBT_page.setMaximumSize(QSize(200, 25))
+        self.cbBox_of_classification_model_in_PBT_page = QComboBox(self.frame_53)
+        self.cbBox_of_classification_model_in_PBT_page.setObjectName(u"cbBox_of_classification_model_in_PBT_page")
+        self.cbBox_of_classification_model_in_PBT_page.setMinimumSize(QSize(105, 25))
+        self.cbBox_of_classification_model_in_PBT_page.setMaximumSize(QSize(200, 25))
 
-        self.horizontalLayout_31.addWidget(self.cbBox_of_multiClassification_model_in_PBT_page)
+        self.horizontalLayout_31.addWidget(self.cbBox_of_classification_model_in_PBT_page)
 
-        self.toolButton_multiClassification = QToolButton(self.frame_53)
-        self.toolButton_multiClassification.setObjectName(u"toolButton_multiClassification")
+        self.toolButton_classification = QToolButton(self.frame_53)
+        self.toolButton_classification.setObjectName(u"toolButton_classification")
 
-        self.horizontalLayout_31.addWidget(self.toolButton_multiClassification)
+        self.horizontalLayout_31.addWidget(self.toolButton_classification)
 
 
         self.horizontalLayout_63.addWidget(self.frame_53)
@@ -6710,6 +6710,38 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_44.addWidget(self.line_22)
 
+        self.frame_4 = QFrame(self.page_pipeline)
+        self.frame_4.setObjectName(u"frame_4")
+        self.frame_4.setFrameShape(QFrame.StyledPanel)
+        self.frame_4.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_154 = QHBoxLayout(self.frame_4)
+        self.horizontalLayout_154.setObjectName(u"horizontalLayout_154")
+        self.horizontalSpacer_86 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_154.addItem(self.horizontalSpacer_86)
+
+        self.LBL_tabel_title = QLabel(self.frame_4)
+        self.LBL_tabel_title.setObjectName(u"LBL_tabel_title")
+        sizePolicy10 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        sizePolicy10.setHorizontalStretch(0)
+        sizePolicy10.setVerticalStretch(0)
+        sizePolicy10.setHeightForWidth(self.LBL_tabel_title.sizePolicy().hasHeightForWidth())
+        self.LBL_tabel_title.setSizePolicy(sizePolicy10)
+        self.LBL_tabel_title.setMinimumSize(QSize(120, 20))
+        self.LBL_tabel_title.setStyleSheet(u"background-color: rgb(255, 255, 255);\n"
+"font: 14pt \"MS Shell Dlg 2\";\n"
+"\n"
+"")
+
+        self.horizontalLayout_154.addWidget(self.LBL_tabel_title, 0, Qt.AlignHCenter)
+
+        self.horizontalSpacer_87 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_154.addItem(self.horizontalSpacer_87)
+
+
+        self.verticalLayout_44.addWidget(self.frame_4)
+
         self.frame_89 = QFrame(self.page_pipeline)
         self.frame_89.setObjectName(u"frame_89")
         self.frame_89.setMinimumSize(QSize(0, 50))
@@ -6724,8 +6756,6 @@ class Ui_MainWindow(object):
             self.table_of_binary_classifaction_in_PBT_page.setColumnCount(10)
         self.table_of_binary_classifaction_in_PBT_page.setObjectName(u"table_of_binary_classifaction_in_PBT_page")
         self.table_of_binary_classifaction_in_PBT_page.setColumnCount(10)
-        self.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setMinimumSectionSize(70)
-        self.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setDefaultSectionSize(70)
         self.table_of_binary_classifaction_in_PBT_page.verticalHeader().setCascadingSectionResizes(True)
 
         self.verticalLayout_45.addWidget(self.table_of_binary_classifaction_in_PBT_page)
@@ -6810,15 +6840,17 @@ class Ui_MainWindow(object):
         self.horizontalLayout_72.setObjectName(u"horizontalLayout_72")
         self.label_12_4 = QLabel(self.scrollAreaWidgetContents_8)
         self.label_12_4.setObjectName(u"label_12_4")
+        sizePolicy7.setHeightForWidth(self.label_12_4.sizePolicy().hasHeightForWidth())
+        self.label_12_4.setSizePolicy(sizePolicy7)
         self.label_12_4.setMinimumSize(QSize(43, 25))
         self.label_12_4.setMaximumSize(QSize(43, 25))
 
         self.horizontalLayout_72.addWidget(self.label_12_4)
 
-        self.LBL_of_selected_binary_classifaction_model_in_PBT_page = QLabel(self.scrollAreaWidgetContents_8)
-        self.LBL_of_selected_binary_classifaction_model_in_PBT_page.setObjectName(u"LBL_of_selected_binary_classifaction_model_in_PBT_page")
+        self.LBL_of_selected_binary_model_in_PBT_page = QLabel(self.scrollAreaWidgetContents_8)
+        self.LBL_of_selected_binary_model_in_PBT_page.setObjectName(u"LBL_of_selected_binary_model_in_PBT_page")
 
-        self.horizontalLayout_72.addWidget(self.LBL_of_selected_binary_classifaction_model_in_PBT_page)
+        self.horizontalLayout_72.addWidget(self.LBL_of_selected_binary_model_in_PBT_page)
 
         self.scrollArea_7.setWidget(self.scrollAreaWidgetContents_8)
 
@@ -6836,20 +6868,22 @@ class Ui_MainWindow(object):
         self.scrollArea_8.setWidgetResizable(True)
         self.scrollAreaWidgetContents_9 = QWidget()
         self.scrollAreaWidgetContents_9.setObjectName(u"scrollAreaWidgetContents_9")
-        self.scrollAreaWidgetContents_9.setGeometry(QRect(0, 0, 107, 43))
+        self.scrollAreaWidgetContents_9.setGeometry(QRect(0, 0, 1414, 49))
         self.horizontalLayout_41 = QHBoxLayout(self.scrollAreaWidgetContents_9)
         self.horizontalLayout_41.setObjectName(u"horizontalLayout_41")
         self.label_247 = QLabel(self.scrollAreaWidgetContents_9)
         self.label_247.setObjectName(u"label_247")
+        sizePolicy7.setHeightForWidth(self.label_247.sizePolicy().hasHeightForWidth())
+        self.label_247.setSizePolicy(sizePolicy7)
         self.label_247.setMinimumSize(QSize(76, 25))
         self.label_247.setMaximumSize(QSize(85, 25))
 
         self.horizontalLayout_41.addWidget(self.label_247)
 
-        self.LBL_of_selected_multiClassification_model_in_PBT_page = QLabel(self.scrollAreaWidgetContents_9)
-        self.LBL_of_selected_multiClassification_model_in_PBT_page.setObjectName(u"LBL_of_selected_multiClassification_model_in_PBT_page")
+        self.LBL_of_selected_classification_model_in_PBT_page = QLabel(self.scrollAreaWidgetContents_9)
+        self.LBL_of_selected_classification_model_in_PBT_page.setObjectName(u"LBL_of_selected_classification_model_in_PBT_page")
 
-        self.horizontalLayout_41.addWidget(self.LBL_of_selected_multiClassification_model_in_PBT_page)
+        self.horizontalLayout_41.addWidget(self.LBL_of_selected_classification_model_in_PBT_page)
 
         self.scrollArea_8.setWidget(self.scrollAreaWidgetContents_9)
 
@@ -6860,11 +6894,13 @@ class Ui_MainWindow(object):
         self.scrollArea_9.setWidgetResizable(True)
         self.scrollAreaWidgetContents_10 = QWidget()
         self.scrollAreaWidgetContents_10.setObjectName(u"scrollAreaWidgetContents_10")
-        self.scrollAreaWidgetContents_10.setGeometry(QRect(0, 0, 106, 43))
+        self.scrollAreaWidgetContents_10.setGeometry(QRect(0, 0, 1414, 49))
         self.horizontalLayout_43 = QHBoxLayout(self.scrollAreaWidgetContents_10)
         self.horizontalLayout_43.setObjectName(u"horizontalLayout_43")
         self.label_251 = QLabel(self.scrollAreaWidgetContents_10)
         self.label_251.setObjectName(u"label_251")
+        sizePolicy7.setHeightForWidth(self.label_251.sizePolicy().hasHeightForWidth())
+        self.label_251.setSizePolicy(sizePolicy7)
         self.label_251.setMinimumSize(QSize(75, 25))
         self.label_251.setMaximumSize(QSize(50, 25))
 
@@ -6895,15 +6931,17 @@ class Ui_MainWindow(object):
         self.horizontalLayout_139.setObjectName(u"horizontalLayout_139")
         self.label_12_6 = QLabel(self.scrollAreaWidgetContents_11)
         self.label_12_6.setObjectName(u"label_12_6")
+        sizePolicy7.setHeightForWidth(self.label_12_6.sizePolicy().hasHeightForWidth())
+        self.label_12_6.setSizePolicy(sizePolicy7)
         self.label_12_6.setMinimumSize(QSize(43, 25))
         self.label_12_6.setMaximumSize(QSize(43, 25))
 
         self.horizontalLayout_139.addWidget(self.label_12_6)
 
-        self.LBL_of_selected_binary_yolo_model_in_PBT_page = QLabel(self.scrollAreaWidgetContents_11)
-        self.LBL_of_selected_binary_yolo_model_in_PBT_page.setObjectName(u"LBL_of_selected_binary_yolo_model_in_PBT_page")
+        self.LBL_of_selected_yolo_model_in_PBT_page = QLabel(self.scrollAreaWidgetContents_11)
+        self.LBL_of_selected_yolo_model_in_PBT_page.setObjectName(u"LBL_of_selected_yolo_model_in_PBT_page")
 
-        self.horizontalLayout_139.addWidget(self.LBL_of_selected_binary_yolo_model_in_PBT_page)
+        self.horizontalLayout_139.addWidget(self.LBL_of_selected_yolo_model_in_PBT_page)
 
         self.scrollArea_10.setWidget(self.scrollAreaWidgetContents_11)
 
@@ -8918,11 +8956,11 @@ class Ui_MainWindow(object):
         self.frame_56 = QFrame(self.page_binary_training)
         self.frame_56.setObjectName(u"frame_56")
         self.frame_56.setEnabled(True)
-        sizePolicy10 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy10.setHorizontalStretch(0)
-        sizePolicy10.setVerticalStretch(0)
-        sizePolicy10.setHeightForWidth(self.frame_56.sizePolicy().hasHeightForWidth())
-        self.frame_56.setSizePolicy(sizePolicy10)
+        sizePolicy11 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy11.setHorizontalStretch(0)
+        sizePolicy11.setVerticalStretch(0)
+        sizePolicy11.setHeightForWidth(self.frame_56.sizePolicy().hasHeightForWidth())
+        self.frame_56.setSizePolicy(sizePolicy11)
         self.frame_56.setMinimumSize(QSize(350, 50))
         self.frame_56.setMaximumSize(QSize(320, 16777215))
         self.frame_56.setFrameShape(QFrame.StyledPanel)
@@ -9106,11 +9144,11 @@ class Ui_MainWindow(object):
 
         self.b_select_dp = QPushButton(self.frame_57)
         self.b_select_dp.setObjectName(u"b_select_dp")
-        sizePolicy11 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        sizePolicy11.setHorizontalStretch(0)
-        sizePolicy11.setVerticalStretch(0)
-        sizePolicy11.setHeightForWidth(self.b_select_dp.sizePolicy().hasHeightForWidth())
-        self.b_select_dp.setSizePolicy(sizePolicy11)
+        sizePolicy12 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy12.setHorizontalStretch(0)
+        sizePolicy12.setVerticalStretch(0)
+        sizePolicy12.setHeightForWidth(self.b_select_dp.sizePolicy().hasHeightForWidth())
+        self.b_select_dp.setSizePolicy(sizePolicy12)
         self.b_select_dp.setMinimumSize(QSize(120, 0))
         self.b_select_dp.setStyleSheet(u"color:white;")
 
@@ -9205,11 +9243,11 @@ class Ui_MainWindow(object):
         self.horizontalLayout_137.setObjectName(u"horizontalLayout_137")
         self.b_add_ok = QPushButton(self.b_add_ds_frame)
         self.b_add_ok.setObjectName(u"b_add_ok")
-        sizePolicy12 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
-        sizePolicy12.setHorizontalStretch(0)
-        sizePolicy12.setVerticalStretch(0)
-        sizePolicy12.setHeightForWidth(self.b_add_ok.sizePolicy().hasHeightForWidth())
-        self.b_add_ok.setSizePolicy(sizePolicy12)
+        sizePolicy13 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
+        sizePolicy13.setHorizontalStretch(0)
+        sizePolicy13.setVerticalStretch(0)
+        sizePolicy13.setHeightForWidth(self.b_add_ok.sizePolicy().hasHeightForWidth())
+        self.b_add_ok.setSizePolicy(sizePolicy13)
         self.b_add_ok.setMinimumSize(QSize(0, 20))
         self.b_add_ok.setMaximumSize(QSize(90, 16777215))
 
@@ -9320,8 +9358,8 @@ class Ui_MainWindow(object):
 
         self.frame_72 = QFrame(self.frame_68)
         self.frame_72.setObjectName(u"frame_72")
-        sizePolicy10.setHeightForWidth(self.frame_72.sizePolicy().hasHeightForWidth())
-        self.frame_72.setSizePolicy(sizePolicy10)
+        sizePolicy11.setHeightForWidth(self.frame_72.sizePolicy().hasHeightForWidth())
+        self.frame_72.setSizePolicy(sizePolicy11)
         self.frame_72.setMaximumSize(QSize(16777215, 20))
         self.frame_72.setFrameShape(QFrame.StyledPanel)
         self.frame_72.setFrameShadow(QFrame.Raised)
@@ -9561,8 +9599,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_128_2.setObjectName(u"horizontalLayout_128_2")
         self.label_134_2 = QLabel(self.groupBox_33)
         self.label_134_2.setObjectName(u"label_134_2")
-        sizePolicy10.setHeightForWidth(self.label_134_2.sizePolicy().hasHeightForWidth())
-        self.label_134_2.setSizePolicy(sizePolicy10)
+        sizePolicy11.setHeightForWidth(self.label_134_2.sizePolicy().hasHeightForWidth())
+        self.label_134_2.setSizePolicy(sizePolicy11)
         self.label_134_2.setMinimumSize(QSize(110, 0))
         self.label_134_2.setMaximumSize(QSize(110, 16777215))
         self.label_134_2.setFont(font1)
@@ -10494,8 +10532,8 @@ class Ui_MainWindow(object):
         self.frame_58 = QFrame(self.page_localization_training)
         self.frame_58.setObjectName(u"frame_58")
         self.frame_58.setEnabled(True)
-        sizePolicy10.setHeightForWidth(self.frame_58.sizePolicy().hasHeightForWidth())
-        self.frame_58.setSizePolicy(sizePolicy10)
+        sizePolicy11.setHeightForWidth(self.frame_58.sizePolicy().hasHeightForWidth())
+        self.frame_58.setSizePolicy(sizePolicy11)
         self.frame_58.setMinimumSize(QSize(350, 50))
         self.frame_58.setMaximumSize(QSize(320, 16777215))
         self.frame_58.setFrameShape(QFrame.StyledPanel)
@@ -10766,8 +10804,8 @@ class Ui_MainWindow(object):
 
         self.l_delete_ds = QPushButton(self.frame_60)
         self.l_delete_ds.setObjectName(u"l_delete_ds")
-        sizePolicy12.setHeightForWidth(self.l_delete_ds.sizePolicy().hasHeightForWidth())
-        self.l_delete_ds.setSizePolicy(sizePolicy12)
+        sizePolicy13.setHeightForWidth(self.l_delete_ds.sizePolicy().hasHeightForWidth())
+        self.l_delete_ds.setSizePolicy(sizePolicy13)
         self.l_delete_ds.setMaximumSize(QSize(65, 16777215))
         self.l_delete_ds.setStyleSheet(u"QPushButton {\n"
 "	background-color: rgb(70,70,70);\n"
@@ -10790,8 +10828,8 @@ class Ui_MainWindow(object):
 
         self.l_add_ds = QPushButton(self.frame_60)
         self.l_add_ds.setObjectName(u"l_add_ds")
-        sizePolicy12.setHeightForWidth(self.l_add_ds.sizePolicy().hasHeightForWidth())
-        self.l_add_ds.setSizePolicy(sizePolicy12)
+        sizePolicy13.setHeightForWidth(self.l_add_ds.sizePolicy().hasHeightForWidth())
+        self.l_add_ds.setSizePolicy(sizePolicy13)
         self.l_add_ds.setMaximumSize(QSize(65, 16777215))
         self.l_add_ds.setStyleSheet(u"QPushButton {\n"
 "	background-color: rgb(70,70,70);\n"
@@ -10862,8 +10900,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_245.setObjectName(u"horizontalLayout_245")
         self.l_add_ok = QPushButton(self.l_add_ds_frame)
         self.l_add_ok.setObjectName(u"l_add_ok")
-        sizePolicy12.setHeightForWidth(self.l_add_ok.sizePolicy().hasHeightForWidth())
-        self.l_add_ok.setSizePolicy(sizePolicy12)
+        sizePolicy13.setHeightForWidth(self.l_add_ok.sizePolicy().hasHeightForWidth())
+        self.l_add_ok.setSizePolicy(sizePolicy13)
         self.l_add_ok.setMinimumSize(QSize(0, 20))
         self.l_add_ok.setMaximumSize(QSize(90, 16777215))
 
@@ -10871,8 +10909,8 @@ class Ui_MainWindow(object):
 
         self.l_add_cancel = QPushButton(self.l_add_ds_frame)
         self.l_add_cancel.setObjectName(u"l_add_cancel")
-        sizePolicy12.setHeightForWidth(self.l_add_cancel.sizePolicy().hasHeightForWidth())
-        self.l_add_cancel.setSizePolicy(sizePolicy12)
+        sizePolicy13.setHeightForWidth(self.l_add_cancel.sizePolicy().hasHeightForWidth())
+        self.l_add_cancel.setSizePolicy(sizePolicy13)
         self.l_add_cancel.setMinimumSize(QSize(0, 20))
         self.l_add_cancel.setMaximumSize(QSize(90, 16777215))
 
@@ -13824,8 +13862,8 @@ class Ui_MainWindow(object):
         self.frame_63 = QFrame(self.page_yolo_training)
         self.frame_63.setObjectName(u"frame_63")
         self.frame_63.setEnabled(True)
-        sizePolicy10.setHeightForWidth(self.frame_63.sizePolicy().hasHeightForWidth())
-        self.frame_63.setSizePolicy(sizePolicy10)
+        sizePolicy11.setHeightForWidth(self.frame_63.sizePolicy().hasHeightForWidth())
+        self.frame_63.setSizePolicy(sizePolicy11)
         self.frame_63.setMinimumSize(QSize(350, 50))
         self.frame_63.setMaximumSize(QSize(320, 16777215))
         self.frame_63.setFrameShape(QFrame.StyledPanel)
@@ -14025,8 +14063,8 @@ class Ui_MainWindow(object):
 
         self.y_delete_ds = QPushButton(self.frame_76)
         self.y_delete_ds.setObjectName(u"y_delete_ds")
-        sizePolicy12.setHeightForWidth(self.y_delete_ds.sizePolicy().hasHeightForWidth())
-        self.y_delete_ds.setSizePolicy(sizePolicy12)
+        sizePolicy13.setHeightForWidth(self.y_delete_ds.sizePolicy().hasHeightForWidth())
+        self.y_delete_ds.setSizePolicy(sizePolicy13)
         self.y_delete_ds.setMaximumSize(QSize(65, 16777215))
         self.y_delete_ds.setStyleSheet(u"QPushButton {\n"
 "	background-color: rgb(70,70,70);\n"
@@ -14049,8 +14087,8 @@ class Ui_MainWindow(object):
 
         self.y_add_ds = QPushButton(self.frame_76)
         self.y_add_ds.setObjectName(u"y_add_ds")
-        sizePolicy12.setHeightForWidth(self.y_add_ds.sizePolicy().hasHeightForWidth())
-        self.y_add_ds.setSizePolicy(sizePolicy12)
+        sizePolicy13.setHeightForWidth(self.y_add_ds.sizePolicy().hasHeightForWidth())
+        self.y_add_ds.setSizePolicy(sizePolicy13)
         self.y_add_ds.setMaximumSize(QSize(65, 16777215))
         self.y_add_ds.setStyleSheet(u"QPushButton {\n"
 "	background-color: rgb(70,70,70);\n"
@@ -14121,8 +14159,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_309.setObjectName(u"horizontalLayout_309")
         self.y_add_ok = QPushButton(self.y_add_ds_frame)
         self.y_add_ok.setObjectName(u"y_add_ok")
-        sizePolicy12.setHeightForWidth(self.y_add_ok.sizePolicy().hasHeightForWidth())
-        self.y_add_ok.setSizePolicy(sizePolicy12)
+        sizePolicy13.setHeightForWidth(self.y_add_ok.sizePolicy().hasHeightForWidth())
+        self.y_add_ok.setSizePolicy(sizePolicy13)
         self.y_add_ok.setMinimumSize(QSize(0, 20))
         self.y_add_ok.setMaximumSize(QSize(90, 16777215))
 
@@ -14130,8 +14168,8 @@ class Ui_MainWindow(object):
 
         self.y_add_cancel = QPushButton(self.y_add_ds_frame)
         self.y_add_cancel.setObjectName(u"y_add_cancel")
-        sizePolicy12.setHeightForWidth(self.y_add_cancel.sizePolicy().hasHeightForWidth())
-        self.y_add_cancel.setSizePolicy(sizePolicy12)
+        sizePolicy13.setHeightForWidth(self.y_add_cancel.sizePolicy().hasHeightForWidth())
+        self.y_add_cancel.setSizePolicy(sizePolicy13)
         self.y_add_cancel.setMinimumSize(QSize(0, 20))
         self.y_add_cancel.setMaximumSize(QSize(90, 16777215))
 
@@ -16572,24 +16610,40 @@ class Ui_MainWindow(object):
         self.radioButton_use_yolo.setText(QCoreApplication.translate("MainWindow", u"use yolo", None))
         self.radioButton_use_unet.setText(QCoreApplication.translate("MainWindow", u"use unet", None))
         self.label_12_3.setText(QCoreApplication.translate("MainWindow", u"Binary : ", None))
+#if QT_CONFIG(tooltip)
+        self.toolButton_binary.setToolTip(QCoreApplication.translate("MainWindow", u"set binary models on table", None))
+#endif // QT_CONFIG(tooltip)
         self.toolButton_binary.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.label_12_5.setText(QCoreApplication.translate("MainWindow", u"Yolo : ", None))
+#if QT_CONFIG(tooltip)
+        self.toolButton_yolo.setToolTip(QCoreApplication.translate("MainWindow", u"set yolo models on table", None))
+#endif // QT_CONFIG(tooltip)
         self.toolButton_yolo.setText(QCoreApplication.translate("MainWindow", u"...", None))
+#if QT_CONFIG(tooltip)
+        self.label_122.setToolTip("")
+#endif // QT_CONFIG(tooltip)
         self.label_122.setText(QCoreApplication.translate("MainWindow", u"Localization : ", None))
+#if QT_CONFIG(tooltip)
+        self.toolButton_localization.setToolTip(QCoreApplication.translate("MainWindow", u"set localization models on table", None))
+#endif // QT_CONFIG(tooltip)
         self.toolButton_localization.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.label_123.setText(QCoreApplication.translate("MainWindow", u"Classification :", None))
-        self.toolButton_multiClassification.setText(QCoreApplication.translate("MainWindow", u"...", None))
+#if QT_CONFIG(tooltip)
+        self.toolButton_classification.setToolTip(QCoreApplication.translate("MainWindow", u"set classification models on table", None))
+#endif // QT_CONFIG(tooltip)
+        self.toolButton_classification.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.LBL_tabel_title.setText(QCoreApplication.translate("MainWindow", u"Binary Models", None))
         self.BTN_of_goToPreviouspage_in_PBT_page.setText("")
         self.lineEdit_of_pageNumber_displayment_in_PBT_page.setText(QCoreApplication.translate("MainWindow", u"1", None))
         self.BTN_of_goToNextpage_in_PBT_page.setText("")
         self.label_12_4.setText(QCoreApplication.translate("MainWindow", u"Binary : ", None))
-        self.LBL_of_selected_binary_classifaction_model_in_PBT_page.setText("")
+        self.LBL_of_selected_binary_model_in_PBT_page.setText("")
         self.label_247.setText(QCoreApplication.translate("MainWindow", u"Classification :", None))
-        self.LBL_of_selected_multiClassification_model_in_PBT_page.setText("")
+        self.LBL_of_selected_classification_model_in_PBT_page.setText("")
         self.label_251.setText(QCoreApplication.translate("MainWindow", u"Localization : ", None))
         self.LBL_of_selected_localization_model_in_PBT_page.setText("")
         self.label_12_6.setText(QCoreApplication.translate("MainWindow", u"Yolo :", None))
-        self.LBL_of_selected_binary_yolo_model_in_PBT_page.setText("")
+        self.LBL_of_selected_yolo_model_in_PBT_page.setText("")
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Name of Pipiline  :", None))
         self.pipline_name.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Example : Date/Mix of weights/....", None))
         self.pipline_name_status.setText(QCoreApplication.translate("MainWindow", u"Please Enter Valid Name", None))

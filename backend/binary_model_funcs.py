@@ -145,7 +145,7 @@ binary_headers_dic = {
         "val_loss",
         "val_accuracy",
         "val_precision",
-        "val_recall",      
+        "val_recall",
     ],
 }
 
@@ -328,7 +328,7 @@ yolo_headers = {
         "dataset_pathes",
         "weights_path",
         "date_",
-        "classes" ,
+        "classes",
         "box_loss",
         "obj_loss",
         "cls_loss",
@@ -415,7 +415,6 @@ def translate_model_algorithm_id_to_creator_function(
 
 
 def strInputSize_2_intInputSize(string, use_for_other_parameter=False):
-
     string = string[1:-1].split(",")
     if not use_for_other_parameter:
         return (int(string[0]), int(string[1]), 3)
@@ -424,6 +423,7 @@ def strInputSize_2_intInputSize(string, use_for_other_parameter=False):
 
 
 # ____________________________________________________________________JJ ZONE
+
 
 # show/set models history to UI tabel
 def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
@@ -458,7 +458,6 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
     # add users to table
     for row_idx, bmodel in enumerate(bmodels_list):
         for col_idx in range(binary_table_ncols):
-
             # translate algo-ids to name
             if col_idx == 0:
                 bmodel[
@@ -488,7 +487,6 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
 def set_bmodels_on_ui_tabel_edited_version(
     ui_obj, bmodels_list, model_type="binary", language="en"
 ):
-
     if model_type == "binary":
         headers = binary_headers_dic[language]
         headers_db = binary_headers_dic["db"]
@@ -508,16 +506,15 @@ def set_bmodels_on_ui_tabel_edited_version(
 
     # define table parameters
     ui_obj.table_of_binary_classifaction_in_PBT_page.resizeColumnsToContents()
-    #ui_obj.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setSectionResizeMode(sQHeaderView.ResizeToContents)
     ui_obj.table_of_binary_classifaction_in_PBT_page.setColumnCount(table_ncols)
     if len(bmodels_list) != 0:
         ui_obj.table_of_binary_classifaction_in_PBT_page.setRowCount(binary_table_nrows)
     else:
         ui_obj.table_of_binary_classifaction_in_PBT_page.setRowCount(0)
     ui_obj.table_of_binary_classifaction_in_PBT_page.verticalHeader().setVisible(True)
-    ui_obj.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setSectionResizeMode(
-        sQHeaderView.Stretch
-    )
+    # ui_obj.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setSectionResizeMode(
+    #     sQHeaderView.Stretch
+    # )
 
     ui_obj.table_of_binary_classifaction_in_PBT_page.setHorizontalHeaderLabels(headers)
     # text color
@@ -533,10 +530,7 @@ def set_bmodels_on_ui_tabel_edited_version(
             table_item = sQTableWidgetItem(str(bmodel[headers_db[col_idx]]))
             # set checkbox (only first col)
             if col_idx == 0:
-                table_item.setFlags(
-                   
-                     sQtCore.Qt.ItemFlag.ItemIsEnabled
-                )
+                table_item.setFlags(sQtCore.Qt.ItemFlag.ItemIsEnabled)
                 table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
             table_item.setForeground(sQColor(text_color))
             ui_obj.table_of_binary_classifaction_in_PBT_page.setItem(
@@ -616,7 +610,7 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
             elif model_type == "classification":
                 bmodel_info["algo_name"] = [
                     translate_binary_algorithm_id_to_name(
-                        algo_id=ui_obj.cbBox_of_multiClassification_model_in_PBT_page.currentText(),
+                        algo_id=ui_obj.cbBox_of_classification_model_in_PBT_page.currentText(),
                         model_type="classification",
                         reverse=True,
                     )
@@ -1260,7 +1254,7 @@ def get_filtered_binary_models_from_db(
         model_type = "classification_models"
     elif model_type == "localization":
         model_type = "localization_models"
-    elif model_type=='yolo':
+    elif model_type == "yolo":
         model_type = "yolo_models"
 
     try:

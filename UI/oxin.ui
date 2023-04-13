@@ -4644,7 +4644,7 @@ border:None;</string>
                                          <x>0</x>
                                          <y>0</y>
                                          <width>488</width>
-                                         <height>30</height>
+                                         <height>32</height>
                                         </rect>
                                        </property>
                                        <property name="sizePolicy">
@@ -7993,7 +7993,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>692</width>
-                                            <height>20</height>
+                                            <height>18</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -9549,7 +9549,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>28</height>
+                                        <height>18</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -9801,7 +9801,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>28</height>
+                                        <height>18</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -12974,6 +12974,9 @@ QPushButton:hover {
                                     </item>
                                     <item>
                                      <widget class="QToolButton" name="toolButton_binary">
+                                      <property name="toolTip">
+                                       <string>set binary models on table</string>
+                                      </property>
                                       <property name="text">
                                        <string>...</string>
                                       </property>
@@ -13066,6 +13069,9 @@ QPushButton:hover {
                                         </item>
                                         <item>
                                          <widget class="QToolButton" name="toolButton_yolo">
+                                          <property name="toolTip">
+                                           <string>set yolo models on table</string>
+                                          </property>
                                           <property name="text">
                                            <string>...</string>
                                           </property>
@@ -13119,6 +13125,9 @@ QPushButton:hover {
                                             <height>25</height>
                                            </size>
                                           </property>
+                                          <property name="toolTip">
+                                           <string/>
+                                          </property>
                                           <property name="text">
                                            <string>Localization : </string>
                                           </property>
@@ -13142,6 +13151,9 @@ QPushButton:hover {
                                         </item>
                                         <item>
                                          <widget class="QToolButton" name="toolButton_localization">
+                                          <property name="toolTip">
+                                           <string>set localization models on table</string>
+                                          </property>
                                           <property name="text">
                                            <string>...</string>
                                           </property>
@@ -13191,7 +13203,7 @@ QPushButton:hover {
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QComboBox" name="cbBox_of_multiClassification_model_in_PBT_page">
+                                         <widget class="QComboBox" name="cbBox_of_classification_model_in_PBT_page">
                                           <property name="minimumSize">
                                            <size>
                                             <width>105</width>
@@ -13207,7 +13219,10 @@ QPushButton:hover {
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QToolButton" name="toolButton_multiClassification">
+                                         <widget class="QToolButton" name="toolButton_classification">
+                                          <property name="toolTip">
+                                           <string>set classification models on table</string>
+                                          </property>
                                           <property name="text">
                                            <string>...</string>
                                           </property>
@@ -13251,6 +13266,69 @@ QPushButton:hover {
                                </widget>
                               </item>
                               <item>
+                               <widget class="QFrame" name="frame_4">
+                                <property name="frameShape">
+                                 <enum>QFrame::StyledPanel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                 <enum>QFrame::Raised</enum>
+                                </property>
+                                <layout class="QHBoxLayout" name="horizontalLayout_154">
+                                 <item>
+                                  <spacer name="horizontalSpacer_86">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                   <property name="sizeHint" stdset="0">
+                                    <size>
+                                     <width>40</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                  </spacer>
+                                 </item>
+                                 <item alignment="Qt::AlignHCenter">
+                                  <widget class="QLabel" name="LBL_tabel_title">
+                                   <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>120</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">background-color: rgb(255, 255, 255);
+font: 14pt &quot;MS Shell Dlg 2&quot;;
+
+</string>
+                                   </property>
+                                   <property name="text">
+                                    <string>Binary Models</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <spacer name="horizontalSpacer_87">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                   <property name="sizeHint" stdset="0">
+                                    <size>
+                                     <width>40</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                  </spacer>
+                                 </item>
+                                </layout>
+                               </widget>
+                              </item>
+                              <item>
                                <widget class="QFrame" name="frame_89">
                                 <property name="minimumSize">
                                  <size>
@@ -13285,12 +13363,6 @@ QPushButton:hover {
                                    <property name="columnCount">
                                     <number>10</number>
                                    </property>
-                                   <attribute name="horizontalHeaderMinimumSectionSize">
-                                    <number>70</number>
-                                   </attribute>
-                                   <attribute name="horizontalHeaderDefaultSectionSize">
-                                    <number>70</number>
-                                   </attribute>
                                    <attribute name="verticalHeaderCascadingSectionResizes">
                                     <bool>true</bool>
                                    </attribute>
@@ -13498,6 +13570,12 @@ color : rgb(0,0,0);</string>
                                         <layout class="QHBoxLayout" name="horizontalLayout_72">
                                          <item>
                                           <widget class="QLabel" name="label_12_4">
+                                           <property name="sizePolicy">
+                                            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                             <horstretch>0</horstretch>
+                                             <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                           </property>
                                            <property name="minimumSize">
                                             <size>
                                              <width>43</width>
@@ -13516,7 +13594,7 @@ color : rgb(0,0,0);</string>
                                           </widget>
                                          </item>
                                          <item>
-                                          <widget class="QLabel" name="LBL_of_selected_binary_classifaction_model_in_PBT_page">
+                                          <widget class="QLabel" name="LBL_of_selected_binary_model_in_PBT_page">
                                            <property name="text">
                                             <string/>
                                            </property>
@@ -13555,13 +13633,19 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>107</width>
-                                              <height>43</height>
+                                              <width>1414</width>
+                                              <height>49</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_41">
                                              <item>
                                               <widget class="QLabel" name="label_247">
+                                               <property name="sizePolicy">
+                                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                                 <horstretch>0</horstretch>
+                                                 <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                               </property>
                                                <property name="minimumSize">
                                                 <size>
                                                  <width>76</width>
@@ -13580,7 +13664,7 @@ color : rgb(0,0,0);</string>
                                               </widget>
                                              </item>
                                              <item>
-                                              <widget class="QLabel" name="LBL_of_selected_multiClassification_model_in_PBT_page">
+                                              <widget class="QLabel" name="LBL_of_selected_classification_model_in_PBT_page">
                                                <property name="text">
                                                 <string/>
                                                </property>
@@ -13600,13 +13684,19 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>106</width>
-                                              <height>43</height>
+                                              <width>1414</width>
+                                              <height>49</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_43">
                                              <item>
                                               <widget class="QLabel" name="label_251">
+                                               <property name="sizePolicy">
+                                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                                 <horstretch>0</horstretch>
+                                                 <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                               </property>
                                                <property name="minimumSize">
                                                 <size>
                                                  <width>75</width>
@@ -13668,6 +13758,12 @@ color : rgb(0,0,0);</string>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">
                                              <item>
                                               <widget class="QLabel" name="label_12_6">
+                                               <property name="sizePolicy">
+                                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                                 <horstretch>0</horstretch>
+                                                 <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                               </property>
                                                <property name="minimumSize">
                                                 <size>
                                                  <width>43</width>
@@ -13686,7 +13782,7 @@ color : rgb(0,0,0);</string>
                                               </widget>
                                              </item>
                                              <item>
-                                              <widget class="QLabel" name="LBL_of_selected_binary_yolo_model_in_PBT_page">
+                                              <widget class="QLabel" name="LBL_of_selected_yolo_model_in_PBT_page">
                                                <property name="text">
                                                 <string/>
                                                </property>

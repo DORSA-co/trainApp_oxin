@@ -424,16 +424,14 @@ class API:
 
         if key == "yolo":
             self.load_table_with_btn(self.ui.toolButton_yolo.objectName())
-            self.ui.cbBox_of_yolo_model_in_PBT_page.setCurrentIndex(0)
+            # self.ui.cbBox_of_yolo_model_in_PBT_page.setCurrentIndex(0)
         elif key == "localization":
             self.load_table_with_btn(self.ui.toolButton_localization.objectName())
-            self.load_table_with_btn(
-                self.ui.toolButton_multiClassification.objectName()
-            )
-            self.ui.cbBox_of_localization_model_in_PBT_page.setCurrentIndex(0)
-            self.ui.cbBox_of_multiClassification_model_in_PBT_page.setCurrentIndex(0)
+            self.load_table_with_btn(self.ui.toolButton_classification.objectName())
+            # self.ui.cbBox_of_localization_model_in_PBT_page.setCurrentIndex(0)
+            # self.ui.cbBox_of_classification_model_in_PBT_page.setCurrentIndex(0)
         self.load_table_with_btn(self.ui.toolButton_binary.objectName())
-        self.ui.cbBox_of_binary_model_in_PBT_page.setCurrentIndex(0)
+        # self.ui.cbBox_of_binary_model_in_PBT_page.setCurrentIndex(0)
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, "sheets_id")
@@ -500,7 +498,7 @@ class API:
 
     # _____________________________________________________________________JJ ZONE BEGINE
 
-    def test_qtable(self, item):
+    def display_models_info_on_table_in_pbt(self, item):
         row = self.ui.table_of_binary_classifaction_in_PBT_page.indexFromItem(
             item
         ).row()
@@ -517,7 +515,8 @@ class API:
                 row, 0
             ).setCheckState(Qt.CheckState.Checked)
             # create string as summery of model(or algorithm)
-            model_summery_that_show = "algorithm:{},that tarin in date:{},with dataset:{},and the weights is here {}".format(
+            model_summery_that_show = "row {} selected,algorithm:{},that tarin in date:{},with dataset:{},and the weights is here {}".format(
+                row + 1,
                 self.bmodels_list[row]["algo_name"],
                 self.bmodels_list[row]["date_"],
                 self.bmodels_list[row]["dataset_pathes"],
@@ -530,7 +529,7 @@ class API:
 
         if self.bmodels_list[row]["algo_name"] in train_api.ALGORITHM_NAMES["binary"]:
             # set the  summery at the lineEdit ,that under the table
-            self.ui.LBL_of_selected_binary_classifaction_model_in_PBT_page.setText(
+            self.ui.LBL_of_selected_binary_model_in_PBT_page.setText(
                 model_summery_that_show
             )
             if model_summery_that_show != "":
@@ -547,7 +546,7 @@ class API:
             in train_api.ALGORITHM_NAMES["classification"]
         ):
             # set the  summery at the lineEdit ,that under the table
-            self.ui.LBL_of_selected_multiClassification_model_in_PBT_page.setText(
+            self.ui.LBL_of_selected_classification_model_in_PBT_page.setText(
                 model_summery_that_show
             )
             if model_summery_that_show != "":
@@ -578,7 +577,7 @@ class API:
 
         elif self.bmodels_list[row]["algo_name"] in train_api.ALGORITHM_NAMES["yolo"]:
             # set the  summery at the lineEdit ,that under the table
-            self.ui.LBL_of_selected_binary_yolo_model_in_PBT_page.setText(
+            self.ui.LBL_of_selected_yolo_model_in_PBT_page.setText(
                 model_summery_that_show
             )
             if model_summery_that_show != "":
@@ -605,18 +604,17 @@ class API:
                         i, 0
                     ).setCheckState(Qt.CheckState.Unchecked)
 
-        if (
-            self.ui.radioButton_use_yolo.isChecked()
-            and self.current_yolo_model != ""
-            and self.current_b_model != ""
-        ) or (
-            self.ui.radioButton_use_unet.isChecked()
-            and self.current_b_model != ""
-            and self.current_c_model != ""
+        if self.current_b_model != "" and (
+            self.current_yolo_model != "" or self.current_l_model != ""
         ):
             self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(True)
             self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(58)
             self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(28)
+
+        else:
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(0)
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(0)
 
     def apply_selected_model_after_push_applyBTN_in_PBT_page(self):
         """the function connect to 'BTN_apply_of_binary_classifaction_in_PBT_page',
@@ -745,7 +743,7 @@ class API:
         this function call in __init__ function
         """
         self.ui.table_of_binary_classifaction_in_PBT_page.itemClicked.connect(
-            partial(self.test_qtable)
+            partial(self.display_models_info_on_table_in_pbt)
         )
 
     def comboBox_connector(self):
@@ -758,7 +756,7 @@ class API:
             lambda: self.refresh_binary_models_table(filter_mode=True, wich_page="PBT")
         )
 
-        self.ui.cbBox_of_multiClassification_model_in_PBT_page.currentTextChanged.connect(
+        self.ui.cbBox_of_classification_model_in_PBT_page.currentTextChanged.connect(
             lambda: self.refresh_binary_models_table(
                 filter_mode=True, wich_page="PBT", model_type="classification"
             )
@@ -785,17 +783,24 @@ class API:
 
     def load_table_with_btn(self, obj_name):
         algo_name = obj_name.split("_")[1]
-        combo_name = eval(
-            "self.ui.{}".format("cbBox_of_" + algo_name + "_model_in_PBT_page")
+        self.refresh_binary_models_table(
+            filter_mode=True, wich_page="PBT", model_type=algo_name
         )
-        index = combo_name.currentIndex()
+        self.remember_selected_item(algo_name=algo_name)
 
-        if index != 0:
-            combo_name.setCurrentIndex(0)
-            combo_name.setCurrentIndex(index)
-        else:
-            combo_name.setCurrentIndex(1)
-            combo_name.setCurrentIndex(index)
+    def remember_selected_item(
+        self,
+        algo_name,
+    ):
+        label = eval(
+            "self.ui.{}".format(" LBL_of_selected_" + algo_name + "_model_in_PBT_page")
+        )
+        txt = label.text()
+        if txt != "":
+            row = int(txt[4]) - 1
+            self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                row, 0
+            ).setCheckState(Qt.CheckState.Checked)
 
     def refresh_loadDataset_tabs_in_PBT(self):
         # labale updating
@@ -831,9 +836,6 @@ class API:
         self.ui.pbt_btn.clicked.connect(
             lambda: self.refresh_binary_models_table_onevent(wich_page="PBT")
         )
-        # self.ui.pipeline_pbt_btn.clicked.connect(
-        #     lambda: self.refresh_binary_models_table_onevent(wich_page="PBT")
-        # )
         self.ui.BTN_of_goToNextpage_in_PBT_page.clicked.connect(
             partial(
                 lambda: self.binary_model_tabel_nextorprev(next=True, wich_page="PBT")
@@ -1154,9 +1156,9 @@ class API:
                 self.ui.toolButton_localization.objectName()
             )
         )
-        self.ui.toolButton_multiClassification.clicked.connect(
+        self.ui.toolButton_classification.clicked.connect(
             lambda: self.load_table_with_btn(
-                self.ui.toolButton_multiClassification.objectName()
+                self.ui.toolButton_classification.objectName()
             )
         )
         self.ui.toolButton_yolo.clicked.connect(
@@ -3780,12 +3782,16 @@ class API:
         """
         if model_type == "binary":
             model_type_ = "binary_models"
+            self.ui.LBL_tabel_title.setText("Binary Models")
         elif model_type == "classification":
             model_type_ = "classification_models"
+            self.ui.LBL_tabel_title.setText("Classification Models")
         elif model_type == "localization":
             model_type_ = "localization_models"
+            self.ui.LBL_tabel_title.setText("Localization Models")
         elif model_type == "yolo":
             model_type_ = "yolo_models"
+            self.ui.LBL_tabel_title.setText("Yolo Models")
         else:
             model_type_ = ""
 
