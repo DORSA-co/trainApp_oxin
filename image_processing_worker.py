@@ -3,6 +3,7 @@ from PySide6.QtCore import Signal as sSignal
 import os
 from Defect_detection_modules.SteelSurfaceInspection import SSI_2
 import cv2
+from backend import pathStructure
 
 class image_processing_worker(sQObject):
     """this class is worker for image processing Qthred
@@ -39,8 +40,10 @@ class image_processing_worker(sQObject):
                     if self.active_cameras[0] <= c <= self.active_cameras[1]:
                         for f in range(self.n_frames[0], self.n_frames[1]+1):
                             # self.ui_obj.suggested_defects_progressBar.setValue(self.ui_obj.suggested_defects_progressBar.value() + 1)
-                            path = os.path.join(self.main_path, self.sheet_id, s, str(c), str(f)+self.img_format)
-                            res_path = os.path.join(self.res_main_path, self.sheet_id, s, str(c))
+                            # path = os.path.join(self.main_path, self.sheet_id, s, str(c), str(f)+self.img_format)
+                            path = pathStructure.sheet_image_path(self.main_path, self.sheet_id, s, str(c), str(f), self.img_format)
+                            # res_path = os.path.join(self.res_main_path, self.sheet_id, s, str(c))
+                            res_path = pathStructure.sheet_camera_path(self.res_main_path, self.sheet_id, s, str(c))
                             if not os.path.exists(res_path):
                                 os.makedirs(res_path)
                             if os.path.exists(path):

@@ -506,6 +506,26 @@ Button */
 	border: None
 }
 
+#today_date{
+	background-color: transparent;
+	border: None
+}
+
+#user_name_3{
+	background-color: transparent;
+	border: None
+}
+
+#lineEdit_name_dataset{
+	background-color: transparent;
+	border: None
+}
+
+#lineEdit_path_dataset{
+	background-color: transparent;
+	border: None
+}
+
 /* /////////////////////////////////////////////////////////////////////////////////////////////////
 Button */
 QProgressBar {
@@ -4643,7 +4663,7 @@ border:None;</string>
                                         <rect>
                                          <x>-158</x>
                                          <y>0</y>
-                                         <width>718</width>
+                                         <width>495</width>
                                          <height>32</height>
                                         </rect>
                                        </property>
@@ -8016,7 +8036,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>707</width>
-                                            <height>27</height>
+                                            <height>20</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -11801,7 +11821,7 @@ background-color: rgb(212, 212, 212);</string>
                                  <item>
                                   <widget class="QPushButton" name="my_databases_3">
                                    <property name="enabled">
-                                    <bool>false</bool>
+                                    <bool>true</bool>
                                    </property>
                                    <property name="minimumSize">
                                     <size>
@@ -11830,29 +11850,20 @@ background-color: rgb(212, 212, 212);</string>
                                  <widget class="QWidget" name="page_create_db">
                                   <layout class="QVBoxLayout" name="verticalLayout_55">
                                    <item>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_158">
-                                     <property name="leftMargin">
-                                      <number>10</number>
-                                     </property>
-                                     <property name="rightMargin">
-                                      <number>10</number>
-                                     </property>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_300">
                                      <item>
                                       <widget class="QLabel" name="label_78">
                                        <property name="minimumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>150</width>
                                          <height>0</height>
                                         </size>
                                        </property>
                                        <property name="maximumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>16777215</width>
                                          <height>16777215</height>
                                         </size>
-                                       </property>
-                                       <property name="styleSheet">
-                                        <string notr="true">border:1px solid rgb(0, 0,0);</string>
                                        </property>
                                        <property name="text">
                                         <string>Today  Date:</string>
@@ -11864,8 +11875,14 @@ background-color: rgb(212, 212, 212);</string>
                                        <property name="enabled">
                                         <bool>true</bool>
                                        </property>
+                                       <property name="sizePolicy">
+                                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                         <horstretch>0</horstretch>
+                                         <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                       </property>
                                        <property name="styleSheet">
-                                        <string notr="true">border:1px solid rgb(0, 0,0);</string>
+                                        <string notr="true"/>
                                        </property>
                                        <property name="readOnly">
                                         <bool>true</bool>
@@ -11875,29 +11892,20 @@ background-color: rgb(212, 212, 212);</string>
                                     </layout>
                                    </item>
                                    <item>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_159">
-                                     <property name="leftMargin">
-                                      <number>10</number>
-                                     </property>
-                                     <property name="rightMargin">
-                                      <number>10</number>
-                                     </property>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_304">
                                      <item>
                                       <widget class="QLabel" name="label_129">
                                        <property name="minimumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>150</width>
                                          <height>0</height>
                                         </size>
                                        </property>
                                        <property name="maximumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>16777215</width>
                                          <height>16777215</height>
                                         </size>
-                                       </property>
-                                       <property name="styleSheet">
-                                        <string notr="true">border:1px solid rgb(0, 0,0);</string>
                                        </property>
                                        <property name="text">
                                         <string>Creator Username :</string>
@@ -11909,8 +11917,14 @@ background-color: rgb(212, 212, 212);</string>
                                        <property name="enabled">
                                         <bool>true</bool>
                                        </property>
+                                       <property name="sizePolicy">
+                                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                         <horstretch>0</horstretch>
+                                         <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                       </property>
                                        <property name="styleSheet">
-                                        <string notr="true">border:1px solid rgb(0, 0,0);</string>
+                                        <string notr="true"/>
                                        </property>
                                        <property name="readOnly">
                                         <bool>true</bool>
@@ -11920,29 +11934,20 @@ background-color: rgb(212, 212, 212);</string>
                                     </layout>
                                    </item>
                                    <item>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_156">
-                                     <property name="leftMargin">
-                                      <number>10</number>
-                                     </property>
-                                     <property name="rightMargin">
-                                      <number>10</number>
-                                     </property>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_362">
                                      <item>
                                       <widget class="QLabel" name="label_8">
                                        <property name="minimumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>150</width>
                                          <height>0</height>
                                         </size>
                                        </property>
                                        <property name="maximumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>16777215</width>
                                          <height>16777215</height>
                                         </size>
-                                       </property>
-                                       <property name="styleSheet">
-                                        <string notr="true">border:1px solid rgb(0, 0,0);</string>
                                        </property>
                                        <property name="text">
                                         <string>Dataset Name:</string>
@@ -11951,6 +11956,12 @@ background-color: rgb(212, 212, 212);</string>
                                      </item>
                                      <item>
                                       <widget class="QLineEdit" name="lineEdit_name_dataset">
+                                       <property name="sizePolicy">
+                                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                         <horstretch>0</horstretch>
+                                         <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                       </property>
                                        <property name="styleSheet">
                                         <string notr="true">border:1px solid rgb(0, 0,0);</string>
                                        </property>
@@ -11959,29 +11970,20 @@ background-color: rgb(212, 212, 212);</string>
                                     </layout>
                                    </item>
                                    <item>
-                                    <layout class="QHBoxLayout" name="horizontalLayout_160">
-                                     <property name="leftMargin">
-                                      <number>10</number>
-                                     </property>
-                                     <property name="rightMargin">
-                                      <number>10</number>
-                                     </property>
+                                    <layout class="QHBoxLayout" name="horizontalLayout_363">
                                      <item>
                                       <widget class="QLabel" name="label_157">
                                        <property name="minimumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>150</width>
                                          <height>0</height>
                                         </size>
                                        </property>
                                        <property name="maximumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>16777215</width>
                                          <height>16777215</height>
                                         </size>
-                                       </property>
-                                       <property name="styleSheet">
-                                        <string notr="true">border:1px solid rgb(0, 0,0);</string>
                                        </property>
                                        <property name="text">
                                         <string>Location :</string>
@@ -11990,6 +11992,12 @@ background-color: rgb(212, 212, 212);</string>
                                      </item>
                                      <item>
                                       <widget class="QLineEdit" name="lineEdit_path_dataset">
+                                       <property name="sizePolicy">
+                                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                         <horstretch>0</horstretch>
+                                         <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                       </property>
                                        <property name="styleSheet">
                                         <string notr="true">border:1px solid rgb(0, 0,0);</string>
                                        </property>
@@ -12003,6 +12011,12 @@ background-color: rgb(212, 212, 212);</string>
                                      </item>
                                      <item>
                                       <widget class="QToolButton" name="toolButton_select_directory">
+                                       <property name="minimumSize">
+                                        <size>
+                                         <width>50</width>
+                                         <height>35</height>
+                                        </size>
+                                       </property>
                                        <property name="styleSheet">
                                         <string notr="true">border:1px solid rgb(0, 0,0);</string>
                                        </property>
@@ -12405,13 +12419,13 @@ background-color: rgb(212, 212, 212);</string>
                                       <widget class="QLabel" name="label_28">
                                        <property name="minimumSize">
                                         <size>
-                                         <width>87</width>
+                                         <width>0</width>
                                          <height>0</height>
                                         </size>
                                        </property>
                                        <property name="maximumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>16777215</width>
                                          <height>16777215</height>
                                         </size>
                                        </property>
@@ -12422,16 +12436,22 @@ background-color: rgb(212, 212, 212);</string>
                                      </item>
                                      <item>
                                       <widget class="QComboBox" name="combo_all_pipline">
+                                       <property name="sizePolicy">
+                                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                         <horstretch>0</horstretch>
+                                         <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                       </property>
                                        <property name="minimumSize">
                                         <size>
-                                         <width>140</width>
+                                         <width>0</width>
                                          <height>0</height>
                                         </size>
                                        </property>
                                        <property name="maximumSize">
                                         <size>
                                          <width>16777215</width>
-                                         <height>25</height>
+                                         <height>16777215</height>
                                         </size>
                                        </property>
                                       </widget>
@@ -12444,13 +12464,13 @@ background-color: rgb(212, 212, 212);</string>
                                       <widget class="QLabel" name="label_61">
                                        <property name="minimumSize">
                                         <size>
-                                         <width>87</width>
+                                         <width>0</width>
                                          <height>0</height>
                                         </size>
                                        </property>
                                        <property name="maximumSize">
                                         <size>
-                                         <width>200</width>
+                                         <width>16777215</width>
                                          <height>16777215</height>
                                         </size>
                                        </property>
@@ -12463,16 +12483,22 @@ background-color: rgb(212, 212, 212);</string>
                                       <layout class="QVBoxLayout" name="verticalLayout_16">
                                        <item>
                                         <widget class="QComboBox" name="combo_my_pipline">
+                                         <property name="sizePolicy">
+                                          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                           <horstretch>0</horstretch>
+                                           <verstretch>0</verstretch>
+                                          </sizepolicy>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
-                                           <width>140</width>
+                                           <width>0</width>
                                            <height>0</height>
                                           </size>
                                          </property>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
-                                           <height>25</height>
+                                           <height>16777215</height>
                                           </size>
                                          </property>
                                         </widget>
@@ -12480,26 +12506,13 @@ background-color: rgb(212, 212, 212);</string>
                                        <item>
                                         <layout class="QHBoxLayout" name="horizontalLayout_9">
                                          <item>
-                                          <widget class="QPushButton" name="show_details_pipline">
-                                           <property name="minimumSize">
-                                            <size>
-                                             <width>0</width>
-                                             <height>30</height>
-                                            </size>
-                                           </property>
-                                           <property name="maximumSize">
-                                            <size>
-                                             <width>16777215</width>
-                                             <height>16777215</height>
-                                            </size>
-                                           </property>
-                                           <property name="text">
-                                            <string>Show Details</string>
-                                           </property>
-                                          </widget>
-                                         </item>
-                                         <item>
                                           <widget class="QPushButton" name="remove_pipline">
+                                           <property name="sizePolicy">
+                                            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                                             <horstretch>0</horstretch>
+                                             <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                           </property>
                                            <property name="minimumSize">
                                             <size>
                                              <width>0</width>
@@ -12524,11 +12537,17 @@ background-color: rgb(212, 212, 212);</string>
                                     </layout>
                                    </item>
                                    <item>
-                                    <widget class="QLabel" name="label_pipline_details">
-                                     <property name="text">
-                                      <string/>
+                                    <spacer name="verticalSpacer_15">
+                                     <property name="orientation">
+                                      <enum>Qt::Vertical</enum>
                                      </property>
-                                    </widget>
+                                     <property name="sizeHint" stdset="0">
+                                      <size>
+                                       <width>20</width>
+                                       <height>40</height>
+                                      </size>
+                                     </property>
+                                    </spacer>
                                    </item>
                                   </layout>
                                  </widget>
@@ -14986,7 +15005,7 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>329</width>
+                                      <width>340</width>
                                       <height>699</height>
                                      </rect>
                                     </property>
@@ -17554,7 +17573,7 @@ QPushButton:hover {
                           <item>
                            <widget class="QStackedWidget" name="stackedWidget_binary">
                             <property name="currentIndex">
-                             <number>2</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="page_binary_list">
                              <layout class="QVBoxLayout" name="verticalLayout_71">
@@ -18683,7 +18702,7 @@ border:Transparent</string>
                                         </property>
                                         <property name="icon">
                                          <iconset>
-                                          <normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</iconset>
+                                          <normaloff>images/reset.png</normaloff>images/reset.png</iconset>
                                         </property>
                                         <property name="iconSize">
                                          <size>
@@ -22255,7 +22274,7 @@ QPushButton:hover {
                                         </property>
                                         <property name="icon">
                                          <iconset>
-                                          <normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</iconset>
+                                          <normaloff>images/reset.png</normaloff>images/reset.png</iconset>
                                         </property>
                                         <property name="iconSize">
                                          <size>
@@ -29132,7 +29151,7 @@ QPushButton:hover {
                           <item>
                            <widget class="QStackedWidget" name="stackedWidget_yolo">
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="page_yolo_training">
                              <layout class="QHBoxLayout" name="horizontalLayout_102">
@@ -29577,7 +29596,7 @@ QPushButton:hover {
                                         </property>
                                         <property name="icon">
                                          <iconset>
-                                          <normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</iconset>
+                                          <normaloff>images/reset.png</normaloff>images/reset.png</iconset>
                                         </property>
                                         <property name="iconSize">
                                          <size>

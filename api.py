@@ -366,9 +366,9 @@ class API:
 
         self.show_save_notif=False
 
-        self.runing_b_model=False
-        self.runing_l_model=False
-        self.runing_y_model=False
+        self.running_b_model=False
+        self.running_l_model=False
+        self.running_y_model=False
 
 
 
@@ -383,16 +383,13 @@ class API:
         # self.__debug_load_sheet__(["996", "997"])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
-        self.__debug__login__()
+        # self.__debug__login__()
 
     def set_pipline_mode(self,key):
         self.pipline_dict = {'yolo':[self.ui.page_yolo,self.ui.page_yolo_2],'localization':[self.ui.page_localization,self.ui.page_localization_2]}
         self.pipline_selected = key
         self.ui.stackedWidget_3.setCurrentWidget(self.pipline_dict[key][0])
         self.ui.stackedWidget_4.setCurrentWidget(self.pipline_dict[key][1])
-
-
-
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, "sheets_id")
@@ -1069,7 +1066,7 @@ class API:
         # pbt
         self.ui.my_databases_3.clicked.connect(self.update_combo_piplines)
         self.ui.remove_pipline.clicked.connect(self.remove_pipline)
-        self.ui.show_details_pipline.clicked.connect(self.show_pipline_details_func)
+        # self.ui.show_details_pipline.clicked.connect(self.show_pipline_details_func)
         self.ui.toolButton_binary.clicked.connect(
             lambda: self.load_table_with_btn(self.ui.toolButton_binary.objectName())
         )
@@ -1271,7 +1268,7 @@ class API:
             if l != self.l:
                 for key in self.sheet_imgprocessing_mem.keys():
                     self.sheet_imgprocessing_mem[key] = False
-            jsons_path = os.path.join(self.sheet.get_main_path()+'_imgProcessing', self.sheet.get_id())
+            jsons_path = pathStructure.sheet_path(self.sheet.get_main_path()+'_imgProcessing', self.sheet.get_id())
             if not os.path.exists(jsons_path):
                 self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
             if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
@@ -2502,14 +2499,14 @@ class API:
     #     return parent_path
 
     def set_b_parms(self):
-        if not self.runing_b_model:
+        if not self.running_b_model:
             # #print('statrt training binary model')
             b_parms = self.ui.get_binary_parms()
             if not b_parms:
                 return
 
-            # update chart axes given train data
-            self.update_b_chart_axes(b_parms[3])
+            # update chart axis given train data
+            self.update_b_chart_axis(b_parms[3])
 
             self.bmodel_train_thread = sQThread()
             # Step 3: Create a worker object
@@ -2534,7 +2531,7 @@ class API:
             self.bmodel_train_worker.update_charts.connect(self.assign_new_value_to_b_chart)
 
             # Step 6: Start the thread
-            self.runing_b_model=True
+            self.running_b_model=True
             self.bmodel_train_thread.start()
             
             self.ui.binary_train.setEnabled(False)
@@ -2547,7 +2544,7 @@ class API:
     def set_binary_train_progressBar(self):
         self.ui.binary_train_progressBar.setValue(self.ui.binary_train_progressBar.value() + 1)
 
-    def update_b_chart_axes(self, nepoch):
+    def update_b_chart_axis(self, nepoch):
         chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
         chart_funcs.clear_series_date(
             ui_obj=self.ui, chart_postfixes=self.ui.chart_names
@@ -2569,13 +2566,13 @@ class API:
             self.ui.set_warning(texts.ERRORS['UPDATE_BCHART_FAILED'][self.language].format(last_epoch), 'train', None, 3)
 
     def set_l_parms(self):
-        if not self.runing_l_model:
+        if not self.running_l_model:
             l_parms = self.ui.get_localization_parms()
             if not l_parms:
                 return
             
-            # update chart axes given train data
-            self.update_l_chart_axes(l_parms[4])
+            # update chart axis given train data
+            self.update_l_chart_axis(l_parms[4])
 
             self.lmodel_train_thread = sQThread()
             # Step 3: Create a worker object
@@ -2602,7 +2599,7 @@ class API:
             self.lmodel_train_worker.update_charts.connect(self.assign_new_value_to_l_chart)
 
             # Step 6: Start the thread
-            self.runing_l_model=True
+            self.running_l_model=True
             self.lmodel_train_thread.start()
                 
             self.ui.localization_train.setEnabled(False)
@@ -2615,7 +2612,7 @@ class API:
     def set_localization_train_progressBar(self):
         self.ui.localization_train_progressBar.setValue(self.ui.localization_train_progressBar.value() + 1)
 
-    def update_l_chart_axes(self, nepoch):
+    def update_l_chart_axis(self, nepoch):
         # for chart_postfix in self.ui.loc_chart_names:
         #     eval("self.ui.axisX_%s" % chart_postfix).setRange(0, max(nepoch, chart_funcs.axisX_range))
         #     if self.ui.localization_chart_checkbox.isChecked():
@@ -2647,13 +2644,13 @@ class API:
             self.ui.set_warning(texts.ERRORS['UPDATE_LCHART_FAILED'][self.ui.language].format(last_epoch), 'l_train', None, 3)
 
     def set_y_parms(self):
-        if not self.runing_y_model:
+        if not self.running_y_model:
             y_parms = self.ui.get_yolo_parms()
             if not y_parms:
                 return
 
-            # update chart axes given train data
-            self.update_yolo_chart_axes(y_parms[3])
+            # update chart axis given train data
+            self.update_yolo_chart_axis(y_parms[3])
 
             self.ymodel_train_thread = sQThread()
             # Step 3: Create a worker object
@@ -2680,7 +2677,7 @@ class API:
             self.ymodel_train_worker.update_charts.connect(self.assign_new_value_to_yolo_chart)
 
             # Step 6: Start the thread
-            self.runing_y_model=True
+            self.running_y_model=True
             self.ymodel_train_thread.start()
                 
             self.ui.yolo_train.setEnabled(False)
@@ -2693,7 +2690,7 @@ class API:
     def set_yolo_train_progressBar(self):
         self.ui.yolo_train_progressBar.setValue(self.ui.yolo_train_progressBar.value() + 1)
 
-    def update_yolo_chart_axes(self, nepoch):
+    def update_yolo_chart_axis(self, nepoch):
         # for chart_postfix in self.ui.loc_chart_names:
         #     eval("self.ui.axisX_%s" % chart_postfix).setRange(0, max(nepoch, chart_funcs.axisX_range))
         #     if self.ui.localization_chart_checkbox.isChecked():
@@ -2744,6 +2741,7 @@ class API:
 
         saved_perfect = self.ds.check_saved_perfect(pos=pos)
         saved_defect = self.ds.check_saved_defect(pos=pos)
+        
         if self.ui.no_defect.isChecked():
             if masks:
                 self.ui.set_warning(
@@ -2796,6 +2794,7 @@ class API:
             )
             self.ds_json.modify_defect(self.ds.defect_path)
             self.image_save_status[img_path] = True
+        
         else:
             self.ui.set_warning(
                 texts.WARNINGS["IMAGE_STATUS"][self.language], "label", level=2
@@ -3423,7 +3422,7 @@ class API:
             QTimer().singleShot(1000, self.ImageManager.start_sheet_checking)
             QTimer().singleShot(1000, lambda: self.ui.set_enabel(self.ui.stop_capture_btn, True))
 
-            self.init_check_plc()
+            # self.init_check_plc()
 
     def stop_capture_func(self, disable_ui=True):
         if disable_ui:
@@ -3432,7 +3431,6 @@ class API:
             self.ui.set_enabel(self.ui.start_capture_btn, True)
             self.ui.set_enabel(self.ui.stop_capture_btn, False)
             self.ready_capture_flag = False
-            self.ImageManager.stop()
             try:
                 self.stop_capture_timers()
             except:
@@ -5631,7 +5629,7 @@ class API:
             # self.connect_plc()
             if self.retry_connecting_plc < 10:
                 self.retry_connecting_plc += 1
-                # QTimer().singleShot(1000,self.connect_plc)
+                QTimer().singleShot(1000,self.connect_plc)
                 self.ui.set_status_plc(
                     auto=False,
                     text=texts.Titles["reconnect"][self.ui.language].format(
@@ -6576,14 +6574,6 @@ class evaluation_worker(QObject):
                 if counter > thresh:
                     return True
         return False
-
-
-
-
-
-
-
-
 
 class ModelsCreation_worker(QObject):
 

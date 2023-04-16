@@ -70,7 +70,7 @@ SubTypes = {
     'reset_yolo_training_params': '05-6',
 
     # Others
-    'SET_DATASET': '071',
+    'SET_DATASET': '07-1',
     'SET_DATASET_FAILED': '07-2',
     'CREATE_DATASET_EXIST': '07-3',
     'CREATE_DATASET': '07-4',

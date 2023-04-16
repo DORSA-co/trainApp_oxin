@@ -560,5 +560,5 @@ class Localization_model_train_worker(sQObject):
     def show_lmodel_train_result(self):
         self.reset_progressbar.emit(1, '')
         self.ui_obj.localization_train.setEnabled(True)
-        self.api_obj.runing_l_model=False
+        self.api_obj.running_l_model=False
         return

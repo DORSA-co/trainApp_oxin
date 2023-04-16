@@ -399,7 +399,7 @@ class Dataset:
         defect_path = os.path.join(binary_path, self.defect_folder)
         perfect_path = os.path.join(binary_path, self.perfect_folder)
         defect_mask_path = os.path.join(binary_path, self.defect_mask_folder)
-        return os.path.exists(defect_path) and os.path.exists(defect_path) and os.path.exists(perfect_path) and os.path.exists(defect_mask_path)
+        return os.path.exists(binary_path) and os.path.exists(defect_path) and os.path.exists(perfect_path) and os.path.exists(defect_mask_path)
 
     def check_localization_dataset(self, dataset_path):
         localization_path = os.path.join(dataset_path, self.localization_folder)

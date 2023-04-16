@@ -100,7 +100,7 @@ class dataBaseUtils:
             return "True"
 
         except:
-            return "Databas Eror"
+            return "Database Error"
 
     # ________________________________________________________________
     #

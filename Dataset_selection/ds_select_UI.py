@@ -32,8 +32,7 @@ class Ds_selection(QMainWindow, ui):
 
         # APP NAME
         # ///////////////////////////////////////////////////////////////
-        title = "Sense - dataset selection"
-
+        title = "SENSE-Dataset Selection"
         self.setWindowTitle(title)
 
         
