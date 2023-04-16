@@ -1071,9 +1071,10 @@ Titles = {
         'save_images': {'fa': 'ذخیره تصاویر',
                         'en': 'Save Images'},
 
-        'temperature': {'fa': ': دما',
-                        'en': 'Temperature :'},
-
+        'temperature_top': {'fa': ': دما بالا' ,
+                        'en': 'Temperature Top:'},
+        'temperature_bottom': {'fa': ': دما پایین' ,
+                        'en': 'Temperature Bottom:'},
         'start': {'fa': 'شروع',
                 'en': 'Start'},
 
@@ -2013,7 +2014,8 @@ def set_title(self, lang):
     self.disconnect_camera_btn.setText(Titles['disconnect2'][lang])
 
     self.checkBox_save_images.setText(Titles['save_images'][lang])
-    self.label_236.setText(Titles['temperature'][lang])
+    self.label_236.setText(Titles['temperature_top'][lang])
+    self.label_297.setText(Titles['temperature_bottom'][lang])
     self.label_237.setText(Titles['plc_status'][lang])
 
 #     strings = [str(x) for x in range(1, 25)]

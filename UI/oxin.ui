@@ -4641,7 +4641,7 @@ border:None;</string>
                                       <widget class="QWidget" name="scrollAreaWidgetContents_3">
                                        <property name="geometry">
                                         <rect>
-                                         <x>-248</x>
+                                         <x>-158</x>
                                          <y>0</y>
                                          <width>718</width>
                                          <height>32</height>
@@ -13515,7 +13515,7 @@ color : rgb(0,0,0);</string>
                                           <x>0</x>
                                           <y>0</y>
                                           <width>76</width>
-                                          <height>43</height>
+                                          <height>49</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -13685,7 +13685,7 @@ color : rgb(0,0,0);</string>
                                               <x>0</x>
                                               <y>0</y>
                                               <width>76</width>
-                                              <height>98</height>
+                                              <height>106</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">
@@ -14986,7 +14986,7 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>340</width>
+                                      <width>329</width>
                                       <height>699</height>
                                      </rect>
                                     </property>

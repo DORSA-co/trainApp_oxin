@@ -124,13 +124,13 @@ class Collector():
 
     def start_grabbing(self):
 
-        device_info = self.camera.GetDeviceInfo()
-        model=str(device_info.GetModelName())
-        model=model[-3:]
+            device_info = self.camera.GetDeviceInfo()
+            model=str(device_info.GetModelName())
+            model=model[-3:]
         # print(model[-3:])
 
 
-        try:
+        # try:
             # print(self.camera.IsOpen())
             # print(device_info.GetSerialNumber())
 
@@ -181,20 +181,24 @@ class Collector():
                     self.camera.ExposureTimeAbs.SetValue(self.exposure)
                     self.camera.GainRaw.SetValue(self.gain)
 
-                    self.camera.GevSCPSPacketSize.SetValue(int(self.ps)+1000)
-                    self.camera.Close()
-                    self.camera.Open()
-                                
-                    self.camera.GevSCPD.SetValue(self.dp)
-                    self.camera.Close()
-                    self.camera.Open()                   
-                    self.camera.GevSCFTD.SetValue(self.ftd)
-                    self.camera.Close()
-                    self.camera.Open()
+                    if not self.trigger:
 
-                    self.camera.GevSCPSPacketSize.SetValue(int(self.ps))
-                    self.camera.Close()
-                    self.camera.Open()
+                        self.camera.GevSCPSPacketSize.SetValue(int(self.ps)+1000)
+                        self.camera.Close()
+                        self.camera.Open()
+                                    
+                        self.camera.GevSCPD.SetValue(self.dp)
+                        self.camera.Close()
+                        self.camera.Open()                   
+                        self.camera.GevSCFTD.SetValue(self.ftd)
+                        self.camera.Close()
+                        self.camera.Open()
+
+                        self.camera.GevSCPSPacketSize.SetValue(int(self.ps))
+                        self.camera.Close()
+                        self.camera.Open()
+
+                        
                     self.camera.Width.SetValue(self.width)
                     self.camera.Height.SetValue(self.height)
 
@@ -237,19 +241,19 @@ class Collector():
 
             return True, 'start grabbing ok'
             
-        except genicam.GenericException as e:
-            # Error handling
+        # except genicam.GenericException as e:
+        #     # Error handling
             
-            message = self.start_grabbing_error_handling(error=e)
-            #print(e)  
+        #     message = self.start_grabbing_error_handling(error=e)
+        #     #print(e)  
         
-            self.stop_grabbing()
-            #print("An exception occurred.", e.GetDescription())
-            self.exitCode = 1
-            # self.eror_window('Check The Number of cameras',3)
+        #     self.stop_grabbing()
+        #     #print("An exception occurred.", e.GetDescription())
+        #     self.exitCode = 1
+        #     # self.eror_window('Check The Number of cameras',3)
 
             
-            return False, message
+        #     return False, message
 
     
     def start_grabbing_error_handling(self, error):
@@ -500,8 +504,8 @@ class connect_manage_cameras:
             collector = Collector(
                 str(cam_parms["serial_number"]),
                 exposure=cam_parms["expo_value"],
-                gain=cam_parms["gain_value"],
-                trigger=False,
+                gain=300,
+                trigger=True,
                 delay_packet=cam_parms["interpacket_delay"],
                 packet_size=cam_parms["packet_size"],
                 frame_transmission_delay=cam_parms["transmission_delay"],
@@ -509,7 +513,7 @@ class connect_manage_cameras:
                 width=cam_parms["width"],
                 offet_x=cam_parms["offsetx_value"],
                 offset_y=cam_parms["offsety_value"],
-                manual=False,
+                manual=True,
             )
 
             # print(collector)
