@@ -40,7 +40,6 @@ class ImageManager(sQObject):
         self.live_type = 0
         self.save_flag = 0
         self.manual_flag = 0
-        self.start_grab = 1
         self.check_th = 200
         self.sheet_check_flag = False
         self.last_frame = 0
@@ -66,9 +65,6 @@ class ImageManager(sQObject):
 
     def set_manual_flag(self, val=1):
         self.manual_flag = val
-
-    def set_start_grab(self, val=1):
-        self.start_grab = val
 
     def get_sheet_check_flag(self):
         return self.sheet_check_flag
@@ -110,8 +106,6 @@ class ImageManager(sQObject):
             create_sheet_path(self.main_path, self.sheet_id)
         self.coil_dict = coil_dict
 
-        self.set_start_grab(val=1)
-
     def update_database(self):
         if self.save_flag:
             self.coil_dict['user'] = self.user
@@ -131,14 +125,6 @@ class ImageManager(sQObject):
 
     def threads_func(self, s, d, loop=False):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
-        if self.start_grab:
-            for camera_id in range(s, d + 1):
-                if self.start_cam <= camera_id <= self.stop_cam or self.start_cam + 12 <= camera_id <= self.stop_cam + 12:
-                    if str(camera_id) in list(connected_cameras.keys()):
-                        connected_cameras[str(camera_id)].start_grabbing()
-                    if self.stop_capture:
-                        return
-            self.set_start_grab(val=0)
 
         if loop:
             while True:
@@ -263,6 +249,8 @@ class ImageManager(sQObject):
                          self.images[self.n_camera_live - 1].strides[0],
                          sQImage.Format_Grayscale8)
             self.ui.live.setPixmap(sQPixmap.fromImage(fs))
+            if self.ui.full_s:
+                self.ui.full_s_window.live.setPixmap(sQPixmap.fromImage(fs))
 
         if self.live_type == 1:
             list(map(self.set_image, ['t'] * 12, range(12)))
@@ -280,6 +268,9 @@ class ImageManager(sQObject):
                      sQImage.Format_Grayscale8)
         s = 'self.ui.' + str(c) + 'live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
         exec(s)
+        if eval('self.ui.full_' + str(c)):
+            s = 'self.ui.full_'+ str(c) +'_window.' + str(c) + 'live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
+            exec(s) 
 
     def join_all(self):
         for t in self.read_thread:

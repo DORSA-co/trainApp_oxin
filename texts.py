@@ -1759,6 +1759,9 @@ Titles = {
         'reset_to_default': {'fa': 'بازگشت به مقدار پیش‌فرض',
                 'en': 'Reset to default'},
 
+        'full_screen': {'fa': 'تمام صفحه',
+                'en': 'Full Screen'},
+
 #---------------------------------------------------------------------
 #----------------------Setting Sofwtare-------------------------------
 #---------------------------------------------------------------------
@@ -2071,7 +2074,11 @@ def set_title(self, lang):
     self.label_166.setText(Titles['camera_number'][lang])
     self.label_27.setText(Titles['detect sensor'][lang])
     self.label_235.setText(Titles['air cleaning'][lang])
-
+    
+    self.full_single_btn.setText(Titles['full_screen'][lang])
+    self.full_top_btn.setText(Titles['full_screen'][lang])
+    self.full_bottom_btn.setText(Titles['full_screen'][lang])
+    self.full_all_btn.setText(Titles['full_screen'][lang])
     
     self.load_sheets_win.groupBox.setTitle(Titles['search by'][lang])
     self.load_sheets_win.btn_id_search.setText(Titles['search'][lang])

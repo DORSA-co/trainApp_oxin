@@ -48,6 +48,7 @@ from labeling.labeling_UI import labeling
 from help_UI import help
 from neighbouring_UI import neighbouring
 from small_neighbouring_UI import small_neighbouring
+from full_screen_UI import full_screen_window
 from labeling import labeling_api
 from PIL import ImageQt
 import numpy as np
@@ -243,6 +244,25 @@ class UI_main_window(QMainWindow, ui):
         self.set_image_label(self.user_label, img)
 
         self.set_combo_boxes()
+
+        # Live page
+        # Live full screen windows
+        self.full_s_window = None
+        self.full_t_window = None
+        self.full_b_window = None
+        self.full__window = None
+
+        # Live full screen flags
+        self.full_s = False
+        self.full_t = False
+        self.full_b = False
+        self.full_ = False
+
+        # Live full screen
+        self.full_single_btn.clicked.connect(self.buttonClick)
+        self.full_top_btn.clicked.connect(self.buttonClick)
+        self.full_bottom_btn.clicked.connect(self.buttonClick)
+        self.full_all_btn.clicked.connect(self.buttonClick)
 
         # Training_page
         self.init_training_page()
@@ -570,7 +590,13 @@ class UI_main_window(QMainWindow, ui):
         # storage
         chart_funcs.create_storage_barchart_on_ui(
             ui_obj=self, 
-            frame_obj_storage=self.storage_chart_frame,
+            frame_obj_storage=self.ssd_chart_frame,
+            storage_type='SSD'
+        )
+        chart_funcs.create_storage_barchart_on_ui(
+            ui_obj=self, 
+            frame_obj_storage=self.hdd_chart_frame,
+            storage_type='HDD'
         )
         self.update_storage_chart()
         self.start_storage_timer()
@@ -682,10 +708,13 @@ class UI_main_window(QMainWindow, ui):
             status = storage_funcs.get_storage_status(d)
             storage_status[n] = status
 
-        chart_funcs.update_storage_barchart(
-            ui_obj=self,
-            storage_status=storage_status
-        )
+            chart_funcs.update_storage_barchart(
+                ui_obj=self,
+                storage_type=n,
+                storage_status=storage_status
+            )
+
+            storage_status = {}
 
     def start_storage_timer(self):
         self.storage_timer = sQtCore.QTimer()
@@ -2704,6 +2733,9 @@ class UI_main_window(QMainWindow, ui):
         self.my_ds_owner_user.setText(str(records[2]))
         self.my_ds_path.setText(str(records[3]))
 
+    def set_full_screen_flags(self, type):
+        exec('self.full_' + str(type) + ' = False')
+
     def buttonClick(self):
         # GET BUTTON CLICKED
         btn = self.sender()
@@ -2797,6 +2829,34 @@ class UI_main_window(QMainWindow, ui):
                 cam_number=int(btnName[6:8]),
                 status=not (self.selelcted_cameras[int(btnName[6:8]) - 1]),
             )
+
+        if btnName == "full_single_btn":
+            if not self.full_s_window :
+                self.full_s_window = full_screen_window(type='single')
+                # self.full_s_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('s')))
+            self.full_s_window.show()
+            self.full_s = True
+
+        if btnName == "full_top_btn":
+            if not self.full_t_window:
+                self.full_t_window = full_screen_window(type='top')
+                # self.full_t_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('t')))
+            self.full_t_window.show()
+            self.full_t = True
+
+        if btnName == "full_bottom_btn":
+            if not self.full_b_window:
+                self.full_b_window = full_screen_window(type='bottom')
+                # self.full_b_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('b')))
+            self.full_b_window.show()
+            self.full_b = True
+
+        if btnName == "full_all_btn":
+            if not self.full__window:
+                self.full__window = full_screen_window(type='all')
+                # self.full__window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('')))
+            self.full__window.show()
+            self.full_ = True
 
         if btnName == "tuning_btn":
             self.left_bar_clear()

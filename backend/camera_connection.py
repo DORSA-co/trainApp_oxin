@@ -133,6 +133,8 @@ class Collector():
         # try:
             # print(self.camera.IsOpen())
             # print(device_info.GetSerialNumber())
+            if self.camera.IsOpen():
+                return True, 'start grabbing ok'
 
             self.camera.Open()
             
@@ -169,15 +171,7 @@ class Collector():
                     self.camera.OffsetX.SetValue(self.offset_x)
                     self.camera.OffsetY.SetValue(self.offset_y)
                     
-
-
-
-                
-
                 else:
-                    
-
-
                     self.camera.ExposureTimeAbs.SetValue(self.exposure)
                     self.camera.GainRaw.SetValue(self.gain)
 

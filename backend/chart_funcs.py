@@ -810,50 +810,50 @@ def update_label_piechart(ui_obj, binary_len):
         return
 
 
-def create_storage_barchart_on_ui(ui_obj, frame_obj_storage, chart_title='Storage Status'):
+def create_storage_barchart_on_ui(ui_obj, frame_obj_storage, storage_type, chart_title='Storage Status'):
     # creat chart
     # binary
-    ui_obj.storage_barchart = sQChart()
+    exec('ui_obj.{}_storage_barchart = sQChart()'.format(storage_type))
     # ui_obj.storage_barchart.setAnimationOptions(sQChart.SeriesAnimations)
-    ui_obj.storage_barchart.setMargins(sQMargins(0, 0, 0, 0))
-    ui_obj.storage_barchart.layout().setContentsMargins(0, 0, 0, 0)
+    exec('ui_obj.{}_storage_barchart.setMargins(sQMargins(0, 0, 0, 0))'.format(storage_type))
+    exec('ui_obj.{}_storage_barchart.layout().setContentsMargins(0, 0, 0, 0)'.format(storage_type))
     # ui_obj.binary_barchart.setTitle(chart_title)
     # ui_obj.binary_barchart.setTheme(sQChart.ChartThemeDark)
-    ui_obj.storage_barchart.legend().setVisible(True)
-    ui_obj.storage_barchart.legend().setAlignment(Qt.AlignRight)
-    ui_obj.storage_barchart.legend().setLabelBrush(sQColor(pie_label_color))
-    ui_obj.storage_barchart.setBackgroundBrush(sQColor('#14165c'))
-    ui_obj.storage_barchart.setBackgroundRoundness(0)
+    exec('ui_obj.{}_storage_barchart.legend().setVisible(False)'.format(storage_type))
+    # exec('ui_obj.{}_storage_barchart.legend().setAlignment(Qt.AlignRight)'.format(storage_type))
+    # exec('ui_obj.{}_storage_barchart.legend().setLabelBrush(sQColor(pie_label_color))'.format(storage_type))
+    exec('ui_obj.{}_storage_barchart.setBackgroundBrush(sQColor("#14165c"))'.format(storage_type))
+    exec('ui_obj.{}_storage_barchart.setBackgroundRoundness(0)'.format(storage_type))
 
     # binary series
-    ui_obj.bar_storage_series = sQHorizontalPercentBarSeries()
+    exec('ui_obj.bar_{}_storage_series = sQHorizontalPercentBarSeries()'.format(storage_type))
 
     # add series to chart
-    ui_obj.storage_barchart.addSeries(ui_obj.bar_storage_series)
+    exec('ui_obj.{}_storage_barchart.addSeries(ui_obj.bar_{}_storage_series)'.format(storage_type, storage_type))
 
     # set to ui
-    ui_obj.storage_barchartview = sQChartView(ui_obj.storage_barchart)
-    ui_obj.storage_barchartview.setContentsMargins(0, 0, 0, 0)
+    exec('ui_obj.{}_storage_barchartview = sQChartView(ui_obj.{}_storage_barchart)'.format(storage_type, storage_type))
+    exec('ui_obj.{}_storage_barchartview.setContentsMargins(0, 0, 0, 0)'.format(storage_type))
     #
     
-    frame_obj_storage.layout().addWidget(ui_obj.storage_barchartview)
+    exec('frame_obj_storage.layout().addWidget(ui_obj.{}_storage_barchartview)'.format(storage_type, storage_type))
 
 
-def update_storage_barchart(ui_obj, storage_status):
-    ui_obj.bar_storage_series.clear()
+def update_storage_barchart(ui_obj, storage_type, storage_status):
+    exec('ui_obj.bar_{}_storage_series.clear()'.format(storage_type))
     
     categories = list(storage_status.keys())
     ui_obj.axisX = QBarCategoryAxis()
     ui_obj.axisX.append(categories)
-    ui_obj.storage_barchart.setAxisY(ui_obj.axisX, ui_obj.bar_storage_series)
+    exec('ui_obj.{}_storage_barchart.setAxisY(ui_obj.axisX, ui_obj.bar_{}_storage_series)'.format(storage_type, storage_type))
     ui_obj.axisX.setLabelsColor(sQColor(pie_label_color))
     ui_obj.axisX.setLabelsVisible(False)
 
     ui_obj.axisY = QValueAxis()
-    ui_obj.storage_barchart.setAxisX(ui_obj.axisY, ui_obj.bar_storage_series)
+    exec('ui_obj.{}_storage_barchart.setAxisX(ui_obj.axisY, ui_obj.bar_{}_storage_series)'.format(storage_type, storage_type))
     ui_obj.axisY.setRange(0, 100)
     ui_obj.axisY.setLabelsColor(sQColor(pie_label_color))
-    ui_obj.axisY.setLabelsFont(sQFont("Times", 8, sQFont.Normal))
+    ui_obj.axisY.setLabelsFont(sQFont("Times", 5, sQFont.Normal))
 
     set0 = QBarSet('used')
     set1 = QBarSet('free')
@@ -865,8 +865,8 @@ def update_storage_barchart(ui_obj, storage_status):
     set0.setBrush(sQColor(defect_color))
     set1.setBrush(sQColor(perfect_color))
 
-    ui_obj.bar_storage_series.append(set0)
-    ui_obj.bar_storage_series.append(set1)
+    exec('ui_obj.bar_{}_storage_series.append(set0)'.format(storage_type))
+    exec('ui_obj.bar_{}_storage_series.append(set1)'.format(storage_type))
 
 
 # # chart (must be add in main_ui.py)
