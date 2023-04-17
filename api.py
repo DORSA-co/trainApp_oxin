@@ -344,6 +344,10 @@ class API:
         self.language = self.ui.language
         self.last_sensor = False
         self.sensor = False
+        self.up_in = False
+        self.up_out = False
+        self.down_in = False
+        self.down_out = False
         self.init_check_plc()
 
         # Level2 connection
@@ -3300,7 +3304,7 @@ class API:
                         btn_name = eval("self.ui.camera%s_btn" % i)
                     btn_name.setEnabled(True)
                 self.set_available_cameras()
-                # self.set_available_cameras()
+                self.start_grab_camera()
                 return
             if selected_cameras[self.i]:
                 QTimer.singleShot(3000, self.connect_camera)
@@ -3391,8 +3395,8 @@ class API:
 
     def set_available_cameras(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
-        # sn_available = list(connected_cameras.keys())
-        sn_available = [str(i) for i in range(1, 25)]
+        sn_available = list(connected_cameras.keys())
+        # sn_available = [str(i) for i in range(1, 25)]
         self.ui.comboBox_connected_cams.clear()
         self.ui.comboBox_connected_cams.addItems(sn_available)
 
@@ -5847,6 +5851,34 @@ class API:
             self.top_temp = "0"
             self.bottom_temp = "0"
 
+        try:
+            self.up_in = self.my_plc.get_value(self.dict_spec_pathes["MemUpLimitSwitchIn"])
+            if self.up_in[0] == "-":
+                self.up_in = False
+            else:
+                self.up_in = bool(self.up_in[0])
+            self.up_out = self.my_plc.get_value(self.dict_spec_pathes["MemUpLimitSwitchOut"])
+            if self.up_out[0] == "-":
+                self.up_out = False
+            else:
+                self.up_out = bool(self.up_out[0])
+            self.down_in = self.my_plc.get_value(self.dict_spec_pathes["MemDownLimitSwitchIn"])
+            if self.down_in[0] == "-":
+                self.down_in = False
+            else:
+                self.down_in = bool(self.down_in[0])
+            self.down_out = self.my_plc.get_value(self.dict_spec_pathes["MemDownLimitSwitchOut"])
+            if self.down_out[0] == "-":
+                self.down_out = False
+            else:
+                self.down_out = bool(self.down_out[0])
+        except:
+            self.up_in = False
+            self.up_out = False
+            self.down_in = False
+            self.down_out = False
+
+
         if self.sensor:
             self.slab_detect = True
         else:
@@ -5878,11 +5910,11 @@ class API:
         # self.down_high_threshold = self.my_plc.get_value(self.dict_spec_pathes["DownHighThreshold"])
         # self.down_low_threshold = self.my_plc.get_value(self.dict_spec_pathes["DownLowThreshold"])
         if self.ui.manual_plc:  # Manual change senssor   in final should be delete
-            if self.itr <= 10:
+            if self.itr <= 8:
                 self.sensor = True
             else:
                 self.sensor = False
-                if self.itr >= 30:
+                if self.itr >= 12:
                     self.itr = 0
             # #print(self.itr)
             self.itr += 1
@@ -5895,6 +5927,10 @@ class API:
         self.last_sensor = self.sensor
 
         self.ui.change_plc_check_status(mode=self.sensor)
+        self.ui.change_place_check_status(side='up', inout='in', mode=self.up_in)
+        self.ui.change_place_check_status(side='up', inout='out', mode=self.up_out)
+        self.ui.change_place_check_status(side='down', inout='in', mode=self.down_in)
+        self.ui.change_place_check_status(side='down', inout='out', mode=self.down_out)
         try:
             self.ui.update_plc_temp(self.top_temp, self.bottom_temp)
         except:

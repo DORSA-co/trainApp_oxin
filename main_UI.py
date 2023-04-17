@@ -3566,6 +3566,11 @@ class UI_main_window(QMainWindow, ui):
         if DEBUG_UI:
             print("asdwdw", mode)
 
+    def change_place_check_status(self, side, inout, mode=True):
+        exec('self.{}_{}_checkbox.setChecked(bool(mode))'.format(side, inout))
+        if DEBUG_UI:
+            print("asdwdw", mode)
+
     def update_plc_temp(self, temp_top=0, temp_down=0):
         self.label_up_temperature.setText(str(temp_top))
         self.label_down_temperature.setText(str(temp_down))
