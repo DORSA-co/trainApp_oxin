@@ -53,6 +53,7 @@ import os
 from datetime import date, time, datetime
 from PyQt5.QtWidgets import QListWidget, QApplication, QMessageBox
 from PyQt5.QtGui import QPixmap, QImage
+from PySide6.QtWidgets import QHeaderView as sQHeaderView
 
 # from backend import add_remove_label
 from PyQt5 import QtCore, QtWidgets
@@ -319,12 +320,6 @@ class API:
         # _________________________________________
         # create binarylist sliders on UI
 
-        self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedHeight(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
-        self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedHeight(0)
         self.raw_and_evaluated_Imagw_sliders_check = []
         self.raw_and_evaluated_Imagw_sliders_check.append(
             binary_list_funcs.set_image_on_loadDataSetSlider_in_PBT(
@@ -587,7 +582,6 @@ class API:
             # #print("name not valid")
 
     def check_name_pipline(self):
-
         pipline_name = self.ui.pipline_name.text()
         if pipline_name == "":
             self.ui.pipline_name_status.setText(
@@ -607,7 +601,6 @@ class API:
         return False
 
     def add_dataset_in_combobox(self):
-
         res, self.datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
         if not res:
             self.ui.notif_manager.append_new_notif(
@@ -625,7 +618,6 @@ class API:
         )
 
     def create_and_add_pipline(self):
-
         try:
             # #print(self.current_b_model)
             # data = pipline_name,user_name,pipline path if save , binary_weight path , local weight path , class weight path
@@ -646,7 +638,6 @@ class API:
             return False
 
     def add_piplines_in_combobox(self, piplinename=-1):
-
         db_pipline_names = self.db.get_pipline_names()
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.clear()
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.addItems(db_pipline_names)
@@ -729,16 +720,64 @@ class API:
             combo_name.setCurrentIndex(1)
             combo_name.setCurrentIndex(index)
 
+    def update_pipline_table_info(self, table, titles):
+        table.resizeColumnsToContents()
+        table.setColumnCount(2)
+        table.setRowCount(len(titles))
+        table.horizontalHeader().setSectionResizeMode(sQHeaderView.Stretch)
+        table.verticalHeader().setSectionResizeMode(sQHeaderView.Stretch)
+        for i, item in enumerate(titles):
+            table_item = sQTableWidgetItem(item)
+            table.setItem(i, 0, table_item)
+
+    def update_table_value(self, table, value, row, col=1):
+        table_value = sQTableWidgetItem(value)
+        table.setItem(row, col, table_value)
+
+    def assign_table_column(self, table, number_of_rows, data_list=None, refresh=True):
+        if refresh:
+            for i in range(number_of_rows):
+                self.update_table_value(
+                    table=table,
+                    value="",
+                    row=i,
+                )
+        else:
+            for item in data_list:
+                self.update_table_value(
+                    table=table,
+                    value=str(item),
+                    row=i,
+                )
+
     def refresh_loadDataset_tabs_in_PBT(self):
-        # labale updating
-        self.ui.LBL_of_data_is_ready_in_PBT_page.setText("")
-        self.ui.LBL_of_pipline_is_ready_in_PBT_page.setText("")
-        self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText("")
-        self.ui.LBL_of_evalution_of_binary_model_in_PBT_page.setText("")
-        self.ui.LBL_of_evalution_of_classification_model_in_PBT_page.setText("")
+        # tabel updating
+        # tabel of data:
+        self.update_pipline_table_info(
+            table=self.ui.tableWidget_data_info,
+            titles=[
+                texts.Titles["validation data"][self.language],
+                texts.Titles["perfect_pbt"][self.language],
+                texts.Titles["defect_pbt"][self.language],
+            ],
+        )
+        # table of pipline:
+        self.update_pipline_table_info(
+            table=self.ui.tableWidget_pipline_info,
+            titles=[
+                texts.Titles["binary_pipline"][self.language],
+                texts.Titles["segmention_pipline"][self.language],
+                texts.Titles["classification_pipline"][self.language],
+                texts.Titles["yolo_pipline"][self.language],
+            ],
+        )
+
         # progressbar updating
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
+        self.ui.frame_120.setFixedWidth(0)
+        self.ui.frame_120.setFixedHeight(0)
+        # self.ui.pgbar_pipline_creation.setFixedWidth(0)
+        # self.ui.pgbar_pipline_creation.setFixedHeight(0)
+
         # combobox updating
         self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.clear()
         self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.addItems(self.PBT_option_list)
@@ -785,6 +824,7 @@ class API:
         self.ui.load_dataset_pbt_btn.clicked.connect(
             self.refresh_loadDataset_tabs_in_PBT
         )
+
         # ______________ JJ
 
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
@@ -1117,7 +1157,6 @@ class API:
         self.label_bakcend["mask"].change_radius(x)
 
     def user_access_pages(self, btn_name):
-
         dic = {
             "Binary_btn": self.ui.page_Binary,
             "Localization_btn": self.ui.page_Localization,
@@ -1698,7 +1737,6 @@ class API:
                 level=2,
             )
         else:
-
             side = self.thechnicals_backend[self.current_technical_side].get_side()
             main_path = self.sheet.get_path()
 
@@ -1737,7 +1775,6 @@ class API:
             )
 
     def remove_select_img(self):
-
         selected_img_for_remove = self.ui.get_selected_img()
         if len(selected_img_for_remove):
             self.selected_images_for_label.remove_by_index(selected_img_for_remove)
@@ -1771,7 +1808,6 @@ class API:
         selected_imgs = self.selected_images_for_label.get_all_selections_list()
         selected_idxs = self.ui.get_selected_img()
         if len(selected_idxs) > 0:
-
             filtered_selected = Utils.get_selected_value(selected_imgs, selected_idxs)
             paths = self.db.get_path_sheet_image(filtered_selected)
             sheets = []
@@ -2022,7 +2058,6 @@ class API:
         return colors
 
     def label_image_mouse(self, wgt_name=""):
-
         label_type = self.ui.get_label_type()
         mouse_status = self.mouse.get_status()
         mouse_button = self.mouse.get_button()
@@ -2229,9 +2264,7 @@ class API:
     # login ---------------------------------
 
     def show_login(self):
-
         if self.logged_in == False:
-
             login_window = self.ui.ret_create_login()
             self.login_api = login_API(login_window, main_ui_obj=self.ui)
             # self.login_api.button_connector()
@@ -2242,7 +2275,6 @@ class API:
             self.show_message_logout()
 
     def show_message_logout(self):
-
         t = self.ui.show_question(
             texts.WARNINGS["question"][self.language],
             texts.WARNINGS["CONFIRM_LOGOUT"][self.language],
@@ -2277,7 +2309,6 @@ class API:
             )
 
         except:
-
             self.ui.logger.create_new_log(
                 code=texts_codes.SubTypes["Logout_unsuccessfully"],
                 message=texts.MESSEGES["Logout_unsuccessfully"]["en"],
@@ -2453,7 +2484,6 @@ class API:
     # dataset
 
     def create_dataset(self):
-
         t = self.ui.show_question(
             texts.WARNINGS["question"][self.language],
             texts.WARNINGS["CREATE_DATABASE"][self.language],
@@ -3988,131 +4018,147 @@ class API:
 
     def pre_load_binary_images_list_in_PBT_load_dataset_page(self):
         if self.ui.lineEdit_of_path_displayment_in_PBT_page.text() != "":
-            self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText("")
+            # self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText("")
             self.load_binary_images_list_in_PBT_load_dataset_page(
                 use_customized_flag=True
             )
         else:
-            self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText(
-                texts.ERRORS["data_not_ready"][self.language]
+            self.ui.LBL_data_is_ready.setFixedHeight(0)
+            self.assign_table_column(
+                table=self.ui.tableWidget_data_info, number_of_rows=3
             )
+            self.ui.create_alert_message(
+                title="WARNING",
+                message=texts.ERRORS["data_not_ready"][self.language],
+            )
+
+            # self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText(
+            #     texts.ERRORS["data_not_ready"][self.language]
+            # )
 
     def load_binary_images_list_in_PBT_load_dataset_page(
         self, use_customized_flag=False
     ):
-
-        self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText("")
-        if (
-            self.raw_and_evaluated_Imagw_sliders_check[0]
-            and self.raw_and_evaluated_Imagw_sliders_check[1]
-        ):
-            if use_customized_flag:
-                selected_datasets = self.customized_datasets
-                text = "Customized"
-            else:
-                text = self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.currentText()
-                selected_datasets = (
-                    dataset.get_selected_datasets_for_PBT_loadDataSet_page(
-                        text, self.datasets_list
-                    )
-                )
-
-            if len(selected_datasets) == 0:
-                self.ui.set_warning(
-                    texts.WARNINGS["SELECT_NO_DATASET"][self.language],
-                    "binarylist",
-                    level=2,
-                )
-                return
-
-            (
-                perfect_check,
-                perfect_image_pathes,
-                defect_check,
-                defect_image_pathes,
-                defect_annot_pathes,
-                binary_count,
-            ) = binary_list_funcs.get_binarylist_image_pathes_list(
-                ds_obj=self.ds, dataset_pathes=selected_datasets
-            )
-
-            if not perfect_check and not defect_check:
-                self.ui.set_warning(
-                    texts.MESSEGES["NO_IMAGE_AVAILABLE_IN_DATASET"][self.language],
-                    "binarylist",
-                    level=2,
-                )
-            else:
-                # msg
-                self.ui.set_warning(
-                    texts.MESSEGES["LOAD_IMAGES_DATASETS"][self.language],
-                    "binarylist",
-                    level=1,
-                )
-
-            if perfect_check or defect_check:
-                if self.perfect_show:
-                    self.path_list = perfect_image_pathes + defect_image_pathes
-                else:
-                    self.path_list = defect_image_pathes
-                random.shuffle(self.path_list)
-            else:
-                self.path_list = []
-
-            if self.path_list != []:
-
-                self.original_and_evaluated_image_in_PBT.add(
-                    mylist=self.path_list,
-                    name="original",
-                )
-                self.original_image_list_next_func = (
-                    self.original_and_evaluated_image_in_PBT.build_next_func(
-                        name="original"
-                    )
-                )
-                self.original_image_list_prev_func = (
-                    self.original_and_evaluated_image_in_PBT.build_prev_func(
-                        name="original"
-                    )
-                )
-                # show message that data is ready
-                self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedWidth(175)
-                self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedHeight(83)
-                data_report = "\n {} dataset has: \n {} perfect images \n {} defect images \n {} total images".format(
-                    text,
-                    len(perfect_image_pathes),
-                    len(defect_image_pathes),
-                    len(self.path_list),
-                )
-                if use_customized_flag:
-                    self.ui.LBL_of_data_is_ready_in_PBT_page.setText(
-                        texts.MESSEGES["Customized Data is ready"][self.language],
-                        +data_report,
-                    )
-                else:
-                    self.ui.LBL_of_data_is_ready_in_PBT_page.setText(
-                        texts.MESSEGES["Data_Is_Ready"][self.language] + data_report
-                    )
-            else:
-                self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedWidth(175)
-                self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedHeight(16)
-                if use_customized_flag:
-                    self.ui.LBL_of_data_is_ready_in_PBT_page.setText(
-                        texts.MESSEGES["Customized Data is not ready"][self.language]
-                    )
-                else:
-                    self.ui.LBL_of_data_is_ready_in_PBT_page.setText(
-                        texts.MESSEGES["Data_Is_Not_Ready"][self.language]
-                    )
+        # if (
+        #     self.raw_and_evaluated_Imagw_sliders_check[0]
+        #     and self.raw_and_evaluated_Imagw_sliders_check[1]
+        # ):
+        if use_customized_flag:
+            selected_datasets = self.customized_datasets
+            text = "Customized"
         else:
-            self.ui.set_warning(
-                texts.ERORS["BUILD_BINARYLIST_SLIDER_ERROR"][self.language],
-                "binarylist",
-                level=3,
+            text = self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.currentText()
+            selected_datasets = dataset.get_selected_datasets_for_PBT_loadDataSet_page(
+                text, self.datasets_list
             )
+        if len(selected_datasets) == 0:
+            self.ui.set_warning(
+                texts.WARNINGS["SELECT_NO_DATASET"][self.language],
+                "binarylist",
+                level=2,
+            )
+            self.ui.create_alert_message(
+                title="WARNING",
+                message=texts.WARNINGS["SELECT_NO_DATASET"][self.language],
+            )
+            return
+
+        (
+            perfect_check,
+            perfect_image_pathes,
+            defect_check,
+            defect_image_pathes,
+            defect_annot_pathes,
+            binary_count,
+        ) = binary_list_funcs.get_binarylist_image_pathes_list(
+            ds_obj=self.ds, dataset_pathes=selected_datasets
+        )
+        if not perfect_check and not defect_check:
+            self.path_list = []
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value="",
+                row=0,
+            )
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value="",
+                row=1,
+            )
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value="",
+                row=2,
+            )
+            self.ui.LBL_data_is_ready.setFixedHeight(30)
+            self.ui.LBL_data_is_ready.setText(
+                texts.MESSEGES["Data_Is_Not_Ready"][self.language]
+            )
+            self.ui.set_warning(
+                texts.MESSEGES["NO_IMAGE_AVAILABLE_IN_DATASET"][self.language],
+                "binarylist",
+                level=2,
+            )
+            self.ui.create_alert_message(
+                title="WARNING",
+                message=texts.MESSEGES["NO_IMAGE_AVAILABLE_IN_DATASET"][self.language],
+            )
+        else:
+            # msg
+            self.ui.set_warning(
+                texts.MESSEGES["LOAD_IMAGES_DATASETS"][self.language],
+                "binarylist",
+                level=1,
+            )
+            if self.perfect_show:
+                self.path_list = perfect_image_pathes + defect_image_pathes
+            else:
+                self.path_list = defect_image_pathes
+            random.shuffle(self.path_list)
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value=str(len(self.path_list)),
+                row=0,
+            )
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value=str(binary_count["perfect"]),
+                row=1,
+            )
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value=str(binary_count["defect"]),
+                row=2,
+            )
+            self.ui.LBL_data_is_ready.setFixedHeight(30)
+            self.ui.LBL_data_is_ready.setText(
+                texts.MESSEGES["Data_Is_Ready"][self.language]
+            )
+
+        # if self.path_list != []:
+        # self.original_and_evaluated_image_in_PBT.add(
+        #     mylist=self.path_list,
+        #     name="original",
+        # )
+        # self.original_image_list_next_func = (
+        #     self.original_and_evaluated_image_in_PBT.build_next_func(
+        #         name="original"
+        #     )
+        # )
+        # self.original_image_list_prev_func = (
+        #     self.original_and_evaluated_image_in_PBT.build_prev_func(
+        #         name="original"
+        #     )
+        # )
+
+    # else:
+    #     self.ui.set_warning(
+    #         texts.ERORS["BUILD_BINARYLIST_SLIDER_ERROR"][self.language],
+    #         "binarylist",
+    #         level=3,
+    #     )
 
     def evaluation_ui_updat(self, summaries):
-
         """this function after evaluation operation completed
 
         Parameters
@@ -4255,7 +4301,6 @@ class API:
                 )
             )
         else:  # there is problem in the process and the pipline does not build
-
             self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
             self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
             self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedWidth(150)
@@ -4907,7 +4952,10 @@ class API:
 
         if get_count:
             try:
-                (res, self.ymodel_count,) = yolo_model_funcs.get_yolo_models_from_db(
+                (
+                    res,
+                    self.ymodel_count,
+                ) = yolo_model_funcs.get_yolo_models_from_db(
                     db_obj=self.db, count=get_count
                 )
                 self.ymodel_count = self.ymodel_count[0]["count(*)"]
@@ -4985,7 +5033,10 @@ class API:
 
             else:
                 if not self.yfilter_mode:
-                    (res, ymodels_list,) = yolo_model_funcs.get_yolo_models_from_db(
+                    (
+                        res,
+                        ymodels_list,
+                    ) = yolo_model_funcs.get_yolo_models_from_db(
                         db_obj=self.db,
                         limit_size=yolo_model_funcs.yolo_table_nrows,
                         offset=(self.ymodel_tabel_itr - 1)
@@ -5385,7 +5436,6 @@ class API:
         """this function is used to create needed piecharts on UI"""
 
         try:
-
             # classlist page
             chart_funcs.create_classlist_piechart_on_ui(
                 ui_obj=self.ui,
@@ -6015,7 +6065,6 @@ class API:
     def set_start_software_plc(self, mode):
         # #print("software on plc ", str(mode))
         try:
-
             self.my_plc.set_value(self.dict_spec_pathes["MemSoftwareStart"], str(mode))
 
         except:
@@ -6216,12 +6265,10 @@ class API:
     # PBT Evaluate -----------------------------------------------
 
     def create_json_file(self, name):
-
         json_parent_path = self.db.get_json_parent_path()
         new_json = Pipeline(json_parent_path, name)
 
     def laod_bpt_jsons(self):
-
         self.filter_json_flag = False
         json_parent_path = self.db.get_json_parent_path()
         self.len_json, self.content_json = pipelines.load_all_json_files_by_date(
@@ -6282,7 +6329,6 @@ class API:
             self.ui.pipline_tabel_next_PBT.setEnabled(False)
 
     def json_clear_filter_btn(self):
-
         self.filter_json_flag = False
 
         pipelines.set_piplines_on_ui_tabel(
@@ -6338,7 +6384,6 @@ class API:
         self.ui.pipline_minut_lineedit.setText("")
 
     def next_page_pipline_history(self):
-
         if not self.filter_json_flag:
             self.filter_content_json = self.content_json
 
@@ -6438,7 +6483,6 @@ class evaluation_worker(QObject):
         yolo_iou_thres,
         yolo_max_det,
     ):
-
         # var for handling evaluating
         # DATA VARS:
         self.paths = paths
@@ -6668,7 +6712,6 @@ class evaluation_worker(QObject):
         return split2yolo, annotationSplit2yolo, defects_inx, file_name
 
     def compute_binary_metrics(self):
-
         y_pred = np.concatenate(self.binary_pred, dtype=np.float16)
         y_true = np.concatenate(self.binary_grandtruth, dtype=np.float16)
 
@@ -6685,7 +6728,6 @@ class evaluation_worker(QObject):
         return loss, accuracy, recall, precision, f1
 
     def create_folder_struct_of_yolo_dataset(self):
-
         image_path = os.path.dirname(os.path.dirname(os.path.dirname(self.paths[0])))
         image_path = os.path.join(image_path, "localization")
 
@@ -6731,7 +6773,6 @@ class evaluation_worker(QObject):
         ImagePath, TextPath = self.create_folder_struct_of_yolo_dataset()
         # save each split image and label with spesefic name
         for img, annotion, splitid in zip(imgs2yolo, annotations2yolo, SplitsId):
-
             # write and save image
             image_file_name = "{}_{}.png".format(ImageFileName, splitid)
             ImagePath = os.path.join(ImagePath, image_file_name)
@@ -6745,7 +6786,6 @@ class evaluation_worker(QObject):
             if (annotion != "perfect") and (
                 annotion["obj_mask"] != []
             ):  # if grand truth of split is defect
-
                 for defect in annotion["obj_mask"]:
                     # proper data for label ,that saves on .txt file
                     classID = defect["class"]
@@ -6964,7 +7004,6 @@ class evaluation_worker(QObject):
 
         # give each split to yolo
         for batch_i, (im, targets, paths, shapes) in enumerate(pbar):
-
             im = im.to(self.yolo_device, non_blocking=True)
             targets = targets.to(self.yolo_device)
             nb, _, height, width = im.shape
@@ -7043,7 +7082,6 @@ class evaluation_worker(QObject):
 
 # __________________________________________________________________
 class ModelsCreation_worker(QObject):
-
     # vars for handling thread
     finished = Signal()
     model_creation_signal = Signal(int)
@@ -7085,7 +7123,10 @@ class ModelsCreation_worker(QObject):
             binary_model_info,
             LC_model_info,
         ) = self.load_pipline_info_from_database()
-        (classes_num, classes,) = binary_model_funcs.strInputSize_2_intInputSize(
+        (
+            classes_num,
+            classes,
+        ) = binary_model_funcs.strInputSize_2_intInputSize(
             string=LC_model_info[1][0]["classes"],
             use_for_other_parameter=True,
         )
@@ -7213,7 +7254,6 @@ class ModelsCreation_worker(QObject):
                 )
 
                 if pipline_info[0]["use_yolo"] == "True":
-
                     _, yolo_model_info = self.db.get_model(
                         self.db.yolo, pipline_info[0]["yolo_weight_path"]
                     )

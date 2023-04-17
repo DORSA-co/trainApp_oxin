@@ -4644,7 +4644,7 @@ border:None;</string>
                                          <x>0</x>
                                          <y>0</y>
                                          <width>488</width>
-                                         <height>30</height>
+                                         <height>32</height>
                                         </rect>
                                        </property>
                                        <property name="sizePolicy">
@@ -7993,7 +7993,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>692</width>
-                                            <height>20</height>
+                                            <height>18</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -9549,7 +9549,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>28</height>
+                                        <height>18</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -9801,7 +9801,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>28</height>
+                                        <height>18</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -12828,7 +12828,7 @@ QPushButton:hover {
                              </size>
                             </property>
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="page_pipeline">
                              <property name="maximumSize">
@@ -14194,7 +14194,7 @@ QPushButton:enabled-hover{
                                 <property name="maximumSize">
                                  <size>
                                   <width>16777215</width>
-                                  <height>71</height>
+                                  <height>94</height>
                                  </size>
                                 </property>
                                 <property name="frameShape">
@@ -14350,6 +14350,9 @@ QPushButton:enabled-hover{
                                     </item>
                                     <item>
                                      <widget class="QToolButton" name="BTN_set_directory_image_in_PBT_page">
+                                      <property name="toolTip">
+                                       <string>choose directory path</string>
+                                      </property>
                                       <property name="text">
                                        <string>...</string>
                                       </property>
@@ -14357,6 +14360,9 @@ QPushButton:enabled-hover{
                                     </item>
                                     <item>
                                      <widget class="QPushButton" name="BTN_load_image_in_PBT_page">
+                                      <property name="enabled">
+                                       <bool>true</bool>
+                                      </property>
                                       <property name="minimumSize">
                                        <size>
                                         <width>93</width>
@@ -14370,7 +14376,7 @@ QPushButton:enabled-hover{
                                        </size>
                                       </property>
                                       <property name="styleSheet">
-                                       <string notr="true">color:white;</string>
+                                       <string notr="true"/>
                                       </property>
                                       <property name="text">
                                        <string>Load Image</string>
@@ -14432,50 +14438,241 @@ QPushButton:enabled-hover{
                                    <property name="title">
                                     <string>Select Pipeline</string>
                                    </property>
-                                   <layout class="QHBoxLayout" name="horizontalLayout_98">
+                                   <layout class="QVBoxLayout" name="verticalLayout_100">
                                     <item>
-                                     <widget class="QLabel" name="label_36">
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>70</width>
-                                        <height>16777215</height>
-                                       </size>
+                                     <widget class="QFrame" name="frame_113">
+                                      <property name="frameShape">
+                                       <enum>QFrame::StyledPanel</enum>
                                       </property>
-                                      <property name="text">
-                                       <string>Pipeline :</string>
+                                      <property name="frameShadow">
+                                       <enum>QFrame::Raised</enum>
                                       </property>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_304">
+                                       <property name="leftMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="topMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="rightMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="bottomMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <item>
+                                        <widget class="QLabel" name="label_36">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>70</width>
+                                           <height>16777215</height>
+                                          </size>
+                                         </property>
+                                         <property name="text">
+                                          <string>Pipeline :</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QComboBox" name="cbBox_of_pipline_in_PBT_page_load_dataset">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>25</height>
+                                          </size>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QPushButton" name="BTN_set_pipline_in_PBT_page">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>0</width>
+                                           <height>26</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>16777215</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">color:white;</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>Set</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
                                      </widget>
                                     </item>
                                     <item>
-                                     <widget class="QComboBox" name="cbBox_of_pipline_in_PBT_page_load_dataset">
+                                     <widget class="QFrame" name="frame_120">
                                       <property name="maximumSize">
                                        <size>
                                         <width>16777215</width>
-                                        <height>25</height>
-                                       </size>
-                                      </property>
-                                     </widget>
-                                    </item>
-                                    <item>
-                                     <widget class="QPushButton" name="BTN_set_pipline_in_PBT_page">
-                                      <property name="minimumSize">
-                                       <size>
-                                        <width>0</width>
-                                        <height>26</height>
-                                       </size>
-                                      </property>
-                                      <property name="maximumSize">
-                                       <size>
-                                        <width>50</width>
                                         <height>16777215</height>
                                        </size>
                                       </property>
-                                      <property name="styleSheet">
-                                       <string notr="true">color:white;</string>
+                                      <property name="frameShape">
+                                       <enum>QFrame::StyledPanel</enum>
                                       </property>
-                                      <property name="text">
-                                       <string>Set</string>
+                                      <property name="frameShadow">
+                                       <enum>QFrame::Raised</enum>
                                       </property>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_98">
+                                       <property name="leftMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="topMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="rightMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="bottomMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <item>
+                                        <widget class="QProgressBar" name="pgbar_pipline_creation">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>16777215</height>
+                                          </size>
+                                         </property>
+                                         <property name="value">
+                                          <number>24</number>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </widget>
+                                    </item>
+                                   </layout>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <spacer name="horizontalSpacer_96">
+                                   <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                   </property>
+                                   <property name="sizeHint" stdset="0">
+                                    <size>
+                                     <width>40</width>
+                                     <height>20</height>
+                                    </size>
+                                   </property>
+                                  </spacer>
+                                 </item>
+                                 <item>
+                                  <widget class="QGroupBox" name="groupBox">
+                                   <property name="enabled">
+                                    <bool>false</bool>
+                                   </property>
+                                   <property name="minimumSize">
+                                    <size>
+                                     <width>350</width>
+                                     <height>0</height>
+                                    </size>
+                                   </property>
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>16777215</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="title">
+                                    <string>Run Evalution</string>
+                                   </property>
+                                   <layout class="QVBoxLayout" name="verticalLayout_99">
+                                    <property name="leftMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="topMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="rightMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <property name="bottomMargin">
+                                     <number>0</number>
+                                    </property>
+                                    <item>
+                                     <widget class="QFrame" name="frame_119">
+                                      <property name="frameShape">
+                                       <enum>QFrame::StyledPanel</enum>
+                                      </property>
+                                      <property name="frameShadow">
+                                       <enum>QFrame::Raised</enum>
+                                      </property>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_362">
+                                       <property name="leftMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="topMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="rightMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="bottomMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <item>
+                                        <widget class="QPushButton" name="BTN_evaluate_image_in_PBT_page_2">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>101</width>
+                                           <height>16777215</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">color:white;</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>Evaluate</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QPushButton" name="BTN_refresh_loadDataset_tab_in_PBT">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>101</width>
+                                           <height>16777215</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">color:white;</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>Refresh</string>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </widget>
+                                    </item>
+                                    <item>
+                                     <widget class="QFrame" name="frame_118">
+                                      <property name="frameShape">
+                                       <enum>QFrame::StyledPanel</enum>
+                                      </property>
+                                      <property name="frameShadow">
+                                       <enum>QFrame::Raised</enum>
+                                      </property>
+                                      <layout class="QHBoxLayout" name="horizontalLayout_363">
+                                       <item>
+                                        <widget class="QProgressBar" name="pgbar_evalution_precess">
+                                         <property name="value">
+                                          <number>24</number>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
                                      </widget>
                                     </item>
                                    </layout>
@@ -14554,38 +14751,6 @@ QPushButton:enabled-hover{
                                        <property name="bottomMargin">
                                         <number>0</number>
                                        </property>
-                                       <item>
-                                        <widget class="QPushButton" name="BTN_evaluate_image_in_PBT_page_2">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>101</width>
-                                           <height>16777215</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">color:white;</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>Evaluate</string>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QPushButton" name="BTN_refresh_loadDataset_tab_in_PBT">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>101</width>
-                                           <height>16777215</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">color:white;</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>Refresh</string>
-                                         </property>
-                                        </widget>
-                                       </item>
                                       </layout>
                                      </widget>
                                     </item>
@@ -14596,18 +14761,82 @@ QPushButton:enabled-hover{
                                       </property>
                                       <layout class="QVBoxLayout" name="verticalLayout_59">
                                        <item>
-                                        <widget class="QLabel" name="LBL_of_data_is_ready_in_PBT_page">
+                                        <widget class="QFrame" name="frame_4">
+                                         <property name="frameShape">
+                                          <enum>QFrame::StyledPanel</enum>
+                                         </property>
+                                         <property name="frameShadow">
+                                          <enum>QFrame::Raised</enum>
+                                         </property>
+                                         <layout class="QHBoxLayout" name="horizontalLayout_154">
+                                          <item>
+                                           <spacer name="horizontalSpacer_87">
+                                            <property name="orientation">
+                                             <enum>Qt::Horizontal</enum>
+                                            </property>
+                                            <property name="sizeHint" stdset="0">
+                                             <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                           </spacer>
+                                          </item>
+                                          <item alignment="Qt::AlignHCenter">
+                                           <widget class="QLabel" name="LBL_data_preparation_info">
+                                            <property name="styleSheet">
+                                             <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+                                            </property>
+                                            <property name="text">
+                                             <string>Data Info</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <spacer name="horizontalSpacer_86">
+                                            <property name="orientation">
+                                             <enum>Qt::Horizontal</enum>
+                                            </property>
+                                            <property name="sizeHint" stdset="0">
+                                             <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                           </spacer>
+                                          </item>
+                                         </layout>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QTableWidget" name="tableWidget_data_info">
                                          <property name="minimumSize">
                                           <size>
-                                           <width>200</width>
+                                           <width>0</width>
+                                           <height>80</height>
+                                          </size>
+                                         </property>
+                                         <property name="sizeAdjustPolicy">
+                                          <enum>QAbstractScrollArea::AdjustToContents</enum>
+                                         </property>
+                                         <attribute name="horizontalHeaderVisible">
+                                          <bool>false</bool>
+                                         </attribute>
+                                         <attribute name="verticalHeaderVisible">
+                                          <bool>false</bool>
+                                         </attribute>
+                                        </widget>
+                                       </item>
+                                       <item alignment="Qt::AlignHCenter">
+                                        <widget class="QLabel" name="LBL_data_is_ready">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
                                            <height>0</height>
                                           </size>
                                          </property>
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>28</height>
-                                          </size>
+                                         <property name="styleSheet">
+                                          <string notr="true">background-color: rgb(255, 255, 255);</string>
                                          </property>
                                          <property name="text">
                                           <string/>
@@ -14615,63 +14844,119 @@ QPushButton:enabled-hover{
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="LBL_of_pipline_is_ready_in_PBT_page">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>28</height>
-                                          </size>
+                                        <widget class="QFrame" name="frame_111">
+                                         <property name="frameShape">
+                                          <enum>QFrame::StyledPanel</enum>
                                          </property>
-                                         <property name="text">
-                                          <string/>
+                                         <property name="frameShadow">
+                                          <enum>QFrame::Raised</enum>
                                          </property>
+                                         <layout class="QHBoxLayout" name="horizontalLayout_155">
+                                          <item>
+                                           <spacer name="horizontalSpacer_88">
+                                            <property name="orientation">
+                                             <enum>Qt::Horizontal</enum>
+                                            </property>
+                                            <property name="sizeHint" stdset="0">
+                                             <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                           </spacer>
+                                          </item>
+                                          <item alignment="Qt::AlignHCenter">
+                                           <widget class="QLabel" name="LBL_pipline_preparation_info">
+                                            <property name="styleSheet">
+                                             <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+                                            </property>
+                                            <property name="text">
+                                             <string>Pipline Info</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <spacer name="horizontalSpacer_89">
+                                            <property name="orientation">
+                                             <enum>Qt::Horizontal</enum>
+                                            </property>
+                                            <property name="sizeHint" stdset="0">
+                                             <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                           </spacer>
+                                          </item>
+                                         </layout>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QProgressBar" name="pgbar_of_pipiline_ready_in_PBT_page">
-                                         <property name="value">
-                                          <number>0</number>
+                                        <widget class="QTableWidget" name="tableWidget_pipline_info">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>0</width>
+                                           <height>200</height>
+                                          </size>
                                          </property>
+                                         <attribute name="horizontalHeaderVisible">
+                                          <bool>false</bool>
+                                         </attribute>
+                                         <attribute name="verticalHeaderVisible">
+                                          <bool>false</bool>
+                                         </attribute>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="LBL_of_evalution_of_binary_model_in_PBT_page">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>100</height>
-                                          </size>
+                                        <widget class="QFrame" name="frame_112">
+                                         <property name="frameShape">
+                                          <enum>QFrame::StyledPanel</enum>
                                          </property>
-                                         <property name="text">
-                                          <string/>
+                                         <property name="frameShadow">
+                                          <enum>QFrame::Raised</enum>
                                          </property>
+                                         <layout class="QHBoxLayout" name="horizontalLayout_300">
+                                          <item>
+                                           <spacer name="horizontalSpacer_90">
+                                            <property name="orientation">
+                                             <enum>Qt::Horizontal</enum>
+                                            </property>
+                                            <property name="sizeHint" stdset="0">
+                                             <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                           </spacer>
+                                          </item>
+                                          <item>
+                                           <widget class="QLabel" name="LBL_evalution_preparation_info">
+                                            <property name="styleSheet">
+                                             <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+                                            </property>
+                                            <property name="text">
+                                             <string>Evalution Info</string>
+                                            </property>
+                                           </widget>
+                                          </item>
+                                          <item>
+                                           <spacer name="horizontalSpacer_91">
+                                            <property name="orientation">
+                                             <enum>Qt::Horizontal</enum>
+                                            </property>
+                                            <property name="sizeHint" stdset="0">
+                                             <size>
+                                              <width>40</width>
+                                              <height>20</height>
+                                             </size>
+                                            </property>
+                                           </spacer>
+                                          </item>
+                                         </layout>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="LBL_of_evalution_of_classification_model_in_PBT_page">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>100</height>
-                                          </size>
-                                         </property>
-                                         <property name="text">
-                                          <string/>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <spacer name="verticalSpacer_9">
-                                         <property name="orientation">
-                                          <enum>Qt::Vertical</enum>
-                                         </property>
-                                         <property name="sizeHint" stdset="0">
-                                          <size>
-                                           <width>20</width>
-                                           <height>40</height>
-                                          </size>
-                                         </property>
-                                        </spacer>
+                                        <widget class="QTableWidget" name="tableWidget_evalution_info"/>
                                        </item>
                                       </layout>
                                      </widget>
@@ -14950,7 +15235,7 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>340</width>
+                                      <width>319</width>
                                       <height>715</height>
                                      </rect>
                                     </property>
