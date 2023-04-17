@@ -3300,7 +3300,7 @@ class API:
                         btn_name = eval("self.ui.camera%s_btn" % i)
                     btn_name.setEnabled(True)
                 self.set_available_cameras()
-                self.start_grab_camera()
+                # self.set_available_cameras()
                 return
             if selected_cameras[self.i]:
                 QTimer.singleShot(3000, self.connect_camera)
@@ -3391,8 +3391,8 @@ class API:
 
     def set_available_cameras(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
-        sn_available = list(connected_cameras.keys())
-        # sn_available = [str(i) for i in range(1, 25)]
+        # sn_available = list(connected_cameras.keys())
+        sn_available = [str(i) for i in range(1, 25)]
         self.ui.comboBox_connected_cams.clear()
         self.ui.comboBox_connected_cams.addItems(sn_available)
 
