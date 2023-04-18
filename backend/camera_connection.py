@@ -38,10 +38,14 @@ if show_eror:
     from eror_window import UI_eror_window
 
 
+
+TRIGGER_SOURCE = ['Off', 'Software', 'Line1']
+
+
 class Collector():
 
     def __init__(self, serial_number,gain = 0 , exposure = 70000, max_buffer = 20, trigger=True, delay_packet=100, packet_size=1500 ,
-                frame_transmission_delay=0 ,width=1000,height=1000,offet_x=0,offset_y=0, manual=False, list_devices_mode=False, trigger_source='Software'):
+                frame_transmission_delay=0 ,width=1000,height=1000,offet_x=0,offset_y=0, manual=False, list_devices_mode=False, trigger_source='Software',trigger_delay=0,debounce=1000):
         """Initializes the Collector
         Args:
             gain (int, optional): The gain of images. Defaults to 0.
@@ -55,6 +59,7 @@ class Collector():
         self.serial_number = serial_number
         self.trigger = trigger
         self.trigger_source = trigger_source
+        print('trig',self.trigger,self.trigger_source)
         self.dp = delay_packet
         self.ps=packet_size
         self.ftd=frame_transmission_delay
@@ -64,6 +69,8 @@ class Collector():
         self.offset_y=offset_y
         self.manual=manual
         self.list_devices_mode=list_devices_mode
+        self.debounce = debounce
+        self.trigger_delay = trigger_delay
         self.exitCode=0
 
         if show_eror:
@@ -136,17 +143,25 @@ class Collector():
                 self.camera.ExposureTimeAbs.SetValue(self.exposure)
                 self.camera.GainRaw.SetValue(self.gain)
                     
-                self.camera.Width.SetValue(self.width)
-                self.camera.Height.SetValue(self.height)
+                # self.camera.Width.SetValue(self.width)
+                # self.camera.Height.SetValue(self.height)
 
                 self.camera.OffsetX.SetValue(self.offset_x)
                 self.camera.OffsetY.SetValue(self.offset_y)
+                self.camera.Close()
 
+                self.camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly) 
+
+                self.camera.Open()
 
                 if self.trigger:
+                    print('set trig')
                     self.camera.TriggerSelector.SetValue('FrameStart')
                     self.camera.TriggerMode.SetValue('On')
+                    print('a',self.camera.TriggerMode.GetValue())
                     self.camera.TriggerSource.SetValue(self.trigger_source)
+                    self.camera.LineDebouncerTimeAbs.SetValue(self.debounce) 
+                    self.camera.TriggerDelayAbs.SetValue(self.trigger_delay)
 
 
                 else:
@@ -169,12 +184,8 @@ class Collector():
                     
 
 
-            self.camera.Close()
 
-            self.camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly) 
-
-            self.camera.Open()
-
+            # self.camera.TriggerMode.SetValue('On')
 
                 # self.camera.TriggerMode.SetValue('Off')
                 # print('triggeroff')
@@ -451,6 +462,18 @@ class connect_manage_cameras:
         available_serials = self.list_available_serial
         # print("camera params", cam_parms)
 
+
+
+        # trigger source
+        if int(cam_parms['trigger_mode']) == 0:
+            trigger_source = TRIGGER_SOURCE[0]
+        elif int(cam_parms['trigger_mode']) == 1:
+            trigger_source = TRIGGER_SOURCE[1]
+        elif int(cam_parms['trigger_mode']) == 2:
+            trigger_source = TRIGGER_SOURCE[2]
+
+
+
         if str(cam_parms["serial_number"]) in available_serials:
 
             # print(cam_parms['serial_number'])
@@ -461,7 +484,8 @@ class connect_manage_cameras:
                 str(cam_parms["serial_number"]),
                 exposure=cam_parms["expo_value"],
                 gain=300,
-                trigger=False,
+                trigger=0 if int(cam_parms['trigger_mode'])==0 else 1,
+                trigger_source=trigger_source,
                 delay_packet=cam_parms["interpacket_delay"],
                 packet_size=cam_parms["packet_size"],
                 frame_transmission_delay=cam_parms["transmission_delay"],
@@ -606,10 +630,11 @@ if __name__ == "__main__":
     # # for sn in ['40150887']:
     #     # collector = Collector( sn,exposure=3000 , gain=30, trigger=False, delay_packet=170000)
     collector = Collector(
-        "21336991",
+        "24350287",
         exposure=3000,
-        gain=10,
-        trigger=False,
+        gain=0,
+        trigger=True,
+        trigger_source='Line1',
         delay_packet=81062,
         packet_size=9000,
         frame_transmission_delay=18036,
@@ -617,7 +642,7 @@ if __name__ == "__main__":
         width=1000,
         offet_x=16,
         offset_y=4,
-        manual=False,
+        manual=True,
     )
 
     # x=collector.get_cam()

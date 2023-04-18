@@ -99,7 +99,7 @@ class ImageManager(sQObject):
         self.images = [np.zeros((1200, 1920))] * 24
         self.stop_cam = stop_cam
         if 'length' in coil_dict.keys() and coil_dict['length']:
-            self.last_frame = 15 - self.check_length_th #int(coil_dict['length'] / self.camera_length) - self.check_length_th
+            self.last_frame = 1000 - self.check_length_th #int(coil_dict['length'] / self.camera_length) - self.check_length_th
         else:
             self.last_frame = 0
         if self.save_flag:

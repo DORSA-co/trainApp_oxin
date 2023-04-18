@@ -21,9 +21,11 @@ class connection_level2():
         if ret:
             # cameras=round(details['width']/250)     # this should be change 
             # projector =int(details['width'] /14)
-            cameras=np.random.choice([4, 6, 8, 10, 12])
-            projector=4
-            speed = np.random.choice([-1, 0, 1], p=[0.1, 0.1, 0.8])
+            # cameras=np.random.choice([4, 6, 8, 10, 12])
+            cameras = 12
+            projector=6
+            # speed = np.random.choice([-1, 0, 1], p=[0.1, 0.1, 0.8])
+            speed=1
             return cameras, projector ,speed, details
  
         else:

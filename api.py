@@ -5986,7 +5986,7 @@ class API:
 
         except:
             pass
-        self.plc_timer.start(500)
+        self.plc_timer.start(1000)
         self.plc_update.start(self.ui.update_timer_plc)
 
     # Mypipline page------------------------------------------------
