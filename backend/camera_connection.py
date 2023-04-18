@@ -138,6 +138,13 @@ class Collector():
             
             if self.manual:
 
+                if self.trigger:
+                    self.camera.TriggerSelector.SetValue('FrameStart')
+                    self.camera.TriggerMode.SetValue('On')
+                    self.camera.TriggerSource.SetValue(self.trigger_source)
+                    # print('triggeron on %s' % self.trigger_source)
+                else:
+                    pass
                 
                 if model=='PRO':
                     # print('yes pro')
@@ -213,13 +220,7 @@ class Collector():
 
             self.camera.Open()
 
-            if self.trigger:
-                self.camera.TriggerSelector.SetValue('FrameStart')
-                self.camera.TriggerMode.SetValue('On')
-                self.camera.TriggerSource.SetValue(self.trigger_source)
-                # print('triggeron on %s' % self.trigger_source)
-            else:
-                pass
+
                 # self.camera.TriggerMode.SetValue('Off')
                 # print('triggeroff')
 
