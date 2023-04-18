@@ -77,7 +77,7 @@ class Collector():
         self.converter.OutputPixelFormat = pylon.PixelType_BGR8packed
         self.converter.OutputBitAlignment = pylon.OutputBitAlignment_MsbAligned
 
-
+        print('self.__tl_factory.EnumerateDevices()',self.__tl_factory.EnumerateDevices())
         for device in self.__tl_factory.EnumerateDevices():
             if (device.GetDeviceClass() == 'BaslerGigE'):                
                 devices.append(device)
@@ -124,12 +124,6 @@ class Collector():
 
     def start_grabbing(self):
 
-            device_info = self.camera.GetDeviceInfo()
-            model=str(device_info.GetModelName())
-            model=model[-3:]
-        # print(model[-3:])
-
-
         # try:
             # print(self.camera.IsOpen())
             # print(device_info.GetSerialNumber())
@@ -138,28 +132,28 @@ class Collector():
             
             if self.manual:
 
+
+                self.camera.ExposureTimeAbs.SetValue(self.exposure)
+                self.camera.GainRaw.SetValue(self.gain)
+                    
+                self.camera.Width.SetValue(self.width)
+                self.camera.Height.SetValue(self.height)
+
+                self.camera.OffsetX.SetValue(self.offset_x)
+                self.camera.OffsetY.SetValue(self.offset_y)
+
+
                 if self.trigger:
                     self.camera.TriggerSelector.SetValue('FrameStart')
                     self.camera.TriggerMode.SetValue('On')
                     self.camera.TriggerSource.SetValue(self.trigger_source)
-                    # print('triggeron on %s' % self.trigger_source)
-                else:
-                    pass
-                
-                if model=='PRO':
-                    # print('yes pro')
-                    # print(self.camera.DeviceTemperature.GetValue())
-                    self.camera.ExposureTime.SetValue(self.exposure)
 
-                    self.camera.Gain.SetValue(self.gain)
-                    
-                    # self.camera.GevSCPSPacketSize.SetValue(int(self.ps)+1000)
-                    # self.camera.Close()
-                    # self.camera.Open()
-                    self.camera.GevSCPSPacketSize.SetValue(int(self.ps))
+
+                else:
+                    self.camera.GevSCPSPacketSize.SetValue(int(self.ps)+1000)
                     self.camera.Close()
                     self.camera.Open()
-                                                  
+                                
                     self.camera.GevSCPD.SetValue(self.dp)
                     self.camera.Close()
                     self.camera.Open()                   
@@ -167,50 +161,11 @@ class Collector():
                     self.camera.Close()
                     self.camera.Open()
 
+                    self.camera.GevSCPSPacketSize.SetValue(int(self.ps))
+                    self.camera.Close()
+                    self.camera.Open()
 
 
-
-                    self.camera.Width.SetValue(self.width)
-                    self.camera.Height.SetValue(self.height)
-
-                    self.camera.OffsetX.SetValue(self.offset_x)
-                    self.camera.OffsetY.SetValue(self.offset_y)
-                    
-
-
-
-                
-
-                else:
-                    
-
-
-                    self.camera.ExposureTimeAbs.SetValue(self.exposure)
-                    self.camera.GainRaw.SetValue(self.gain)
-
-                    if not self.trigger:
-
-                        self.camera.GevSCPSPacketSize.SetValue(int(self.ps)+1000)
-                        self.camera.Close()
-                        self.camera.Open()
-                                    
-                        self.camera.GevSCPD.SetValue(self.dp)
-                        self.camera.Close()
-                        self.camera.Open()                   
-                        self.camera.GevSCFTD.SetValue(self.ftd)
-                        self.camera.Close()
-                        self.camera.Open()
-
-                        self.camera.GevSCPSPacketSize.SetValue(int(self.ps))
-                        self.camera.Close()
-                        self.camera.Open()
-
-                        
-                    self.camera.Width.SetValue(self.width)
-                    self.camera.Height.SetValue(self.height)
-
-                    self.camera.OffsetX.SetValue(self.offset_x)
-                    self.camera.OffsetY.SetValue(self.offset_y)
                     
 
 
@@ -506,7 +461,7 @@ class connect_manage_cameras:
                 str(cam_parms["serial_number"]),
                 exposure=cam_parms["expo_value"],
                 gain=300,
-                trigger=True,
+                trigger=False,
                 delay_packet=cam_parms["interpacket_delay"],
                 packet_size=cam_parms["packet_size"],
                 frame_transmission_delay=cam_parms["transmission_delay"],
@@ -651,7 +606,7 @@ if __name__ == "__main__":
     # # for sn in ['40150887']:
     #     # collector = Collector( sn,exposure=3000 , gain=30, trigger=False, delay_packet=170000)
     collector = Collector(
-        "24350367",
+        "21336991",
         exposure=3000,
         gain=10,
         trigger=False,
@@ -667,29 +622,29 @@ if __name__ == "__main__":
 
     # x=collector.get_cam()
 
-    # collector.start_grabbing()
+    collector.start_grabbing()
     # collector.start_grabbing()
     # cameras = collector
-    collector.listDevices()
+    # collector.listDevices()
     # cameras.start_grabbing()
     # cameras.getPictures()
     # print(cameras.)
 
-    # while True:
+    while True:
 
-    #     #     # for cam in cameras:
-    #     #     #         cam.trigg_exec()
+        #     # for cam in cameras:
+        #     #         cam.trigg_exec()
 
-    #     #     # for cam in cameras:
-    #     #     #print(cam.camera.GetQueuedBufferCount())
-    #     img = cameras.getPictures()
-    #     img=img[1]
-    #     # print(img.shape)
-    #     # print(cam.camera.GetQueuedBufferCount())
-    #     cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
-    #     img=np.uint8(img)
-    #     # cv2.imshow('img',img)
-    #     cv2.waitKey(50)
+        #     # for cam in cameras:
+        #     #print(cam.camera.GetQueuedBufferCount())
+        img = collector.getPictures()
+        img=img[1]
+        # print(img.shape)
+        # print(cam.camera.GetQueuedBufferCount())
+        cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
+        img=np.uint8(img)
+        # cv2.imshow('img',img)
+        cv2.waitKey(50)
     #     # img = cameras[1].getPictures()
     #     # #print(cam.camera.GetQueuedBufferCount())
     #     # cv2.imshow('img2', cv2.resize( img, None, fx=0.5, fy=0.5 ))

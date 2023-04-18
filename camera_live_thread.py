@@ -245,7 +245,7 @@ class ImageManager(sQObject):
             fs = sQImage(self.images[self.n_camera_live - 1], self.images[self.n_camera_live - 1].shape[1],
                          self.images[self.n_camera_live - 1].shape[0],
                          self.images[self.n_camera_live - 1].strides[0],
-                         sQImage.Format_Grayscale8)
+                         sQImage.Format_RGB888)
             self.ui.live.setPixmap(sQPixmap.fromImage(fs))
             if self.ui.full_s:
                 self.ui.full_s_window.live.setPixmap(sQPixmap.fromImage(fs))
@@ -263,7 +263,7 @@ class ImageManager(sQObject):
         fs = sQImage(self.images[i], self.images[i].shape[1],
                      self.images[i].shape[0],
                      self.images[i].strides[0],
-                     sQImage.Format_Grayscale8)
+                     sQImage.Format_RGB888)
         s = 'self.ui.' + str(c) + 'live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
         exec(s)
         if eval('self.ui.full_' + str(c)):
