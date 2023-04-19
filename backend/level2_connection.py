@@ -23,7 +23,8 @@ class connection_level2():
             # projector =int(details['width'] /14)
             cameras=np.random.choice([4, 6, 8, 10, 12])
             projector=4
-            speed = np.random.choice([-1, 0, 1], p=[0.1, 0.1, 0.8])
+            # speed = np.random.choice([-1, 0, 1], p=[0.1, 0.1, 0.8])
+            speed = 1
             return cameras, projector ,speed, details
  
         else:
