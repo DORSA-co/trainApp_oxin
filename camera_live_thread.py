@@ -193,47 +193,46 @@ class ImageManager(sQObject):
                 return
 
     def check_thread_func(self):
-        self.first_check_finished.emit()
-        # connected_cameras = self.cameras.get_connected_cameras_by_id()
-        # cameras_id = sorted(connected_cameras.keys())
-        # camera_id = -1
-        # for id in cameras_id:
-        #     id = int(id)
-        #     if self.start_cam <= id <= self.stop_cam or self.start_cam + 12 <= id <= self.stop_cam + 12:
-        #         camera_id = id
-        #         break
-        #     if self.stop_capture:
-        #         return
-        # if camera_id < 0:
-        #     if self.manual_flag:
-        #         camera_id = 1
-        #         i=0
-        #     else:
-        #         return
+        connected_cameras = self.cameras.get_connected_cameras_by_id()
+        cameras_id = sorted(connected_cameras.keys())
+        camera_id = -1
+        for id in cameras_id:
+            id = int(id)
+            if self.start_cam <= id <= self.stop_cam or self.start_cam + 12 <= id <= self.stop_cam + 12:
+                camera_id = id
+                break
+            if self.stop_capture:
+                return
+        if camera_id < 0:
+            if self.manual_flag:
+                camera_id = 1
+                i=0
+            else:
+                return
         
-        # while True:
-        #     if str(camera_id) in list(connected_cameras.keys()):
-        #         ret, img = connected_cameras[str(camera_id)].getPictures()
-        #         if not ret:
-        #             continue
-        #         check = self.sheet_check(img)
-        #         if check:
-        #             self.first_check_finished.emit()
-        #             return
-        #     else:
-        #         if self.manual_flag:
-        #             img = np.zeros((1200, 1920), dtype=np.uint8)
-        #             if i < 20:
-        #                 img[:, :] = np.random.randint(self.check_th, 255)
-        #                 i+=1
-        #             else:
-        #                 img[:, :] = np.random.randint(0, 150)
-        #             check = self.sheet_check(img)
-        #             if check:
-        #                 self.first_check_finished.emit()
-        #                 return
-        #     if self.stop_capture:
-        #         return
+        while True:
+            if str(camera_id) in list(connected_cameras.keys()):
+                ret, img = connected_cameras[str(camera_id)].getPictures()
+                if not ret:
+                    continue
+                check = self.sheet_check(img)
+                if check:
+                    self.first_check_finished.emit()
+                    return
+            else:
+                if self.manual_flag:
+                    img = np.zeros((1200, 1920, 3), dtype=np.uint8)
+                    if i < 0:
+                        img[:, :] = np.random.randint(self.check_th, 255)
+                        i+=1
+                    else:
+                        img[:, :] = np.random.randint(0, 150)
+                    check = self.sheet_check(img)
+                    if check:
+                        self.first_check_finished.emit()
+                        return
+            if self.stop_capture:
+                return
 
     def sheet_check(self, img):
         average = img.mean()

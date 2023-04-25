@@ -380,8 +380,7 @@ class API:
         self.ui.radioButton_one.toggled.connect(lambda :self.set_pipline_mode('yolo') )
         self.ui.radioButton_two.toggled.connect(lambda :self.set_pipline_mode('localization') )
         self.set_pipline_mode('yolo')
-
-
+        
         # DEBUG_FUNCTIONS
         # -------------------------------------
         # self.__debug_load_sheet__(["996", "997"])
@@ -3428,10 +3427,9 @@ class API:
             self.ImageManager.set_live_type(self.live_type)
             self.ImageManager.set_save_flag(self.ui.checkBox_save_images.isChecked())
             self.ImageManager.set_manual_flag(self.ui.manual_camera)
-            # self.ui.set_enabel(self.ui.stop_capture_btn, False)
-            # QTimer().singleShot(1000, self.ImageManager.start_sheet_checking)
-            # QTimer().singleShot(1000, lambda: self.ui.set_enabel(self.ui.stop_capture_btn, True))
-            self.ImageManager.start_sheet_checking()
+            self.ui.set_enabel(self.ui.stop_capture_btn, False)
+            QTimer().singleShot(0, self.ImageManager.start_sheet_checking)
+            QTimer().singleShot(0, lambda: self.ui.set_enabel(self.ui.stop_capture_btn, True))
 
             # self.init_check_plc()
 
@@ -3467,7 +3465,7 @@ class API:
         if speed > 0:
             self.ImageManager.start()
         self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_timer.start(int(1000/self.ui.frame_rate+1))
+        self.grab_timer.start(int(1000/(self.ui.frame_rate+1)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
