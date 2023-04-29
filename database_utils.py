@@ -45,7 +45,7 @@ class dataBaseUtils:
         self.piplines = "piplines"
         self.binary_model = "binary_models"
         self.classification = "classification_models"
-        self.localiztion = "localiztion_models"
+        self.localiztion = "localization_models"
         self.yolo = "yolo_models"
 
         self.piplines_name = "name"
@@ -156,7 +156,6 @@ class dataBaseUtils:
     #
     # ________________________________________________________________
     def report_last_sheets(self, count):
-
         records = self.db.report_last(self.sheets_info_tabel, "sheet_id", count)
         res = []
         for record in records:
@@ -275,17 +274,14 @@ class dataBaseUtils:
             return []
 
     def ret_sign_defect_table(self):
-
         res, sign = self.db.search(self.sign_tables, "id", "0")
 
         return sign[0]["defects_info"]
 
     def update_sign_table(self, col_name, value, id="id", id_value=0):
-
         self.db.update_record(self.sign_tables, col_name, value, id, id_value)
 
     def load_cam_params(self, input_camera_id):
-
         try:
             res, record = self.db.search(self.table_cameras, "id", input_camera_id)
             record = record[0]
@@ -1016,7 +1012,6 @@ class dataBaseUtils:
     # ___________________________________________________________________________________
 
     def search_user(self, input_user_name):
-
         try:
             res, record = self.db.search(
                 self.table_user, "user_name", input_user_name, int_type=False
@@ -1036,7 +1031,6 @@ class dataBaseUtils:
             return []
 
     def get_default_dataset(self, user_name):
-
         try:
             res, record = self.db.search(
                 self.table_user, "user_name", user_name, int_type=False
@@ -1045,7 +1039,6 @@ class dataBaseUtils:
 
             return record["default_dataset"]
         except:
-
             return []
 
     def get_dateset_name(self, id):
@@ -1059,7 +1052,6 @@ class dataBaseUtils:
             return []
 
     def get_path_dataset(self, dataset_id):
-
         try:
             res, record = self.db.search(self.dataset, "id", dataset_id, int_type=False)
             record = record[0]
@@ -1070,13 +1062,11 @@ class dataBaseUtils:
             return []
 
     def get_all_datasets(self):
-
         records = self.db.report_last(self.dataset, "id", 99, side="ASC")
 
         return records
 
     def get_user_databases(self, user_name, default=True):
-
         try:
             res, record = self.db.search(
                 self.dataset, "user_own", user_name, int_type=False
@@ -1103,13 +1093,11 @@ class dataBaseUtils:
             return []
 
     def update_dataset_default(self, dataset_id, user_name):
-
         self.db.update_record(
             self.table_user, "default_dataset", str(dataset_id), "user_name", user_name
         )
 
     def add_dataset(self, data):
-
         # try:
         res = self.db.add_record(
             data,
@@ -1215,7 +1203,6 @@ class dataBaseUtils:
 
         try:
             for _, param in enumerate(plc_parms.keys()):
-
                 try:
                     min_value = str(int(plc_parms[param][1]))
                 except:
@@ -1305,7 +1292,6 @@ class dataBaseUtils:
             return False
 
     def remove_pipline(self, name):
-
         res = self.db.remove_record(col_name="name", id=name, table_name=self.piplines)
 
     def get_selected_pipline_record(self, value):

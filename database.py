@@ -6,6 +6,7 @@ from mysql.connector import Error
 from numpy import rec
 import texts
 import texts_codes
+
 # from tenacity import retry_if_exception
 
 
@@ -28,9 +29,7 @@ class dataBase:
 
         self.check_connection()
 
-
-
-    def get_log(self, message='nothing', code='00', level=1):
+    def get_log(self, message="nothing", code="00", level=1):
         """
         this function is used to get log from database tasks
 
@@ -41,7 +40,6 @@ class dataBase:
         """
         if self.logger_obj != None:
             self.logger_obj.create_new_log(message=message, code=code, level=level)
-    
 
     # --------------------------------------------------------------------------
     # --------------------------------------------------------------------------
@@ -77,7 +75,10 @@ class dataBase:
             if connection.is_connected():
                 db_Info = connection.get_server_info()  # get informations of database
                 # log
-                self.get_log(message='Connected to MySQL Server version %s' % (db_Info), code=texts_codes.SubTypes['connected_to_mysql_server'])
+                self.get_log(
+                    message="Connected to MySQL Server version %s" % (db_Info),
+                    code=texts_codes.SubTypes["connected_to_mysql_server"],
+                )
                 #
 
                 cursor = connection.cursor()
@@ -85,14 +86,21 @@ class dataBase:
                 record = cursor.fetchall()
 
                 # log
-                self.get_log(message='Connected to database %s' % (record), code=texts_codes.SubTypes['connected_to_database'])
+                self.get_log(
+                    message="Connected to database %s" % (record),
+                    code=texts_codes.SubTypes["connected_to_database"],
+                )
                 #
                 return True
 
         except Exception as e:
             # log
             # #print(e)
-            self.get_log(message='Error while connecting to MySQL', code=texts_codes.SubTypes['error_connecting_to_mysql'], level=5)
+            self.get_log(
+                message="Error while connecting to MySQL",
+                code=texts_codes.SubTypes["error_connecting_to_mysql"],
+                level=5,
+            )
             #
             return False
 
@@ -102,8 +110,10 @@ class dataBase:
                 connection.close()
 
             # log
-            self.get_log(message='MySQL connection is closed', code=texts_codes.SubTypes['mysql_connection_closed'])
-            
+            self.get_log(
+                message="MySQL connection is closed",
+                code=texts_codes.SubTypes["mysql_connection_closed"],
+            )
 
     def execute_quary(self, quary, cursor, connection, need_data=False, close=False):
         """
@@ -135,7 +145,11 @@ class dataBase:
         except Exception as e:
             # log
             # #print(e)
-            self.get_log(message='Error while connecting to MySQL', code=texts_codes.SubTypes['error_connecting_to_mysql'], level=5)
+            self.get_log(
+                message="Error while connecting to MySQL",
+                code=texts_codes.SubTypes["error_connecting_to_mysql"],
+                level=5,
+            )
             #
 
     # --------------------------------------------------------------------------
@@ -159,18 +173,20 @@ class dataBase:
 
         # try:
 
-        s ='%s,'*len_parameters
+        s = "%s," * len_parameters
         s = s[:-1]
-        s = '(' + s + ')'
+        s = "(" + s + ")"
 
         if self.check_connection:
-            cursor,connection=self.connect()
+            cursor, connection = self.connect()
 
             mySql_insert_query = """INSERT INTO {} {} 
                                 VALUES 
-                                {} """.format(table_name,parametrs,s) 
+                                {} """.format(
+                table_name, parametrs, s
+            )
             print(mySql_insert_query, data)
-            cursor.execute(mySql_insert_query,data)
+            cursor.execute(mySql_insert_query, data)
             connection.commit()
             cursor.close()
 
@@ -185,17 +201,22 @@ class dataBase:
     # --------------------------------------------------------------------------
     # --------------------------------------------------------------------------
 
-    #def update_record(self, table_name, col_name, value, id_name, id_value):
+    # def update_record(self, table_name, col_name, value, id_name, id_value):
 
-    def update_record(self,table_name,col_name,value,id_name,id_value):
-        
+    def update_record(self, table_name, col_name, value, id_name, id_value):
         # #print('id_value',table_name,col_name,value,id_name,id_value)
         if self.check_connection:
             cursor, connection = self.connect()
 
             mySql_insert_query = """UPDATE {} 
                                     SET {} = {}
-                                    WHERE {} ={} """.format(table_name,col_name,("'"+value+"'"),id_name,("'"+id_value+"'"))
+                                    WHERE {} ={} """.format(
+                table_name,
+                col_name,
+                ("'" + value + "'"),
+                id_name,
+                ("'" + id_value + "'"),
+            )
             ##print(mySql_insert_query)
             cursor.execute(mySql_insert_query)
             # mySql_insert_query=(mySql_insert_query,data)
@@ -245,7 +266,6 @@ class dataBase:
     # --------------------------------------------------------------------------
     # --------------------------------------------------------------------------
     def report_last(self, table_name, parametr, count, side="DESC"):
-
         if self.check_connection:
             cursor, connection = self.connect()
 
@@ -300,16 +320,13 @@ class dataBase:
 
         try:
             if self.check_connection:
-
                 cursor, connection = self.connect()
                 if int_type:
                     sql_select_Query = "SELECT * FROM {} WHERE {} = {};".format(
                         table_name, param_name, str(value)
                     )
-
                     cursor = self.execute_quary(sql_select_Query, cursor, connection)
                 else:
-
                     sql_select_Query = """SELECT * FROM {} WHERE {} = {} """.format(
                         table_name, param_name, ("'" + str(value) + "'")
                     )
@@ -416,14 +433,14 @@ class dataBase:
 
                 ##print(sql_select_Query)
 
-                cursor=self.execute_quary(sql_select_Query, cursor, connection)
+                cursor = self.execute_quary(sql_select_Query, cursor, connection)
 
                 records = cursor.fetchall()
                 ##print("Total number of rows in table: ", cursor.rowcount)
                 ##print(len(records),records)
-                #----------------------------
+                # ----------------------------
                 # #print(records)
-                
+
                 field_names = [col[0] for col in cursor.description]
                 res = []
                 for record in records:
@@ -566,13 +583,17 @@ class dataBase:
     def delete(self, db_name, table_name):
         try:
             if self.check_connection:
-                cursor,connection=self.connect()
-            sql_Delete_table = "DELETE FROM  {}.{};".format(db_name,table_name)
-            cursor=self.execute_quary(sql_Delete_table, cursor, connection)       
-            ##print('delete')     
-            #                               
+                cursor, connection = self.connect()
+            sql_Delete_table = "DELETE FROM  {}.{};".format(db_name, table_name)
+            cursor = self.execute_quary(sql_Delete_table, cursor, connection)
+            ##print('delete')
+            #
         except Exception as e:
-            self.get_log(message='Error reading data from MySQL table', code=texts_codes.SubTypes['error_reading_from_mysql'], level=5)
+            self.get_log(
+                message="Error reading data from MySQL table",
+                code=texts_codes.SubTypes["error_reading_from_mysql"],
+                level=5,
+            )
 
     # --------------------------------------------------------------------------
     # --------------------------------------------------------------------------
@@ -670,20 +691,20 @@ class dataBase:
             return e, []
 
     def check_table_exist(self, table_name):
-
         try:
             if self.check_connection:
-                cursor,connection=self.connect()
-            sql_check_table = "SELECT * FROM {}.{};".format(self.data_base_name,table_name)
-            cursor=self.execute_quary(sql_check_table, cursor, connection)       
-            # #print('check')    
-            return 'Exist'                              
+                cursor, connection = self.connect()
+            sql_check_table = "SELECT * FROM {}.{};".format(
+                self.data_base_name, table_name
+            )
+            cursor = self.execute_quary(sql_check_table, cursor, connection)
+            # #print('check')
+            return "Exist"
         except mysql.connector.Error as e:
             return e
             # #print("Error reading data from MySQL table", e)
 
     def test(self):
-
         # try:
         if self.check_connection:
             cursor, connection = self.connect()
@@ -699,20 +720,24 @@ class dataBase:
 
 
 if __name__ == "__main__":
-
-    db= dataBase('root','Dorsa1400@','localhost','saba_database')
-    x=db.search(table_name='binary_models',param_name='weights_path',value='JJ1999',int_type=False)
+    db = dataBase("root", "Dorsa1400@", "localhost", "saba_database")
+    x = db.search(
+        table_name="binary_models",
+        param_name="weights_path",
+        value="JJ1999",
+        int_type=False,
+    )
     # #print(x)
-        # return pipline_info
-    #db.get_col_name('996','camera_settings','id')
+    # return pipline_info
+    # db.get_col_name('996','camera_settings','id')
 
-#     # data=(0,)*10
-#     # data=(0,0,0,0,1920,1200,0,0,0,0,0)
+    #     # data=(0,)*10
+    #     # data=(0,0,0,0,1920,1200,0,0,0,0,0)
 
     # x=db.get_all_content('defects_info')
     # #print(x)
 
-    record = db.search( 'piplines' , 'name', 'milad2')
+    record = db.search("piplines", "name", "milad2")
     # #print(record)
 
 #     # table_name,parametrs,len_parameters)

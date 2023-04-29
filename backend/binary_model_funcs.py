@@ -410,6 +410,10 @@ def translate_binary_algorithm_id_to_name(
 def translate_model_algorithm_id_to_creator_function(
     algo_id, input_size, num_class=1, mode="binary", weights_path=None
 ):
+    ###__________temp__________________
+    if algo_id == "Ulnim":
+        input_size = (224, 224, 3)
+    ###________________________________
     creator = train_api.ALGORITHM_CREATOR[algo_id]
     model = creator(input_size=input_size, num_class=num_class, mode=mode)
     if weights_path != None:
@@ -418,7 +422,6 @@ def translate_model_algorithm_id_to_creator_function(
 
 
 def strInputSize_2_intInputSize(string, use_for_other_parameter=False):
-
     string = string[1:-1].split(",")
     if not use_for_other_parameter:
         return (int(string[0]), int(string[1]), 3)
@@ -427,6 +430,7 @@ def strInputSize_2_intInputSize(string, use_for_other_parameter=False):
 
 
 # ____________________________________________________________________JJ ZONE
+
 
 # show/set models history to UI tabel
 def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
@@ -461,7 +465,6 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
     # add users to table
     for row_idx, bmodel in enumerate(bmodels_list):
         for col_idx in range(binary_table_ncols):
-
             # translate algo-ids to name
             if col_idx == 0:
                 bmodel[
@@ -491,7 +494,6 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
 def set_bmodels_on_ui_tabel_edited_version(
     ui_obj, bmodels_list, model_type="binary", language="en"
 ):
-
     if model_type == "binary":
         headers = binary_headers_dic[language]
         headers_db = binary_headers_dic["db"]

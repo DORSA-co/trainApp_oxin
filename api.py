@@ -370,6 +370,11 @@ class API:
         self.current_b_model = None
         self.current_l_model = None
         self.current_c_model = None
+        self.pipline_name = ""
+        self.binary_model_flag = False
+        self.segmentation_model_flag = False
+        self.classification_model_flag = False
+        self.yolo_model_flag = False
         self.add_piplines_in_combobox()
         self.add_dataset_in_combobox()
 
@@ -706,6 +711,10 @@ class API:
             partial(self.set_nframe_label)
         )
 
+        self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentTextChanged.connect(
+            partial(self.update_pipline_table_title)
+        )
+
     def load_table_with_btn(self, obj_name):
         algo_name = obj_name.split("_")[1]
         combo_name = eval(
@@ -720,14 +729,70 @@ class API:
             combo_name.setCurrentIndex(1)
             combo_name.setCurrentIndex(index)
 
-    def update_pipline_table_info(self, table, titles):
+    def update_pipline_table_title(self, pipline_name):
+        _, pipline_info = self.db.get_selected_pipline_record(value=pipline_name)
+        if pipline_info != []:
+            self.len_model_piplines = len(
+                pipelines.TABLE_TITLE[pipline_info[0]["pipline_type"]]
+            )
+
+            self.update_pipline_table_info(
+                table=self.ui.tableWidget_pipline_info,
+                titles=pipelines.TABLE_TITLE[pipline_info[0]["pipline_type"]],
+                language=True,
+            )
+            self.assign_table_column(
+                table=self.ui.tableWidget_pipline_info,
+                number_of_rows=self.len_model_piplines,
+                refresh=True,
+            )
+            if pipline_name == self.pipline_name:
+                if self.binary_model_flag:
+                    self.update_table_value(
+                        table=self.ui.tableWidget_pipline_info,
+                        value=texts.MESSEGES["Part_is_ready"][self.language],
+                        row=0,
+                    )
+                if self.segmentation_model_flag:
+                    self.update_table_value(
+                        table=self.ui.tableWidget_pipline_info,
+                        value=texts.MESSEGES["Part_is_ready"][self.language],
+                        row=1,
+                    )
+                if self.classification_model_flag:
+                    self.update_table_value(
+                        table=self.ui.tableWidget_pipline_info,
+                        value=texts.MESSEGES["Part_is_ready"][self.language],
+                        row=2,
+                    )
+                if self.yolo_model_flag:
+                    if pipline_info[0]["pipline_type"] == "BY":
+                        row = 1
+                    else:
+                        row = 2
+                    self.update_table_value(
+                        table=self.ui.tableWidget_pipline_info,
+                        value=texts.MESSEGES["Part_is_ready"][self.language],
+                        row=row,
+                    )
+
+        elif pipline_name != "":
+            self.ui.create_alert_message(
+                title="ERROR",
+                message=texts.ERRORS["pipline_info_unfetchable"][self.language],
+            )
+
+    def update_pipline_table_info(self, table, titles, language=False):
         table.resizeColumnsToContents()
         table.setColumnCount(2)
         table.setRowCount(len(titles))
         table.horizontalHeader().setSectionResizeMode(sQHeaderView.Stretch)
         table.verticalHeader().setSectionResizeMode(sQHeaderView.Stretch)
         for i, item in enumerate(titles):
-            table_item = sQTableWidgetItem(item)
+            if language:
+                table_item = sQTableWidgetItem(item[self.language])
+            else:
+                table_item = sQTableWidgetItem(item)
             table.setItem(i, 0, table_item)
 
     def update_table_value(self, table, value, row, col=1):
@@ -743,7 +808,7 @@ class API:
                     row=i,
                 )
         else:
-            for item in data_list:
+            for i, item in enumerate(data_list):
                 self.update_table_value(
                     table=table,
                     value=str(item),
@@ -751,7 +816,6 @@ class API:
                 )
 
     def refresh_loadDataset_tabs_in_PBT(self):
-        # tabel updating
         # tabel of data:
         self.update_pipline_table_info(
             table=self.ui.tableWidget_data_info,
@@ -762,20 +826,19 @@ class API:
             ],
         )
         # table of pipline:
-        self.update_pipline_table_info(
-            table=self.ui.tableWidget_pipline_info,
-            titles=[
-                texts.Titles["binary_pipline"][self.language],
-                texts.Titles["segmention_pipline"][self.language],
-                texts.Titles["classification_pipline"][self.language],
-                texts.Titles["yolo_pipline"][self.language],
-            ],
+        self.update_pipline_table_title(
+            pipline_name=self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
         )
+        # [
+        #         texts.Titles["binary_pipline"][self.language],
+        #         texts.Titles["segmention_pipline"][self.language],
+        #         texts.Titles["classification_pipline"][self.language],
+        #         texts.Titles["yolo_pipline"][self.language],
+        #     ],
 
         # progressbar updating
-        self.ui.frame_120.setFixedWidth(0)
-        self.ui.frame_120.setFixedHeight(0)
         # self.ui.pgbar_pipline_creation.setFixedWidth(0)
+        self.ui.frame_120.setFixedHeight(0)
         # self.ui.pgbar_pipline_creation.setFixedHeight(0)
 
         # combobox updating
@@ -784,7 +847,6 @@ class API:
         self.add_piplines_in_combobox()
         # checkbox updating
         self.ui.chbox_prefectdata_in_PBT_page.setChecked(True)
-        # self.ui.chbox_defectdata_in_PBT_page.setChecked(True)
         # lineEdit updating
         self.ui.lineEdit_of_path_displayment_in_PBT_page.setText("")
 
@@ -1016,6 +1078,7 @@ class API:
             self.evaluate_model_on_selected_model
         )
         self.ui.BTN_set_pipline_in_PBT_page.clicked.connect(self.set_pipline)
+        self.ui.BTN_reset_pipline_in_PBT_page.clicked.connect(self.reset_pipline)
 
         self.ui.BTN_prev_original_image_in_PBT_page.clicked.connect(
             partial(
@@ -4258,7 +4321,7 @@ class API:
 
     # ______________________________________________________________________________________________________________________
 
-    def set_pipline_of_model(self, id):
+    def set_pipline_of_model(self, id, flag_creation):
         """this function connect to the thread of model creation
         for getting it's signal and update UI
 
@@ -4267,71 +4330,188 @@ class API:
         id : int
             this number indicate the pesentage of model creation process
         """
-        if id == 1:  # binary model build
-            self.b_model = self.ModelsCreation.b_model
-            # self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(50)
+
+        if id == 0:
+            self.ui.create_alert_message(
+                title="ERROR",
+                message=texts.ERRORS["pipline_info_unfetchable"][self.language],
+            )
+        elif id == 1:  # binary model build
+            self.ui.frame_120.setFixedHeight(30)
+            self.pipline_type = self.ModelsCreation.pipline_type
+            if flag_creation:
+                self.b_model = self.ModelsCreation.b_model
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_is_ready"][self.language],
+                    row=0,
+                )
+                self.pgbar_value += 50
+                self.binary_model_flag = True
+            else:
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_can_not_build"][self.language],
+                    row=0,
+                )
         elif id == 2:  # if there is no yolo in pipline structer,segmention model build
-            self.l_model = self.ModelsCreation.l_model
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(70)
-        elif (
-            id == 3
-        ):  # if there is no yolo in pipline structer,classification model build
-            self.c_model = self.ModelsCreation.c_model
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(95)
+            if flag_creation:
+                self.l_model = self.ModelsCreation.l_model
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_is_ready"][self.language],
+                    row=1,
+                )
+                if self.pipline_type == "BS":
+                    self.pgbar_value += 50
+                else:
+                    self.pgbar_value += 30
+                self.segmentation_model_flag = True
+            else:
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_can_not_build"][self.language],
+                    row=1,
+                )
+        elif id == 3:
+            if flag_creation:
+                self.c_model = self.ModelsCreation.c_model
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_is_ready"][self.language],
+                    row=2,
+                )
+                self.pgbar_value += 20
+                self.classification_model_flag = True
+            else:
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_can_not_build"][self.language],
+                    row=2,
+                )
         elif id == 4:  # yolo model build
             self.use_yolo = True
-            self.yolo_model = self.ModelsCreation.yolo_model
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(95)
-        elif id == 5:  # model creation completed
-            self.pipline_OBJ = self.ModelsCreation.pipline_OBJ
-            self.classes_num = self.ModelsCreation.classes_num
-            self.inputtype = self.ModelsCreation.inputtype
-            self.inputsize = self.ModelsCreation.inputsize
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(100)
-
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
-
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedWidth(150)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedHeight(16)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setText(
-                texts.MESSEGES["Pipline_Is_Ready"][self.language].format(
-                    self.pipline_OBJ.get(key=pipelines.PIPELINE_NAME)
+            if self.pipline_type == "BY":
+                row = 1
+                self.pgbar_value += 50
+            else:
+                row = 2
+                self.pgbar_value += 20
+            if flag_creation:
+                self.yolo_model = self.ModelsCreation.yolo_model
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_is_ready"][self.language],
+                    row=row,
                 )
+
+                self.yolo_model_flag = True
+            else:
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_can_not_build"][self.language],
+                    row=3,
+                )
+
+        self.pipline_check = {
+            "BY": (self.yolo_model_flag and self.binary_model_flag),
+            "BS": (self.binary_model_flag and self.segmentation_model_flag),
+            "BSY": (
+                self.yolo_model_flag
+                and self.binary_model_flag
+                and self.segmentation_model_flag
+            ),
+            "BSC": (
+                self.binary_model_flag
+                and self.segmentation_model_flag
+                and self.classification_model_flag
+            ),
+        }
+
+        if self.pipline_check[self.pipline_type]:
+            self.ui.LBL_pipline_is_ready.setFixedHeight(20)
+            self.ui.LBL_pipline_is_ready.setText(
+                texts.MESSEGES["Complete_Pipline"][self.language]
             )
-        else:  # there is problem in the process and the pipline does not build
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedWidth(150)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedHeight(16)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setText(
+        else:
+            self.ui.LBL_pipline_is_ready.setFixedHeight(20)
+            self.ui.LBL_pipline_is_ready.setText(
                 texts.MESSEGES["Pipline_Is_Not_Ready"][self.language]
             )
+
+        if self.pgbar_value > 100:
+            self.pgbar_value = 100
+
+        self.ui.pgbar_pipline_creation.setValue(self.pgbar_value)
+        if self.pgbar_value == 100:
+            self.ui.frame_120.setFixedHeight(0)
+            self.ui.BTN_set_pipline_in_PBT_page.setEnabled(False)
+            self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
+
+        # self.pipline_OBJ = self.ModelsCreation.pipline_OBJ
+        # self.classes_num = self.ModelsCreation.classes_num
+        # self.inputtype = self.ModelsCreation.inputtype
+        # self.inputsize = self.ModelsCreation.inputsize
+        # self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
+
+    def reset_pipline(self):
+        self.pgbar_value = 0
+        self.ui.pgbar_pipline_creation.setValue(self.pgbar_value)
+        self.ui.frame_120.setFixedHeight(0)
+        self.assign_table_column(
+            table=self.ui.tableWidget_pipline_info,
+            number_of_rows=self.len_model_piplines,
+            refresh=True,
+        )
+        self.binary_model_flag = False
+        self.segmentation_model_flag = False
+        self.classification_model_flag = False
+        self.yolo_model_flag = False
+        self.ui.LBL_pipline_is_ready.setText("")
+        self.ui.LBL_pipline_is_ready.setFixedHeight(0)
+        self.ui.BTN_set_pipline_in_PBT_page.setEnabled(True)
+        self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(False)
+        self.pipline_name = ""
 
     def set_pipline(self):
         """this function connect to set button in ui,at PBT page
         this creates models of selected
         this shows notif of it on ui
         """
-        self.load_binary_images_list_in_PBT_load_dataset_page()
-        # display progressBar of progress of creating and loading models of pipline
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(151)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(23)
-
         # CREAT PIPLINE OBJ:
-        pipline_name = self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
-        self.use_yolo = False
+        self.pipline_name = (
+            self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
+        )
+        # self.assign_table_column(
+        #     table=self.ui.tableWidget_pipline_info,
+        #     number_of_rows=self.len_model_piplines,
+        #     refresh=True,
+        # )
+        self.assign_table_column(
+            table=self.ui.tableWidget_pipline_info,
+            number_of_rows=self.len_model_piplines,
+            data_list=[texts.MESSEGES["Part_is_not_ready"][self.language]]
+            * self.len_model_piplines,
+            refresh=False,
+        )
 
-        # Threading___________________
+        self.pgbar_value = 0
+        self.ui.pgbar_pipline_creation.setValue(self.pgbar_value)
+        self.binary_model_flag = False
+        self.segmentation_model_flag = False
+        self.classification_model_flag = False
+        self.yolo_model_flag = False
+        self.ui.LBL_pipline_is_ready.setText("")
+        self.ui.LBL_pipline_is_ready.setFixedHeight(0)
+
+        # # Threading___________________
         self.ModelsCreation_thread = QThread()
         self.ModelsCreation = ModelsCreation_worker()
         self.ModelsCreation.set_params(
             login_user_name=self.login_user_name,
             db=self.db,
             language=self.language,
-            pipline_name=pipline_name,
+            pipline_name=self.pipline_name,
         )
 
         self.ModelsCreation.moveToThread(self.ModelsCreation_thread)
@@ -4346,14 +4526,10 @@ class API:
         self.ModelsCreation_thread.start()
 
         self.ui.BTN_set_pipline_in_PBT_page.setEnabled(False)
-        self.ModelsCreation_thread.finished.connect(
-            lambda: self.ui.BTN_set_pipline_in_PBT_page.setEnabled(True)
-        )
+        # self.ModelsCreation_thread.finished.connect(
+        #     lambda: self.ui.BTN_set_pipline_in_PBT_page.setEnabled(True)
+        # )
 
-    # ____________JJ ZONE STOP
-    # _________________________________________________________________________________________________
-    # _________________________________________________________________________________________________
-    # binary-list page functions
     # load binary images list
     def load_binary_images_list(self):
         """this function is used to show datasets images on binarylist page"""
@@ -7084,7 +7260,7 @@ class evaluation_worker(QObject):
 class ModelsCreation_worker(QObject):
     # vars for handling thread
     finished = Signal()
-    model_creation_signal = Signal(int)
+    model_creation_signal = Signal(int, bool)
 
     def set_params(self, login_user_name, db, language, pipline_name):
         """funtion is alternative for init funtion
@@ -7104,39 +7280,35 @@ class ModelsCreation_worker(QObject):
         self.login_user_name = login_user_name
         self.db = db
         self.lang = language
+
         self.pipline_name = pipline_name
 
     def set_pipline(self):
         """main function of class,creating models"""
 
         # creating pipline object
-        self.pipline_OBJ = pipelines.Pipeline(
-            pipeline_root=binary_list_funcs.PIPLINES_PATH,
-            pipeline_name=self.pipline_name,
-        )
+        # self.pipline_OBJ = pipelines.Pipeline(
+        #     pipeline_root=binary_list_funcs.PIPLINES_PATH,
+        #     pipeline_name=self.pipline_name,
+        # )
         # set values of owner and username in pipline obj
-        self.pipline_OBJ.set(key=pipelines.OWNER, value=self.login_user_name)
+        # self.pipline_OBJ.set(key=pipelines.OWNER, value=self.login_user_name)
+
         # load data from database:
         (
             flag,
-            pipline_info,
+            pipline_type,
             binary_model_info,
             LC_model_info,
         ) = self.load_pipline_info_from_database()
-        (
-            classes_num,
-            classes,
-        ) = binary_model_funcs.strInputSize_2_intInputSize(
-            string=LC_model_info[1][0]["classes"],
-            use_for_other_parameter=True,
-        )
+        self.pipline_type = pipline_type
         if flag:
             # set binary model parameter of pipline:
-            self.set_param_of_pipline(
-                flag="binary",
-                modelid=binary_model_info[0]["algo_name"],
-                modelweight=binary_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
-            )
+            # self.set_param_of_pipline(
+            #     flag="binary",
+            #     modelid=binary_model_info[0]["algo_name"],
+            #     modelweight=binary_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
+            # )
             # get model name,map id to nhame
             b_algo_name = binary_model_funcs.translate_binary_algorithm_id_to_name(
                 binary_model_info[0]["algo_name"]
@@ -7145,69 +7317,54 @@ class ModelsCreation_worker(QObject):
             try:
                 self.b_model = (
                     binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-                        algo_id=b_algo_name, input_size=self.inputsize
+                        algo_id=b_algo_name,
+                        input_size=self.inputsize,
+                        weights_path=binary_model_info[0]["weights_path"],
                     )
                 )
                 # send signal for updataing progress bar
-                self.model_creation_signal.emit(1)
-
-                # get number of classes
-                (
-                    classes_num,
-                    classes,
-                ) = binary_model_funcs.strInputSize_2_intInputSize(
-                    string=LC_model_info[1][0]["classes"],
-                    use_for_other_parameter=True,
+                self.model_creation_signal.emit(
+                    1,
+                    True,
                 )
-                self.classes_num = classes_num
             except:
                 # send notif of there is problem in creating models of pipline(here binary)
-                self.model_creation_signal.emit(6)
-                self.finished.emit()
-            if LC_model_info[0] == "yolo":
-                try:
-                    # set yolo model parameter of pipline:
-                    self.set_param_of_pipline(
-                        flag="yolo",
-                        modelid=LC_model_info[1][0]["algo_name"],
-                        modelweight=LC_model_info[1][0]["weights_path"],
-                    )
-                    # create yolo model object
-                    self.yolo_creator(yolo_info=LC_model_info[1])
-                    # send signal for updataing progress bar
-                    self.model_creation_signal.emit(4)
-                except:
-                    # send notif of there is problem in creating models of pipline(here yolo)
-                    self.model_creation_signal.emit(6)
-                    self.finished.emit()
-            else:
-                try:
-                    self.pipline_OBJ.set(key=pipelines.USE_YOLO, value=False)
-                    # self.set_param_of_pipline(flag='SC',modelid='????',modelweight='????')
+                self.model_creation_signal.emit(1, False)
 
+            if "S" in pipline_type:
+                try:
                     # get model name,map id to name
                     l_algo_name = (
                         binary_model_funcs.translate_binary_algorithm_id_to_name(
-                            LC_model_info[0][0]["algo_name"],
+                            LC_model_info["segmentation"][0]["algo_name"],
                             model_type="localization",
                         )
                     )
                     # create segmention model object
                     self.l_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-                        algo_id=l_algo_name, input_size=self.inputsize
+                        algo_id=l_algo_name,
+                        input_size=self.inputsize,
+                        weights_path=LC_model_info["segmentation"][0]["weights_path"],
                     )
                     # send signal for updataing progress bar
-                    self.model_creation_signal.emit(2)
+                    self.model_creation_signal.emit(2, True)
                 except:
                     # send notif of there is problem in creating models of pipline(here segmention)
-                    self.model_creation_signal.emit(6)
-                    self.finished.emit()
+                    self.model_creation_signal.emit(2, False)
 
+            if "C" in pipline_type:
+                (
+                    self.classes_num,
+                    _,
+                ) = binary_model_funcs.strInputSize_2_intInputSize(
+                    string=LC_model_info["classification"][0]["classes"],
+                    use_for_other_parameter=True,
+                )
                 try:
                     # get model name,map id to name
                     c_algo_name = (
                         binary_model_funcs.translate_binary_algorithm_id_to_name(
-                            LC_model_info[1][0]["algo_name"],
+                            LC_model_info["classification"][0]["algo_name"],
                             model_type="classification",
                         )
                     )
@@ -7215,36 +7372,126 @@ class ModelsCreation_worker(QObject):
                     self.c_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
                         algo_id=c_algo_name,
                         input_size=self.inputsize,
-                        num_class=classes_num,
+                        num_class=self.classes_num,
                         mode="categorical",
+                        weights_path=LC_model_info["classification"][0]["weights_path"],
                     )
                     # send signal for updataing progress bar
-                    self.model_creation_signal.emit(3)
+                    self.model_creation_signal.emit(3, True)
                 except:
                     # send notif of there is problem in creating models of pipline(here segmention)
-                    self.model_creation_signal.emit(6)
-                    self.finished.emit()
+                    self.model_creation_signal.emit(3, False)
 
-            self.model_creation_signal.emit(5)
-            self.finished.emit()
+            if "Y" in pipline_type:
+                (
+                    self.classes_num,
+                    _,
+                ) = binary_model_funcs.strInputSize_2_intInputSize(
+                    string=LC_model_info["yolo"][0]["classes"],
+                    use_for_other_parameter=True,
+                )
+                try:
+                    # create yolo model object
+                    self.yolo_creator(yolo_info=LC_model_info["yolo"][0])
+                    # send signal for updataing progress bar
+                    self.model_creation_signal.emit(4, True)
+                except:
+                    # send notif of there is problem in creating models of pipline(here yolo)
+                    self.model_creation_signal.emit(4, False)
+
+            if pipline_type == "BS":
+                self.classes_num = 1
         else:
-            self.model_creation_signal.emit(6)
-            self.finished.emit()
+            self.model_creation_signal.emit(
+                0,
+                False,
+            )
+        self.finished.emit()
+
+    # ___________________________________________________________________________
+
+    #     if LC_model_info[0] == "yolo":
+    #         try:
+    #             # set yolo model parameter of pipline:
+    #             self.set_param_of_pipline(
+    #                 flag="yolo",
+    #                 modelid=LC_model_info[1][0]["algo_name"],
+    #                 modelweight=LC_model_info[1][0]["weights_path"],
+    #             )
+    #             # create yolo model object
+    #             self.yolo_creator(yolo_info=LC_model_info[1])
+    #             # send signal for updataing progress bar
+    #             self.model_creation_signal.emit(4)
+    #         except:
+    #             # send notif of there is problem in creating models of pipline(here yolo)
+    #             self.model_creation_signal.emit(6)
+    #             self.finished.emit()
+    #     else:
+    #         try:
+    #             self.pipline_OBJ.set(key=pipelines.USE_YOLO, value=False)
+    #             # self.set_param_of_pipline(flag='SC',modelid='????',modelweight='????')
+
+    #             # get model name,map id to name
+    #             l_algo_name = (
+    #                 binary_model_funcs.translate_binary_algorithm_id_to_name(
+    #                     LC_model_info[0][0]["algo_name"],
+    #                     model_type="localization",
+    #                 )
+    #             )
+    #             # create segmention model object
+    #             self.l_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
+    #                 algo_id=l_algo_name, input_size=self.inputsize
+    #             )
+    #             # send signal for updataing progress bar
+    #             self.model_creation_signal.emit(2)
+    #         except:
+    #             # send notif of there is problem in creating models of pipline(here segmention)
+    #             self.model_creation_signal.emit(6)
+    #             self.finished.emit()
+
+    #         try:
+    #             # get model name,map id to name
+    #             c_algo_name = (
+    #                 binary_model_funcs.translate_binary_algorithm_id_to_name(
+    #                     LC_model_info[1][0]["algo_name"],
+    #                     model_type="classification",
+    #                 )
+    #             )
+    #             # create classification model object
+    #             self.c_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
+    #                 algo_id=c_algo_name,
+    #                 input_size=self.inputsize,
+    #                 num_class=classes_num,
+    #                 mode="categorical",
+    #             )
+    #             # send signal for updataing progress bar
+    #             self.model_creation_signal.emit(3)
+    #         except:
+    #             # send notif of there is problem in creating models of pipline(here segmention)
+    #             self.model_creation_signal.emit(6)
+    #             self.finished.emit()
+
+    #     self.model_creation_signal.emit(5)
+    #     self.finished.emit()
+    # else:
+    #     self.model_creation_signal.emit(6)
+    #     self.finished.emit()
 
     def load_pipline_info_from_database(self):
         """load required data for database"""
 
-        flag = False  # indicate data fetched correctly
+        flag = True  # indicate data fetched correctly
         pipline_info, binary_model_info = None, None
-        LC_model_info = []
-
+        LC_model_info = {"yolo": None, "segmentation": None, "classification": None}
         # load pipline info
         _, pipline_info = self.db.get_selected_pipline_record(value=self.pipline_name)
+        pipline_type = pipline_info[0]["pipline_type"]
         if pipline_info != []:
             # load binary model info
             _, binary_model_info = self.db.get_model(
                 self.db.binary_model, pipline_info[0]["binary_weight_path"]
             )
+
             if binary_model_info != []:
                 # get input type of pipline e.g. splited or resized
                 self.inputtype = binary_model_info[0]["input_type"]
@@ -7252,34 +7499,36 @@ class ModelsCreation_worker(QObject):
                 self.inputsize = binary_model_funcs.strInputSize_2_intInputSize(
                     string=binary_model_info[0]["input_size"]
                 )
+            else:
+                flag = False
 
-                if pipline_info[0]["use_yolo"] == "True":
-                    _, yolo_model_info = self.db.get_model(
-                        self.db.yolo, pipline_info[0]["yolo_weight_path"]
-                    )
-                    if yolo_model_info != []:
-                        LC_model_info = ["yolo", yolo_model_info]
-                        flag = True
-
+            if "S" in pipline_type:
+                # load segmnetion model
+                _, localiztion_model_info = self.db.get_model(
+                    self.db.localiztion, pipline_info[0]["localization_weight_path"]
+                )
+                if localiztion_model_info != []:
+                    LC_model_info["segmentation"] = localiztion_model_info
                 else:
-                    # load segmnetion model
-                    _, localiztion_model_info = self.db.get_model(
-                        self.db.localiztion, pipline_info[0]["localization_weight_path"]
-                    )
-                    if localiztion_model_info != []:
-                        # load classification model
-                        _, classification_model_info = self.db.get_model(
-                            self.db.classification,
-                            pipline_info[0]["classification_weight_path"],
-                        )
-                        if classification_model_info != []:
-                            LC_model_info = [
-                                localiztion_model_info,
-                                classification_model_info,
-                            ]
-                            flag = True
+                    flag = False
 
-        return flag, pipline_info, binary_model_info, LC_model_info
+            if "C" in pipline_type:
+                _, classification_model_info = self.db.get_model(
+                    self.db.classification,
+                    pipline_info[0]["classification_weight_path"],
+                )
+                if classification_model_info != []:
+                    LC_model_info["classification"] = classification_model_info
+            if "Y" in pipline_type:
+                _, yolo_model_info = self.db.get_model(
+                    self.db.yolo, pipline_info[0]["yolo_weight_path"]
+                )
+                if yolo_model_info != []:
+                    LC_model_info["yolo"] = yolo_model_info
+                else:
+                    flag = False
+
+        return flag, pipline_type, binary_model_info, LC_model_info
 
     def set_param_of_pipline(self, flag, modelid, modelweight):
         """function for setting ID&WEIGHT models in pipline object
@@ -7354,9 +7603,9 @@ class ModelsCreation_worker(QObject):
         yolo_info : list
             list contains dictionary of yolo data
         """
-        device = select_device("", batch_size=yolo_info[0]["batch_size"])
+        device = select_device("", batch_size=yolo_info["batch_size"])
         self.yolo_model = DetectMultiBackend(
-            weights=yolo_info[0]["weights_path"],
+            weights=yolo_info["weights_path"],
             device=device,
             dnn=False,
             fp16=True,

@@ -709,7 +709,7 @@ border: 1px solid black;
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>images/icons/cil-airplane-mode-off.png</normaloff>images/icons/cil-airplane-mode-off.png</iconset>
+                <normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/cil-airplane-mode-off.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/cil-airplane-mode-off.png</iconset>
               </property>
              </widget>
             </widget>
@@ -1618,7 +1618,7 @@ Classification</string>
                    <string/>
                   </property>
                   <property name="pixmap">
-                   <pixmap>images/images/dorsa_oxin_white.png</pixmap>
+                   <pixmap>../../Users/DORSA-PC1/.designer/backup/images/images/dorsa_oxin_white.png</pixmap>
                   </property>
                   <property name="scaledContents">
                    <bool>true</bool>
@@ -1834,7 +1834,7 @@ QPushButton:hover {
                      </property>
                      <property name="icon">
                       <iconset>
-                       <normaloff>images/enter.png</normaloff>images/enter.png</iconset>
+                       <normaloff>../../Users/DORSA-PC1/.designer/backup/images/enter.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/enter.png</iconset>
                      </property>
                      <property name="iconSize">
                       <size>
@@ -1981,7 +1981,7 @@ QPushButton:hover {
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>images/icons/person.png</normaloff>images/icons/person.png</iconset>
+                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/person.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/person.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -2054,7 +2054,7 @@ QPushButton:hover {
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>images/icons/icon_help.png</normaloff>images/icons/icon_help.png</iconset>
+                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/icon_help.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/icon_help.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -2089,7 +2089,7 @@ QPushButton:hover {
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>images/icons/icon_minimize.png</normaloff>images/icons/icon_minimize.png</iconset>
+                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/icon_minimize.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/icon_minimize.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -2134,7 +2134,7 @@ QPushButton:hover {
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>images/icons/icon_maximize.png</normaloff>images/icons/icon_maximize.png</iconset>
+                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/icon_maximize.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/icon_maximize.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -2169,7 +2169,7 @@ QPushButton:hover {
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>images/icons/cil-x.png</normaloff>images/icons/cil-x.png</iconset>
+                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/cil-x.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/cil-x.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -2829,7 +2829,7 @@ QPushButton:enabled-hover{
                                          </property>
                                          <property name="icon">
                                           <iconset>
-                                           <normaloff>../../Users/DORSA-PC1/Desktop/images/link.png</normaloff>../../Users/DORSA-PC1/Desktop/images/link.png</iconset>
+                                           <normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/link.png</normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/link.png</iconset>
                                          </property>
                                         </widget>
                                        </item>
@@ -2882,7 +2882,7 @@ QPushButton:enabled-hover {
                                          </property>
                                          <property name="icon">
                                           <iconset>
-                                           <normaloff>../../Users/DORSA-PC1/Desktop/images/disconnected-chains.png</normaloff>../../Users/DORSA-PC1/Desktop/images/disconnected-chains.png</iconset>
+                                           <normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/disconnected-chains.png</normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/disconnected-chains.png</iconset>
                                          </property>
                                          <property name="iconSize">
                                           <size>
@@ -3325,7 +3325,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3352,7 +3352,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3376,7 +3376,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3400,7 +3400,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3424,7 +3424,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3448,7 +3448,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3472,7 +3472,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3496,7 +3496,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3520,7 +3520,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3544,7 +3544,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3568,7 +3568,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3602,7 +3602,7 @@ background-color:Transparent;
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/camtop.png</normaloff>images/camtop.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/camtop.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3682,7 +3682,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3706,7 +3706,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3730,7 +3730,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3754,7 +3754,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3778,7 +3778,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3802,7 +3802,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3826,7 +3826,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3850,7 +3850,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3874,7 +3874,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3898,7 +3898,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3922,7 +3922,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -3946,7 +3946,7 @@ border-color:Transparent</string>
                                                 </property>
                                                 <property name="icon">
                                                  <iconset>
-                                                  <normaloff>images/cambtm.png</normaloff>images/cambtm.png</iconset>
+                                                  <normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/cambtm.png</iconset>
                                                 </property>
                                                 <property name="iconSize">
                                                  <size>
@@ -4644,7 +4644,7 @@ border:None;</string>
                                          <x>0</x>
                                          <y>0</y>
                                          <width>488</width>
-                                         <height>32</height>
+                                         <height>30</height>
                                         </rect>
                                        </property>
                                        <property name="sizePolicy">
@@ -7925,7 +7925,7 @@ border-radius: 8px;</string>
                                            </property>
                                            <property name="icon">
                                             <iconset>
-                                             <normaloff>images/icons/cil-arrow-circle-right.png</normaloff>images/icons/cil-arrow-circle-right.png</iconset>
+                                             <normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/cil-arrow-circle-right.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/cil-arrow-circle-right.png</iconset>
                                            </property>
                                            <property name="iconSize">
                                             <size>
@@ -7964,7 +7964,7 @@ border-radius: 8px;</string>
                                            </property>
                                            <property name="icon">
                                             <iconset>
-                                             <normaloff>images/icons/cil-arrow-circle-left.png</normaloff>images/icons/cil-arrow-circle-left.png</iconset>
+                                             <normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/cil-arrow-circle-left.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/icons/cil-arrow-circle-left.png</iconset>
                                            </property>
                                            <property name="iconSize">
                                             <size>
@@ -7993,7 +7993,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>692</width>
-                                            <height>18</height>
+                                            <height>20</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -8297,7 +8297,7 @@ border-radius: 8px;</string>
                                        <string/>
                                       </property>
                                       <property name="pixmap">
-                                       <pixmap>../../Users/UI/2.jpg</pixmap>
+                                       <pixmap>../../Users/DORSA-PC1/Users/UI/2.jpg</pixmap>
                                       </property>
                                       <property name="scaledContents">
                                        <bool>true</bool>
@@ -8437,7 +8437,7 @@ color:black;</string>
                                              <string/>
                                             </property>
                                             <property name="pixmap">
-                                             <pixmap>images/pngaaa.com-4780825 - Copy.png</pixmap>
+                                             <pixmap>../../Users/DORSA-PC1/.designer/backup/images/pngaaa.com-4780825 - Copy.png</pixmap>
                                             </property>
                                             <property name="scaledContents">
                                              <bool>true</bool>
@@ -8539,7 +8539,7 @@ color:black;</string>
                                              <string/>
                                             </property>
                                             <property name="pixmap">
-                                             <pixmap>images/pngaaa.com-4780825.png</pixmap>
+                                             <pixmap>../../Users/DORSA-PC1/.designer/backup/images/pngaaa.com-4780825.png</pixmap>
                                             </property>
                                             <property name="scaledContents">
                                              <bool>true</bool>
@@ -8787,7 +8787,7 @@ border: None</string>
                                               </property>
                                               <property name="icon">
                                                <iconset>
-                                                <normaloff>images/plus.png</normaloff>images/plus.png</iconset>
+                                                <normaloff>../../Users/DORSA-PC1/.designer/backup/images/plus.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/plus.png</iconset>
                                               </property>
                                               <property name="iconSize">
                                                <size>
@@ -8879,7 +8879,7 @@ border: None</string>
                                               </property>
                                               <property name="icon">
                                                <iconset>
-                                                <normaloff>images/minus.png</normaloff>images/minus.png</iconset>
+                                                <normaloff>../../Users/DORSA-PC1/.designer/backup/images/minus.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/minus.png</iconset>
                                               </property>
                                               <property name="iconSize">
                                                <size>
@@ -9487,7 +9487,7 @@ color:white;</string>
                                             <string/>
                                            </property>
                                            <property name="pixmap">
-                                            <pixmap>../../Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825.png</pixmap>
+                                            <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825.png</pixmap>
                                            </property>
                                            <property name="scaledContents">
                                             <bool>true</bool>
@@ -9549,7 +9549,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>18</height>
+                                        <height>28</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -9598,7 +9598,7 @@ font-size: 30%;</string>
                                           <string/>
                                          </property>
                                          <property name="pixmap">
-                                          <pixmap>../../Users/.designer/train/oxin/03-11-2021 09-43-52-296900__0.jpg</pixmap>
+                                          <pixmap>../../Users/DORSA-PC1/Users/.designer/train/oxin/03-11-2021 09-43-52-296900__0.jpg</pixmap>
                                          </property>
                                          <property name="scaledContents">
                                           <bool>true</bool>
@@ -9739,7 +9739,7 @@ font-size: 30%;</string>
                                             <string/>
                                            </property>
                                            <property name="pixmap">
-                                            <pixmap>../../Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825.png</pixmap>
+                                            <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825.png</pixmap>
                                            </property>
                                            <property name="scaledContents">
                                             <bool>true</bool>
@@ -9801,7 +9801,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>18</height>
+                                        <height>28</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -9850,7 +9850,7 @@ font-size: 30%;</string>
                                           <string/>
                                          </property>
                                          <property name="pixmap">
-                                          <pixmap>../../Users/.designer/train/oxin/03-11-2021 09-43-52-296900__0.jpg</pixmap>
+                                          <pixmap>../../Users/DORSA-PC1/Users/.designer/train/oxin/03-11-2021 09-43-52-296900__0.jpg</pixmap>
                                          </property>
                                          <property name="scaledContents">
                                           <bool>true</bool>
@@ -9940,7 +9940,7 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -9992,7 +9992,7 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -10051,7 +10051,7 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/zoom-in.png</normaloff>images/zoom-in.png</iconset>
+                                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/zoom-in.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/zoom-in.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -10103,7 +10103,7 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/zoom-out.png</normaloff>images/zoom-out.png</iconset>
+                                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/zoom-out.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/zoom-out.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -10155,7 +10155,7 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/drag3.png</normaloff>images/drag3.png</iconset>
+                                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/drag3.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/drag3.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -10214,7 +10214,7 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/clipart1919813.png</normaloff>images/clipart1919813.png</iconset>
+                                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/clipart1919813.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/clipart1919813.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -10266,7 +10266,7 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/suggest.png</normaloff>images/suggest.png</iconset>
+                                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/suggest.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/suggest.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -10318,7 +10318,7 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/heatmap.png</normaloff>images/heatmap.png</iconset>
+                                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/heatmap.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/heatmap.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -10377,7 +10377,7 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/x-mark.png</normaloff>images/x-mark.png</iconset>
+                                    <normaloff>../../Users/DORSA-PC1/.designer/backup/images/x-mark.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/x-mark.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
@@ -10474,7 +10474,7 @@ QToolTip {
                                     </property>
                                     <property name="icon">
                                      <iconset>
-                                      <normaloff>images/top_arrow.png</normaloff>images/top_arrow.png</iconset>
+                                      <normaloff>../../Users/DORSA-PC1/.designer/backup/images/top_arrow.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/top_arrow.png</iconset>
                                     </property>
                                     <property name="iconSize">
                                      <size>
@@ -12828,7 +12828,7 @@ QPushButton:hover {
                              </size>
                             </property>
                             <property name="currentIndex">
-                             <number>0</number>
+                             <number>1</number>
                             </property>
                             <widget class="QWidget" name="page_pipeline">
                              <property name="maximumSize">
@@ -13464,8 +13464,8 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>1416</width>
-                                      <height>200</height>
+                                      <width>92</width>
+                                      <height>165</height>
                                      </rect>
                                     </property>
                                     <layout class="QVBoxLayout" name="verticalLayout_107">
@@ -13491,8 +13491,8 @@ color : rgb(0,0,0);</string>
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>1414</width>
-                                          <height>84</height>
+                                          <width>96</width>
+                                          <height>49</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -13661,8 +13661,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>1414</width>
-                                              <height>106</height>
+                                              <width>90</width>
+                                              <height>43</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">
@@ -14505,6 +14505,31 @@ QPushButton:enabled-hover{
                                          </property>
                                         </widget>
                                        </item>
+                                       <item>
+                                        <widget class="QPushButton" name="BTN_reset_pipline_in_PBT_page">
+                                         <property name="enabled">
+                                          <bool>false</bool>
+                                         </property>
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>0</width>
+                                           <height>26</height>
+                                          </size>
+                                         </property>
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>50</width>
+                                           <height>16777215</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">color:white;</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>ReSet</string>
+                                         </property>
+                                        </widget>
+                                       </item>
                                       </layout>
                                      </widget>
                                     </item>
@@ -14761,6 +14786,13 @@ QPushButton:enabled-hover{
                                       </property>
                                       <layout class="QVBoxLayout" name="verticalLayout_59">
                                        <item>
+                                        <widget class="Line" name="line_77">
+                                         <property name="orientation">
+                                          <enum>Qt::Horizontal</enum>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
                                         <widget class="QFrame" name="frame_4">
                                          <property name="frameShape">
                                           <enum>QFrame::StyledPanel</enum>
@@ -14809,6 +14841,13 @@ QPushButton:enabled-hover{
                                         </widget>
                                        </item>
                                        <item>
+                                        <widget class="Line" name="line_143">
+                                         <property name="orientation">
+                                          <enum>Qt::Horizontal</enum>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
                                         <widget class="QTableWidget" name="tableWidget_data_info">
                                          <property name="minimumSize">
                                           <size>
@@ -14840,6 +14879,13 @@ QPushButton:enabled-hover{
                                          </property>
                                          <property name="text">
                                           <string/>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="Line" name="line_75">
+                                         <property name="orientation">
+                                          <enum>Qt::Horizontal</enum>
                                          </property>
                                         </widget>
                                        </item>
@@ -14892,6 +14938,13 @@ QPushButton:enabled-hover{
                                         </widget>
                                        </item>
                                        <item>
+                                        <widget class="Line" name="line_144">
+                                         <property name="orientation">
+                                          <enum>Qt::Horizontal</enum>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
                                         <widget class="QTableWidget" name="tableWidget_pipline_info">
                                          <property name="minimumSize">
                                           <size>
@@ -14905,6 +14958,29 @@ QPushButton:enabled-hover{
                                          <attribute name="verticalHeaderVisible">
                                           <bool>false</bool>
                                          </attribute>
+                                        </widget>
+                                       </item>
+                                       <item alignment="Qt::AlignHCenter">
+                                        <widget class="QLabel" name="LBL_pipline_is_ready">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">background-color: rgb(255, 255, 255);</string>
+                                         </property>
+                                         <property name="text">
+                                          <string/>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="Line" name="line_76">
+                                         <property name="orientation">
+                                          <enum>Qt::Horizontal</enum>
+                                         </property>
                                         </widget>
                                        </item>
                                        <item>
@@ -14953,6 +15029,13 @@ QPushButton:enabled-hover{
                                            </spacer>
                                           </item>
                                          </layout>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="Line" name="line_145">
+                                         <property name="orientation">
+                                          <enum>Qt::Horizontal</enum>
+                                         </property>
                                         </widget>
                                        </item>
                                        <item>
@@ -18160,7 +18243,7 @@ border:Transparent</string>
                                             </property>
                                             <property name="icon">
                                              <iconset>
-                                              <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                              <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</iconset>
                                             </property>
                                             <property name="iconSize">
                                              <size>
@@ -18215,7 +18298,7 @@ border:Transparent</string>
                                             </property>
                                             <property name="icon">
                                              <iconset>
-                                              <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                              <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</iconset>
                                             </property>
                                             <property name="iconSize">
                                              <size>
@@ -18281,7 +18364,7 @@ border:Transparent</string>
                                             </property>
                                             <property name="icon">
                                              <iconset>
-                                              <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                              <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</iconset>
                                             </property>
                                             <property name="iconSize">
                                              <size>
@@ -18337,7 +18420,7 @@ border:Transparent</string>
                                             </property>
                                             <property name="icon">
                                              <iconset>
-                                              <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                              <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</iconset>
                                             </property>
                                             <property name="iconSize">
                                              <size>
@@ -18932,7 +19015,7 @@ border:Transparent</string>
                                         </property>
                                         <property name="icon">
                                          <iconset>
-                                          <normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</iconset>
+                                          <normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/reset.png</iconset>
                                         </property>
                                         <property name="iconSize">
                                          <size>
@@ -19259,7 +19342,7 @@ QPushButton:hover {
                                          <string/>
                                         </property>
                                         <property name="pixmap">
-                                         <pixmap>../../Users/DORSA-PC1/Desktop/images/train_iamge.jpg</pixmap>
+                                         <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/train_iamge.jpg</pixmap>
                                         </property>
                                        </widget>
                                       </item>
@@ -19307,7 +19390,7 @@ QPushButton:hover {
                                          <string/>
                                         </property>
                                         <property name="pixmap">
-                                         <pixmap>../../Users/DORSA-PC1/Desktop/images/val_iamge.jpg</pixmap>
+                                         <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/val_iamge.jpg</pixmap>
                                         </property>
                                        </widget>
                                       </item>
@@ -21639,7 +21722,7 @@ color : rgb(0,0,0);</string>
                                       </property>
                                       <property name="icon">
                                        <iconset>
-                                        <normaloff>images/free-arrows-refresh-icon-2847-thumb.png</normaloff>images/free-arrows-refresh-icon-2847-thumb.png</iconset>
+                                        <normaloff>../../Users/DORSA-PC1/.designer/backup/images/free-arrows-refresh-icon-2847-thumb.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/free-arrows-refresh-icon-2847-thumb.png</iconset>
                                       </property>
                                       <property name="iconSize">
                                        <size>
@@ -21674,7 +21757,7 @@ color : rgb(0,0,0);</string>
                                       </property>
                                       <property name="icon">
                                        <iconset>
-                                        <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                        <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</iconset>
                                       </property>
                                       <property name="iconSize">
                                        <size>
@@ -21730,7 +21813,7 @@ color : rgb(0,0,0);</string>
                                       </property>
                                       <property name="icon">
                                        <iconset>
-                                        <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                        <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</iconset>
                                       </property>
                                       <property name="iconSize">
                                        <size>
@@ -22504,7 +22587,7 @@ QPushButton:hover {
                                         </property>
                                         <property name="icon">
                                          <iconset>
-                                          <normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</iconset>
+                                          <normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/reset.png</iconset>
                                         </property>
                                         <property name="iconSize">
                                          <size>
@@ -22834,7 +22917,7 @@ QPushButton:hover {
                                        <string/>
                                       </property>
                                       <property name="pixmap">
-                                       <pixmap>../../Users/DORSA-PC1/Desktop/images/train_iamge.jpg</pixmap>
+                                       <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/train_iamge.jpg</pixmap>
                                       </property>
                                      </widget>
                                     </item>
@@ -22882,7 +22965,7 @@ QPushButton:hover {
                                        <string/>
                                       </property>
                                       <property name="pixmap">
-                                       <pixmap>../../Users/DORSA-PC1/Desktop/images/val_iamge.jpg</pixmap>
+                                       <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/val_iamge.jpg</pixmap>
                                       </property>
                                      </widget>
                                     </item>
@@ -25121,7 +25204,7 @@ color : rgb(0,0,0);</string>
                                       </property>
                                       <property name="icon">
                                        <iconset>
-                                        <normaloff>images/refresh.png</normaloff>images/refresh.png</iconset>
+                                        <normaloff>../../Users/DORSA-PC1/.designer/backup/images/refresh.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/refresh.png</iconset>
                                       </property>
                                       <property name="iconSize">
                                        <size>
@@ -25156,7 +25239,7 @@ color : rgb(0,0,0);</string>
                                       </property>
                                       <property name="icon">
                                        <iconset>
-                                        <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                        <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</iconset>
                                       </property>
                                       <property name="iconSize">
                                        <size>
@@ -25212,7 +25295,7 @@ color : rgb(0,0,0);</string>
                                       </property>
                                       <property name="icon">
                                        <iconset>
-                                        <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                        <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</iconset>
                                       </property>
                                       <property name="iconSize">
                                        <size>
@@ -25856,7 +25939,7 @@ border:Transparent</string>
                                          </property>
                                          <property name="icon">
                                           <iconset>
-                                           <normaloff>../../Users/DORSA-PC1/Desktop/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/Desktop/images/arrow-left.png</iconset>
+                                           <normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/arrow-left.png</iconset>
                                          </property>
                                          <property name="iconSize">
                                           <size>
@@ -25905,7 +25988,7 @@ border:Transparent</string>
                                          </property>
                                          <property name="icon">
                                           <iconset>
-                                           <normaloff>../../Users/DORSA-PC1/Desktop/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/Desktop/images/arrow-right.png</iconset>
+                                           <normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/arrow-right.png</iconset>
                                          </property>
                                          <property name="iconSize">
                                           <size>
@@ -26752,7 +26835,7 @@ border:Transparent</string>
                                        <string/>
                                       </property>
                                       <property name="pixmap">
-                                       <pixmap>../../Users/DORSA-PC1/Desktop/images/train_iamge.jpg</pixmap>
+                                       <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/train_iamge.jpg</pixmap>
                                       </property>
                                       <property name="alignment">
                                        <set>Qt::AlignCenter</set>
@@ -26812,7 +26895,7 @@ border:Transparent</string>
                                        <string/>
                                       </property>
                                       <property name="pixmap">
-                                       <pixmap>../../Users/DORSA-PC1/Desktop/images/val_iamge.jpg</pixmap>
+                                       <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/val_iamge.jpg</pixmap>
                                       </property>
                                      </widget>
                                     </item>
@@ -29077,7 +29160,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="icon">
                                           <iconset>
-                                           <normaloff>images/refresh.png</normaloff>images/refresh.png</iconset>
+                                           <normaloff>../../Users/DORSA-PC1/.designer/backup/images/refresh.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/refresh.png</iconset>
                                          </property>
                                          <property name="iconSize">
                                           <size>
@@ -29115,7 +29198,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="icon">
                                           <iconset>
-                                           <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                           <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</iconset>
                                          </property>
                                          <property name="iconSize">
                                           <size>
@@ -29171,7 +29254,7 @@ color : rgb(0,0,0);</string>
                                          </property>
                                          <property name="icon">
                                           <iconset>
-                                           <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                           <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</iconset>
                                          </property>
                                          <property name="iconSize">
                                           <size>
@@ -29826,7 +29909,7 @@ QPushButton:hover {
                                         </property>
                                         <property name="icon">
                                          <iconset>
-                                          <normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Desktop/images/reset.png</iconset>
+                                          <normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/reset.png</normaloff>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/reset.png</iconset>
                                         </property>
                                         <property name="iconSize">
                                          <size>
@@ -30159,7 +30242,7 @@ QPushButton:hover {
                                        <string/>
                                       </property>
                                       <property name="pixmap">
-                                       <pixmap>../../Users/DORSA-PC1/Desktop/images/train_iamge.jpg</pixmap>
+                                       <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/train_iamge.jpg</pixmap>
                                       </property>
                                      </widget>
                                     </item>
@@ -30207,7 +30290,7 @@ QPushButton:hover {
                                        <string/>
                                       </property>
                                       <property name="pixmap">
-                                       <pixmap>../../Users/DORSA-PC1/Desktop/images/val_iamge.jpg</pixmap>
+                                       <pixmap>../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/val_iamge.jpg</pixmap>
                                       </property>
                                      </widget>
                                     </item>
@@ -32864,7 +32947,7 @@ color : rgb(0,0,0);</string>
                                       </property>
                                       <property name="icon">
                                        <iconset>
-                                        <normaloff>images/free-arrows-refresh-icon-2847-thumb.png</normaloff>images/free-arrows-refresh-icon-2847-thumb.png</iconset>
+                                        <normaloff>../../Users/DORSA-PC1/.designer/backup/images/free-arrows-refresh-icon-2847-thumb.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/free-arrows-refresh-icon-2847-thumb.png</iconset>
                                       </property>
                                       <property name="iconSize">
                                        <size>
@@ -32899,7 +32982,7 @@ color : rgb(0,0,0);</string>
                                       </property>
                                       <property name="icon">
                                        <iconset>
-                                        <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
+                                        <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png</iconset>
                                       </property>
                                       <property name="iconSize">
                                        <size>
@@ -32955,7 +33038,7 @@ color : rgb(0,0,0);</string>
                                       </property>
                                       <property name="icon">
                                        <iconset>
-                                        <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
+                                        <normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png</iconset>
                                       </property>
                                       <property name="iconSize">
                                        <size>
@@ -33118,7 +33201,7 @@ color : rgb(0,0,0);</string>
                                      <string/>
                                     </property>
                                     <property name="pixmap">
-                                     <pixmap>images/persian.png</pixmap>
+                                     <pixmap>../../Users/DORSA-PC1/.designer/backup/images/persian.png</pixmap>
                                     </property>
                                     <property name="scaledContents">
                                      <bool>true</bool>
@@ -33199,7 +33282,7 @@ color : rgb(0,0,0);</string>
                                      <string/>
                                     </property>
                                     <property name="pixmap">
-                                     <pixmap>../../Users/trainApp_oxin8 (copy)/UI/C:/Users/DORSA-PC1/Desktop/UI/images/persian.png</pixmap>
+                                     <pixmap>../../Users/DORSA-PC1/Users/trainApp_oxin8 (copy)/UI/C:/Users/DORSA-PC1/Desktop/UI/images/persian.png</pixmap>
                                     </property>
                                     <property name="scaledContents">
                                      <bool>true</bool>

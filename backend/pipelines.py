@@ -23,8 +23,29 @@ except:
 
 
 from train_api import ALGORITHM_NAMES
+import texts
 
 # from binary_model_funcs import translate_binary_algorithm_id_to_name
+
+# ______________________________________
+TABLE_TITLE = {
+    "BY": [texts.Titles["binary_pipline"], texts.Titles["yolo_pipline"]],
+    "BSY": [
+        texts.Titles["binary_pipline"],
+        texts.Titles["segmention_pipline"],
+        texts.Titles["yolo_pipline"],
+    ],
+    "BS": [
+        texts.Titles["binary_pipline"],
+        texts.Titles["segmention_pipline"],
+    ],
+    "BSC": [
+        texts.Titles["binary_pipline"],
+        texts.Titles["segmention_pipline"],
+        texts.Titles["classification_pipline"],
+    ],
+}
+
 
 # ____________________________________
 
@@ -341,6 +362,7 @@ MAIN_PARMS = [
     "evaluated_datasets",
 ]
 
+
 # show/set models history to UI tabel
 def set_piplines_on_ui_tabel(ui_obj, values):
     """this function is used to set binary models list on ui binary models list (binary history page)
@@ -429,7 +451,6 @@ def load_all_json_files_by_date(dir_path, reverse=False):
         file_paths = []
 
     for path in file_paths:
-
         path = os.path.normpath(path)
         if path[-4:] == "json":
             # #print(path)
@@ -674,7 +695,6 @@ def filter_piplines(all_content, param_filter):
 def filter_model(param_filter_model, pipline, localization=False):
     param = param_filter_model.keys()
     if param != []:
-
         if MODEL_ID in param:
             if pipline[MODEL_ID] != param_filter_model[MODEL_ID]:
                 return True

@@ -7,6 +7,10 @@ ERRORS = {
         "fa": "محل آدرس خالی است،لطفا یک آدرس قابل قبول وارد نمایید",
         "en": "Path place is empty,enter valid path",
     },
+    "pipline_info_unfetchable": {
+        "fa": "اطلاعات پایپ لاین قابل بازیابی نیست",
+        "en": "pipline info is unfetchable",
+    },
     "ERROR": {"fa": " خطا: ", "en": " ERROR: "},
     "invalid_name": {"fa": " نام پایپ لاین صحیح نمیباشد ", "en": " Invalid Name "},
     "repeat_name": {
@@ -809,7 +813,21 @@ MESSEGES = {
         "fa": "مجموعه داده های سفارشی یافت نشد",
         "en": "Customized Data is not ready",
     },
-    "Pipline_Is_Ready": {"fa": "پایپ لاین {} آماده است ", "en": "pipline {} is ready"},
+    "Part_is_ready": {"fa": "آماده", "en": "ready"},
+    "Part_is_not_ready": {
+        "fa": "آماده نیست",
+        "en": "not ready",
+    },
+    "Part_can_not_build": {"fa": "نمی تواند مدل را بسازد", "en": "can not build model"},
+    "Complete_Pipline": {"fa": "پایپ لاین آماده است", "en": "pipline is ready"},
+    "Pipline_without_Classification": {
+        "fa": "پایپ لاین بدون مدل دسته بندی آماده است",
+        "en": "Pipline is ready without classification",
+    },
+    "Pipline_only_Yolo": {
+        "fa": "پایپ لاین فقط قسمت باینری و یولو دارد",
+        "en": "pipline only has binary and yolo part",
+    },
     "Pipline_Is_Not_Ready": {
         "fa": "پایپ لاین آماده نیست",
         "en": "the pipeline is not built, and not ready",

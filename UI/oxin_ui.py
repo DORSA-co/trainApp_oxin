@@ -614,7 +614,7 @@ class Ui_MainWindow(object):
         self.toggleButton.setStyleSheet(u"background-image: url(:/icons/images/icons/t1.png);\n"
 "")
         icon = QIcon()
-        icon.addFile(u"images/icons/cil-airplane-mode-off.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/icons/cil-airplane-mode-off.png", QSize(), QIcon.Normal, QIcon.Off)
         self.toggleButton.setIcon(icon)
         self.titleLeftApp = QLabel(self.topLogoInfo)
         self.titleLeftApp.setObjectName(u"titleLeftApp")
@@ -942,7 +942,7 @@ class Ui_MainWindow(object):
         self.label_dorsa = QLabel(self.leftBox)
         self.label_dorsa.setObjectName(u"label_dorsa")
         self.label_dorsa.setMaximumSize(QSize(0, 62))
-        self.label_dorsa.setPixmap(QPixmap(u"images/images/dorsa_oxin_white.png"))
+        self.label_dorsa.setPixmap(QPixmap(u"../../Users/DORSA-PC1/.designer/backup/images/images/dorsa_oxin_white.png"))
         self.label_dorsa.setScaledContents(True)
         self.label_dorsa.setMargin(0)
 
@@ -1037,7 +1037,7 @@ class Ui_MainWindow(object):
 "	background-color:  rgb(197 , 195,196);\n"
 "}")
         icon1 = QIcon()
-        icon1.addFile(u"images/enter.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/enter.png", QSize(), QIcon.Normal, QIcon.Off)
         self.pushButton_7.setIcon(icon1)
         self.pushButton_7.setIconSize(QSize(24, 24))
 
@@ -1092,7 +1092,7 @@ class Ui_MainWindow(object):
         self.login_btn.setMaximumSize(QSize(28, 28))
         self.login_btn.setCursor(QCursor(Qt.PointingHandCursor))
         icon2 = QIcon()
-        icon2.addFile(u"images/icons/person.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon2.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/icons/person.png", QSize(), QIcon.Normal, QIcon.Off)
         self.login_btn.setIcon(icon2)
         self.login_btn.setIconSize(QSize(20, 20))
 
@@ -1117,7 +1117,7 @@ class Ui_MainWindow(object):
         self.helpButton.setCursor(QCursor(Qt.PointingHandCursor))
         self.helpButton.setStyleSheet(u"")
         icon4 = QIcon()
-        icon4.addFile(u"images/icons/icon_help.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon4.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/icons/icon_help.png", QSize(), QIcon.Normal, QIcon.Off)
         self.helpButton.setIcon(icon4)
         self.helpButton.setIconSize(QSize(17, 17))
 
@@ -1129,7 +1129,7 @@ class Ui_MainWindow(object):
         self.miniButton.setMaximumSize(QSize(28, 28))
         self.miniButton.setCursor(QCursor(Qt.PointingHandCursor))
         icon5 = QIcon()
-        icon5.addFile(u"images/icons/icon_minimize.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon5.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/icons/icon_minimize.png", QSize(), QIcon.Normal, QIcon.Off)
         self.miniButton.setIcon(icon5)
         self.miniButton.setIconSize(QSize(20, 20))
 
@@ -1148,7 +1148,7 @@ class Ui_MainWindow(object):
         self.maxiButton.setFont(font2)
         self.maxiButton.setCursor(QCursor(Qt.PointingHandCursor))
         icon6 = QIcon()
-        icon6.addFile(u"images/icons/icon_maximize.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon6.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/icons/icon_maximize.png", QSize(), QIcon.Normal, QIcon.Off)
         self.maxiButton.setIcon(icon6)
         self.maxiButton.setIconSize(QSize(20, 20))
 
@@ -1160,7 +1160,7 @@ class Ui_MainWindow(object):
         self.closeButton.setMaximumSize(QSize(28, 28))
         self.closeButton.setCursor(QCursor(Qt.PointingHandCursor))
         icon7 = QIcon()
-        icon7.addFile(u"images/icons/cil-x.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon7.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/icons/cil-x.png", QSize(), QIcon.Normal, QIcon.Off)
         self.closeButton.setIcon(icon7)
         self.closeButton.setIconSize(QSize(20, 20))
 
@@ -1474,7 +1474,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon8 = QIcon()
-        icon8.addFile(u"../../Users/DORSA-PC1/Desktop/images/link.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon8.addFile(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/link.png", QSize(), QIcon.Normal, QIcon.Off)
         self.connect_camera_btn.setIcon(icon8)
 
         self.verticalLayout_52.addWidget(self.connect_camera_btn)
@@ -1509,7 +1509,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon9 = QIcon()
-        icon9.addFile(u"../../Users/DORSA-PC1/Desktop/images/disconnected-chains.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon9.addFile(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/disconnected-chains.png", QSize(), QIcon.Normal, QIcon.Off)
         self.disconnect_camera_btn.setIcon(icon9)
         self.disconnect_camera_btn.setIconSize(QSize(20, 18))
 
@@ -1680,7 +1680,7 @@ class Ui_MainWindow(object):
         self.camera01_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
         icon10 = QIcon()
-        icon10.addFile(u"images/camtop.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon10.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/camtop.png", QSize(), QIcon.Normal, QIcon.Off)
         self.camera01_btn.setIcon(icon10)
         self.camera01_btn.setIconSize(QSize(20, 20))
         self.camera01_btn.setFlat(False)
@@ -1838,7 +1838,7 @@ class Ui_MainWindow(object):
         self.camera13_btn.setStyleSheet(u"background:Transparent;\n"
 "border-color:Transparent")
         icon11 = QIcon()
-        icon11.addFile(u"images/cambtm.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon11.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/cambtm.png", QSize(), QIcon.Normal, QIcon.Off)
         self.camera13_btn.setIcon(icon11)
         self.camera13_btn.setIconSize(QSize(20, 20))
 
@@ -2229,7 +2229,7 @@ class Ui_MainWindow(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 488, 32))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 488, 30))
         sizePolicy7 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy7.setHorizontalStretch(0)
         sizePolicy7.setVerticalStretch(0)
@@ -3940,7 +3940,7 @@ class Ui_MainWindow(object):
         self.next_coil_btn.setStyleSheet(u"background-color: rgb(71, 71, 71);\n"
 "border-radius: 8px;")
         icon12 = QIcon()
-        icon12.addFile(u"images/icons/cil-arrow-circle-right.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon12.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/icons/cil-arrow-circle-right.png", QSize(), QIcon.Normal, QIcon.Off)
         self.next_coil_btn.setIcon(icon12)
         self.next_coil_btn.setIconSize(QSize(13, 13))
 
@@ -3954,7 +3954,7 @@ class Ui_MainWindow(object):
         self.prev_coil_btn.setStyleSheet(u"background-color: rgb(71, 71, 71);\n"
 "border-radius: 8px;")
         icon13 = QIcon()
-        icon13.addFile(u"images/icons/cil-arrow-circle-left.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon13.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/icons/cil-arrow-circle-left.png", QSize(), QIcon.Normal, QIcon.Off)
         self.prev_coil_btn.setIcon(icon13)
         self.prev_coil_btn.setIconSize(QSize(13, 13))
 
@@ -3969,7 +3969,7 @@ class Ui_MainWindow(object):
         self.scrollArea_5.setWidgetResizable(True)
         self.scrollAreaWidgetContents_6 = QWidget()
         self.scrollAreaWidgetContents_6.setObjectName(u"scrollAreaWidgetContents_6")
-        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 692, 18))
+        self.scrollAreaWidgetContents_6.setGeometry(QRect(0, 0, 692, 20))
         self.horizontalLayout_228 = QHBoxLayout(self.scrollAreaWidgetContents_6)
         self.horizontalLayout_228.setObjectName(u"horizontalLayout_228")
         self.horizontalLayout_228.setContentsMargins(9, 0, 0, 0)
@@ -4151,7 +4151,7 @@ class Ui_MainWindow(object):
         self.crop_image.setBaseSize(QSize(240, 130))
         self.crop_image.setFrameShape(QFrame.Box)
         self.crop_image.setFrameShadow(QFrame.Plain)
-        self.crop_image.setPixmap(QPixmap(u"../../Users/UI/2.jpg"))
+        self.crop_image.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/UI/2.jpg"))
         self.crop_image.setScaledContents(True)
         self.crop_image.setWordWrap(False)
         self.crop_image.setMargin(2)
@@ -4205,7 +4205,7 @@ class Ui_MainWindow(object):
 "/* margin-top: 1ex; /* leave space at the top for the title */\n"
 "text-Align:left;\n"
 "color:black;")
-        self.label_234.setPixmap(QPixmap(u"images/pngaaa.com-4780825 - Copy.png"))
+        self.label_234.setPixmap(QPixmap(u"../../Users/DORSA-PC1/.designer/backup/images/pngaaa.com-4780825 - Copy.png"))
         self.label_234.setScaledContents(True)
 
         self.horizontalLayout_151.addWidget(self.label_234)
@@ -4254,7 +4254,7 @@ class Ui_MainWindow(object):
 "/* margin-top: 1ex; /* leave space at the top for the title */\n"
 "text-Align:left;\n"
 "color:black;")
-        self.label_233.setPixmap(QPixmap(u"images/pngaaa.com-4780825.png"))
+        self.label_233.setPixmap(QPixmap(u"../../Users/DORSA-PC1/.designer/backup/images/pngaaa.com-4780825.png"))
         self.label_233.setScaledContents(True)
 
         self.horizontalLayout_151.addWidget(self.label_233)
@@ -4362,7 +4362,7 @@ class Ui_MainWindow(object):
         self.add_btn_SI.setStyleSheet(u"background-color: None;\n"
 "border: None")
         icon14 = QIcon()
-        icon14.addFile(u"images/plus.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon14.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/plus.png", QSize(), QIcon.Normal, QIcon.Off)
         self.add_btn_SI.setIcon(icon14)
         self.add_btn_SI.setIconSize(QSize(26, 26))
 
@@ -4395,7 +4395,7 @@ class Ui_MainWindow(object):
         self.remove_btn_SI.setStyleSheet(u"background-color: None;\n"
 "border: None")
         icon15 = QIcon()
-        icon15.addFile(u"images/minus.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon15.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/minus.png", QSize(), QIcon.Normal, QIcon.Off)
         self.remove_btn_SI.setIcon(icon15)
         self.remove_btn_SI.setIconSize(QSize(26, 26))
 
@@ -4732,7 +4732,7 @@ class Ui_MainWindow(object):
         self.label_1311 = QLabel(self.frame_661)
         self.label_1311.setObjectName(u"label_1311")
         self.label_1311.setMaximumSize(QSize(23, 8))
-        self.label_1311.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825.png"))
+        self.label_1311.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825.png"))
         self.label_1311.setScaledContents(True)
 
         self.verticalLayout_931.addWidget(self.label_1311)
@@ -4764,7 +4764,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side_4.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 18))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 288, 28))
         self.scrollAreaWidgetContents_2.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_2.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_90_2 = QHBoxLayout(self.scrollAreaWidgetContents_2)
@@ -4775,7 +4775,7 @@ class Ui_MainWindow(object):
         self.up_side_technical.setMinimumSize(QSize(288, 0))
         self.up_side_technical.setMaximumSize(QSize(280, 16777215))
         self.up_side_technical.setStyleSheet(u"")
-        self.up_side_technical.setPixmap(QPixmap(u"../../Users/.designer/train/oxin/03-11-2021 09-43-52-296900__0.jpg"))
+        self.up_side_technical.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/.designer/train/oxin/03-11-2021 09-43-52-296900__0.jpg"))
         self.up_side_technical.setScaledContents(True)
 
         self.horizontalLayout_90_2.addWidget(self.up_side_technical)
@@ -4825,7 +4825,7 @@ class Ui_MainWindow(object):
         self.label_125 = QLabel(self.frame_64_2)
         self.label_125.setObjectName(u"label_125")
         self.label_125.setMaximumSize(QSize(23, 8))
-        self.label_125.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825.png"))
+        self.label_125.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/pngaaa.com-4780825.png"))
         self.label_125.setScaledContents(True)
 
         self.verticalLayout_92.addWidget(self.label_125)
@@ -4852,7 +4852,7 @@ class Ui_MainWindow(object):
         self.scrollArea_up_side_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_51 = QWidget()
         self.scrollAreaWidgetContents_51.setObjectName(u"scrollAreaWidgetContents_51")
-        self.scrollAreaWidgetContents_51.setGeometry(QRect(0, 0, 288, 18))
+        self.scrollAreaWidgetContents_51.setGeometry(QRect(0, 0, 288, 28))
         self.scrollAreaWidgetContents_51.setMinimumSize(QSize(288, 0))
         self.scrollAreaWidgetContents_51.setMaximumSize(QSize(280, 16777215))
         self.horizontalLayout_1141 = QHBoxLayout(self.scrollAreaWidgetContents_51)
@@ -4863,7 +4863,7 @@ class Ui_MainWindow(object):
         self.down_side_technical.setEnabled(True)
         self.down_side_technical.setMinimumSize(QSize(0, 0))
         self.down_side_technical.setMaximumSize(QSize(16777215, 16777215))
-        self.down_side_technical.setPixmap(QPixmap(u"../../Users/.designer/train/oxin/03-11-2021 09-43-52-296900__0.jpg"))
+        self.down_side_technical.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/.designer/train/oxin/03-11-2021 09-43-52-296900__0.jpg"))
         self.down_side_technical.setScaledContents(True)
 
         self.horizontalLayout_1141.addWidget(self.down_side_technical)
@@ -4926,7 +4926,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon16 = QIcon()
-        icon16.addFile(u"images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon16.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
         self.next_img_label_btn.setIcon(icon16)
         self.next_img_label_btn.setIconSize(QSize(24, 31))
 
@@ -4959,7 +4959,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon17 = QIcon()
-        icon17.addFile(u"images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon17.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
         self.prev_img_label_btn.setIcon(icon17)
         self.prev_img_label_btn.setIconSize(QSize(24, 31))
 
@@ -4999,7 +4999,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon18 = QIcon()
-        icon18.addFile(u"images/zoom-in.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon18.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/zoom-in.png", QSize(), QIcon.Normal, QIcon.Off)
         self.zoomIn_btn.setIcon(icon18)
         self.zoomIn_btn.setIconSize(QSize(24, 31))
 
@@ -5032,7 +5032,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon19 = QIcon()
-        icon19.addFile(u"images/zoom-out.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon19.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/zoom-out.png", QSize(), QIcon.Normal, QIcon.Off)
         self.zoomOut_btn.setIcon(icon19)
         self.zoomOut_btn.setIconSize(QSize(36, 31))
 
@@ -5065,7 +5065,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon20 = QIcon()
-        icon20.addFile(u"images/drag3.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon20.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/drag3.png", QSize(), QIcon.Normal, QIcon.Off)
         self.drag_btn.setIcon(icon20)
         self.drag_btn.setIconSize(QSize(30, 22))
 
@@ -5105,7 +5105,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon21 = QIcon()
-        icon21.addFile(u"images/clipart1919813.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon21.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/clipart1919813.png", QSize(), QIcon.Normal, QIcon.Off)
         self.polygon_btn.setIcon(icon21)
         self.polygon_btn.setIconSize(QSize(28, 27))
 
@@ -5138,7 +5138,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon22 = QIcon()
-        icon22.addFile(u"images/suggest.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon22.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/suggest.png", QSize(), QIcon.Normal, QIcon.Off)
         self.suggested_defects_btn.setIcon(icon22)
         self.suggested_defects_btn.setIconSize(QSize(45, 45))
 
@@ -5168,7 +5168,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon23 = QIcon()
-        icon23.addFile(u"images/heatmap.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon23.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/heatmap.png", QSize(), QIcon.Normal, QIcon.Off)
         self.heatmap_btn.setIcon(icon23)
         self.heatmap_btn.setIconSize(QSize(70, 30))
 
@@ -5208,7 +5208,7 @@ class Ui_MainWindow(object):
 "}\n"
 "")
         icon24 = QIcon()
-        icon24.addFile(u"images/x-mark.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon24.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/x-mark.png", QSize(), QIcon.Normal, QIcon.Off)
         self.delete_btn.setIcon(icon24)
         self.delete_btn.setIconSize(QSize(22, 27))
 
@@ -5249,7 +5249,7 @@ class Ui_MainWindow(object):
         self.label_show_help_btn.setMaximumSize(QSize(20, 20))
         self.label_show_help_btn.setStyleSheet(u"background-color: white;")
         icon25 = QIcon()
-        icon25.addFile(u"images/top_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon25.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/top_arrow.png", QSize(), QIcon.Normal, QIcon.Off)
         self.label_show_help_btn.setIcon(icon25)
         self.label_show_help_btn.setIconSize(QSize(15, 15))
 
@@ -6796,7 +6796,7 @@ class Ui_MainWindow(object):
         self.scrollArea_6.setWidgetResizable(True)
         self.scrollAreaWidgetContents_7 = QWidget()
         self.scrollAreaWidgetContents_7.setObjectName(u"scrollAreaWidgetContents_7")
-        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 1416, 200))
+        self.scrollAreaWidgetContents_7.setGeometry(QRect(0, 0, 92, 165))
         self.verticalLayout_107 = QVBoxLayout(self.scrollAreaWidgetContents_7)
         self.verticalLayout_107.setObjectName(u"verticalLayout_107")
         self.verticalLayout_107.setContentsMargins(0, 0, 0, 0)
@@ -6805,7 +6805,7 @@ class Ui_MainWindow(object):
         self.scrollArea_7.setWidgetResizable(True)
         self.scrollAreaWidgetContents_8 = QWidget()
         self.scrollAreaWidgetContents_8.setObjectName(u"scrollAreaWidgetContents_8")
-        self.scrollAreaWidgetContents_8.setGeometry(QRect(0, 0, 1414, 84))
+        self.scrollAreaWidgetContents_8.setGeometry(QRect(0, 0, 96, 49))
         self.horizontalLayout_72 = QHBoxLayout(self.scrollAreaWidgetContents_8)
         self.horizontalLayout_72.setObjectName(u"horizontalLayout_72")
         self.label_12_4 = QLabel(self.scrollAreaWidgetContents_8)
@@ -6890,7 +6890,7 @@ class Ui_MainWindow(object):
         self.scrollArea_10.setWidgetResizable(True)
         self.scrollAreaWidgetContents_11 = QWidget()
         self.scrollAreaWidgetContents_11.setObjectName(u"scrollAreaWidgetContents_11")
-        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 1414, 106))
+        self.scrollAreaWidgetContents_11.setGeometry(QRect(0, 0, 90, 43))
         self.horizontalLayout_139 = QHBoxLayout(self.scrollAreaWidgetContents_11)
         self.horizontalLayout_139.setObjectName(u"horizontalLayout_139")
         self.label_12_6 = QLabel(self.scrollAreaWidgetContents_11)
@@ -7211,6 +7211,15 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_304.addWidget(self.BTN_set_pipline_in_PBT_page)
 
+        self.BTN_reset_pipline_in_PBT_page = QPushButton(self.frame_113)
+        self.BTN_reset_pipline_in_PBT_page.setObjectName(u"BTN_reset_pipline_in_PBT_page")
+        self.BTN_reset_pipline_in_PBT_page.setEnabled(False)
+        self.BTN_reset_pipline_in_PBT_page.setMinimumSize(QSize(0, 26))
+        self.BTN_reset_pipline_in_PBT_page.setMaximumSize(QSize(50, 16777215))
+        self.BTN_reset_pipline_in_PBT_page.setStyleSheet(u"color:white;")
+
+        self.horizontalLayout_304.addWidget(self.BTN_reset_pipline_in_PBT_page)
+
 
         self.verticalLayout_100.addWidget(self.frame_113)
 
@@ -7328,6 +7337,13 @@ class Ui_MainWindow(object):
         self.GBox_model_evaluation_details.setObjectName(u"GBox_model_evaluation_details")
         self.verticalLayout_59 = QVBoxLayout(self.GBox_model_evaluation_details)
         self.verticalLayout_59.setObjectName(u"verticalLayout_59")
+        self.line_77 = QFrame(self.GBox_model_evaluation_details)
+        self.line_77.setObjectName(u"line_77")
+        self.line_77.setFrameShape(QFrame.HLine)
+        self.line_77.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_59.addWidget(self.line_77)
+
         self.frame_4 = QFrame(self.GBox_model_evaluation_details)
         self.frame_4.setObjectName(u"frame_4")
         self.frame_4.setFrameShape(QFrame.StyledPanel)
@@ -7351,6 +7367,13 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_59.addWidget(self.frame_4)
 
+        self.line_143 = QFrame(self.GBox_model_evaluation_details)
+        self.line_143.setObjectName(u"line_143")
+        self.line_143.setFrameShape(QFrame.HLine)
+        self.line_143.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_59.addWidget(self.line_143)
+
         self.tableWidget_data_info = QTableWidget(self.GBox_model_evaluation_details)
         self.tableWidget_data_info.setObjectName(u"tableWidget_data_info")
         self.tableWidget_data_info.setMinimumSize(QSize(0, 80))
@@ -7366,6 +7389,13 @@ class Ui_MainWindow(object):
         self.LBL_data_is_ready.setStyleSheet(u"background-color: rgb(255, 255, 255);")
 
         self.verticalLayout_59.addWidget(self.LBL_data_is_ready, 0, Qt.AlignHCenter)
+
+        self.line_75 = QFrame(self.GBox_model_evaluation_details)
+        self.line_75.setObjectName(u"line_75")
+        self.line_75.setFrameShape(QFrame.HLine)
+        self.line_75.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_59.addWidget(self.line_75)
 
         self.frame_111 = QFrame(self.GBox_model_evaluation_details)
         self.frame_111.setObjectName(u"frame_111")
@@ -7390,6 +7420,13 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_59.addWidget(self.frame_111)
 
+        self.line_144 = QFrame(self.GBox_model_evaluation_details)
+        self.line_144.setObjectName(u"line_144")
+        self.line_144.setFrameShape(QFrame.HLine)
+        self.line_144.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_59.addWidget(self.line_144)
+
         self.tableWidget_pipline_info = QTableWidget(self.GBox_model_evaluation_details)
         self.tableWidget_pipline_info.setObjectName(u"tableWidget_pipline_info")
         self.tableWidget_pipline_info.setMinimumSize(QSize(0, 200))
@@ -7397,6 +7434,20 @@ class Ui_MainWindow(object):
         self.tableWidget_pipline_info.verticalHeader().setVisible(False)
 
         self.verticalLayout_59.addWidget(self.tableWidget_pipline_info)
+
+        self.LBL_pipline_is_ready = QLabel(self.GBox_model_evaluation_details)
+        self.LBL_pipline_is_ready.setObjectName(u"LBL_pipline_is_ready")
+        self.LBL_pipline_is_ready.setMaximumSize(QSize(16777215, 0))
+        self.LBL_pipline_is_ready.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+
+        self.verticalLayout_59.addWidget(self.LBL_pipline_is_ready, 0, Qt.AlignHCenter)
+
+        self.line_76 = QFrame(self.GBox_model_evaluation_details)
+        self.line_76.setObjectName(u"line_76")
+        self.line_76.setFrameShape(QFrame.HLine)
+        self.line_76.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_59.addWidget(self.line_76)
 
         self.frame_112 = QFrame(self.GBox_model_evaluation_details)
         self.frame_112.setObjectName(u"frame_112")
@@ -7420,6 +7471,13 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout_59.addWidget(self.frame_112)
+
+        self.line_145 = QFrame(self.GBox_model_evaluation_details)
+        self.line_145.setObjectName(u"line_145")
+        self.line_145.setFrameShape(QFrame.HLine)
+        self.line_145.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_59.addWidget(self.line_145)
 
         self.tableWidget_evalution_info = QTableWidget(self.GBox_model_evaluation_details)
         self.tableWidget_evalution_info.setObjectName(u"tableWidget_evalution_info")
@@ -9302,7 +9360,7 @@ class Ui_MainWindow(object):
         self.binary_reset.setMinimumSize(QSize(130, 0))
         self.binary_reset.setStyleSheet(u"background-color: None")
         icon29 = QIcon()
-        icon29.addFile(u"../../Users/DORSA-PC1/Desktop/images/reset.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon29.addFile(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/reset.png", QSize(), QIcon.Normal, QIcon.Off)
         self.binary_reset.setIcon(icon29)
         self.binary_reset.setIconSize(QSize(12, 16))
 
@@ -9463,7 +9521,7 @@ class Ui_MainWindow(object):
         self.label_295 = QLabel(self.frame_72)
         self.label_295.setObjectName(u"label_295")
         self.label_295.setMaximumSize(QSize(15, 15))
-        self.label_295.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/train_iamge.jpg"))
+        self.label_295.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/train_iamge.jpg"))
 
         self.horizontalLayout_296.addWidget(self.label_295)
 
@@ -9480,7 +9538,7 @@ class Ui_MainWindow(object):
         self.label_13_4 = QLabel(self.frame_72)
         self.label_13_4.setObjectName(u"label_13_4")
         self.label_13_4.setMaximumSize(QSize(15, 15))
-        self.label_13_4.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/val_iamge.jpg"))
+        self.label_13_4.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/val_iamge.jpg"))
 
         self.horizontalLayout_296.addWidget(self.label_13_4)
 
@@ -10479,7 +10537,7 @@ class Ui_MainWindow(object):
 "border : 0px;\n"
 "color : rgb(0,0,0);")
         icon30 = QIcon()
-        icon30.addFile(u"images/free-arrows-refresh-icon-2847-thumb.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon30.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/free-arrows-refresh-icon-2847-thumb.png", QSize(), QIcon.Normal, QIcon.Off)
         self.binary_table_refresh_btn.setIcon(icon30)
         self.binary_table_refresh_btn.setIconSize(QSize(30, 30))
 
@@ -11112,7 +11170,7 @@ class Ui_MainWindow(object):
         self.label_18 = QLabel(self.frame_71)
         self.label_18.setObjectName(u"label_18")
         self.label_18.setMaximumSize(QSize(15, 15))
-        self.label_18.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/train_iamge.jpg"))
+        self.label_18.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/train_iamge.jpg"))
 
         self.horizontalLayout_246.addWidget(self.label_18)
 
@@ -11129,7 +11187,7 @@ class Ui_MainWindow(object):
         self.label_13_3 = QLabel(self.frame_71)
         self.label_13_3.setObjectName(u"label_13_3")
         self.label_13_3.setMaximumSize(QSize(15, 15))
-        self.label_13_3.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/val_iamge.jpg"))
+        self.label_13_3.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/val_iamge.jpg"))
 
         self.horizontalLayout_246.addWidget(self.label_13_3)
 
@@ -12082,7 +12140,7 @@ class Ui_MainWindow(object):
 "border : 0px;\n"
 "color : rgb(0,0,0);")
         icon31 = QIcon()
-        icon31.addFile(u"images/refresh.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon31.addFile(u"../../Users/DORSA-PC1/.designer/backup/images/refresh.png", QSize(), QIcon.Normal, QIcon.Off)
         self.localization_table_refresh_btn.setIcon(icon31)
         self.localization_table_refresh_btn.setIconSize(QSize(30, 30))
 
@@ -12387,7 +12445,7 @@ class Ui_MainWindow(object):
         self.classlist_prev_btn.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
         icon32 = QIcon()
-        icon32.addFile(u"../../Users/DORSA-PC1/Desktop/images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon32.addFile(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/arrow-left.png", QSize(), QIcon.Normal, QIcon.Off)
         self.classlist_prev_btn.setIcon(icon32)
         self.classlist_prev_btn.setIconSize(QSize(30, 30))
 
@@ -12408,7 +12466,7 @@ class Ui_MainWindow(object):
         self.classlist_next_btn.setStyleSheet(u"background-color:Transparent;\n"
 "border:Transparent")
         icon33 = QIcon()
-        icon33.addFile(u"../../Users/DORSA-PC1/Desktop/images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon33.addFile(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/arrow-right.png", QSize(), QIcon.Normal, QIcon.Off)
         self.classlist_next_btn.setIcon(icon33)
         self.classlist_next_btn.setIconSize(QSize(30, 30))
 
@@ -12765,7 +12823,7 @@ class Ui_MainWindow(object):
         self.label_31.setObjectName(u"label_31")
         self.label_31.setMinimumSize(QSize(15, 15))
         self.label_31.setMaximumSize(QSize(15, 15))
-        self.label_31.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/train_iamge.jpg"))
+        self.label_31.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/train_iamge.jpg"))
         self.label_31.setAlignment(Qt.AlignCenter)
 
         self.horizontalLayout_27.addWidget(self.label_31)
@@ -12785,7 +12843,7 @@ class Ui_MainWindow(object):
         self.label_34.setObjectName(u"label_34")
         self.label_34.setMinimumSize(QSize(15, 15))
         self.label_34.setMaximumSize(QSize(15, 15))
-        self.label_34.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/val_iamge.jpg"))
+        self.label_34.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/val_iamge.jpg"))
 
         self.horizontalLayout_27.addWidget(self.label_34)
 
@@ -14372,7 +14430,7 @@ class Ui_MainWindow(object):
         self.label_323 = QLabel(self.frame_94)
         self.label_323.setObjectName(u"label_323")
         self.label_323.setMaximumSize(QSize(15, 15))
-        self.label_323.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/train_iamge.jpg"))
+        self.label_323.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/train_iamge.jpg"))
 
         self.horizontalLayout_310.addWidget(self.label_323)
 
@@ -14389,7 +14447,7 @@ class Ui_MainWindow(object):
         self.label_13_5 = QLabel(self.frame_94)
         self.label_13_5.setObjectName(u"label_13_5")
         self.label_13_5.setMaximumSize(QSize(15, 15))
-        self.label_13_5.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Desktop/images/val_iamge.jpg"))
+        self.label_13_5.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/DORSA-PC1/Desktop/images/val_iamge.jpg"))
 
         self.horizontalLayout_310.addWidget(self.label_13_5)
 
@@ -15650,7 +15708,7 @@ class Ui_MainWindow(object):
         self.label_language.setMinimumSize(QSize(47, 50))
         self.label_language.setMaximumSize(QSize(47, 50))
         self.label_language.setStyleSheet(u"")
-        self.label_language.setPixmap(QPixmap(u"images/persian.png"))
+        self.label_language.setPixmap(QPixmap(u"../../Users/DORSA-PC1/.designer/backup/images/persian.png"))
         self.label_language.setScaledContents(True)
 
         self.horizontalLayout_2931.addWidget(self.label_language)
@@ -15684,7 +15742,7 @@ class Ui_MainWindow(object):
         self.label_language_2.setMinimumSize(QSize(47, 50))
         self.label_language_2.setMaximumSize(QSize(47, 50))
         self.label_language_2.setStyleSheet(u"")
-        self.label_language_2.setPixmap(QPixmap(u"../../Users/trainApp_oxin8 (copy)/UI/C:/Users/DORSA-PC1/Desktop/UI/images/persian.png"))
+        self.label_language_2.setPixmap(QPixmap(u"../../Users/DORSA-PC1/Users/trainApp_oxin8 (copy)/UI/C:/Users/DORSA-PC1/Desktop/UI/images/persian.png"))
         self.label_language_2.setScaledContents(True)
 
         self.horizontalLayout_2941.addWidget(self.label_language_2)
@@ -16229,7 +16287,7 @@ class Ui_MainWindow(object):
         self.live_tabWidget.setCurrentIndex(0)
         self.stackedWidget_defect.setCurrentIndex(0)
         self.stackedWidget_2.setCurrentIndex(2)
-        self.stackedWidget_pbt.setCurrentIndex(0)
+        self.stackedWidget_pbt.setCurrentIndex(1)
         self.stackedWidget_3.setCurrentIndex(1)
         self.stackedWidget_4.setCurrentIndex(1)
         self.stackedWidget_binary.setCurrentIndex(2)
@@ -16740,6 +16798,7 @@ class Ui_MainWindow(object):
         self.groupBox_7.setTitle(QCoreApplication.translate("MainWindow", u"Select Pipeline", None))
         self.label_36.setText(QCoreApplication.translate("MainWindow", u"Pipeline :", None))
         self.BTN_set_pipline_in_PBT_page.setText(QCoreApplication.translate("MainWindow", u"Set", None))
+        self.BTN_reset_pipline_in_PBT_page.setText(QCoreApplication.translate("MainWindow", u"ReSet", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Run Evalution", None))
         self.BTN_evaluate_image_in_PBT_page_2.setText(QCoreApplication.translate("MainWindow", u"Evaluate", None))
         self.BTN_refresh_loadDataset_tab_in_PBT.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
@@ -16747,6 +16806,7 @@ class Ui_MainWindow(object):
         self.LBL_data_preparation_info.setText(QCoreApplication.translate("MainWindow", u"Data Info", None))
         self.LBL_data_is_ready.setText("")
         self.LBL_pipline_preparation_info.setText(QCoreApplication.translate("MainWindow", u"Pipline Info", None))
+        self.LBL_pipline_is_ready.setText("")
         self.LBL_evalution_preparation_info.setText(QCoreApplication.translate("MainWindow", u"Evalution Info", None))
         self.BTN_prev_original_image_in_PBT_page.setText("")
         self.label_37.setText(QCoreApplication.translate("MainWindow", u"Orginal Images", None))

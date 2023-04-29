@@ -40,7 +40,7 @@ DEBUG = False
 SHAMSI_DATE = False
 
 ALGORITHM_NAMES = {
-    "binary": ["Xbc", "Rbe"],
+    "binary": ["Xbc", "Rbc"],
     "localization": ["Ulnim", "Ulnpr"],
     "classification": ["Xcc", "Rce"],
     "yolo": ["5n", "5s", "5m", "5l", "5x"],
@@ -50,8 +50,8 @@ ALGORITHM_CREATOR = {
     "Rbc": models.resnet_cnn,
     "Blu": models.base_unet,
     "Rleu": models.resnet_unet,
-    "Llu": models.low_unet,
-    "uln": models.unet,
+    "Ulnim": models.low_unet,
+    "Ulnpr": models.unet,
     "Xcc": models.xception_cnn,
     "Rce": models.resnet_cnn,
 }
