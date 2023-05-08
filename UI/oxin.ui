@@ -4879,7 +4879,7 @@ border:None;</string>
                                       <widget class="QWidget" name="scrollAreaWidgetContents_3">
                                        <property name="geometry">
                                         <rect>
-                                         <x>-114</x>
+                                         <x>0</x>
                                          <y>0</y>
                                          <width>718</width>
                                          <height>32</height>
@@ -5629,23 +5629,7 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="tlive1">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="tlive2">
+                                         <widget class="QLabel" name="tlive4">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -5677,7 +5661,23 @@ border: None;</string>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="tlive4">
+                                         <widget class="QLabel" name="tlive2">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="tlive1">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -5707,7 +5707,7 @@ border: None;</string>
                                         <number>10</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_30">
+                                        <widget class="QLabel" name="label_23">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -5726,34 +5726,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>1</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_3">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>2</string>
+                                          <string>4</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -5788,7 +5761,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_23">
+                                        <widget class="QLabel" name="label_3">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -5807,7 +5780,34 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>4</string>
+                                          <string>2</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_30">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>1</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -5847,23 +5847,7 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="tlive5">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="tlive6">
+                                         <widget class="QLabel" name="tlive8">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -5895,7 +5879,23 @@ border: None;</string>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="tlive8">
+                                         <widget class="QLabel" name="tlive6">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="tlive5">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -5925,7 +5925,7 @@ border: None;</string>
                                         <number>10</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_41">
+                                        <widget class="QLabel" name="label_54">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -5944,34 +5944,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>5</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_42">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>6</string>
+                                          <string>8</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -6006,7 +5979,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_54">
+                                        <widget class="QLabel" name="label_42">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -6025,7 +5998,34 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>8</string>
+                                          <string>6</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_41">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>5</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -6065,23 +6065,7 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="tlive9">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="tlive10">
+                                         <widget class="QLabel" name="tlive12">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -6113,7 +6097,23 @@ border: None;</string>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="tlive12">
+                                         <widget class="QLabel" name="tlive10">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="tlive9">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -6143,7 +6143,7 @@ border: None;</string>
                                         <number>10</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_55">
+                                        <widget class="QLabel" name="label_58">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -6162,34 +6162,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>9</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_56">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>10</string>
+                                          <string>12</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -6224,7 +6197,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_58">
+                                        <widget class="QLabel" name="label_56">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -6243,7 +6216,34 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>12</string>
+                                          <string>10</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_55">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>9</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -6327,23 +6327,7 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="blive13">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="blive14">
+                                         <widget class="QLabel" name="blive16">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -6375,7 +6359,23 @@ border: None;</string>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="blive16">
+                                         <widget class="QLabel" name="blive14">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="blive13">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -6405,7 +6405,7 @@ border: None;</string>
                                         <number>10</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_64">
+                                        <widget class="QLabel" name="label_70">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -6424,34 +6424,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>13</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_65">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>14</string>
+                                          <string>16</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -6486,7 +6459,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_70">
+                                        <widget class="QLabel" name="label_65">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -6505,7 +6478,34 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>16</string>
+                                          <string>14</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_64">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>13</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -6545,38 +6545,6 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="blive17">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="blive18">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
                                          <widget class="QLabel" name="blive19">
                                           <property name="minimumSize">
                                            <size>
@@ -6608,6 +6576,38 @@ border: None;</string>
                                           </property>
                                          </widget>
                                         </item>
+                                        <item>
+                                         <widget class="QLabel" name="blive18">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="blive17">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
                                        </layout>
                                       </widget>
                                      </item>
@@ -6623,7 +6623,7 @@ border: None;</string>
                                         <number>10</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_85">
+                                        <widget class="QLabel" name="label_128">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -6642,34 +6642,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>17</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_126">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>18</string>
+                                          <string>20</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -6704,7 +6677,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_128">
+                                        <widget class="QLabel" name="label_126">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -6723,7 +6696,34 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>20</string>
+                                          <string>18</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_85">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>17</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -6763,23 +6763,7 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="blive21">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="blive22">
+                                         <widget class="QLabel" name="blive24">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -6811,7 +6795,23 @@ border: None;</string>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="blive24">
+                                         <widget class="QLabel" name="blive22">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="blive21">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -6841,7 +6841,7 @@ border: None;</string>
                                         <number>10</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_75">
+                                        <widget class="QLabel" name="label_84">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -6860,34 +6860,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>21</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_76">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>22</string>
+                                          <string>24</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -6922,7 +6895,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_84">
+                                        <widget class="QLabel" name="label_76">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -6941,7 +6914,34 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>24</string>
+                                          <string>22</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_75">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>21</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -7028,55 +7028,7 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="live1">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live2">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live3">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live4">
+                                         <widget class="QLabel" name="live6">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -7108,7 +7060,55 @@ border: None;</string>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="live6">
+                                         <widget class="QLabel" name="live4">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live3">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live2">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live1">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -7138,7 +7138,7 @@ border: None;</string>
                                         <number>5</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_59">
+                                        <widget class="QLabel" name="label_198">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -7157,88 +7157,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>1</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_60">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>2</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_62">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>3</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_63">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>4</string>
+                                          <string>6</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -7273,7 +7192,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_198">
+                                        <widget class="QLabel" name="label_63">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -7292,7 +7211,88 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>6</string>
+                                          <string>4</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_62">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>3</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_60">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>2</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_59">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>1</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -7332,55 +7332,7 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="live7">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live8">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live9">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live10">
+                                         <widget class="QLabel" name="live12">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -7412,7 +7364,55 @@ border: None;</string>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="live12">
+                                         <widget class="QLabel" name="live10">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live9">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live8">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live7">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -7442,7 +7442,7 @@ border: None;</string>
                                         <number>5</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_199">
+                                        <widget class="QLabel" name="label_204">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -7461,88 +7461,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>7</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_200">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>8</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_201">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>9</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_202">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>10</string>
+                                          <string>12</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -7577,7 +7496,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_204">
+                                        <widget class="QLabel" name="label_202">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -7596,7 +7515,88 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>12</string>
+                                          <string>10</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_201">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>9</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_200">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>8</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_199">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>7</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -7636,55 +7636,7 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="live13">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live14">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live15">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live16">
+                                         <widget class="QLabel" name="live18">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -7716,7 +7668,55 @@ border: None;</string>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="live18">
+                                         <widget class="QLabel" name="live16">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live15">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live14">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live13">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -7746,7 +7746,7 @@ border: None;</string>
                                         <number>5</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_205">
+                                        <widget class="QLabel" name="label_210">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -7765,88 +7765,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>13</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_206">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>14</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_207">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>15</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_208">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>16</string>
+                                          <string>18</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -7881,7 +7800,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_210">
+                                        <widget class="QLabel" name="label_208">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -7900,7 +7819,88 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>18</string>
+                                          <string>16</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_207">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>15</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_206">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>14</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_205">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>13</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -7940,55 +7940,7 @@ border: None;</string>
                                          <number>0</number>
                                         </property>
                                         <item>
-                                         <widget class="QLabel" name="live19">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live20">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live21">
-                                          <property name="minimumSize">
-                                           <size>
-                                            <width>0</width>
-                                            <height>0</height>
-                                           </size>
-                                          </property>
-                                          <property name="text">
-                                           <string/>
-                                          </property>
-                                          <property name="scaledContents">
-                                           <bool>true</bool>
-                                          </property>
-                                         </widget>
-                                        </item>
-                                        <item>
-                                         <widget class="QLabel" name="live22">
+                                         <widget class="QLabel" name="live24">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -8020,7 +7972,55 @@ border: None;</string>
                                          </widget>
                                         </item>
                                         <item>
-                                         <widget class="QLabel" name="live24">
+                                         <widget class="QLabel" name="live22">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live21">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live20">
+                                          <property name="minimumSize">
+                                           <size>
+                                            <width>0</width>
+                                            <height>0</height>
+                                           </size>
+                                          </property>
+                                          <property name="text">
+                                           <string/>
+                                          </property>
+                                          <property name="scaledContents">
+                                           <bool>true</bool>
+                                          </property>
+                                         </widget>
+                                        </item>
+                                        <item>
+                                         <widget class="QLabel" name="live19">
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
@@ -8050,7 +8050,7 @@ border: None;</string>
                                         <number>5</number>
                                        </property>
                                        <item>
-                                        <widget class="QLabel" name="label_212">
+                                        <widget class="QLabel" name="label_217">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -8069,88 +8069,7 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>19</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_213">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>20</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_214">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>21</string>
-                                         </property>
-                                         <property name="alignment">
-                                          <set>Qt::AlignCenter</set>
-                                         </property>
-                                        </widget>
-                                       </item>
-                                       <item>
-                                        <widget class="QLabel" name="label_215">
-                                         <property name="maximumSize">
-                                          <size>
-                                           <width>16777215</width>
-                                           <height>20</height>
-                                          </size>
-                                         </property>
-                                         <property name="styleSheet">
-                                          <string notr="true">QLabel {
-	background-color: rgb(221, 221, 221);
-	border-radius: 5px;
-	border: 2px solid rgb(221, 221, 221);
-	padding-left: 10px;
-	selection-color: rgb(255, 255, 255);
-	selection-background-color: rgb(255, 121, 198);
-}
-</string>
-                                         </property>
-                                         <property name="text">
-                                          <string>22</string>
+                                          <string>24</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -8185,7 +8104,7 @@ border: None;</string>
                                         </widget>
                                        </item>
                                        <item>
-                                        <widget class="QLabel" name="label_217">
+                                        <widget class="QLabel" name="label_215">
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
@@ -8204,7 +8123,88 @@ border: None;</string>
 </string>
                                          </property>
                                          <property name="text">
-                                          <string>24</string>
+                                          <string>22</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_214">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>21</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_213">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>20</string>
+                                         </property>
+                                         <property name="alignment">
+                                          <set>Qt::AlignCenter</set>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QLabel" name="label_212">
+                                         <property name="maximumSize">
+                                          <size>
+                                           <width>16777215</width>
+                                           <height>20</height>
+                                          </size>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QLabel {
+	background-color: rgb(221, 221, 221);
+	border-radius: 5px;
+	border: 2px solid rgb(221, 221, 221);
+	padding-left: 10px;
+	selection-color: rgb(255, 255, 255);
+	selection-background-color: rgb(255, 121, 198);
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string>19</string>
                                          </property>
                                          <property name="alignment">
                                           <set>Qt::AlignCenter</set>
@@ -13899,7 +13899,7 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>63</width>
+                                      <width>92</width>
                                       <height>165</height>
                                      </rect>
                                     </property>
@@ -13926,8 +13926,8 @@ color : rgb(0,0,0);</string>
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>76</width>
-                                          <height>43</height>
+                                          <width>96</width>
+                                          <height>49</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -14096,8 +14096,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>76</width>
-                                              <height>98</height>
+                                              <width>90</width>
+                                              <height>43</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">

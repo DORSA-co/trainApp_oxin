@@ -380,8 +380,7 @@ class API:
         self.ui.radioButton_one.toggled.connect(lambda :self.set_pipline_mode('yolo') )
         self.ui.radioButton_two.toggled.connect(lambda :self.set_pipline_mode('localization') )
         self.set_pipline_mode('yolo')
-
-
+        
         # DEBUG_FUNCTIONS
         # -------------------------------------
         # self.__debug_load_sheet__(["996", "997"])

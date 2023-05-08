@@ -699,10 +699,12 @@ class UI_main_window(QMainWindow, ui):
             drives.append('/')
             names = ['HDD', 'SSD']
             self.label_289.setMaximumHeight(16777215)
+            self.hdd_chart_frame.setMaximumWidth(16777215)
         else:
             drives = ['/']
             names = ['SSD']
-            self.label_289.setMaximumHeight(7)
+            self.label_289.setMaximumHeight(0)
+            self.hdd_chart_frame.setMaximumWidth(0)
         storage_status = {}
         for d, n in zip(drives, names):
             status = storage_funcs.get_storage_status(d)
@@ -719,8 +721,8 @@ class UI_main_window(QMainWindow, ui):
     def start_storage_timer(self):
         self.storage_timer = sQtCore.QTimer()
         self.storage_timer.timeout.connect(self.update_storage_chart)
-        # self.storage_timer.start(600000)
-        self.storage_timer.start(10000)
+        self.storage_timer.start(600000)
+        # self.storage_timer.start(10000)
 
     def showTime(self):
 
