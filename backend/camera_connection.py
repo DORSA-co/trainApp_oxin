@@ -45,7 +45,7 @@ TRIGGER_SOURCE = ['Off', 'Software', 'Line1']
 class Collector():
 
     def __init__(self, serial_number,gain = 0 , exposure = 70000, max_buffer = 20, trigger=True, delay_packet=100, packet_size=1500 ,
-                frame_transmission_delay=0 ,width=1000,height=1000,offet_x=0,offset_y=0, manual=False, list_devices_mode=False, trigger_source='Software',trigger_delay=0,debounce=1000):
+                frame_transmission_delay=0 ,width=1000,height=1000,offet_x=0,offset_y=0, manual=False, list_devices_mode=False, trigger_source='Line1',trigger_delay=0,debounce=1000):
         """Initializes the Collector
         Args:
             gain (int, optional): The gain of images. Defaults to 0.
@@ -59,7 +59,6 @@ class Collector():
         self.serial_number = serial_number
         self.trigger = trigger
         self.trigger_source = trigger_source
-        print('trig',self.trigger,self.trigger_source)
         self.dp = delay_packet
         self.ps=packet_size
         self.ftd=frame_transmission_delay
@@ -84,7 +83,6 @@ class Collector():
         self.converter.OutputPixelFormat = pylon.PixelType_BGR8packed
         self.converter.OutputBitAlignment = pylon.OutputBitAlignment_MsbAligned
 
-        print('self.__tl_factory.EnumerateDevices()',self.__tl_factory.EnumerateDevices())
         for device in self.__tl_factory.EnumerateDevices():
             if (device.GetDeviceClass() == 'BaslerGigE'):                
                 devices.append(device)
@@ -131,10 +129,10 @@ class Collector():
 
     def start_grabbing(self):
 
-        # try:
+        try:
             # print(self.camera.IsOpen())
             # print(device_info.GetSerialNumber())
-
+            self.camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly) 
             self.camera.Open()
             
             if self.manual:
@@ -148,20 +146,22 @@ class Collector():
 
                 self.camera.OffsetX.SetValue(self.offset_x)
                 self.camera.OffsetY.SetValue(self.offset_y)
-                self.camera.Close()
 
-                self.camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly) 
-
-                self.camera.Open()
 
                 if self.trigger:
-                    print('set trig')
+
+                    # self.camera.GevSCPD.SetValue(self.dp)
+
+                    print('dp',self.dp)
+
                     self.camera.TriggerSelector.SetValue('FrameStart')
                     self.camera.TriggerMode.SetValue('On')
-                    print('a',self.camera.TriggerMode.GetValue())
                     self.camera.TriggerSource.SetValue(self.trigger_source)
                     self.camera.LineDebouncerTimeAbs.SetValue(self.debounce) 
-                    self.camera.TriggerDelayAbs.SetValue(self.trigger_delay)
+                    # self.camera.TriggerDelayAbs.SetValue(self.trigger_delay)
+                    print('dp',self.dp,type(self.dp))
+                    self.dp=4877
+                    self.camera.GevSCPD.SetValue(self.dp)
 
 
                 else:
@@ -208,19 +208,19 @@ class Collector():
 
             return True, 'start grabbing ok'
             
-        # except genicam.GenericException as e:
-        #     # Error handling
+        except genicam.GenericException as e:
+            # Error handling
             
-        #     message = self.start_grabbing_error_handling(error=e)
-        #     #print(e)  
+            message = self.start_grabbing_error_handling(error=e)
+            #print(e)  
         
-        #     self.stop_grabbing()
-        #     #print("An exception occurred.", e.GetDescription())
-        #     self.exitCode = 1
-        #     # self.eror_window('Check The Number of cameras',3)
+            self.stop_grabbing()
+            #print("An exception occurred.", e.GetDescription())
+            self.exitCode = 1
+            # self.eror_window('Check The Number of cameras',3)
 
             
-        #     return False, message
+            return False, message
 
     
     def start_grabbing_error_handling(self, error):
@@ -348,9 +348,9 @@ class Collector():
             #print(self.camera.GetQueuedBufferCount(), 'T'*100)
 
 
-    def getPictures(self, time_out = 50):
-        Flag=True
-        try:
+    def getPictures(self, time_out = 500):
+            Flag=True
+        # try:
 
             
             if DEBUG:
@@ -384,28 +384,28 @@ class Collector():
                 else:
                     img=np.zeros([1200,1920,3],dtype=np.uint8)
                     self.cont_eror+=1
-                    # print('eror',self.cont_eror)
+                    print('eror',self.cont_eror)
                     # print("Error: ", grabResult.ErrorCode, grabResult.ErrorDescription)
                     Flag=False
 
             else:
-                    # print('erpr')
+                    print('erpr')
                     img=np.zeros([1200,1920,3],dtype=np.uint8)
                     Flag=False
 
-        except:
-            #print('Time out')
-            img=np.zeros([1200,1920,3],dtype=np.uint8)
-            Flag=False
+        # except:
+        #     #print('Time out')
+        #     img=np.zeros([1200,1920,3],dtype=np.uint8)
+        #     Flag=False
 
         # cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
         # cv2.waitKey(50)
-        if Flag:
-            #print('yes')
-            return True, img
-        else:
-            #print('no')
-            return False, np.zeros([1200,1920,3],dtype=np.uint8)
+            if Flag:
+                #print('yes')
+                return True, img
+            else:
+                #print('no')
+                return False, np.zeros([1200,1920,3],dtype=np.uint8)
 
 
 
@@ -479,11 +479,12 @@ class connect_manage_cameras:
             # print(cam_parms['serial_number'])
 
             # try:
+            print(cam_parms)
 
             collector = Collector(
                 str(cam_parms["serial_number"]),
                 exposure=cam_parms["expo_value"],
-                gain=300,
+                gain=cam_parms["gain_value"],
                 trigger=0 if int(cam_parms['trigger_mode'])==0 else 1,
                 trigger_source=trigger_source,
                 delay_packet=cam_parms["interpacket_delay"],
@@ -493,7 +494,7 @@ class connect_manage_cameras:
                 width=cam_parms["width"],
                 offet_x=cam_parms["offsetx_value"],
                 offset_y=cam_parms["offsety_value"],
-                manual=True,
+                manual=True ,
             )
 
             # print(collector)
@@ -628,65 +629,45 @@ if __name__ == "__main__":
 
     # cameras = {}
     # # for sn in ['40150887']:
+    #     # collector = Collector(
+    cameras = ['24350362','24350352','24350360','24350287','24350361','24350357','24350355','24350368','24350364','24350363','24350369',\
+               '24350354','24350367','24350351','24350349','24350358','24350365','24350366','24350356','24350370','24350353','24350359','24350286']
+    # cameras = ['24350362']
+    cameras_obj =[]
+    # cameras = {}
+    for sn in cameras:
     #     # collector = Collector( sn,exposure=3000 , gain=30, trigger=False, delay_packet=170000)
-    collector = Collector(
-        "24350287",
-        exposure=3000,
-        gain=0,
-        trigger=True,
-        trigger_source='Line1',
-        delay_packet=81062,
-        packet_size=9000,
-        frame_transmission_delay=18036,
-        height=1000,
-        width=1000,
-        offet_x=16,
-        offset_y=4,
-        manual=True,
-    )
+        print(sn)
+        collector = Collector(
+            sn,
+            exposure=3000,
+            gain=10,
+            trigger=True,
+            delay_packet=4877,
+            packet_size=9000,
+            frame_transmission_delay=18036,
+            height=1000,
+            width=1000,
+            offet_x=16,
+            offset_y=4,
+            manual=True,
+        )
 
     # x=collector.get_cam()
 
-    collector.start_grabbing()
     # collector.start_grabbing()
-    # cameras = collector
-    # collector.listDevices()
-    # cameras.start_grabbing()
-    # cameras.getPictures()
-    # print(cameras.)
-
-    while True:
-
-        #     # for cam in cameras:
-        #     #         cam.trigg_exec()
-
-        #     # for cam in cameras:
-        #     #print(cam.camera.GetQueuedBufferCount())
-        img = collector.getPictures()
-        img=img[1]
-        # print(img.shape)
-        # print(cam.camera.GetQueuedBufferCount())
-        cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
-        img=np.uint8(img)
-        # cv2.imshow('img',img)
-        cv2.waitKey(50)
-    #     # img = cameras[1].getPictures()
-    #     # #print(cam.camera.GetQueuedBufferCount())
-    #     # cv2.imshow('img2', cv2.resize( img, None, fx=0.5, fy=0.5 ))
-    #     # cv2.waitKey(50)
-    #     # img = cameras[2].getPictures()
-    #     # #print(cam.camera.GetQueuedBufferCount())
-    #     # cv2.imshow('img3', cv2.resize( img, None, fx=0.5, fy=0.5 ))
-    #     # cv2.waitKey(50)
-    #     # img = cameras[3].getPictures()
-    #     # #print(cam.camera.GetQueuedBufferCount())
-    #     # cv2.imshow('img4', cv2.resize( img, None, fx=0.5, fy=0.5 ))
-    #     # cv2.waitKey(50)
-
-    #     # time.sleep(0.330)
-    #     # while cam.camera.GetQueuedBufferCount()!=10:
-    #     #     pass
-    #     # print(cam.camera.GetQueuedBufferCount(), 'f'*100)
-    #     # print('-'*100)
-    # # func = get_threading(cameras)
-    # # func()
+    # collector.start_grabbing()
+        cameras = collector
+        cameras_obj.append(cameras)
+        cameras.start_grabbing()
+        cameras.getPictures()
+        print('aaaa')
+    for cam in cameras_obj:
+        cam.camera.DeviceReset.Execute()
+    # im
+    # while True:
+    #     for cam in cameras_obj:
+    #         print('cam',cam.camera.IsGrabbing())
+    #         flag = cam.getPictures()
+    #         print('flag',flag[0])
+    #     cv2.waitKey(100)

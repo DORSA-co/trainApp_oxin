@@ -3428,10 +3428,11 @@ class API:
             self.ImageManager.set_live_type(self.live_type)
             self.ImageManager.set_save_flag(self.ui.checkBox_save_images.isChecked())
             self.ImageManager.set_manual_flag(self.ui.manual_camera)
-            self.ui.set_enabel(self.ui.stop_capture_btn, False)
-            QTimer().singleShot(1000, self.ImageManager.start_sheet_checking)
-            QTimer().singleShot(1000, lambda: self.ui.set_enabel(self.ui.stop_capture_btn, True))
-
+            # self.ui.set_enabel(self.ui.stop_capture_btn, False)
+            # QTimer().singleShot(1000, self.ImageManager.start_sheet_checking)
+            # QTimer().singleShot(1000, lambda: self.ui.set_enabel(self.ui.stop_capture_btn, True))
+            # self.ImageManager.start_sheet_checking()
+            self.start_capture_timers()
             # self.init_check_plc()
 
     def stop_capture_func(self, disable_ui=True):
@@ -3458,7 +3459,10 @@ class API:
             self.set_start_software_plc(False)
 
     def start_capture_timers(self):
-        self.ImageManager.stop_sheet_checking()
+        # try:
+        #     self.ImageManager.stop_sheet_checking()
+        # except:
+        #     pass
         try:
             _, _, speed, _ = self.l2_connection.get_full_info()  # get data from level2
         except:
@@ -3466,7 +3470,7 @@ class API:
         if speed > 0:
             self.ImageManager.start()
         self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_timer.start(int(1000/self.ui.frame_rate))
+        self.grab_timer.start(int(1000/(self.ui.frame_rate+1)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
