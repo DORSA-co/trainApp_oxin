@@ -97,13 +97,15 @@ class Collector():
         
         else:
             for device in devices:
-                camera = pylon.InstantCamera(self.__tl_factory.CreateDevice(device))
-                # print(camera.GetDeviceInfo().GetSerialNumber())
-                if camera.GetDeviceInfo().GetSerialNumber() == self.serial_number:
-                    self.camera = camera
-                
-                    break
-
+                try:
+                    camera = pylon.InstantCamera(self.__tl_factory.CreateDevice(device))
+                    # print(camera.GetDeviceInfo().GetSerialNumber())
+                    if camera.GetDeviceInfo().GetSerialNumber() == self.serial_number:
+                        self.camera = camera
+                    
+                        break
+                except:
+                    print('error in camera connection')
         #assert len(devices) > 0 , 'No Camera is Connected!'
         
 
@@ -152,14 +154,14 @@ class Collector():
 
                     # self.camera.GevSCPD.SetValue(self.dp)
 
-                    print('dp',self.dp)
+                    # print('dp',self.dp)
 
                     self.camera.TriggerSelector.SetValue('FrameStart')
                     self.camera.TriggerMode.SetValue('On')
                     self.camera.TriggerSource.SetValue(self.trigger_source)
                     self.camera.LineDebouncerTimeAbs.SetValue(self.debounce) 
                     # self.camera.TriggerDelayAbs.SetValue(self.trigger_delay)
-                    print('dp',self.dp,type(self.dp))
+                    # print('dp',self.dp,type(self.dp))
                     self.dp=4877
                     self.camera.GevSCPD.SetValue(self.dp)
 
@@ -348,22 +350,24 @@ class Collector():
             #print(self.camera.GetQueuedBufferCount(), 'T'*100)
 
 
-    def getPictures(self, time_out = 500):
-            Flag=True
-        # try:
+    def getPictures(self, time_out = 50):
+        Flag=True
+        try:
 
             
             if DEBUG:
                 print('TRIGE Done')
             # print('444444444444', self.camera.IsGrabbing())
             if self.camera.IsGrabbing():
+                self.camera.Open()
                 if DEBUG:
                     print('Is grabbing')
                     
                     if self.camera.GetQueuedBufferCount() == 10:
                         print('ERRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOORRRRRRRRRRRRRRRRRRRRRRRRR')
-                grabResult = self.camera.RetrieveResult(time_out, pylon.TimeoutHandling_ThrowException)
 
+                grabResult = self.camera.RetrieveResult(time_out, pylon.TimeoutHandling_ThrowException)
+ 
                 # print('grab',grabResult)
                 
 
@@ -393,19 +397,20 @@ class Collector():
                     img=np.zeros([1200,1920,3],dtype=np.uint8)
                     Flag=False
 
-        # except:
-        #     #print('Time out')
-        #     img=np.zeros([1200,1920,3],dtype=np.uint8)
-        #     Flag=False
+        except:
+            #print('Time out')
+            img=np.zeros([1200,1920,3],dtype=np.uint8)
+            Flag=False
 
         # cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
         # cv2.waitKey(50)
-            if Flag:
-                #print('yes')
-                return True, img
-            else:
-                #print('no')
-                return False, np.zeros([1200,1920,3],dtype=np.uint8)
+        if Flag:
+            #print('yes')
+            img = cv2.flip(img, 1)
+            return True, img
+        else:
+            #print('no')
+            return False, np.zeros([1200,1920,3],dtype=np.uint8)
 
 
 

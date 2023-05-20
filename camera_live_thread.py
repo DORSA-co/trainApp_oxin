@@ -139,7 +139,7 @@ class ImageManager(sQObject):
             if self.start_cam <= camera_id <= self.stop_cam or self.start_cam + 12 <= camera_id <= self.stop_cam + 12:
                 if str(camera_id) in list(connected_cameras.keys()):
                     ret, img = connected_cameras[str(camera_id)].getPictures()
-                    print(camera_id,'  ',ret)
+                    # print(camera_id,'  ',ret)
                     if ret:
                         if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame:
                             check = self.sheet_check(img)

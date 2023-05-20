@@ -112,7 +112,7 @@ from PySide6.QtWidgets import QVBoxLayout
 from Train_modules.models import xception_cnn, resnet_cnn
 from Train_modules.models import unet, low_unet, resnet_unet
 import matplotlib.pyplot as plt
-from tensorflow.keras.metrics import Accuracy, Precision, Recall
+# from tensorflow.keras.metrics import Accuracy, Precision, Recall
 from Train_modules.deep_utils import metrics
 from backend import pipelines
 import tensorflow as tf
@@ -332,14 +332,18 @@ class API:
         self.retry_connecting_plc = 0
         self.set_plc_ip_to_ui()
         self.connect_plc()
-        self.load_plc_parms()  # should be commecnt in finbal version
+        # self.load_plc_parms()  # should be commecnt in finbal version
         self.ui.start_wind_btn.clicked.connect(lambda: self.set_wind(True))
         self.start_auto_wind()
         # self.update_plc_parms()
         self.plc_timer = QTimer()
         self.plc_timer.timeout.connect(self.update_sensor_and_temp)
-        self.plc_update = QTimer()
-        self.plc_update.timeout.connect(self.update_plc_values)
+        # self.plc_update = QTimer()
+        # self.plc_update.timeout.connect(self.test_t)
+
+        self.update_plc_values()
+
+
         self.slab_detect = False
         self.language = self.ui.language
         self.last_sensor = False
@@ -386,7 +390,7 @@ class API:
         # self.__debug_load_sheet__(["996", "997"])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
-        # self.__debug__login__()
+        self.__debug__login__()
 
     def set_pipline_mode(self,key):
         self.pipline_dict = {'yolo':[self.ui.page_yolo,self.ui.page_yolo_2],'localization':[self.ui.page_localization,self.ui.page_localization_2]}
@@ -3256,6 +3260,7 @@ class API:
             cam_num = self.i + 1
             cam_parms = self.get_camera_config(str(cam_num))
             ret = self.cameras.add_camera(str(cam_num), cam_parms)
+            # threading.Thread(target=self.cameras.add_camera,args=(str(cam_num), cam_parms))
 
             if ret == "True":
                 self.ui.set_warning(
@@ -3306,8 +3311,15 @@ class API:
                 self.start_grab_camera()
                 return
             if selected_cameras[self.i]:
-                QTimer.singleShot(3000, self.connect_camera)
+                QTimer.singleShot(1, self.connect_camera)   # defult time 3000
                 return
+
+
+
+
+
+
+
 
     def disconnect_camera(self):
         """
@@ -3389,7 +3401,7 @@ class API:
                     btn_name.setEnabled(True)
                 return
             if selected_cameras[self.j]:
-                QTimer.singleShot(3000, self.disconnect_camera)
+                QTimer.singleShot(1, self.disconnect_camera)  # defult time 3000
                 return
 
     def set_available_cameras(self):
@@ -5629,6 +5641,9 @@ class API:
                 message=texts.MESSEGES["plc_connection_apply"]["en"], code=texts_codes.SubTypes['plc_connection_apply'], level=1
             )
             self.plc_connection_status = True
+            self.ui.change_plc_status(status="connect")
+            self.plc_retry_connection = 0
+
             self.ui.disconnect_plc_btn.setEnabled(True)
             self.ui.connect_plc_btn.setEnabled(False)
 
@@ -5642,6 +5657,7 @@ class API:
             # self.connect_plc()
             if self.retry_connecting_plc < 10:
                 self.retry_connecting_plc += 1
+                self.ui.change_plc_status(status="retry")
                 QTimer().singleShot(1000,self.connect_plc)
                 self.ui.set_status_plc(
                     auto=False,
@@ -5652,6 +5668,7 @@ class API:
             else:
                 self.retry_connecting_plc = 0
                 self.ui.set_status_plc(mode=False)
+                self.ui.change_plc_status(status="disconnect")
                 self.ui.disconnect_plc_btn.setEnabled(False)
                 self.ui.connect_plc_btn.setEnabled(True)
 
@@ -5692,13 +5709,82 @@ class API:
         # #print('parms',self.parms)
         return True
 
+    # def disconnect_plc(self, on_close=False, force_close=False):
+    #     """
+    #     this function is used to disconnect from plc
+
+    #     Args:
+    #         on_close (bool, optional): a boolean determining if function is called on app close. Defaults to False.
+    #         force_close (bool, optional): a boolean determining to force close the plc (whenever plc is disconnected suddenly)
+    #     """
+
+    #     # force close the plc, this is for those times that plc is disconnecter by error
+    #     if force_close:
+    #         try:
+    #             self.my_plc.disconnect()
+    #         except:
+    #             pass
+    #         #
+    #         self.timer_write_plc.stop()
+    #         self.plc_connection_status = False
+    #         del self.my_plc
+    #         #
+    #         # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_by_error'][self.ui.language], level=2)
+    #         self.ui.notif_manager.append_new_notif(
+    #             message=texts.ERRORS["plc_disconnected_by_error"][self.ui.language],
+    #             level=3,
+    #         )
+    #         self.ui.logger.create_new_log(
+    #             message=texts.ERRORS["plc_disconnected_by_error"]["en"], code=texts_codes.SubTypes['plc_disconnected_by_error'], level=4
+    #         )
+    #         #
+    #         self.ui.disconnect_plc_btn.setEnabled(False)
+    #         self.ui.connect_plc_btn.setEnabled(True)
+    #         #
+    #         # self.ui.plc_main_frame.setEnabled(False)
+
+    #         return
+
+    #     try:
+    #         self.my_plc.disconnect()
+    #         self.timer_write_plc.stop()
+    #         self.plc_connection_status = False
+    #         del self.my_plc
+    #         #
+    #         # self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_disconnected'][self.ui.language], level=0)
+    #         self.ui.notif_manager.append_new_notif(
+    #             message=texts.MESSEGES["plc_disconnected"][self.ui.language], level=1
+    #         )
+    #         self.ui.logger.create_new_log(
+    #             message=texts.MESSEGES["plc_disconnected"]["en"], code=texts_codes.SubTypes['plc_disconnected'], level=1
+    #         )
+    #         #
+    #         self.ui.disconnect_plc_btn.setEnabled(False)
+    #         self.ui.connect_plc_btn.setEnabled(True)
+
+    #     # failed to disconnect plc
+    #     except:
+    #         if not on_close:
+    #             # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_failed'][self.ui.language], level=2)
+    #             self.ui.notif_manager.append_new_notif(
+    #                 message=texts.ERRORS["plc_disconnected_failed"][self.ui.language],
+    #                 level=3,
+    #             )
+    #             self.ui.logger.create_new_log(
+    #                 message=texts.ERRORS["plc_disconnected_failed"]["en"], code=texts_codes.SubTypes['plc_disconnected_failed'], level=3
+    #             )
+
+    #     #
+    #     # self.ui.plc_main_frame.setEnabled(False)
+
+
     def disconnect_plc(self, on_close=False, force_close=False):
         """
         this function is used to disconnect from plc
 
         Args:
-            on_close (bool, optional): a boolean determining if function is called on app close. Defaults to False.
-            force_close (bool, optional): a boolean determining to force close the plc (whenever plc is disconnected suddenly)
+            on_close (bool, optional): a boolean deermining if function is called on app close. Defaults to False.
+            force_close (bool, optional): a boolean deermining to force close the plc (whenever plc is disconnected suddenly)
         """
 
         # force close the plc, this is for those times that plc is disconnecter by error
@@ -5708,38 +5794,42 @@ class API:
             except:
                 pass
             #
-            self.timer_write_plc.stop()
             self.plc_connection_status = False
+            self.ui.change_plc_status(status="disconnect")
+            self.ui.set_status_plc(mode = False)
+
             del self.my_plc
             #
-            # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_by_error'][self.ui.language], level=2)
+            self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_by_error'][self.ui.language], level=2)
+
             self.ui.notif_manager.append_new_notif(
                 message=texts.ERRORS["plc_disconnected_by_error"][self.ui.language],
                 level=3,
             )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["plc_disconnected_by_error"]["en"], code=texts_codes.SubTypes['plc_disconnected_by_error'], level=4
+                message=texts.ERRORS["plc_disconnected_by_error"]["en"], level=4
             )
             #
             self.ui.disconnect_plc_btn.setEnabled(False)
             self.ui.connect_plc_btn.setEnabled(True)
-            #
-            # self.ui.plc_main_frame.setEnabled(False)
 
             return
 
         try:
             self.my_plc.disconnect()
-            self.timer_write_plc.stop()
             self.plc_connection_status = False
+            self.ui.change_plc_status(status="disconnect")
+            self.ui.set_status_plc(mode = False)
+            
             del self.my_plc
             #
-            # self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_disconnected'][self.ui.language], level=0)
+            self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_disconnected'][self.ui.language], level=0)
+
             self.ui.notif_manager.append_new_notif(
                 message=texts.MESSEGES["plc_disconnected"][self.ui.language], level=1
             )
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["plc_disconnected"]["en"], code=texts_codes.SubTypes['plc_disconnected'], level=1
+                message=texts.MESSEGES["plc_disconnected"]["en"], level=1
             )
             #
             self.ui.disconnect_plc_btn.setEnabled(False)
@@ -5748,17 +5838,25 @@ class API:
         # failed to disconnect plc
         except:
             if not on_close:
-                # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_failed'][self.ui.language], level=2)
+                self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_failed'][self.ui.language], level=2)
+
                 self.ui.notif_manager.append_new_notif(
                     message=texts.ERRORS["plc_disconnected_failed"][self.ui.language],
                     level=3,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.ERRORS["plc_disconnected_failed"]["en"], code=texts_codes.SubTypes['plc_disconnected_failed'], level=3
+                    message=texts.ERRORS["plc_disconnected_failed"]["en"], level=3
                 )
 
-        #
-        # self.ui.plc_main_frame.setEnabled(False)
+
+
+
+
+
+
+
+
+
 
     def set_plc_ip_to_ui(self):
         """
@@ -5820,8 +5918,8 @@ class API:
         except:
             pass
 
-    def get_sensor_and_temp(self):
-        t1 = time.time()
+    def get_sensor(self):
+        print(time.time())
         try:
             if not self.ui.manual_plc:
                 
@@ -5829,7 +5927,7 @@ class API:
                 self.sensor = self.my_plc.get_value(
                     self.dict_spec_pathes["MemDistanceSensor"]
                 )
-                # #print(self.sensor[0])
+
                 if self.sensor[0] == "-":
                     if not self.ui.manual_plc:
                         # #print(";" * 50)
@@ -5841,7 +5939,19 @@ class API:
 
         except:
             self.sensor = False
-        t2=time.time()
+
+            
+        if self.sensor:
+            self.slab_detect = True
+        else:
+            self.slab_detect = False
+
+        threading.Timer(0.1,self.get_sensor).start()
+
+
+    def get_temp_and_switch(self):
+
+
         try:
 
             self.top_temp = str(
@@ -5882,21 +5992,21 @@ class API:
             self.down_out = False
 
 
-        if self.sensor:
-            self.slab_detect = True
-        else:
-            self.slab_detect = False
+        threading.Timer(5,self.get_temp_and_switch).start()
 
-        # threading.Thread(target=self.get_sensor_and_temp)
+
+    def test_t(self):
+        print('aaaa')
+
 
     def update_plc_values(self):
 
-        threading.Thread(target=self.get_sensor_and_temp).start()
-        # self.get_sensor_and_temp()
+        threading.Timer(1,self.get_sensor).start()
+        threading.Timer(1,self.get_temp_and_switch).start()
+
 
     def update_sensor_and_temp(self):
-        # threading.Thread(target=self.get_sensor_and_temp).start()
-        # self.get_sensor_and_temp()
+
         try:
             if (
                 self.top_temp > self.up_high_threshold
@@ -5961,7 +6071,10 @@ class API:
                 self.ImageManager.update_sheet(n_camera, details)
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)
-                self.my_plc.set_cams_and_prejector(n_camera, projectors)
+                # if self.connection_status:
+                print('start thread set caemra and projector')
+                threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start()
+                # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
                         message=str(
@@ -5975,7 +6088,8 @@ class API:
             else:
                 self.ImageManager.update_database()
                 self.stop_capture_func(disable_ui=False)
-                self.my_plc.set_cams_and_prejector(0, 0)
+                # if self.connection_status:
+                self.my_plc.set_cams_and_prejector(3, 0)
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
                         message=str(texts.MESSEGES["save_sheet"][self.ui.language]), level=1
@@ -5985,12 +6099,12 @@ class API:
         # if self.start_capture_flag:
         try:
             self.plc_timer.stop()
-            self.plc_update.stop()
+            # self.plc_update.stop()
 
         except:
             pass
         self.plc_timer.start(1000)
-        self.plc_update.start(self.ui.update_timer_plc)
+        # self.plc_update.start(self.ui.update_timer_plc)
 
     # Mypipline page------------------------------------------------
 
@@ -6620,6 +6734,8 @@ class evaluation_worker(QObject):
                     return True
         return False
 
+
+
 class ModelsCreation_worker(QObject):
 
     # vars for handling thread
@@ -6745,3 +6861,4 @@ class ModelsCreation_worker(QObject):
 
             self.model_creation_signal.emit(4)
             self.finished.emit()
+

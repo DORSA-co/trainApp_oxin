@@ -76,7 +76,7 @@ from train_api import ALGORITHM_NAMES
 from train_api import ALGORITHM_NAMES
 
 ui, _ = loadUiType("UI/oxin.ui")
-os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
+#os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
 
 
 DEBUG_UI = False
@@ -1273,6 +1273,7 @@ class UI_main_window(QMainWindow, ui):
     def def_yes_defect(self):
         """set stack widget page with click"""
         self.stackedWidget_defect.setCurrentWidget(self.page_yes)
+
 
     def def_no_defect(self):
         """set stack widget page with click"""

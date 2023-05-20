@@ -2445,7 +2445,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>0</number>
+                         <number>8</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -8429,7 +8429,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>707</width>
-                                            <height>27</height>
+                                            <height>17</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -13899,7 +13899,7 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>92</width>
+                                      <width>63</width>
                                       <height>165</height>
                                      </rect>
                                     </property>
@@ -13926,8 +13926,8 @@ color : rgb(0,0,0);</string>
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>96</width>
-                                          <height>49</height>
+                                          <width>76</width>
+                                          <height>43</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -14096,8 +14096,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>90</width>
-                                              <height>43</height>
+                                              <width>76</width>
+                                              <height>98</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">
@@ -33526,6 +33526,30 @@ color : rgb(0,0,0);</string>
                                     </property>
                                     <property name="text">
                                      <string>Disconnect</string>
+                                    </property>
+                                   </widget>
+                                  </item>
+                                  <item>
+                                   <widget class="QLabel" name="plc_status_label">
+                                    <property name="minimumSize">
+                                     <size>
+                                      <width>30</width>
+                                      <height>30</height>
+                                     </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                     <size>
+                                      <width>30</width>
+                                      <height>30</height>
+                                     </size>
+                                    </property>
+                                    <property name="styleSheet">
+                                     <string notr="true">background: red;
+border-radius: 15px;
+border: 3px solid #434c5d;</string>
+                                    </property>
+                                    <property name="text">
+                                     <string/>
                                     </property>
                                    </widget>
                                   </item>

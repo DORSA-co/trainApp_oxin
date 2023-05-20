@@ -473,6 +473,7 @@ def set_bmodels_on_ui_tabel_edited_version(
                 bmodel[headers_db[col_idx]] = translate_binary_algorithm_id_to_name(
                     algo_id=bmodel[headers_db[col_idx]], model_type=model_type
                 )
+            print('bmodels_list',bmodels_list)
             table_item = sQTableWidgetItem(str(bmodel[headers_db[col_idx]]))
             # set checkbox (only first col)
             if col_idx == 0:
@@ -575,7 +576,7 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
             elif model_type == "yolo":
                 bmodel_info["algo_name"] = [
                     translate_binary_algorithm_id_to_name(
-                        algo_id=ui_obj.cbBox_of_localiztion_model_in_PBT_page.currentText(),
+                        algo_id=ui_obj.cbBox_of_localization_model_in_PBT_page.currentText(),
                         model_type="yolo",
                         reverse=True,
                     )
@@ -1302,9 +1303,10 @@ class Binary_model_train_worker(sQObject):
         bmodel_records = train_api.train_binary(
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
+        print('bmodel_records',bmodel_records)
         if not bmodel_records[0]:
             self.warning.emit(
-                bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2]
+                bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2],None,1
             )
         else:
             bmodel_records = bmodel_records[1]
@@ -1325,6 +1327,7 @@ class Binary_model_train_worker(sQObject):
                 self.warning.emit(
                     texts.MESSEGES["train_successfuly"][self.api_obj.language],
                     "train",
+                    None,
                     1,
                 )
                 # update ui

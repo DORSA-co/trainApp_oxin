@@ -50,6 +50,7 @@ SubTypes = {
     'database_add_lmodel_failed': '06-15',
     'database_get_classmodels': '06-16',
     'database_get_classmodels_failed': '06-17',
+
     'database_get_filtered_cls_models': '06-18',
     'database_get_filtered_cls_models_failed': '06-19',
     'database_get_defects': '06-20',
@@ -63,11 +64,16 @@ SubTypes = {
     'error_connecting_to_mysql': '06-28',
     'mysql_connection_closed': '06-29',
     'error_reading_from_mysql': '06-30',
-
+    'database_get_ymodels': '06-31',
+    'database_get_ymodels_failed': '06-32',
     'reset_binary_training_params': '05-3',
     'reset_localization_training_params': '05-4',
     'reset_classification_training_params': '05-5',
     'reset_yolo_training_params': '05-6',
+
+    'database_add_ymodel': '06-33',
+    'database_add_ymodel_failed': '06-34',
+
 
     # Others
     'SET_DATASET': '07-1',
