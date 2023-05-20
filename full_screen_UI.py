@@ -1,6 +1,5 @@
 
 import sys
-from PyQt5 import QtCore
 from PyQt5.QtWidgets import * 
 from PyQt5.QtGui import * 
 from PyQt5.QtGui import *
@@ -8,6 +7,7 @@ from PySide6.QtCharts import *
 from PySide6.QtCore import *
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
+from PySide6 import QtCore as sQtCore
 import os
 
 ui, _ = loadUiType("UI/full_screen.ui")
@@ -61,11 +61,11 @@ class full_screen_window(QMainWindow, ui):
             )
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):

@@ -5919,7 +5919,7 @@ class API:
             pass
 
     def get_sensor(self):
-        print(time.time())
+        # print(time.time())
         try:
             if not self.ui.manual_plc:
                 
@@ -6089,7 +6089,7 @@ class API:
                 self.ImageManager.update_database()
                 self.stop_capture_func(disable_ui=False)
                 # if self.connection_status:
-                self.my_plc.set_cams_and_prejector(3, 0)
+                # self.my_plc.set_cams_and_prejector(3, 0)
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
                         message=str(texts.MESSEGES["save_sheet"][self.ui.language]), level=1
