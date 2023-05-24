@@ -105,7 +105,8 @@ class Collector():
                     
                         break
                 except:
-                    print('error in camera connection')
+                    pass
+                    # print('error in camera connection')
         #assert len(devices) > 0 , 'No Camera is Connected!'
         
 

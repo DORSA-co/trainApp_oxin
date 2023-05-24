@@ -72,7 +72,8 @@ from backend import (
     level2_connection,
     localization_model_funcs,
     yolo_model_funcs,
-    pathStructure
+    pathStructure,
+    FileManager
 )
 
 import database_utils
@@ -120,6 +121,11 @@ from image_splitter import ImageCrops
 import json
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from PySide6.QtCore import QObject, QThread, Signal
+
+import sys
+sys.path.append('../oxin_storage_management')
+from storage_main_UI import storage_management
+from storage_api import storage_api
 
 # _______JJ
 
@@ -384,6 +390,13 @@ class API:
         self.ui.radioButton_one.toggled.connect(lambda :self.set_pipline_mode('yolo') )
         self.ui.radioButton_two.toggled.connect(lambda :self.set_pipline_mode('localization') )
         self.set_pipline_mode('yolo')
+
+        # storage
+        self.ssd_image_file_manager = None
+        self.hdd_file_manager = None
+        self.read_storage_paths_from_db()
+        self.create_diskMemory_objs()
+        self.start_storage_checking()
         
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -391,6 +404,75 @@ class API:
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
         self.__debug__login__()
+
+    def read_storage_paths_from_db(self):
+        res, storage_settings = self.db.load_storage_setting()
+        if res: 
+            self.max_cleanup_percentage = storage_settings['max_cleanup_percentage']
+            self.hdd_path = storage_settings['hdd_path']
+            self.ssd_images_path = storage_settings['ssd_images_path']
+
+    def create_diskMemory_objs(self):
+        if os.path.exists(self.hdd_path):
+            self.hdd_file_manager = FileManager.diskMemory(path=self.hdd_path)
+        if os.path.exists(self.ssd_images_path):
+            self.ssd_image_file_manager = FileManager.diskMemory(path=self.ssd_images_path)
+
+    def check_storage(self):
+        self.update_storage_charts()
+        if self.ssd_image_file_manager:
+            ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
+            print('#######3', ssd_image_percent, self.max_cleanup_percentage)
+            if ssd_image_percent > self.max_cleanup_percentage:
+                # os.system('python3 ../oxin_storage_management/storage_main_UI.py')
+                storage_win = storage_management()
+                s_api = storage_api(storage_win)
+                storage_win.show()
+        
+    def update_storage_charts(self):
+        if os.path.exists(self.hdd_path):
+            if not self.hdd_file_manager:
+                self.hdd_file_manager = FileManager.diskMemory(path=self.hdd_path)
+            self.ui.show_hdd_chart()
+            self.update_hdd_chart()
+        else:
+            self.ui.hide_hdd_chart()
+
+        if os.path.exists(self.ssd_images_path):
+            if not self.ssd_image_file_manager:
+                self.ssd_image_file_manager = FileManager.diskMemory(path=self.ssd_images_path)
+            self.ui.show_ssd_chart()
+            self.update_ssd_chart()
+        else:
+            self.ui.hide_ssd_chart()
+
+    def update_ssd_chart(self):
+        self.ssd_image_file_manager.refresh()
+        storage_status = {'SSD': {'Used':self.ssd_image_file_manager.used.toGB(), 
+                              'Free': self.ssd_image_file_manager.free.toGB()}, 
+                    }
+        chart_funcs.update_storage_barchart(
+            ui_obj=self.ui,
+            storage_type='SSD',
+            storage_status=storage_status
+        )
+
+    def update_hdd_chart(self):
+        self.hdd_file_manager.refresh()
+        storage_status = {'HDD': {'Used':self.hdd_file_manager.used.toGB(), 
+                            'Free': self.hdd_file_manager.free.toGB()}
+                    }
+        chart_funcs.update_storage_barchart(
+            ui_obj=self.ui,
+            storage_type='HDD',
+            storage_status=storage_status
+        )
+
+    def start_storage_checking(self):
+        self.check_storage()
+        self.storage_timer = QTimer()
+        self.storage_timer.timeout.connect(self.check_storage)
+        self.storage_timer.start(1000*60*15)
 
     def set_pipline_mode(self,key):
         self.pipline_dict = {'yolo':[self.ui.page_yolo,self.ui.page_yolo_2],'localization':[self.ui.page_localization,self.ui.page_localization_2]}

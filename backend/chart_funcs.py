@@ -855,12 +855,12 @@ def update_storage_barchart(ui_obj, storage_type, storage_status):
     ui_obj.axisY.setLabelsColor(sQColor(pie_label_color))
     ui_obj.axisY.setLabelsFont(sQFont("Times", 5, sQFont.Normal))
 
-    set0 = QBarSet('used')
-    set1 = QBarSet('free')
+    set0 = QBarSet('Used')
+    set1 = QBarSet('Free')
 
     for k in categories:
-        set0.append(storage_status[k]['used'])
-        set1.append(storage_status[k]['free'])
+        set0.append(storage_status[k]['Used'])
+        set1.append(storage_status[k]['Free'])
 
     set0.setBrush(sQColor(defect_color))
     set1.setBrush(sQColor(perfect_color))

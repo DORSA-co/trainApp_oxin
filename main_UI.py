@@ -35,6 +35,7 @@ from app_settings import Settings
 from backend import (
     data_grabber,
     storage_funcs,
+    FileManager,
     chart_funcs,
     camera_connection,
     colors_pallete,
@@ -598,8 +599,6 @@ class UI_main_window(QMainWindow, ui):
             frame_obj_storage=self.hdd_chart_frame,
             storage_type='HDD'
         )
-        self.update_storage_chart()
-        self.start_storage_timer()
 
         # -----------------------------------------------------------------------------------------------------
         # PLC check buttons
@@ -691,38 +690,6 @@ class UI_main_window(QMainWindow, ui):
         # self.setFont(QtGui.QFont("Bariol", 18))
 
         self.show_labeling_help()
-
-    def update_storage_chart(self):
-        drives = storage_funcs.get_available_drives()
-        if len(drives) > 0:
-            drives = [drives[0]]
-            drives.append('/')
-            names = ['HDD', 'SSD']
-            self.label_289.setMaximumHeight(16777215)
-            self.hdd_chart_frame.setMaximumWidth(16777215)
-        else:
-            drives = ['/']
-            names = ['SSD']
-            self.label_289.setMaximumHeight(0)
-            self.hdd_chart_frame.setMaximumWidth(0)
-        storage_status = {}
-        for d, n in zip(drives, names):
-            status = storage_funcs.get_storage_status(d)
-            storage_status[n] = status
-
-            chart_funcs.update_storage_barchart(
-                ui_obj=self,
-                storage_type=n,
-                storage_status=storage_status
-            )
-
-            storage_status = {}
-
-    def start_storage_timer(self):
-        self.storage_timer = sQtCore.QTimer()
-        self.storage_timer.timeout.connect(self.update_storage_chart)
-        self.storage_timer.start(600000)
-        # self.storage_timer.start(10000)
 
     def showTime(self):
 
@@ -3683,6 +3650,22 @@ class UI_main_window(QMainWindow, ui):
             img = cv2.imread(os.path.join(path, help_images[i]))
             image = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
             exec('self.labeling_help_{}.setPixmap(QPixmap.fromImage(image))'.format(i+1))
+
+    def show_hdd_chart(self):
+        self.hdd_label.setMaximumHeight(16777215)
+        self.hdd_chart_frame.setMaximumWidth(310)
+
+    def hide_hdd_chart(self):
+        self.hdd_label.setMaximumHeight(0)
+        self.hdd_chart_frame.setMaximumWidth(0)
+
+    def show_ssd_chart(self):
+        self.ssd_label.setMaximumHeight(16777215)
+        self.ssd_chart_frame.setMaximumWidth(310)
+
+    def hide_ssd_chart(self):
+        self.ssd_label.setMaximumHeight(0)
+        self.ssd_chart_frame.setMaximumWidth(0)
 
 if __name__ == "__main__":
     app = QApplication()
