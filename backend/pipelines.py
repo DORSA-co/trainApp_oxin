@@ -45,12 +45,56 @@ TABLE_TITLE = {
         texts.Titles["classification_pipline"],
     ],
 }
+# ___________________________________________________________________
+MODELS_METRICS = {
+    "BY": [
+        ["loss", "acc", "precision", "recall", "f1"],
+        [
+            "mp",
+            "mr",
+            "map50",
+            "map",
+            "loss_box",
+            "loss_obj",
+            "loss_cls",
+            "maps",
+        ],
+    ],
+    "BSC": [
+        ["loss", "acc", "precision", "recall", "f1"],
+        ["loss", "accuracy", "iou", "fscore"],
+        ["loss", "acc", "precision", "recall", "f1"],
+    ],
+    "BSY": [
+        ["loss", "acc", "precision", "recall", "f1"],
+        ["loss", "accuracy", "iou", "fscore"],
+        [
+            "mp",
+            "mr",
+            "map50",
+            "map",
+            "loss_box",
+            "loss_obj",
+            "loss_cls",
+        ],
+    ],
+    "BS": [
+        ["loss", "acc", "precision", "recall", "f1"],
+        ["loss", "accuracy", "iou", "fscore"],
+    ],
+}
+TAB_TITLES = {
+    "BY": ["binary", "yolo"],
+    "BSC": ["binary", "segmention", "classification"],
+    "BSY": ["binary", "segmention", "yolo"],
+    "BS": ["binary", "segmention"],
+}
+# ________________________________________________________________
 
-
-# ____________________________________
 
 PIPELINE_ROOT = "root_path"
 PIPELINE_NAME = "name"
+PIPELINE_TYPE = "type"
 DATE_CREATED = "date_created"
 TIME_CREATED = "time_created"
 OWNER = "owner"
@@ -195,7 +239,7 @@ class Pipeline:
         self.pipline_json[DATE_CREATED] = date_created
         self.pipline_json[TIME_CREATED] = time_created
         self.pipline_json[OWNER] = None
-        self.pipline_json[USE_YOLO] = None
+        self.pipline_json[USE_YOLO] = False
 
         # target classes
         self.pipline_json[TARGET_CLASSES] = None
@@ -223,10 +267,10 @@ class Pipeline:
             MODEL_RECALL: None,
             MODEL_LOSS: None,
             MODEL_F1: None,
-            MODEL_PERCLASSS_ACCURACY: None,
         }
 
-        # localization model
+        # localizati
+        # on model
         self.pipline_json[LOCALIZATION_MODEL] = {
             MODEL_ID: None,
             MODEL_WEIGHTS_PATH: None,
@@ -445,15 +489,12 @@ def load_all_json_files_by_date(dir_path, reverse=False):
         file_paths = sorted(
             Path(dir_path).iterdir(), key=os.path.getmtime, reverse=True
         )
-        # return len(file_paths),file_paths
     except:
-        # return 0,[]
         file_paths = []
 
     for path in file_paths:
         path = os.path.normpath(path)
         if path[-4:] == "json":
-            # #print(path)
             with open(path, "r") as f:
                 res.append(json.load(f))
     return len(res), res

@@ -51,7 +51,13 @@ import numpy as np
 import math
 import os
 from datetime import date, time, datetime
-from PyQt5.QtWidgets import QListWidget, QApplication, QMessageBox
+from PyQt5.QtWidgets import (
+    QListWidget,
+    QApplication,
+    QMessageBox,
+    QTableWidget,
+    QWidget,
+)
 from PyQt5.QtGui import QPixmap, QImage
 from PySide6.QtWidgets import QHeaderView as sQHeaderView
 
@@ -142,6 +148,8 @@ from tqdm import tqdm
 import torch
 from pathlib import Path
 from yolov5.utils.metrics import ap_per_class, box_iou
+from yolov5.utils.plots import Annotator, colors
+from yolov5.utils.plots import output_to_target, plot_images, plot_val_study
 
 # ______import YOLOV5 module ______#
 
@@ -375,6 +383,8 @@ class API:
         self.segmentation_model_flag = False
         self.classification_model_flag = False
         self.yolo_model_flag = False
+        self.pipline_is_ready = False
+        self.data_is_ready = False
         self.add_piplines_in_combobox()
         self.add_dataset_in_combobox()
 
@@ -396,6 +406,8 @@ class API:
             lambda: self.set_pipline_mode("localization")
         )
         self.set_pipline_mode("yolo")
+
+        # temp
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -729,11 +741,24 @@ class API:
             combo_name.setCurrentIndex(1)
             combo_name.setCurrentIndex(index)
 
+    def update_evaluation_metrics_table(self, pipline_type):
+        self.ui.tabWidget.clear()
+        metrics_list = pipelines.MODELS_METRICS[pipline_type]
+        tab_list = pipelines.TAB_TITLES[pipline_type]
+        for i, each_tab in enumerate(tab_list):
+            table = eval("self.ui.{}_table_metrics".format(each_tab))
+            self.ui.tabWidget.addTab(table, each_tab)
+            self.update_pipline_table_info(table=table, titles=metrics_list[i])
+
     def update_pipline_table_title(self, pipline_name):
         _, pipline_info = self.db.get_selected_pipline_record(value=pipline_name)
         if pipline_info != []:
             self.len_model_piplines = len(
                 pipelines.TABLE_TITLE[pipline_info[0]["pipline_type"]]
+            )
+
+            self.update_evaluation_metrics_table(
+                pipline_type=pipline_info[0]["pipline_type"]
             )
 
             self.update_pipline_table_info(
@@ -788,6 +813,8 @@ class API:
         table.setRowCount(len(titles))
         table.horizontalHeader().setSectionResizeMode(sQHeaderView.Stretch)
         table.verticalHeader().setSectionResizeMode(sQHeaderView.Stretch)
+        table.horizontalHeader().setVisible(False)
+        table.verticalHeader().setVisible(False)
         for i, item in enumerate(titles):
             if language:
                 table_item = sQTableWidgetItem(item[self.language])
@@ -829,24 +856,19 @@ class API:
         self.update_pipline_table_title(
             pipline_name=self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
         )
-        # [
-        #         texts.Titles["binary_pipline"][self.language],
-        #         texts.Titles["segmention_pipline"][self.language],
-        #         texts.Titles["classification_pipline"][self.language],
-        #         texts.Titles["yolo_pipline"][self.language],
-        #     ],
 
         # progressbar updating
-        # self.ui.pgbar_pipline_creation.setFixedWidth(0)
-        self.ui.frame_120.setFixedHeight(0)
+        # self.ui.frame_120.setFixedHeight(0)
+        # self.ui.frame_118.setFixedHeight(0)
         # self.ui.pgbar_pipline_creation.setFixedHeight(0)
+        # self.ui.pgbar_pipline_creation.setFixedWidth(0)
 
         # combobox updating
         self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.clear()
         self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.addItems(self.PBT_option_list)
         self.add_piplines_in_combobox()
         # checkbox updating
-        self.ui.chbox_prefectdata_in_PBT_page.setChecked(True)
+        self.ui.chbox_prefectdata_in_PBT_page.setChecked(False)
         # lineEdit updating
         self.ui.lineEdit_of_path_displayment_in_PBT_page.setText("")
 
@@ -885,6 +907,26 @@ class API:
         )
         self.ui.load_dataset_pbt_btn.clicked.connect(
             self.refresh_loadDataset_tabs_in_PBT
+        )
+        self.ui.pipline_type_rdBTN_BY.toggled.connect(
+            lambda: self.set_stackedWidget_in_history_pbt_page(
+                self.ui.pipline_type_rdBTN_BY
+            )
+        )
+        self.ui.pipline_type_rdBTN_BS.toggled.connect(
+            lambda: self.set_stackedWidget_in_history_pbt_page(
+                self.ui.pipline_type_rdBTN_BS
+            )
+        )
+        self.ui.pipline_type_rdBTN_BSC.toggled.connect(
+            lambda: self.set_stackedWidget_in_history_pbt_page(
+                self.ui.pipline_type_rdBTN_BSC
+            )
+        )
+        self.ui.pipline_type_rdBTN_BSY.toggled.connect(
+            lambda: self.set_stackedWidget_in_history_pbt_page(
+                self.ui.pipline_type_rdBTN_BSY
+            )
         )
 
         # ______________ JJ
@@ -4197,22 +4239,9 @@ class API:
             self.ui.LBL_data_is_ready.setText(
                 texts.MESSEGES["Data_Is_Ready"][self.language]
             )
-
-        # if self.path_list != []:
-        # self.original_and_evaluated_image_in_PBT.add(
-        #     mylist=self.path_list,
-        #     name="original",
-        # )
-        # self.original_image_list_next_func = (
-        #     self.original_and_evaluated_image_in_PBT.build_next_func(
-        #         name="original"
-        #     )
-        # )
-        # self.original_image_list_prev_func = (
-        #     self.original_and_evaluated_image_in_PBT.build_prev_func(
-        #         name="original"
-        #     )
-        # )
+            self.data_is_ready = True
+            if self.pipline_is_ready:
+                self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
 
     # else:
     #     self.ui.set_warning(
@@ -4221,39 +4250,64 @@ class API:
     #         level=3,
     #     )
 
-    def evaluation_ui_updat(self, summaries):
+    def evaluation_ui_update(self, metrics_info, image_slider_path):
         """this function after evaluation operation completed
 
         Parameters
         ----------
-        summaries : list
-            list of evalution reports of each pipline's model
+        metrics_info : list
+            dictionary of evalution reports of each pipline's part
         """
 
-        # show pipline evaluation info on ui
-        self.ui.LBL_of_evalution_of_binary_model_in_PBT_page.setText(summaries[0])
-        self.ui.LBL_of_evalution_of_classification_model_in_PBT_page.setText(
-            summaries[1]
+        for i, metrics in enumerate(metrics_info["binary"]):
+            self.update_table_value(
+                table=self.ui.binary_table_metrics,
+                value=str(metrics),
+                row=i,
+            )
+        if "Y" in self.pipline_type:
+            for i, metrics in enumerate(metrics_info["yolo"]):
+                self.update_table_value(
+                    table=self.ui.yolo_table_metrics,
+                    value=str(metrics),
+                    row=i,
+                )
+        elif "S" in self.pipline_type:
+            for i, metrics in enumerate(metrics_info["segmention"]):
+                self.update_table_value(
+                    table=self.ui.segmention_table_metrics,
+                    value=str(metrics),
+                    row=i,
+                )
+        elif "C" in self.pipline_type:
+            for i, metrics in enumerate(metrics_info["classification"]):
+                self.update_table_value(
+                    table=self.ui.classification_table_metrics,
+                    value=str(metrics),
+                    row=i,
+                )
+        else:
+            print("what happend!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
+        self.original_and_evaluated_image_in_PBT.add(
+            mylist=list(image_slider_path.keys()),
+            name="original",
+        )
+        self.original_image_list_next_func = (
+            self.original_and_evaluated_image_in_PBT.build_next_func(name="original")
+        )
+        self.original_image_list_prev_func = (
+            self.original_and_evaluated_image_in_PBT.build_prev_func(name="original")
         )
 
-        # hide labels of task of evalution
-        self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedHeight(0)
-        self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedHeight(0)
-
-        # after finishing progress,the progressBar will hide
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
-
         """should modify"""
-        # self.ui.BTN_next_original_image_in_PBT_page.setEnabled(True)
-        # self.ui.BTN_prev_original_image_in_PBT_page.setEnabled(True)
+        self.ui.BTN_next_original_image_in_PBT_page.setEnabled(True)
+        self.ui.BTN_prev_original_image_in_PBT_page.setEnabled(True)
         # update slider
-        # self.pred_each_path = value
-        # self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
-        #     predict_eval=self.pred_each_path
-        # )
+
+        self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
+            predict_eval=image_slider_path
+        )
 
     def set_signal_from_evaluate_thread(self, percentage):
         """this function used to update progressbar percentage
@@ -4263,7 +4317,7 @@ class API:
         percentage : float
             new quantity of progressbar ,that should update
         """
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(percentage)
+        self.ui.pgbar_evalution_precess.setValue(percentage)
 
     def evaluate_model_on_selected_model(self):
         """this function connect to evaluate button in ui ,at PBT page
@@ -4273,17 +4327,16 @@ class API:
         show on ui
         """
 
-        """will modfiy"""
         # _______________creat PIPLINE OBJ????
-        dataset_path = os.path.dirname(os.path.dirname(self.path_list[0]))
-        pipline_name = self.pipline_OBJ.get(key=pipelines.PIPELINE_NAME)
+        # dataset_path = os.path.dirname(os.path.dirname(self.path_list[0]))
+        # pipline_name = self.pipline_OBJ.get(key=pipelines.PIPELINE_NAME)
+        # _______________________________________________________________________
 
         # display progressBar of progress of evaluating  dataset
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(150)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(23)
-
-        # Threading___________________
+        self.pgbar_value = 0
+        self.ui.pgbar_evalution_precess.setValue(self.pgbar_value)
+        self.ui.frame_118.setFixedHeight(60)
+        # # _____________________________Threading_____________________________#
         self.evaluation_thread = QThread()
         self.evaluation = evaluation_worker()
         if self.use_yolo:
@@ -4292,7 +4345,7 @@ class API:
                 data_nc=self.classes_num,
                 inputType=self.inputtype,
                 inputsize=self.inputsize,
-                pipline_OBJ=self.pipline_OBJ,
+                # pipline_OBJ=self.pipline_OBJ,
                 binary_model=self.b_model,
                 binary_thresh=0.5,
                 yolo_model=self.yolo_model,
@@ -4310,7 +4363,7 @@ class API:
         self.evaluation.finished.connect(self.evaluation_thread.quit)
         self.evaluation.finished.connect(self.evaluation.deleteLater)
         self.evaluation_thread.finished.connect(self.evaluation_thread.deleteLater)
-        self.evaluation.progress.connect(self.evaluation_ui_updat)
+        self.evaluation.progress.connect(self.evaluation_ui_update)
         self.evaluation.pgb_bar_signal.connect(self.set_signal_from_evaluate_thread)
         self.evaluation_thread.start()
 
@@ -4404,7 +4457,6 @@ class API:
                     value=texts.MESSEGES["Part_is_ready"][self.language],
                     row=row,
                 )
-
                 self.yolo_model_flag = True
             else:
                 self.update_table_value(
@@ -4447,12 +4499,15 @@ class API:
             self.ui.frame_120.setFixedHeight(0)
             self.ui.BTN_set_pipline_in_PBT_page.setEnabled(False)
             self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
+            self.pipline_is_ready = True
+            if self.data_is_ready:
+                self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
 
         # self.pipline_OBJ = self.ModelsCreation.pipline_OBJ
-        # self.classes_num = self.ModelsCreation.classes_num
-        # self.inputtype = self.ModelsCreation.inputtype
-        # self.inputsize = self.ModelsCreation.inputsize
-        # self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
+        self.classes_num = self.ModelsCreation.classes_num
+        self.inputtype = self.ModelsCreation.inputtype
+        self.inputsize = self.ModelsCreation.inputsize
+        self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
 
     def reset_pipline(self):
         self.pgbar_value = 0
@@ -4472,6 +4527,8 @@ class API:
         self.ui.BTN_set_pipline_in_PBT_page.setEnabled(True)
         self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(False)
         self.pipline_name = ""
+        self.pipline_is_ready = False
+        self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(False)
 
     def set_pipline(self):
         """this function connect to set button in ui,at PBT page
@@ -4479,14 +4536,13 @@ class API:
         this shows notif of it on ui
         """
         # CREAT PIPLINE OBJ:
+        # """temporary part"""
+        # self.load_binary_images_list_in_PBT_load_dataset_page()
+        # """will modfiy"""
+
         self.pipline_name = (
             self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
         )
-        # self.assign_table_column(
-        #     table=self.ui.tableWidget_pipline_info,
-        #     number_of_rows=self.len_model_piplines,
-        #     refresh=True,
-        # )
         self.assign_table_column(
             table=self.ui.tableWidget_pipline_info,
             number_of_rows=self.len_model_piplines,
@@ -4523,12 +4579,16 @@ class API:
         )
 
         self.ModelsCreation.model_creation_signal.connect(self.set_pipline_of_model)
+        self.ModelsCreation.pipline_info_signal.connect(self.set_pipline_type)
         self.ModelsCreation_thread.start()
 
         self.ui.BTN_set_pipline_in_PBT_page.setEnabled(False)
         # self.ModelsCreation_thread.finished.connect(
         #     lambda: self.ui.BTN_set_pipline_in_PBT_page.setEnabled(True)
         # )
+
+    def set_pipline_type(self, pipline_type):
+        self.pipline_type = pipline_type
 
     # load binary images list
     def load_binary_images_list(self):
@@ -6444,6 +6504,17 @@ class API:
         json_parent_path = self.db.get_json_parent_path()
         new_json = Pipeline(json_parent_path, name)
 
+    def set_stackedWidget_in_history_pbt_page(self, b):
+        if b.isChecked():
+            if b.text() == "BY":
+                self.ui.stackedWidget_LC_metrics.setCurrentIndex(1)
+            elif b.text() == "BSY":
+                self.ui.stackedWidget_LC_metrics.setCurrentIndex(2)
+            elif b.text() == "BS":
+                self.ui.stackedWidget_LC_metrics.setCurrentIndex(3)
+            elif b.text() == "BSC":
+                self.ui.stackedWidget_LC_metrics.setCurrentIndex(0)
+
     def laod_bpt_jsons(self):
         self.filter_json_flag = False
         json_parent_path = self.db.get_json_parent_path()
@@ -6640,7 +6711,7 @@ class evaluation_worker(QObject):
 
     # vars for handling thread
     finished = Signal()
-    progress = Signal(list)
+    progress = Signal(dict, dict)
     pgb_bar_signal = Signal(float)
 
     def set_params(
@@ -6649,7 +6720,6 @@ class evaluation_worker(QObject):
         data_nc,
         inputType,
         inputsize,
-        pipline_OBJ,
         binary_model,
         binary_thresh,
         yolo_model,
@@ -6665,13 +6735,19 @@ class evaluation_worker(QObject):
         self.inputType = inputType
         self.inputsize = inputsize
         self.data_nc = data_nc
-        self.pipline_OBJ = pipline_OBJ
+        # self.pipline_OBJ = pipline_OBJ
 
         # BINARY MODEL VARS:
         self.binary_model = binary_model
         self.binary_thresh = binary_thresh
         self.binary_grandtruth = []
         self.binary_pred = []
+        self.metrics_info = {
+            "binary": [],
+            "yolo": [],
+            "segmention": [],
+            "classification": [],
+        }
 
         # yolo vars:
         self.use_yolo = use_yolo
@@ -6681,12 +6757,21 @@ class evaluation_worker(QObject):
         self.yolo_iou_thres = yolo_iou_thres
         self.yolo_max_det = yolo_max_det
         self.yolo_splited_image = []
+        # slider vars
+        self.dic_of_Cimage = {}
+        self.dic_of_slider_image_path = {}
+        # const vars:
+        self.binary_evaluation_part = 50
+        self.binary_compute_metrics = 5
+        self.yolo_evaluation_part = 40
+        self.yolo_compute_metrics = 5
 
     def evaluate(self):
         """main function of class,process of evaluating"""
-
-        # define metrics,in an in the var instantiates,????
-        ymetrics = []
+        # define metrics,in an in the var instantiates
+        flag2yolo = False
+        data_not_created = True
+        # binary evalution part
         for i, path in enumerate(self.paths):
             if path.find("defect") != -1:  # check image is perfect or defect
                 flag = True
@@ -6697,60 +6782,95 @@ class evaluation_worker(QObject):
                 annotationSplit2yolo,
                 splitsid,
                 file_name,
-            ) = self.model2binary(
-                filepath=path, defect=flag
-            )  # data to binary model and get output to prepare for LC(location&classification)
-            print("j" * 30, self.use_yolo, len(splitsid))
+                points,
+            ) = self.model2binary(filepath=path, defect=flag)
+            # data to binary model and get output to prepare for LC(location&classification)
+            if data_not_created:
+                Imagedir, Textdir = self.create_folder_struct_of_yolo_dataset()
+                val_data = os.path.join(os.path.dirname(Textdir), "val_data.txt")
+                data_not_created = False
+                # path of .txt file ,that contain all image paths
+                # check dataset exited or not:
+                # data_not_created = not (
+                #     self.check_dataset_existance(imagepath=Imagedir, textpath=Textdir)
+                # )
             if self.use_yolo and (len(splitsid) != 0):  # if we use yolo in pipline
-                flag2yolo, val_data = self.prepare_binary_model_output2yolo(
+                flag2yolo = True
+                _ = self.prepare_binary_model_output2yolo(
                     imgs2yolo=split2yolo,
                     annotations2yolo=annotationSplit2yolo,
                     SplitsId=splitsid,
                     ImageFileName=file_name,
+                    Imagedir=Imagedir,
+                    Textdir=Textdir,
+                    all_val_path=val_data,
                 )  # prepare data for yolo
-            # if flag2yolo:
-            #     stats, names, losses, dataloaderlen = self.binaryoutput2yolo(
-            #         path=val_data
-            #     )  # give binary output to yolo
-            #     # compute yolo metrics
-            #     mp, mr, map50, map, losses, maps = self.compute_yolo_metrics(
-            #         names=names,
-            #         stats=stats,
-            #         loss=losses,
-            #         DataloaderLen=dataloaderlen,
-            #     )
-            #     ymetrics = [losses, mp, mr, map50, map]
 
             # update progress bar for each image ,go to model
-            percentage = (80 * (i + 1)) / len(self.paths)
+            percentage = (self.binary_evaluation_part * (i + 1)) / len(self.paths)
             self.pgb_bar_signal.emit(percentage)
 
-        # after the loop ,compute metrics
         # compute binary metrics
-        # loss, accuracy, recall, precision, f1 = self.compute_binary_metrics()
-        # bmetrics = [loss, accuracy, recall, precision, f1]
+        loss, accuracy, recall, precision, f1 = self.compute_binary_metrics()
+        bmetrics = [
+            round(loss, 3),
+            round(accuracy, 2),
+            round(recall, 2),
+            round(precision, 2),
+            round(f1, 2),
+        ]
+        self.pgb_bar_signal.emit(
+            self.yolo_evaluation_part + self.binary_compute_metrics
+        )
+        self.metrics_info["binary"] = bmetrics
+        # yolo evalution part
+        if flag2yolo:
+            stats, names, losses, dataloaderlen = self.binaryoutput2yolo(
+                path=os.path.dirname(val_data), points=points
+            )  # give binary output to yolo
+        # compute yolo metrics
+        (
+            mp,
+            mr,
+            map50,
+            map,
+            loss_box,
+            loss_obj,
+            loss_cls,
+            maps,
+        ) = self.compute_yolo_metrics(
+            names=names,
+            stats=stats,
+            loss=losses,
+            DataloaderLen=dataloaderlen,
+            map=0.0,
+            mp=0.0,
+            mr=0.0,
+            map50=0.0,
+        )
+        ymetrics = [
+            round(loss_box, 2),
+            round(loss_obj, 2),
+            round(loss_cls, 2),
+            round(mp, 2),
+            round(mr, 2),
+            round(map50, 2),
+            round(map, 2),
+        ]
+        self.metrics_info["yolo"] = ymetrics
+        self.progress.emit(self.metrics_info, self.dic_of_slider_image_path)
+        self.pgb_bar_signal.emit(
+            self.binary_evaluation_part
+            + self.binary_compute_metrics
+            + self.yolo_evaluation_part
+            + self.yolo_compute_metrics
+        )
 
         # set pipline metrics value in json
         # self.update_pipline_info(bmetrics=bmetrics, ymetrics=ymetrics, use_yolo=True)
 
-        # evalution is completed and  the progressbar is full
-        # self.pgb_bar_signal.emit(100)
-
-        # # UI REPORT
-        # # PREPARE INFO OF MODELS THAT SHOW ON UI
-        # binary_report = "BINARY: \n accuracy:{:.1f} \n precision:{:.1f} \n recall;{:.1f} \n f1:{:.1f}".format(
-        #     accuracy, precision, recall, f1
-        # )
-        # if ymetrics != []:
-        #     yolo_report = "BINARY: \n precision:{:.1f} \n recall;{:.1f} \n map:{:.1f},map0595:{:.1f}".format(
-        #         mp, mr, map50, map
-        #     )
-        # else:
-        #     yolo_report = "binary model predict all image perfect \nthen, there is no data for giveing to LC part"
-        # ListReport = [binary_report, yolo_report]
-        # # SEND MODEL METRICS&OUTPUT
-        # self.progress.emit(ListReport)
-        # self.finished.emit()  # FINISHED THREAD
+        # SEND MODEL METRICS&OUTPUT
+        self.finished.emit()  # FINISHED THREAD
 
     def update_pipline_info(
         self, bmetrics, ymetrics, use_yolo, lmetrics=None, cmetrics=None
@@ -6831,6 +6951,9 @@ class evaluation_worker(QObject):
         img = cv2.imread(filepath)  # load image
         basename = os.path.basename(filepath)
         file_name, _ = os.path.splitext(basename)
+        # ?????????????????????????????????????????
+        self.dic_of_Cimage[file_name] = True  # ???????
+        # ?????????????????????????????????????????
         if defect:
             # load mask of image
             mask_path = filepath.replace("defect", "defect_mask")
@@ -6850,7 +6973,13 @@ class evaluation_worker(QObject):
         if (
             self.inputType == "splited"
         ):  # check image should split or resize for giveing them to piplines
-            img_crops, _, crops_annotations = get_crops_normal(
+            (
+                img_crops,
+                _,
+                crops_annotations,
+                points,
+                self.target_size,
+            ) = get_crops_normal(
                 img=img,
                 mask=mask,
                 size=(self.inputsize[0], self.inputsize[0]),
@@ -6859,21 +6988,22 @@ class evaluation_worker(QObject):
         else:
             img_crops = [cv2.resize(img, (self.inputsize, self.inputsize))]
             img_crops = np.array(img_crops)
-
         pred = self.binary_model.predict(img_crops)
-        pred = (pred > 0.5).astype("float16")
+        pred = (pred > 0.3).astype("float16")
         grand_truth = np.zeros(
             pred.shape, dtype=np.float16
         )  # 0 for perfect split and 1 for defect split
         split2yolo = []
         annotationSplit2yolo = []
         defects_inx = np.where(pred[:] == 1)[0]
-
         if len(defects_inx) != 0:
             split2yolo = img_crops[defects_inx]
             if defect:
                 for index in defects_inx:
-                    annotationSplit2yolo.append(crops_annotations[index])
+                    if crops_annotations[index]["obj_masks"] != []:
+                        annotationSplit2yolo.append(crops_annotations[index])
+                    else:
+                        annotationSplit2yolo.append("perfect")
             else:
                 for _ in defects_inx:
                     annotationSplit2yolo.append("perfect")
@@ -6885,7 +7015,13 @@ class evaluation_worker(QObject):
 
         self.binary_pred.append(pred)
         self.binary_grandtruth.append(grand_truth)
-        return split2yolo, annotationSplit2yolo, defects_inx, file_name
+        return (
+            split2yolo,
+            annotationSplit2yolo,
+            defects_inx,
+            file_name,
+            points,
+        )
 
     def compute_binary_metrics(self):
         y_pred = np.concatenate(self.binary_pred, dtype=np.float16)
@@ -6914,17 +7050,38 @@ class evaluation_worker(QObject):
                 if not (os.path.exists(image_path)):
                     os.mkdir(image_path)
                 if img_folder == "images":
-                    label_path = image_path.replace("images", "label")
+                    label_path = image_path.replace("images", "labels")
                     if not (os.path.exists(label_path)):
                         os.mkdir(label_path)
-
         else:
             pass
 
         return image_path, label_path
 
+    def check_dataset_existance(self, imagepath, textpath):
+        image_list = os.listdir(imagepath)
+        label_list = os.listdir(textpath)
+        all_val_path = os.path.join(os.path.dirname(textpath), "val_data.txt")
+        flag = os.path.exists(all_val_path)
+
+        if (
+            (len(image_list) != 0)
+            and (len(label_list) != 0)
+            and (len(image_list) == len(label_list))
+            and flag
+        ):
+            return True
+        return False
+
     def prepare_binary_model_output2yolo(
-        self, imgs2yolo, annotations2yolo, SplitsId, ImageFileName
+        self,
+        imgs2yolo,
+        annotations2yolo,
+        SplitsId,
+        ImageFileName,
+        Imagedir,
+        Textdir,
+        all_val_path,
     ):
         """get binary model output and create standard yolo dataset
 
@@ -6944,51 +7101,68 @@ class evaluation_worker(QObject):
         str
             path of .txt file ,consists of all images path,that are yolo input
         """
-
-        # create folder structer of standard yolo dataset
-        ImagePath, TextPath = self.create_folder_struct_of_yolo_dataset()
         # save each split image and label with spesefic name
         for img, annotion, splitid in zip(imgs2yolo, annotations2yolo, SplitsId):
             # write and save image
-            image_file_name = "{}_{}.png".format(ImageFileName, splitid)
-            ImagePath = os.path.join(ImagePath, image_file_name)
-            cv2.imwrite(filename=ImagePath, img=img)
-
+            image_file_name = "{}_{}.jpg".format(ImageFileName, splitid)
+            ImagePath = os.path.join(Imagedir, image_file_name)
+            cv2.imwrite(ImagePath, img)
             # indicate text file name
             text_file_name = "{}_{}.txt".format(ImageFileName, splitid)
-            TextPath = os.path.join(TextPath, text_file_name)
-            self.yolo_splited_image.append(TextPath)
-
-            if (annotion != "perfect") and (
-                annotion["obj_mask"] != []
-            ):  # if grand truth of split is defect
-                for defect in annotion["obj_mask"]:
+            TextPath = os.path.join(Textdir, text_file_name)
+            # try:
+            #     os.mkdir(
+            #         os.path.join(
+            #             r"C:\trainApp_oxin\default_dataset\localization", "temp"
+            #         )
+            #     )
+            # except:
+            #     pass
+            # temp_text_path = os.path.join(
+            #     r"C:\trainApp_oxin\default_dataset\localization", "temp", text_file_name
+            # )
+            self.yolo_splited_image.append(ImagePath)
+            defect_info = []
+            # ___________temp_______
+            # temp_defect_info = []
+            # ______________________
+            if annotion != "perfect":  # if grand truth of split is defect
+                for defect in annotion["obj_masks"]:
                     # proper data for label ,that saves on .txt file
-                    classID = defect["class"]
-                    cnt = defect["mask"]
+                    classID = 0  # defect["class"]
+                    cnt = np.array(defect["mask"])
                     (x, y, w, h) = cv2.boundingRect(cnt)
                     xc = (x + (w // 2)) / self.inputsize[0]
                     yc = (y + (h // 2)) / self.inputsize[1]
                     width = w / self.inputsize[0]
                     height = h / self.inputsize[1]
-                    defect_info = [classID, xc, yc, width, height]
+                    defect_info.append([classID, xc, yc, width, height])
+                    # _________________temp_______________________
+                    # temp_defect_info.append([x, y, x + w, y + h])
+                    # ____________________________________________
+
             else:  # if grand truth of split is [perfect]
-                defect_info = [""]
-
+                defect_info.append([""])
+                # _________________temp_______
+                # temp_defect_info.append([""])
+                # ____________________________
             with open(TextPath, "w") as f:
-                for item in defect_info:
-                    f.write(str(item) + " ")
-                f.write("\n")
-
-            all_val_path = os.path.join(
-                os.path.dirname(TextPath), "val_data.txt"
-            )  # path of .txt file ,that contain all image paths
-            with open(all_val_path, "w"):
-                for file in self.yolo_splited_image:
-                    f.write(file)
+                for info in defect_info:
+                    for item in info:
+                        f.write(str(item) + " ")
                     f.write("\n")
-            return True, all_val_path
-        return False, ""
+            # ____________________temp_______________
+            # with open(temp_text_path, "w") as f:
+            #     for info in temp_defect_info:
+            #         for item in info:
+            #             f.write(str(item) + " ")
+            #         f.write("\n")
+            # ______________________________________
+        with open(all_val_path, "w") as f:
+            for file in self.yolo_splited_image:
+                f.write(file)
+                f.write("\n")
+        return True
 
     def create_yolo_dataloader(self, path, task="val"):
         """this function creat dataloader object
@@ -7014,11 +7188,9 @@ class evaluation_worker(QObject):
         else:
             self.yolo_device = self.yolo_model.device
             batch_size = self.yolo_batch_size
-
-        imgsz = check_img_size(self.inputsize, s=stride)
+        imgsz = check_img_size(self.inputsize[0], s=stride)
         pt = self.yolo_model.pt
-        pad, rect = (0.0, False) if task == "speed" else (0.5, pt)
-
+        pad, rect = (0.0, False) if task == "speed" else (0, pt)
         dataloader = create_dataloader(
             path,
             imgsz,
@@ -7028,6 +7200,13 @@ class evaluation_worker(QObject):
             pad=pad,
             rect=rect,
             workers=8,
+            prefix=colorstr(f"{task}: "),
+        )[0]
+        dataloader2 = create_dataloader(
+            path=path,
+            imgsz=300,
+            batch_size=1,
+            stride=1,
             prefix=colorstr(f"{task}: "),
         )[0]
 
@@ -7040,9 +7219,10 @@ class evaluation_worker(QObject):
             "mAP50",
             "mAP50-95",
         )
+        pbar2 = tqdm(dataloader2, desc=s, bar_format=TQDM_BAR_FORMAT)
         pbar = tqdm(dataloader, desc=s, bar_format=TQDM_BAR_FORMAT)
 
-        return pbar, len(dataloader)
+        return pbar, len(dataloader), pbar2
 
     def define_yolo_metrics(self):
         """this function define some vars for saveing yolo metrics value
@@ -7075,7 +7255,9 @@ class evaluation_worker(QObject):
             stats,
         )
 
-    def compute_yolo_metrics(self, names, stats, loss, DataloaderLen):
+    def compute_yolo_metrics(
+        self, names, stats, loss, DataloaderLen, map=0.0, mp=0.0, mr=0.0, map50=0.0
+    ):
         """function compute yolo metrics
 
         Parameters
@@ -7107,7 +7289,7 @@ class evaluation_worker(QObject):
         )  # number of targets per class
         maps = np.zeros(self.data_nc) + map
 
-        return (mp, mr, map50, map, *(loss.cpu() / DataloaderLen).tolist()), maps
+        return mp, mr, map50, map, *(loss.cpu() / DataloaderLen).tolist(), maps
 
     def process_batch(self, detections, labels, iouv):
         """utils funtion of yolov5
@@ -7149,7 +7331,7 @@ class evaluation_worker(QObject):
                 correct[matches[:, 1].astype(int), i] = True
         return torch.tensor(correct, dtype=torch.bool, device=iouv.device)
 
-    def binaryoutput2yolo(self, path):
+    def binaryoutput2yolo(self, path, points):
         """give output of binary to yolo
 
         Parameters
@@ -7164,8 +7346,7 @@ class evaluation_worker(QObject):
         """
 
         # create dataloader object
-        pbar, dataloaderlen = self.create_yolo_dataloader(path=path)
-
+        pbar, dataloaderlen, pbar2 = self.create_yolo_dataloader(path=path)
         # define LOSS&METRICS
         (
             names,
@@ -7177,10 +7358,14 @@ class evaluation_worker(QObject):
 
         compute_loss = None
         save_hybrid = False
-
+        half = False
         # give each split to yolo
-        for batch_i, (im, targets, paths, shapes) in enumerate(pbar):
+        for (
+            batch_i,
+            ((im, targets, paths, shapes), (im2, targets2, paths2, shapes2)),
+        ) in enumerate(zip(pbar, pbar2)):
             im = im.to(self.yolo_device, non_blocking=True)
+            im = im.half() if half else im.float()
             targets = targets.to(self.yolo_device)
             nb, _, height, width = im.shape
             preds, train_out = (
@@ -7188,10 +7373,20 @@ class evaluation_worker(QObject):
                 if compute_loss
                 else (self.yolo_model(im, augment=False), None)
             )
-
             targets[:, 2:] *= torch.tensor(
                 (width, height, width, height), device=self.yolo_device
             )
+            # __________dataloader number 2_____________
+
+            im2 = im2.to(self.yolo_device, non_blocking=True)
+            im2 = im2.half() if half else im2.float()
+            targets2 = targets2.to(self.yolo_device)
+            nb2, _, height2, width2 = im2.shape
+            targets2[:, 2:] *= torch.tensor(
+                (width2, height2, width2, height2), device=self.yolo_device
+            )
+            # ________________________________________
+
             lb = (
                 [targets[targets[:, 0] == i, 1:] for i in range(nb)]
                 if save_hybrid
@@ -7210,6 +7405,83 @@ class evaluation_worker(QObject):
                 agnostic=False,
                 max_det=self.yolo_max_det,
             )
+            true_path = os.path.join(
+                "C:/trainApp_oxin/default_dataset/localization/slider/true",
+                f"val_batch{batch_i}_labels.jpg",
+            )
+            pred_path = os.path.join(
+                "C:/trainApp_oxin/default_dataset/localization/slider/pred",
+                f"val_batch{batch_i}_pred.jpg",
+            )
+
+            plot_images(
+                im2,
+                targets2,
+                paths2,
+                true_path,
+                names,
+            )
+            plot_images(
+                im,
+                output_to_target(preds),
+                paths,
+                pred_path,
+                names,
+            )
+
+            basename = os.path.basename(paths2[0])
+            filename, _ = os.path.splitext(basename)
+            full_image_name = filename.split("_")[0] + "_" + filename.split("_")[1]
+            split_index = filename.split("_")[2]
+            split_index = int(split_index)
+            j, i = points[split_index]
+
+            original_image_in_slider_folder = os.path.join(
+                "default_dataset/localization/slider/pred", full_image_name + ".png"
+            )
+            evaluated_image_in_slider_folder = os.path.join(
+                "default_dataset/localization/slider/true", full_image_name + ".png"
+            )
+
+            # get raw image of  slider image
+            raw_image_of_dataset = os.path.join(
+                "default_dataset/binary/perfect", full_image_name + ".png"
+            )
+            if not (os.path.exists(raw_image_of_dataset)):
+                raw_image_of_dataset = os.path.join(
+                    "default_dataset/binary/defect", full_image_name + ".png"
+                )
+            if self.dic_of_Cimage[
+                full_image_name
+            ]:  # check we have image in slider folder or not
+                true_img = cv2.imread(raw_image_of_dataset)
+                # pred_img = true_img.copy()
+                self.dic_of_Cimage[full_image_name] = False
+            else:
+                true_img = cv2.imread(original_image_in_slider_folder)
+                # pred_img = cv2.imread(evaluated_image_in_slider_folder)
+
+            true_split = cv2.imread(true_path)
+            # pred_split = cv2.imread(pred_path)
+            true_img[
+                j : j + self.inputsize[0], i : i + self.inputsize[0], :
+            ] = true_split
+            # pred_img[
+            #     j : j + self.inputsize[0], i : i + self.inputsize[0], :
+            # ] = pred_split
+
+            os.remove(true_path)
+            # os.remove(pred_path)
+
+            cv2.imwrite(original_image_in_slider_folder, true_img)
+            # cv2.imwrite(evaluated_image_in_slider_folder, pred_img)
+            self.dic_of_slider_image_path[
+                original_image_in_slider_folder
+            ] = evaluated_image_in_slider_folder
+            # ________________________________________________________________________________
+
+            # basename = os.path.basename(paths2[0])
+
             # Metrics
             for si, pred in enumerate(preds):
                 labels = targets[targets[:, 0] == si, 1:]
@@ -7252,14 +7524,174 @@ class evaluation_worker(QObject):
                 stats.append(
                     (correct, pred[:, 4], pred[:, 5], labels[:, 0])
                 )  # (correct, conf, pcls, tcls)
+                percentage = (
+                    (self.yolo_evaluation_part * (batch_i + 1)) / len(pbar)
+                ) + (self.binary_evaluation_part + self.binary_compute_metrics)
+                self.pgb_bar_signal.emit(percentage)
 
+        self.pgb_bar_signal.emit(
+            self.binary_evaluation_part
+            + self.binary_compute_metrics
+            + self.yolo_evaluation_part
+        )
         return stats, names, loss, dataloaderlen
+
+    def prepare_image_in_slider(
+        self, points, size, path, true_boundboxes, pred_boundboxes, scale_boxex_param
+    ):
+        """
+        prepare_image_in_slider function : generate grand pred and grand trueth of L&C precess
+        and save them in folder structers for showing them on sliders
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        points : list
+            list of tuple,each tuple indicates position band of splits
+        size : _type_
+            _description_
+        path : str
+            file path of each split
+        true_boundboxes : _type_
+            _description_
+        pred_boundboxes : _type_
+            _description_
+        scale_boxex_param : _type_
+            _description_
+        """
+
+        # vars of directory path name:
+        # directory of image saves for slider show
+        evaluated_directory = "localization/slider/pred"
+        original_directory = "localization/slider/true"
+        # directory of image raw image in dataset
+        perfect_source_directory = "binary/perfect"
+        defect_source_directory = "binary/defect"
+
+        # get required info from file name
+        p = path[0]
+        basename = os.path.basename(p)
+        filename, _ = os.path.splitext(basename)
+        full_image_name = filename.split("_")[0] + "_" + filename.split("_")[1]
+        split_index = filename.split("_")[2]
+        split_index = int(split_index)
+
+        # create folder struct for slider images
+        original_image_in_slider_folder = os.path.join(
+            "default_dataset", original_directory, full_image_name + ".png"
+        )
+        evaluated_image_in_slider_folder = os.path.join(
+            "default_dataset", evaluated_directory, full_image_name + ".png"
+        )
+
+        # get raw image of  slider image
+        raw_image_of_dataset = os.path.join(
+            "default_dataset", perfect_source_directory, full_image_name + ".png"
+        )
+        if not (os.path.exists(raw_image_of_dataset)):
+            raw_image_of_dataset = os.path.join(
+                "default_dataset", defect_source_directory, full_image_name + ".png"
+            )
+
+        if self.dic_of_Cimage[
+            full_image_name
+        ]:  # check we have image in slider folder or not
+            true_img = cv2.imread(raw_image_of_dataset)
+            pred_img = cv2.imread(raw_image_of_dataset)
+            self.dic_of_Cimage[full_image_name] = False
+        else:
+            true_img = cv2.imread(original_image_in_slider_folder)
+            pred_img = cv2.imread(evaluated_image_in_slider_folder)
+
+        # procedure of plotting L&C resulte on image
+        j, i = points[split_index]
+        true_mask_part = np.ascontiguousarray(
+            true_img[j : j + size[0], i : i + size[1]]
+        )
+        pred_mask_part = np.ascontiguousarray(
+            pred_img[j : j + size[0], i : i + size[1]]
+        )
+        # true_annotator = Annotator(
+        #     true_mask_part, line_width=1, pil=True, example=str(self.yolo_model.names)
+        # )
+        # pred_annotator = Annotator(
+        #     pred_mask_part, line_width=1, pil=True, example=str(self.yolo_model.names)
+        # )
+        names = (
+            self.yolo_model.names
+            if hasattr(self.yolo_model, "names")
+            else self.yolo_model.module.names
+        )
+        temp = np.array([true_mask_part])
+        plot_images(
+            temp,
+            true_boundboxes,
+            path,
+            original_image_in_slider_folder,
+            names,
+        )
+
+        # if len(pred_boundboxes):
+        #     pred_boundboxes[:, :4] = scale_boxes(
+        #         scale_boxex_param, pred_boundboxes[:, :4], pred_mask_part.shape
+        #     ).round()
+
+        # draw pred of L&C models
+        # try:
+        #     os.mkdir(
+        #         os.path.join(r"C:\trainApp_oxin\default_dataset\localization", "temp2")
+        #     )
+        # except:
+        #     pass
+        # # ____________________temp__________________________________
+        # temp_text_path = os.path.join(
+        #     r"C:\trainApp_oxin\default_dataset\localization",
+        #     "temp2",
+        #     os.path.basename(path).replace("jpg", "txt"),
+        # )
+        # # ___________________________________________________________
+        # for conf, cls, *xyxy in reversed(pred_boundboxes):
+        #     # __________temporary__________________________
+        #     c = 0  # int(cls)  # integer class
+        #     label = None
+        #     # __________temporary__________________________
+        #     pred_annotator.box_label(xyxy, label, color=colors(c, True))
+        # pred_img[j : j + size[0], i : i + size[1]] = pred_annotator.result()
+
+        # # draw true of L&C
+        # # ____________temp______________
+        # temp_defect_info = []
+        # # ______________________________
+        # for conf, cls, *xyxy in reversed(true_boundboxes):
+        #     # __________temporary__________________________
+        #     c = 0  # int(cls)  # integer class
+        #     label = None
+        #     # __________temporary__________________________
+
+        #     true_annotator.box_label(xyxy, label, color=colors(c, True))
+        #     temp_defect_info.append([xyxy[0], xyxy[1], xyxy[2], xyxy[3]])
+        # true_img[j : j + size[0], i : i + size[1]] = true_annotator.result()
+        # ___________________temp___________________________
+        # with open(temp_text_path, "w") as f:
+        #     for info in temp_defect_info:
+        #         for item in info:
+        #             f.write(str(item) + " ")
+        #         f.write("\n")
+        # __________________________________________________
+
+        # cv2.imwrite(original_image_in_slider_folder, true_img)
+        # cv2.imwrite(evaluated_image_in_slider_folder, pred_img)
+        # self.dic_of_slider_image_path[
+        #     original_image_in_slider_folder
+        # ] = evaluated_image_in_slider_folder
 
 
 # __________________________________________________________________
 class ModelsCreation_worker(QObject):
     # vars for handling thread
     finished = Signal()
+    pipline_info_signal = Signal(str)
     model_creation_signal = Signal(int, bool)
 
     def set_params(self, login_user_name, db, language, pipline_name):
@@ -7280,19 +7712,18 @@ class ModelsCreation_worker(QObject):
         self.login_user_name = login_user_name
         self.db = db
         self.lang = language
-
         self.pipline_name = pipline_name
 
     def set_pipline(self):
         """main function of class,creating models"""
 
         # creating pipline object
-        # self.pipline_OBJ = pipelines.Pipeline(
-        #     pipeline_root=binary_list_funcs.PIPLINES_PATH,
-        #     pipeline_name=self.pipline_name,
-        # )
+        self.pipline_OBJ = pipelines.Pipeline(
+            pipeline_root=binary_list_funcs.PIPLINES_PATH,
+            pipeline_name=self.pipline_name,
+        )
         # set values of owner and username in pipline obj
-        # self.pipline_OBJ.set(key=pipelines.OWNER, value=self.login_user_name)
+        self.pipline_OBJ.set(key=pipelines.OWNER, value=self.login_user_name)
 
         # load data from database:
         (
@@ -7303,12 +7734,6 @@ class ModelsCreation_worker(QObject):
         ) = self.load_pipline_info_from_database()
         self.pipline_type = pipline_type
         if flag:
-            # set binary model parameter of pipline:
-            # self.set_param_of_pipline(
-            #     flag="binary",
-            #     modelid=binary_model_info[0]["algo_name"],
-            #     modelweight=binary_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
-            # )
             # get model name,map id to nhame
             b_algo_name = binary_model_funcs.translate_binary_algorithm_id_to_name(
                 binary_model_info[0]["algo_name"]
@@ -7327,6 +7752,14 @@ class ModelsCreation_worker(QObject):
                     1,
                     True,
                 )
+                self.pipline_OBJ.set_binary_model(
+                    key=pipelines.MODEL_ID, value=binary_model_info[0]["algo_name"]
+                )
+                self.pipline_OBJ.set_binary_model(
+                    key=pipelines.MODEL_WEIGHTS_PATH,
+                    value=binary_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
+                )
+
             except:
                 # send notif of there is problem in creating models of pipline(here binary)
                 self.model_creation_signal.emit(1, False)
@@ -7348,6 +7781,14 @@ class ModelsCreation_worker(QObject):
                     )
                     # send signal for updataing progress bar
                     self.model_creation_signal.emit(2, True)
+                    self.pipline_OBJ.set_localization_model(
+                        key=pipelines.MODEL_ID,
+                        value=LC_model_info["segmentation"][0]["algo_name"],
+                    )
+                    self.pipline_OBJ.set_localization_model(
+                        key=pipelines.MODEL_WEIGHTS_PATH,
+                        value=LC_model_info["segmentation"][0]["weights_path"],
+                    )
                 except:
                     # send notif of there is problem in creating models of pipline(here segmention)
                     self.model_creation_signal.emit(2, False)
@@ -7378,6 +7819,14 @@ class ModelsCreation_worker(QObject):
                     )
                     # send signal for updataing progress bar
                     self.model_creation_signal.emit(3, True)
+                    self.pipline_OBJ.set_classification_model(
+                        key=pipelines.MODEL_ID,
+                        value=LC_model_info["classification"][0]["algo_name"],
+                    )
+                    self.pipline_OBJ.set_classification_model(
+                        key=pipelines.MODEL_ID,
+                        value=LC_model_info["classification"][0]["weights_path"],
+                    )
                 except:
                     # send notif of there is problem in creating models of pipline(here segmention)
                     self.model_creation_signal.emit(3, False)
@@ -7395,6 +7844,14 @@ class ModelsCreation_worker(QObject):
                     self.yolo_creator(yolo_info=LC_model_info["yolo"][0])
                     # send signal for updataing progress bar
                     self.model_creation_signal.emit(4, True)
+                    """should modify"""
+                    self.pipline_OBJ.set_yolo_model(key=pipelines.MODEL_ID, value=0)
+                    """should modify"""
+                    self.pipline_OBJ.set_yolo_model(
+                        key=pipelines.MODEL_WEIGHTS_PATH,
+                        value=LC_model_info["yolo"][0]["weights_path"],
+                    )
+                    self.pipline_OBJ.set(pipelines.USE_YOLO, value=True)
                 except:
                     # send notif of there is problem in creating models of pipline(here yolo)
                     self.model_creation_signal.emit(4, False)
@@ -7406,76 +7863,8 @@ class ModelsCreation_worker(QObject):
                 0,
                 False,
             )
+        self.pipline_info_signal.emit(pipline_type)
         self.finished.emit()
-
-    # ___________________________________________________________________________
-
-    #     if LC_model_info[0] == "yolo":
-    #         try:
-    #             # set yolo model parameter of pipline:
-    #             self.set_param_of_pipline(
-    #                 flag="yolo",
-    #                 modelid=LC_model_info[1][0]["algo_name"],
-    #                 modelweight=LC_model_info[1][0]["weights_path"],
-    #             )
-    #             # create yolo model object
-    #             self.yolo_creator(yolo_info=LC_model_info[1])
-    #             # send signal for updataing progress bar
-    #             self.model_creation_signal.emit(4)
-    #         except:
-    #             # send notif of there is problem in creating models of pipline(here yolo)
-    #             self.model_creation_signal.emit(6)
-    #             self.finished.emit()
-    #     else:
-    #         try:
-    #             self.pipline_OBJ.set(key=pipelines.USE_YOLO, value=False)
-    #             # self.set_param_of_pipline(flag='SC',modelid='????',modelweight='????')
-
-    #             # get model name,map id to name
-    #             l_algo_name = (
-    #                 binary_model_funcs.translate_binary_algorithm_id_to_name(
-    #                     LC_model_info[0][0]["algo_name"],
-    #                     model_type="localization",
-    #                 )
-    #             )
-    #             # create segmention model object
-    #             self.l_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-    #                 algo_id=l_algo_name, input_size=self.inputsize
-    #             )
-    #             # send signal for updataing progress bar
-    #             self.model_creation_signal.emit(2)
-    #         except:
-    #             # send notif of there is problem in creating models of pipline(here segmention)
-    #             self.model_creation_signal.emit(6)
-    #             self.finished.emit()
-
-    #         try:
-    #             # get model name,map id to name
-    #             c_algo_name = (
-    #                 binary_model_funcs.translate_binary_algorithm_id_to_name(
-    #                     LC_model_info[1][0]["algo_name"],
-    #                     model_type="classification",
-    #                 )
-    #             )
-    #             # create classification model object
-    #             self.c_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-    #                 algo_id=c_algo_name,
-    #                 input_size=self.inputsize,
-    #                 num_class=classes_num,
-    #                 mode="categorical",
-    #             )
-    #             # send signal for updataing progress bar
-    #             self.model_creation_signal.emit(3)
-    #         except:
-    #             # send notif of there is problem in creating models of pipline(here segmention)
-    #             self.model_creation_signal.emit(6)
-    #             self.finished.emit()
-
-    #     self.model_creation_signal.emit(5)
-    #     self.finished.emit()
-    # else:
-    #     self.model_creation_signal.emit(6)
-    #     self.finished.emit()
 
     def load_pipline_info_from_database(self):
         """load required data for database"""
@@ -7530,71 +7919,6 @@ class ModelsCreation_worker(QObject):
 
         return flag, pipline_type, binary_model_info, LC_model_info
 
-    def set_param_of_pipline(self, flag, modelid, modelweight):
-        """function for setting ID&WEIGHT models in pipline object
-
-        Parameters
-        ----------
-        flag : str
-            indicate ,wich part of pipline,you want to set
-        modelid : _type_
-            _description_
-        modelweight : str
-            path of weight file
-        """
-
-        if flag == "binary":
-            self.pipline_OBJ.set_binary_model(key=pipelines.MODEL_ID, value=modelid)
-            self.pipline_OBJ.set_binary_model(
-                key=pipelines.MODEL_WEIGHTS_PATH, value=modelweight
-            )
-        elif flag == "yolo":
-            self.pipline_OBJ.set(key=pipelines.USE_YOLO, value=True)
-            self.pipline_OBJ.set_yolo_model(key=pipelines.MODEL_ID, value=modelid)
-            self.pipline_OBJ.set_yolo_model(
-                key=pipelines.MODEL_WEIGHTS_PATH, value=modelweight
-            )
-        else:
-            """should modify"""
-            pass
-            # set localiztion model parameter of pipline:
-            #     self.pipline_OBJ.set_localiztion_model(
-            #         key=pipelines.MODEL_ID,
-            #         value=localiztion_model_info[0]["algo_name"],
-            #     )
-            #     self.pipline_OBJ.set_localiztion_model(
-            #         key=pipelines.MODEL_WEIGHTS_PATH,
-            #         value=localiztion_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
-            #     )
-
-            #     self.classification_input_size = (
-            #         binary_model_funcs.strInputSize_2_intInputSize(
-            #             string=classification_model_info[0]["input_size"]
-            #         )
-            #     )
-            #     (
-            #         classes_num,
-            #         classes,
-            #     ) = binary_model_funcs.strInputSize_2_intInputSize(
-            #         string=classification_model_info[0]["classes"],
-            #         use_for_other_parameter=True,
-            #     )
-            #     # set localiztion model parameter of pipline:
-            #     self.pipline_OBJ.set_classification_model(
-            #         key=pipelines.MODEL_ID,
-            #         value=classification_model_info[0]["algo_name"],
-            #     )
-            #     self.pipline_OBJ.set_classification_model(
-            #         key=pipelines.MODEL_WEIGHTS_PATH,
-            #         value=classification_model_info[0][
-            #             pipelines.MODEL_WEIGHTS_PATH
-            #         ],
-            #     )
-
-            # self.pipline_OBJ.set_classification_model(
-            #     key=pipelines.TARGET_CLASSES, value=classes
-            # )
-
     def yolo_creator(self, yolo_info):
         """this function creates yolo object
 
@@ -7603,14 +7927,15 @@ class ModelsCreation_worker(QObject):
         yolo_info : list
             list contains dictionary of yolo data
         """
+        half = False
         device = select_device("", batch_size=yolo_info["batch_size"])
         self.yolo_model = DetectMultiBackend(
             weights=yolo_info["weights_path"],
             device=device,
             dnn=False,
-            fp16=True,
+            fp16=half,
         )
-        """should modify"""
+        # """should modify"""
         # stride, pt, jit, engine = (
         #     self.yolo_model.stride,
         #     self.yolo_model.pt,

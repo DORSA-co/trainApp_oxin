@@ -410,10 +410,6 @@ def translate_binary_algorithm_id_to_name(
 def translate_model_algorithm_id_to_creator_function(
     algo_id, input_size, num_class=1, mode="binary", weights_path=None
 ):
-    ###__________temp__________________
-    if algo_id == "Ulnim":
-        input_size = (224, 224, 3)
-    ###________________________________
     creator = train_api.ALGORITHM_CREATOR[algo_id]
     model = creator(input_size=input_size, num_class=num_class, mode=mode)
     if weights_path != None:

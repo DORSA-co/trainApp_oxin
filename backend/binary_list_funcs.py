@@ -40,6 +40,7 @@ WRONG_RIGHT_SYMBOL = {True: r"UI\images\true.jpg", False: r"UI\images\wrong.jpg"
 
 # ______________________________________________________________________JJ
 
+
 # create image slider area on UI
 def create_image_slider_on_ui(
     ui_obj,
@@ -100,19 +101,22 @@ def create_image_slider_on_ui(
 
         ui_obj.logger.create_new_log(
             message=texts.MESSEGES["BINARYLIST_SLIDER_build"]["en"],
-            code=texts_codes.SubTypes['BINARYLIST_SLIDER_build'],
-            level=1
+            code=texts_codes.SubTypes["BINARYLIST_SLIDER_build"],
+            level=1,
         )
         return True
 
     except Exception as e:
         ui_obj.set_warning(
-            texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"], "binarylist", texts_codes.SubTypes['BUILD_BINARYLIST_SLIDER_ERROR'], level=3
+            texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"],
+            "binarylist",
+            texts_codes.SubTypes["BUILD_BINARYLIST_SLIDER_ERROR"],
+            level=3,
         )
         ui_obj.logger.create_new_log(
             message=texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"],
-            code=texts_codes.SubTypes['BUILD_BINARYLIST_SLIDER_ERROR'],
-            level=5
+            code=texts_codes.SubTypes["BUILD_BINARYLIST_SLIDER_ERROR"],
+            level=5,
         )
         return False
 
@@ -170,12 +174,18 @@ def maximize_image_on_click(ui_obj, db_obj, label, event):
 
             if res:
                 ui_obj.window = neighbouring(
-                    image, annotated_image=annotated_image, has_annotation=True, lang=ui_obj.language
+                    image,
+                    annotated_image=annotated_image,
+                    has_annotation=True,
+                    lang=ui_obj.language,
                 )
                 ui_obj.window.show()
             else:
                 ui_obj.window = neighbouring(
-                    image, annotated_image=annotated_image, has_annotation=False, lang=ui_obj.language
+                    image,
+                    annotated_image=annotated_image,
+                    has_annotation=False,
+                    lang=ui_obj.language,
                 )
                 ui_obj.window.show()
 
@@ -361,15 +371,16 @@ def set_image_to_ui_slider_eidted_version(
             image=mask,
             no_image=False,
             image_type=image_type,
+            use_color=True,
         )
         # update text (image url)
-        whats_this_text = sub_directory + "#" + image_path + "#" + annot_sub_direcotory
-        eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % ("original", i)).setWhatsThis(
-            whats_this_text
-        )
-        eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % ("evaluated", i)).setWhatsThis(
-            whats_this_text
-        )
+        # whats_this_text = sub_directory + "#" + image_path + "#" + annot_sub_direcotory
+        # eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % ("original", i)).setWhatsThis(
+        #     whats_this_text
+        # )
+        # eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % ("evaluated", i)).setWhatsThis(
+        #     whats_this_text
+        # )
         # set last image labels on UI as empty
 
     #     try:
@@ -679,7 +690,7 @@ def create_mask_from_annotation_file(ui_obj, db_obj, image, annotation_path):
             pts = pts.reshape((-1, 1, 2))
             # Draw a line nofilled polygon
             # draw a filled polygon
-            line_thickness = obj_mask['line_thickness']
+            line_thickness = obj_mask["line_thickness"]
             if res:
                 image_mask = cv2.polylines(
                     image_mask,

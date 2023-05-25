@@ -11,6 +11,7 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+
 # from pyqt5_plugins import *
 
 from PySide6.QtCharts import *
@@ -134,7 +135,10 @@ class UI_main_window(QMainWindow, ui):
             log_mainfolderpath=self.log_mainfolderpath,
             console_log=True,
         )
-        self.logger.create_new_log(message=texts.MESSEGES["UI_CREATED"]["en"], code=texts_codes.SubTypes['UI_CREATED'])
+        self.logger.create_new_log(
+            message=texts.MESSEGES["UI_CREATED"]["en"],
+            code=texts_codes.SubTypes["UI_CREATED"],
+        )
 
         # load notification module
         self.notif_manager = notification_popup.Notification_manager(ui_obj=self)
@@ -569,7 +573,7 @@ class UI_main_window(QMainWindow, ui):
         # ------------------------------------------------------------------------------------------------------
         # storage
         chart_funcs.create_storage_barchart_on_ui(
-            ui_obj=self, 
+            ui_obj=self,
             frame_obj_storage=self.storage_chart_frame,
         )
         self.update_storage_chart()
@@ -666,26 +670,28 @@ class UI_main_window(QMainWindow, ui):
 
         self.show_labeling_help()
 
+        self.binary_table_metrics = QTableWidget(self)
+        self.yolo_table_metrics = QTableWidget(self)
+        self.segmention_table_metrics = QTableWidget(self)
+        self.classification_table_metrics = QTableWidget(self)
+
     def update_storage_chart(self):
         drives = storage_funcs.get_available_drives()
         if len(drives) > 0:
             drives = [drives[0]]
-            drives.append('/')
-            names = ['HDD', 'SSD']
+            drives.append("/")
+            names = ["HDD", "SSD"]
             self.label_289.setMaximumHeight(16777215)
         else:
-            drives = ['/']
-            names = ['SSD']
+            drives = ["/"]
+            names = ["SSD"]
             self.label_289.setMaximumHeight(7)
         storage_status = {}
         for d, n in zip(drives, names):
             status = storage_funcs.get_storage_status(d)
             storage_status[n] = status
 
-        chart_funcs.update_storage_barchart(
-            ui_obj=self,
-            storage_status=storage_status
-        )
+        chart_funcs.update_storage_barchart(ui_obj=self, storage_status=storage_status)
 
     def start_storage_timer(self):
         self.storage_timer = sQtCore.QTimer()
@@ -694,7 +700,6 @@ class UI_main_window(QMainWindow, ui):
         self.storage_timer.start(10000)
 
     def showTime(self):
-
         # getting current time
         current_time = QTime.currentTime()
 
@@ -706,18 +711,19 @@ class UI_main_window(QMainWindow, ui):
         # showing it to the label
         # self.sec_label.setText(label_time)
 
-    def set_settings(self, 
-                lang, 
-                font,
-                manual_plc,
-                plc_update_time, 
-                wind_duration, 
-                automatic_wind, 
-                auto_wind_intervals, 
-                manual_cameras, 
-                frame_rate, 
-                live_update_time
-            ):
+    def set_settings(
+        self,
+        lang,
+        font,
+        manual_plc,
+        plc_update_time,
+        wind_duration,
+        automatic_wind,
+        auto_wind_intervals,
+        manual_cameras,
+        frame_rate,
+        live_update_time,
+    ):
         """set language
 
         Args:
@@ -732,20 +738,20 @@ class UI_main_window(QMainWindow, ui):
         self.fontComboBox.setCurrentText(font)
         self.change_language_font()
 
-        if manual_plc == 'True':
+        if manual_plc == "True":
             self.manual_plc_check.setCheckState(Qt.CheckState.Checked)
         else:
             self.manual_plc_check.setCheckState(Qt.CheckState.Unchecked)
         self.update_timer_plc_spinBox.setValue(int(plc_update_time))
         self.update_wind_plc_spinBox.setValue(int(wind_duration))
-        if automatic_wind == 'True':
+        if automatic_wind == "True":
             self.auto_wind_check.setCheckState(Qt.CheckState.Checked)
         else:
             self.auto_wind_check.setCheckState(Qt.CheckState.Unchecked)
         self.update_auto_wind_plc_spinBox.setValue(int(auto_wind_intervals))
         self.change_plc_parms()
 
-        if manual_cameras == 'True':
+        if manual_cameras == "True":
             self.manual_cameras_check.setCheckState(Qt.CheckState.Checked)
         else:
             self.manual_cameras_check.setCheckState(Qt.CheckState.Unchecked)
@@ -788,13 +794,19 @@ class UI_main_window(QMainWindow, ui):
         self.bgApp.setStyleSheet("font: %s;" % (self.fontComboBox.currentText()))
         QApplication.instance().setFont(self.fontComboBox.currentText())
 
-        self.logger.create_new_log(message=texts.MESSEGES["setting_applied"]['en'].format(texts.Titles['language_font']['en']),
-                                    code=texts_codes.SubTypes['language_font'])
+        self.logger.create_new_log(
+            message=texts.MESSEGES["setting_applied"]["en"].format(
+                texts.Titles["language_font"]["en"]
+            ),
+            code=texts_codes.SubTypes["language_font"],
+        )
         self.set_warning(
-            texts.MESSEGES["setting_applied"][self.language].format(texts.Titles['language_font'][self.language]), 
-            "setting", 
-            texts_codes.SubTypes['language_font'],
-            level=1
+            texts.MESSEGES["setting_applied"][self.language].format(
+                texts.Titles["language_font"][self.language]
+            ),
+            "setting",
+            texts_codes.SubTypes["language_font"],
+            level=1,
         )
 
     def change_language_image(self):
@@ -816,7 +828,7 @@ class UI_main_window(QMainWindow, ui):
         self.label_language.setPixmap(pixmap)
 
     def change_wind_setting_status(self):
-        self.update_auto_wind_plc_spinBox.setEnabled(self.auto_wind_check.isChecked()) 
+        self.update_auto_wind_plc_spinBox.setEnabled(self.auto_wind_check.isChecked())
 
     def change_plc_parms(self):
         """Change plc timer params in ui
@@ -833,13 +845,19 @@ class UI_main_window(QMainWindow, ui):
         # except:
         #     pass
         self.manual_plc = self.manual_plc_check.isChecked()
-        self.logger.create_new_log(message=texts.MESSEGES["setting_applied"]['en'].format(texts.Titles['plc']['en']),
-                                    code=texts_codes.SubTypes['plc'])
+        self.logger.create_new_log(
+            message=texts.MESSEGES["setting_applied"]["en"].format(
+                texts.Titles["plc"]["en"]
+            ),
+            code=texts_codes.SubTypes["plc"],
+        )
         self.set_warning(
-            texts.MESSEGES["setting_applied"][self.language].format(texts.Titles['plc'][self.language]), 
-            "setting", 
-            texts_codes.SubTypes['plc'],
-            level=1
+            texts.MESSEGES["setting_applied"][self.language].format(
+                texts.Titles["plc"][self.language]
+            ),
+            "setting",
+            texts_codes.SubTypes["plc"],
+            level=1,
         )
 
     def change_cameras_parms(self):
@@ -851,13 +869,19 @@ class UI_main_window(QMainWindow, ui):
         self.frame_rate = self.frame_rate_spinBox.value()
         self.update_timer_live_frame = self.update_timer_live_frame_spinBox.value()
         self.manual_camera = self.manual_cameras_check.isChecked()
-        self.logger.create_new_log(message=texts.MESSEGES["setting_applied"]['en'].format(texts.Titles['cameras']['en']),
-                                    code=texts_codes.SubTypes['cameras'])
+        self.logger.create_new_log(
+            message=texts.MESSEGES["setting_applied"]["en"].format(
+                texts.Titles["cameras"]["en"]
+            ),
+            code=texts_codes.SubTypes["cameras"],
+        )
         self.set_warning(
-            texts.MESSEGES["setting_applied"][self.language].format(texts.Titles['cameras'][self.language]), 
+            texts.MESSEGES["setting_applied"][self.language].format(
+                texts.Titles["cameras"][self.language]
+            ),
             "setting",
-            texts_codes.SubTypes['cameras'],
-            level=1
+            texts_codes.SubTypes["cameras"],
+            level=1,
         )
 
     def create_alert_message(self, title, message):
@@ -878,7 +902,7 @@ class UI_main_window(QMainWindow, ui):
         alert_window.exec()
         self.logger.create_new_log(
             message="create new alert with message : {}".format(message),
-            code=texts_codes.SubTypes['new_alert']
+            code=texts_codes.SubTypes["new_alert"],
         )
 
     def mousePressEvent(self, event):
@@ -1049,7 +1073,9 @@ class UI_main_window(QMainWindow, ui):
             self.animation.setEasingCurve(QEasingCurve.InOutQuart)
             self.animation.start()
 
-        self.logger.create_new_log(message="Left menu open/close.", code=texts_codes.SubTypes['left_menu'])
+        self.logger.create_new_log(
+            message="Left menu open/close.", code=texts_codes.SubTypes["left_menu"]
+        )
 
     # Technical view Move
     # ///////////////////////////////////////////////////////////////
@@ -1124,7 +1150,10 @@ class UI_main_window(QMainWindow, ui):
             widthExtended = standard
 
         self.start_box_animation(width, widthRightBox, "left")
-        self.logger.create_new_log(message="extra Left menu open/close.", code=texts_codes.SubTypes['extra_left_menu'])
+        self.logger.create_new_log(
+            message="extra Left menu open/close.",
+            code=texts_codes.SubTypes["extra_left_menu"],
+        )
 
     def start_box_animation(self, left_box_width, right_box_width, direction):
         """run move animation with inputs
@@ -1165,7 +1194,9 @@ class UI_main_window(QMainWindow, ui):
     def label_show_help(self):
         h = self.label_show_help_frame.height()
         if h <= 1:
-            self.minHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"minimumHeight")
+            self.minHeight = sQtCore.QPropertyAnimation(
+                self.label_show_help_frame, b"minimumHeight"
+            )
             self.minHeight.setDuration(300)
             self.minHeight.setStartValue(h)
             self.minHeight.setEndValue(106)
@@ -1173,7 +1204,9 @@ class UI_main_window(QMainWindow, ui):
             self.group = sQtCore.QParallelAnimationGroup()
             self.group.addAnimation(self.minHeight)
 
-            self.maxHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"maximumHeight")
+            self.maxHeight = sQtCore.QPropertyAnimation(
+                self.label_show_help_frame, b"maximumHeight"
+            )
             self.maxHeight.setDuration(300)
             self.maxHeight.setStartValue(h)
             self.maxHeight.setEndValue(131)
@@ -1181,11 +1214,13 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.maxHeight)
             self.group.start()
 
-            icon_path = 'UI/images/bottom_arrow.png'
+            icon_path = "UI/images/bottom_arrow.png"
             self.label_show_help_btn.setIcon(sQPixmap.fromImage(sQImage(icon_path)))
 
         else:
-            self.minHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"minimumHeight")
+            self.minHeight = sQtCore.QPropertyAnimation(
+                self.label_show_help_frame, b"minimumHeight"
+            )
             self.minHeight.setDuration(300)
             self.minHeight.setStartValue(h)
             self.minHeight.setEndValue(1)
@@ -1193,7 +1228,9 @@ class UI_main_window(QMainWindow, ui):
             self.group = sQtCore.QParallelAnimationGroup()
             self.group.addAnimation(self.minHeight)
 
-            self.maxHeight = sQtCore.QPropertyAnimation(self.label_show_help_frame, b"maximumHeight")
+            self.maxHeight = sQtCore.QPropertyAnimation(
+                self.label_show_help_frame, b"maximumHeight"
+            )
             self.maxHeight.setDuration(300)
             self.maxHeight.setStartValue(h)
             self.maxHeight.setEndValue(1)
@@ -1201,7 +1238,7 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.maxHeight)
             self.group.start()
 
-            icon_path = 'UI/images/top_arrow.png'
+            icon_path = "UI/images/top_arrow.png"
             self.label_show_help_btn.setIcon(sQPixmap.fromImage(sQImage(icon_path)))
 
     def label_dorsa_open(self, enable):
@@ -1235,7 +1272,9 @@ class UI_main_window(QMainWindow, ui):
             self.animation.setEndValue(widthExtended)
             self.animation.setEasingCurve(QEasingCurve.InOutQuart)
             self.animation.start()
-            self.logger.create_new_log(message="Dorsa label opened", code=texts_codes.SubTypes['dorsa_label'])
+            self.logger.create_new_log(
+                message="Dorsa label opened", code=texts_codes.SubTypes["dorsa_label"]
+            )
 
     # TOGGLE Yes_defect
     # ///////////////////////////////////////////////////////////////
@@ -1253,7 +1292,9 @@ class UI_main_window(QMainWindow, ui):
     def show_login(self):
         """show login window"""
         self.login_window.show()
-        self.logger.create_new_log(message="open login window", code=texts_codes.SubTypes['show_login_window'])
+        self.logger.create_new_log(
+            message="open login window", code=texts_codes.SubTypes["show_login_window"]
+        )
 
     def setting_win(self):
         """open setting Frame with click"""
@@ -1290,7 +1331,9 @@ class UI_main_window(QMainWindow, ui):
     def minimize(self):
         """Minimize winodw"""
         self.showMinimized()
-        self.logger.create_new_log(message="minimize window", code=texts_codes.SubTypes['minimize_window'])
+        self.logger.create_new_log(
+            message="minimize window", code=texts_codes.SubTypes["minimize_window"]
+        )
 
     def close_win(self):
         """Close window"""
@@ -1298,13 +1341,15 @@ class UI_main_window(QMainWindow, ui):
         ret = api.check_image_saved()
         if ret:
             t = self.show_question(
-                    texts.WARNINGS["question"][self.language],
-                    texts.MESSEGES["exit_confirm"][self.language],
-                )
+                texts.WARNINGS["question"][self.language],
+                texts.MESSEGES["exit_confirm"][self.language],
+            )
             if not t:
                 return
             else:
-                self.logger.create_new_log(message="Close window", code=texts_codes.SubTypes['close_window'])
+                self.logger.create_new_log(
+                    message="Close window", code=texts_codes.SubTypes["close_window"]
+                )
                 self.close()
                 sys.exit()
 
@@ -1315,7 +1360,10 @@ class UI_main_window(QMainWindow, ui):
             self.showNormal()
         else:
             self.showMaximized()
-        self.logger.create_new_log(message="Maximize or Minimize window", code=texts_codes.SubTypes['maximize_minimize_window'])
+        self.logger.create_new_log(
+            message="Maximize or Minimize window",
+            code=texts_codes.SubTypes["maximize_minimize_window"],
+        )
 
     def show_help(self):
         help_image = None
@@ -1469,7 +1517,7 @@ class UI_main_window(QMainWindow, ui):
             # for i in range(11):
             # #print(i)
             record = "{} - {} - {}".format(record[0], record[1], (record[2]))
-            
+
             table_item = QTableWidgetItem(str(record))
             # if i ==0:
             table_item.setFlags(
@@ -1493,7 +1541,10 @@ class UI_main_window(QMainWindow, ui):
             ):
                 if i >= 0:
                     selected_list.append(i)
-        self.logger.create_new_log(message="get selected images in UI", code=texts_codes.SubTypes['get_selected_images'])
+        self.logger.create_new_log(
+            message="get selected images in UI",
+            code=texts_codes.SubTypes["get_selected_images"],
+        )
         return selected_list
 
     def clear_table(self):
@@ -1580,7 +1631,10 @@ class UI_main_window(QMainWindow, ui):
         """open Dataloader window"""
         self.label_type = "mask"
         self.load_sheets_win.show()
-        self.logger.create_new_log(message="Open Dataloader Window", code=texts_codes.SubTypes['dataloader_window'])  # LOG
+        self.logger.create_new_log(
+            message="Open Dataloader Window",
+            code=texts_codes.SubTypes["dataloader_window"],
+        )  # LOG
 
     def ret_create_login(self):
         """Create Object Login Window and set Title Page language
@@ -1589,14 +1643,20 @@ class UI_main_window(QMainWindow, ui):
         self.login_window = UI_login_window()
         texts.set_title_login(self, self.language)
 
-        self.logger.create_new_log(message="create login object", code=texts_codes.SubTypes['create_login_window'])  # LOG
+        self.logger.create_new_log(
+            message="create login object",
+            code=texts_codes.SubTypes["create_login_window"],
+        )  # LOG
         return self.login_window
 
     def create_ds_selection_dialog(self):
         self.select_ds_dialog = Ds_selection()
         texts.set_title_ds_selection(self, self.language)
 
-        self.logger.create_new_log(message="create dataset selection object", code=texts_codes.SubTypes['create_ds_selection_window'])  # LOG
+        self.logger.create_new_log(
+            message="create dataset selection object",
+            code=texts_codes.SubTypes["create_ds_selection_window"],
+        )  # LOG
         return self.select_ds_dialog
 
     def ret_create_labeling(self):
@@ -1652,10 +1712,14 @@ class UI_main_window(QMainWindow, ui):
         self.n.show()
 
     def maximize_labeling_help_images(self, n):
-        path = 'images/labeling_helps'
+        path = "images/labeling_helps"
         help_images = sorted(os.listdir(path))
-        img = cv2.imread(os.path.join(path, help_images[n-1]))
-        self.n_help = neighbouring(img, annotated_image=texts.ERRORS["annotation_not_exist"][self.language], lang=self.language)
+        img = cv2.imread(os.path.join(path, help_images[n - 1]))
+        self.n_help = neighbouring(
+            img,
+            annotated_image=texts.ERRORS["annotation_not_exist"][self.language],
+            lang=self.language,
+        )
         self.n_help.show()
 
     def show_small_neighbouring(self):
@@ -1701,7 +1765,9 @@ class UI_main_window(QMainWindow, ui):
         except Exception as e:
             self.set_label(self.label_sheet_id_2, "-")
             self.logger.create_new_log(
-                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+                message="set sheet detail Error",
+                code=texts_codes.SubTypes["set_sheet_detail_error"],
+                level=5,
             )
         try:
             if tab_live:
@@ -1711,7 +1777,9 @@ class UI_main_window(QMainWindow, ui):
         except Exception as e:
             self.set_label(self.label_heat_number_2, "-")
             self.logger.create_new_log(
-                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+                message="set sheet detail Error",
+                code=texts_codes.SubTypes["set_sheet_detail_error"],
+                level=5,
             )
         try:
             if tab_live:
@@ -1721,7 +1789,9 @@ class UI_main_window(QMainWindow, ui):
         except Exception as e:
             self.set_label(self.label_ps_number_2, "-")
             self.logger.create_new_log(
-                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+                message="set sheet detail Error",
+                code=texts_codes.SubTypes["set_sheet_detail_error"],
+                level=5,
             )
         try:
             if tab_live:
@@ -1731,7 +1801,9 @@ class UI_main_window(QMainWindow, ui):
         except Exception as e:
             self.set_label(self.label_pdl_number_2, "-")
             self.logger.create_new_log(
-                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+                message="set sheet detail Error",
+                code=texts_codes.SubTypes["set_sheet_detail_error"],
+                level=5,
             )
         try:
             if tab_live:
@@ -1741,7 +1813,9 @@ class UI_main_window(QMainWindow, ui):
         except Exception as e:
             self.set_label(self.label_length_2, "-")
             self.logger.create_new_log(
-                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+                message="set sheet detail Error",
+                code=texts_codes.SubTypes["set_sheet_detail_error"],
+                level=5,
             )
         try:
             if tab_live:
@@ -1751,7 +1825,9 @@ class UI_main_window(QMainWindow, ui):
         except Exception as e:
             self.set_label(self.label_width_2, "-")
             self.logger.create_new_log(
-                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+                message="set sheet detail Error",
+                code=texts_codes.SubTypes["set_sheet_detail_error"],
+                level=5,
             )
         try:
             if tab_live:
@@ -1761,9 +1837,13 @@ class UI_main_window(QMainWindow, ui):
         except Exception as e:
             self.set_label(self.label_thickness_2, "-")
             self.logger.create_new_log(
-                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+                message="set sheet detail Error",
+                code=texts_codes.SubTypes["set_sheet_detail_error"],
+                level=5,
             )
-        self.logger.create_new_log(message="Set sheet details", code=texts_codes.SubTypes['set_sheet_detail'])
+        self.logger.create_new_log(
+            message="Set sheet details", code=texts_codes.SubTypes["set_sheet_detail"]
+        )
 
     def set_warning(self, text, name, code=None, level=1):
         """Show warning with time delay 2 second , all labels for show warning has been set here"""
@@ -1788,7 +1868,7 @@ class UI_main_window(QMainWindow, ui):
         }
         if text != None:
             if code:
-                text = '(' + code + ')' + text
+                text = "(" + code + ")" + text
             if level == 1:
                 waring_labels[name].setText(" " + text + " ")
                 waring_labels[name].setStyleSheet(
@@ -1817,7 +1897,7 @@ class UI_main_window(QMainWindow, ui):
         else:
             waring_labels[name].setText("")
             waring_labels[name].setStyleSheet("")
-    
+
     def show_question(self, title, message):
         """Show question window with specefic message
         Args:
@@ -1829,11 +1909,15 @@ class UI_main_window(QMainWindow, ui):
         messageBox.setWindowTitle(title)
         messageBox.setIcon(sQMessageBox.Question)
         messageBox.setInformativeText(message)
-        
-        buttonoptionA = messageBox.addButton(texts.Titles['yes'][self.language], sQMessageBox.YesRole)    
-        buttonoptionB = messageBox.addButton(texts.Titles['no'][self.language], sQMessageBox.NoRole)  
+
+        buttonoptionA = messageBox.addButton(
+            texts.Titles["yes"][self.language], sQMessageBox.YesRole
+        )
+        buttonoptionB = messageBox.addButton(
+            texts.Titles["no"][self.language], sQMessageBox.NoRole
+        )
         messageBox.setDefaultButton(buttonoptionB)
-        
+
         messageBox.exec_()
 
         if messageBox.clickedButton() == buttonoptionA:
@@ -1944,11 +2028,11 @@ class UI_main_window(QMainWindow, ui):
         self.yolo_name_filter_combo.clear()
         self.cls_name_filter_combo.clear()
 
-        b_algorithms = ALGORITHM_NAMES['binary']
-        l_algorithms = ALGORITHM_NAMES['localization']
-        class_algorithms = ALGORITHM_NAMES['classification']
-        yolo_algorithms = ALGORITHM_NAMES['yolo']
-        y_algorithms = ALGORITHM_NAMES['yolo']
+        b_algorithms = ALGORITHM_NAMES["binary"]
+        l_algorithms = ALGORITHM_NAMES["localization"]
+        class_algorithms = ALGORITHM_NAMES["classification"]
+        yolo_algorithms = ALGORITHM_NAMES["yolo"]
+        y_algorithms = ALGORITHM_NAMES["yolo"]
         self.b_algorithms.addItems(b_algorithms)
         self.l_algorithms.addItems(l_algorithms)
         self.y_algorithms.addItems(y_algorithms)
@@ -1969,7 +2053,7 @@ class UI_main_window(QMainWindow, ui):
         reg_ex1 = sQtCore.QRegularExpression("[1-9][0-9]+")
         input_validator = PG.QRegularExpressionValidator(reg_ex1, self.b_epochs)
         self.b_epochs.setValidator(input_validator)
-        
+
         input_validator = PG.QRegularExpressionValidator(reg_ex1, self.b_batch)
         self.b_batch.setValidator(input_validator)
 
@@ -1989,7 +2073,7 @@ class UI_main_window(QMainWindow, ui):
         reg_ex1 = sQtCore.QRegularExpression("[1-9][0-9]+")
         input_validator = PG.QRegularExpressionValidator(reg_ex1, self.l_epochs)
         self.l_epochs.setValidator(input_validator)
-        
+
         input_validator = PG.QRegularExpressionValidator(reg_ex1, self.l_batch)
         self.l_batch.setValidator(input_validator)
 
@@ -2005,7 +2089,7 @@ class UI_main_window(QMainWindow, ui):
         reg_ex1 = sQtCore.QRegularExpression("[1-9][0-9]+")
         input_validator = PG.QRegularExpressionValidator(reg_ex1, self.y_epochs)
         self.y_epochs.setValidator(input_validator)
-        
+
         input_validator = PG.QRegularExpressionValidator(reg_ex1, self.y_batch)
         self.y_batch.setValidator(input_validator)
 
@@ -2019,7 +2103,7 @@ class UI_main_window(QMainWindow, ui):
 
     def localization_algorithm_changed(self):
         text = self.l_algorithms.currentText()
-        flag = text[-2:] == 'pr'
+        flag = text[-2:] == "pr"
         self.l_select_prep.setEnabled(flag)
         self.l_prep.setEnabled(flag)
 
@@ -2052,7 +2136,7 @@ class UI_main_window(QMainWindow, ui):
             "tuning_epochs": "1",
             "validation_split": "20",
         }
-        
+
         y_parms = {
             "algorithm_name": "5n",
             "input_type": True,
@@ -2105,7 +2189,10 @@ class UI_main_window(QMainWindow, ui):
         self.y_vs.setText(y_parms["validation_split"])
         self.y_input_size1.setValue(256)
 
-        self.logger.create_new_log(message="Set training default params", code=texts_codes.SubTypes['set_training_default_params'])
+        self.logger.create_new_log(
+            message="Set training default params",
+            code=texts_codes.SubTypes["set_training_default_params"],
+        )
 
     def reset_binary_default_params(self):
         """set default parms for binary training pages , that show in UI , every parms"""
@@ -2117,8 +2204,8 @@ class UI_main_window(QMainWindow, ui):
             "learning_rate": "1e-3",
             "tuning_epochs": "1",
             "validation_split": "20",
-            "proc": "CPU"
-            }
+            "proc": "CPU",
+        }
 
         self.b_algorithms.setCurrentText(b_parms["algorithm_name"])
 
@@ -2133,8 +2220,11 @@ class UI_main_window(QMainWindow, ui):
         self.input_size1.setValue(256)
         self.b_gpu.setCurrentText(b_parms["proc"])
 
-        self.logger.create_new_log(message="Reset binary training params", code=texts_codes.SubTypes['reset_binary_training_params'])
-   
+        self.logger.create_new_log(
+            message="Reset binary training params",
+            code=texts_codes.SubTypes["reset_binary_training_params"],
+        )
+
     def reset_localization_default_params(self):
         """set default parms for localization training pages , that show in UI , every parms"""
         l_parms = {
@@ -2144,7 +2234,7 @@ class UI_main_window(QMainWindow, ui):
             "batch_size": "8",
             "learning_rate": "1e-3",
             "validation_split": "20",
-            "proc": "CPU"
+            "proc": "CPU",
         }
 
         # localization model params
@@ -2160,7 +2250,10 @@ class UI_main_window(QMainWindow, ui):
         self.l_input_size1.setValue(256)
         self.l_gpu.setCurrentText(l_parms["proc"])
 
-        self.logger.create_new_log(message="Reset localization training params", code=texts_codes.SubTypes['reset_localization_training_params'])
+        self.logger.create_new_log(
+            message="Reset localization training params",
+            code=texts_codes.SubTypes["reset_localization_training_params"],
+        )
 
     def reset_classification_default_params(self):
         """set default parms for classification training pages , that show in UI , every parms"""
@@ -2171,7 +2264,7 @@ class UI_main_window(QMainWindow, ui):
             "learning_rate": "1e-3",
             "tuning_epochs": "1",
             "validation_split": "20",
-            "proc": "CPU"
+            "proc": "CPU",
         }
 
         # classification model params
@@ -2182,8 +2275,11 @@ class UI_main_window(QMainWindow, ui):
         self.class_split_lineedit.setText(classification_params["validation_split"])
         # self.c_gpu.setCurrentText(classification_params["proc"])
 
-        self.logger.create_new_log(message="Reset classification training params", code=texts_codes.SubTypes['reset_classification_training_default_params'])
-   
+        self.logger.create_new_log(
+            message="Reset classification training params",
+            code=texts_codes.SubTypes["reset_classification_training_default_params"],
+        )
+
     def reset_yolo_default_params(self):
         """set default parms for yolo training pages , that show in UI , every parms"""
         y_parms = {
@@ -2193,7 +2289,7 @@ class UI_main_window(QMainWindow, ui):
             "batch_size": "8",
             # "learning_rate": "1e-3",
             "validation_split": "20",
-            "proc": "CPU" 
+            "proc": "CPU",
         }
 
         # yolo model params
@@ -2209,7 +2305,10 @@ class UI_main_window(QMainWindow, ui):
         self.y_input_size1.setValue(256)
         self.y_gpu.setCurrentText(y_parms["proc"])
 
-        self.logger.create_new_log(message="Reset yolo training params", code=texts_codes.SubTypes['reset_yolo_training_params'])
+        self.logger.create_new_log(
+            message="Reset yolo training params",
+            code=texts_codes.SubTypes["reset_yolo_training_params"],
+        )
 
     def set_b_default_db_parms(self, binary_path):
         """Add default dataset to binary pathes for train"""
@@ -2244,19 +2343,19 @@ class UI_main_window(QMainWindow, ui):
             binary_vs = float(self.b_vs.text()) / 100
             if binary_vs > 0.5:
                 binary_vs = 0.5
-            str = self.b_gpu.currentText().split(' ')
-            binary_gpu = int(str[1]) if str[0]=='GPU' else -1
+            str = self.b_gpu.currentText().split(" ")
+            binary_gpu = int(str[1]) if str[0] == "GPU" else -1
             text = self.b_dp.toPlainText()
-            if text == '':
+            if text == "":
                 self.logger.create_new_log(
-                message=texts.WARNINGS["parameters_error"]['en'], 
-                code=texts_codes.SubTypes['parameters_error'],
-                level=5
+                    message=texts.WARNINGS["parameters_error"]["en"],
+                    code=texts_codes.SubTypes["parameters_error"],
+                    level=5,
                 )
                 self.set_warning(
                     texts.WARNINGS["parameters_error"][self.language],
                     "train",
-                    texts_codes.SubTypes['parameters_error'],
+                    texts_codes.SubTypes["parameters_error"],
                     level=2,
                 )
                 return []
@@ -2278,14 +2377,14 @@ class UI_main_window(QMainWindow, ui):
 
         except:
             self.logger.create_new_log(
-                message=texts.WARNINGS["parameters_error"]['en'], 
-                code=texts_codes.SubTypes['parameters_error'],
-                level=5
+                message=texts.WARNINGS["parameters_error"]["en"],
+                code=texts_codes.SubTypes["parameters_error"],
+                level=5,
             )
             self.set_warning(
                 texts.WARNINGS["parameters_error"][self.language],
                 "train",
-                texts_codes.SubTypes['parameters_error'],
+                texts_codes.SubTypes["parameters_error"],
                 level=2,
             )
             return []
@@ -2298,16 +2397,19 @@ class UI_main_window(QMainWindow, ui):
         try:
             localization_algorithm_name = self.l_algorithms.currentText()
             localization_pretrain_path = self.l_prep.toPlainText()
-            if localization_algorithm_name[-2:] == 'pr' and localization_pretrain_path == '':
+            if (
+                localization_algorithm_name[-2:] == "pr"
+                and localization_pretrain_path == ""
+            ):
                 self.logger.create_new_log(
-                message=texts.WARNINGS["parameters_error"]['en'], 
-                code=texts_codes.SubTypes['parameters_error'],
-                level=5
+                    message=texts.WARNINGS["parameters_error"]["en"],
+                    code=texts_codes.SubTypes["parameters_error"],
+                    level=5,
                 )
                 self.set_warning(
                     texts.WARNINGS["parameters_error"][self.language],
                     "l_train",
-                    texts_codes.SubTypes['parameters_error'],
+                    texts_codes.SubTypes["parameters_error"],
                     level=2,
                 )
                 return []
@@ -2321,19 +2423,19 @@ class UI_main_window(QMainWindow, ui):
             localization_vs = float(self.l_vs.text()) / 100
             if localization_vs > 0.5:
                 localization_vs = 0.5
-            str = self.l_gpu.currentText().split(' ')
-            localization_gpu = int(str[1]) if str[0]=='GPU' else -1
+            str = self.l_gpu.currentText().split(" ")
+            localization_gpu = int(str[1]) if str[0] == "GPU" else -1
             text = self.l_dp.toPlainText()
-            if text == '':
+            if text == "":
                 self.logger.create_new_log(
-                message=texts.WARNINGS["parameters_error"]['en'], 
-                code=texts_codes.SubTypes['parameters_error'],
-                level=5
+                    message=texts.WARNINGS["parameters_error"]["en"],
+                    code=texts_codes.SubTypes["parameters_error"],
+                    level=5,
                 )
                 self.set_warning(
                     texts.WARNINGS["parameters_error"][self.language],
                     "l_train",
-                    texts_codes.SubTypes['parameters_error'],
+                    texts_codes.SubTypes["parameters_error"],
                     level=2,
                 )
                 return []
@@ -2355,14 +2457,14 @@ class UI_main_window(QMainWindow, ui):
 
         except:
             self.logger.create_new_log(
-                message=texts.WARNINGS["parameters_error"]['en'], 
-                code=texts_codes.SubTypes['parameters_error'],
-                level=5
+                message=texts.WARNINGS["parameters_error"]["en"],
+                code=texts_codes.SubTypes["parameters_error"],
+                level=5,
             )
             self.set_warning(
                 texts.WARNINGS["parameters_error"][self.language],
                 "l_train",
-                texts_codes.SubTypes['parameters_error'],
+                texts_codes.SubTypes["parameters_error"],
                 level=2,
             )
             return []
@@ -2384,8 +2486,8 @@ class UI_main_window(QMainWindow, ui):
         except:
             self.logger.create_new_log(
                 message=texts.WARNINGS["training_params_invalid"]["en"],
-                code=texts_codes.SubTypes['parameters_error'],
-                level=5
+                code=texts_codes.SubTypes["parameters_error"],
+                level=5,
             )
             return []
 
@@ -2418,19 +2520,19 @@ class UI_main_window(QMainWindow, ui):
             yolo_vs = float(self.y_vs.text()) / 100
             if yolo_vs > 0.5:
                 yolo_vs = 0.5
-            str = self.y_gpu.currentText().split(' ')
-            yolo_gpu = int(str[1]) if str[0]=='GPU' else -1
+            str = self.y_gpu.currentText().split(" ")
+            yolo_gpu = int(str[1]) if str[0] == "GPU" else -1
             text = self.y_dp.toPlainText()
-            if text == '':
+            if text == "":
                 self.logger.create_new_log(
-                message=texts.WARNINGS["parameters_error"]['en'], 
-                code=texts_codes.SubTypes['parameters_error'],
-                level=5
+                    message=texts.WARNINGS["parameters_error"]["en"],
+                    code=texts_codes.SubTypes["parameters_error"],
+                    level=5,
                 )
                 self.set_warning(
                     texts.WARNINGS["parameters_error"][self.language],
                     "y_train",
-                    texts_codes.SubTypes['parameters_error'],
+                    texts_codes.SubTypes["parameters_error"],
                     level=2,
                 )
                 return []
@@ -2452,14 +2554,14 @@ class UI_main_window(QMainWindow, ui):
 
         except:
             self.logger.create_new_log(
-                message=texts.WARNINGS["parameters_error"]['en'], 
-                code=texts_codes.SubTypes['parameters_error'],
-                level=5
+                message=texts.WARNINGS["parameters_error"]["en"],
+                code=texts_codes.SubTypes["parameters_error"],
+                level=5,
             )
             self.set_warning(
                 texts.WARNINGS["parameters_error"][self.language],
                 "y_train",
-                texts_codes.SubTypes['parameters_error'],
+                texts_codes.SubTypes["parameters_error"],
                 level=2,
             )
             return []
@@ -2559,7 +2661,7 @@ class UI_main_window(QMainWindow, ui):
 
         self.comboBox_ncamera_SI.clear()
         i = 0
-        for x in range(min, max+1):
+        for x in range(min, max + 1):
             self.comboBox_ncamera_SI.addItem(str(x))
             self.comboBox_ncamera_SI.setItemChecked(i, False)
             i += 1
@@ -2569,7 +2671,7 @@ class UI_main_window(QMainWindow, ui):
         """set combobox Items in data aquization page for frames with max size"""
         self.comboBox_nframe_SI.clear()
         i = 0
-        for x in range(1, max+1):
+        for x in range(1, max + 1):
             self.comboBox_nframe_SI.addItem(str(x))
             self.comboBox_nframe_SI.setItemChecked(i, False)
             i += 1
@@ -2620,16 +2722,16 @@ class UI_main_window(QMainWindow, ui):
                 self.set_warning(
                     texts.ERRORS["date_empty"][self.language],
                     "profile",
-                    texts_codes.SubTypes['ds_params_error'],
+                    texts_codes.SubTypes["ds_params_error"],
                     level=2,
                 )
                 return {}
-                
+
             if not user_name:
                 self.set_warning(
                     texts.ERRORS["creator_user_name_empty"][self.language],
                     "profile",
-                    texts_codes.SubTypes['ds_params_error'],
+                    texts_codes.SubTypes["ds_params_error"],
                     level=2,
                 )
                 return {}
@@ -2638,7 +2740,7 @@ class UI_main_window(QMainWindow, ui):
                 self.set_warning(
                     texts.ERRORS["dataset_name_empty"][self.language],
                     "profile",
-                    texts_codes.SubTypes['ds_params_error'],
+                    texts_codes.SubTypes["ds_params_error"],
                     level=2,
                 )
                 return {}
@@ -2647,7 +2749,7 @@ class UI_main_window(QMainWindow, ui):
                 self.set_warning(
                     texts.ERRORS["location_empty"][self.language],
                     "profile",
-                    texts_codes.SubTypes['ds_params_error'],
+                    texts_codes.SubTypes["ds_params_error"],
                     level=2,
                 )
                 return {}
@@ -2662,9 +2764,9 @@ class UI_main_window(QMainWindow, ui):
 
         except:
             self.logger.create_new_log(
-                message="Except in get create dataset parms from UI", 
-                code=texts_codes.SubTypes['ds_params_error'],
-                level=5
+                message="Except in get create dataset parms from UI",
+                code=texts_codes.SubTypes["ds_params_error"],
+                level=5,
             )
             return []
 
@@ -2809,8 +2911,8 @@ class UI_main_window(QMainWindow, ui):
             #     "background-image: url(./images/icons/PBT.png);background-color: rgb(170, 170, 212);color:rgb(0,0,0);"
             # )
             # self.stackedWidget.setCurrentWidget(self.page_pbt)
-        
-        if btnName == 'log_btn':
+
+        if btnName == "log_btn":
             self.show_log_win = show_logs_UI.show_logs(lang=self.language)
             texts.set_show_log(self, self.language)
             self.show_log_win.show()
@@ -2907,9 +3009,7 @@ class UI_main_window(QMainWindow, ui):
             )
 
         if btnName == "yolo_training":
-            self.stackedWidget_yolo.setCurrentWidget(
-                self.page_yolo_training
-            )
+            self.stackedWidget_yolo.setCurrentWidget(self.page_yolo_training)
             self.yolo_training.setStyleSheet(
                 "QPushButton { background-color: rgb(170 ,170, 170); color: rgb(0,0,0); border: none;} \
                                             QPushButton:hover {background-color:  rgb(197 ,195, 196);}"
@@ -2920,9 +3020,7 @@ class UI_main_window(QMainWindow, ui):
             )
 
         if btnName == "yolo_history":
-            self.stackedWidget_yolo.setCurrentWidget(
-                self.page_yolo_history
-            )
+            self.stackedWidget_yolo.setCurrentWidget(self.page_yolo_history)
             self.yolo_history.setStyleSheet(
                 "QPushButton { background-color: rgb(170 ,170, 170); color: rgb(0,0,0); border: none;} \
                                             QPushButton:hover {background-color:  rgb(197 ,195, 196);}"
@@ -3062,7 +3160,7 @@ class UI_main_window(QMainWindow, ui):
         if btnName == "b_add_cancel":
             self.cancel_add_binary_ds()
 
-        if btnName == 'l_algorithms':
+        if btnName == "l_algorithms":
             self.localization_algorithm_changed()
 
         if btnName == "l_add_ds":
@@ -3248,13 +3346,13 @@ class UI_main_window(QMainWindow, ui):
             else:
                 btn_name = eval("self.camera%s_btn" % cam_num)
             ico = sQIcon()
-            ico.addFile(img_top, sQSize(30,30), sQIcon.Disabled, sQIcon.Off)
+            ico.addFile(img_top, sQSize(30, 30), sQIcon.Disabled, sQIcon.Off)
             btn_name.setIcon(ico)
 
         else:
             btn_name = eval("self.camera%s_btn" % cam_num)
             ico = sQIcon()
-            ico.addFile(img_btm, sQSize(30,30), sQIcon.Disabled, sQIcon.Off)
+            ico.addFile(img_btm, sQSize(30, 30), sQIcon.Disabled, sQIcon.Off)
             btn_name.setIcon(ico)
 
     def get_selected_cameras(self):
@@ -3285,7 +3383,6 @@ class UI_main_window(QMainWindow, ui):
                 tabs[i].setStyleSheet("background-color: rgb(100,100,100)")
 
     def refresh_pipline_tabs_in_PBT(self):
-
         self.cbBox_of_binary_model_in_PBT_page.clear()
         self.cbBox_of_binary_model_in_PBT_page.addItem("All")
         self.cbBox_of_binary_model_in_PBT_page.addItems(ALGORITHM_NAMES["binary"])
@@ -3297,10 +3394,7 @@ class UI_main_window(QMainWindow, ui):
 
         self.cbBox_of_yolo_model_in_PBT_page.clear()
         self.cbBox_of_yolo_model_in_PBT_page.addItem("All")
-        self.cbBox_of_yolo_model_in_PBT_page.addItems(
-            ALGORITHM_NAMES["yolo"]
-        )
-
+        self.cbBox_of_yolo_model_in_PBT_page.addItems(ALGORITHM_NAMES["yolo"])
 
         self.cbBox_of_multiClassification_model_in_PBT_page.clear()
         self.cbBox_of_multiClassification_model_in_PBT_page.addItem("All")
@@ -3477,7 +3571,6 @@ class UI_main_window(QMainWindow, ui):
     def set_status_plc(self, mode=False, auto=True, text=None):
         if auto:
             if not mode:
-
                 self.plc_status_line.setText(texts.Titles["disconnect"][self.language])
                 self.plc_warnings.setText(texts.Titles["disconnect"][self.language])
                 self.plc_status = False
@@ -3532,7 +3625,7 @@ class UI_main_window(QMainWindow, ui):
                 self.start_wind_btn.setEnabled(True)
                 api.set_wind(False)
 
-    def clear_binary_filters_fields(self, wich_page='not PBT'):
+    def clear_binary_filters_fields(self, wich_page="not PBT"):
         if wich_page != "PBT":
             self.binary_epoch_min_filter_lineedit.clear()
             self.binary_epoch_max_filter_lineedit.clear()
@@ -3606,12 +3699,19 @@ class UI_main_window(QMainWindow, ui):
         self.yolo_end_day_lineedit.clear()
 
     def show_labeling_help(self, n_helps=6):
-        path = 'images/labeling_helps'
+        path = "images/labeling_helps"
         help_images = sorted(os.listdir(path))
         for i in range(n_helps):
             img = cv2.imread(os.path.join(path, help_images[i]))
-            image = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
-            exec('self.labeling_help_{}.setPixmap(QPixmap.fromImage(image))'.format(i+1))
+            image = QImage(
+                img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+            )
+            exec(
+                "self.labeling_help_{}.setPixmap(QPixmap.fromImage(image))".format(
+                    i + 1
+                )
+            )
+
 
 if __name__ == "__main__":
     app = QApplication()
