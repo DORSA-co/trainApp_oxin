@@ -1,5 +1,4 @@
 import re
-from tkinter import EXCEPTION
 from matplotlib.pyplot import flag
 import mysql.connector
 from mysql.connector import Error

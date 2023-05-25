@@ -10,7 +10,7 @@ import inspect
 
 
 class dataBaseUtils:
-    def __init__(self, ui_obj, user_name="root", password="Dorsa1400@"):
+    def __init__(self, ui_obj, user_name="root", password="Dorsa-1400"):
         if ui_obj!='Null':
             self.db = database.dataBase(
                 user_name, password, "localhost", "saba_database", logger_obj=ui_obj.logger
@@ -37,7 +37,7 @@ class dataBaseUtils:
         self.piplines='piplines'
         self.binary_model='binary_models'
         self.classification='classification_models'
-        self.localiztion='localiztion_models'
+        self.localiztion='localization_models'
         self.yolo='yolo_models'
 
         

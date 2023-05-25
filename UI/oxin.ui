@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>1527</width>
-    <height>950</height>
+    <height>935</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,7 +20,7 @@
   <property name="minimumSize">
    <size>
     <width>1527</width>
-    <height>950</height>
+    <height>935</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -34324,13 +34324,13 @@ border: 3px solid #434c5d;</string>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
-                 <height>40</height>
+                 <height>25</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
-                 <height>40</height>
+                 <height>25</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -34344,13 +34344,13 @@ border: 3px solid #434c5d;</string>
                  <number>0</number>
                 </property>
                 <property name="topMargin">
-                 <number>2</number>
+                 <number>0</number>
                 </property>
                 <property name="rightMargin">
                  <number>0</number>
                 </property>
                 <property name="bottomMargin">
-                 <number>2</number>
+                 <number>0</number>
                 </property>
                 <item>
                  <widget class="QLabel" name="creditsLabel">

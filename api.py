@@ -23,7 +23,6 @@ from PySide6.QtCore import QThread as sQThread
 from PySide6.QtGui import QPen, QPainter
 from matplotlib import pyplot as plt
 from matplotlib.style import use
-from pyautogui import PRIMARY
 
 from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
 from app_settings import Settings
@@ -86,7 +85,7 @@ from utils1 import tempMemory, Utils
 
 from backend.dataset import Dataset
 from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2
-import train_api
+# import train_api
 
 from labeling.labeling_UI import labeling
 
@@ -110,8 +109,6 @@ import time
 from PySide6.QtWidgets import QLabel as sQLabel, QProgressBar
 from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
 from PySide6.QtWidgets import QVBoxLayout
-from Train_modules.models import xception_cnn, resnet_cnn
-from Train_modules.models import unet, low_unet, resnet_unet
 import matplotlib.pyplot as plt
 # from tensorflow.keras.metrics import Accuracy, Precision, Recall
 from Train_modules.deep_utils import metrics
@@ -336,6 +333,7 @@ class API:
 
         # PLC
         self.retry_connecting_plc = 0
+        self.plc_connection_status = False
         self.set_plc_ip_to_ui()
         self.connect_plc()
         # self.load_plc_parms()  # should be commecnt in finbal version
@@ -3645,7 +3643,7 @@ class API:
         elif model_type == "classification":
             model_type_ = "classification_models"
         elif model_type == "localization":
-            model_type_ = "localiztion_models"
+            model_type_ = "localization_models"
         elif model_type == "yolo":
             model_type_ = "yolo_models"
         else:
@@ -5740,6 +5738,7 @@ class API:
             if self.retry_connecting_plc < 10:
                 self.retry_connecting_plc += 1
                 self.ui.change_plc_status(status="retry")
+                self.plc_connection_status = False
                 QTimer().singleShot(1000,self.connect_plc)
                 self.ui.set_status_plc(
                     auto=False,
@@ -5750,6 +5749,7 @@ class API:
             else:
                 self.retry_connecting_plc = 0
                 self.ui.set_status_plc(mode=False)
+                self.plc_connection_status = False
                 self.ui.change_plc_status(status="disconnect")
                 self.ui.disconnect_plc_btn.setEnabled(False)
                 self.ui.connect_plc_btn.setEnabled(True)
@@ -5983,7 +5983,7 @@ class API:
 
     def set_wind(self, mode=True):
         # print(type(self.sensor),self.sensor)
-        if self.sensor :
+        if self.sensor and self.plc_connection_status:
             if self.ui.wind_itr == 1:
                 ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
                 ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(mode))
