@@ -48,7 +48,7 @@
 
 
 import cv2
-img = cv2.imread('oxin_image_grabber/2023/05/19/989m7/TOP/6/12.png')
+img = cv2.imread('oxin_image_grabber/2023/05/27/900o7/TOP/6/12.png')
 img = cv2.flip(img, 1)
 cv2.imshow('a',img)
 cv2.waitKey(0)

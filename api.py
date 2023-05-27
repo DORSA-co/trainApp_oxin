@@ -86,7 +86,7 @@ from utils1 import tempMemory, Utils
 
 from backend.dataset import Dataset
 from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2
-# import train_api
+import train_api
 
 from labeling.labeling_UI import labeling
 
@@ -406,7 +406,8 @@ class API:
 
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
-        if res: 
+        if res:
+            self.update_time = storage_settings['update_time']
             self.max_cleanup_percentage = storage_settings['max_cleanup_percentage']
             self.hdd_path = storage_settings['hdd_path']
             self.ssd_images_path = storage_settings['ssd_images_path']
@@ -422,10 +423,11 @@ class API:
         if self.ssd_image_file_manager:
             ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
             if ssd_image_percent > self.max_cleanup_percentage:
-                # os.system('python3 ../oxin_storage_management/storage_main_UI.py')
                 self.storage_win = storage_management()
                 self.s_api = storage_api(self.storage_win)
                 self.storage_win.show()
+                self.s_api.update_charts()
+                self.s_api.check_disks()
         
     def update_storage_charts(self):
         if os.path.exists(self.hdd_path):
@@ -470,7 +472,7 @@ class API:
         self.check_storage()
         self.storage_timer = QTimer()
         self.storage_timer.timeout.connect(self.check_storage)
-        self.storage_timer.start(1000*60*15)
+        self.storage_timer.start(1000*60*self.update_time)
 
     def set_pipline_mode(self,key):
         self.pipline_dict = {'yolo':[self.ui.page_yolo,self.ui.page_yolo_2],'localization':[self.ui.page_localization,self.ui.page_localization_2]}
