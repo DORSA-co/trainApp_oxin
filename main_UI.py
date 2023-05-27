@@ -3379,9 +3379,13 @@ class UI_main_window(QMainWindow, ui):
         return KEYS.get(event.key())
 
     def show_image_info_lable_page(self, sheet, pos):
+        print(pos)
         self.plabel_coil_num_txt.setText(str(sheet.get_id()))
         self.plabel_date_txt.setText(str(sheet.get_date_string()))
-        self.plabel_cam_txt.setText(str(pos[-1][0]))
+        if 'bot' in pos[1].lower() or 'down' in pos[1].lower():
+            self.plabel_cam_txt.setText(str(pos[-1][0] + 12))
+        else:
+            self.plabel_cam_txt.setText(str(pos[-1][0]))
         self.plabel_frame_txt.setText(str(pos[-1][1]))
 
     def show_image_btn(self, label_name, img_path):

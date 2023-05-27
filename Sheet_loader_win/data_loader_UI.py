@@ -219,6 +219,7 @@ class data_loader(QMainWindow, ui):
             return
 
         path1 = sheet_path(self.par_path, str(select[0]))
+        print(path1)
         # import os
         try:
             if os.path.exists(path1): 
@@ -226,9 +227,9 @@ class data_loader(QMainWindow, ui):
             else : 
                 #print('Path Not Exist  {}'.format(str(path1)))
                 self.set_warning(texts.ERRORS['path_not_exist'][self.language], level=3)
-            self.main_ui_obj.logger.create_new_log(
-                code=texts_codes.SubTypes['Open_folder_eror'], message=texts.ERRORS["path_not_exist"]["en"]+'  '+str(path1), level=3
-            )
+                self.main_ui_obj.logger.create_new_log(
+                    code=texts_codes.SubTypes['Open_folder_eror'], message=texts.ERRORS["path_not_exist"]["en"]+'  '+str(path1), level=3
+                )
         except:
             #print('Cant open folder')
             self.set_warning(texts.ERRORS['open_folder_failed'][self.language], level=3)

@@ -1,6 +1,7 @@
 # from logging import _Level
 import ast
 from email.mime import image
+from importlib.resources import path
 from ntpath import join
 from operator import le
 from pickletools import uint8
@@ -420,12 +421,11 @@ class API:
         self.update_storage_charts()
         if self.ssd_image_file_manager:
             ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
-            print('#######3', ssd_image_percent, self.max_cleanup_percentage)
             if ssd_image_percent > self.max_cleanup_percentage:
                 # os.system('python3 ../oxin_storage_management/storage_main_UI.py')
-                storage_win = storage_management()
-                s_api = storage_api(storage_win)
-                storage_win.show()
+                self.storage_win = storage_management()
+                self.s_api = storage_api(self.storage_win)
+                self.storage_win.show()
         
     def update_storage_charts(self):
         if os.path.exists(self.hdd_path):
@@ -1355,9 +1355,11 @@ class API:
             if l != self.l:
                 for key in self.sheet_imgprocessing_mem.keys():
                     self.sheet_imgprocessing_mem[key] = False
-            jsons_path = pathStructure.sheet_path(self.sheet.get_main_path()+'_imgProcessing', self.sheet.get_id())
+            jsons_main_path = self.db.get_suggestions_path()
+            jsons_path = pathStructure.sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
             if not os.path.exists(jsons_path):
                 self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
+                pathStructure.create_sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
             if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
                 self.ui.set_enabel(self.ui.load_coil_btn, False)
                 self.ui.set_enabel(self.ui.next_coil_btn, False)
@@ -1376,8 +1378,7 @@ class API:
                     self.workers[-1].assign_parameters(
                         n_cameras=((i*step)+1, (i+1)*step),
                         n_frames=(1, self.sheet.get_nframe()), 
-                        main_path=self.sheet.get_main_path(), 
-                        res_main_path=self.sheet.get_main_path()+'_imgProcessing',
+                        res_main_path=jsons_main_path,
                         sheet_id=self.sheet.get_id(), 
                         active_cameras = self.sheet.get_cameras(),
                         img_format=self.sheet.get_image_format(),
@@ -6154,7 +6155,7 @@ class API:
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)
                 # if self.connection_status:
-                print('start thread set caemra and projector')
+                # print('start thread set caemra and projector')
                 threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start()
                 # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
                 if self.show_save_notif:

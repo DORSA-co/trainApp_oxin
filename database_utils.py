@@ -127,11 +127,11 @@ class dataBaseUtils:
     # ________________________________________________________________
     #
     # ________________________________________________________________
-    def load_sheet_date(self, id):
+    def load_sheet_date_mainpath(self, id):
         res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id, int_type=False)
         record = record[0]
 
-        return record['date']
+        return record['date'], record['main_path']
 
     # ________________________________________________________________
     #
@@ -178,6 +178,13 @@ class dataBaseUtils:
         )
         record = record[0]
         return record["parent_path"]
+
+    def get_suggestions_path(self, value=0):
+        res, record = self.db.search(
+            table_name=self.setting_tabel, param_name="id", value=value
+        )
+        record = record[0]
+        return record["suggestions_path"]
 
     def set_dataset_path_user(self, path):
         #  update_record(self,data,table_name,col_name,value,id,id_value):
