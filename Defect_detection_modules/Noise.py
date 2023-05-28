@@ -20,7 +20,7 @@ def NoiseDetection(img, dim, ndim):
     if img.shape[1] != dim:
         img = np.pad(img, [(0, 0), (0, dim - img.shape[1])], mode='constant')
 
-    # blocks = np.swapaxes(img.reshape(4, 8, 4, -1), 1, 2)
+    # blocks = np.swapaxis(img.reshape(4, 8, 4, -1), 1, 2)
 
     # Divide img into (ndim, ndim) sub-blocks
     blocks = ImageDivision(img, ndim, 0)

@@ -1,6 +1,7 @@
 import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore as sQtCore
 # from pyqt5_plugins import *
 from PySide6.QtCharts import *
 from PySide6.QtCore import *
@@ -24,6 +25,8 @@ class neighbouring(QMainWindow, ui):
         super(neighbouring, self).__init__()
         self.setupUi(self)
         flags = Qt.WindowFlags(Qt.FramelessWindowHint)
+        title = "SENSE-Image Enlargement"
+        self.setWindowTitle(title)
         self.pos_ = self.pos()
         self.setWindowFlags(flags)
         self.img = img
@@ -55,11 +58,11 @@ class neighbouring(QMainWindow, ui):
         self.annot_checkbox.setText(texts.Titles['show_labels'][lang])
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):
@@ -178,7 +181,11 @@ class neighbouring(QMainWindow, ui):
     def show_help(self):
         if not self.help_win:
             self.help_win = help(lang=self.language)
-        self.help_win.set_text('neighbouring page')
+        text = texts.HELPS["IMAGEENLARGEMENT_PAGE"][self.language]
+        help_image = cv2.imread(
+            texts.HELPS_ADDRESS["IMAGEENLARGEMENT_PAGE"][self.language]
+        )
+        self.help_win.set_help_image(help_image, text)
         self.help_win.show()
 
     def center(self):
@@ -189,7 +196,6 @@ class neighbouring(QMainWindow, ui):
         frame_geo.moveCenter(center_loc)
         self.move(frame_geo.topLeft())
         # self.move(frame_geo.moveTop)
-
 
     def set_annotations(self):
         self.n_image.setScaledContents(True)

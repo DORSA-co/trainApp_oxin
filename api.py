@@ -119,7 +119,7 @@ from PySide6.QtWidgets import QVBoxLayout
 from Train_modules.models import xception_cnn, resnet_cnn
 from Train_modules.models import unet, low_unet, resnet_unet
 import matplotlib.pyplot as plt
-from tensorflow.keras.metrics import Accuracy, Precision, Recall
+# from tensorflow.keras.metrics import Accuracy, Precision, Recall
 from Train_modules.deep_utils import metrics
 from backend import pipelines
 import tensorflow as tf
@@ -356,18 +356,26 @@ class API:
         self.retry_connecting_plc = 0
         self.set_plc_ip_to_ui()
         self.connect_plc()
-        self.load_plc_parms()  # should be commecnt in finbal version
+        # self.load_plc_parms()  # should be commecnt in finbal version
         self.ui.start_wind_btn.clicked.connect(lambda: self.set_wind(True))
         self.start_auto_wind()
         # self.update_plc_parms()
         self.plc_timer = QTimer()
         self.plc_timer.timeout.connect(self.update_sensor_and_temp)
-        self.plc_update = QTimer()
-        self.plc_update.timeout.connect(self.update_plc_values)
+        # self.plc_update = QTimer()
+        # self.plc_update.timeout.connect(self.test_t)
+
+        self.update_plc_values()
+
+
         self.slab_detect = False
         self.language = self.ui.language
         self.last_sensor = False
         self.sensor = False
+        self.up_in = False
+        self.up_out = False
+        self.down_in = False
+        self.down_out = False
         self.init_check_plc()
 
         # Level2 connection
@@ -397,9 +405,9 @@ class API:
 
         self.show_save_notif = False
 
-        self.runing_b_model = False
-        self.runing_l_model = False
-        self.runing_y_model = False
+        self.running_b_model=False
+        self.running_l_model=False
+        self.running_y_model=False
 
         self.ui.radioButton_use_yolo.setChecked(True)
         self.ui.radioButton_use_yolo.toggled.connect(
@@ -409,7 +417,7 @@ class API:
             lambda: self.set_pipline_mode("localization")
         )
         self.set_pipline_mode("yolo")
-
+        self.load_plc_parms()
         # temp
 
         # DEBUG_FUNCTIONS
@@ -1290,7 +1298,7 @@ class API:
         # pbt
         self.ui.my_databases_3.clicked.connect(self.update_combo_piplines)
         self.ui.remove_pipline.clicked.connect(self.remove_pipline)
-        self.ui.show_details_pipline.clicked.connect(self.show_pipline_details_func)
+        # self.ui.show_details_pipline.clicked.connect(self.show_pipline_details_func)
         self.ui.toolButton_binary.clicked.connect(
             lambda: self.load_table_with_btn(self.ui.toolButton_binary.objectName())
         )
@@ -1509,9 +1517,7 @@ class API:
             if l != self.l:
                 for key in self.sheet_imgprocessing_mem.keys():
                     self.sheet_imgprocessing_mem[key] = False
-            jsons_path = os.path.join(
-                self.sheet.get_main_path() + "_imgProcessing", self.sheet.get_id()
-            )
+            jsons_path = pathStructure.sheet_path(self.sheet.get_main_path()+'_imgProcessing', self.sheet.get_id())
             if not os.path.exists(jsons_path):
                 self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
             if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
@@ -2789,14 +2795,14 @@ class API:
     #     return parent_path
 
     def set_b_parms(self):
-        if not self.runing_b_model:
+        if not self.running_b_model:
             # #print('statrt training binary model')
             b_parms = self.ui.get_binary_parms()
             if not b_parms:
                 return
 
-            # update chart axes given train data
-            self.update_b_chart_axes(b_parms[3])
+            # update chart axis given train data
+            self.update_b_chart_axis(b_parms[3])
 
             self.bmodel_train_thread = sQThread()
             # Step 3: Create a worker object
@@ -2837,7 +2843,7 @@ class API:
             )
 
             # Step 6: Start the thread
-            self.runing_b_model = True
+            self.running_b_model=True
             self.bmodel_train_thread.start()
 
             self.ui.binary_train.setEnabled(False)
@@ -2852,7 +2858,7 @@ class API:
             self.ui.binary_train_progressBar.value() + 1
         )
 
-    def update_b_chart_axes(self, nepoch):
+    def update_b_chart_axis(self, nepoch):
         chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
         chart_funcs.clear_series_date(
             ui_obj=self.ui, chart_postfixes=self.ui.chart_names
@@ -2884,13 +2890,13 @@ class API:
             )
 
     def set_l_parms(self):
-        if not self.runing_l_model:
+        if not self.running_l_model:
             l_parms = self.ui.get_localization_parms()
             if not l_parms:
                 return
-
-            # update chart axes given train data
-            self.update_l_chart_axes(l_parms[4])
+            
+            # update chart axis given train data
+            self.update_l_chart_axis(l_parms[4])
 
             self.lmodel_train_thread = sQThread()
             # Step 3: Create a worker object
@@ -2933,7 +2939,7 @@ class API:
             )
 
             # Step 6: Start the thread
-            self.runing_l_model = True
+            self.running_l_model=True
             self.lmodel_train_thread.start()
 
             self.ui.localization_train.setEnabled(False)
@@ -2948,7 +2954,7 @@ class API:
             self.ui.localization_train_progressBar.value() + 1
         )
 
-    def update_l_chart_axes(self, nepoch):
+    def update_l_chart_axis(self, nepoch):
         # for chart_postfix in self.ui.loc_chart_names:
         #     eval("self.ui.axisX_%s" % chart_postfix).setRange(0, max(nepoch, chart_funcs.axisX_range))
         #     if self.ui.localization_chart_checkbox.isChecked():
@@ -2992,13 +2998,13 @@ class API:
             )
 
     def set_y_parms(self):
-        if not self.runing_y_model:
+        if not self.running_y_model:
             y_parms = self.ui.get_yolo_parms()
             if not y_parms:
                 return
 
-            # update chart axes given train data
-            self.update_yolo_chart_axes(y_parms[3])
+            # update chart axis given train data
+            self.update_yolo_chart_axis(y_parms[3])
 
             self.ymodel_train_thread = sQThread()
             # Step 3: Create a worker object
@@ -3039,7 +3045,7 @@ class API:
             )
 
             # Step 6: Start the thread
-            self.runing_y_model = True
+            self.running_y_model=True
             self.ymodel_train_thread.start()
 
             self.ui.yolo_train.setEnabled(False)
@@ -3054,7 +3060,7 @@ class API:
             self.ui.yolo_train_progressBar.value() + 1
         )
 
-    def update_yolo_chart_axes(self, nepoch):
+    def update_yolo_chart_axis(self, nepoch):
         # for chart_postfix in self.ui.loc_chart_names:
         #     eval("self.ui.axisX_%s" % chart_postfix).setRange(0, max(nepoch, chart_funcs.axisX_range))
         #     if self.ui.localization_chart_checkbox.isChecked():
@@ -3117,6 +3123,7 @@ class API:
 
         saved_perfect = self.ds.check_saved_perfect(pos=pos)
         saved_defect = self.ds.check_saved_defect(pos=pos)
+        
         if self.ui.no_defect.isChecked():
             if masks:
                 self.ui.set_warning(
@@ -3169,6 +3176,7 @@ class API:
             )
             self.ds_json.modify_defect(self.ds.defect_path)
             self.image_save_status[img_path] = True
+        
         else:
             self.ui.set_warning(
                 texts.WARNINGS["IMAGE_STATUS"][self.language], "label", level=2
@@ -3629,6 +3637,7 @@ class API:
             cam_num = self.i + 1
             cam_parms = self.get_camera_config(str(cam_num))
             ret = self.cameras.add_camera(str(cam_num), cam_parms)
+            # threading.Thread(target=self.cameras.add_camera,args=(str(cam_num), cam_parms))
 
             if ret == "True":
                 self.ui.set_warning(
@@ -3678,10 +3687,18 @@ class API:
                         btn_name = eval("self.ui.camera%s_btn" % i)
                     btn_name.setEnabled(True)
                 self.set_available_cameras()
+                self.start_grab_camera()
                 return
             if selected_cameras[self.i]:
-                QTimer.singleShot(3000, self.connect_camera)
+                QTimer.singleShot(1, self.connect_camera)   # defult time 3000
                 return
+
+
+
+
+
+
+
 
     def disconnect_camera(self):
         """
@@ -3763,15 +3780,20 @@ class API:
                     btn_name.setEnabled(True)
                 return
             if selected_cameras[self.j]:
-                QTimer.singleShot(3000, self.disconnect_camera)
+                QTimer.singleShot(1, self.disconnect_camera)  # defult time 3000
                 return
 
     def set_available_cameras(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
         sn_available = list(connected_cameras.keys())
-        sn_available = [str(i) for i in range(1, 25)]
+        # sn_available = [str(i) for i in range(1, 25)]
         self.ui.comboBox_connected_cams.clear()
         self.ui.comboBox_connected_cams.addItems(sn_available)
+
+    def start_grab_camera(self):
+        connected_cameras = self.cameras.get_connected_cameras_by_id()
+        for camera in connected_cameras:
+            connected_cameras[camera].start_grabbing()
 
     def start_capture_func(self, disable_ui=True):
         if disable_ui:
@@ -3796,13 +3818,12 @@ class API:
             self.ImageManager.set_live_type(self.live_type)
             self.ImageManager.set_save_flag(self.ui.checkBox_save_images.isChecked())
             self.ImageManager.set_manual_flag(self.ui.manual_camera)
-            self.ui.set_enabel(self.ui.stop_capture_btn, False)
-            QTimer().singleShot(1000, self.ImageManager.start_sheet_checking)
-            QTimer().singleShot(
-                1000, lambda: self.ui.set_enabel(self.ui.stop_capture_btn, True)
-            )
-
-            self.init_check_plc()
+            # self.ui.set_enabel(self.ui.stop_capture_btn, False)
+            # QTimer().singleShot(1000, self.ImageManager.start_sheet_checking)
+            # QTimer().singleShot(1000, lambda: self.ui.set_enabel(self.ui.stop_capture_btn, True))
+            # self.ImageManager.start_sheet_checking()
+            self.start_capture_timers()
+            # self.init_check_plc()
 
     def stop_capture_func(self, disable_ui=True):
         if disable_ui:
@@ -3811,7 +3832,6 @@ class API:
             self.ui.set_enabel(self.ui.start_capture_btn, True)
             self.ui.set_enabel(self.ui.stop_capture_btn, False)
             self.ready_capture_flag = False
-            self.ImageManager.stop()
             try:
                 self.stop_capture_timers()
             except:
@@ -3829,7 +3849,10 @@ class API:
             self.set_start_software_plc(False)
 
     def start_capture_timers(self):
-        self.ImageManager.stop_sheet_checking()
+        # try:
+        #     self.ImageManager.stop_sheet_checking()
+        # except:
+        #     pass
         try:
             _, _, speed, _ = self.l2_connection.get_full_info()  # get data from level2
         except:
@@ -3837,7 +3860,7 @@ class API:
         if speed > 0:
             self.ImageManager.start()
         self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_timer.start(int(1000 / self.ui.frame_rate))
+        self.grab_timer.start(int(1000/(self.ui.frame_rate+1)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
@@ -6189,6 +6212,9 @@ class API:
                 level=1,
             )
             self.plc_connection_status = True
+            self.ui.change_plc_status(status="connect")
+            self.plc_retry_connection = 0
+
             self.ui.disconnect_plc_btn.setEnabled(True)
             self.ui.connect_plc_btn.setEnabled(False)
 
@@ -6204,7 +6230,8 @@ class API:
             # self.connect_plc()
             if self.retry_connecting_plc < 10:
                 self.retry_connecting_plc += 1
-                # QTimer().singleShot(1000,self.connect_plc)
+                self.ui.change_plc_status(status="retry")
+                #QTimer().singleShot(1000,self.connect_plc)
                 self.ui.set_status_plc(
                     auto=False,
                     text=texts.Titles["reconnect"][self.ui.language].format(
@@ -6214,6 +6241,7 @@ class API:
             else:
                 self.retry_connecting_plc = 0
                 self.ui.set_status_plc(mode=False)
+                self.ui.change_plc_status(status="disconnect")
                 self.ui.disconnect_plc_btn.setEnabled(False)
                 self.ui.connect_plc_btn.setEnabled(True)
 
@@ -6233,34 +6261,104 @@ class API:
             return False
         self.pathes = parms
         self.dict_spec_pathes = plc_managment.set_pathes(self.pathes)
-
-        self.up_high_threshold = self.my_plc.get_value(
-            self.dict_spec_pathes["UpHighThreshold"]
-        )
-        self.up_low_threshold = self.my_plc.get_value(
-            self.dict_spec_pathes["UpLowThreshold"]
-        )
-        self.down_high_threshold = self.my_plc.get_value(
-            self.dict_spec_pathes["DownHighThreshold"]
-        )
-        self.down_low_threshold = self.my_plc.get_value(
-            self.dict_spec_pathes["DownLowThreshold"]
-        )
+        try:
+            self.up_high_threshold = self.my_plc.get_value(
+                self.dict_spec_pathes["UpHighThreshold"]
+            )
+            self.up_low_threshold = self.my_plc.get_value(
+                self.dict_spec_pathes["UpLowThreshold"]
+            )
+            self.down_high_threshold = self.my_plc.get_value(
+                self.dict_spec_pathes["DownHighThreshold"]
+            )
+            self.down_low_threshold = self.my_plc.get_value(
+                self.dict_spec_pathes["DownLowThreshold"]
+            )
         # self.
-
+        except:
+            return False
         # #print('-'*50,self.up_high_threshold)
         # #print('88888888888888',self.dict_spec_pathes)
 
         # #print('parms',self.parms)
         return True
 
+    # def disconnect_plc(self, on_close=False, force_close=False):
+    #     """
+    #     this function is used to disconnect from plc
+
+    #     Args:
+    #         on_close (bool, optional): a boolean determining if function is called on app close. Defaults to False.
+    #         force_close (bool, optional): a boolean determining to force close the plc (whenever plc is disconnected suddenly)
+    #     """
+
+    #     # force close the plc, this is for those times that plc is disconnecter by error
+    #     if force_close:
+    #         try:
+    #             self.my_plc.disconnect()
+    #         except:
+    #             pass
+    #         #
+    #         self.timer_write_plc.stop()
+    #         self.plc_connection_status = False
+    #         del self.my_plc
+    #         #
+    #         # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_by_error'][self.ui.language], level=2)
+    #         self.ui.notif_manager.append_new_notif(
+    #             message=texts.ERRORS["plc_disconnected_by_error"][self.ui.language],
+    #             level=3,
+    #         )
+    #         self.ui.logger.create_new_log(
+    #             message=texts.ERRORS["plc_disconnected_by_error"]["en"], code=texts_codes.SubTypes['plc_disconnected_by_error'], level=4
+    #         )
+    #         #
+    #         self.ui.disconnect_plc_btn.setEnabled(False)
+    #         self.ui.connect_plc_btn.setEnabled(True)
+    #         #
+    #         # self.ui.plc_main_frame.setEnabled(False)
+
+    #         return
+
+    #     try:
+    #         self.my_plc.disconnect()
+    #         self.timer_write_plc.stop()
+    #         self.plc_connection_status = False
+    #         del self.my_plc
+    #         #
+    #         # self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_disconnected'][self.ui.language], level=0)
+    #         self.ui.notif_manager.append_new_notif(
+    #             message=texts.MESSEGES["plc_disconnected"][self.ui.language], level=1
+    #         )
+    #         self.ui.logger.create_new_log(
+    #             message=texts.MESSEGES["plc_disconnected"]["en"], code=texts_codes.SubTypes['plc_disconnected'], level=1
+    #         )
+    #         #
+    #         self.ui.disconnect_plc_btn.setEnabled(False)
+    #         self.ui.connect_plc_btn.setEnabled(True)
+
+    #     # failed to disconnect plc
+    #     except:
+    #         if not on_close:
+    #             # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_failed'][self.ui.language], level=2)
+    #             self.ui.notif_manager.append_new_notif(
+    #                 message=texts.ERRORS["plc_disconnected_failed"][self.ui.language],
+    #                 level=3,
+    #             )
+    #             self.ui.logger.create_new_log(
+    #                 message=texts.ERRORS["plc_disconnected_failed"]["en"], code=texts_codes.SubTypes['plc_disconnected_failed'], level=3
+    #             )
+
+    #     #
+    #     # self.ui.plc_main_frame.setEnabled(False)
+
+
     def disconnect_plc(self, on_close=False, force_close=False):
         """
         this function is used to disconnect from plc
 
         Args:
-            on_close (bool, optional): a boolean determining if function is called on app close. Defaults to False.
-            force_close (bool, optional): a boolean determining to force close the plc (whenever plc is disconnected suddenly)
+            on_close (bool, optional): a boolean deermining if function is called on app close. Defaults to False.
+            force_close (bool, optional): a boolean deermining to force close the plc (whenever plc is disconnected suddenly)
         """
 
         # force close the plc, this is for those times that plc is disconnecter by error
@@ -6270,42 +6368,42 @@ class API:
             except:
                 pass
             #
-            self.timer_write_plc.stop()
             self.plc_connection_status = False
+            self.ui.change_plc_status(status="disconnect")
+            self.ui.set_status_plc(mode = False)
+
             del self.my_plc
             #
-            # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_by_error'][self.ui.language], level=2)
+            self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_by_error'][self.ui.language], level=2)
+
             self.ui.notif_manager.append_new_notif(
                 message=texts.ERRORS["plc_disconnected_by_error"][self.ui.language],
                 level=3,
             )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["plc_disconnected_by_error"]["en"],
-                code=texts_codes.SubTypes["plc_disconnected_by_error"],
-                level=4,
+                message=texts.ERRORS["plc_disconnected_by_error"]["en"], level=4
             )
             #
             self.ui.disconnect_plc_btn.setEnabled(False)
             self.ui.connect_plc_btn.setEnabled(True)
-            #
-            # self.ui.plc_main_frame.setEnabled(False)
 
             return
 
         try:
             self.my_plc.disconnect()
-            self.timer_write_plc.stop()
             self.plc_connection_status = False
+            self.ui.change_plc_status(status="disconnect")
+            self.ui.set_status_plc(mode = False)
+            
             del self.my_plc
             #
-            # self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_disconnected'][self.ui.language], level=0)
+            self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_disconnected'][self.ui.language], level=0)
+
             self.ui.notif_manager.append_new_notif(
                 message=texts.MESSEGES["plc_disconnected"][self.ui.language], level=1
             )
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["plc_disconnected"]["en"],
-                code=texts_codes.SubTypes["plc_disconnected"],
-                level=1,
+                message=texts.MESSEGES["plc_disconnected"]["en"], level=1
             )
             #
             self.ui.disconnect_plc_btn.setEnabled(False)
@@ -6314,19 +6412,25 @@ class API:
         # failed to disconnect plc
         except:
             if not on_close:
-                # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_failed'][self.ui.language], level=2)
+                self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_failed'][self.ui.language], level=2)
+
                 self.ui.notif_manager.append_new_notif(
                     message=texts.ERRORS["plc_disconnected_failed"][self.ui.language],
                     level=3,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.ERRORS["plc_disconnected_failed"]["en"],
-                    code=texts_codes.SubTypes["plc_disconnected_failed"],
-                    level=3,
+                    message=texts.ERRORS["plc_disconnected_failed"]["en"], level=3
                 )
 
-        #
-        # self.ui.plc_main_frame.setEnabled(False)
+
+
+
+
+
+
+
+
+
 
     def set_plc_ip_to_ui(self):
         """
@@ -6376,11 +6480,15 @@ class API:
             self.auto_wind_timer.start(auto_wind_timer)
 
     def set_wind(self, mode=True):
-        if self.ui.wind_itr == 1:
-            ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
-            # if ret and mode:
-            if mode:
-                self.ui.start_wind()
+        # print(type(self.sensor),self.sensor)
+        if self.sensor :
+            if self.connection_status:
+                if self.ui.wind_itr == 1:
+                    ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+                    ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(mode))
+                    # if ret and mode:
+                    if mode:
+                        self.ui.start_wind()
 
     def set_start_software_plc(self, mode):
         # #print("software on plc ", str(mode))
@@ -6390,46 +6498,95 @@ class API:
         except:
             pass
 
-    def get_sensor_and_temp(self):
+    def get_sensor(self):
+        # print(time.time())
         try:
-            self.sensor = self.my_plc.get_value(
-                self.dict_spec_pathes["MemDistanceSensor"]
-            )
-            # #print(self.sensor[0])
-            if self.sensor[0] == "-":
-                if not self.ui.manual_plc:
-                    # #print(";" * 50)
-                    self.sensor = False
-            else:
-                self.sensor = bool(self.sensor[0])
+            if not self.ui.manual_plc:
+                
+            
+                self.sensor = self.my_plc.get_value(
+                    self.dict_spec_pathes["MemDistanceSensor"]
+                )
+
+                if self.sensor[0] == "-":
+                    if not self.ui.manual_plc:
+                        # #print(";" * 50)
+                        self.sensor = False
+                else:
+                    self.sensor = bool(self.sensor[0])
+
+            
+
         except:
             self.sensor = False
 
-        try:
-            self.top_temp = str(
-                self.my_plc.get_value(self.dict_spec_pathes["UpTemperature"])[0]
-            )
-            self.bottom_temp = str(
-                self.my_plc.get_value(self.dict_spec_pathes["DownTemperature"])[0]
-            )
-        except:
-            self.top_temp = "0"
-            self.bottom_temp = "0"
-
+            
         if self.sensor:
             self.slab_detect = True
         else:
             self.slab_detect = False
 
-        # threading.Thread(target=self.get_sensor_and_temp)
+        threading.Timer(0.1,self.get_sensor).start()
+
+
+    def get_temp_and_switch(self):
+
+
+        try:
+
+            self.top_temp = str(
+                round(self.my_plc.get_value(self.dict_spec_pathes["UpTemperature"])[0],2)
+            )
+            self.bottom_temp = str(
+                round(self.my_plc.get_value(self.dict_spec_pathes["DownTemperature"])[0],2)
+            )
+        except:
+            self.top_temp = "0"
+            self.bottom_temp = "0"
+
+        try:
+            self.up_in = self.my_plc.get_value(self.dict_spec_pathes["MemUpLimitSwitchIn"])
+            if self.up_in[0] == "-":
+                self.up_in = False
+            else:
+                self.up_in = bool(self.up_in[0])
+            self.up_out = self.my_plc.get_value(self.dict_spec_pathes["MemUpLimitSwitchOut"])
+            if self.up_out[0] == "-":
+                self.up_out = False
+            else:
+                self.up_out = bool(self.up_out[0])
+            self.down_in = self.my_plc.get_value(self.dict_spec_pathes["MemDownLimitSwitchIn"])
+            if self.down_in[0] == "-":
+                self.down_in = False
+            else:
+                self.down_in = bool(self.down_in[0])
+            self.down_out = self.my_plc.get_value(self.dict_spec_pathes["MemDownLimitSwitchOut"])
+            if self.down_out[0] == "-":
+                self.down_out = False
+            else:
+                self.down_out = bool(self.down_out[0])
+        except:
+            self.up_in = False
+            self.up_out = False
+            self.down_in = False
+            self.down_out = False
+
+
+        threading.Timer(5,self.get_temp_and_switch).start()
+
+
+    def test_t(self):
+        print('aaaa')
+
 
     def update_plc_values(self):
-        threading.Thread(target=self.get_sensor_and_temp).start()
-        # self.get_sensor_and_temp()
+
+        threading.Timer(1,self.get_sensor).start()
+        threading.Timer(1,self.get_temp_and_switch).start()
+
 
     def update_sensor_and_temp(self):
-        # threading.Thread(target=self.get_sensor_and_temp).start()
-        # self.get_sensor_and_temp()
+
         try:
             if (
                 self.top_temp > self.up_high_threshold
@@ -6439,22 +6596,21 @@ class API:
                     message=texts.ERRORS["overhead_temp"][self.ui.language], level=3
                 )
         except:
-            # #print('Except self.top_temp > self.up_high_threshold')
+            # print('Except self.top_temp > self.up_high_threshold')
             pass
         #  self.up_high_threshold = self.my_plc.get_value(self.dict_spec_pathes["UpHighThreshold"])
         # self.up_low_threshold = self.my_plc.get_value(self.dict_spec_pathes["UpLowThreshold"])
         # self.down_high_threshold = self.my_plc.get_value(self.dict_spec_pathes["DownHighThreshold"])
         # self.down_low_threshold = self.my_plc.get_value(self.dict_spec_pathes["DownLowThreshold"])
         if self.ui.manual_plc:  # Manual change senssor   in final should be delete
-            if self.itr <= 10:
+            if self.itr <= 8:
                 self.sensor = True
             else:
                 self.sensor = False
-                if self.itr >= 20:
+                if self.itr >= 12:
                     self.itr = 0
             # #print(self.itr)
             self.itr += 1
-
         # if self.sensor:
         #     self.init_check_plc()
         # #print(self.sensor)
@@ -6464,6 +6620,10 @@ class API:
         self.last_sensor = self.sensor
 
         self.ui.change_plc_check_status(mode=self.sensor)
+        self.ui.change_place_check_status(side='up', inout='in', mode=self.up_in)
+        self.ui.change_place_check_status(side='up', inout='out', mode=self.up_out)
+        self.ui.change_place_check_status(side='down', inout='in', mode=self.down_in)
+        self.ui.change_place_check_status(side='down', inout='out', mode=self.down_out)
         try:
             self.ui.update_plc_temp(self.top_temp, self.bottom_temp)
         except:
@@ -6491,7 +6651,10 @@ class API:
                 self.ImageManager.update_sheet(n_camera, details)
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)
-                self.my_plc.set_cams_and_prejector(n_camera, projectors)
+                # if self.connection_status:
+                print('start thread set caemra and projector')
+                threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start()
+                # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
                         message=str(
@@ -6505,7 +6668,8 @@ class API:
             else:
                 self.ImageManager.update_database()
                 self.stop_capture_func(disable_ui=False)
-                self.my_plc.set_cams_and_prejector(0, 0)
+                # if self.connection_status:
+                # self.my_plc.set_cams_and_prejector(3, 0)
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
                         message=str(texts.MESSEGES["save_sheet"][self.ui.language]),
@@ -6516,12 +6680,12 @@ class API:
         # if self.start_capture_flag:
         try:
             self.plc_timer.stop()
-            self.plc_update.stop()
+            # self.plc_update.stop()
 
         except:
             pass
-        self.plc_timer.start(500)
-        self.plc_update.start(self.ui.update_timer_plc)
+        self.plc_timer.start(1000)
+        # self.plc_update.start(self.ui.update_timer_plc)
 
     # Mypipline page------------------------------------------------
 

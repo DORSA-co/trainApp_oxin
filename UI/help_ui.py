@@ -71,11 +71,11 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_4)
 
-        self.label_3 = QLabel(self.frame_4)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setStyleSheet(u"")
+        self.font_label = QLabel(self.frame_4)
+        self.font_label.setObjectName(u"font_label")
+        self.font_label.setStyleSheet(u"")
 
-        self.horizontalLayout.addWidget(self.label_3)
+        self.horizontalLayout.addWidget(self.font_label)
 
         self.spinBox_font = QSpinBox(self.frame_4)
         self.spinBox_font.setObjectName(u"spinBox_font")
@@ -287,7 +287,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Help - Sens", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"Font :", None))
+        self.font_label.setText(QCoreApplication.translate("MainWindow", u"Font :", None))
 #if QT_CONFIG(tooltip)
         self.miniButton.setToolTip(QCoreApplication.translate("MainWindow", u"Minimize", None))
 #endif // QT_CONFIG(tooltip)

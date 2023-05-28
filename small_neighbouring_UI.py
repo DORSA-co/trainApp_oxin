@@ -44,11 +44,11 @@ class small_neighbouring(QMainWindow, ui):
         # btn connector
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):

@@ -164,7 +164,6 @@ def set_ymodels_on_ui_tabel(ui_obj, ymodels_list):
     # add users to table
     for row_idx, ymodel in enumerate(ymodels_list):
         for col_idx in range(yolo_table_ncols):
-
             # translate algo-ids to name
             if col_idx == 0:
                 ymodel[yolo_headers_db[col_idx]] = translate_yolo_algorithm_id_to_name(

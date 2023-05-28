@@ -166,7 +166,6 @@ def set_lmodels_on_ui_tabel(ui_obj, lmodels_list):
     # add users to table
     for row_idx, lmodel in enumerate(lmodels_list):
         for col_idx in range(localization_table_ncols):
-
             # translate algo-ids to name
             if col_idx == 0:
                 lmodel[

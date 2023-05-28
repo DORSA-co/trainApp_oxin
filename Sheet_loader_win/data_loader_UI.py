@@ -4,6 +4,7 @@ from select import select
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PySide6 import QtCore as sQtCore
+from PySide6 import QtCore as sQtCore
 from PyQt5.QtGui import *
 # from pyqt5_plugins import *
 from PySide6.QtCharts import *
@@ -19,6 +20,8 @@ import api
 import texts
 import texts_codes
 from PyQt5.QtGui import QPainter
+import cv2
+from help_UI import help
 
 try:
     import database_utils
@@ -43,6 +46,9 @@ class data_loader(QMainWindow, ui):
         flags = Qt.WindowFlags(Qt.FramelessWindowHint)
         self.pos_ = self.pos()
         self.setWindowFlags(flags)
+        title = "SENSE-Sheet Loader"
+        self.setWindowTitle(title)
+
         self.activate_()
 
         self.main_ui_obj = main_ui_obj
@@ -67,14 +73,15 @@ class data_loader(QMainWindow, ui):
         
         self.tables=[self.list_show_id,self.list_heat_number,self.list_ps_number,self.list_pdl_number]
 
+        self.help_win = None
         self._old_pos = None
 
     def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):
@@ -87,6 +94,7 @@ class data_loader(QMainWindow, ui):
     def activate_(self):
         self.closeButton.clicked.connect(self.close_win)
         self.miniButton.clicked.connect(self.minimize)
+        self.helpButton.clicked.connect(self.show_help)
 
     def minimize(self):
         self.showMinimized()
@@ -94,8 +102,20 @@ class data_loader(QMainWindow, ui):
     def close_win(self):
         self.close()
 
+    def show_help(self):
+        if not self.help_win:
+            self.help_win = help(lang=self.language)
+        text = texts.HELPS["LOADSHEET_PAGE"][self.language]
+        help_image = cv2.imread(
+            texts.HELPS_ADDRESS["LOADSHEET_PAGE"][self.language]
+        )
+        self.help_win.set_help_image(help_image, text)
+        self.help_win.show()
+
     def set_language(self, lang='en'):
         self.language = lang
+        if self.help_win:
+            self.help_win.set_language(self.language)
 
     def clear_tables(self):
         for table_name in self.tables:

@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 # list_side=[delattr]
-ncam = 2
+ncam = 10
 nframe = 200
 for cnt in range(1001, 1030):
     path = "oxin_image_grabber/{}".format(cnt)

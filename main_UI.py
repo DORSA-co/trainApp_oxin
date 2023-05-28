@@ -49,6 +49,7 @@ from labeling.labeling_UI import labeling
 from help_UI import help
 from neighbouring_UI import neighbouring
 from small_neighbouring_UI import small_neighbouring
+from full_screen_UI import full_screen_window
 from labeling import labeling_api
 from PIL import ImageQt
 import numpy as np
@@ -61,7 +62,7 @@ import cv2
 import time
 
 from PyQt5.QtGui import QPainter
-
+from PySide6 import QtCore as sQtCore
 from consts.keyboards_keys import KEYS
 from consts.pages_indexs import PAGES_IDX
 import texts, texts_codes
@@ -76,7 +77,7 @@ from train_api import ALGORITHM_NAMES
 from train_api import ALGORITHM_NAMES
 
 ui, _ = loadUiType("UI/oxin.ui")
-os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
+# os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
 
 
 DEBUG_UI = False
@@ -116,7 +117,7 @@ class UI_main_window(QMainWindow, ui):
 
         # APP NAME
         # ///////////////////////////////////////////////////////////////
-        title = "SABA - trainer"
+        title = "SENSE-Trainer"
         description = "PyDracula APP - Theme with colors based on Dracula for Python."
         # APPLY TEXTS
         self.setWindowTitle(title)
@@ -247,6 +248,25 @@ class UI_main_window(QMainWindow, ui):
         self.set_image_label(self.user_label, img)
 
         self.set_combo_boxes()
+
+        # Live page
+        # Live full screen windows
+        self.full_s_window = None
+        self.full_t_window = None
+        self.full_b_window = None
+        self.full__window = None
+
+        # Live full screen flags
+        self.full_s = False
+        self.full_t = False
+        self.full_b = False
+        self.full_ = False
+
+        # Live full screen
+        self.full_single_btn.clicked.connect(self.buttonClick)
+        self.full_top_btn.clicked.connect(self.buttonClick)
+        self.full_bottom_btn.clicked.connect(self.buttonClick)
+        self.full_all_btn.clicked.connect(self.buttonClick)
 
         # Training_page
         self.init_training_page()
@@ -576,8 +596,10 @@ class UI_main_window(QMainWindow, ui):
         # ------------------------------------------------------------------------------------------------------
         # storage
         chart_funcs.create_storage_barchart_on_ui(
-            ui_obj=self,
-            frame_obj_storage=self.storage_chart_frame,
+            ui_obj=self, frame_obj_storage=self.ssd_chart_frame, storage_type="SSD"
+        )
+        chart_funcs.create_storage_barchart_on_ui(
+            ui_obj=self, frame_obj_storage=self.hdd_chart_frame, storage_type="HDD"
         )
         self.update_storage_chart()
         self.start_storage_timer()
@@ -685,22 +707,28 @@ class UI_main_window(QMainWindow, ui):
             drives.append("/")
             names = ["HDD", "SSD"]
             self.label_289.setMaximumHeight(16777215)
+            self.hdd_chart_frame.setMaximumWidth(16777215)
         else:
             drives = ["/"]
             names = ["SSD"]
-            self.label_289.setMaximumHeight(7)
+            self.label_289.setMaximumHeight(0)
+            self.hdd_chart_frame.setMaximumWidth(0)
         storage_status = {}
         for d, n in zip(drives, names):
             status = storage_funcs.get_storage_status(d)
             storage_status[n] = status
 
-        chart_funcs.update_storage_barchart(ui_obj=self, storage_status=storage_status)
+            chart_funcs.update_storage_barchart(
+                ui_obj=self, storage_type=n, storage_status=storage_status
+            )
+
+            storage_status = {}
 
     def start_storage_timer(self):
         self.storage_timer = sQtCore.QTimer()
         self.storage_timer.timeout.connect(self.update_storage_chart)
-        # self.storage_timer.start(600000)
-        self.storage_timer.start(10000)
+        self.storage_timer.start(600000)
+        # self.storage_timer.start(10000)
 
     def showTime(self):
         # getting current time
@@ -916,7 +944,7 @@ class UI_main_window(QMainWindow, ui):
             event (event): left or right click for drag window
         Returns: None
         """
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = event.pos()
 
     def mouseReleaseEvent(self, event):
@@ -927,7 +955,7 @@ class UI_main_window(QMainWindow, ui):
             event (event): release Event for update drag window
         Returns: None
         """
-        if event.button() == QtCore.Qt.LeftButton:
+        if event.button() == sQtCore.Qt.LeftButton:
             self._old_pos = None
 
     def mouseMoveEvent(self, event):
@@ -1370,6 +1398,7 @@ class UI_main_window(QMainWindow, ui):
 
     def show_help(self):
         help_image = None
+        text = ""
         name = self.stackedWidget.currentWidget().objectName()
         if name == "page_software_setting":
             text = texts.HELPS["SETTINGS_PAGE"][self.language]
@@ -1410,23 +1439,22 @@ class UI_main_window(QMainWindow, ui):
                     texts.HELPS_ADDRESS["PROFILE_MYPIP_PAGE"][self.language]
                 )
         elif name == "page_pbt":
-            pass
-            # tab_name = self.stackedWidget_pbt.currentWidget().objectName()
-            # if tab_name == "page_pipeline":
-            #     text = texts.HELPS["PBT_PIPLINE_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["PBT_PIPLINE_PAGE"][self.language]
-            #     )
-            # elif tab_name == "page_load_dataset":
-            #     text = texts.HELPS["PBT_LOADDATASET_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["PBT_LOADDATASET_PAGE"][self.language]
-            #     )
-            # elif tab_name == "page_history":
-            #     text = texts.HELPS["PBT_HISTORY_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["PBT_HISTORY_PAGE"][self.language]
-            #     )
+            tab_name = self.stackedWidget_pbt.currentWidget().objectName()
+            if tab_name == "page_pipeline":
+                text = texts.HELPS["PBT_PIPLINE_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["PBT_PIPLINE_PAGE"][self.language]
+                )
+            elif tab_name == "page_load_dataset":
+                text = texts.HELPS["PBT_LOADDATASET_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["PBT_LOADDATASET_PAGE"][self.language]
+                )
+            elif tab_name == "page_history":
+                text = texts.HELPS["PBT_HISTORY_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["PBT_HISTORY_PAGE"][self.language]
+                )
         elif name == "page_Binary":
             stack_name = self.stackedWidget_binary.currentWidget().objectName()
             if stack_name == "page_binary_list":
@@ -1445,40 +1473,43 @@ class UI_main_window(QMainWindow, ui):
                     texts.HELPS_ADDRESS["BINARY_HISTORY_PAGE"][self.language]
                 )
         elif name == "page_Localization":
-            pass
-            # stack_name = self.stackedWidget_localization.currentWidget().objectName()
-            # if stack_name == "page_localization_training":
-            #     text = texts.HELPS["LOC_TRAINING_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["LOC_TRAINING_PAGE"][self.language]
-            #     )
-            # elif stack_name == "page_localization_history":
-            #     text = texts.HELPS["LOC_HISTORY_PAGE"][self.language]
-            #     help_image = cv2.imread(
-            #         texts.HELPS_ADDRESS["LOC_HISTORY_PAGE"][self.language]
-            #     )
+            stack_name = self.stackedWidget_localization.currentWidget().objectName()
+            if stack_name == "page_localization_training":
+                text = texts.HELPS["LOC_TRAINING_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["LOC_TRAINING_PAGE"][self.language]
+                )
+            elif stack_name == "page_localization_history":
+                text = texts.HELPS["LOC_HISTORY_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["LOC_HISTORY_PAGE"][self.language]
+                )
+        elif name == "page_Yolo":
+            stack_name = self.stackedWidget_yolo.currentWidget().objectName()
+            if stack_name == "page_yolo_training":
+                text = texts.HELPS["YOLO_TRAINING_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["YOLO_TRAINING_PAGE"][self.language]
+                )
+            elif stack_name == "page_yolo_history":
+                text = texts.HELPS["YOLO_HISTORY_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["YOLO_HISTORY_PAGE"][self.language]
+                )
         elif name == "page_Classification":
             stack_name = self.stackedWidget_classification.currentWidget().objectName()
             if stack_name == "page_classification_class_list":
-                pass
+                text = texts.HELPS["CLASSLIST_PAGE"][self.language]
+                help_image = cv2.imread(
+                    texts.HELPS_ADDRESS["CLASSLIST_PAGE"][self.language]
+                )
             elif stack_name == "page_classification_training":
                 pass
             elif stack_name == "page_classification_history":
                 pass
-        elif name == "page_software_setting":
-            pass
-        if help_image is not None:
-            self.help_win.textEdit.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            self.help_win.textEdit.setText(text)
-            image = QImage(
-                help_image,
-                help_image.shape[1],
-                help_image.shape[0],
-                help_image.strides[0],
-                QImage.Format_BGR888,
-            )
-            self.help_win.label.setPixmap(QPixmap.fromImage(image))
-            self.help_win.show()
+
+        self.help_win.set_help_image(help_image, text)
+        self.help_win.show()
 
     def left_bar_clear(self):
         """change left bar image with base color (white)"""
@@ -2806,6 +2837,9 @@ class UI_main_window(QMainWindow, ui):
         self.my_ds_owner_user.setText(str(records[2]))
         self.my_ds_path.setText(str(records[3]))
 
+    def set_full_screen_flags(self, type):
+        exec("self.full_" + str(type) + " = False")
+
     def buttonClick(self):
         # GET BUTTON CLICKED
         btn = self.sender()
@@ -2899,6 +2933,34 @@ class UI_main_window(QMainWindow, ui):
                 cam_number=int(btnName[6:8]),
                 status=not (self.selelcted_cameras[int(btnName[6:8]) - 1]),
             )
+
+        if btnName == "full_single_btn":
+            if not self.full_s_window:
+                self.full_s_window = full_screen_window(type="single")
+                # self.full_s_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('s')))
+            self.full_s_window.show()
+            self.full_s = True
+
+        if btnName == "full_top_btn":
+            if not self.full_t_window:
+                self.full_t_window = full_screen_window(type="top")
+                # self.full_t_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('t')))
+            self.full_t_window.show()
+            self.full_t = True
+
+        if btnName == "full_bottom_btn":
+            if not self.full_b_window:
+                self.full_b_window = full_screen_window(type="bottom")
+                # self.full_b_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('b')))
+            self.full_b_window.show()
+            self.full_b = True
+
+        if btnName == "full_all_btn":
+            if not self.full__window:
+                self.full__window = full_screen_window(type="all")
+                # self.full__window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('')))
+            self.full__window.show()
+            self.full_ = True
 
         if btnName == "tuning_btn":
             self.left_bar_clear()
@@ -3598,6 +3660,11 @@ class UI_main_window(QMainWindow, ui):
         # x=self.detect_sensor_check_box.isChecked()
 
         self.detect_sensor_check_box.setChecked(bool(mode))
+        if DEBUG_UI:
+            print("asdwdw", mode)
+
+    def change_place_check_status(self, side, inout, mode=True):
+        exec("self.{}_{}_checkbox.setChecked(bool(mode))".format(side, inout))
         if DEBUG_UI:
             print("asdwdw", mode)
 

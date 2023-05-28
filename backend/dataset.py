@@ -171,7 +171,6 @@ class Dataset:
 
     # ____________________________________JJ ZONE
     def creat_folder_structure_of_wrong_predict_images(self, pipline_name):
-
         # creat dirctory name
         pipline_wrong_result_path = os.path.join(self.wrong_images_path, pipline_name)
         self.pipline_wrong_result_fp_path = os.path.join(
@@ -617,7 +616,6 @@ def get_selected_datasets(ui_obj, datasets_list, is_binarylist=False):
 
 
 def get_selected_datasets_for_PBT_loadDataSet_page(datasetname, datasets_list):
-
     list = []
     for dataset in datasets_list:
         if dataset["name"] == datasetname:
