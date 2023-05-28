@@ -1284,8 +1284,8 @@ class dataBaseUtils:
             res = self.db.add_record(
                 data,
                 table_name=self.piplines,
-                parametrs="(name,user_own,path,binary_weight_path,localization_weight_path,classification_weight_path)",
-                len_parameters=6,
+                parametrs="(name,user_own,binary_weight_path,localization_weight_path,classification_weight_path,yolo_weight_path,use_yolo)",
+                len_parameters=7,
             )
             return True
         except:

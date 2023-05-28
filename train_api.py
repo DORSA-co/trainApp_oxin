@@ -907,7 +907,7 @@ def train_yolo(
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES["FIT_MODEL"]["en"])
     except:
         api_obj.ui.logger.create_new_log(
-            message=texts.ERRORS["FIT_MODEL_FAILED"]["en"], level=5
+            message=texts.ERRORS["FIT_MODEL_FAILED"]["enALGORITHM_NAMES"], level=5
         )
         return (
             False,

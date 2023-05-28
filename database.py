@@ -171,32 +171,30 @@ class dataBase:
         :rtype: bool
         """
 
-        # try:
+        try:
+            s = "%s," * len_parameters
+            s = s[:-1]
+            s = "(" + s + ")"
 
-        s = "%s," * len_parameters
-        s = s[:-1]
-        s = "(" + s + ")"
+            if self.check_connection:
+                cursor, connection = self.connect()
 
-        if self.check_connection:
-            cursor, connection = self.connect()
+                mySql_insert_query = """INSERT INTO {} {} 
+                                    VALUES 
+                                    {} """.format(
+                    table_name, parametrs, s
+                )
+                cursor.execute(mySql_insert_query, data)
+                connection.commit()
+                cursor.close()
 
-            mySql_insert_query = """INSERT INTO {} {} 
-                                VALUES 
-                                {} """.format(
-                table_name, parametrs, s
-            )
-            print(mySql_insert_query, data)
-            cursor.execute(mySql_insert_query, data)
-            connection.commit()
-            cursor.close()
+                return SUCCESSFULL
 
-            return SUCCESSFULL
+            else:
+                return CONNECTION_ERROR
 
-        else:
-            return CONNECTION_ERROR
-
-        # except Exception as e:
-        #     return e
+        except Exception as e:
+            return e
 
     # --------------------------------------------------------------------------
     # --------------------------------------------------------------------------

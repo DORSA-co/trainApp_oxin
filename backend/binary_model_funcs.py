@@ -135,6 +135,9 @@ binary_headers_dic = {
         "batch_size",
         "lr",
         "split_ratio",
+        "dataset_pathes",
+        "weights_path",
+        "date_",
         "loss",
         "accuracy",
         "precision_",
@@ -143,9 +146,6 @@ binary_headers_dic = {
         "val_accuracy",
         "val_precision",
         "val_recall",
-        "dataset_pathes",
-        "weights_path",
-        "date_",
     ],
 }
 
@@ -221,7 +221,6 @@ classification_headers = {
         "Input-Size",
         "Input-Type",
         "N-Epochs",
-        "N-Tuning Epochs",
         "Batch-Size",
         "Learning-Rate",
         "Split Ratio",
@@ -242,7 +241,6 @@ classification_headers = {
         "اندازه ورودی",
         "نوع ورودی",
         "تعداد اپوک",
-        "تعداد اپوک تنظیم",
         "اندازه دسته",
         "نرخ یادگیری",
         "نسبت تقسیم داده",
@@ -263,7 +261,6 @@ classification_headers = {
         "input_size",
         "input_type",
         "epochs",
-        "tuning_epochs",
         "batch_size",
         "lr",
         "split_ratio",
@@ -331,7 +328,8 @@ yolo_headers = {
         "dataset_pathes",
         "weights_path",
         "date_",
-        "classes" "box_loss",
+        "classes",
+        "box_loss",
         "obj_loss",
         "cls_loss",
         "val_precision",
@@ -396,7 +394,6 @@ def translate_binary_algorithm_id_to_name(
     :return: _description_
     :rtype: binary algorithm name/id (by respect to reverse value)
     """
-
     if not reverse:
         return train_api.ALGORITHM_NAMES[model_type][int(algo_id)]
     else:
@@ -515,14 +512,13 @@ def set_bmodels_on_ui_tabel_edited_version(
     else:
         ui_obj.table_of_binary_classifaction_in_PBT_page.setRowCount(0)
     ui_obj.table_of_binary_classifaction_in_PBT_page.verticalHeader().setVisible(True)
-    ui_obj.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setSectionResizeMode(
-        sQHeaderView.Stretch
-    )
+    # ui_obj.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setSectionResizeMode(
+    #     sQHeaderView.Stretch
+    # )
 
     ui_obj.table_of_binary_classifaction_in_PBT_page.setHorizontalHeaderLabels(headers)
     # text color
     text_color = colors_pallete.black
-
     # add users to table
     for row_idx, bmodel in enumerate(bmodels_list):
         for col_idx in range(table_ncols):
@@ -534,10 +530,7 @@ def set_bmodels_on_ui_tabel_edited_version(
             table_item = sQTableWidgetItem(str(bmodel[headers_db[col_idx]]))
             # set checkbox (only first col)
             if col_idx == 0:
-                table_item.setFlags(
-                    sQtCore.Qt.ItemFlag.ItemIsUserCheckable
-                    | sQtCore.Qt.ItemFlag.ItemIsEnabled
-                )
+                table_item.setFlags(sQtCore.Qt.ItemFlag.ItemIsEnabled)
                 table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
             table_item.setForeground(sQColor(text_color))
             ui_obj.table_of_binary_classifaction_in_PBT_page.setItem(
@@ -617,7 +610,7 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
             elif model_type == "classification":
                 bmodel_info["algo_name"] = [
                     translate_binary_algorithm_id_to_name(
-                        algo_id=ui_obj.cbBox_of_multiClassification_model_in_PBT_page.currentText(),
+                        algo_id=ui_obj.cbBox_of_classification_model_in_PBT_page.currentText(),
                         model_type="classification",
                         reverse=True,
                     )
@@ -633,7 +626,7 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
             elif model_type == "yolo":
                 bmodel_info["algo_name"] = [
                     translate_binary_algorithm_id_to_name(
-                        algo_id=ui_obj.cbBox_of_localiztion_model_in_PBT_page.currentText(),
+                        algo_id=ui_obj.cbBox_of_yolo_model_in_PBT_page.currentText(),
                         model_type="yolo",
                         reverse=True,
                     )
@@ -1261,8 +1254,8 @@ def get_filtered_binary_models_from_db(
         model_type = "classification_models"
     elif model_type == "localization":
         model_type = "localization_models"
-    else:
-        print("what the fuck!!!!!!!!!!!!")
+    elif model_type == "yolo":
+        model_type = "yolo_models"
 
     try:
         res, defects_list = db_obj.search_binary_model_by_filter(

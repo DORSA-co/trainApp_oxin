@@ -401,8 +401,11 @@ class API:
         self.runing_l_model = False
         self.runing_y_model = False
 
-        self.ui.radioButton_one.toggled.connect(lambda: self.set_pipline_mode("yolo"))
-        self.ui.radioButton_two.toggled.connect(
+        self.ui.radioButton_use_yolo.setChecked(True)
+        self.ui.radioButton_use_yolo.toggled.connect(
+            lambda: self.set_pipline_mode("yolo")
+        )
+        self.ui.radioButton_use_unet.toggled.connect(
             lambda: self.set_pipline_mode("localization")
         )
         self.set_pipline_mode("yolo")
@@ -424,6 +427,17 @@ class API:
         self.pipline_selected = key
         self.ui.stackedWidget_3.setCurrentWidget(self.pipline_dict[key][0])
         self.ui.stackedWidget_4.setCurrentWidget(self.pipline_dict[key][1])
+
+        if key == "yolo":
+            self.load_table_with_btn(self.ui.toolButton_yolo.objectName())
+            # self.ui.cbBox_of_yolo_model_in_PBT_page.setCurrentIndex(0)
+        elif key == "localization":
+            self.load_table_with_btn(self.ui.toolButton_localization.objectName())
+            self.load_table_with_btn(self.ui.toolButton_classification.objectName())
+            # self.ui.cbBox_of_localization_model_in_PBT_page.setCurrentIndex(0)
+            # self.ui.cbBox_of_classification_model_in_PBT_page.setCurrentIndex(0)
+        self.load_table_with_btn(self.ui.toolButton_binary.objectName())
+        # self.ui.cbBox_of_binary_model_in_PBT_page.setCurrentIndex(0)
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, "sheets_id")
@@ -490,58 +504,65 @@ class API:
 
     # _____________________________________________________________________JJ ZONE BEGINE
 
-    def show_summery_of_selected_model_in_lineEdit_in_PBT_page(self, row, column):
-        """this function called,when the user select ,rows from tabel in UI(IN PBT PAGE)
-        and,pass number of selected row as input to the function
+    def display_models_info_on_table_in_pbt(self, item):
+        row = self.ui.table_of_binary_classifaction_in_PBT_page.indexFromItem(
+            item
+        ).row()
+        if (
+            self.ui.table_of_binary_classifaction_in_PBT_page.item(row, 0).checkState()
+            == Qt.CheckState.Checked
+        ):
+            self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                row, 0
+            ).setCheckState(Qt.CheckState.Unchecked)
+            model_summery_that_show = ""
+        else:
+            self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                row, 0
+            ).setCheckState(Qt.CheckState.Checked)
+            # create string as summery of model(or algorithm)
+            model_summery_that_show = "row {} selected,algorithm:{},that tarin in date:{},with dataset:{},and the weights is here {}".format(
+                row + 1,
+                self.bmodels_list[row]["algo_name"],
+                self.bmodels_list[row]["date_"],
+                self.bmodels_list[row]["dataset_pathes"],
+                self.bmodels_list[row]["weights_path"],
+            )
+            temp = self.bmodels_list[row]["input_size"]
+            input_size = tuple(map(int, temp[1:-1].split(",")))
 
-        Parameters
-        ----------
-        row : int
-            row number of item
-        column : int
-            column number of item
-        """
+            self.current_bmodel = self.bmodels_list[row]
 
-        # create string as summery of model(or algorithm)
-        model_summery_that_show = "algorithm:{},that tarin in date:{},with dataset:{},and the weights is here {}".format(
-            self.bmodels_list[row]["algo_name"],
-            self.bmodels_list[row]["date_"],
-            self.bmodels_list[row]["dataset_pathes"],
-            self.bmodels_list[row]["weights_path"],
-        )
-
-        temp = self.bmodels_list[row]["input_size"]
-        input_size = tuple(map(int, temp[1:-1].split(",")))
-
-        self.current_bmodel = self.bmodels_list[row]
         if self.bmodels_list[row]["algo_name"] in train_api.ALGORITHM_NAMES["binary"]:
             # set the  summery at the lineEdit ,that under the table
-            self.ui.LBL_of_selected_binary_classifaction_model_in_PBT_page.setText(
+            self.ui.LBL_of_selected_binary_model_in_PBT_page.setText(
                 model_summery_that_show
             )
-
-            self.algo_name_binary_model = self.bmodels_list[row]["algo_name"]
-            self.input_size_binary_model = input_size
-            self.weight_path_binary_model = self.bmodels_list[row]["weights_path"]
-
-            self.current_b_model = self.bmodels_list[row]
+            if model_summery_that_show != "":
+                self.input_size_binary_model = input_size
+                self.current_b_model = self.bmodels_list[row]
+                self.current_b_model_weights = self.current_b_model["weights_path"]
+            else:
+                self.input_size_binary_model = ""
+                self.current_b_model = ""
+                self.current_b_model_weights = ""
 
         elif (
             self.bmodels_list[row]["algo_name"]
             in train_api.ALGORITHM_NAMES["classification"]
         ):
             # set the  summery at the lineEdit ,that under the table
-            self.ui.LBL_of_selected_multiClassification_model_in_PBT_page.setText(
+            self.ui.LBL_of_selected_classification_model_in_PBT_page.setText(
                 model_summery_that_show
             )
-
-            self.algo_name_classification_model = self.bmodels_list[row]["algo_name"]
-            self.input_size_classification_model = input_size
-            self.weight_path_classification_model = self.bmodels_list[row][
-                "weights_path"
-            ]
-
-            self.current_c_model = self.bmodels_list[row]
+            if model_summery_that_show != "":
+                self.input_size_classification_model = input_size
+                self.current_c_model = self.bmodels_list[row]
+                self.current_c_model_weights = self.current_c_model["weights_path"]
+            else:
+                self.input_size_classification_model = ""
+                self.current_c_model = ""
+                self.current_c_model_weights = ""
 
         elif (
             self.bmodels_list[row]["algo_name"]
@@ -551,25 +572,73 @@ class API:
             self.ui.LBL_of_selected_localization_model_in_PBT_page.setText(
                 model_summery_that_show
             )
+            if model_summery_that_show != "":
+                self.input_size_localization_model = input_size
+                self.current_l_model = self.bmodels_list[row]
+                self.current_l_model_weights = self.current_l_model["weights_path"]
+            else:
+                self.input_size_localization_model = ""
+                self.current_l_model = ""
+                self.current_l_model_weights = ""
 
-            self.algo_name_localization_model = self.bmodels_list[row]["algo_name"]
-            self.input_size_localization_model = input_size
-            self.weight_path_localization_model = self.bmodels_list[row]["weights_path"]
+        elif self.bmodels_list[row]["algo_name"] in train_api.ALGORITHM_NAMES["yolo"]:
+            # set the  summery at the lineEdit ,that under the table
+            self.ui.LBL_of_selected_yolo_model_in_PBT_page.setText(
+                model_summery_that_show
+            )
+            if model_summery_that_show != "":
+                self.input_size_yolo_model = input_size
+                self.current_yolo_model = self.bmodels_list[row]
+                self.current_yolo_model_weights = self.current_yolo_model[
+                    "weights_path"
+                ]
+            else:
+                self.input_size_yolo_model = ""
+                self.current_yolo_model = ""
+                self.current_yolo_model_weights = ""
 
-            self.current_l_model = self.bmodels_list[row]
+        for i in range(self.ui.table_of_binary_classifaction_in_PBT_page.rowCount()):
+            if self.ui.table_of_binary_classifaction_in_PBT_page.item(i, 0) != None:
+                if (
+                    i != row
+                    and self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                        i, 0
+                    ).checkState()
+                    == Qt.CheckState.Checked
+                ):
+                    self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                        i, 0
+                    ).setCheckState(Qt.CheckState.Unchecked)
 
-        self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(True)
+        if self.current_b_model != "" and (
+            self.current_yolo_model != "" or self.current_l_model != ""
+        ):
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(True)
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(58)
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(28)
+
+        else:
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(0)
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(0)
 
     def apply_selected_model_after_push_applyBTN_in_PBT_page(self):
         """the function connect to 'BTN_apply_of_binary_classifaction_in_PBT_page',
         and if the user set models,by clicking the buttom ,load dataset page loaded
         """
         if self.check_name_pipline():
+            classification_info = ""
+            if self.current_l_model != "" and self.current_c_model == "":
+                classification_info = texts.WARNINGS["Have_Classification_model"][
+                    self.language
+                ]
+
             if self.ui.show_question(
                 texts.WARNINGS["WARNING"][self.language],
                 texts.WARNINGS["Create_pipline"][self.language]
                 + self.ui.pipline_name.text()
-                + ")",
+                + ")\n"
+                + classification_info,
             ):
                 if self.create_and_add_pipline():
                     self.ui.stackedWidget_pbt.setCurrentWidget(
@@ -593,10 +662,8 @@ class API:
                     self.ui.pipline_name_status.setText(
                         texts.ERRORS["pipline_eror"][self.language]
                     )
-
         else:
             pass
-            # #print("name not valid")
 
     def check_name_pipline(self):
         pipline_name = self.ui.pipline_name.text()
@@ -636,22 +703,20 @@ class API:
 
     def create_and_add_pipline(self):
         try:
-            # #print(self.current_b_model)
-            # data = pipline_name,user_name,pipline path if save , binary_weight path , local weight path , class weight path
             data = (
                 self.ui.pipline_name.text(),
                 self.login_user_name,
-                "Null",
-                self.current_b_model["weights_path"],
-                self.current_l_model["weights_path"],
-                self.current_c_model["weights_path"],
+                self.current_b_model_weights,
+                self.current_l_model_weights,
+                self.current_c_model_weights,
+                self.current_yolo_model_weights,
+                str(self.current_yolo_model != ""),
             )  # path pipline null
             ret = self.db.add_pipline(data)
-            # #print('ret',ret)
             return ret
 
         except:
-            #     self.ui.pipline_name_status.setText(texts.ERRORS['repeat_name'][self.language])
+            # self.ui.pipline_name_status.setText(texts.ERRORS['repeat_name'][self.language])
             return False
 
     def add_piplines_in_combobox(self, piplinename=-1):
@@ -659,7 +724,7 @@ class API:
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.clear()
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.addItems(db_pipline_names)
         if piplinename != -1:
-            inx = self.db_pipline_names.index(piplinename)
+            inx = db_pipline_names.index(piplinename)
             self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setCurrentIndex(inx)
 
     def load_image_btn_in_PBT_page(self):
@@ -683,9 +748,8 @@ class API:
         """by calling this function, the qtablewidget of UI connect to corresponding function.
         this function call in __init__ function
         """
-        # qtablewidget in PBT page that,indicate all information of  binary classification DL model,from SQL
-        self.ui.table_of_binary_classifaction_in_PBT_page.cellClicked.connect(
-            partial(self.show_summery_of_selected_model_in_lineEdit_in_PBT_page)
+        self.ui.table_of_binary_classifaction_in_PBT_page.itemClicked.connect(
+            partial(self.display_models_info_on_table_in_pbt)
         )
 
     def comboBox_connector(self):
@@ -698,7 +762,7 @@ class API:
             lambda: self.refresh_binary_models_table(filter_mode=True, wich_page="PBT")
         )
 
-        self.ui.cbBox_of_multiClassification_model_in_PBT_page.currentTextChanged.connect(
+        self.ui.cbBox_of_classification_model_in_PBT_page.currentTextChanged.connect(
             lambda: self.refresh_binary_models_table(
                 filter_mode=True, wich_page="PBT", model_type="classification"
             )
@@ -729,17 +793,24 @@ class API:
 
     def load_table_with_btn(self, obj_name):
         algo_name = obj_name.split("_")[1]
-        combo_name = eval(
-            "self.ui.{}".format("cbBox_of_" + algo_name + "_model_in_PBT_page")
+        self.refresh_binary_models_table(
+            filter_mode=True, wich_page="PBT", model_type=algo_name
         )
-        index = combo_name.currentIndex()
+        self.remember_selected_item(algo_name=algo_name)
 
-        if index != 0:
-            combo_name.setCurrentIndex(0)
-            combo_name.setCurrentIndex(index)
-        else:
-            combo_name.setCurrentIndex(1)
-            combo_name.setCurrentIndex(index)
+    def remember_selected_item(
+        self,
+        algo_name,
+    ):
+        label = eval(
+            "self.ui.{}".format(" LBL_of_selected_" + algo_name + "_model_in_PBT_page")
+        )
+        txt = label.text()
+        if txt != "":
+            row = int(txt[4]) - 1
+            self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                row, 0
+            ).setCheckState(Qt.CheckState.Checked)
 
     def update_evaluation_metrics_table(self, pipline_type):
         self.ui.tabWidget.clear()
@@ -884,9 +955,6 @@ class API:
             partial(self.apply_selected_model_after_push_applyBTN_in_PBT_page)
         )
         self.ui.pbt_btn.clicked.connect(
-            lambda: self.refresh_binary_models_table_onevent(wich_page="PBT")
-        )
-        self.ui.pipeline_pbt_btn.clicked.connect(
             lambda: self.refresh_binary_models_table_onevent(wich_page="PBT")
         )
         self.ui.BTN_of_goToNextpage_in_PBT_page.clicked.connect(
@@ -1231,10 +1299,13 @@ class API:
                 self.ui.toolButton_localization.objectName()
             )
         )
-        self.ui.toolButton_multiClassification.clicked.connect(
+        self.ui.toolButton_classification.clicked.connect(
             lambda: self.load_table_with_btn(
-                self.ui.toolButton_multiClassification.objectName()
+                self.ui.toolButton_classification.objectName()
             )
+        )
+        self.ui.toolButton_yolo.clicked.connect(
+            lambda: self.load_table_with_btn(self.ui.toolButton_yolo.objectName())
         )
         self.ui.history_pbt_btn.clicked.connect(self.laod_bpt_jsons)
         self.ui.pipline_tabel_next_PBT.clicked.connect(self.next_page_pipline_history)
@@ -3809,6 +3880,15 @@ class API:
                 str(self.bmodel_tabel_itr)
             )
             self.ui.refresh_pipline_tabs_in_PBT()
+
+            # __________________________
+            self.ui.radioButton_use_yolo.setChecked(True)
+            self.ui.radioButton_use_unet.setChecked(False)
+            self.set_pipline_mode("yolo")
+            self.load_table_with_btn(self.ui.toolButton_binary.objectName())
+            self.load_table_with_btn(self.ui.toolButton_yolo.objectName())
+            # __________________________
+
         else:
             self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
 
@@ -3845,12 +3925,16 @@ class API:
         """
         if model_type == "binary":
             model_type_ = "binary_models"
+            self.ui.LBL_tabel_title.setText("Binary Models")
         elif model_type == "classification":
             model_type_ = "classification_models"
+            self.ui.LBL_tabel_title.setText("Classification Models")
         elif model_type == "localization":
             model_type_ = "localization_models"
+            self.ui.LBL_tabel_title.setText("Localization Models")
         elif model_type == "yolo":
             model_type_ = "yolo_models"
+            self.ui.LBL_tabel_title.setText("Yolo Models")
         else:
             model_type_ = ""
 

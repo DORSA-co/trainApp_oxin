@@ -284,6 +284,9 @@ class UI_main_window(QMainWindow, ui):
         self.pipeline_pbt_btn.clicked.connect(self.buttonClick)
 
         self.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
+        self.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(0)
+        self.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(0)
+
         self.load_dataset_pbt_btn.clicked.connect(self.buttonClick)
         self.history_pbt_btn.clicked.connect(self.buttonClick)
         # charts ---------------------------------------------------------------------------------------------
@@ -3383,9 +3386,6 @@ class UI_main_window(QMainWindow, ui):
                 tabs[i].setStyleSheet("background-color: rgb(100,100,100)")
 
     def refresh_pipline_tabs_in_PBT(self):
-        self.cbBox_of_binary_model_in_PBT_page.clear()
-        self.cbBox_of_binary_model_in_PBT_page.addItem("All")
-        self.cbBox_of_binary_model_in_PBT_page.addItems(ALGORITHM_NAMES["binary"])
         self.cbBox_of_localization_model_in_PBT_page.clear()
         self.cbBox_of_localization_model_in_PBT_page.addItem("All")
         self.cbBox_of_localization_model_in_PBT_page.addItems(
@@ -3396,11 +3396,16 @@ class UI_main_window(QMainWindow, ui):
         self.cbBox_of_yolo_model_in_PBT_page.addItem("All")
         self.cbBox_of_yolo_model_in_PBT_page.addItems(ALGORITHM_NAMES["yolo"])
 
-        self.cbBox_of_multiClassification_model_in_PBT_page.clear()
-        self.cbBox_of_multiClassification_model_in_PBT_page.addItem("All")
-        self.cbBox_of_multiClassification_model_in_PBT_page.addItems(
+        self.cbBox_of_classification_model_in_PBT_page.clear()
+        self.cbBox_of_classification_model_in_PBT_page.addItem("All")
+        self.cbBox_of_classification_model_in_PBT_page.addItems(
             ALGORITHM_NAMES["classification"]
         )
+        self.cbBox_of_binary_model_in_PBT_page.clear()
+        self.cbBox_of_binary_model_in_PBT_page.addItem("All")
+        self.cbBox_of_binary_model_in_PBT_page.addItems(ALGORITHM_NAMES["binary"])
+        self.radioButton_use_yolo.setChecked(True)
+
         self.set_active_color(wich_tab=0)
         self.pipline_name.setText("")
         self.pipline_name.setPlaceholderText(
@@ -3409,10 +3414,10 @@ class UI_main_window(QMainWindow, ui):
         self.pipline_name_status.setText(
             texts.Titles["warn_of_valid_pipline_name"][self.language]
         )
-        self.LBL_of_selected_binary_classifaction_model_in_PBT_page.setText("")
-        self.LBL_of_selected_multiClassification_model_in_PBT_page.setText("")
+        self.LBL_of_selected_binary_model_in_PBT_page.setText("")
+        self.LBL_of_selected_classification_model_in_PBT_page.setText("")
         self.LBL_of_selected_localization_model_in_PBT_page.setText("")
-        self.LBL_of_selected_binary_yolo_model_in_PBT_page.setText("")
+        self.LBL_of_selected_yolo_model_in_PBT_page.setText("")
 
     def connet_keyboard(self, keys, functions, page_name):
         """Connect keys into specefic function in a page"""
