@@ -29,6 +29,7 @@ from Train_modules import Unet
 #     import Unet
 # sm.set_framework("tf.keras")
 # sm.framework()
+from yolov5.models.common import DetectMultiBackend
 
 
 BINARY = "binary"

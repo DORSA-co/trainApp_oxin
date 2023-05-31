@@ -119,6 +119,7 @@ from PySide6.QtWidgets import QVBoxLayout
 from Train_modules.models import xception_cnn, resnet_cnn
 from Train_modules.models import unet, low_unet, resnet_unet
 import matplotlib.pyplot as plt
+
 # from tensorflow.keras.metrics import Accuracy, Precision, Recall
 from Train_modules.deep_utils import metrics
 from backend import pipelines
@@ -152,7 +153,9 @@ from yolov5.utils.plots import Annotator, colors
 from yolov5.utils.plots import output_to_target, plot_images, plot_val_study
 
 # ______import YOLOV5 module ______#
+from backend.pipline_creation_module import ModelsCreation_worker
 
+# ___________________________________________
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
@@ -367,7 +370,6 @@ class API:
 
         self.update_plc_values()
 
-
         self.slab_detect = False
         self.language = self.ui.language
         self.last_sensor = False
@@ -405,9 +407,9 @@ class API:
 
         self.show_save_notif = False
 
-        self.running_b_model=False
-        self.running_l_model=False
-        self.running_y_model=False
+        self.running_b_model = False
+        self.running_l_model = False
+        self.running_y_model = False
 
         self.ui.radioButton_use_yolo.setChecked(True)
         self.ui.radioButton_use_yolo.toggled.connect(
@@ -1517,7 +1519,9 @@ class API:
             if l != self.l:
                 for key in self.sheet_imgprocessing_mem.keys():
                     self.sheet_imgprocessing_mem[key] = False
-            jsons_path = pathStructure.sheet_path(self.sheet.get_main_path()+'_imgProcessing', self.sheet.get_id())
+            jsons_path = pathStructure.sheet_path(
+                self.sheet.get_main_path() + "_imgProcessing", self.sheet.get_id()
+            )
             if not os.path.exists(jsons_path):
                 self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
             if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
@@ -2843,7 +2847,7 @@ class API:
             )
 
             # Step 6: Start the thread
-            self.running_b_model=True
+            self.running_b_model = True
             self.bmodel_train_thread.start()
 
             self.ui.binary_train.setEnabled(False)
@@ -2894,7 +2898,7 @@ class API:
             l_parms = self.ui.get_localization_parms()
             if not l_parms:
                 return
-            
+
             # update chart axis given train data
             self.update_l_chart_axis(l_parms[4])
 
@@ -2939,7 +2943,7 @@ class API:
             )
 
             # Step 6: Start the thread
-            self.running_l_model=True
+            self.running_l_model = True
             self.lmodel_train_thread.start()
 
             self.ui.localization_train.setEnabled(False)
@@ -3045,7 +3049,7 @@ class API:
             )
 
             # Step 6: Start the thread
-            self.running_y_model=True
+            self.running_y_model = True
             self.ymodel_train_thread.start()
 
             self.ui.yolo_train.setEnabled(False)
@@ -3123,7 +3127,7 @@ class API:
 
         saved_perfect = self.ds.check_saved_perfect(pos=pos)
         saved_defect = self.ds.check_saved_defect(pos=pos)
-        
+
         if self.ui.no_defect.isChecked():
             if masks:
                 self.ui.set_warning(
@@ -3176,7 +3180,7 @@ class API:
             )
             self.ds_json.modify_defect(self.ds.defect_path)
             self.image_save_status[img_path] = True
-        
+
         else:
             self.ui.set_warning(
                 texts.WARNINGS["IMAGE_STATUS"][self.language], "label", level=2
@@ -3690,15 +3694,8 @@ class API:
                 self.start_grab_camera()
                 return
             if selected_cameras[self.i]:
-                QTimer.singleShot(1, self.connect_camera)   # defult time 3000
+                QTimer.singleShot(1, self.connect_camera)  # defult time 3000
                 return
-
-
-
-
-
-
-
 
     def disconnect_camera(self):
         """
@@ -3860,7 +3857,7 @@ class API:
         if speed > 0:
             self.ImageManager.start()
         self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_timer.start(int(1000/(self.ui.frame_rate+1)))
+        self.grab_timer.start(int(1000 / (self.ui.frame_rate + 1)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
@@ -4642,10 +4639,6 @@ class API:
         this creates models of selected
         this shows notif of it on ui
         """
-        # CREAT PIPLINE OBJ:
-        # """temporary part"""
-        # self.load_binary_images_list_in_PBT_load_dataset_page()
-        # """will modfiy"""
 
         self.pipline_name = (
             self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
@@ -4671,14 +4664,13 @@ class API:
         self.ModelsCreation_thread = QThread()
         self.ModelsCreation = ModelsCreation_worker()
         self.ModelsCreation.set_params(
-            login_user_name=self.login_user_name,
-            db=self.db,
-            language=self.language,
             pipline_name=self.pipline_name,
+            database=self.db,
+            login_user_name=self.login_user_name,
         )
 
         self.ModelsCreation.moveToThread(self.ModelsCreation_thread)
-        self.ModelsCreation_thread.started.connect(self.ModelsCreation.set_pipline)
+        self.ModelsCreation_thread.started.connect(self.ModelsCreation.build_pipline)
         self.ModelsCreation.finished.connect(self.ModelsCreation_thread.quit)
         self.ModelsCreation.finished.connect(self.ModelsCreation.deleteLater)
         self.ModelsCreation_thread.finished.connect(
@@ -6231,7 +6223,7 @@ class API:
             if self.retry_connecting_plc < 10:
                 self.retry_connecting_plc += 1
                 self.ui.change_plc_status(status="retry")
-                #QTimer().singleShot(1000,self.connect_plc)
+                # QTimer().singleShot(1000,self.connect_plc)
                 self.ui.set_status_plc(
                     auto=False,
                     text=texts.Titles["reconnect"][self.ui.language].format(
@@ -6351,7 +6343,6 @@ class API:
     #     #
     #     # self.ui.plc_main_frame.setEnabled(False)
 
-
     def disconnect_plc(self, on_close=False, force_close=False):
         """
         this function is used to disconnect from plc
@@ -6370,11 +6361,15 @@ class API:
             #
             self.plc_connection_status = False
             self.ui.change_plc_status(status="disconnect")
-            self.ui.set_status_plc(mode = False)
+            self.ui.set_status_plc(mode=False)
 
             del self.my_plc
             #
-            self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_by_error'][self.ui.language], level=2)
+            self.ui.show_mesagges(
+                self.ui.plc_warnings,
+                texts.ERRORS["plc_disconnected_by_error"][self.ui.language],
+                level=2,
+            )
 
             self.ui.notif_manager.append_new_notif(
                 message=texts.ERRORS["plc_disconnected_by_error"][self.ui.language],
@@ -6393,11 +6388,15 @@ class API:
             self.my_plc.disconnect()
             self.plc_connection_status = False
             self.ui.change_plc_status(status="disconnect")
-            self.ui.set_status_plc(mode = False)
-            
+            self.ui.set_status_plc(mode=False)
+
             del self.my_plc
             #
-            self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_disconnected'][self.ui.language], level=0)
+            self.ui.show_mesagges(
+                self.ui.plc_warnings,
+                texts.MESSEGES["plc_disconnected"][self.ui.language],
+                level=0,
+            )
 
             self.ui.notif_manager.append_new_notif(
                 message=texts.MESSEGES["plc_disconnected"][self.ui.language], level=1
@@ -6412,7 +6411,11 @@ class API:
         # failed to disconnect plc
         except:
             if not on_close:
-                self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_failed'][self.ui.language], level=2)
+                self.ui.show_mesagges(
+                    self.ui.plc_warnings,
+                    texts.ERRORS["plc_disconnected_failed"][self.ui.language],
+                    level=2,
+                )
 
                 self.ui.notif_manager.append_new_notif(
                     message=texts.ERRORS["plc_disconnected_failed"][self.ui.language],
@@ -6421,16 +6424,6 @@ class API:
                 self.ui.logger.create_new_log(
                     message=texts.ERRORS["plc_disconnected_failed"]["en"], level=3
                 )
-
-
-
-
-
-
-
-
-
-
 
     def set_plc_ip_to_ui(self):
         """
@@ -6481,11 +6474,15 @@ class API:
 
     def set_wind(self, mode=True):
         # print(type(self.sensor),self.sensor)
-        if self.sensor :
+        if self.sensor:
             if self.connection_status:
                 if self.ui.wind_itr == 1:
-                    ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
-                    ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(mode))
+                    ret = self.my_plc.set_value(
+                        self.dict_spec_pathes["MemUpValve"], str(mode)
+                    )
+                    ret = self.my_plc.set_value(
+                        self.dict_spec_pathes["MemDownValve"], str(mode)
+                    )
                     # if ret and mode:
                     if mode:
                         self.ui.start_wind()
@@ -6502,8 +6499,6 @@ class API:
         # print(time.time())
         try:
             if not self.ui.manual_plc:
-                
-            
                 self.sensor = self.my_plc.get_value(
                     self.dict_spec_pathes["MemDistanceSensor"]
                 )
@@ -6515,52 +6510,58 @@ class API:
                 else:
                     self.sensor = bool(self.sensor[0])
 
-            
-
         except:
             self.sensor = False
 
-            
         if self.sensor:
             self.slab_detect = True
         else:
             self.slab_detect = False
 
-        threading.Timer(0.1,self.get_sensor).start()
-
+        threading.Timer(0.1, self.get_sensor).start()
 
     def get_temp_and_switch(self):
-
-
         try:
-
             self.top_temp = str(
-                round(self.my_plc.get_value(self.dict_spec_pathes["UpTemperature"])[0],2)
+                round(
+                    self.my_plc.get_value(self.dict_spec_pathes["UpTemperature"])[0], 2
+                )
             )
             self.bottom_temp = str(
-                round(self.my_plc.get_value(self.dict_spec_pathes["DownTemperature"])[0],2)
+                round(
+                    self.my_plc.get_value(self.dict_spec_pathes["DownTemperature"])[0],
+                    2,
+                )
             )
         except:
             self.top_temp = "0"
             self.bottom_temp = "0"
 
         try:
-            self.up_in = self.my_plc.get_value(self.dict_spec_pathes["MemUpLimitSwitchIn"])
+            self.up_in = self.my_plc.get_value(
+                self.dict_spec_pathes["MemUpLimitSwitchIn"]
+            )
             if self.up_in[0] == "-":
                 self.up_in = False
             else:
                 self.up_in = bool(self.up_in[0])
-            self.up_out = self.my_plc.get_value(self.dict_spec_pathes["MemUpLimitSwitchOut"])
+            self.up_out = self.my_plc.get_value(
+                self.dict_spec_pathes["MemUpLimitSwitchOut"]
+            )
             if self.up_out[0] == "-":
                 self.up_out = False
             else:
                 self.up_out = bool(self.up_out[0])
-            self.down_in = self.my_plc.get_value(self.dict_spec_pathes["MemDownLimitSwitchIn"])
+            self.down_in = self.my_plc.get_value(
+                self.dict_spec_pathes["MemDownLimitSwitchIn"]
+            )
             if self.down_in[0] == "-":
                 self.down_in = False
             else:
                 self.down_in = bool(self.down_in[0])
-            self.down_out = self.my_plc.get_value(self.dict_spec_pathes["MemDownLimitSwitchOut"])
+            self.down_out = self.my_plc.get_value(
+                self.dict_spec_pathes["MemDownLimitSwitchOut"]
+            )
             if self.down_out[0] == "-":
                 self.down_out = False
             else:
@@ -6571,22 +6572,16 @@ class API:
             self.down_in = False
             self.down_out = False
 
-
-        threading.Timer(5,self.get_temp_and_switch).start()
-
+        threading.Timer(5, self.get_temp_and_switch).start()
 
     def test_t(self):
-        print('aaaa')
-
+        print("aaaa")
 
     def update_plc_values(self):
-
-        threading.Timer(1,self.get_sensor).start()
-        threading.Timer(1,self.get_temp_and_switch).start()
-
+        threading.Timer(1, self.get_sensor).start()
+        threading.Timer(1, self.get_temp_and_switch).start()
 
     def update_sensor_and_temp(self):
-
         try:
             if (
                 self.top_temp > self.up_high_threshold
@@ -6620,10 +6615,10 @@ class API:
         self.last_sensor = self.sensor
 
         self.ui.change_plc_check_status(mode=self.sensor)
-        self.ui.change_place_check_status(side='up', inout='in', mode=self.up_in)
-        self.ui.change_place_check_status(side='up', inout='out', mode=self.up_out)
-        self.ui.change_place_check_status(side='down', inout='in', mode=self.down_in)
-        self.ui.change_place_check_status(side='down', inout='out', mode=self.down_out)
+        self.ui.change_place_check_status(side="up", inout="in", mode=self.up_in)
+        self.ui.change_place_check_status(side="up", inout="out", mode=self.up_out)
+        self.ui.change_place_check_status(side="down", inout="in", mode=self.down_in)
+        self.ui.change_place_check_status(side="down", inout="out", mode=self.down_out)
         try:
             self.ui.update_plc_temp(self.top_temp, self.bottom_temp)
         except:
@@ -6652,8 +6647,10 @@ class API:
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)
                 # if self.connection_status:
-                print('start thread set caemra and projector')
-                threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start()
+                print("start thread set caemra and projector")
+                threading.Thread(
+                    target=self.my_plc.set_cams_and_prejector, args=(3, projectors)
+                ).start()
                 # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
@@ -7933,266 +7930,3 @@ class evaluation_worker(QObject):
         # self.dic_of_slider_image_path[
         #     original_image_in_slider_folder
         # ] = evaluated_image_in_slider_folder
-
-
-# __________________________________________________________________
-class ModelsCreation_worker(QObject):
-    # vars for handling thread
-    finished = Signal()
-    pipline_info_signal = Signal(str)
-    model_creation_signal = Signal(int, bool)
-
-    def set_params(self, login_user_name, db, language, pipline_name):
-        """funtion is alternative for init funtion
-
-        Parameters
-        ----------
-        login_user_name : _type_
-            _description_
-        db : dataBaseUtils object(customized class)
-            _description_
-        language : _type_
-            _description_
-        pipline_name : str
-            name of pipline
-        """
-
-        self.login_user_name = login_user_name
-        self.db = db
-        self.lang = language
-        self.pipline_name = pipline_name
-
-    def set_pipline(self):
-        """main function of class,creating models"""
-
-        # creating pipline object
-        self.pipline_OBJ = pipelines.Pipeline(
-            pipeline_root=binary_list_funcs.PIPLINES_PATH,
-            pipeline_name=self.pipline_name,
-        )
-        # set values of owner and username in pipline obj
-        self.pipline_OBJ.set(key=pipelines.OWNER, value=self.login_user_name)
-
-        # load data from database:
-        (
-            flag,
-            pipline_type,
-            binary_model_info,
-            LC_model_info,
-        ) = self.load_pipline_info_from_database()
-        self.pipline_type = pipline_type
-        if flag:
-            # get model name,map id to nhame
-            b_algo_name = binary_model_funcs.translate_binary_algorithm_id_to_name(
-                binary_model_info[0]["algo_name"]
-            )
-            # create binary model object
-            try:
-                self.b_model = (
-                    binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-                        algo_id=b_algo_name,
-                        input_size=self.inputsize,
-                        weights_path=binary_model_info[0]["weights_path"],
-                    )
-                )
-                # send signal for updataing progress bar
-                self.model_creation_signal.emit(
-                    1,
-                    True,
-                )
-                self.pipline_OBJ.set_binary_model(
-                    key=pipelines.MODEL_ID, value=binary_model_info[0]["algo_name"]
-                )
-                self.pipline_OBJ.set_binary_model(
-                    key=pipelines.MODEL_WEIGHTS_PATH,
-                    value=binary_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
-                )
-
-            except:
-                # send notif of there is problem in creating models of pipline(here binary)
-                self.model_creation_signal.emit(1, False)
-
-            if "S" in pipline_type:
-                try:
-                    # get model name,map id to name
-                    l_algo_name = (
-                        binary_model_funcs.translate_binary_algorithm_id_to_name(
-                            LC_model_info["segmentation"][0]["algo_name"],
-                            model_type="localization",
-                        )
-                    )
-                    # create segmention model object
-                    self.l_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-                        algo_id=l_algo_name,
-                        input_size=self.inputsize,
-                        weights_path=LC_model_info["segmentation"][0]["weights_path"],
-                    )
-                    # send signal for updataing progress bar
-                    self.model_creation_signal.emit(2, True)
-                    self.pipline_OBJ.set_localization_model(
-                        key=pipelines.MODEL_ID,
-                        value=LC_model_info["segmentation"][0]["algo_name"],
-                    )
-                    self.pipline_OBJ.set_localization_model(
-                        key=pipelines.MODEL_WEIGHTS_PATH,
-                        value=LC_model_info["segmentation"][0]["weights_path"],
-                    )
-                except:
-                    # send notif of there is problem in creating models of pipline(here segmention)
-                    self.model_creation_signal.emit(2, False)
-
-            if "C" in pipline_type:
-                (
-                    self.classes_num,
-                    _,
-                ) = binary_model_funcs.strInputSize_2_intInputSize(
-                    string=LC_model_info["classification"][0]["classes"],
-                    use_for_other_parameter=True,
-                )
-                try:
-                    # get model name,map id to name
-                    c_algo_name = (
-                        binary_model_funcs.translate_binary_algorithm_id_to_name(
-                            LC_model_info["classification"][0]["algo_name"],
-                            model_type="classification",
-                        )
-                    )
-                    # create classification model object
-                    self.c_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-                        algo_id=c_algo_name,
-                        input_size=self.inputsize,
-                        num_class=self.classes_num,
-                        mode="categorical",
-                        weights_path=LC_model_info["classification"][0]["weights_path"],
-                    )
-                    # send signal for updataing progress bar
-                    self.model_creation_signal.emit(3, True)
-                    self.pipline_OBJ.set_classification_model(
-                        key=pipelines.MODEL_ID,
-                        value=LC_model_info["classification"][0]["algo_name"],
-                    )
-                    self.pipline_OBJ.set_classification_model(
-                        key=pipelines.MODEL_ID,
-                        value=LC_model_info["classification"][0]["weights_path"],
-                    )
-                except:
-                    # send notif of there is problem in creating models of pipline(here segmention)
-                    self.model_creation_signal.emit(3, False)
-
-            if "Y" in pipline_type:
-                (
-                    self.classes_num,
-                    _,
-                ) = binary_model_funcs.strInputSize_2_intInputSize(
-                    string=LC_model_info["yolo"][0]["classes"],
-                    use_for_other_parameter=True,
-                )
-                try:
-                    # create yolo model object
-                    self.yolo_creator(yolo_info=LC_model_info["yolo"][0])
-                    # send signal for updataing progress bar
-                    self.model_creation_signal.emit(4, True)
-                    """should modify"""
-                    self.pipline_OBJ.set_yolo_model(key=pipelines.MODEL_ID, value=0)
-                    """should modify"""
-                    self.pipline_OBJ.set_yolo_model(
-                        key=pipelines.MODEL_WEIGHTS_PATH,
-                        value=LC_model_info["yolo"][0]["weights_path"],
-                    )
-                    self.pipline_OBJ.set(pipelines.USE_YOLO, value=True)
-                except:
-                    # send notif of there is problem in creating models of pipline(here yolo)
-                    self.model_creation_signal.emit(4, False)
-
-            if pipline_type == "BS":
-                self.classes_num = 1
-        else:
-            self.model_creation_signal.emit(
-                0,
-                False,
-            )
-        self.pipline_info_signal.emit(pipline_type)
-        self.finished.emit()
-
-    def load_pipline_info_from_database(self):
-        """load required data for database"""
-
-        flag = True  # indicate data fetched correctly
-        pipline_info, binary_model_info = None, None
-        LC_model_info = {"yolo": None, "segmentation": None, "classification": None}
-        # load pipline info
-        _, pipline_info = self.db.get_selected_pipline_record(value=self.pipline_name)
-        pipline_type = pipline_info[0]["pipline_type"]
-        if pipline_info != []:
-            # load binary model info
-            _, binary_model_info = self.db.get_model(
-                self.db.binary_model, pipline_info[0]["binary_weight_path"]
-            )
-
-            if binary_model_info != []:
-                # get input type of pipline e.g. splited or resized
-                self.inputtype = binary_model_info[0]["input_type"]
-                # convert binary input size in str format to tuple of int
-                self.inputsize = binary_model_funcs.strInputSize_2_intInputSize(
-                    string=binary_model_info[0]["input_size"]
-                )
-            else:
-                flag = False
-
-            if "S" in pipline_type:
-                # load segmnetion model
-                _, localiztion_model_info = self.db.get_model(
-                    self.db.localiztion, pipline_info[0]["localization_weight_path"]
-                )
-                if localiztion_model_info != []:
-                    LC_model_info["segmentation"] = localiztion_model_info
-                else:
-                    flag = False
-
-            if "C" in pipline_type:
-                _, classification_model_info = self.db.get_model(
-                    self.db.classification,
-                    pipline_info[0]["classification_weight_path"],
-                )
-                if classification_model_info != []:
-                    LC_model_info["classification"] = classification_model_info
-            if "Y" in pipline_type:
-                _, yolo_model_info = self.db.get_model(
-                    self.db.yolo, pipline_info[0]["yolo_weight_path"]
-                )
-                if yolo_model_info != []:
-                    LC_model_info["yolo"] = yolo_model_info
-                else:
-                    flag = False
-
-        return flag, pipline_type, binary_model_info, LC_model_info
-
-    def yolo_creator(self, yolo_info):
-        """this function creates yolo object
-
-        Parameters
-        ----------
-        yolo_info : list
-            list contains dictionary of yolo data
-        """
-        half = False
-        device = select_device("", batch_size=yolo_info["batch_size"])
-        self.yolo_model = DetectMultiBackend(
-            weights=yolo_info["weights_path"],
-            device=device,
-            dnn=False,
-            fp16=half,
-        )
-        # """should modify"""
-        # stride, pt, jit, engine = (
-        #     self.yolo_model.stride,
-        #     self.yolo_model.pt,
-        #     self.yolo_model.jit,
-        #     self.yolo_model.engine,
-        # )
-        # imgsz = check_img_size(self.inputsize[0], s=stride)
-        # half = self.yolo_model.fp16
-        # if engine:
-        #     batch_size = self.yolo_model.batch_size
-        # else:
-        #     device = self.yolo_model.device
