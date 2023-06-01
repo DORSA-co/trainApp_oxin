@@ -8,7 +8,7 @@ from PySide6.QtGui import Qt
 
 from backend import colors_pallete, chart_funcs, date_funcs
 import texts
-import train_api
+# import train_api
 import os
 import json
 from utils1 import Utils

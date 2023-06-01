@@ -8432,7 +8432,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>707</width>
-                                            <height>27</height>
+                                            <height>20</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -15401,7 +15401,7 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>329</width>
+                                      <width>340</width>
                                       <height>699</height>
                                      </rect>
                                     </property>
@@ -26022,7 +26022,7 @@ border:Transparent</string>
                                          </property>
                                          <property name="icon">
                                           <iconset>
-                                           <normaloff>../../Users/DORSA-PC1/Desktop/images/arrow-left.png</normaloff>../../Users/DORSA-PC1/Desktop/images/arrow-left.png</iconset>
+                                           <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
                                          </property>
                                          <property name="iconSize">
                                           <size>
@@ -26071,7 +26071,7 @@ border:Transparent</string>
                                          </property>
                                          <property name="icon">
                                           <iconset>
-                                           <normaloff>../../Users/DORSA-PC1/Desktop/images/arrow-right.png</normaloff>../../Users/DORSA-PC1/Desktop/images/arrow-right.png</iconset>
+                                           <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
                                          </property>
                                          <property name="iconSize">
                                           <size>

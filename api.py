@@ -86,7 +86,7 @@ from utils1 import tempMemory, Utils
 
 from backend.dataset import Dataset
 from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2
-import train_api
+# import train_api
 
 from labeling.labeling_UI import labeling
 
@@ -124,6 +124,7 @@ import sys
 sys.path.append('../oxin_storage_management')
 from storage_main_UI import storage_management
 from storage_api import storage_api
+from storage_worker import storage_worker
 
 # _______JJ
 
@@ -393,8 +394,9 @@ class API:
         # storage
         self.ssd_image_file_manager = None
         self.hdd_file_manager = None
+        self.storage_win = None
+        self.s_api = None
         self.read_storage_paths_from_db()
-        self.create_diskMemory_objs()
         self.start_storage_checking()
         
         # DEBUG_FUNCTIONS
@@ -413,41 +415,46 @@ class API:
             self.ssd_images_path = storage_settings['ssd_images_path']
 
     def create_diskMemory_objs(self):
-        if os.path.exists(self.hdd_path):
+        if not os.path.exists(self.hdd_path):
+            os.makedirs(self.hdd_path, exist_ok=True)
+        if not self.hdd_file_manager:
             self.hdd_file_manager = FileManager.diskMemory(path=self.hdd_path)
-        if os.path.exists(self.ssd_images_path):
+
+        if not os.path.exists(self.ssd_images_path):
+            os.makedirs(self.ssd_images_path, exist_ok=True)
+        if not self.ssd_image_file_manager:
             self.ssd_image_file_manager = FileManager.diskMemory(path=self.ssd_images_path)
 
+    def create_storage_window(self):
+        if not self.storage_win:
+            self.storage_win = storage_management()
+        if not self.s_api:
+            self.s_api = storage_api(self.storage_win)
+
     def check_storage(self):
+        self.create_diskMemory_objs()
+        self.create_storage_window()
+
+        self.ssd_image_file_manager.refresh()
+        self.hdd_file_manager.refresh()
+
         self.update_storage_charts()
+
         if self.ssd_image_file_manager:
             ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
             if ssd_image_percent > self.max_cleanup_percentage:
-                self.storage_win = storage_management()
-                self.s_api = storage_api(self.storage_win)
                 self.storage_win.show()
-                self.s_api.update_charts()
-                self.s_api.check_disks()
-        
+                self.s_api.start()
+                    
     def update_storage_charts(self):
-        if os.path.exists(self.hdd_path):
-            if not self.hdd_file_manager:
-                self.hdd_file_manager = FileManager.diskMemory(path=self.hdd_path)
-            self.ui.show_hdd_chart()
-            self.update_hdd_chart()
-        else:
-            self.ui.hide_hdd_chart()
+        self.ui.show_hdd_chart()
+        self.update_hdd_chart()
 
         if os.path.exists(self.ssd_images_path):
-            if not self.ssd_image_file_manager:
-                self.ssd_image_file_manager = FileManager.diskMemory(path=self.ssd_images_path)
             self.ui.show_ssd_chart()
             self.update_ssd_chart()
-        else:
-            self.ui.hide_ssd_chart()
 
     def update_ssd_chart(self):
-        self.ssd_image_file_manager.refresh()
         storage_status = {'SSD': {'Used':self.ssd_image_file_manager.used.toGB(), 
                               'Free': self.ssd_image_file_manager.free.toGB()}, 
                     }
@@ -458,7 +465,6 @@ class API:
         )
 
     def update_hdd_chart(self):
-        self.hdd_file_manager.refresh()
         storage_status = {'HDD': {'Used':self.hdd_file_manager.used.toGB(), 
                             'Free': self.hdd_file_manager.free.toGB()}
                     }

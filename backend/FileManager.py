@@ -37,9 +37,9 @@ class Space:
 #____________________________________________________________________________________________________________________________________
 class diskMemory():
 
-    def __init__(self,path):
+    def __init__(self, path):
         self.path = path
-        self.refresh()
+        # self.refresh()
     
 
     def refresh(self):
