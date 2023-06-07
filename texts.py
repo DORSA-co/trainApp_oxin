@@ -619,6 +619,14 @@ WARNINGS = {
 }
 
 MESSEGES = {
+    'Storage_opened': {'fa': 'نرم افزار مدیریت حافظه با موفقیت اجرا شد.',
+        'en': 'The storage management software was successfully executed'},
+
+    'Storage_open_failed': {'fa': 'خطا در اجرای نرم افزار مدیریت حافظه',
+        'en': 'Error in running the storage management software'},
+
+    '': {'fa': '',
+        'en': ''},
 
     'Login_successfully' :{'fa': ' ورود کاربر با موفقت ایجاد شد',
                 'en': 'Login successfully '},

@@ -128,6 +128,8 @@ from storage_worker import storage_worker
 
 # _______JJ
 
+from MyTimer import MyTimer
+
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
@@ -384,9 +386,6 @@ class API:
         self.running_l_model=False
         self.running_y_model=False
 
-
-
-
         self.ui.radioButton_one.toggled.connect(lambda :self.set_pipline_mode('yolo') )
         self.ui.radioButton_two.toggled.connect(lambda :self.set_pipline_mode('localization') )
         self.set_pipline_mode('yolo')
@@ -396,7 +395,6 @@ class API:
         self.hdd_file_manager = None
         self.storage_win = None
         self.s_api = None
-        self.read_storage_paths_from_db()
         self.start_storage_checking()
         
         # DEBUG_FUNCTIONS
@@ -405,6 +403,9 @@ class API:
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
         self.__debug__login__()
+
+
+        self.ttttt = time.time()
 
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
@@ -432,6 +433,7 @@ class API:
             self.s_api = storage_api(self.storage_win)
 
     def check_storage(self):
+        self.read_storage_paths_from_db()
         self.create_diskMemory_objs()
         self.create_storage_window()
 
@@ -443,16 +445,23 @@ class API:
         if self.ssd_image_file_manager:
             ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
             if ssd_image_percent > self.max_cleanup_percentage:
-                self.storage_win.show()
-                self.s_api.start()
+                try:
+                    self.storage_win.show()
+                    self.s_api.start()
+                    self.ui.logger.create_new_log(
+                        code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"], level=1
+                    )
+                except:
+                    self.ui.logger.create_new_log(
+                        code=texts_codes.SubTypes['Storage_open_failed'], message=texts.MESSEGES["Storage_open_failed"]["en"], level=1
+                    )
                     
     def update_storage_charts(self):
         self.ui.show_hdd_chart()
         self.update_hdd_chart()
 
-        if os.path.exists(self.ssd_images_path):
-            self.ui.show_ssd_chart()
-            self.update_ssd_chart()
+        self.ui.show_ssd_chart()
+        self.update_ssd_chart()
 
     def update_ssd_chart(self):
         storage_status = {'SSD': {'Used':self.ssd_image_file_manager.used.toGB(), 
@@ -3516,7 +3525,7 @@ class API:
             )
             self.live_timer = QTimer(self.ui)
             self.live_timer.timeout.connect(self.ImageManager.show_live)
-            self.grab_timer = QTimer(self.ui)
+            self.grab_timer = MyTimer(self.ui)
             self.grab_timer.timeout.connect(self.grab_image)
             self.ImageManager.first_check_finished.connect(self.start_capture_timers)
             self.ImageManager.second_check_finished.connect(self.stop_capture_timers)
@@ -3569,12 +3578,12 @@ class API:
             pass
         if speed > 0:
             self.ImageManager.start()
-        self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_timer.start(int(1000/(self.ui.frame_rate+1)))
+        # self.live_timer.start(self.ui.update_timer_live_frame)
+        self.grab_timer.start(int(1000/(self.ui.frame_rate)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
-        self.live_timer.stop()
+        # self.live_timer.stop()
         self.grab_timer.stop()
 
     def grab_image(self):
@@ -3585,6 +3594,8 @@ class API:
         if speed > 0:
             self.ImageManager.stop()
             self.ImageManager.start()
+        # print((time.time() - self.ttttt)*1000)
+        self.ttttt = time.time()
 
     def change_live_camera(self, text):
         try:
