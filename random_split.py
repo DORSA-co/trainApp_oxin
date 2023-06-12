@@ -55,7 +55,7 @@ def FindNormalCrops(img, mask, size, annotation):
 
     img_crops = np.array(img_crops)
     mask_crops = np.array(mask_crops)
-    return img_crops, mask_crops, crops_annotations, points, img.shape
+    return img_crops, mask_crops, crops_annotations
 
 
 def FindRegions(img, size):
@@ -269,10 +269,14 @@ def get_crops_normal(img, mask, size, annotation=None):
     # if image is zero-one mask remove pixels with gray value between 0 and 255
     mask = ((mask > 100) * 255).astype("uint8")
 
-    img_crops, mask_crops, crops_annotations, points, target_size = FindNormalCrops(
+    img_crops, mask_crops, crops_annotations = FindNormalCrops(
         img, mask, size, annotation
     )
-    return img_crops, mask_crops, crops_annotations, points, target_size
+    return (
+        img_crops,
+        mask_crops,
+        crops_annotations,
+    )
 
 
 def get_crops_no_defect(img, n_split, size):

@@ -154,6 +154,7 @@ from yolov5.utils.plots import output_to_target, plot_images, plot_val_study
 
 # ______import YOLOV5 module ______#
 from backend.pipline_creation_module import ModelsCreation_worker
+from backend.pipline_evaluation_module import Evaluation_worker
 
 # ___________________________________________
 
@@ -4440,28 +4441,17 @@ class API:
         self.pgbar_value = 0
         self.ui.pgbar_evalution_precess.setValue(self.pgbar_value)
         self.ui.frame_118.setFixedHeight(60)
-        # # _____________________________Threading_____________________________#
+        # _________________________________________________________________________
         self.evaluation_thread = QThread()
-        self.evaluation = evaluation_worker()
-        if self.use_yolo:
-            self.evaluation.set_params(
-                paths=self.path_list,
-                data_nc=self.classes_num,
-                inputType=self.inputtype,
-                inputsize=self.inputsize,
-                # pipline_OBJ=self.pipline_OBJ,
-                binary_model=self.b_model,
-                binary_thresh=0.5,
-                yolo_model=self.yolo_model,
-                yolo_batch_size=1,
-                use_yolo=True,
-                yolo_conf_thres=0.001,
-                yolo_iou_thres=0.6,
-                yolo_max_det=300,
-            )
-        else:
-            pass
-
+        self.evaluation = Evaluation_worker()
+        self.evaluation.set_params(
+            data_path=self.path_list,
+            pipline_obj=None,
+            input_type=self.inputtype,
+            input_size=self.inputsize[0],
+            binary_model=self.b_model,
+            binary_threshold=0.5,
+        )
         self.evaluation.moveToThread(self.evaluation_thread)
         self.evaluation_thread.started.connect(self.evaluation.evaluate)
         self.evaluation.finished.connect(self.evaluation_thread.quit)
@@ -4475,6 +4465,42 @@ class API:
         self.evaluation_thread.finished.connect(
             lambda: self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
         )
+
+        # # _____________________________Threading_____________________________#
+        # self.evaluation_thread = QThread()
+        # self.evaluation = evaluation_worker()
+        # if self.use_yolo:
+        #     self.evaluation.set_params(
+        #         paths=self.path_list,
+        #         data_nc=self.classes_num,
+        #         inputType=self.inputtype,
+        #         inputsize=self.inputsize,
+        #         # pipline_OBJ=self.pipline_OBJ,
+        #         binary_model=self.b_model,
+        #         binary_thresh=0.5,
+        #         yolo_model=self.yolo_model,
+        #         yolo_batch_size=1,
+        #         use_yolo=True,
+        #         yolo_conf_thres=0.001,
+        #         yolo_iou_thres=0.6,
+        #         yolo_max_det=300,
+        #     )
+        # else:
+        #     pass
+
+        # self.evaluation.moveToThread(self.evaluation_thread)
+        # self.evaluation_thread.started.connect(self.evaluation.evaluate)
+        # self.evaluation.finished.connect(self.evaluation_thread.quit)
+        # self.evaluation.finished.connect(self.evaluation.deleteLater)
+        # self.evaluation_thread.finished.connect(self.evaluation_thread.deleteLater)
+        # self.evaluation.progress.connect(self.evaluation_ui_update)
+        # self.evaluation.pgb_bar_signal.connect(self.set_signal_from_evaluate_thread)
+        # self.evaluation_thread.start()
+
+        # self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(False)
+        # self.evaluation_thread.finished.connect(
+        #     lambda: self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
+        # )
 
     # ______________________________________________________________________________________________________________________
 

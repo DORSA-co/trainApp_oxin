@@ -12,7 +12,7 @@ from backend.binary_model_funcs import (
 from Train_modules.model_creator import translate_model_database_info_to_modelOBJ
 
 
-# _______Threading Management_______#
+# _______Threading Management Class_______#
 class ModelsCreation_worker(QObject):
     # vars for handling thread
     finished = Signal()

@@ -2445,7 +2445,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>8</number>
+                         <number>3</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -4882,7 +4882,7 @@ border:None;</string>
                                          <x>0</x>
                                          <y>0</y>
                                          <width>715</width>
-                                         <height>32</height>
+                                         <height>30</height>
                                         </rect>
                                        </property>
                                        <property name="sizePolicy">
@@ -5173,8 +5173,8 @@ QPushButton:disabled {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>825</width>
-                                      <height>28</height>
+                                      <width>692</width>
+                                      <height>18</height>
                                      </rect>
                                     </property>
                                     <layout class="QHBoxLayout" name="horizontalLayout_213">
@@ -9985,7 +9985,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>793</height>
+                                        <height>28</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -10237,7 +10237,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>793</height>
+                                        <height>28</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -13971,8 +13971,8 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>1416</width>
-                                      <height>200</height>
+                                      <width>92</width>
+                                      <height>165</height>
                                      </rect>
                                     </property>
                                     <layout class="QVBoxLayout" name="verticalLayout_107">
@@ -13998,8 +13998,8 @@ color : rgb(0,0,0);</string>
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>1414</width>
-                                          <height>84</height>
+                                          <width>96</width>
+                                          <height>49</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -14186,8 +14186,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>1414</width>
-                                              <height>106</height>
+                                              <width>90</width>
+                                              <height>43</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">
