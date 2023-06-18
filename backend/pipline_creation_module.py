@@ -4,11 +4,7 @@ from PySide6.QtCore import QObject, QThread, Signal
 # custom module
 from backend import pipelines
 from backend.binary_list_funcs import PIPLINES_PATH
-from backend.binary_model_funcs import (
-    strInputSize_2_intInputSize,
-    translate_binary_algorithm_id_to_name,
-    translate_model_algorithm_id_to_creator_function,
-)
+from backend.binary_model_funcs import strInputSize_2_intInputSize
 from Train_modules.model_creator import translate_model_database_info_to_modelOBJ
 
 

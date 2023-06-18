@@ -54,10 +54,6 @@ MODELS_METRICS = {
             "mr",
             "map50",
             "map",
-            "loss_box",
-            "loss_obj",
-            "loss_cls",
-            "maps",
         ],
     ],
     "BSC": [
@@ -73,9 +69,6 @@ MODELS_METRICS = {
             "mr",
             "map50",
             "map",
-            "loss_box",
-            "loss_obj",
-            "loss_cls",
         ],
     ],
     "BS": [

@@ -23,7 +23,7 @@ def ImageResize(img, size):
     )
 
 
-def FindNormalCrops(img, mask, size, annotation):
+def FindNormalCrops(img, mask, size, annotation, number_output_flag):
     img = ImageResize(img, size)
     mask = ImageResize(mask, size)
 
@@ -33,7 +33,6 @@ def FindNormalCrops(img, mask, size, annotation):
     mask_crops = []
     crops_annotations = []
     points = []
-
     jj = list(range(0, img.shape[0], size[0]))
     ii = list(range(0, img.shape[1], size[1]))
     points = list(itertools.product(jj, ii))
@@ -55,7 +54,10 @@ def FindNormalCrops(img, mask, size, annotation):
 
     img_crops = np.array(img_crops)
     mask_crops = np.array(mask_crops)
-    return img_crops, mask_crops, crops_annotations
+    if number_output_flag:
+        return img_crops, mask_crops, crops_annotations
+    else:
+        return img_crops, mask_crops, crops_annotations, (img.shape)[0:2]
 
 
 def FindRegions(img, size):
@@ -261,7 +263,7 @@ def get_crops_random(img, mask, size, annotation=None):
     return img_crops, mask_crops, crops_annotations
 
 
-def get_crops_normal(img, mask, size, annotation=None):
+def get_crops_normal(img, mask, size, annotation=None, number_output_flag=True):
     # make image grayscale
     if len(mask.shape) != 2:
         mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
@@ -269,14 +271,23 @@ def get_crops_normal(img, mask, size, annotation=None):
     # if image is zero-one mask remove pixels with gray value between 0 and 255
     mask = ((mask > 100) * 255).astype("uint8")
 
-    img_crops, mask_crops, crops_annotations = FindNormalCrops(
-        img, mask, size, annotation
-    )
-    return (
-        img_crops,
-        mask_crops,
-        crops_annotations,
-    )
+    if number_output_flag:
+        img_crops, mask_crops, crops_annotations = FindNormalCrops(
+            img, mask, size, annotation, number_output_flag
+        )
+        return (
+            img_crops,
+            mask_crops,
+            crops_annotations,
+        )
+    else:
+        (
+            img_crops,
+            mask_crops,
+            crops_annotations,
+            target_shape,
+        ) = FindNormalCrops(img, mask, size, annotation, number_output_flag)
+        return img_crops, mask_crops, crops_annotations, target_shape
 
 
 def get_crops_no_defect(img, n_split, size):

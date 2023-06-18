@@ -4394,25 +4394,25 @@ class API:
         else:
             print("what happend!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
-        self.original_and_evaluated_image_in_PBT.add(
-            mylist=list(image_slider_path.keys()),
-            name="original",
-        )
-        self.original_image_list_next_func = (
-            self.original_and_evaluated_image_in_PBT.build_next_func(name="original")
-        )
-        self.original_image_list_prev_func = (
-            self.original_and_evaluated_image_in_PBT.build_prev_func(name="original")
-        )
+        # self.original_and_evaluated_image_in_PBT.add(
+        #     mylist=list(image_slider_path.keys()),
+        #     name="original",
+        # )
+        # self.original_image_list_next_func = (
+        #     self.original_and_evaluated_image_in_PBT.build_next_func(name="original")
+        # )
+        # self.original_image_list_prev_func = (
+        #     self.original_and_evaluated_image_in_PBT.build_prev_func(name="original")
+        # )
 
-        """should modify"""
-        self.ui.BTN_next_original_image_in_PBT_page.setEnabled(True)
-        self.ui.BTN_prev_original_image_in_PBT_page.setEnabled(True)
-        # update slider
+        # """should modify"""
+        # self.ui.BTN_next_original_image_in_PBT_page.setEnabled(True)
+        # self.ui.BTN_prev_original_image_in_PBT_page.setEnabled(True)
+        # # update slider
 
-        self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
-            predict_eval=image_slider_path
-        )
+        # self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
+        #     predict_eval=image_slider_path
+        # )
 
     def set_signal_from_evaluate_thread(self, percentage):
         """this function used to update progressbar percentage
@@ -4449,8 +4449,13 @@ class API:
             pipline_obj=None,
             input_type=self.inputtype,
             input_size=self.inputsize[0],
+            data_nc=1,
             binary_model=self.b_model,
             binary_threshold=0.5,
+            yolo_model=self.yolo_model,
+            yolo_conf_thres=0.001,
+            yolo_iou_thres=0.6,
+            yolo_max_det=300,
         )
         self.evaluation.moveToThread(self.evaluation_thread)
         self.evaluation_thread.started.connect(self.evaluation.evaluate)
@@ -7676,79 +7681,79 @@ class evaluation_worker(QObject):
                 agnostic=False,
                 max_det=self.yolo_max_det,
             )
-            true_path = os.path.join(
-                "C:/trainApp_oxin/default_dataset/localization/slider/true",
-                f"val_batch{batch_i}_labels.jpg",
-            )
-            pred_path = os.path.join(
-                "C:/trainApp_oxin/default_dataset/localization/slider/pred",
-                f"val_batch{batch_i}_pred.jpg",
-            )
+            # true_path = os.path.join(
+            #     "C:/trainApp_oxin/default_dataset/localization/slider/true",
+            #     f"val_batch{batch_i}_labels.jpg",
+            # )
+            # pred_path = os.path.join(
+            #     "C:/trainApp_oxin/default_dataset/localization/slider/pred",
+            #     f"val_batch{batch_i}_pred.jpg",
+            # )
 
-            plot_images(
-                im2,
-                targets2,
-                paths2,
-                true_path,
-                names,
-            )
-            plot_images(
-                im,
-                output_to_target(preds),
-                paths,
-                pred_path,
-                names,
-            )
+            # plot_images(
+            #     im2,
+            #     targets2,
+            #     paths2,
+            #     true_path,
+            #     names,
+            # )
+            # plot_images(
+            #     im,
+            #     output_to_target(preds),
+            #     paths,
+            #     pred_path,
+            #     names,
+            # )
 
-            basename = os.path.basename(paths2[0])
-            filename, _ = os.path.splitext(basename)
-            full_image_name = filename.split("_")[0] + "_" + filename.split("_")[1]
-            split_index = filename.split("_")[2]
-            split_index = int(split_index)
-            j, i = points[split_index]
+            # basename = os.path.basename(paths2[0])
+            # filename, _ = os.path.splitext(basename)
+            # full_image_name = filename.split("_")[0] + "_" + filename.split("_")[1]
+            # split_index = filename.split("_")[2]
+            # split_index = int(split_index)
+            # j, i = points[split_index]
 
-            original_image_in_slider_folder = os.path.join(
-                "default_dataset/localization/slider/pred", full_image_name + ".png"
-            )
-            evaluated_image_in_slider_folder = os.path.join(
-                "default_dataset/localization/slider/true", full_image_name + ".png"
-            )
+            # original_image_in_slider_folder = os.path.join(
+            #     "default_dataset/localization/slider/pred", full_image_name + ".png"
+            # )
+            # evaluated_image_in_slider_folder = os.path.join(
+            #     "default_dataset/localization/slider/true", full_image_name + ".png"
+            # )
 
-            # get raw image of  slider image
-            raw_image_of_dataset = os.path.join(
-                "default_dataset/binary/perfect", full_image_name + ".png"
-            )
-            if not (os.path.exists(raw_image_of_dataset)):
-                raw_image_of_dataset = os.path.join(
-                    "default_dataset/binary/defect", full_image_name + ".png"
-                )
-            if self.dic_of_Cimage[
-                full_image_name
-            ]:  # check we have image in slider folder or not
-                true_img = cv2.imread(raw_image_of_dataset)
-                # pred_img = true_img.copy()
-                self.dic_of_Cimage[full_image_name] = False
-            else:
-                true_img = cv2.imread(original_image_in_slider_folder)
-                # pred_img = cv2.imread(evaluated_image_in_slider_folder)
+            # # get raw image of  slider image
+            # raw_image_of_dataset = os.path.join(
+            #     "default_dataset/binary/perfect", full_image_name + ".png"
+            # )
+            # if not (os.path.exists(raw_image_of_dataset)):
+            #     raw_image_of_dataset = os.path.join(
+            #         "default_dataset/binary/defect", full_image_name + ".png"
+            #     )
+            # if self.dic_of_Cimage[
+            #     full_image_name
+            # ]:  # check we have image in slider folder or not
+            #     true_img = cv2.imread(raw_image_of_dataset)
+            #     # pred_img = true_img.copy()
+            #     self.dic_of_Cimage[full_image_name] = False
+            # else:
+            #     true_img = cv2.imread(original_image_in_slider_folder)
+            #     # pred_img = cv2.imread(evaluated_image_in_slider_folder)
 
-            true_split = cv2.imread(true_path)
-            # pred_split = cv2.imread(pred_path)
-            true_img[
-                j : j + self.inputsize[0], i : i + self.inputsize[0], :
-            ] = true_split
-            # pred_img[
+            # true_split = cv2.imread(true_path)
+            # # pred_split = cv2.imread(pred_path)
+            # true_img[
             #     j : j + self.inputsize[0], i : i + self.inputsize[0], :
-            # ] = pred_split
+            # ] = true_split
+            # # pred_img[
+            # #     j : j + self.inputsize[0], i : i + self.inputsize[0], :
+            # # ] = pred_split
 
-            os.remove(true_path)
-            # os.remove(pred_path)
+            # os.remove(true_path)
+            # # os.remove(pred_path)
 
-            cv2.imwrite(original_image_in_slider_folder, true_img)
-            # cv2.imwrite(evaluated_image_in_slider_folder, pred_img)
-            self.dic_of_slider_image_path[
-                original_image_in_slider_folder
-            ] = evaluated_image_in_slider_folder
+            # cv2.imwrite(original_image_in_slider_folder, true_img)
+            # # cv2.imwrite(evaluated_image_in_slider_folder, pred_img)
+            # self.dic_of_slider_image_path[
+            #     original_image_in_slider_folder
+            # ] = evaluated_image_in_slider_folder
             # ________________________________________________________________________________
 
             # basename = os.path.basename(paths2[0])

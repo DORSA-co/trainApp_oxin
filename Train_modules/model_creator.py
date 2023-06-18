@@ -56,6 +56,7 @@ class ModelCreator:
         model = function(
             input_size=input_size, num_class=num_class, mode=mode, weights=self.weights
         )
+
         return model
 
 
