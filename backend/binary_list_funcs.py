@@ -134,7 +134,6 @@ def maximize_image_on_click(ui_obj, db_obj, label, event):
     :param event: _description_
     :type event: _type_
     """
-
     pathes = label.whatsThis()  # image path is set on its label whatsthis
 
     try:
@@ -238,15 +237,14 @@ def set_image_on_loadDataSetSlider_in_PBT(
                 no_image=True,
             )
 
-            # doble-click event for labels
-            eval(
-                "ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i)
-            ).mouseDoubleClickEvent = partial(
-                maximize_image_on_click,
-                ui_obj,
-                db_obj,
-                eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i)),
-            )
+            # # doble-click event for labels
+            # eval(
+            #     "ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i)
+            # ).mouseDoubleClickEvent = partial(
+            #     maximize_image_slider_on_click,
+            #     ui_obj,
+            #     eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % (prefix, i)),
+            # )
 
         # assign layout to frame
         frame_obj.setLayout(eval("ui_obj.loadDataset_PBT_page_layout_%s" % prefix))
@@ -331,16 +329,12 @@ def set_image_to_ui_slider(
 # __________________________________________________JJ ZONE STARTS
 def set_image_to_ui_slider_eidted_version(
     ui_obj,
-    sub_directory,
-    annot_sub_direcotory,
     image_path_list,
-    mask_path_list,
     predict_eval,
     image_per_row=n_images_per_row,
 ):
     image_type = "noimage"
 
-    # try:
     # set dataset images on UI
     for i, image_path in enumerate(image_path_list):
         # load image
@@ -355,65 +349,69 @@ def set_image_to_ui_slider_eidted_version(
             image_type = "noimage"
 
         # set to UI label
+        true_label = eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % ("original", i))
+        true_label.setWhatsThis(image_path)
+        true_label.mouseDoubleClickEvent = partial(
+            maximize_image_slider_on_click, ui_obj, true_label
+        )
         set_image_to_ui_edited_version(
-            label_name=eval(
-                "ui_obj.loadDataset_PBT_page_label_%s_%s" % ("original", i)
-            ),
+            label_name=true_label,
             image=image,
             no_image=False,
             image_type=image_type,
             use_color=True,
         )
+        pred_label = eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % ("evaluated", i))
+        pred_label.setWhatsThis(predict_eval[image_path])
+        pred_label.mouseDoubleClickEvent = partial(
+            maximize_image_slider_on_click, ui_obj, pred_label
+        )
         set_image_to_ui_edited_version(
-            label_name=eval(
-                "ui_obj.loadDataset_PBT_page_label_%s_%s" % ("evaluated", i)
-            ),
+            label_name=pred_label,
             image=mask,
             no_image=False,
             image_type=image_type,
             use_color=True,
         )
-        # update text (image url)
-        # whats_this_text = sub_directory + "#" + image_path + "#" + annot_sub_direcotory
-        # eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % ("original", i)).setWhatsThis(
-        #     whats_this_text
-        # )
-        # eval("ui_obj.loadDataset_PBT_page_label_%s_%s" % ("evaluated", i)).setWhatsThis(
-        #     whats_this_text
-        # )
-        # set last image labels on UI as empty
+    image_type = "noimage"
+    for j in range(image_per_row - len(image_path_list)):
+        true_label = eval(
+            "ui_obj.loadDataset_PBT_page_label_%s_%s"
+            % ("original", j + len(image_path_list))
+        )
+        true_label.setWhatsThis("")
+        set_image_to_ui_edited_version(
+            label_name=true_label,
+            image=image,
+            no_image=True,
+            image_type=image_type,
+            use_color=True,
+        )
+        pred_label = eval(
+            "ui_obj.loadDataset_PBT_page_label_%s_%s"
+            % ("evaluated", j + len(image_path_list))
+        )
+        pred_label.setWhatsThis("")
+        set_image_to_ui_edited_version(
+            label_name=pred_label,
+            image=mask,
+            no_image=True,
+            image_type=image_type,
+            use_color=True,
+        )
 
-    #     try:
-    #         i += 1
-    #     except:
-    #         i = 0
-    #     for j in range(i, image_per_row):
-    #         set_image_to_ui_edited_version(
-    #             label_name=eval(
-    #                 "ui_obj.loadDataset_PBT_page_label_%s_%s" % ("original", j)
-    #             ),
-    #             image=None,
-    #             no_image=True,
-    #             image_type=image_type,
-    #         )
-    #         set_image_to_ui_edited_version(
-    #             label_name=eval(
-    #                 "ui_obj.loadDataset_PBT_page_label_%s_%s" % ("evaluated", j)
-    #             ),
-    #             image=None,
-    #             no_image=True,
-    #             image_type=image_type,
-    #         )
-    #         eval(
-    #             "ui_obj.loadDataset_PBT_page_label_%s_%s" % ("original", j)
-    #         ).setWhatsThis("")
-    #         eval(
-    #             "ui_obj.loadDataset_PBT_page_label_%s_%s" % ("evaluated", j)
-    #         ).setWhatsThis("")
 
-    #     return True
-    # except:
-    #     return False
+def maximize_image_slider_on_click(ui_obj, label, event):
+    pathes = label.whatsThis()
+    if pathes != "":
+        image = cv2.imread(pathes)
+        ui_obj.window = neighbouring(
+            img=image,
+            annotated_image=None,
+            has_annotation=False,
+            lang=ui_obj.language,
+        )
+        ui_obj.window.show()
 
 
 # __________________________________________________JJ ZONE STOPS

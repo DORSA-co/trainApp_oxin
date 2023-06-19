@@ -21,9 +21,8 @@ from yolov5.utils.general import (
     scale_boxes,
     xywh2xyxy,
 )
-from yolov5.utils.metrics import ap_per_class, box_iou
 from yolov5.utils.plots import Annotator, colors
-from yolov5.utils.plots import output_to_target, plot_val_study
+from yolov5.utils.plots import output_to_target
 from random_split import get_crops_normal
 
 PERFECT_FOLDER = "perfect"
@@ -45,9 +44,6 @@ YOLO_DATASET_PATH = "yolo_dataset"
 SLIDER_PATH = "slider"
 TRUE_IMAGE_SLIDER = "true"
 PRED_IMAGE_SLIDER = "pred"
-
-
-# ________________________________________________________________#
 
 
 def plot_images(images, targets, paths=None, fname="images.jpg", names=None):
@@ -122,9 +118,6 @@ def plot_images(images, targets, paths=None, fname="images.jpg", names=None):
     annotator.im.save(fname)  # save
 
 
-# ________________________________________________________________#
-
-
 # _______Threading Management Class_______#
 class Evaluation_worker(QObject):
     # vars for handling thread
@@ -167,6 +160,7 @@ class Evaluation_worker(QObject):
         self.final_step = 10
         # ________________block five (slider param)__________
         self.dic_of_Cimag = {"true": {}, "pred": {}}
+        self.dic_of_slider_image_path = {}
 
     def evaluate(self):
         loss, accuracy, precision, recall, f1, data2location = self.Data2Binary()
@@ -197,7 +191,7 @@ class Evaluation_worker(QObject):
             + self.binary_evaluation_part
             + self.yolo_evaluation_data_preparation
         )
-        self.progress.emit(metrics_info, {"jxj": "kxk"})
+        self.progress.emit(metrics_info, self.dic_of_slider_image_path)
         self.pgb_bar_signal.emit(
             self.yolo_evaluation_part
             + self.binary_evaluation_part
@@ -392,7 +386,6 @@ class Evaluation_worker(QObject):
         )
         pred_pbar = tqdm(pred_dataloader, desc=s, bar_format=TQDM_BAR_FORMAT)
         true_pbar = tqdm(true_dataloader, desc=s, bar_format=TQDM_BAR_FORMAT)
-
         return pred_pbar, true_pbar, yolo_device
 
     def points_creator(
@@ -424,25 +417,14 @@ class Evaluation_worker(QObject):
         filename, _ = os.path.splitext(basename)
         filename_components = filename.split("_")
         full_image_name = filename_components[0] + "_" + filename_components[1]
-        # ______indicate image extension_____________
-        basename = os.path.basename(self.data_path[0])
-        _, extention = os.path.splitext(basename)
-        # ___________create image dirctory_________________
-        dataset_dir = os.path.dirname(os.path.dirname(self.data_path[0]))
-        raw_image_of_dataset = os.path.join(
-            dataset_dir, DEFECT_FOLDER, "{}{}".format(full_image_name, extention)
-        )
-        if not (os.path.exists(raw_image_of_dataset)):
-            raw_image_of_dataset = os.path.join(
-                dataset_dir,
-                PERFECT_FOLDER,
-                "{}{}".format(full_image_name, extention),
-            )
         # ________load raw image__________
         final_image_path = os.path.join(
             save_path, "{}{}".format(full_image_name, IMG_EXTENSION_JPG)
         )
         split = cv2.imread(save_path_)
+        final_image_path = os.path.join(
+            save_path, "{}{}".format(full_image_name, IMG_EXTENSION_JPG)
+        )
         if self.dic_of_Cimag[useing][full_image_name]:
             num1 = (self.target_size[0] // self.input_size) * split.shape[0]
             num2 = (self.target_size[1] // self.input_size) * split.shape[1]
@@ -453,6 +435,9 @@ class Evaluation_worker(QObject):
         if useing == "true":
             step1 = self.input_size
             step2 = self.input_size
+            self.dic_of_slider_image_path[final_image_path] = final_image_path.replace(
+                "true", "pred"
+            )
         else:
             step1 = split.shape[0]
             step2 = split.shape[1]
@@ -464,9 +449,6 @@ class Evaluation_worker(QObject):
         j, i = points[split_index]
         raw_image[j : j + step1, i : i + step2, :] = split
 
-        final_image_path = os.path.join(
-            save_path, "{}{}".format(full_image_name, IMG_EXTENSION_JPG)
-        )
         cv2.imwrite(final_image_path, raw_image)
         os.remove(save_path_)
 
@@ -511,12 +493,12 @@ class Evaluation_worker(QObject):
             targets[:, 2:] *= torch.tensor(
                 (width, height, width, height), device=yolo_device
             )
-            lb = [targets[targets[:, 0] == i, 1:] for i in range(nb)]
+
             preds = non_max_suppression(
                 preds,
                 self.yolo_conf_thres,
                 self.yolo_iou_thres,
-                labels=lb,
+                labels=[],
                 multi_label=True,
                 agnostic=False,
                 max_det=self.yolo_max_det,
@@ -590,7 +572,7 @@ class Evaluation_worker(QObject):
                     (correct, pred[:, 4], pred[:, 5], labels[:, 0])
                 )  # (correct, conf, pcls, tcls)
                 percentage = (self.yolo_evaluation_part * (batch_i + 1)) / len(
-                    true_pbar
+                    pred_pbar
                 )
                 self.pgb_bar_signal.emit(
                     percentage
@@ -605,9 +587,6 @@ class Evaluation_worker(QObject):
             )
             ap50, ap = ap[:, 0], ap.mean(1)  # AP@0.5, AP@0.5:0.95
             mp, mr, map50, map = p.mean(), r.mean(), ap50.mean(), ap.mean()
-        nt = np.bincount(
-            stats[3].astype(int), minlength=self.data_nc
-        )  # number of targets per class
         maps = np.zeros(self.data_nc) + map
 
         return mp, mr, map50, map, maps
@@ -634,7 +613,7 @@ class Evaluation_worker(QObject):
                 correct[matches[:, 1].astype(int), i] = True
         return torch.tensor(correct, dtype=torch.bool, device=iouv.device)
 
-    # _____________________________________
+    # ________________For posterity....._____________________
 
     def Binary2Unet(self):
         pass
@@ -653,5 +632,3 @@ class Evaluation_worker(QObject):
 
     def PrepareUnetOutputForCategorical(self):
         pass
-
-    # ___________________________________
