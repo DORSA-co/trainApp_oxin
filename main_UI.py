@@ -2972,10 +2972,10 @@ class UI_main_window(QMainWindow, ui):
 
         if btnName == "pbt_btn":
             self.left_bar_clear()
-            # self.pbt_btn.setStyleSheet(
-            #     "background-image: url(./images/icons/PBT.png);background-color: rgb(170, 170, 212);color:rgb(0,0,0);"
-            # )
-            # self.stackedWidget.setCurrentWidget(self.page_pbt)
+            self.pbt_btn.setStyleSheet(
+                "background-image: url(./images/icons/PBT.png);background-color: rgb(170, 170, 212);color:rgb(0,0,0);"
+            )
+            self.stackedWidget.setCurrentWidget(self.page_pbt)
 
         if btnName == "log_btn":
             self.show_log_win = show_logs_UI.show_logs(lang=self.language)
@@ -3467,8 +3467,7 @@ class UI_main_window(QMainWindow, ui):
         self.cbBox_of_binary_model_in_PBT_page.addItem("All")
         self.cbBox_of_binary_model_in_PBT_page.addItems(ALGORITHM_NAMES["binary"])
         self.radioButton_use_yolo.setChecked(True)
-
-        self.set_active_color(wich_tab=0)
+        self.set_active_color(wich_tab=self.stackedWidget_pbt.currentIndex())
         self.pipline_name.setText("")
         self.pipline_name.setPlaceholderText(
             texts.Titles["example_of_pipline_name"][self.language]

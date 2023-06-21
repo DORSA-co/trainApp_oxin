@@ -21,6 +21,7 @@ from yolov5.utils.general import (
     scale_boxes,
     xywh2xyxy,
 )
+from backend import pipelines
 from yolov5.utils.plots import Annotator, colors
 from yolov5.utils.plots import output_to_target
 from random_split import get_crops_normal
@@ -124,6 +125,7 @@ class Evaluation_worker(QObject):
     finished = Signal()
     progress = Signal(dict, dict)
     pgb_bar_signal = Signal(float)
+    pipline_signal = Signal(pipelines.Pipeline)
 
     def set_params(
         self,
@@ -164,6 +166,7 @@ class Evaluation_worker(QObject):
 
     def evaluate(self):
         loss, accuracy, precision, recall, f1, data2location = self.Data2Binary()
+
         bmetrics = [
             round(loss, 3),
             round(accuracy, 2),
@@ -171,6 +174,21 @@ class Evaluation_worker(QObject):
             round(precision, 2),
             round(f1, 2),
         ]
+        self.pipline_obj.set_binary_model(
+            key=pipelines.MODEL_LOSS, value=str(round(loss, 3))
+        )
+        self.pipline_obj.set_binary_model(
+            key=pipelines.MODEL_ACCURACY, value=str(round(accuracy, 2))
+        )
+        self.pipline_obj.set_binary_model(
+            key=pipelines.MODEL_PRECISION, value=str(round(precision, 2))
+        )
+        self.pipline_obj.set_binary_model(
+            key=pipelines.MODEL_RECALL, value=str(round(recall, 2))
+        )
+        self.pipline_obj.set_binary_model(
+            key=pipelines.MODEL_F1, value=str(round(f1, 2))
+        )
         self.pgb_bar_signal.emit(self.binary_evaluation_part)
         yolo_data_path = self.PrepareBinaryOutputForYolo(
             imgs=data2location["img"],
@@ -183,7 +201,20 @@ class Evaluation_worker(QObject):
         mp, mr, map50, map, maps = self.Binary2Yolo(
             path=os.path.dirname(yolo_data_path)
         )
+
         ymetrics = [round(mp, 2), round(mr, 2), round(map50, 2), round(map, 2)]
+        self.pipline_obj.set_yolo_model(
+            key=pipelines.MODEL_PRECISION, value=(str(round(mp, 2)))
+        )
+        self.pipline_obj.set_yolo_model(
+            key=pipelines.MODEL_RECALL, value=str(round(mr, 2))
+        )
+        self.pipline_obj.set_yolo_model(
+            key=pipelines.MODEL_MAP05, value=str(round(map50, 2))
+        )
+        self.pipline_obj.set_yolo_model(
+            key=pipelines.MODEL_MAP0595, value=str(round(map, 2))
+        )
         metrics_info = {"binary": bmetrics, "yolo": ymetrics}
 
         self.pgb_bar_signal.emit(
@@ -198,6 +229,7 @@ class Evaluation_worker(QObject):
             + self.yolo_evaluation_data_preparation
             + self.final_step
         )
+        self.pipline_signal.emit(self.pipline_obj)
         self.finished.emit()
 
     def Data2Binary(self):

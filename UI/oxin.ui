@@ -13263,7 +13263,7 @@ QPushButton:hover {
                              </size>
                             </property>
                             <property name="currentIndex">
-                             <number>2</number>
+                             <number>1</number>
                             </property>
                             <widget class="QWidget" name="page_pipeline">
                              <property name="maximumSize">
@@ -13971,8 +13971,8 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>92</width>
-                                      <height>165</height>
+                                      <width>1416</width>
+                                      <height>200</height>
                                      </rect>
                                     </property>
                                     <layout class="QVBoxLayout" name="verticalLayout_107">
@@ -13998,8 +13998,8 @@ color : rgb(0,0,0);</string>
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>96</width>
-                                          <height>49</height>
+                                          <width>1414</width>
+                                          <height>84</height>
                                          </rect>
                                         </property>
                                         <layout class="QHBoxLayout" name="horizontalLayout_72">
@@ -14186,8 +14186,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>90</width>
-                                              <height>43</height>
+                                              <width>1414</width>
+                                              <height>106</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">
@@ -15158,6 +15158,9 @@ QPushButton:enabled-hover{
                                     </property>
                                     <item>
                                      <widget class="QFrame" name="frame_119">
+                                      <property name="enabled">
+                                       <bool>true</bool>
+                                      </property>
                                       <property name="frameShape">
                                        <enum>QFrame::StyledPanel</enum>
                                       </property>
@@ -15180,7 +15183,7 @@ QPushButton:enabled-hover{
                                        <item>
                                         <widget class="QPushButton" name="BTN_evaluate_image_in_PBT_page_2">
                                          <property name="enabled">
-                                          <bool>true</bool>
+                                          <bool>false</bool>
                                          </property>
                                          <property name="maximumSize">
                                           <size>
@@ -15586,7 +15589,7 @@ QPushButton:enabled-hover{
                                           <cursorShape>ArrowCursor</cursorShape>
                                          </property>
                                          <property name="currentIndex">
-                                          <number>0</number>
+                                          <number>1</number>
                                          </property>
                                          <widget class="QWidget" name="binary_tab">
                                           <attribute name="title">
@@ -15894,7 +15897,7 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>340</width>
+                                      <width>337</width>
                                       <height>783</height>
                                      </rect>
                                     </property>

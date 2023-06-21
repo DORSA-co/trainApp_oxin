@@ -107,10 +107,6 @@ MODEL_F1 = "f1"
 MODEL_LOSS = "loss"
 MODEL_DICE = "dice"
 MODEL_IOU = "iou"
-MODEL_PERCLASSS_ACCURACY = "perclass_accuracy"
-MODEL_BOXLOSS = "box_loss"
-MODEL_OBJLOSS = "obj_loss"
-MODEL_CLSLOSS = "cls_loss"
 MODEL_MAP05 = "mAP_0.5"
 MODEL_MAP0595 = "mAP_0.5:0.95"
 #
@@ -277,9 +273,6 @@ class Pipeline:
         self.pipline_json[YOLO_MODEL] = {
             MODEL_ID: None,
             MODEL_WEIGHTS_PATH: None,
-            MODEL_BOXLOSS: None,
-            MODEL_OBJLOSS: None,
-            MODEL_CLSLOSS: None,
             MODEL_PRECISION: None,
             MODEL_RECALL: None,
             MODEL_MAP05: None,
@@ -290,7 +283,6 @@ class Pipeline:
         """this function is used to save pipeline json object to path as a file"""
 
         try:
-            # print(self.pipline_json[PIPELINE_ROOT])
             json_path = os.path.join(
                 self.pipline_json[PIPELINE_ROOT],
                 "%s-%s-%s.json"
@@ -300,25 +292,11 @@ class Pipeline:
                     self.pipline_json[TIME_CREATED],
                 ),
             )
-            # print(json_path)
             with open(json_path, "w") as f:
                 json.dump(self.pipline_json, f)
             f.close()
-
-            # print(";" * 50)
-
         except:
-            try:
-                json_path = self.pipline_json[PIPELINE_ROOT]
-                json_path += ".json" if json_path[-5:] != ".json" else ""
-                #
-                with open(json_path, "w") as f:
-                    json.dump(self.pipline_json, f)
-                f.close()
-
-            except Exception as e:
-                pass
-                # print(e)
+            pass
 
     def load_json(self):
         """this function is used to load pipline info from json file"""
@@ -344,7 +322,6 @@ class Pipeline:
 
         except Exception as e:
             pass
-            # print(e)
 
     def set(self, key, value):
         self.pipline_json[key] = value

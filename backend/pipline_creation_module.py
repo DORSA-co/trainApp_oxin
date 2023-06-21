@@ -12,7 +12,6 @@ from Train_modules.model_creator import translate_model_database_info_to_modelOB
 class ModelsCreation_worker(QObject):
     # vars for handling thread
     finished = Signal()
-    pipline_info_signal = Signal(str)
     model_creation_signal = Signal(int, bool)
 
     def set_params(self, pipline_name, database, login_user_name):
@@ -92,36 +91,38 @@ class ModelsCreation_worker(QObject):
             binary_model_info,
             LC_model_info,
         ) = self.load_pipline_info_from_database()
-
+        self.pipline_OBJ.set(
+            key=pipelines.USE_YOLO, value=(True if "Y" in pipline_type else False)
+        )
         if flag:
             # create binary model object
-            # try:
-            self.b_model = translate_model_database_info_to_modelOBJ(
-                info_dict={
-                    "algo_name": binary_model_info[0]["algo_name"],
-                    "input_size": self.inputsize,
-                    "num_class": 1,
-                    "mode": "binary",
-                },
-                weights_path=binary_model_info[0]["weights_path"],
-                model_type="binary",
-            )
-            # send signal for updataing progress bar
-            self.model_creation_signal.emit(
-                1,
-                True,
-            )
-            self.pipline_OBJ.set_binary_model(
-                key=pipelines.MODEL_ID, value=binary_model_info[0]["algo_name"]
-            )
-            self.pipline_OBJ.set_binary_model(
-                key=pipelines.MODEL_WEIGHTS_PATH,
-                value=binary_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
-            )
+            try:
+                self.b_model = translate_model_database_info_to_modelOBJ(
+                    info_dict={
+                        "algo_name": binary_model_info[0]["algo_name"],
+                        "input_size": self.inputsize,
+                        "num_class": 1,
+                        "mode": "binary",
+                    },
+                    weights_path=binary_model_info[0]["weights_path"],
+                    model_type="binary",
+                )
+                # send signal for updataing progress bar
+                self.model_creation_signal.emit(
+                    1,
+                    True,
+                )
+                self.pipline_OBJ.set_binary_model(
+                    key=pipelines.MODEL_ID, value=binary_model_info[0]["algo_name"]
+                )
+                self.pipline_OBJ.set_binary_model(
+                    key=pipelines.MODEL_WEIGHTS_PATH,
+                    value=binary_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
+                )
 
-            # except:
-            #     # send notif of there is problem in creating models of pipline(here binary)
-            #     self.model_creation_signal.emit(1, False)
+            except:
+                # send notif of there is problem in creating models of pipline(here binary)
+                self.model_creation_signal.emit(1, False)
 
             if "S" in pipline_type:
                 try:
@@ -227,5 +228,6 @@ class ModelsCreation_worker(QObject):
                 0,
                 False,
             )
-        self.pipline_info_signal.emit(pipline_type)
+        self.pipline_OBJ.set(key=pipelines.TARGET_CLASSES, value=self.classes_num)
+        self.pipline_type = pipline_type
         self.finished.emit()

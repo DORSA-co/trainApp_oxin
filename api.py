@@ -1,68 +1,21 @@
-# from logging import _Level
-import ast
-from email.mime import image
-from ntpath import join
-from operator import le
-from pickletools import uint8
 import re
-from shutil import which
-from stat import FILE_ATTRIBUTE_NORMAL
-import sys
-from ast import Try
-
-
 from tkinter import NO, PIESLICE
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QFileDialog
 from cv2 import log
-
-from PySide6 import QtGui
-from PySide6.QtCharts import QPieSeries, QPieSlice, QChart, QChartView
 from PySide6.QtCore import *
 from PySide6.QtCore import QThread as sQThread
-from PySide6.QtGui import QPen, QPainter
-from matplotlib import pyplot as plt
-from matplotlib.style import use
-from pyautogui import PRIMARY
-
-from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
+from Defect_detection_modules.SteelSurfaceInspection import SSI
 from app_settings import Settings
 from backend import data_grabber, camera_connection
-from backend.pipelines import (
-    MODEL_ACCURACY,
-    MODEL_DICE,
-    MODEL_F1,
-    MODEL_IOU,
-    MODEL_LOSS,
-    MODEL_PRECISION,
-    MODEL_RECALL,
-    Pipeline,
-)
-import backend.pipelines
 from backend.mouse import Mouse
 from backend.keyboard import Keyboard
-
-# from backend import Label
 import cv2
 import threading
-import time
-from PIL import ImageQt
 import numpy as np
 import math
 import os
-from datetime import date, time, datetime
-from PyQt5.QtWidgets import (
-    QListWidget,
-    QApplication,
-    QMessageBox,
-    QTableWidget,
-    QWidget,
-)
-from PyQt5.QtGui import QPixmap, QImage
 from PySide6.QtWidgets import QHeaderView as sQHeaderView
-
-# from backend import add_remove_label
-from PyQt5 import QtCore, QtWidgets
 from PySide6.QtCore import QThread
 from functools import partial
 from backend import (
@@ -81,80 +34,29 @@ from backend import (
     yolo_model_funcs,
     pathStructure,
 )
-
 import database_utils
 from utils1 import *
 from utils1.move_on_list import moveOnList, moveOnImagrList
-
 import texts  # eror and warnings texts
 import texts_codes
 from utils1 import tempMemory, Utils
-
 from backend.dataset import Dataset
-from random_split import get_crops_normal, get_crops_no_defect, get_crops_no_defect2
 import train_api
-
-from labeling.labeling_UI import labeling
-
-from Dataset_selection.ds_select_UI import Ds_selection
-from FileDialog import FileDialog
-
 from labeling import labeling_api
-from pynput.mouse import Button, Controller
-
+from pynput.mouse import Controller
 from login_win.login_api import login_API
 from camera_live_thread import ImageManager
-from multiprocessing import Process
 import dataset_utils
 import image_processing_worker
 import save_all_worker
 import random
-
-# _______JJ importing:
-import random
-import time
-from PySide6.QtWidgets import QLabel as sQLabel, QProgressBar
 from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
-from PySide6.QtWidgets import QVBoxLayout
-from Train_modules.models import xception_cnn, resnet_cnn
-from Train_modules.models import unet, low_unet, resnet_unet
-import matplotlib.pyplot as plt
-
-# from tensorflow.keras.metrics import Accuracy, Precision, Recall
-from Train_modules.deep_utils import metrics
 from backend import pipelines
-import tensorflow as tf
-from image_splitter import ImageCrops
-import json
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-from PySide6.QtCore import QObject, QThread, Signal
-import yaml
-
-# _______JJ
-
-
-# ______import YOLOV5 module ______#
-from yolov5.utils.torch_utils import select_device
-from yolov5.models.common import DetectMultiBackend
-from yolov5.utils.general import (
-    check_img_size,
-    colorstr,
-    TQDM_BAR_FORMAT,
-    non_max_suppression,
-    scale_boxes,
-    xywh2xyxy,
-)
-from yolov5.utils.dataloaders import create_dataloader
-from tqdm import tqdm
-import torch
-from pathlib import Path
-from yolov5.utils.metrics import ap_per_class, box_iou
-from yolov5.utils.plots import Annotator, colors
-from yolov5.utils.plots import output_to_target, plot_images, plot_val_study
-
-# ______import YOLOV5 module ______#
 from backend.pipline_creation_module import ModelsCreation_worker
 from backend.pipline_evaluation_module import Evaluation_worker
+from backend.binary_list_funcs import PIPLINES_PATH
+from backend.pipelines import Pipeline
+import backend.pipelines
 
 # ___________________________________________
 
@@ -938,13 +840,6 @@ class API:
         self.update_pipline_table_title(
             pipline_name=self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
         )
-
-        # progressbar updating
-        # self.ui.frame_120.setFixedHeight(0)
-        # self.ui.frame_118.setFixedHeight(0)
-        # self.ui.pgbar_pipline_creation.setFixedHeight(0)
-        # self.ui.pgbar_pipline_creation.setFixedWidth(0)
-
         # combobox updating
         self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.clear()
         self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.addItems(self.PBT_option_list)
@@ -954,10 +849,35 @@ class API:
         # lineEdit updating
         self.ui.lineEdit_of_path_displayment_in_PBT_page.setText("")
 
-        # slider updating
-        # ???????
-
-    # _____________________________________________________________________JJ ZONE END
+        for i, _ in enumerate(pipelines.MODELS_METRICS["BY"][0]):
+            self.update_table_value(
+                table=self.ui.binary_table_metrics,
+                value="",
+                row=i,
+            )
+        if "Y" in self.pipline_type:
+            for i, _ in enumerate(pipelines.MODELS_METRICS["BY"][1]):
+                self.update_table_value(
+                    table=self.ui.yolo_table_metrics,
+                    value="",
+                    row=i,
+                )
+        elif "S" in self.pipline_type:
+            for i, _ in enumerate(pipelines.MODELS_METRICS["BSC"][1]):
+                self.update_table_value(
+                    table=self.ui.segmention_table_metrics,
+                    value="",
+                    row=i,
+                )
+        elif "C" in self.pipline_type:
+            for i, _ in enumerate(pipelines.MODELS_METRICS["BSC"][2]):
+                self.update_table_value(
+                    table=self.ui.classification_table_metrics,
+                    value="",
+                    row=i,
+                )
+        else:
+            print("what happend!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
     def button_connector(self):
         """this function is used to connet UI buttons to their functionality"""
@@ -4264,6 +4184,7 @@ class API:
             )
             return
 
+        self.selected_datasets = selected_datasets
         (
             perfect_check,
             perfect_image_pathes,
@@ -4396,6 +4317,9 @@ class API:
         )
         self.image_slider_path = image_slider_path
 
+    def pipline_saveing(self, pipline):
+        pipline.save_json()
+
     def set_signal_from_evaluate_thread(self, percentage):
         """this function used to update progressbar percentage
 
@@ -4414,24 +4338,30 @@ class API:
         show on ui
         """
 
-        # _______________creat PIPLINE OBJ????
         # dataset_path = os.path.dirname(os.path.dirname(self.path_list[0]))
         # pipline_name = self.pipline_OBJ.get(key=pipelines.PIPELINE_NAME)
-        # _______________________________________________________________________
+        self.pipline_OBJ.set(
+            key=pipelines.EVALUATED_DATASETS, value=self.selected_datasets[0]["path"]
+        )
+
+        self.ui.chbox_prefectdata_in_PBT_page.setEnabled(False)
+        self.ui.BTN_load_in_PBT_page.setEnabled(False)
+        self.ui.BTN_load_image_in_PBT_page.setEnabled(False)
+        self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(False)
+        self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setEnabled(False)
 
         # display progressBar of progress of evaluating  dataset
         self.pgbar_value = 0
         self.ui.pgbar_evalution_precess.setValue(self.pgbar_value)
         self.ui.frame_118.setFixedHeight(60)
-        # _________________________________________________________________________
         self.evaluation_thread = QThread()
         self.evaluation = Evaluation_worker()
         self.evaluation.set_params(
             data_path=self.path_list,
-            pipline_obj=None,
+            pipline_obj=self.pipline_OBJ,
             input_type=self.inputtype,
             input_size=self.inputsize[0],
-            data_nc=1,
+            data_nc=self.classes_num,
             binary_model=self.b_model,
             binary_threshold=0.5,
             yolo_model=self.yolo_model,
@@ -4446,11 +4376,33 @@ class API:
         self.evaluation_thread.finished.connect(self.evaluation_thread.deleteLater)
         self.evaluation.progress.connect(self.evaluation_ui_update)
         self.evaluation.pgb_bar_signal.connect(self.set_signal_from_evaluate_thread)
+        self.evaluation.pipline_signal.connect(self.pipline_saveing)
         self.evaluation_thread.start()
 
         self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(False)
         self.evaluation_thread.finished.connect(
             lambda: self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.frame_118.setFixedHeight(0)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.BTN_refresh_loadDataset_tab_in_PBT.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.chbox_prefectdata_in_PBT_page.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.BTN_load_image_in_PBT_page.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.BTN_load_in_PBT_page.setEnabled(True)
         )
 
     def set_pipline_of_model(self, id, flag_creation):
@@ -4582,8 +4534,9 @@ class API:
             if self.data_is_ready:
                 self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
 
-        # self.pipline_OBJ = self.ModelsCreation.pipline_OBJ
+        self.pipline_OBJ = self.ModelsCreation.pipline_OBJ
         self.classes_num = self.ModelsCreation.classes_num
+        self.pipline_type = self.ModelsCreation.pipline_type
         self.inputtype = self.ModelsCreation.inputtype
         self.inputsize = self.ModelsCreation.inputsize
         self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
@@ -4635,7 +4588,7 @@ class API:
         self.ui.LBL_pipline_is_ready.setText("")
         self.ui.LBL_pipline_is_ready.setFixedHeight(0)
 
-        # # Threading___________________
+        # Threading............................
         self.ModelsCreation_thread = QThread()
         self.ModelsCreation = ModelsCreation_worker()
         self.ModelsCreation.set_params(
@@ -4651,18 +4604,10 @@ class API:
         self.ModelsCreation_thread.finished.connect(
             self.ModelsCreation_thread.deleteLater
         )
-
         self.ModelsCreation.model_creation_signal.connect(self.set_pipline_of_model)
-        self.ModelsCreation.pipline_info_signal.connect(self.set_pipline_type)
         self.ModelsCreation_thread.start()
 
         self.ui.BTN_set_pipline_in_PBT_page.setEnabled(False)
-        # self.ModelsCreation_thread.finished.connect(
-        #     lambda: self.ui.BTN_set_pipline_in_PBT_page.setEnabled(True)
-        # )
-
-    def set_pipline_type(self, pipline_type):
-        self.pipline_type = pipline_type
 
     # load binary images list
     def load_binary_images_list(self):
