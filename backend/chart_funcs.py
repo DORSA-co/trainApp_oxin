@@ -821,6 +821,7 @@ def create_storage_barchart_on_ui(ui_obj, frame_obj_storage, storage_type, chart
     # ui_obj.binary_barchart.setTheme(sQChart.ChartThemeDark)
     exec('ui_obj.{}_storage_barchart.legend().setVisible(False)'.format(storage_type))
     # exec('ui_obj.{}_storage_barchart.legend().setAlignment(Qt.AlignRight)'.format(storage_type))
+    
     # exec('ui_obj.{}_storage_barchart.legend().setLabelBrush(sQColor(pie_label_color))'.format(storage_type))
     exec('ui_obj.{}_storage_barchart.setBackgroundBrush(sQColor("#14165c"))'.format(storage_type))
     exec('ui_obj.{}_storage_barchart.setBackgroundRoundness(0)'.format(storage_type))

@@ -7,7 +7,7 @@ from PySide6.QtCore import Signal as sSignal
 from requests import head
 
 from backend import colors_pallete, chart_funcs, date_funcs
-# import train_api
+import train_api
 import texts, texts_codes
 import os
 from utils1 import Utils

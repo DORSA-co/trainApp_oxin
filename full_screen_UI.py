@@ -10,6 +10,8 @@ from PySide6.QtWidgets import *
 from PySide6 import QtCore as sQtCore
 import os
 
+from PySide6.QtWidgets import QWidget
+
 ui, _ = loadUiType("UI/full_screen.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 
