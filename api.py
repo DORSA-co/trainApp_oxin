@@ -405,7 +405,9 @@ class API:
         self.__debug__login__()
 
 
-        self.ttttt = time.time()
+        self.grab_time = 0
+        self.stop_grab = False
+        self.grab_main_thread = None
 
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
@@ -3525,8 +3527,9 @@ class API:
             )
             self.live_timer = QTimer(self.ui)
             self.live_timer.timeout.connect(self.ImageManager.show_live)
-            self.grab_timer = MyTimer(self.ui)
-            self.grab_timer.timeout.connect(self.grab_image)
+            # self.grab_timer = QTimer(self.ui)
+            # self.grab_timer.timeout.connect(self.grab_image)
+            # self.grab_main_thread = threading.Thread(target=self.run_grab)
             self.ImageManager.first_check_finished.connect(self.start_capture_timers)
             self.ImageManager.second_check_finished.connect(self.stop_capture_timers)
             self.start_capture_flag = True
@@ -3578,13 +3581,30 @@ class API:
             pass
         if speed > 0:
             self.ImageManager.start()
-        # self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_timer.start(int(1000/(self.ui.frame_rate)))
+        self.live_timer.start(self.ui.update_timer_live_frame)
+        self.grab_main_thread = threading.Thread(target=self.run_grab)
+        self.grab_main_thread.start()
+        # self.grab_timer.start(int(1000/(self.ui.frame_rate)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
-        # self.live_timer.stop()
-        self.grab_timer.stop()
+        self.live_timer.stop()
+        self.stop_grab_image()
+
+    def run_grab(self):
+        while True:
+            print(self.stop_grab)
+            if self.stop_grab:
+                return
+            self.grab_time = time.time()
+            self.grab_image()
+            self.grab_time = time.time() - self.grab_time
+            if self.stop_grab:
+                return
+            print('??????', self.grab_time)
+            t = 1/self.ui.frame_rate
+            if self.grab_time<t:
+                time.sleep(t - self.grab_time)
 
     def grab_image(self):
         try:
@@ -3594,8 +3614,12 @@ class API:
         if speed > 0:
             self.ImageManager.stop()
             self.ImageManager.start()
-        # print((time.time() - self.ttttt)*1000)
-        self.ttttt = time.time()
+
+    def stop_grab_image(self):
+        if self.grab_main_thread:
+            self.stop_grab = True
+            self.grab_main_thread.join()
+        self.stop_grab = False
 
     def change_live_camera(self, text):
         try:

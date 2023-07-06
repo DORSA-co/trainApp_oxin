@@ -2803,28 +2803,28 @@ class UI_main_window(QMainWindow, ui):
         if btnName == "full_single_btn":
             if not self.full_s_window :
                 self.full_s_window = full_screen_window(type='single')
-                # self.full_s_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('s')))
+                self.full_s_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('s')))
             self.full_s_window.show()
             self.full_s = True
 
         if btnName == "full_top_btn":
             if not self.full_t_window:
                 self.full_t_window = full_screen_window(type='top')
-                # self.full_t_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('t')))
+                self.full_t_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('t')))
             self.full_t_window.show()
             self.full_t = True
 
         if btnName == "full_bottom_btn":
             if not self.full_b_window:
                 self.full_b_window = full_screen_window(type='bottom')
-                # self.full_b_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('b')))
+                self.full_b_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('b')))
             self.full_b_window.show()
             self.full_b = True
 
         if btnName == "full_all_btn":
             if not self.full__window:
                 self.full__window = full_screen_window(type='all')
-                # self.full__window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('')))
+                self.full__window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('')))
             self.full__window.show()
             self.full_ = True
 
