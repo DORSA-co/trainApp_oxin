@@ -7,7 +7,8 @@ from PySide6.QtCore import Signal as sSignal
 from requests import head
 
 from backend import colors_pallete, chart_funcs, date_funcs
-import train_api, texts, texts_codes
+# import train_api
+import texts, texts_codes
 import os
 from utils1 import Utils
 import json
@@ -473,7 +474,7 @@ def set_bmodels_on_ui_tabel_edited_version(
                 bmodel[headers_db[col_idx]] = translate_binary_algorithm_id_to_name(
                     algo_id=bmodel[headers_db[col_idx]], model_type=model_type
                 )
-            print('bmodels_list',bmodels_list)
+            # print('bmodels_list',bmodels_list)
             table_item = sQTableWidgetItem(str(bmodel[headers_db[col_idx]]))
             # set checkbox (only first col)
             if col_idx == 0:
@@ -522,7 +523,7 @@ def save_new_binary_model_record(ui_obj, db_obj, bmodel_records):
     """
 
     # add
-    print(bmodel_records["weights_path"])
+    # print(bmodel_records["weights_path"])
     if add_new_binary_model_to_db(db_obj=db_obj, new_bmodel_info=bmodel_records):
         ui_obj.notif_manager.append_new_notif(
             message=texts.MESSEGES["database_add_bmodel"][ui_obj.language], level=1
@@ -581,8 +582,7 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
                         reverse=True,
                     )
                 ]
-            else:
-                print("what the fuck!!!!!!!!1")
+
 
             bmodel_info["epochs"] = ["", ""]
             bmodel_info["tuning_epochs"] = ["", ""]
@@ -1204,8 +1204,6 @@ def get_filtered_binary_models_from_db(
         model_type = "classification_models"
     elif model_type == "localization":
         model_type = "localization_models"
-    else:
-        print("what the fuck!!!!!!!!!!!!")
 
     try:
         res, defects_list = db_obj.search_binary_model_by_filter(
@@ -1303,7 +1301,7 @@ class Binary_model_train_worker(sQObject):
         bmodel_records = train_api.train_binary(
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
-        print('bmodel_records',bmodel_records)
+        # print('bmodel_records',bmodel_records)
         if not bmodel_records[0]:
             self.warning.emit(
                 bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2],None,1

@@ -1,6 +1,7 @@
 # from logging import _Level
 import ast
 from email.mime import image
+from importlib.resources import path
 from ntpath import join
 from operator import le
 from pickletools import uint8
@@ -23,7 +24,6 @@ from PySide6.QtCore import QThread as sQThread
 from PySide6.QtGui import QPen, QPainter
 from matplotlib import pyplot as plt
 from matplotlib.style import use
-from pyautogui import PRIMARY
 
 from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
 from app_settings import Settings
@@ -72,7 +72,8 @@ from backend import (
     level2_connection,
     localization_model_funcs,
     yolo_model_funcs,
-    pathStructure
+    pathStructure,
+    FileManager
 )
 
 import database_utils
@@ -85,7 +86,7 @@ from utils1 import tempMemory, Utils
 
 from backend.dataset import Dataset
 from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2
-import train_api
+# import train_api
 
 from labeling.labeling_UI import labeling
 
@@ -109,8 +110,6 @@ import time
 from PySide6.QtWidgets import QLabel as sQLabel, QProgressBar
 from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
 from PySide6.QtWidgets import QVBoxLayout
-from Train_modules.models import xception_cnn, resnet_cnn
-from Train_modules.models import unet, low_unet, resnet_unet
 import matplotlib.pyplot as plt
 # from tensorflow.keras.metrics import Accuracy, Precision, Recall
 from Train_modules.deep_utils import metrics
@@ -121,7 +120,15 @@ import json
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from PySide6.QtCore import QObject, QThread, Signal
 
+import sys
+sys.path.append('../oxin_storage_management')
+from storage_main_UI import storage_management
+from storage_api import storage_api
+from storage_worker import storage_worker
+
 # _______JJ
+
+from MyTimer import MyTimer
 
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
@@ -330,6 +337,7 @@ class API:
 
         # PLC
         self.retry_connecting_plc = 0
+        self.plc_connection_status = False
         self.set_plc_ip_to_ui()
         self.connect_plc()
         # self.load_plc_parms()  # should be commecnt in finbal version
@@ -378,12 +386,16 @@ class API:
         self.running_l_model=False
         self.running_y_model=False
 
-
-
-
         self.ui.radioButton_one.toggled.connect(lambda :self.set_pipline_mode('yolo') )
         self.ui.radioButton_two.toggled.connect(lambda :self.set_pipline_mode('localization') )
         self.set_pipline_mode('yolo')
+
+        # storage
+        self.ssd_image_file_manager = None
+        self.hdd_file_manager = None
+        self.storage_win = None
+        self.s_api = None
+        self.start_storage_checking()
         
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -391,6 +403,93 @@ class API:
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
         self.__debug__login__()
+
+
+        self.grab_time = 0
+        self.stop_grab = False
+        self.grab_main_thread = None
+
+    def read_storage_paths_from_db(self):
+        res, storage_settings = self.db.load_storage_setting()
+        if res:
+            self.update_time = storage_settings['update_time']
+            self.max_cleanup_percentage = storage_settings['max_cleanup_percentage']
+            self.hdd_path = storage_settings['hdd_path']
+            self.ssd_images_path = storage_settings['ssd_images_path']
+
+    def create_diskMemory_objs(self):
+        if not os.path.exists(self.hdd_path):
+            os.makedirs(self.hdd_path, exist_ok=True)
+        if not self.hdd_file_manager:
+            self.hdd_file_manager = FileManager.diskMemory(path=self.hdd_path)
+
+        if not os.path.exists(self.ssd_images_path):
+            os.makedirs(self.ssd_images_path, exist_ok=True)
+        if not self.ssd_image_file_manager:
+            self.ssd_image_file_manager = FileManager.diskMemory(path=self.ssd_images_path)
+
+    def create_storage_window(self):
+        if not self.storage_win:
+            self.storage_win = storage_management()
+        if not self.s_api:
+            self.s_api = storage_api(self.storage_win)
+
+    def check_storage(self):
+        self.read_storage_paths_from_db()
+        self.create_diskMemory_objs()
+        self.create_storage_window()
+
+        self.ssd_image_file_manager.refresh()
+        self.hdd_file_manager.refresh()
+
+        self.update_storage_charts()
+
+        if self.ssd_image_file_manager:
+            ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
+            if ssd_image_percent > self.max_cleanup_percentage:
+                try:
+                    self.storage_win.show()
+                    self.s_api.start()
+                    self.ui.logger.create_new_log(
+                        code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"], level=1
+                    )
+                except:
+                    self.ui.logger.create_new_log(
+                        code=texts_codes.SubTypes['Storage_open_failed'], message=texts.MESSEGES["Storage_open_failed"]["en"], level=1
+                    )
+                    
+    def update_storage_charts(self):
+        self.ui.show_hdd_chart()
+        self.update_hdd_chart()
+
+        self.ui.show_ssd_chart()
+        self.update_ssd_chart()
+
+    def update_ssd_chart(self):
+        storage_status = {'SSD': {'Used':self.ssd_image_file_manager.used.toGB(), 
+                              'Free': self.ssd_image_file_manager.free.toGB()}, 
+                    }
+        chart_funcs.update_storage_barchart(
+            ui_obj=self.ui,
+            storage_type='SSD',
+            storage_status=storage_status
+        )
+
+    def update_hdd_chart(self):
+        storage_status = {'HDD': {'Used':self.hdd_file_manager.used.toGB(), 
+                            'Free': self.hdd_file_manager.free.toGB()}
+                    }
+        chart_funcs.update_storage_barchart(
+            ui_obj=self.ui,
+            storage_type='HDD',
+            storage_status=storage_status
+        )
+
+    def start_storage_checking(self):
+        self.check_storage()
+        self.storage_timer = QTimer()
+        self.storage_timer.timeout.connect(self.check_storage)
+        self.storage_timer.start(1000*60*self.update_time)
 
     def set_pipline_mode(self,key):
         self.pipline_dict = {'yolo':[self.ui.page_yolo,self.ui.page_yolo_2],'localization':[self.ui.page_localization,self.ui.page_localization_2]}
@@ -1275,9 +1374,11 @@ class API:
             if l != self.l:
                 for key in self.sheet_imgprocessing_mem.keys():
                     self.sheet_imgprocessing_mem[key] = False
-            jsons_path = pathStructure.sheet_path(self.sheet.get_main_path()+'_imgProcessing', self.sheet.get_id())
+            jsons_main_path = self.db.get_suggestions_path()
+            jsons_path = pathStructure.sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
             if not os.path.exists(jsons_path):
                 self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
+                pathStructure.create_sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
             if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
                 self.ui.set_enabel(self.ui.load_coil_btn, False)
                 self.ui.set_enabel(self.ui.next_coil_btn, False)
@@ -1296,8 +1397,7 @@ class API:
                     self.workers[-1].assign_parameters(
                         n_cameras=((i*step)+1, (i+1)*step),
                         n_frames=(1, self.sheet.get_nframe()), 
-                        main_path=self.sheet.get_main_path(), 
-                        res_main_path=self.sheet.get_main_path()+'_imgProcessing',
+                        res_main_path=jsons_main_path,
                         sheet_id=self.sheet.get_id(), 
                         active_cameras = self.sheet.get_cameras(),
                         img_format=self.sheet.get_image_format(),
@@ -3496,8 +3596,9 @@ class API:
             )
             self.live_timer = QTimer(self.ui)
             self.live_timer.timeout.connect(self.ImageManager.show_live)
-            self.grab_timer = QTimer(self.ui)
-            self.grab_timer.timeout.connect(self.grab_image)
+            # self.grab_timer = QTimer(self.ui)
+            # self.grab_timer.timeout.connect(self.grab_image)
+            # self.grab_main_thread = threading.Thread(target=self.run_grab)
             self.ImageManager.first_check_finished.connect(self.start_capture_timers)
             self.ImageManager.second_check_finished.connect(self.stop_capture_timers)
             self.start_capture_flag = True
@@ -3550,12 +3651,29 @@ class API:
         if speed > 0:
             self.ImageManager.start()
         self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_timer.start(int(1000/(self.ui.frame_rate+1)))
+        self.grab_main_thread = threading.Thread(target=self.run_grab)
+        self.grab_main_thread.start()
+        # self.grab_timer.start(int(1000/(self.ui.frame_rate)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
         self.live_timer.stop()
-        self.grab_timer.stop()
+        self.stop_grab_image()
+
+    def run_grab(self):
+        while True:
+            print(self.stop_grab)
+            if self.stop_grab:
+                return
+            self.grab_time = time.time()
+            self.grab_image()
+            self.grab_time = time.time() - self.grab_time
+            if self.stop_grab:
+                return
+            print('??????', self.grab_time)
+            t = 1/self.ui.frame_rate
+            if self.grab_time<t:
+                time.sleep(t - self.grab_time)
 
     def grab_image(self):
         try:
@@ -3565,6 +3683,12 @@ class API:
         if speed > 0:
             self.ImageManager.stop()
             self.ImageManager.start()
+
+    def stop_grab_image(self):
+        if self.grab_main_thread:
+            self.stop_grab = True
+            self.grab_main_thread.join()
+        self.stop_grab = False
 
     def change_live_camera(self, text):
         try:
@@ -3632,7 +3756,7 @@ class API:
         elif model_type == "classification":
             model_type_ = "classification_models"
         elif model_type == "localization":
-            model_type_ = "localiztion_models"
+            model_type_ = "localization_models"
         elif model_type == "yolo":
             model_type_ = "yolo_models"
         else:
@@ -5727,6 +5851,7 @@ class API:
             if self.retry_connecting_plc < 10:
                 self.retry_connecting_plc += 1
                 self.ui.change_plc_status(status="retry")
+                self.plc_connection_status = False
                 QTimer().singleShot(1000,self.connect_plc)
                 self.ui.set_status_plc(
                     auto=False,
@@ -5737,6 +5862,7 @@ class API:
             else:
                 self.retry_connecting_plc = 0
                 self.ui.set_status_plc(mode=False)
+                self.plc_connection_status = False
                 self.ui.change_plc_status(status="disconnect")
                 self.ui.disconnect_plc_btn.setEnabled(False)
                 self.ui.connect_plc_btn.setEnabled(True)
@@ -5970,7 +6096,7 @@ class API:
 
     def set_wind(self, mode=True):
         # print(type(self.sensor),self.sensor)
-        if self.sensor :
+        if self.sensor and self.plc_connection_status:
             if self.ui.wind_itr == 1:
                 ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
                 ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(mode))
@@ -6141,7 +6267,7 @@ class API:
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)
                 # if self.connection_status:
-                print('start thread set caemra and projector')
+                # print('start thread set caemra and projector')
                 threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start()
                 # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
                 if self.show_save_notif:

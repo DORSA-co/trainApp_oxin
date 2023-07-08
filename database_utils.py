@@ -30,13 +30,14 @@ class dataBaseUtils:
         self.image_processing = "image_processing"
         self.dataset = "datasets "
         self.plc = "plc_path"
+        self.storage_settings = "storage_settings"
         self.ui_obj = ui_obj
         self.piplines_evaluation_info='piplines_info'
        #________________________
         self.piplines='piplines'
         self.binary_model='binary_models'
         self.classification='classification_models'
-        self.localiztion='localiztion_models'
+        self.localiztion='localization_models'
         self.yolo='yolo_models'
 
         
@@ -126,11 +127,11 @@ class dataBaseUtils:
     # ________________________________________________________________
     #
     # ________________________________________________________________
-    def load_sheet_date(self, id):
+    def load_sheet_date_mainpath(self, id):
         res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id, int_type=False)
         record = record[0]
 
-        return record['date']
+        return record['date'], record['main_path']
 
     # ________________________________________________________________
     #
@@ -177,6 +178,13 @@ class dataBaseUtils:
         )
         record = record[0]
         return record["parent_path"]
+
+    def get_suggestions_path(self, value=0):
+        res, record = self.db.search(
+            table_name=self.setting_tabel, param_name="id", value=value
+        )
+        record = record[0]
+        return record["suggestions_path"]
 
     def set_dataset_path_user(self, path):
         #  update_record(self,data,table_name,col_name,value,id,id_value):
@@ -1245,7 +1253,47 @@ class dataBaseUtils:
         )
         record = record[0]
         return record["pipeline_json_path"]
+    
+    def load_storage_setting(self):
+        """This function is used to get storage settings from table
 
+        :return: A flag that indicates the success of the task along with the settings.
+        :rtype: tuple
+        """
+
+        res, settings = self.db.search(
+            self.storage_settings, "id", "1"
+        )
+        print('res'*50,res)
+        if res == database.SUCCESSFULL:
+            return True, settings[0]
+        else:
+            # Log Exception
+            return False, settings
+
+    def set_storage_setting(self, max_cleanup_percentage, min_cleanup_percentage, ssd_image_path, ssd_dataset_path, hdd_path):
+        """This function set settings in database table
+
+        :param max_cleanup_percentage: maximum percentage to cleanup.
+        :type max_cleanup_percentage: int
+        :param min_cleanup_percentage: minimum percentage to cleanup.
+        :type min_cleanup_percentage: int
+        :param ssd_image_path: path of images partition of ssd.
+        :type ssd_image_path: str
+        :param ssd_dataset_path: path of datasets partition of ssd.
+        :type ssd_dataset_path: str
+        :param hdd_path: path of hdd.
+        :type hdd_path: str
+        :return: True if all settings update successfully. False otherwise.
+        :rtype: bool
+        """
+        res1 = self.db.update_record(self.storage_settings, "max_cleanup_percentage", str(max_cleanup_percentage), "id", "1")
+        res2 = self.db.update_record(self.storage_settings, "min_cleanup_percentage", str(min_cleanup_percentage), "id", "1")
+        res3 = self.db.update_record(self.storage_settings, "ssd_images_path", str(ssd_image_path), "id", "1")
+        res4 = self.db.update_record(self.storage_settings, "ssd_datasets_path", str(ssd_dataset_path), "id", "1")
+        res5 = self.db.update_record(self.storage_settings, "hdd_path", str(hdd_path), "id", "1")
+
+        return res1 and res2 and res3 and res4 and res5
 
 
     # #____________________________________JJ ZONE

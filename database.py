@@ -1,5 +1,4 @@
 import re
-from tkinter import EXCEPTION
 from matplotlib.pyplot import flag
 import mysql.connector
 from mysql.connector import Error
@@ -171,7 +170,7 @@ class dataBase:
             mySql_insert_query = """INSERT INTO {} {} 
                                 VALUES 
                                 {} """.format(table_name,parametrs,s) 
-            print(mySql_insert_query, data)
+            # print(mySql_insert_query, data)
             cursor.execute(mySql_insert_query,data)
             connection.commit()
             cursor.close()

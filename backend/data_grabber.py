@@ -101,13 +101,12 @@ class sheetOverView:
     def update_defect(self):
         for c in range(1, self.actives_camera[1]+1):
             for f in range(1, self.sheet.get_nframe()+1):
-                json_path = pathStructure.sheet_image_path(
-                    self.sheet.get_main_path()+self.json_postfix,
+                json_path = pathStructure.sheet_suggestions_json_path(
+                    '',
                     self.sheet.get_id(),
-                    self.side,
-                    c,
-                    f,
-                    self.json_format
+                    self.side, 
+                    c, 
+                    f
                 )
                 if os.path.exists(json_path):
                     with open(json_path) as jfile:
@@ -481,13 +480,12 @@ class sheetOverView:
                         idx_frame+1,
                         self.sheet.get_image_format(),
                     )
-                    json_path = pathStructure.sheet_image_path(
-                        self.sheet.get_main_path()+self.json_postfix,
+                    json_path = pathStructure.sheet_suggestions_json_path(
+                        '',
                         self.sheet.get_id(),
-                        self.side,
+                        self.side, 
                         a+1,
-                        idx_frame+1,
-                        self.json_format
+                        idx_frame+1
                     )
 
                     img = None  

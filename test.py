@@ -70,3 +70,30 @@ for cam_id, value in zip(sorted_dict.keys(),sorted_dict.values()):
         print(cam_id)
 
 
+# img = cv2.imread('oxin_image_grabber/2023/05/27/900o7/TOP/6/12.png')
+# img = cv2.flip(img, 1)
+# cv2.imshow('a',img)
+# cv2.waitKey(0)
+
+import os
+def find_mount_point(path):
+    path = os.path.abspath(path)
+    orig_dev = os.stat(path).st_dev
+
+    while path != '/':
+        dir = os.path.dirname(path)
+        if os.stat(dir).st_dev != orig_dev:
+            # we crossed the device border
+            break
+        path = dir
+    return path
+
+
+def find_mount_point2(path):
+    path = os.path.abspath(path)
+    while not os.path.ismount(path):
+        path = os.path.dirname(path)
+    return path
+
+path = '/media/reyhane/782F28BD242E495A/oxin_image_grabber'
+print(find_mount_point2(path))

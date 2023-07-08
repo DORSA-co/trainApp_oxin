@@ -35,6 +35,7 @@ from app_settings import Settings
 from backend import (
     data_grabber,
     storage_funcs,
+    FileManager,
     chart_funcs,
     camera_connection,
     colors_pallete,
@@ -72,8 +73,8 @@ from Dataset_selection.ds_select_UI import Ds_selection
 
 # from login_win.login_api import
 
-from train_api import ALGORITHM_NAMES
-from train_api import ALGORITHM_NAMES
+# from train_api import ALGORITHM_NAMES
+ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'], 'yolo': ['5n', '5s', '5m', '5l', '5x']}
 
 ui, _ = loadUiType("UI/oxin.ui")
 #os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
@@ -598,8 +599,6 @@ class UI_main_window(QMainWindow, ui):
             frame_obj_storage=self.hdd_chart_frame,
             storage_type='HDD'
         )
-        self.update_storage_chart()
-        self.start_storage_timer()
 
         # -----------------------------------------------------------------------------------------------------
         # PLC check buttons
@@ -691,38 +690,6 @@ class UI_main_window(QMainWindow, ui):
         # self.setFont(QtGui.QFont("Bariol", 18))
 
         self.show_labeling_help()
-
-    def update_storage_chart(self):
-        drives = storage_funcs.get_available_drives()
-        if len(drives) > 0:
-            drives = [drives[0]]
-            drives.append('/')
-            names = ['HDD', 'SSD']
-            self.label_289.setMaximumHeight(16777215)
-            self.hdd_chart_frame.setMaximumWidth(16777215)
-        else:
-            drives = ['/']
-            names = ['SSD']
-            self.label_289.setMaximumHeight(0)
-            self.hdd_chart_frame.setMaximumWidth(0)
-        storage_status = {}
-        for d, n in zip(drives, names):
-            status = storage_funcs.get_storage_status(d)
-            storage_status[n] = status
-
-            chart_funcs.update_storage_barchart(
-                ui_obj=self,
-                storage_type=n,
-                storage_status=storage_status
-            )
-
-            storage_status = {}
-
-    def start_storage_timer(self):
-        self.storage_timer = sQtCore.QTimer()
-        self.storage_timer.timeout.connect(self.update_storage_chart)
-        self.storage_timer.start(600000)
-        # self.storage_timer.start(10000)
 
     def showTime(self):
 
@@ -2836,28 +2803,28 @@ class UI_main_window(QMainWindow, ui):
         if btnName == "full_single_btn":
             if not self.full_s_window :
                 self.full_s_window = full_screen_window(type='single')
-                # self.full_s_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('s')))
+                self.full_s_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('s')))
             self.full_s_window.show()
             self.full_s = True
 
         if btnName == "full_top_btn":
             if not self.full_t_window:
                 self.full_t_window = full_screen_window(type='top')
-                # self.full_t_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('t')))
+                self.full_t_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('t')))
             self.full_t_window.show()
             self.full_t = True
 
         if btnName == "full_bottom_btn":
             if not self.full_b_window:
                 self.full_b_window = full_screen_window(type='bottom')
-                # self.full_b_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('b')))
+                self.full_b_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('b')))
             self.full_b_window.show()
             self.full_b = True
 
         if btnName == "full_all_btn":
             if not self.full__window:
                 self.full__window = full_screen_window(type='all')
-                # self.full__window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('')))
+                self.full__window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('')))
             self.full__window.show()
             self.full_ = True
 
@@ -3414,7 +3381,10 @@ class UI_main_window(QMainWindow, ui):
     def show_image_info_lable_page(self, sheet, pos):
         self.plabel_coil_num_txt.setText(str(sheet.get_id()))
         self.plabel_date_txt.setText(str(sheet.get_date_string()))
-        self.plabel_cam_txt.setText(str(pos[-1][0]))
+        if 'bot' in pos[1].lower() or 'down' in pos[1].lower():
+            self.plabel_cam_txt.setText(str(pos[-1][0] + 12))
+        else:
+            self.plabel_cam_txt.setText(str(pos[-1][0]))
         self.plabel_frame_txt.setText(str(pos[-1][1]))
 
     def show_image_btn(self, label_name, img_path):
@@ -3683,6 +3653,22 @@ class UI_main_window(QMainWindow, ui):
             img = cv2.imread(os.path.join(path, help_images[i]))
             image = QImage(img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888)
             exec('self.labeling_help_{}.setPixmap(QPixmap.fromImage(image))'.format(i+1))
+
+    def show_hdd_chart(self):
+        self.hdd_label.setMaximumHeight(16777215)
+        self.hdd_chart_frame.setMaximumWidth(310)
+
+    def hide_hdd_chart(self):
+        self.hdd_label.setMaximumHeight(0)
+        self.hdd_chart_frame.setMaximumWidth(0)
+
+    def show_ssd_chart(self):
+        self.ssd_label.setMaximumHeight(16777215)
+        self.ssd_chart_frame.setMaximumWidth(310)
+
+    def hide_ssd_chart(self):
+        self.ssd_label.setMaximumHeight(0)
+        self.ssd_chart_frame.setMaximumWidth(0)
 
 if __name__ == "__main__":
     app = QApplication()
