@@ -3226,7 +3226,75 @@ class API:
         cam_parms = self.db.load_cam_params(id)
         return cam_parms
 
+
     def connect_camera(self):
+
+
+        """
+        This camera is used to connect selected cameras
+        """
+        selected_cameras = self.ui.get_selected_cameras()
+
+        if not any(selected_cameras):
+            self.ui.set_warning(
+                texts.WARNINGS["no_camera_selected"][self.ui.language],
+                "camera_connection",
+                level=2
+            )
+            return
+        print(selected_cameras)
+
+        self.camera_threads = []
+        self.ret_dict ={}
+        for cam_num , cam in enumerate(selected_cameras):
+            if cam:
+                cam_parms = self.get_camera_config(str(cam_num+1))
+                thread = threading.Thread(target=self.cameras.add_camera,args=(str(cam_num+1), cam_parms,self.ret_dict,self.ui.logger))
+                thread.start()
+                self.camera_threads.append(thread)
+        
+        self.set_btns(False)
+        threading.Thread(target=self.check_finished).start()
+
+
+    def set_btns(self,mode):
+        self.ui.set_buttons_enable_or_disable(
+            [self.ui.disconnect_camera_btn, self.ui.connect_camera_btn],
+            enable=mode,
+        )
+        self.ui.checkBox_top.setEnabled(mode)
+        self.ui.checkBox_bottom.setEnabled(mode)
+        self.ui.checkBox_all.setEnabled(mode)
+        for i in range(1, 25):
+            if i < 10:
+                btn_name = eval("self.ui.camera0%s_btn" % i)
+            else:
+                btn_name = eval("self.ui.camera%s_btn" % i)
+            btn_name.setEnabled(mode)
+
+
+    def check_finished(self):
+        for thread in self.camera_threads:
+            thread.join()
+        self.update_camera_ui()
+        
+    def update_camera_ui(self):
+        self.set_available_cameras()
+        self.start_grab_camera()
+
+        myKeys = list(self.ret_dict.keys())
+        myKeys.sort()
+        sorted_dict = {i: self.ret_dict[i] for i in myKeys}
+
+        for cam_id, value in zip(sorted_dict.keys(),sorted_dict.values()):
+            if value[0]:
+                self.ui.set_img_btn_camera(cam_id)
+            else:
+                self.ui.set_img_btn_camera(cam_id, status="False")
+        self.set_btns(True)
+
+
+    def connect_camera_old(self):
         """
         This camera is used to connect selected cameras
         """
@@ -3414,6 +3482,7 @@ class API:
     def start_grab_camera(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
         for camera in connected_cameras:
+            print('grabed')
             connected_cameras[camera].start_grabbing()
 
     def start_capture_func(self, disable_ui=True):

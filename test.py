@@ -47,8 +47,26 @@
 #     print((time.time() - t)*1000)
 
 
-import cv2
-img = cv2.imread('oxin_image_grabber/2023/05/19/989m7/TOP/6/12.png')
-img = cv2.flip(img, 1)
-cv2.imshow('a',img)
-cv2.waitKey(0)
+# import cv2
+# img = cv2.imread('oxin_image_grabber/2023/05/19/989m7/TOP/6/12.png')
+# img = cv2.flip(img, 1)
+# cv2.imshow('a',img)
+# cv2.waitKey(0) 
+
+
+ret_dict = {24: (True, 'start grabbing ok'), 12: (True, 'start grabbing ok'), 4: (False, 'start grabbing ok'), 2: (True, 'start grabbing ok'), 15: (True, 'start grabbing ok'), 13: (True, 'start grabbing ok'), 20: (True, 'start grabbing ok'), 16: (True, 'start grabbing ok'), 3: (True, 'start grabbing ok'), 17: (True, 'start grabbing ok'), 6: (True, 'start grabbing ok'), 7: (True, 'start grabbing ok'), 22: (True, 'start grabbing ok'), 1: (True, 'start grabbing ok'), 23: (True, 'start grabbing ok'), 9: (True, 'start grabbing ok'), 19: (True, 'start grabbing ok'), 21: (True, 'start grabbing ok'), 5: (True, 'start grabbing ok'), 8: (True, 'start grabbing ok'), 18: (True, 'start grabbing ok'), 10: (True, 'start grabbing ok'), 14: (True, 'start grabbing ok'), 11: (True, 'start grabbing ok')}
+
+
+myKeys = list(ret_dict.keys())
+myKeys.sort()
+sorted_dict = {i: ret_dict[i] for i in myKeys}
+
+print(sorted_dict)
+
+
+for cam_id, value in zip(sorted_dict.keys(),sorted_dict.values()):
+    print(value)
+    if value[0]:
+        print(cam_id)
+
+
