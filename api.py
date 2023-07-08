@@ -10,9 +10,8 @@ from shutil import which
 from stat import FILE_ATTRIBUTE_NORMAL
 import sys
 from ast import Try
+import matplotlib
 
-
-from tkinter import NO, PIESLICE
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QFileDialog
 from cv2 import log
@@ -409,6 +408,11 @@ class API:
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
         self.__debug__login__()
+
+
+        self.grab_time = 0
+        self.stop_grab = False
+        self.grab_main_thread = None
 
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
@@ -1585,10 +1589,12 @@ class API:
     # ----------------------------------------------------------------------------------------
     def show_sheet_loader(self):
         try:
+            # self.ui.show_loading_page()
             sheets = self.db.report_last_sheets(9999)
             self.ui.load_sheets_win.show_sheets_info(sheets)
             self.ui.load_sheets_win.reset_search_lines()
             self.ui.data_loader_win_show()
+            # self.ui.close_loading_page()
             self.ui.load_sheets_win.set_warning(
                 texts.MESSEGES["refresh_success"][self.language], level=1
             )
@@ -1858,7 +1864,7 @@ class API:
             for select_img in filtered_selected:
                 sheets.append(self.db.load_sheet(select_img[0]))
 
-            self.ds.save_to_temp(paths, sheets, filtered_selected)
+            # self.ds.save_to_temp(paths, sheets, filtered_selected)
 
             self.move_on_list.add(
                 list(zip(sheets, filtered_selected, paths)), "selected_imgs_for_label"
@@ -2955,6 +2961,7 @@ class API:
         self.worker.update_progressbar.connect(self.update_save_all_progressbar)
         self.worker.question.connect(self.save_all_show_question)
         # Step 6: Start the thread
+        self.ui.save_all_dataset_btn.setEnabled(False)
         self.thread.start()
 
     def save_all_show_question(self, title, message):
@@ -2968,6 +2975,7 @@ class API:
                 "label",
                 level=1,
             )
+        self.ui.save_all_dataset_btn.setEnabled(True)
 
     def update_save_all_progressbar(self):
         self.ui.save_all_progressBar.setValue(self.ui.save_all_progressBar.value() + 1)
@@ -3539,8 +3547,9 @@ class API:
             )
             self.live_timer = QTimer(self.ui)
             self.live_timer.timeout.connect(self.ImageManager.show_live)
-            self.grab_timer = QTimer(self.ui)
-            self.grab_timer.timeout.connect(self.grab_image)
+            # self.grab_timer = QTimer(self.ui)
+            # self.grab_timer.timeout.connect(self.grab_image)
+            # self.grab_main_thread = threading.Thread(target=self.run_grab)
             self.ImageManager.first_check_finished.connect(self.start_capture_timers)
             self.ImageManager.second_check_finished.connect(self.stop_capture_timers)
             self.start_capture_flag = True
@@ -3593,12 +3602,27 @@ class API:
         if speed > 0:
             self.ImageManager.start()
         self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_timer.start(int(1000/(self.ui.frame_rate)))
+        self.grab_main_thread = threading.Thread(target=self.run_grab)
+        self.grab_main_thread.start()
+        # self.grab_timer.start(int(1000/(self.ui.frame_rate)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
         self.live_timer.stop()
-        self.grab_timer.stop()
+        self.stop_grab_image()
+
+    def run_grab(self):
+        while True:
+            if self.stop_grab:
+                return
+            self.grab_time = time.time()
+            self.grab_image()
+            self.grab_time = time.time() - self.grab_time
+            if self.stop_grab:
+                return
+            t = 1/self.ui.frame_rate
+            if self.grab_time<t:
+                time.sleep(t - self.grab_time)
 
     def grab_image(self):
         try:
@@ -3608,6 +3632,12 @@ class API:
         if speed > 0:
             self.ImageManager.stop()
             self.ImageManager.start()
+
+    def stop_grab_image(self):
+        if self.grab_main_thread:
+            self.stop_grab = True
+            self.grab_main_thread.join()
+        self.stop_grab = False
 
     def change_live_camera(self, text):
         try:

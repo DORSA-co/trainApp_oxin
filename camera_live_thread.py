@@ -261,6 +261,10 @@ class ImageManager(sQObject):
         self.show_full_screen_live()
 
     def show_full_screen_live(self):
+
+
+        # threading.Thread(target = self.ui.full__window.show_full_screen_live , args=(self.images,)).start()
+
         if self.ui.full_s:
             fs = sQImage(self.images[self.n_camera_live - 1], self.images[self.n_camera_live - 1].shape[1],
                          self.images[self.n_camera_live - 1].shape[0],

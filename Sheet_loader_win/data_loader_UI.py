@@ -219,7 +219,7 @@ class data_loader(QMainWindow, ui):
             return
 
         path1 = sheet_path(self.par_path, str(select[0]))
-        print(path1)
+        # print(path1)
         # import os
         try:
             if os.path.exists(path1): 

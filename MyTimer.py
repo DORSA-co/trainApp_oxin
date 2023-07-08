@@ -13,7 +13,7 @@ class MyTimer(QObject):
 
     def __init__(self, parent: Optional[PySide6.QtCore.QObject] = ...) -> None:
         super().__init__(parent)
-        self.stop_thead = False
+        self.stop_thread = False
 
     def create_thread(self, msec: int) -> None:
         self.thread = threading.Thread(target=self.timer, args=(msec, ))
@@ -22,12 +22,11 @@ class MyTimer(QObject):
         self.thread.start()
 
     def join_thread(self) -> None:
-        self.stop_thead = True
-        print(self.stop_thead)
+        self.stop_thread = True
         self.thread.join()
 
     def start(self, msec: int) -> None:
-        self.stop_thead = False
+        self.stop_thread = False
         self.create_thread(msec)
         self.start_thread()
 
@@ -36,11 +35,12 @@ class MyTimer(QObject):
 
     def timer(self, msec: int):
         while True:
-            print(self.stop_thead)
-            if self.stop_thead:
+            if self.stop_thread:
                 break
+            t1 =time.time()
             sleep(msec/1000)
-            print(self.stop_thead)
-            if self.stop_thead:
+            
+            if self.stop_thread:
                 break
             self.timeout.emit()
+            print(time.time()-t1)
