@@ -71,10 +71,13 @@ from login_win.login_UI import UI_login_window
 
 from Dataset_selection.ds_select_UI import Ds_selection
 
+from PySide6.QtCore import QThread as sQThread
+from loading_worker import loading_worker
+
 # from login_win.login_api import
 
-# from train_api import ALGORITHM_NAMES
-ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'], 'yolo': ['5n', '5s', '5m', '5l', '5x']}
+from train_api import ALGORITHM_NAMES
+# ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'], 'yolo': ['5n', '5s', '5m', '5l', '5x']}
 
 ui, _ = loadUiType("UI/oxin.ui")
 #os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
@@ -223,7 +226,7 @@ class UI_main_window(QMainWindow, ui):
         # self.classification_class_list_table()
 
         # data aquization page
-        self.load_coil_btn.clicked.connect(self.buttonClick)
+        # self.load_coil_btn.clicked.connect(self.buttonClick)
 
         self.next_coil_btn.clicked.connect(self.buttonClick)
         self.prev_coil_btn.clicked.connect(self.buttonClick)
@@ -3669,6 +3672,19 @@ class UI_main_window(QMainWindow, ui):
     def hide_ssd_chart(self):
         self.ssd_label.setMaximumHeight(0)
         self.ssd_chart_frame.setMaximumWidth(0)
+
+    def show_loading_page(self):
+        self.thread = sQThread()
+        self.worker = loading_worker()
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(lambda: self.worker.show_win('Please waite...'))
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()
+
+    def close_loading_page(self):
+        self.worker.close_win()
 
 if __name__ == "__main__":
     app = QApplication()

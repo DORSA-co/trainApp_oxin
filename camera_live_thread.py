@@ -243,12 +243,10 @@ class ImageManager(sQObject):
 
     def show_live(self):
         if self.live_type == 0:
-            t = time.time()
             fs = sQImage(self.images[self.n_camera_live - 1], self.images[self.n_camera_live - 1].shape[1],
                          self.images[self.n_camera_live - 1].shape[0],
                          self.images[self.n_camera_live - 1].strides[0],
                          sQImage.Format_RGB888)
-            t = time.time()
             self.ui.live.setPixmap(sQPixmap.fromImage(fs))
 
         if self.live_type == 1:

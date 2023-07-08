@@ -8432,7 +8432,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>707</width>
-                                            <height>20</height>
+                                            <height>27</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_228">
@@ -15401,7 +15401,7 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>340</width>
+                                      <width>329</width>
                                       <height>699</height>
                                      </rect>
                                     </property>

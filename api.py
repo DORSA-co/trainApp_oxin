@@ -10,9 +10,8 @@ from shutil import which
 from stat import FILE_ATTRIBUTE_NORMAL
 import sys
 from ast import Try
+import matplotlib
 
-
-from tkinter import NO, PIESLICE
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QFileDialog
 from cv2 import log
@@ -86,7 +85,7 @@ from utils1 import tempMemory, Utils
 
 from backend.dataset import Dataset
 from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2
-# import train_api
+import train_api
 
 from labeling.labeling_UI import labeling
 
@@ -395,6 +394,12 @@ class API:
         self.hdd_file_manager = None
         self.storage_win = None
         self.s_api = None
+        self.storage_timer = None
+
+        
+        self.read_storage_paths_from_db()
+        self.create_diskMemory_objs()
+        self.create_storage_window()
         self.start_storage_checking()
         
         # DEBUG_FUNCTIONS
@@ -413,7 +418,7 @@ class API:
         res, storage_settings = self.db.load_storage_setting()
         if res:
             self.update_time = storage_settings['update_time']
-            self.max_cleanup_percentage = storage_settings['max_cleanup_percentage']
+            self.storage_upper_limit = storage_settings['storage_upper_limit']
             self.hdd_path = storage_settings['hdd_path']
             self.ssd_images_path = storage_settings['ssd_images_path']
 
@@ -431,14 +436,11 @@ class API:
     def create_storage_window(self):
         if not self.storage_win:
             self.storage_win = storage_management()
+            self.storage_win.apply_settings_btn.clicked.connect(self.restart_storage_checking)
         if not self.s_api:
             self.s_api = storage_api(self.storage_win)
 
     def check_storage(self):
-        self.read_storage_paths_from_db()
-        self.create_diskMemory_objs()
-        self.create_storage_window()
-
         self.ssd_image_file_manager.refresh()
         self.hdd_file_manager.refresh()
 
@@ -446,9 +448,14 @@ class API:
 
         if self.ssd_image_file_manager:
             ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
-            if ssd_image_percent > self.max_cleanup_percentage:
+            if ssd_image_percent > self.storage_upper_limit:
                 try:
+                    self.storage_win.set_language(self.language)
                     self.storage_win.show()
+                    self.s_api.clear_filters()
+                    if self.sensor:
+                        pass
+                        # self.s_api.add_filter(self.current_sheet_id) ###############
                     self.s_api.start()
                     self.ui.logger.create_new_log(
                         code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"], level=1
@@ -487,9 +494,18 @@ class API:
 
     def start_storage_checking(self):
         self.check_storage()
-        self.storage_timer = QTimer()
-        self.storage_timer.timeout.connect(self.check_storage)
+        if not self.storage_timer:
+            self.storage_timer = QTimer()
+            self.storage_timer.timeout.connect(self.check_storage)
         self.storage_timer.start(1000*60*self.update_time)
+
+    def restart_storage_checking(self):
+        self.storage_timer.stop()
+        self.read_storage_paths_from_db()
+        self.ssd_image_file_manager = None
+        self.hdd_file_manager = None
+        self.create_diskMemory_objs()
+        self.start_storage_checking()
 
     def set_pipline_mode(self,key):
         self.pipline_dict = {'yolo':[self.ui.page_yolo,self.ui.page_yolo_2],'localization':[self.ui.page_localization,self.ui.page_localization_2]}
@@ -1573,10 +1589,12 @@ class API:
     # ----------------------------------------------------------------------------------------
     def show_sheet_loader(self):
         try:
+            # self.ui.show_loading_page()
             sheets = self.db.report_last_sheets(9999)
             self.ui.load_sheets_win.show_sheets_info(sheets)
             self.ui.load_sheets_win.reset_search_lines()
             self.ui.data_loader_win_show()
+            # self.ui.close_loading_page()
             self.ui.load_sheets_win.set_warning(
                 texts.MESSEGES["refresh_success"][self.language], level=1
             )
@@ -1846,7 +1864,7 @@ class API:
             for select_img in filtered_selected:
                 sheets.append(self.db.load_sheet(select_img[0]))
 
-            self.ds.save_to_temp(paths, sheets, filtered_selected)
+            # self.ds.save_to_temp(paths, sheets, filtered_selected)
 
             self.move_on_list.add(
                 list(zip(sheets, filtered_selected, paths)), "selected_imgs_for_label"
@@ -2943,6 +2961,7 @@ class API:
         self.worker.update_progressbar.connect(self.update_save_all_progressbar)
         self.worker.question.connect(self.save_all_show_question)
         # Step 6: Start the thread
+        self.ui.save_all_dataset_btn.setEnabled(False)
         self.thread.start()
 
     def save_all_show_question(self, title, message):
@@ -2956,6 +2975,7 @@ class API:
                 "label",
                 level=1,
             )
+        self.ui.save_all_dataset_btn.setEnabled(True)
 
     def update_save_all_progressbar(self):
         self.ui.save_all_progressBar.setValue(self.ui.save_all_progressBar.value() + 1)
@@ -3662,7 +3682,6 @@ class API:
 
     def run_grab(self):
         while True:
-            print(self.stop_grab)
             if self.stop_grab:
                 return
             self.grab_time = time.time()
@@ -3670,7 +3689,6 @@ class API:
             self.grab_time = time.time() - self.grab_time
             if self.stop_grab:
                 return
-            print('??????', self.grab_time)
             t = 1/self.ui.frame_rate
             if self.grab_time<t:
                 time.sleep(t - self.grab_time)

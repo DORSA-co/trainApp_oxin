@@ -7,7 +7,7 @@ from pyparsing import col
 
 from backend import colors_pallete
 import texts
-# import train_api
+import train_api
 
 
 # UI table header names

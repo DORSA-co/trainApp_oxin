@@ -584,8 +584,8 @@ INSERT INTO `sign_tables` (`id`, `defects_info`, `camera_settings`, `sheets_info
 
 CREATE TABLE `storage_settings` (
   `id` int NOT NULL,
-  `max_cleanup_percentage` int NOT NULL,
-  `min_cleanup_percentage` int NOT NULL,
+  `storage_upper_limit` int NOT NULL,
+  `storage_lower_limit` int NOT NULL,
   `ssd_images_path` varchar(1000) NOT NULL,
   `ssd_datasets_path` varchar(1000) NOT NULL,
   `hdd_path` varchar(1000) NOT NULL
@@ -595,7 +595,7 @@ CREATE TABLE `storage_settings` (
 -- Dumping data for table `storage_settings`
 --
 
-INSERT INTO `storage_settings` (`id`, `max_cleanup_percentage`, `min_cleanup_percentage`, `ssd_images_path`, `ssd_datasets_path`, `hdd_path`) VALUES
+INSERT INTO `storage_settings` (`id`, `storage_upper_limit`, `storage_lower_limit`, `ssd_images_path`, `ssd_datasets_path`, `hdd_path`) VALUES
 (1, 15, 10, '/home/reyhane/PythonProjects/Oxin_Softwares/trainApp_oxin_new/oxin_image_grabber', '/home/reyhane/Desktop/default_dataset', '/media/reyhane/782F28BD242E495A/oxin_image_grabber');
 
 -- --------------------------------------------------------
