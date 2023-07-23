@@ -19,7 +19,7 @@ ui, _ = loadUiType("UI/full_screen.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 
 
-class full_screen_window(sQWidget, ui):
+class full_screen_window(QMainWindow, ui):
     """
     this class initializes a confirm/message window for user. it has two buttons, yes or no, to accept or deny the operation will be done
 
@@ -35,9 +35,9 @@ class full_screen_window(sQWidget, ui):
 
 
     def __init__(self, type,parent=None):
-        super(full_screen_window, self).__init__(parent)
-        self.m_ui = asd
-        self.asd.setupUi(self)
+        super(full_screen_window, self).__init__()
+
+        self.setupUi(self)
         flags = Qt.WindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint) # removing the window frame and attache it to top
         self.pos_ = self.pos()
         self._old_pos = None

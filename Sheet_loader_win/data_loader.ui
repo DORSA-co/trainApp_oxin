@@ -829,12 +829,11 @@ color: black;
                 <bool>true</bool>
                </property>
                <property name="rowCount">
-                <number>1</number>
+                <number>0</number>
                </property>
                <property name="columnCount">
-                <number>9</number>
+                <number>12</number>
                </property>
-               <row/>
                <column>
                 <property name="text">
                  <string>1</string>
@@ -845,6 +844,9 @@ color: black;
                  <string>2</string>
                 </property>
                </column>
+               <column/>
+               <column/>
+               <column/>
                <column/>
                <column/>
                <column/>
@@ -1067,11 +1069,11 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
 }</string>
                      </property>
                      <property name="currentIndex">
-                      <number>0</number>
+                      <number>3</number>
                      </property>
                      <widget class="QWidget" name="id_page">
                       <attribute name="title">
-                       <string>ID</string>
+                       <string>Plate ID</string>
                       </attribute>
                       <layout class="QVBoxLayout" name="verticalLayout_5">
                        <item>
@@ -1082,14 +1084,14 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                         </widget>
                        </item>
                        <item>
-                        <widget class="QListWidget" name="list_show_id"/>
+                        <widget class="QListWidget" name="list_plate_id"/>
                        </item>
                        <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_13">
                          <item>
                           <widget class="QLabel" name="label_12">
                            <property name="text">
-                            <string>ID  :</string>
+                            <string>ID:</string>
                            </property>
                           </widget>
                          </item>
@@ -1098,7 +1100,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                            <property name="minimumSize">
                             <size>
                              <width>150</width>
-                             <height>27</height>
+                             <height>5</height>
                             </size>
                            </property>
                           </widget>
@@ -1117,9 +1119,9 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                        </item>
                       </layout>
                      </widget>
-                     <widget class="QWidget" name="heat_number_page">
+                     <widget class="QWidget" name="order_page">
                       <attribute name="title">
-                       <string>HEAT</string>
+                       <string>Order ID</string>
                       </attribute>
                       <attribute name="toolTip">
                        <string>heat number</string>
@@ -1128,19 +1130,70 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                        <item>
                         <widget class="QLabel" name="label_5">
                          <property name="text">
-                          <string>Availabl HEAT Numbers :</string>
+                          <string>Available Order IDs :</string>
                          </property>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QListWidget" name="list_heat_number"/>
+                        <widget class="QListWidget" name="list_order_id"/>
                        </item>
                        <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_9">
                          <item>
                           <widget class="QLabel" name="label_4">
                            <property name="text">
-                            <string>Number :</string>
+                            <string>ID:</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="line_search_order">
+                           <property name="minimumSize">
+                            <size>
+                             <width>150</width>
+                             <height>5</height>
+                            </size>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="btn_order_search">
+                         <property name="cursor">
+                          <cursorShape>PointingHandCursor</cursorShape>
+                         </property>
+                         <property name="text">
+                          <string>Search</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                     <widget class="QWidget" name="heat_page">
+                      <attribute name="title">
+                       <string>Heat ID</string>
+                      </attribute>
+                      <attribute name="toolTip">
+                       <string>Product Schedule Number</string>
+                      </attribute>
+                      <layout class="QVBoxLayout" name="verticalLayout_7">
+                       <item>
+                        <widget class="QLabel" name="label_6">
+                         <property name="text">
+                          <string>Available Head IDs :</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QListWidget" name="list_heat_id"/>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_10">
+                         <item>
+                          <widget class="QLabel" name="label_7">
+                           <property name="text">
+                            <string>ID:</string>
                            </property>
                           </widget>
                          </item>
@@ -1168,60 +1221,9 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                        </item>
                       </layout>
                      </widget>
-                     <widget class="QWidget" name="psn_page">
+                     <widget class="QWidget" name="qc_page">
                       <attribute name="title">
-                       <string>PSN</string>
-                      </attribute>
-                      <attribute name="toolTip">
-                       <string>Product Schedule Number</string>
-                      </attribute>
-                      <layout class="QVBoxLayout" name="verticalLayout_7">
-                       <item>
-                        <widget class="QLabel" name="label_6">
-                         <property name="text">
-                          <string>Available Product Schedule Numbesr :</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QListWidget" name="list_ps_number"/>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_10">
-                         <item>
-                          <widget class="QLabel" name="label_7">
-                           <property name="text">
-                            <string>Number :</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLineEdit" name="line_search_psn">
-                           <property name="minimumSize">
-                            <size>
-                             <width>150</width>
-                             <height>5</height>
-                            </size>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="btn_psn_search">
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="text">
-                          <string>Search</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                     <widget class="QWidget" name="PDLN_page">
-                      <attribute name="title">
-                       <string>PDLN</string>
+                       <string>QC Standard</string>
                       </attribute>
                       <attribute name="toolTip">
                        <string>Product Drift Line Number</string>
@@ -1230,24 +1232,24 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                        <item>
                         <widget class="QLabel" name="label_9">
                          <property name="text">
-                          <string>Available Product Drift Line Numbers :</string>
+                          <string>Available QC Standard values :</string>
                          </property>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QListWidget" name="list_pdl_number"/>
+                        <widget class="QListWidget" name="list_qc_standard"/>
                        </item>
                        <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_12">
                          <item>
                           <widget class="QLabel" name="label_8">
                            <property name="text">
-                            <string>Number :</string>
+                            <string>Vlaue:</string>
                            </property>
                           </widget>
                          </item>
                          <item>
-                          <widget class="QLineEdit" name="line_search_pdln">
+                          <widget class="QLineEdit" name="line_search_qc">
                            <property name="minimumSize">
                             <size>
                              <width>150</width>
@@ -1259,7 +1261,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                         </layout>
                        </item>
                        <item>
-                        <widget class="QPushButton" name="btn_pdln_search">
+                        <widget class="QPushButton" name="btn_qc_search">
                          <property name="cursor">
                           <cursorShape>PointingHandCursor</cursorShape>
                          </property>

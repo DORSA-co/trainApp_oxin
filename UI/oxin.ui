@@ -5176,8 +5176,8 @@ QPushButton:disabled {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>825</width>
-                                      <height>28</height>
+                                      <width>1025</width>
+                                      <height>20</height>
                                      </rect>
                                     </property>
                                     <layout class="QHBoxLayout" name="horizontalLayout_213">
@@ -5196,12 +5196,12 @@ QPushButton:disabled {
                                      <item>
                                       <widget class="QLabel" name="label_156">
                                        <property name="text">
-                                        <string>Sheet ID :</string>
+                                        <string>Plate ID :</string>
                                        </property>
                                       </widget>
                                      </item>
                                      <item>
-                                      <widget class="QLabel" name="label_sheet_id">
+                                      <widget class="QLabel" name="label_plate_id">
                                        <property name="text">
                                         <string>-</string>
                                        </property>
@@ -5217,12 +5217,12 @@ QPushButton:disabled {
                                      <item>
                                       <widget class="QLabel" name="label_heat_number_5">
                                        <property name="text">
-                                        <string>Heat Number :</string>
+                                        <string>Order ID:</string>
                                        </property>
                                       </widget>
                                      </item>
                                      <item>
-                                      <widget class="QLabel" name="label_heat_number">
+                                      <widget class="QLabel" name="label_order_id">
                                        <property name="text">
                                         <string>-</string>
                                        </property>
@@ -5238,12 +5238,12 @@ QPushButton:disabled {
                                      <item>
                                       <widget class="QLabel" name="label_159">
                                        <property name="text">
-                                        <string>Ps Number :</string>
+                                        <string>Heat ID:</string>
                                        </property>
                                       </widget>
                                      </item>
                                      <item>
-                                      <widget class="QLabel" name="label_ps_number">
+                                      <widget class="QLabel" name="label_heat_id">
                                        <property name="text">
                                         <string>-</string>
                                        </property>
@@ -5259,12 +5259,12 @@ QPushButton:disabled {
                                      <item>
                                       <widget class="QLabel" name="label_132">
                                        <property name="text">
-                                        <string>Pdl Number :</string>
+                                        <string>QC Standard:</string>
                                        </property>
                                       </widget>
                                      </item>
                                      <item>
-                                      <widget class="QLabel" name="label_pdl_number">
+                                      <widget class="QLabel" name="label_qc_standard">
                                        <property name="text">
                                         <string>-</string>
                                        </property>
@@ -5280,7 +5280,7 @@ QPushButton:disabled {
                                      <item>
                                       <widget class="QLabel" name="label_223">
                                        <property name="text">
-                                        <string>length :</string>
+                                        <string>Length :</string>
                                        </property>
                                       </widget>
                                      </item>
@@ -5334,7 +5334,70 @@ QPushButton:disabled {
                                       </widget>
                                      </item>
                                      <item>
-                                      <widget class="QLabel" name="sheet_label">
+                                      <widget class="Line" name="line_75">
+                                       <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="label_287">
+                                       <property name="text">
+                                        <string>Length Order:</string>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="label_length_order">
+                                       <property name="text">
+                                        <string>-</string>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="Line" name="line_76">
+                                       <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="label_289">
+                                       <property name="text">
+                                        <string>Width Order:</string>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="label_width_order">
+                                       <property name="text">
+                                        <string>-</string>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="Line" name="line_77">
+                                       <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="label_290">
+                                       <property name="text">
+                                        <string>Thickness Order:</string>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="label_thickness_order">
+                                       <property name="text">
+                                        <string>-</string>
+                                       </property>
+                                      </widget>
+                                     </item>
+                                     <item>
+                                      <widget class="QLabel" name="label_298">
                                        <property name="text">
                                         <string/>
                                        </property>
@@ -8420,22 +8483,22 @@ border-radius: 8px;</string>
                                          <property name="maximumSize">
                                           <size>
                                            <width>16777215</width>
-                                           <height>40</height>
+                                           <height>30</height>
                                           </size>
                                          </property>
                                          <property name="widgetResizable">
                                           <bool>true</bool>
                                          </property>
-                                         <widget class="QWidget" name="scrollAreaWidgetContents_6">
+                                         <widget class="QWidget" name="scrollAreaWidgetContents_12">
                                           <property name="geometry">
                                            <rect>
                                             <x>0</x>
                                             <y>0</y>
-                                            <width>707</width>
-                                            <height>27</height>
+                                            <width>1025</width>
+                                            <height>20</height>
                                            </rect>
                                           </property>
-                                          <layout class="QHBoxLayout" name="horizontalLayout_228">
+                                          <layout class="QHBoxLayout" name="horizontalLayout_364">
                                            <property name="leftMargin">
                                             <number>9</number>
                                            </property>
@@ -8449,123 +8512,93 @@ border-radius: 8px;</string>
                                             <number>0</number>
                                            </property>
                                            <item>
-                                            <widget class="QLabel" name="label_226">
-                                             <property name="sizePolicy">
-                                              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                                               <horstretch>0</horstretch>
-                                               <verstretch>0</verstretch>
-                                              </sizepolicy>
-                                             </property>
+                                            <widget class="QLabel" name="label_357">
                                              <property name="text">
-                                              <string>Sheet ID :</string>
+                                              <string>Plate ID :</string>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_sheet_id_2">
+                                            <widget class="QLabel" name="label_plate_id_2">
                                              <property name="text">
                                               <string>-</string>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="Line" name="line_65">
+                                            <widget class="Line" name="line_145">
                                              <property name="orientation">
                                               <enum>Qt::Vertical</enum>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_heat_number_3">
-                                             <property name="sizePolicy">
-                                              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                                               <horstretch>0</horstretch>
-                                               <verstretch>0</verstretch>
-                                              </sizepolicy>
-                                             </property>
+                                            <widget class="QLabel" name="label_heat_number_7">
                                              <property name="text">
-                                              <string>Heat Number :</string>
+                                              <string>Order ID:</string>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_heat_number_2">
+                                            <widget class="QLabel" name="label_order_id_2">
                                              <property name="text">
                                               <string>-</string>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="Line" name="line_66">
+                                            <widget class="Line" name="line_146">
                                              <property name="orientation">
                                               <enum>Qt::Vertical</enum>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_228">
-                                             <property name="sizePolicy">
-                                              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                                               <horstretch>0</horstretch>
-                                               <verstretch>0</verstretch>
-                                              </sizepolicy>
-                                             </property>
+                                            <widget class="QLabel" name="label_358">
                                              <property name="text">
-                                              <string>Ps Number :</string>
+                                              <string>Heat ID:</string>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_ps_number_2">
+                                            <widget class="QLabel" name="label_heat_id_2">
                                              <property name="text">
                                               <string>-</string>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="Line" name="line_67">
+                                            <widget class="Line" name="line_147">
                                              <property name="orientation">
                                               <enum>Qt::Vertical</enum>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_229">
-                                             <property name="sizePolicy">
-                                              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                                               <horstretch>0</horstretch>
-                                               <verstretch>0</verstretch>
-                                              </sizepolicy>
-                                             </property>
+                                            <widget class="QLabel" name="label_359">
                                              <property name="text">
-                                              <string>Pdl Number :</string>
+                                              <string>QC Standard:</string>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_pdl_number_2">
+                                            <widget class="QLabel" name="label_qc_standard_2">
                                              <property name="text">
                                               <string>-</string>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="Line" name="line_68">
+                                            <widget class="Line" name="line_148">
                                              <property name="orientation">
                                               <enum>Qt::Vertical</enum>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_230">
-                                             <property name="sizePolicy">
-                                              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                                               <horstretch>0</horstretch>
-                                               <verstretch>0</verstretch>
-                                              </sizepolicy>
-                                             </property>
+                                            <widget class="QLabel" name="label_360">
                                              <property name="text">
-                                              <string>length :</string>
+                                              <string>Length :</string>
                                              </property>
                                             </widget>
                                            </item>
@@ -8577,20 +8610,14 @@ border-radius: 8px;</string>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="Line" name="line_69">
+                                            <widget class="Line" name="line_149">
                                              <property name="orientation">
                                               <enum>Qt::Vertical</enum>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_231">
-                                             <property name="sizePolicy">
-                                              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                                               <horstretch>0</horstretch>
-                                               <verstretch>0</verstretch>
-                                              </sizepolicy>
-                                             </property>
+                                            <widget class="QLabel" name="label_361">
                                              <property name="text">
                                               <string>Width :</string>
                                              </property>
@@ -8604,20 +8631,14 @@ border-radius: 8px;</string>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="Line" name="line_70">
+                                            <widget class="Line" name="line_150">
                                              <property name="orientation">
                                               <enum>Qt::Vertical</enum>
                                              </property>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="label_232">
-                                             <property name="sizePolicy">
-                                              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                                               <horstretch>0</horstretch>
-                                               <verstretch>0</verstretch>
-                                              </sizepolicy>
-                                             </property>
+                                            <widget class="QLabel" name="label_362">
                                              <property name="text">
                                               <string>Thickness :</string>
                                              </property>
@@ -8631,7 +8652,70 @@ border-radius: 8px;</string>
                                             </widget>
                                            </item>
                                            <item>
-                                            <widget class="QLabel" name="sheet_label_2">
+                                            <widget class="Line" name="line_151">
+                                             <property name="orientation">
+                                              <enum>Qt::Vertical</enum>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="QLabel" name="label_363">
+                                             <property name="text">
+                                              <string>Length Order:</string>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="QLabel" name="label_length_order_2">
+                                             <property name="text">
+                                              <string>-</string>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="Line" name="line_152">
+                                             <property name="orientation">
+                                              <enum>Qt::Vertical</enum>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="QLabel" name="label_364">
+                                             <property name="text">
+                                              <string>Width Order:</string>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="QLabel" name="label_width_order_2">
+                                             <property name="text">
+                                              <string>-</string>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="Line" name="line_153">
+                                             <property name="orientation">
+                                              <enum>Qt::Vertical</enum>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="QLabel" name="label_365">
+                                             <property name="text">
+                                              <string>Thickness Order:</string>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="QLabel" name="label_thickness_order_2">
+                                             <property name="text">
+                                              <string>-</string>
+                                             </property>
+                                            </widget>
+                                           </item>
+                                           <item>
+                                            <widget class="QLabel" name="label_366">
                                              <property name="text">
                                               <string/>
                                              </property>

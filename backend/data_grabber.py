@@ -622,7 +622,7 @@ if __name__ == "__main__":
                 sheet_id=996,
                 main_path='/home/reyhane/PycharmProjects/trainApp_oxin8/oxin_image_grabber',
                 image_format='.png',
-                heat_number=0,
+                heat_id=0,
                 ps_number=1111,
                 pdl_number=2222,
                 width=480,

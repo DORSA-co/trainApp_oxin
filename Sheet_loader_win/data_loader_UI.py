@@ -64,14 +64,14 @@ class data_loader(QMainWindow, ui):
         self.open_folder_image.clicked.connect(self.open_folder_images)
        
         self.btn_id_search.clicked.connect(self.search_id)
+        self.btn_order_search.clicked.connect(self.search_order)
         self.btn_heat_search.clicked.connect(self.search_heat)
-        self.btn_pdln_search.clicked.connect(self.search_pdln)
-        self.btn_psn_search.clicked.connect(self.search_psn)
+        self.btn_qc_search.clicked.connect(self.search_qc)
         
         self.selected=-1
         self.counter=-1
         
-        self.tables=[self.list_show_id,self.list_heat_number,self.list_ps_number,self.list_pdl_number]
+        self.tables=[self.list_plate_id, self.list_order_id, self.list_heat_id,self.list_qc_standard]
 
         self.help_win = None
         self._old_pos = None
@@ -139,10 +139,10 @@ class data_loader(QMainWindow, ui):
                         table_item.setCheckState(Qt.CheckState.Unchecked)
                     table_item.setTextAlignment(Qt.AlignCenter)
                     self.tableWidget_dataset.setItem(row,i,table_item)
-                self.list_show_id.insertItem(row, str(sheet.sheet_id))   # add id in listwidget
-                self.list_heat_number.insertItem(row, str(sheet.heat_number))   # add id in listwidget
-                self.list_ps_number.insertItem(row, str(sheet.ps_number))   # add id in listwidget
-                self.list_pdl_number.insertItem(row, str(sheet.pdl_number))   # add id in listwidget
+                self.list_plate_id.insertItem(row, str(sheet.sheet_id))   # add id in listwidget
+                self.list_order_id.insertItem(row, str(sheet.order_id))   # add id in listwidget
+                self.list_heat_id.insertItem(row, str(sheet.heat_id))   # add id in listwidget
+                self.list_qc_standard.insertItem(row, str(sheet.qc_standard))   # add id in listwidget
 
             self.table_sheets = sheets
 
@@ -160,12 +160,11 @@ class data_loader(QMainWindow, ui):
                 code=texts_codes.SubTypes['show_sheets_info_eror'], message=texts.MESSEGES["show_sheet_info_eror"]["en"], level=5
             )
 
-
     def show_detail(self):
         exist = False
         text = ''
-        for i in range(self.tableWidget_dataset.rowCount()):    
-            if self.tableWidget_dataset.item(i, 0).checkState() == QtCore.Qt.Checked:
+        for i in range(self.tableWidget_dataset.rowCount()):
+            if self.tableWidget_dataset.item(i, 0).checkState() == Qt.CheckState.Checked:
                 if not os.path.isdir(self.table_sheets[i].get_path()):
                     text += texts.ERRORS['sheet_not_exist'][self.language].format(self.table_sheets[i].get_id())
                     text += '\n'
@@ -201,17 +200,6 @@ class data_loader(QMainWindow, ui):
     def get_selected_sheetid(self):
         return self.selected_list
 
-    def load_images(self):
-        
-        self.path=os.path.join(self.par_path,str(self.records[self.selected][0]))
-
-        self.coil_number=str(self.records[self.selected][0])
-        self.heat_no=str(self.records[self.selected][1])
-        self.psn=str(self.records[self.selected][2])
-        self.pdln=str(self.records[self.selected][3])
-        self.length=str(self.records[self.selected][4])
-        self.details={'id':self.coil_number,'heat_no':self.heat_no,'psn':self.psn,'pdln':self.pdln,'length':self.length}
-
     def open_folder_images(self):
         select=self.load()
         if len(select) != 1:
@@ -240,8 +228,8 @@ class data_loader(QMainWindow, ui):
 
     #LOAD DATBASE --------------
     def show_dataset(self):
-        self.hh_Labels=['ID', 'Date', 'Time', 'HEAT Number', 'Product Schedule Number', 'Product Drift Line Number', 'Length', 'Width', 'Thickness']
-        self.hh_Labels_fa=['شناسه', 'تاریخ', 'زمان', 'شماره سفارش', 'شماره سفارش', 'شماره سفارش', 'طول', 'عرض', 'ضخامت']
+        self.hh_Labels=['Plate ID', 'Date', 'Time', 'Order ID', 'Heat ID', 'QC STANDARD', 'Length', 'Width', 'Thickness', 'Length Order', 'Width Order', 'Thickness Order']
+        self.hh_Labels_fa=['شناسه', 'تاریخ', 'زمان', 'شماره سفارش', 'شماره ذوب', 'کنترل کیفی', 'طول', 'عرض', 'ضخامت', 'طول سفارش', 'عرض سفارش', 'ضخامت سفارش']
         if self.language=='en':
             self.tableWidget_dataset.setHorizontalHeaderLabels(self.hh_Labels)
         if self.language=='fa':
@@ -252,7 +240,7 @@ class data_loader(QMainWindow, ui):
 
     def search_id(self):
         try:
-            itemsTextList =  [str(self.list_show_id.item(i).text()) for i in range(self.list_show_id.count())]
+            itemsTextList =  [str(self.list_plate_id.item(i).text()) for i in range(self.list_plate_id.count())]
 
             if self.line_search_id.text() in itemsTextList:
 
@@ -270,13 +258,13 @@ class data_loader(QMainWindow, ui):
 
     def search_heat(self):
         try:
-            itemsTextList =  [str(self.list_heat_number.item(i).text()) for i in range(self.list_heat_number.count())]
+            itemsTextList =  [str(self.list_heat_id.item(i).text()) for i in range(self.list_heat_id.count())]
 
             if self.line_search_heat.text() in itemsTextList:
 
                 sheets = []
                 for sheet in self.load_sheets:
-                    if sheet.get_heatnumber() == self.line_search_heat.text():
+                    if sheet.get_heatid() == self.line_search_heat.text():
                         sheets.append(sheet)
                 self.show_sheets_info(sheets)
                 self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
@@ -286,48 +274,45 @@ class data_loader(QMainWindow, ui):
         except:
             self.srarch_eror('search_heat')
 
-    def search_psn(self):
+    def search_order(self):
         try:
-            itemsTextList =  [str(self.list_ps_number.item(i).text()) for i in range(self.list_ps_number.count())]
+            itemsTextList =  [str(self.list_order_id.item(i).text()) for i in range(self.list_order_id.count())]
 
-            if self.line_search_psn.text() in itemsTextList:
+            if self.line_search_order.text() in itemsTextList:
 
                 sheets = []
                 for sheet in self.load_sheets:
 
-                    if sheet.get_psnumber() == self.line_search_psn.text():
+                    if sheet.get_orderid() == self.line_search_order.text():
                         sheets.append(sheet)
                 self.show_sheets_info(sheets)
                 self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
             else:
-                self.set_warning(texts.WARNINGS['UNAV_PSN'][self.language], level=2)
+                self.set_warning(texts.WARNINGS['UNAV_ORDER'][self.language], level=2)
         except:
-            self.srarch_eror('search_psn')
+            self.srarch_eror('search_order')
             
-    def search_pdln(self):
+    def search_qc(self):
         try:
-            itemsTextList =  [str(self.list_pdl_number.item(i).text()) for i in range(self.list_pdl_number.count())]
+            itemsTextList =  [str(self.list_qc_standard.item(i).text()) for i in range(self.list_qc_standard.count())]
 
-            if self.line_search_pdln.text() in itemsTextList:
+            if self.line_search_qc.text() in itemsTextList:
 
                 sheets = []
                 for sheet in self.load_sheets:
-                    if sheet.get_pdlnumber() == self.line_search_pdln.text():
+                    if sheet.get_qcstandard() == self.line_search_qc.text():
                         sheets.append(sheet)
                 self.show_sheets_info(sheets)
                 self.set_warning(texts.MESSEGES['search_success'][self.language], level=1)
             else:
-                self.set_warning(texts.WARNINGS['UNAV_PDLN'][self.language], level=2)
+                self.set_warning(texts.WARNINGS['UNAV_QC'][self.language], level=2)
         except:
-            self.srarch_eror('search_pdln')
+            self.srarch_eror('search_qc')
 
     def srarch_eror(self,name):
-
         self.main_ui_obj.logger.create_new_log(
                 code=texts_codes.SubTypes['sheet_window_search_error'], message=texts.ERRORS["search_error"]["en"]+'  '+str(name), level=5
             )
-
-
 
     def buttonClick(self):
         # GET BUTTON CLICKED
@@ -338,7 +323,6 @@ class data_loader(QMainWindow, ui):
             self.toggleMenu(True)
 
         # #print BTN NAME
-
 
     def set_warning(self, text, name='warning', level=1):
         """Show warning with time delay 2 second , all labels for show warning has been set here"""
@@ -374,9 +358,9 @@ class data_loader(QMainWindow, ui):
 
     def reset_search_lines(self):
         self.line_search_id.clear()
+        self.line_search_order.clear()
         self.line_search_heat.clear()
-        self.line_search_psn.clear()
-        self.line_search_pdln.clear()
+        self.line_search_qc.clear()
 
 if __name__ == "__main__":
     app = QApplication()

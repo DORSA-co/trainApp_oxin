@@ -80,7 +80,7 @@ class Collector():
 
 
         self.converter = pylon.ImageFormatConverter()
-        self.converter.OutputPixelFormat = pylon.PixelType_BGR8packed
+        self.converter.OutputPixelFormat = pylon.PixelType_Mono8
         self.converter.OutputBitAlignment = pylon.OutputBitAlignment_MsbAligned
 
         for device in self.__tl_factory.EnumerateDevices():
@@ -137,9 +137,12 @@ class Collector():
 
                     self.camera.ExposureTimeAbs.SetValue(self.exposure)
                     self.camera.GainRaw.SetValue(self.gain)
-                        
-                    # self.camera.Width.SetValue(self.width)
-                    # self.camera.Height.SetValue(self.height)
+                    
+
+                    self.camera.StopGrabbing()
+                    self.camera.Width.SetValue(self.width)
+                    self.camera.Height.SetValue(self.height)
+                    self.camera.StartGrabbing(pylon.GrabStrategy_LatestImageOnly) 
 
                     self.camera.OffsetX.SetValue(self.offset_x)
                     self.camera.OffsetY.SetValue(self.offset_y)
@@ -359,30 +362,30 @@ class Collector():
                     img=image.Array
 
                 else:
-                    img=np.zeros([1200,1920,3],dtype=np.uint8)
+                    img=np.zeros([1200,1920],dtype=np.uint8)
                     self.cont_eror+=1
                     print("Error not GrabSucceeded: ", grabResult.ErrorCode, grabResult.ErrorDescription)
                     Flag=False
 
             else:
                     print('Error not grabbing')
-                    img=np.zeros([1200,1920,3],dtype=np.uint8)
+                    img=np.zeros([1200,1920],dtype=np.uint8)
                     Flag=False
 
         except:
             #print('Time out')
-            img=np.zeros([1200,1920,3],dtype=np.uint8)
+            img=np.zeros([1200,1920],dtype=np.uint8)
             Flag=False
 
         # cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
         # cv2.waitKey(50)
         if Flag:
             #print('yes')
-            img = cv2.flip(img, 1)
+            # img = cv2.flip(img, 1)
             return True, img
         else:
             #print('no')
-            return False, np.zeros([1200,1920,3],dtype=np.uint8)
+            return False, np.zeros([1200,1920],dtype=np.uint8)
 
 
 

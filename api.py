@@ -345,9 +345,6 @@ class API:
         # self.update_plc_parms()
         self.plc_timer = QTimer()
         self.plc_timer.timeout.connect(self.update_sensor_and_temp)
-        # self.plc_update = QTimer()
-        # self.plc_update.timeout.connect(self.test_t)
-
         self.update_plc_values()
 
 
@@ -363,6 +360,8 @@ class API:
 
         # Level2 connection
         self.l2_connection = level2_connection.connection_level2()
+        self.l2_connection.create_connection()
+        self.start_level2_threads()
 
         # PBT
 
@@ -455,7 +454,8 @@ class API:
                     self.s_api.clear_filters()
                     if self.sensor:
                         pass
-                        # self.s_api.add_filter(self.current_sheet_id) ###############
+                        sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
+                        self.s_api.add_filter(sheet_id)
                     self.s_api.start()
                     self.ui.logger.create_new_log(
                         code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"], level=1
@@ -738,7 +738,7 @@ class API:
                 self.current_c_model["weights_path"],
             )  # path pipline null
             ret = self.db.add_pipline(data)
-            # #print('ret',ret)
+
             return ret
 
         except:
@@ -3602,7 +3602,7 @@ class API:
     def start_grab_camera(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
         for camera in connected_cameras:
-            print('grabed')
+            # print('grabed')
             connected_cameras[camera].start_grabbing()
 
     def start_capture_func(self, disable_ui=True):
@@ -3665,9 +3665,10 @@ class API:
         # except:
         #     pass
         try:
-            _, _, speed, _ = self.l2_connection.get_full_info()  # get data from level2
-        except:
-            pass
+            _, _, data = self.l2_connection.get_full_info()  # get data from level2
+            speed = float(data['speed'])
+        except Exception as e:
+            raise e
         if speed > 0:
             self.ImageManager.start()
         self.live_timer.start(self.ui.update_timer_live_frame)
@@ -3695,9 +3696,10 @@ class API:
 
     def grab_image(self):
         try:
-            _, _, speed, _ = self.l2_connection.get_full_info()  # get data from level2
-        except:
-            pass
+            _, _, data = self.l2_connection.get_full_info()  # get data from level2
+            speed = float(data['speed'])
+        except Exception as e:
+            raise e
         if speed > 0:
             self.ImageManager.stop()
             self.ImageManager.start()
@@ -6217,6 +6219,10 @@ class API:
         threading.Timer(1,self.get_sensor).start()
         threading.Timer(1,self.get_temp_and_switch).start()
 
+    def start_level2_threads(self):
+        self.level2_thread = threading.Thread(target=self.l2_connection.get_data)
+        self.level2_thread.start()
+
 
     def update_sensor_and_temp(self):
 
@@ -6271,7 +6277,6 @@ class API:
                     (
                         n_camera,
                         projectors,
-                        speed,
                         details,
                     ) = self.l2_connection.get_full_info()  # get data from level2
                 except:
@@ -6280,7 +6285,7 @@ class API:
                         title=texts.Titles["connection_failed"],
                         message=texts.MESSEGES["connection_failed"],
                     )
-
+                print('%%%%%%'*5, details)
                 self.ImageManager.update_sheet(n_camera, details)
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)

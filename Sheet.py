@@ -8,12 +8,15 @@ class Sheet:
                 sheet_id=None,
                 main_path=None,
                 image_format=None,
-                heat_number=None,
-                ps_number=None,
-                pdl_number=None,
+                order_id=None,
+                heat_id=None,
+                qc_standard=None,
                 width=None,
                 length=None,
                 thickness=None,
+                width_order=None,
+                length_order=None,
+                thickness_order=None,
                 date=None,
                 time=None,
                 user=None,
@@ -25,12 +28,15 @@ class Sheet:
         self.sheet_id = sheet_id
         self.main_path = main_path
         self.image_format = image_format
-        self.heat_number = heat_number
-        self.ps_number = ps_number #product scechule number
-        self.pdl_number = pdl_number #product d??? number
+        self.order_id = order_id
+        self.heat_id = heat_id
+        self.qc_standard = qc_standard 
         self.width = width
         self.length = length
         self.thickness = thickness
+        self.width_order = width_order
+        self.length_order = length_order
+        self.thickness_order = thickness_order
         self.date = date
         self.time = time
         self.user = user
@@ -42,14 +48,14 @@ class Sheet:
     def set_id(self,sheet_id):
         self.sheet_id = sheet_id
 
-    def set_heatnumber(self, heat_num):
-        self.heat_number = heat_num
+    def set_orderid(self, order_id):
+        self.order_id = order_id
 
-    def set_pdlnumber(self,num):
-        self.pdl_number = num
-    
-    def set_psnumber(self, num):
-        self.ps_number = num
+    def set_heatid(self, heat_id):
+        self.heat_id = heat_id
+
+    def set_qcstandard(self, qc_standard):
+        self.qc_standard = qc_standard
 
     def set_width(self, w):
         self.width = w
@@ -59,6 +65,15 @@ class Sheet:
 
     def set_thickness(self, t):
         self.thickness = t
+
+    def set_widthorder(self, w_order):
+        self.width_order = w_order
+
+    def set_lengthorder(self, l_order):
+        self.length_order = l_order
+
+    def set_thicknessorder(self, t_order):
+        self.thickness_order = t_order
 
     def set_dimentions(self, w, l, t):
         self.width = w
@@ -93,15 +108,15 @@ class Sheet:
     #---------------------------------------------------------------------------------
     def get_id(self):
         return self.sheet_id
-
-    def get_heatnumber(self):
-        return self.heat_number
-
-    def get_pdlnumber(self):
-        return self.pdl_number
     
-    def get_psnumber(self):
-        return self.ps_number
+    def get_orderid(self):
+        return self.order_id
+
+    def get_heatid(self):
+        return self.heat_id
+
+    def get_qcstandard(self):
+        return self.qc_standard
 
     def get_width(self):
         return self.width
@@ -111,6 +126,15 @@ class Sheet:
 
     def get_thickness(self):
         return self.thickness
+
+    def get_widthorder(self):
+        return self.width_order
+
+    def get_lengthorder(self):
+        return self.length_order
+
+    def get_thicknessorder(self):
+        return self.thickness_order
 
     def get_dimentions(self):
         return self.width, self.length, self.thickness
@@ -154,11 +178,13 @@ class Sheet:
             'sheet_id':self.sheet_id,
             'date': self.get_date_string(),
             'time': self.get_time_string(),
-            'heat_number': self.heat_number,
-            'ps_number': self.ps_number,
-            'pdl_number': self.pdl_number,
+            'order_id': self.order_id,
+            'heat_id': self.heat_id,
+            'qc_standard': self.qc_standard,
             'length': self.length,
             'width' : self.width,
             'thickness': self.thickness,
-            #'order number': self.order_numb
+            'length_order': self.length_order,
+            'width_order' : self.width_order,
+            'thickness_order': self.thickness_order,
         }

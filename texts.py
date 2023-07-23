@@ -547,14 +547,14 @@ WARNINGS = {
 
     'SELECT_SHEET': {'fa': ' لطفا یک ورق را انتخاب کنید  ',
                         'en': ' Please select one sheet '},
-    'UNAV_ID': {'fa': ' شناسه ی وارد شده دردسترس نیست ',
-                        'en': ' The entered ID is not available '},
-    'UNAV_HEAT': {'fa': ' شماره سفارش وارد شده دردسترس نیست ',
-                        'en': ' The entered HEAT number is not available '},
-    'UNAV_PSN': {'fa': ' شماره سفارش وارد شده دردسترس نیست ',
-                        'en': ' The entered PS number is not available '},
-    'UNAV_PDLN': {'fa': ' شماره سفارش وارد شده دردسترس نیست ',
-                        'en': ' The entered PDL number is not available '},
+    'UNAV_ID': {'fa': ' شماره ورق وارد شده دردسترس نیست ',
+                        'en': ' The entered Plate ID is not available '},
+    'UNAV_ORDER': {'fa': ' شماره سفارش وارد شده دردسترس نیست ',
+                        'en': ' The entered Order ID is not available '},
+    'UNAV_HEAT': {'fa': ' شماره ذوب وارد شده دردسترس نیست ',
+                        'en': ' The entered Heat ID is not available '},
+    'UNAV_QC': {'fa': ' مقدار کنترل کیفی وارد شده دردسترس نیست ',
+                        'en': ' The entered QC Standard value is not available '},
 
     'SET_DATASET_TITLE': {'fa': ' مجموعه داده پیش فرض ',
                           'en': ' Default dataset '},
@@ -1044,26 +1044,35 @@ Titles = {
         'creditsLabel': {'fa': "تهیه شده توسط : شرکت درصا",
                         'en': 'By: Dorsa-co'},
 
-        'Sheet ID :': {'fa': " : شماره ورق",
-                        'en': 'Sheet ID : '},
+        'Plate ID :': {'fa': " : شماره ورق",
+                        'en':'Plate ID : '},
 
-        'Heat Number :': {'fa': " : شماره سفارش",
-                        'en': 'Heat Number : '},
+        'Order ID :': {'fa': " : شماره سفارش",
+                        'en': 'Order ID : '},
 
-        'Ps Number :': {'fa': " : شماره  سفارش",
-                        'en': 'Ps Number : '},
+        'Heat ID :': {'fa': " : شماره  ذوب",
+                        'en': 'Heat ID : '},
 
-        'Pdl Number :': {'fa': " : شماره  سفارش",
-                        'en': 'Pdl Number : '},
+        'QC Standard :': {'fa': " : کنترل کیفی",
+                        'en': 'QC Standard : '},
 
-        'length :': {'fa': " : طول",
-                        'en': 'length :'},
+        'Length :': {'fa': " : طول",
+                        'en': 'Length :'},
 
         'Width :': {'fa': " : عرض",
                         'en': 'Width : '},
 
         'Thickness :': {'fa': " : ضخامت",
                         'en': 'Thickness : '},
+
+        'Length Order :': {'fa': " : طول سفارش",
+                        'en': 'Length Order :'},
+
+        'Width Order :': {'fa': " : عرض سفارش",
+                        'en': 'Width Order : '},
+
+        'Thickness Order :': {'fa': " : ضخامت سفارش",
+                        'en': 'Thickness Order : '},
 
         'start_capture': {'fa': 'شروع نمایش زنده',
                         'en': 'Start Capture'},
@@ -1138,17 +1147,17 @@ Titles = {
         'detail': {'fa': 'جزئیات مجموعه داده',
                 'en': 'Details Of Dataset'},
 
-        'available_ids': {'fa': 'شماره شناسه های در دسترس :',
-                        'en': 'Availabla ID Numbers :'},
+        'available_ids': {'fa': 'شماره ورق های در دسترس :',
+                        'en': 'Available Plate IDs :'},
 
-        'available_heats': {'fa': 'شماره سفارش های در دسترس :',
-                                'en': 'Availabl HEAT Numbers :'},
+        'available_orders': {'fa': 'شماره سفارش های در دسترس :',
+                                'en': 'Available Order IDs :'},
 
-        'available_psns': {'fa': 'شماره سفارش های در دسترس :',
-                                'en': 'Available Product Schedule Numbers :'},
+        'available_heats': {'fa': 'شماره ذوب های در دسترس :',
+                                'en': 'Available Heat IDs :'},
 
-        'available_pdlns': {'fa': 'شماره سفارش های در دسترس :',
-                                'en': 'Available Product Drift Line Numbers :'},
+        'available_qc': {'fa': 'مقادیر کنترل کیفی در دسترس :',
+                                'en': 'Available QC Standard Values :'},
 
         'number': {'fa': ': شماره',
                 'en': 'Number :'},
@@ -1177,14 +1186,17 @@ Titles = {
         'ID2': {'fa': 'شناسه',
                 'en': 'ID'},
 
-        'heatn': {'fa': 'ش. سفارش',
-                'en': 'HEAT'},
+        'Value': {'fa': ':مقدار',
+                'en': 'Value:'},
 
-        'psn': {'fa': 'ش. سفارش',
-                'en': 'PSN'},
+        'heatn': {'fa': 'ش. ذوب',
+                'en': 'Heat ID'},
 
-        'pdln': {'fa': 'ش. سفارش',
-                'en': 'PDLN'},
+        'ordern': {'fa': 'ش. سفارش',
+                'en': 'Order ID'},
+
+        'qc': {'fa': 'کنترل کیفی',
+                'en': 'QC Standard'},
 
         'role': {'fa': ':نقش',
                 'en': 'Role:'},
@@ -2033,20 +2045,26 @@ def set_title(self, lang):
     self.label_50.setText(Titles['Frame Number'][lang])
     self.creditsLabel.setText(Titles['creditsLabel'][lang])
 
-    self.label_226.setText(Titles['Sheet ID :'][lang])
-    self.label_156.setText(Titles['Sheet ID :'][lang])
-    self.label_heat_number_3.setText(Titles['Heat Number :'][lang])
-    self.label_heat_number_5.setText(Titles['Heat Number :'][lang])
-    self.label_228.setText(Titles['Ps Number :'][lang])
-    self.label_159.setText(Titles['Ps Number :'][lang])
-    self.label_229.setText(Titles['Pdl Number :'][lang])
-    self.label_132.setText(Titles['Pdl Number :'][lang])
-    self.label_230.setText(Titles['length :'][lang])
-    self.label_223.setText(Titles['length :'][lang])
-    self.label_231.setText(Titles['Width :'][lang])
+    self.label_357.setText(Titles['Plate ID :'][lang])
+    self.label_156.setText(Titles['Plate ID :'][lang])
+    self.label_heat_number_7.setText(Titles['Order ID :'][lang])
+    self.label_heat_number_5.setText(Titles['Order ID :'][lang])
+    self.label_358.setText(Titles['Heat ID :'][lang])
+    self.label_159.setText(Titles['Heat ID :'][lang])
+    self.label_359.setText(Titles['QC Standard :'][lang])
+    self.label_132.setText(Titles['QC Standard :'][lang])
+    self.label_360.setText(Titles['Length :'][lang])
+    self.label_223.setText(Titles['Length :'][lang])
+    self.label_361.setText(Titles['Width :'][lang])
     self.label_227.setText(Titles['Width :'][lang])
-    self.label_232.setText(Titles['Thickness :'][lang])
+    self.label_362.setText(Titles['Thickness :'][lang])
     self.label_225.setText(Titles['Thickness :'][lang])
+    self.label_363.setText(Titles['Length Order :'][lang])
+    self.label_287.setText(Titles['Length Order :'][lang])
+    self.label_364.setText(Titles['Width Order :'][lang])
+    self.label_289.setText(Titles['Width Order :'][lang])
+    self.label_365.setText(Titles['Thickness Order :'][lang])
+    self.label_290.setText(Titles['Thickness Order :'][lang])
 
     self.checkBox_suggested_defects.setText(Titles['show_suggested_defects'][lang])
     self.next_coil_btn.setToolTip(Titles['next_sheet'][lang])
@@ -2090,9 +2108,9 @@ def set_title(self, lang):
     
     self.load_sheets_win.groupBox.setTitle(Titles['search by'][lang])
     self.load_sheets_win.btn_id_search.setText(Titles['search'][lang])
-    self.load_sheets_win.btn_pdln_search.setText(Titles['search'][lang])
-    self.load_sheets_win.btn_psn_search.setText(Titles['search'][lang])
+    self.load_sheets_win.btn_order_search.setText(Titles['search'][lang])
     self.load_sheets_win.btn_heat_search.setText(Titles['search'][lang])
+    self.load_sheets_win.btn_qc_search.setText(Titles['search'][lang])
 
     self.load_sheets_win.btn_refresh.setText(Titles['refresh'][lang])
     self.load_sheets_win.open_folder_image.setText(Titles['open_images'][lang])
@@ -2101,20 +2119,20 @@ def set_title(self, lang):
     self.load_sheets_win.groupBox_2.setTitle(Titles['detail'][lang])
 
     self.load_sheets_win.label_13.setText(Titles['available_ids'][lang])
-    self.load_sheets_win.label_5.setText(Titles['available_heats'][lang])
-    self.load_sheets_win.label_6.setText(Titles['available_psns'][lang])
-    self.load_sheets_win.label_9.setText(Titles['available_pdlns'][lang])
+    self.load_sheets_win.label_5.setText(Titles['available_orders'][lang])
+    self.load_sheets_win.label_6.setText(Titles['available_heats'][lang])
+    self.load_sheets_win.label_9.setText(Titles['available_qc'][lang])
 
     self.load_sheets_win.label_12.setText(Titles['ID'][lang])
-    self.load_sheets_win.label_4.setText(Titles['number'][lang])
-    self.load_sheets_win.label_7.setText(Titles['number'][lang])
-    self.load_sheets_win.label_8.setText(Titles['number'][lang])
+    self.load_sheets_win.label_4.setText(Titles['ID'][lang])
+    self.load_sheets_win.label_7.setText(Titles['ID'][lang])
+    self.load_sheets_win.label_8.setText(Titles['Value'][lang])
     self.load_sheets_win.show_dataset()
 
     self.load_sheets_win.coil_search.setTabText(0, Titles['ID2'][lang])
-    self.load_sheets_win.coil_search.setTabText(1, Titles['heatn'][lang])
-    self.load_sheets_win.coil_search.setTabText(2, Titles['psn'][lang])
-    self.load_sheets_win.coil_search.setTabText(3, Titles['pdln'][lang])
+    self.load_sheets_win.coil_search.setTabText(1, Titles['ordern'][lang])
+    self.load_sheets_win.coil_search.setTabText(2, Titles['heatn'][lang])
+    self.load_sheets_win.coil_search.setTabText(3, Titles['qc'][lang])
 
 
     # User Profile Page

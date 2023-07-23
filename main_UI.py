@@ -1700,49 +1700,49 @@ class UI_main_window(QMainWindow, ui):
         """
         try:
             if tab_live:
-                self.set_label(self.label_sheet_id, str(details["sheet_id"]))
+                self.set_label(self.label_plate_id, str(details["PLATE_ID"]))
             else:
-                self.set_label(self.label_sheet_id_2, str(details["sheet_id"]))
+                self.set_label(self.label_plate_id_2, str(details["PLATE_ID"]))
         except Exception as e:
-            self.set_label(self.label_sheet_id_2, "-")
+            self.set_label(self.label_plate_id_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
             )
         try:
             if tab_live:
-                self.set_label(self.label_heat_number, str(details["heat_number"]))
+                self.set_label(self.label_order_id, str(details["ORDER_ID"]))
             else:
-                self.set_label(self.label_heat_number_2, str(details["heat_number"]))
+                self.set_label(self.label_order_id_2, str(details["ORDER_ID"]))
         except Exception as e:
-            self.set_label(self.label_heat_number_2, "-")
+            self.set_label(self.label_order_id_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
             )
         try:
             if tab_live:
-                self.set_label(self.label_ps_number, str(details["ps_number"]))
+                self.set_label(self.label_heat_id, str(details["HEAT_ID"]))
             else:
-                self.set_label(self.label_ps_number_2, str(details["ps_number"]))
+                self.set_label(self.label_heat_id_2, str(details["HEAT_ID"]))
         except Exception as e:
-            self.set_label(self.label_ps_number_2, "-")
+            self.set_label(self.label_heat_id_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
             )
         try:
             if tab_live:
-                self.set_label(self.label_pdl_number, str(details["pdl_number"]))
+                self.set_label(self.label_qc_standard, str(details["QC_STANDARD"]))
             else:
-                self.set_label(self.label_pdl_number_2, str(details["pdl_number"]))
+                self.set_label(self.label_qc_standard_2, str(details["QC_STANDARD"]))
         except Exception as e:
-            self.set_label(self.label_pdl_number_2, "-")
+            self.set_label(self.label_qc_standard_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
             )
         try:
             if tab_live:
-                self.set_label(self.label_length, str(details["length"]))
+                self.set_label(self.label_length, str(details["LENGHT"]))
             else:
-                self.set_label(self.label_length_2, str(details["length"]))
+                self.set_label(self.label_length_2, str(details["LENGHT"]))
         except Exception as e:
             self.set_label(self.label_length_2, "-")
             self.logger.create_new_log(
@@ -1750,9 +1750,9 @@ class UI_main_window(QMainWindow, ui):
             )
         try:
             if tab_live:
-                self.set_label(self.label_width, str(details["width"]))
+                self.set_label(self.label_width, str(details["WIDTH"]))
             else:
-                self.set_label(self.label_width_2, str(details["width"]))
+                self.set_label(self.label_width_2, str(details["WIDTH"]))
         except Exception as e:
             self.set_label(self.label_width_2, "-")
             self.logger.create_new_log(
@@ -1760,11 +1760,41 @@ class UI_main_window(QMainWindow, ui):
             )
         try:
             if tab_live:
-                self.set_label(self.label_thickness, str(details["thickness"]))
+                self.set_label(self.label_thickness, str(details["THICKNESS"]))
             else:
-                self.set_label(self.label_thickness_2, str(details["thickness"]))
+                self.set_label(self.label_thickness_2, str(details["THICKNESS"]))
         except Exception as e:
             self.set_label(self.label_thickness_2, "-")
+            self.logger.create_new_log(
+                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+            )
+        try:
+            if tab_live:
+                self.set_label(self.label_length_order, str(details["LENGHT_ORDER"]))
+            else:
+                self.set_label(self.label_length_order_2, str(details["LENGHT_ORDER"]))
+        except Exception as e:
+            self.set_label(self.label_length_order_2, "-")
+            self.logger.create_new_log(
+                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+            )
+        try:
+            if tab_live:
+                self.set_label(self.label_width_order, str(details["WIDTH_ORDER"]))
+            else:
+                self.set_label(self.label_width_order_2, str(details["WIDTH_ORDER"]))
+        except Exception as e:
+            self.set_label(self.label_width_order_2, "-")
+            self.logger.create_new_log(
+                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+            )
+        try:
+            if tab_live:
+                self.set_label(self.label_thickness_order, str(details["THICKNESS_ORDER"]))
+            else:
+                self.set_label(self.label_thickness_order_2, str(details["THICKNESS_ORDER"]))
+        except Exception as e:
+            self.set_label(self.label_thickness_order_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
             )

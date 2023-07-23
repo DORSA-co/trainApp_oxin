@@ -25,7 +25,7 @@ class dataBaseUtils():
             sheet_id    = record['sheet_id'],
             main_path   = record['main_path'],
             image_format= record['image_format'],
-            heat_number = record['heat_number'],
+            heat_id = record['heat_id'],
             ps_number   = record['ps_number'],
             pdl_number  = record['pdl_number'],
             width       = record['width'],

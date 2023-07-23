@@ -529,7 +529,7 @@ INSERT INTO `settings` (`id`, `parent_path`, `suggestions_path`, `path_dataset`,
 CREATE TABLE `sheets_info` (
   `id` int NOT NULL,
   `sheet_id` varchar(45) NOT NULL,
-  `heat_number` varchar(45) DEFAULT NULL,
+  `heat_id` varchar(45) DEFAULT NULL,
   `ps_number` varchar(45) DEFAULT NULL,
   `pdl_number` float DEFAULT NULL,
   `length` float DEFAULT NULL,
@@ -548,7 +548,7 @@ CREATE TABLE `sheets_info` (
 -- Dumping data for table `sheets_info`
 --
 
-INSERT INTO `sheets_info` (`id`, `sheet_id`, `heat_number`, `ps_number`, `pdl_number`, `length`, `width`, `thickness`, `user`, `time`, `date`, `main_path`, `nframe`, `cameras`, `image_format`) VALUES
+INSERT INTO `sheets_info` (`id`, `sheet_id`, `heat_id`, `ps_number`, `pdl_number`, `length`, `width`, `thickness`, `user`, `time`, `date`, `main_path`, `nframe`, `cameras`, `image_format`) VALUES
 (149, '900AG', '347', '835', 944, 9312, 3041, 31, 'root', '07:25:09', '2023/05/27', '/media/reyhane/782F28BD242E495A/oxin_image_grabber', 37, '1-10', '.png'),
 (150, '938ob', '439', '133', 462, 8967, 3046, 26, 'root', '07:25:22', '2023/05/27', '/media/reyhane/782F28BD242E495A/oxin_image_grabber', 31, '1-10', '.png'),
 (151, '9708U', '823', '779', 335, 8089, 2970, 15, 'root', '07:25:33', '2023/05/27', '/media/reyhane/782F28BD242E495A/oxin_image_grabber', 28, '1-10', '.png'),

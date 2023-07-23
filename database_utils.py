@@ -60,15 +60,18 @@ class dataBaseUtils:
         hh, mm, _ = record["time"].split(":")
         sheet_obj = Sheet(
             id=record["id"],
-            sheet_id=record["sheet_id"],
+            sheet_id=record["PLATE_ID"],
             main_path=record["main_path"],
             image_format=record["image_format"],
-            heat_number=record["heat_number"],
-            ps_number=record["ps_number"],
-            pdl_number=record["pdl_number"],
-            width=record["width"],
-            length=record["length"],
-            thickness=record["thickness"],
+            order_id=record["ORDER_ID"],
+            heat_id=record["HEAT_ID"],
+            qc_standard=record["QC_STANDARD"],
+            width=record["WIDTH"],
+            length=record["LENGHT"],
+            thickness=record["THICKNESS"],
+            width_order=record["WIDTH_ORDER"],
+            length_order=record["LENGHT_ORDER"],
+            thickness_order=record["THICKNESS_ORDER"],
             date=datetime.date(int(y), int(m), int(d)),
             time=datetime.time(int(hh), int(mm)),
             user=record["user"],
@@ -91,23 +94,23 @@ class dataBaseUtils:
             db_headers = db_headers + key + ","
         db_headers = "(" + db_headers[:-1] + ")"
 
-        try:
-            res = self.db.add_record(
-                data,
-                table_name=self.sheets_info_tabel,
-                parametrs=db_headers,
-                len_parameters=len(coil_dict),
-            )
-            return "True"
+        # try:
+        res = self.db.add_record(
+            data,
+            table_name=self.sheets_info_tabel,
+            parametrs=db_headers,
+            len_parameters=len(coil_dict),
+        )
+        return "True"
 
-        except:
-            return "Database Error"
+        # except:
+        #     return "Database Error"
 
     # ________________________________________________________________
     #
     # ________________________________________________________________
     def load_sheet(self, id):
-        res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id, int_type=False)
+        res, record = self.db.search(self.sheets_info_tabel, "PLATE_ID", id, int_type=False)
         record = record[0]
 
         return self.build_sheet(record)
@@ -118,7 +121,7 @@ class dataBaseUtils:
     def load_sheets(self, ids):
         sheets = []
         for id in ids:
-            res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id)
+            res, record = self.db.search(self.sheets_info_tabel, "PLATE_ID", id)
             record = record[0]
 
             sheets.append(self.build_sheet(record))
@@ -128,7 +131,7 @@ class dataBaseUtils:
     #
     # ________________________________________________________________
     def load_sheet_date_mainpath(self, id):
-        res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id, int_type=False)
+        res, record = self.db.search(self.sheets_info_tabel, "PLATE_ID", id, int_type=False)
         record = record[0]
 
         return record['date'], record['main_path']
@@ -146,7 +149,7 @@ class dataBaseUtils:
     # ________________________________________________________________
     def report_last_sheets(self, count):
 
-        records = self.db.report_last(self.sheets_info_tabel, "sheet_id", count)
+        records = self.db.report_last(self.sheets_info_tabel, "PLATE_ID", count)
         res = []
         for record in records:
             res.append(self.build_sheet(record))
@@ -1264,7 +1267,6 @@ class dataBaseUtils:
         res, settings = self.db.search(
             self.storage_settings, "id", "1"
         )
-        print('res'*50,res)
         if res == database.SUCCESSFULL:
             return True, settings[0]
         else:

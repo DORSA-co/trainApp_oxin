@@ -94,12 +94,12 @@ class ImageManager(sQObject):
         self.sheet_check_thread.start()
 
     def update_sheet(self, stop_cam, coil_dict):
-        self.sheet_id = str(coil_dict['sheet_id'])
+        self.sheet_id = str(coil_dict['PLATE_ID'])
         self.nframe = [0] * 24
         self.images = [np.zeros((1200, 1920))] * 24
         self.stop_cam = stop_cam
-        if 'length' in coil_dict.keys() and coil_dict['length']:
-            self.last_frame = 1000 - self.check_length_th #int(coil_dict['length'] / self.camera_length) - self.check_length_th
+        if 'LENGHT' in coil_dict.keys() and coil_dict['LENGHT']:
+            self.last_frame = 1000 - self.check_length_th #int(coil_dict['LENGHT'] / self.camera_length) - self.check_length_th
         else:
             self.last_frame = 0
         if self.save_flag:
@@ -119,8 +119,9 @@ class ImageManager(sQObject):
                 self.coil_dict['cameras'] = '0-0'
             else:
                 self.coil_dict['cameras'] = str(self.start_cam) + '-' + str(self.stop_cam)
-            self.coil_dict['Image_format'] = self.image_format
-
+            self.coil_dict['image_format'] = self.image_format
+            
+            self.coil_dict.pop('speed')
             self.db.set_sheet(coil_dict=self.coil_dict)
 
     def threads_func(self, s, d, loop=False):
@@ -139,8 +140,10 @@ class ImageManager(sQObject):
             if self.start_cam <= camera_id <= self.stop_cam or self.start_cam + 12 <= camera_id <= self.stop_cam + 12:
                 if str(camera_id) in list(connected_cameras.keys()):
                     ret, img = connected_cameras[str(camera_id)].getPictures()
-                    # print(camera_id,'  ',ret)
+                
                     if ret:
+                        if camera_id < 13:
+                            img = cv2.flip(img, 1)
                         if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame:
                             check = self.sheet_check(img)
                             if not check:
@@ -159,10 +162,10 @@ class ImageManager(sQObject):
                                 path = sheet_image_path(self.main_path, self.sheet_id, side, str(camera_id - 12),
                                                         str(self.nframe[int(camera_id) - 1]),
                                                         self.image_format)
-                            cv2.imwrite(path, self.images[int(camera_id) - 1][:, :, 1])
+                            cv2.imwrite(path, self.images[int(camera_id) - 1])
                 else:
                     if self.manual_flag:
-                        img = np.zeros((1200, 1920, 3), dtype=np.uint8)
+                        img = np.zeros((1200, 1920), dtype=np.uint8)
                         if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame + 5:
                             img[:, :] = np.random.randint(self.check_th, 255)
                         else:
@@ -188,7 +191,7 @@ class ImageManager(sQObject):
                                 path = sheet_image_path(self.main_path, self.sheet_id, side, str(camera_id - 12),
                                                         str(self.nframe[int(camera_id) - 1]),
                                                         self.image_format)
-                            cv2.imwrite(path, self.images[int(camera_id) - 1][:, :, 1])
+                            cv2.imwrite(path, self.images[int(camera_id) - 1])
                         cv2.waitKey(1)
             if self.stop_capture:
                 return
