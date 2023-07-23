@@ -5868,7 +5868,7 @@ class API:
             )
 
             # self.connect_plc()
-            if self.retry_connecting_plc < 10:
+            if self.retry_connecting_plc < 1:                   # retry connection
                 self.retry_connecting_plc += 1
                 self.ui.change_plc_status(status="retry")
                 self.plc_connection_status = False

@@ -175,16 +175,16 @@ class Sheet:
     
     def get_info_dict(self):
         return {
-            'sheet_id':self.sheet_id,
+            'PLATE_ID':self.sheet_id,
             'date': self.get_date_string(),
             'time': self.get_time_string(),
-            'order_id': self.order_id,
-            'heat_id': self.heat_id,
-            'qc_standard': self.qc_standard,
-            'length': self.length,
-            'width' : self.width,
-            'thickness': self.thickness,
-            'length_order': self.length_order,
-            'width_order' : self.width_order,
-            'thickness_order': self.thickness_order,
+            'ORDER_ID': self.order_id,
+            'HEAT_ID': self.heat_id,
+            'QC_STANDARD': self.qc_standard,
+            'LENGHT': self.length,
+            'WIDTH' : self.width,
+            'THICKNESS': self.thickness,
+            'LENGHT_ORDER': self.length_order,
+            'WIDTH_ORDER' : self.width_order,
+            'THICKNESS_ORDER': self.thickness_order,
         }

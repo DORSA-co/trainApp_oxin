@@ -21,10 +21,10 @@ import segmentation_models as sm
 sm.set_framework("tf.keras")
 sm.framework()
 
-# try:
-from Train_modules import Unet
-# except:
-#     import Unet
+try:
+    from Train_modules import Unet
+except:
+    import Unet
 # sm.set_framework("tf.keras")
 # sm.framework()
 
@@ -540,12 +540,14 @@ def resnet_unet(input_size, learning_rate=1e-3, num_class=1, mode=BINARY):
 
 
 def resnet_cnn(
+        
     input_size,
     learning_rate=1e-3,
     num_class=1,
     mode=BINARY,
     fine_tune_layer=-1,
     weights=None,
+    
 ):
     """Create Resnet model.
 
@@ -564,6 +566,10 @@ def resnet_cnn(
     :return: Resnet CNN model
     :rtype: keras.models.Model
     """
+
+
+
+
     preprocess_input = tf.keras.applications.resnet_v2.preprocess_input
     
     try:
@@ -574,18 +580,25 @@ def resnet_cnn(
             "models/binary/resnet_weights_tf_dim_ordering_tf_kernels_notop.h5"
         )
     except:
+
         base_model = tf.keras.applications.ResNet50V2(
         include_top=False, weights="imagenet", input_shape=input_size
     )
 
+
+
     base_model.trainable = False
 
-    inpt = tf.keras.Input(shape=input_size)
-    inpt_pre = preprocess_input(inpt)
+    inpt = tf.keras.Input(shape=(input_size[0],input_size[1],1))
+
+    inpt2 = tf.keras.layers.Concatenate()([inpt]*3)
+
+    inpt_pre = preprocess_input(inpt2)
 
     # --------------------------------------------
     out_base = base_model(inpt_pre)
     # --------------------------------------------
+
     x = tf.keras.layers.GlobalAveragePooling2D()(out_base)
     x = tf.keras.layers.Dropout(0.2)(x)
     x = tf.keras.layers.Dense(512, activation="relu")(x)
@@ -597,7 +610,7 @@ def resnet_cnn(
         model.load_weights(weights)
     # --------------------------------------------
     if fine_tune_layer > 0:
-        base_model = model.layers[3]
+        base_model = model.layers[4]
         base_model.trainable = True
         for i in range(fine_tune_layer):
             base_model.layers[i].trainable = False
@@ -896,6 +909,6 @@ def efficientnetb2_base_cnn(
 
 
 if __name__ == "__main__":
-    model = resnet_cnn( (128,800,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
+    model = resnet_cnn( (255,255,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
     # model = efficientnetb2_base_cnn((128, 800, 3), num_class=1, mode=BINARY)
     end = True
