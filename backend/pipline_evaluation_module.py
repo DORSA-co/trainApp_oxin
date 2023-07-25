@@ -502,6 +502,7 @@ class Evaluation_worker(QObject):
         self.makedir(path=slider_dirctory, remove_flag=True)
         self.makedir(path=true_dirctory, remove_flag=True)
         self.makedir(path=pred_dirctory, remove_flag=True)
+        # _____________________________________________________
         pred_pbar, true_pbar, yolo_device = self.create_yolo_dataloader(path=path)
         stats = []
         iouv = torch.linspace(0.5, 0.95, 10, device=yolo_device)

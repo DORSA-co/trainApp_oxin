@@ -14068,8 +14068,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>107</width>
-                                              <height>43</height>
+                                              <width>1414</width>
+                                              <height>49</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -14119,8 +14119,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>106</width>
-                                              <height>43</height>
+                                              <width>1414</width>
+                                              <height>49</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_43">
@@ -15897,7 +15897,7 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>337</width>
+                                      <width>340</width>
                                       <height>783</height>
                                      </rect>
                                     </property>

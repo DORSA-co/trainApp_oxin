@@ -333,6 +333,15 @@ class API:
         self.__debug__login__()
 
     def set_pipline_mode(self, key):
+        """
+        set_pipline_mode function for setting type of pipeline,that use yolo vs unet
+
+
+        Parameters
+        ----------
+        key : str
+           has 2 acceptable  values ,yolo and  localization
+        """
         self.pipline_dict = {
             "yolo": [self.ui.page_yolo, self.ui.page_yolo_2],
             "localization": [self.ui.page_localization, self.ui.page_localization_2],
@@ -633,6 +642,16 @@ class API:
             return False
 
     def add_piplines_in_combobox(self, piplinename=-1):
+        """
+        add_piplines_in_combobox add created pipline info to sql ,in pipline table
+
+        check the name of piplie is new,if is new ,add pipline to sql table
+
+        Parameters
+        ----------
+        piplinename:str
+            name of pipline, by default -1
+        """
         db_pipline_names = self.db.get_pipline_names()
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.clear()
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.addItems(db_pipline_names)
@@ -641,6 +660,10 @@ class API:
             self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setCurrentIndex(inx)
 
     def load_image_btn_in_PBT_page(self):
+        """
+        load_image_btn_in_PBT_page concet to toolbuttom for gettinh path of cutomized dataset
+
+        """
         path = QFileDialog.getExistingDirectory(self.ui, "Choose Directory", "")
         self.ui.lineEdit_of_path_displayment_in_PBT_page.setText(path)
         self.customized_datasets = [{"path": path}]
@@ -705,6 +728,16 @@ class API:
         )
 
     def load_table_with_btn(self, obj_name):
+        """
+        load_table_with_btn
+
+            by pushhing toolbuttom update tabel
+
+        Parameters
+        ----------
+        obj_name : str
+            by pushhing toolbuttom update tabel
+        """
         algo_name = obj_name.split("_")[1]
         self.refresh_binary_models_table(
             filter_mode=True, wich_page="PBT", model_type=algo_name
@@ -715,6 +748,16 @@ class API:
         self,
         algo_name,
     ):
+        """
+        remember_selected_item function remember table change between model type changing
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        algo_name :str
+            indicate type of model
+        """
         label = eval(
             "self.ui.{}".format(" LBL_of_selected_" + algo_name + "_model_in_PBT_page")
         )
@@ -726,6 +769,16 @@ class API:
             ).setCheckState(Qt.CheckState.Checked)
 
     def update_evaluation_metrics_table(self, pipline_type):
+        """
+        update_evaluation_metrics_table used for updateing  types of table metrics in page 2 of pbt
+
+        according to the type of pipline chage the cell structure of metrics table
+
+        Parameters
+        ----------
+        pipline_type : str
+            type of pipline:BY,BS,BSC,BSY
+        """
         self.ui.tabWidget.clear()
         metrics_list = pipelines.MODELS_METRICS[pipline_type]
         tab_list = pipelines.TAB_TITLES[pipline_type]
@@ -735,6 +788,16 @@ class API:
             self.update_pipline_table_info(table=table, titles=metrics_list[i])
 
     def update_pipline_table_title(self, pipline_name):
+        """
+        update_pipline_table_title _summary_
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        pipline_name : _type_
+            _description_
+        """
         _, pipline_info = self.db.get_selected_pipline_record(value=pipline_name)
         if pipline_info != []:
             self.len_model_piplines = len(
@@ -792,6 +855,20 @@ class API:
             )
 
     def update_pipline_table_info(self, table, titles, language=False):
+        """
+        update_pipline_table_info for refeshing table in page 2 of pbt
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        table : _type_
+            table obj
+        titles : list
+            list of string we want dispaly as title of colume one
+        language : bool, optional
+            _description_, by default False
+        """
         table.resizeColumnsToContents()
         table.setColumnCount(2)
         table.setRowCount(len(titles))
@@ -807,10 +884,43 @@ class API:
             table.setItem(i, 0, table_item)
 
     def update_table_value(self, table, value, row, col=1):
+        """
+        update_table_value used for chage vales of one item in tables
+
+        used for 3 table in page 2 of pbt
+        for changeing value of each label in colume two
+
+        Parameters
+        ----------
+        table : _type_
+            table obj ,we want to change value of it
+        value : str
+            value we want to dispaly on cell of table
+        row : int
+            number of row of the cell
+        col : int, optional
+            number of colume of the cell, by default 1
+        """
         table_value = sQTableWidgetItem(value)
         table.setItem(row, col, table_value)
 
     def assign_table_column(self, table, number_of_rows, data_list=None, refresh=True):
+        """
+        assign_table_column
+
+        used for assigne value of refreshing tables in page 2 of pbt
+
+        Parameters
+        ----------
+        table : _type_
+            table obj
+        number_of_rows : int
+            number of rows of tabel
+        data_list : list, optional
+            list of data we want to assinge on tables item, by default None
+        refresh : bool, optional
+           indicate we want to refesh table or not , by default True
+        """
         if refresh:
             for i in range(number_of_rows):
                 self.update_table_value(
@@ -827,6 +937,10 @@ class API:
                 )
 
     def refresh_loadDataset_tabs_in_PBT(self):
+        """
+        refresh_loadDataset_tabs_in_PBT used for refresh and reset page one of pbt
+
+        """
         # tabel of data:
         self.update_pipline_table_info(
             table=self.ui.tableWidget_data_info,
@@ -3815,6 +3929,17 @@ class API:
 
     # binary-model history page functions
     def refresh_binary_models_table_onevent(self, wich_page="not PBT"):
+        """
+        refresh_binary_models_table_onevent _summary_
+
+        this function  used for refreshing and loading data of table
+
+        Parameters
+        ----------
+        wich_page : str, optional
+            this value set that function used update ui of pbt part or other part,
+            for using in pbt pass PBT string as value_, by default "not PBT"
+        """
         self.bmodel_tabel_itr = 1
         if wich_page == "PBT":
             self.ui.lineEdit_of_pageNumber_displayment_in_PBT_page.setText(
@@ -4318,6 +4443,16 @@ class API:
         self.image_slider_path = image_slider_path
 
     def pipline_saveing(self, pipline):
+        """
+        pipline_saveing save pipline obj as .json filr
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        pipline :pipline class
+            obj of evalution of pipline
+        """
         pipline.save_json()
 
     def set_signal_from_evaluate_thread(self, percentage):
@@ -4338,8 +4473,6 @@ class API:
         show on ui
         """
 
-        # dataset_path = os.path.dirname(os.path.dirname(self.path_list[0]))
-        # pipline_name = self.pipline_OBJ.get(key=pipelines.PIPELINE_NAME)
         self.pipline_OBJ.set(
             key=pipelines.EVALUATED_DATASETS, value=self.selected_datasets[0]["path"]
         )
@@ -4542,6 +4675,11 @@ class API:
         self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
 
     def reset_pipline(self):
+        """
+        reset_pipline reset all param of the creating pipline process
+
+        _extended_summary_
+        """
         self.pgbar_value = 0
         self.ui.pgbar_pipline_creation.setValue(self.pgbar_value)
         self.ui.frame_120.setFixedHeight(0)
@@ -5140,6 +5278,16 @@ class API:
     def update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
         self, prevornext="False", predict_eval=None
     ):
+        """
+        update_rawANDmask_images_on_loadDataSetSlider_in_PBT for moving slider on image list
+
+        Parameters
+        ----------
+        prevornext : str, optional
+            _description_, by default "False"
+        predict_eval : _type_, optional
+            List of corresponding pred images, by default None
+        """
         # next or prev on list
         if prevornext == "next":
             self.original_image_list_next_func()

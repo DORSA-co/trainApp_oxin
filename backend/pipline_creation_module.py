@@ -10,6 +10,11 @@ from Train_modules.model_creator import translate_model_database_info_to_modelOB
 
 # _______Threading Management Class_______#
 class ModelsCreation_worker(QObject):
+    """
+    ModelsCreation_worker class worker for creating models of pipeline
+
+    """
+
     # vars for handling thread
     finished = Signal()
     model_creation_signal = Signal(int, bool)
@@ -76,6 +81,10 @@ class ModelsCreation_worker(QObject):
         return flag, pipline_type, binary_model_info, LC_model_info
 
     def build_pipline(self):
+        """
+        build_pipline build models of pipline
+
+        """
         # creating pipline object
         self.pipline_OBJ = pipelines.Pipeline(
             pipeline_root=PIPLINES_PATH,

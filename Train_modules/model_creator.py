@@ -27,12 +27,42 @@ TENSORFLOW_MODEL_CREATOR = {
 
 
 class ModelCreator:
+    """
+     class for createting DL models obj
+
+    with obj form the class you can creat all types of DL models of the software
+    """
+
     def __init__(self, model_param, weights, model_type):
+        """
+        __init__ _summary_
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        model_param : dict
+            dictnary of data ,needs for creating model
+        weights : str
+            path of model weigh
+        model_type :str
+            indicate model architecture
+        """
         self.model_param = model_param
         self.weights = weights
         self.model_type = model_type
 
     def yolo_creator(self):
+        """
+        yolo_creator for creating yolo  models
+
+        _extended_summary_
+
+        Returns
+        -------
+        _type_
+            yolo model obj
+        """
         device = select_device(
             self.model_param["device"], batch_size=self.model_param["batch_size"]
         )
@@ -45,6 +75,14 @@ class ModelCreator:
         return model
 
     def tensorflow_model_creator(self):
+        """
+        tensorflow_model_creator for creating tensorflow model obj
+
+        Returns
+        -------
+        _type_
+            tensorflow model obj
+        """
         input_size = self.model_param["input_size"]
         num_class = self.model_param["num_class"]
         mode = self.model_param["mode"]
@@ -72,6 +110,30 @@ def get_model_type(weights_path, device):
 
 
 def translate_model_database_info_to_modelOBJ(info_dict, weights_path, model_type):
+    """
+    translate_model_database_info_to_modelOBJ function used for model creating
+
+    a wraper function for useing  ModelCreator obj
+
+
+    Parameters
+    ----------
+    info_dict : dict
+        for tensorflow model consist of:
+        algo_name
+        input size
+        num_class
+        model:binary or categorical
+    weights_path : str
+        path of model weights
+    model_type : str
+        indicate model architecture
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
     model_creator_OBJ = ModelCreator(
         model_param=info_dict, weights=weights_path, model_type=model_type
     )
