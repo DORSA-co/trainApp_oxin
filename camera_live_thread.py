@@ -121,7 +121,7 @@ class ImageManager(sQObject):
                 self.coil_dict['cameras'] = str(self.start_cam) + '-' + str(self.stop_cam)
             self.coil_dict['image_format'] = self.image_format
             
-            self.coil_dict.pop('speed')
+            # self.coil_dict.pop('speed')
             self.db.set_sheet(coil_dict=self.coil_dict)
 
     def threads_func(self, s, d, loop=False):
@@ -249,7 +249,7 @@ class ImageManager(sQObject):
             fs = sQImage(self.images[self.n_camera_live - 1], self.images[self.n_camera_live - 1].shape[1],
                          self.images[self.n_camera_live - 1].shape[0],
                          self.images[self.n_camera_live - 1].strides[0],
-                         sQImage.Format_RGB888)
+                         sQImage.Format_Grayscale8)
             self.ui.live.setPixmap(sQPixmap.fromImage(fs))
 
         if self.live_type == 1:
@@ -272,7 +272,7 @@ class ImageManager(sQObject):
             fs = sQImage(self.images[self.n_camera_live - 1], self.images[self.n_camera_live - 1].shape[1],
                          self.images[self.n_camera_live - 1].shape[0],
                          self.images[self.n_camera_live - 1].strides[0],
-                         sQImage.Format_BGR888)
+                         sQImage.Format_Grayscale8)
             self.ui.full_s_window.live.setPixmap(sQPixmap.fromImage(fs))
         
         if self.ui.full_t:
@@ -288,7 +288,7 @@ class ImageManager(sQObject):
         fs = sQImage(self.images[i], self.images[i].shape[1],
                      self.images[i].shape[0],
                      self.images[i].strides[0],
-                     sQImage.Format_RGB888)
+                     sQImage.Format_Grayscale8)
         s = 'self.ui.' + str(c) + 'live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
         exec(s)
 
@@ -296,7 +296,7 @@ class ImageManager(sQObject):
         fs = sQImage(self.images[i], self.images[i].shape[1],
                      self.images[i].shape[0],
                      self.images[i].strides[0],
-                     sQImage.Format_BGR888)
+                     sQImage.Format_Grayscale8)
         s = 'self.ui.full_'+ str(c) +'_window.' + str(c) + 'live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
         exec(s) 
         

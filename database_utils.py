@@ -90,8 +90,9 @@ class dataBaseUtils:
         data = ()
         db_headers = ""
         for key in coil_dict:
-            data = data + (coil_dict[key],)
-            db_headers = db_headers + key + ","
+            if key != 'speed':
+                data = data + (coil_dict[key],)
+                db_headers = db_headers + key + ","
         db_headers = "(" + db_headers[:-1] + ")"
 
         # try:
@@ -99,7 +100,7 @@ class dataBaseUtils:
             data,
             table_name=self.sheets_info_tabel,
             parametrs=db_headers,
-            len_parameters=len(coil_dict),
+            len_parameters=len(coil_dict)-1,
         )
         return "True"
 
@@ -1273,7 +1274,7 @@ class dataBaseUtils:
             # Log Exception
             return False, settings
 
-    def set_storage_setting(self, storage_upper_limit, storage_lower_limit, ssd_image_path, ssd_dataset_path, hdd_path):
+    def set_storage_setting(self, storage_upper_limit=None, storage_lower_limit=None, ssd_image_path=None, ssd_dataset_path=None, hdd_path=None):
         """This function set settings in database table
 
         :param storage_upper_limit: maximum percentage to cleanup.
@@ -1289,11 +1290,26 @@ class dataBaseUtils:
         :return: True if all settings update successfully. False otherwise.
         :rtype: bool
         """
-        res1 = self.db.update_record(self.storage_settings, "storage_upper_limit", str(storage_upper_limit), "id", "1")
-        res2 = self.db.update_record(self.storage_settings, "storage_lower_limit", str(storage_lower_limit), "id", "1")
-        res3 = self.db.update_record(self.storage_settings, "ssd_images_path", str(ssd_image_path), "id", "1")
-        res4 = self.db.update_record(self.storage_settings, "ssd_datasets_path", str(ssd_dataset_path), "id", "1")
-        res5 = self.db.update_record(self.storage_settings, "hdd_path", str(hdd_path), "id", "1")
+        if storage_upper_limit:
+            res1 = self.db.update_record(self.storage_settings, "storage_upper_limit", str(storage_upper_limit), "id", "1")
+        else:
+            res1 = True
+        if storage_lower_limit:
+            res2 = self.db.update_record(self.storage_settings, "storage_lower_limit", str(storage_lower_limit), "id", "1")
+        else:
+            res2 = True
+        if ssd_image_path:
+            res3 = self.db.update_record(self.storage_settings, "ssd_images_path", str(ssd_image_path), "id", "1")
+        else:
+            res3 = True
+        if ssd_dataset_path:
+            res4 = self.db.update_record(self.storage_settings, "ssd_datasets_path", str(ssd_dataset_path), "id", "1")
+        else:
+            res4 = True
+        if hdd_path:
+            res5 = self.db.update_record(self.storage_settings, "hdd_path", str(hdd_path), "id", "1")
+        else:
+            res5 = True
 
         return res1 and res2 and res3 and res4 and res5
 

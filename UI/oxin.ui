@@ -5413,7 +5413,7 @@ QPushButton:disabled {
                                     <enum>Qt::LeftToRight</enum>
                                    </property>
                                    <property name="currentIndex">
-                                    <number>0</number>
+                                    <number>3</number>
                                    </property>
                                    <widget class="QWidget" name="tab_3">
                                     <attribute name="title">
@@ -7065,12 +7065,6 @@ border: None;</string>
                                      </item>
                                      <item>
                                       <widget class="QFrame" name="frame_103">
-                                       <property name="minimumSize">
-                                        <size>
-                                         <width>0</width>
-                                         <height>84</height>
-                                        </size>
-                                       </property>
                                        <property name="frameShape">
                                         <enum>QFrame::Box</enum>
                                        </property>
@@ -7369,12 +7363,6 @@ border: None;</string>
                                      </item>
                                      <item>
                                       <widget class="QFrame" name="frame_104">
-                                       <property name="minimumSize">
-                                        <size>
-                                         <width>0</width>
-                                         <height>84</height>
-                                        </size>
-                                       </property>
                                        <property name="frameShape">
                                         <enum>QFrame::Box</enum>
                                        </property>
@@ -7673,12 +7661,6 @@ border: None;</string>
                                      </item>
                                      <item>
                                       <widget class="QFrame" name="frame_105">
-                                       <property name="minimumSize">
-                                        <size>
-                                         <width>0</width>
-                                         <height>84</height>
-                                        </size>
-                                       </property>
                                        <property name="frameShape">
                                         <enum>QFrame::Box</enum>
                                        </property>
@@ -7977,12 +7959,6 @@ border: None;</string>
                                      </item>
                                      <item>
                                       <widget class="QFrame" name="frame_106">
-                                       <property name="minimumSize">
-                                        <size>
-                                         <width>0</width>
-                                         <height>84</height>
-                                        </size>
-                                       </property>
                                        <property name="frameShape">
                                         <enum>QFrame::Box</enum>
                                        </property>

@@ -22,6 +22,7 @@ import texts_codes
 from PyQt5.QtGui import QPainter
 import cv2
 from help_UI import help
+from backend.date_funcs import get_datetime,convert_date,convert_get_time
 
 try:
     import database_utils
@@ -67,6 +68,7 @@ class data_loader(QMainWindow, ui):
         self.btn_order_search.clicked.connect(self.search_order)
         self.btn_heat_search.clicked.connect(self.search_heat)
         self.btn_qc_search.clicked.connect(self.search_qc)
+        self.btn_date_search.clicked.connect(self.search_date)
         
         self.selected=-1
         self.counter=-1
@@ -75,6 +77,40 @@ class data_loader(QMainWindow, ui):
 
         self.help_win = None
         self._old_pos = None
+
+
+        self.set_default()
+
+
+        self.comboBox_date_type.currentTextChanged.connect(self.change_date_type)
+
+
+    def change_date_type(self):
+
+        return
+
+        type = self.comboBox_date_type.currentText()
+        date,time = get_datetime(persian=True,folder_path=False,ret_list=True)
+        import datetime
+        if type == texts.Titles["jalali"][self.language]:
+            for sheet in self.load_sheets:
+                sheet.date = datetime.datetime.now()
+
+        self.show_sheets_info(self.load_sheets,full=False)
+
+
+
+    def set_default(self):
+        date,time = get_datetime(persian=True,folder_path=False,ret_list=True)
+        self.coil_end_date.setText(date)
+        self.coil_end_time.setText('23:59:59')
+        self.coil_start_time.setText('00:00:01')
+        string = [
+            texts.Titles["jalali"][self.language],
+            texts.Titles["georgian"][self.language],
+        ]
+        self.comboBox_date_type.clear()
+        self.comboBox_date_type.addItems(string)
 
     def mousePressEvent(self, event):
         if event.button() == sQtCore.Qt.LeftButton:
@@ -145,6 +181,7 @@ class data_loader(QMainWindow, ui):
                 self.list_qc_standard.insertItem(row, str(sheet.qc_standard))   # add id in listwidget
 
             self.table_sheets = sheets
+
 
             if len(sheets) == 0:
                 self.load_btn.setEnabled(False)
@@ -226,7 +263,7 @@ class data_loader(QMainWindow, ui):
             )
 
 
-    #LOAD DATBASE --------------
+    #LOAD DATSET --------------
     def show_dataset(self):
         self.hh_Labels=['Plate ID', 'Date', 'Time', 'Order ID', 'Heat ID', 'QC STANDARD', 'Length', 'Width', 'Thickness', 'Length Order', 'Width Order', 'Thickness Order']
         self.hh_Labels_fa=['شناسه', 'تاریخ', 'زمان', 'شماره سفارش', 'شماره ذوب', 'کنترل کیفی', 'طول', 'عرض', 'ضخامت', 'طول سفارش', 'عرض سفارش', 'ضخامت سفارش']
@@ -308,6 +345,39 @@ class data_loader(QMainWindow, ui):
                 self.set_warning(texts.WARNINGS['UNAV_QC'][self.language], level=2)
         except:
             self.srarch_eror('search_qc')
+
+
+
+    def search_date(self):
+        try:
+            self.start_date = convert_date(self.coil_start_date.text().split('/',2))
+            self.end_date = convert_date(self.coil_end_date.text().split('/',2))
+        except:
+            self.set_warning(texts.ERRORS['DATE_RANGE_INCORRECT'][self.language], level=2)
+            return
+        # try:
+        self.start_time = convert_get_time(self.coil_start_time.text().split(':',2))
+        self.end_time = convert_get_time(self.coil_end_time.text().split(':',2))
+        # except:
+        #     self.set_warning(texts.ERRORS['TIME_RANGE_INCORRECT'][self.language], level=2)
+        #     return
+        # self.start_time = convert_get_time()
+
+        try:
+            new_sheets = []
+            for sheet in self.load_sheets:
+                date = sheet.date
+                time = sheet.time
+                if date>=self.start_date and date<=self.end_date and time >=self.start_time and time<=self.end_time:
+                    new_sheets.append(sheet)
+
+
+            self.show_sheets_info(new_sheets)
+        except:
+            print('set filter date error')
+            return
+
+
 
     def srarch_eror(self,name):
         self.main_ui_obj.logger.create_new_log(

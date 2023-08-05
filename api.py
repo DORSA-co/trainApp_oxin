@@ -127,7 +127,7 @@ from storage_worker import storage_worker
 
 # _______JJ
 
-from MyTimer import MyTimer
+import getpass
 
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
@@ -149,6 +149,7 @@ class API:
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils(ui_obj=self.ui)
+        # self.config_database()
         self.create_classlist_pie_chart()
         self.create_label_color()
         self.create_default_ds()
@@ -453,7 +454,6 @@ class API:
                     self.storage_win.show()
                     self.s_api.clear_filters()
                     if self.sensor:
-                        pass
                         sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
                         self.s_api.add_filter(sheet_id)
                     self.s_api.start()
@@ -6285,7 +6285,7 @@ class API:
                         title=texts.Titles["connection_failed"],
                         message=texts.MESSEGES["connection_failed"],
                     )
-                print('%%%%%%'*5, details)
+                # print('%%%%%%'*5, details)
                 self.ImageManager.update_sheet(n_camera, details)
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)

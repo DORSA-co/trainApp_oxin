@@ -138,6 +138,9 @@ ERRORS = {
     'DATE_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای تاریخ صحیح نیست ',
                              'en': ' Date range is not correct '},
 
+    'TIME_RANGE_INCORRECT': {'fa': ' بازه وارد شده برای ساعت صحیح نیست ',
+                             'en': ' Time range is not correct '},
+
     'database_load_defects_failed': {'fa': 'خطای دریافت لیست عیوب از دیتابیس',
                  'en': 'Failed to load defects from database'},
 
@@ -1805,7 +1808,15 @@ Titles = {
         'page_storage': {'fa': 'صفحه حافظه',
                                 'en': 'Storage'},                        
         'show_labels': {'fa': 'نمایش برچسب‌ها',
-                                'en': 'Show Labels'},                       
+                                'en': 'Show Labels'},   
+
+        'jalali': {'fa': 'شمسی',
+                                'en': 'Jalali'},   
+
+        'georgian': {'fa': 'میلادی',
+                                'en': 'Georgian'},   
+
+
 }
 
 HELPS = {
@@ -2129,10 +2140,11 @@ def set_title(self, lang):
     self.load_sheets_win.label_8.setText(Titles['Value'][lang])
     self.load_sheets_win.show_dataset()
 
-    self.load_sheets_win.coil_search.setTabText(0, Titles['ID2'][lang])
-    self.load_sheets_win.coil_search.setTabText(1, Titles['ordern'][lang])
-    self.load_sheets_win.coil_search.setTabText(2, Titles['heatn'][lang])
-    self.load_sheets_win.coil_search.setTabText(3, Titles['qc'][lang])
+    self.load_sheets_win.coil_search.setTabText(0, Titles['date'][lang])
+    self.load_sheets_win.coil_search.setTabText(1, Titles['ID2'][lang])
+    self.load_sheets_win.coil_search.setTabText(2, Titles['ordern'][lang])
+    self.load_sheets_win.coil_search.setTabText(3, Titles['heatn'][lang])
+    self.load_sheets_win.coil_search.setTabText(4, Titles['qc'][lang])
 
 
     # User Profile Page
