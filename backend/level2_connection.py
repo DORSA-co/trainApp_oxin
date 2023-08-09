@@ -114,12 +114,12 @@ class connection_level2():
         port=11000
 
         self.socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # try:
-        self.socket.bind((host,port))
-        self.socket.listen(2)
+        try:
+            self.socket.bind((host,port))
+            self.socket.listen(2)
         
-        # except:
-        #     print('Error open port')
+        except:
+            print('Error open port')
 
 
     def get_data(self):

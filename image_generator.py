@@ -18,7 +18,7 @@ for cnt in range(1001, 1030):
             if not os.path.exists(os.path.join(path, side, str(n))):
                 os.makedirs(os.path.join(path, side, str(n)))
             for f in range(1, nframe):
-                img = np.zeros((1200, 1920), dtype=np.uint8)
+                img = np.zeros((1200, 1792), dtype=np.uint8)
                 img[:, :] = np.random.randint(0, 150)
                 res_path = os.path.join(path, side, str(n))
                 h, w = img.shape
