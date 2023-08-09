@@ -25,7 +25,7 @@ class ImageManager(sQObject):
         self.cameras = cameras
         self.n_read_thread = 24
         self.read_thread = []
-        self.images = [np.zeros((1200, 1920))] * 24
+        self.images = [np.zeros((1024, 1792))] * 24
         self.db = database_utils.dataBaseUtils(ui_obj=self.ui)
         self.sheet_id = 0
         self.coil_dict = {}
@@ -97,7 +97,7 @@ class ImageManager(sQObject):
     def update_sheet(self, stop_cam, coil_dict):
         self.sheet_id = str(coil_dict['PLATE_ID'])
         self.nframe = [0] * 24
-        self.images = [np.zeros((1200, 1920))] * 24
+        self.images = [np.zeros((1024, 1792))] * 24
         self.stop_cam = stop_cam
         if 'LENGHT' in coil_dict.keys() and coil_dict['LENGHT']:
             self.last_frame = 1000 - self.check_length_th #int(coil_dict['LENGHT'] / self.camera_length) - self.check_length_th
@@ -172,7 +172,7 @@ class ImageManager(sQObject):
                             cv2.imwrite(path, self.images[int(camera_id) - 1])
                 else:
                     if self.manual_flag:
-                        img = np.zeros((1200, 1920), dtype=np.uint8)
+                        img = np.zeros((1024, 1792), dtype=np.uint8)
                         if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame + 5:
                             img[:, :] = np.random.randint(self.check_th, 255)
                         else:
@@ -232,7 +232,7 @@ class ImageManager(sQObject):
         #             return
         #     else:
         #         if self.manual_flag:
-        #             img = np.zeros((1200, 1920), dtype=np.uint8)
+        #             img = np.zeros((1024, 1792), dtype=np.uint8)
         #             if i < 20:
         #                 img[:, :] = np.random.randint(self.check_th, 255)
         #                 i+=1

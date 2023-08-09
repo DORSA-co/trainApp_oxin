@@ -158,10 +158,10 @@ class API:
         self.create_default_ds()
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
-            "mask": Label.maskLbl((1200, 1920), self.LABEL_COLOR),
+            "mask": Label.maskLbl((1024, 1792), self.LABEL_COLOR),
         }
         self.label_bakcend_neighbours = {
-            "mask": Label.maskLbl((1200, 1920), self.LABEL_COLOR),
+            "mask": Label.maskLbl((1024, 1792), self.LABEL_COLOR),
         }
 
         # Label.bbox_lbl()
@@ -1482,11 +1482,10 @@ class API:
                     actives_camera=sheet.get_cameras(),
                     oriation=data_grabber.VERTICAL,
                 )
-
+                
                 selecteds = self.selected_images_for_label.get_sheet_side_selections(
                     str(self.sheet.get_id()), side
                 )
-
                 self.thechnicals_backend[side].update_selected(selecteds)
                 self.current_technical_side = side
                 self.refresh_thechnical(fp=1)  #
@@ -1571,7 +1570,6 @@ class API:
     def refresh_thechnical(self, fp):
         if self.t % fp == 0:
             self.t = 1
-
             self.thechnicals_backend[
                 self.current_technical_side
             ].update_sheet_img()  # update technical image
@@ -1580,8 +1578,6 @@ class API:
             ].get_real_img()  # get image of sheet corespond to mouse position
             self.ui.set_crop_image(img)  # show image in UI
             self.update_sheet_img(self.current_technical_side)
-            # self.ui.show_selected_side(self.current_technical_side)
-
         else:
             self.t += 1
 
@@ -2001,7 +1997,7 @@ class API:
             if os.path.exists(path):
                 img = Utils.read_image(path, "color")
             else:
-                img = np.zeros((1200, 1920, 3), dtype='uint8')
+                img = np.zeros((1024, 1792, 3), dtype='uint8')
             self.n_imgs.append(img)
 
         self.load_neighbour_annotations(neighbours, paths)

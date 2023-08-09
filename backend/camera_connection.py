@@ -362,19 +362,19 @@ class Collector():
                     img=image.Array
 
                 else:
-                    img=np.zeros([1200,1920],dtype=np.uint8)
+                    img=np.zeros([1024,1792],dtype=np.uint8)
                     self.cont_eror+=1
                     print("Error not GrabSucceeded: ", grabResult.ErrorCode, grabResult.ErrorDescription)
                     Flag=False
 
             else:
                     print('Error not grabbing')
-                    img=np.zeros([1200,1920],dtype=np.uint8)
+                    img=np.zeros([1024,1792],dtype=np.uint8)
                     Flag=False
 
         except:
             #print('Time out')
-            img=np.zeros([1200,1920],dtype=np.uint8)
+            img=np.zeros([1024,1792],dtype=np.uint8)
             Flag=False
 
         # cv2.imshow("img1", cv2.resize(img, None, fx=0.5, fy=0.5))
@@ -385,7 +385,7 @@ class Collector():
             return True, img
         else:
             #print('no')
-            return False, np.zeros([1200,1920],dtype=np.uint8)
+            return False, np.zeros([1024,1792],dtype=np.uint8)
 
 
 

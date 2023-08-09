@@ -283,7 +283,7 @@ if __name__ == "__main__":
     # db.get_col_name('996','camera_settings','id')
 
     # data=(0,)*10
-    #data=(0,0,0,0,1920,1200,0,0,0,0,0)
+    #data=(0,0,0,0,1792,1200,0,0,0,0,0)
 
     
     # x=db.get_all_content('users')
@@ -298,7 +298,7 @@ if __name__ == "__main__":
 
     # ##print(x)
 
-    # db.remove_record('1920', 'camera_settings')
+    # db.remove_record('1792', 'camera_settings')
 
     # db.remove_record('user_name', 'milad', 'users')
 

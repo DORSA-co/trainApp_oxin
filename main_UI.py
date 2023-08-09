@@ -241,7 +241,7 @@ class UI_main_window(QMainWindow, ui):
         self.label_type = "mask"
         self.zoom_type = None
 
-        self.img = cv2.imread("images/dorsa-logo.png")
+        self.img = cv2.imread("images/dorsa-logo.png", 0)
         self.set_crop_image(self.img)
 
         img = cv2.imread("UI/images/male-placeholder.jpg")
@@ -986,9 +986,10 @@ class UI_main_window(QMainWindow, ui):
         Returns: None
         """
         image = QImage(
-            img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+            img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_Grayscale8
         )
         self.crop_image.setPixmap(QPixmap.fromImage(image))
+        
         # cv2.waitKey(200)
 
     def set_enabel(self, widget, status):
@@ -1231,7 +1232,7 @@ class UI_main_window(QMainWindow, ui):
 
             # ANIMATION
             self.animation = QPropertyAnimation(self.label_dorsa, b"minimumWidth")
-            self.animation.setDuration(1200)
+            self.animation.setDuration(1024)
             self.animation.setStartValue(width)
             self.animation.setEndValue(widthExtended)
             self.animation.setEasingCurve(QEasingCurve.InOutQuart)
