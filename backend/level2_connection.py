@@ -110,16 +110,18 @@ class connection_level2():
 
     def create_connection(self):
 
-        host='176.16.32.6'
-        port=11000
+        try:
 
-        self.socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # try:
-        self.socket.bind((host,port))
-        self.socket.listen(2)
+            host='176.16.32.6'
+            port=11000
+
+            self.socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # try:
+            self.socket.bind((host,port))
+            self.socket.listen(2)
         
-        # except:
-        #     print('Error open port')
+        except:
+            print('Error open port')
 
 
     def get_data(self):
@@ -130,7 +132,9 @@ class connection_level2():
         
                 conn.send(data)
                 self.convert_data(data)
+                # print('gg')
             except:
+                print('error')
                 pass
 
 if __name__=='__main__':

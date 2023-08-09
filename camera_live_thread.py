@@ -12,6 +12,7 @@ from PySide6.QtGui import QImage as sQImage
 from PySide6.QtGui import QPixmap as sQPixmap
 from main_UI import SHAMSI_DATE
 
+MOTION =True
 
 class ImageManager(sQObject):
     first_check_finished = sSignal()
@@ -142,6 +143,12 @@ class ImageManager(sQObject):
                     ret, img = connected_cameras[str(camera_id)].getPictures()
                 
                     if ret:
+
+
+                        if MOTION:
+                            self.check_motion(camera_id,img,ret)
+
+
                         if camera_id < 13:
                             img = cv2.flip(img, 1)
                         if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame:
@@ -327,3 +334,14 @@ class ImageManager(sQObject):
 
     def stop_sheet_checking(self):
         self.sheet_check_thread.join()
+
+
+
+    
+
+    def check_motion(self,camera_id,img,ret):
+        return
+        if ret:
+            if camera_id == 2:
+                diff = cv2.absdiff(img,self.last_frame)
+                self.last_frame = img

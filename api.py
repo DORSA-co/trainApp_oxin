@@ -145,6 +145,9 @@ FRAME_RATE = 7
 class API:
     def __init__(self, ui):
         self.ui = ui
+
+        self.remove_pypylon_chache()
+
         self.mouse = Mouse()
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
@@ -342,6 +345,7 @@ class API:
         self.connect_plc()
         # self.load_plc_parms()  # should be commecnt in finbal version
         self.ui.start_wind_btn.clicked.connect(lambda: self.set_wind(True))
+        self.wind_mode = False
         self.start_auto_wind()
         # self.update_plc_parms()
         self.plc_timer = QTimer()
@@ -413,6 +417,16 @@ class API:
         self.grab_time = 0
         self.stop_grab = False
         self.grab_main_thread = None
+
+    def remove_pypylon_chache(self):
+        path = os.getcwd()
+        os.chdir('/dev/shm')
+        listdir =os.listdir()
+        for gen in listdir:
+            if 'GenICam_XML' in gen:
+                os.system('rm {}'.format(gen))
+
+        os.chdir(path)
 
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
@@ -5798,7 +5812,6 @@ class API:
                             self.ui.auto_wind,
                             self.ui.auto_wind_intervals        
                             )
-        self.start_auto_wind()
         self.init_check_plc()
 
     def set_camera_parms(self):
@@ -6118,11 +6131,19 @@ class API:
         # print(type(self.sensor),self.sensor)
         if self.sensor and self.plc_connection_status:
             if self.ui.wind_itr == 1:
-                ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
-                ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(mode))
+                # ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+                t1 = time.time()
+                threading.Thread(target=self.my_plc.set_value,args=(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))).start()
+                # ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))
+                print('set_wind',time.time()-t1)
                 # if ret and mode:
                 if mode:
                     self.ui.start_wind()
+        
+            self.wind_mode = not self.wind_mode
+                
+                
+                
 
     def set_start_software_plc(self, mode):
         # #print("software on plc ", str(mode))
