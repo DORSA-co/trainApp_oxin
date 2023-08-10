@@ -491,6 +491,7 @@ class sheetOverView:
                     img = None  
                     if os.path.exists(img_path):
                         img = cv2.imread(img_path, 0)
+                   
                     if img is None:  # if image doesnt exist, black image substitute
                         img = np.zeros(IMAGE_SHAPE, np.uint8)
                     else:

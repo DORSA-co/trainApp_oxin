@@ -124,11 +124,14 @@ class connection_level2():
 
     def get_data(self):
         while 1:
-            conn,addr=self.socket.accept()
-            data=conn.recv(100000)
-            conn.send(data)
-            self.convert_data(data)
-
+            try:
+                conn,addr=self.socket.accept()
+                data=conn.recv(100000)
+                conn.send(data)
+                self.convert_data(data)
+            except:
+                pass
+                # print('cant connect')
 if __name__=='__main__':
 
     conn=connection_level2()
