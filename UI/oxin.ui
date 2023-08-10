@@ -6413,7 +6413,7 @@ border: None;</string>
                                           <property name="minimumSize">
                                            <size>
                                             <width>0</width>
-                                            <height>0</height>
+                                            <height>1</height>
                                            </size>
                                           </property>
                                           <property name="text">
@@ -6812,7 +6812,7 @@ border: None;</string>
                                        <property name="frameShadow">
                                         <enum>QFrame::Plain</enum>
                                        </property>
-                                       <layout class="QHBoxLayout" name="horizontalLayout_201">
+                                       <layout class="QHBoxLayout" name="horizontalLayout_228">
                                         <property name="spacing">
                                          <number>0</number>
                                         </property>
@@ -7065,12 +7065,6 @@ border: None;</string>
                                      </item>
                                      <item>
                                       <widget class="QFrame" name="frame_103">
-                                       <property name="minimumSize">
-                                        <size>
-                                         <width>0</width>
-                                         <height>84</height>
-                                        </size>
-                                       </property>
                                        <property name="frameShape">
                                         <enum>QFrame::Box</enum>
                                        </property>
@@ -7369,12 +7363,6 @@ border: None;</string>
                                      </item>
                                      <item>
                                       <widget class="QFrame" name="frame_104">
-                                       <property name="minimumSize">
-                                        <size>
-                                         <width>0</width>
-                                         <height>84</height>
-                                        </size>
-                                       </property>
                                        <property name="frameShape">
                                         <enum>QFrame::Box</enum>
                                        </property>
@@ -7673,12 +7661,6 @@ border: None;</string>
                                      </item>
                                      <item>
                                       <widget class="QFrame" name="frame_105">
-                                       <property name="minimumSize">
-                                        <size>
-                                         <width>0</width>
-                                         <height>84</height>
-                                        </size>
-                                       </property>
                                        <property name="frameShape">
                                         <enum>QFrame::Box</enum>
                                        </property>
@@ -7977,12 +7959,6 @@ border: None;</string>
                                      </item>
                                      <item>
                                       <widget class="QFrame" name="frame_106">
-                                       <property name="minimumSize">
-                                        <size>
-                                         <width>0</width>
-                                         <height>84</height>
-                                        </size>
-                                       </property>
                                        <property name="frameShape">
                                         <enum>QFrame::Box</enum>
                                        </property>
@@ -8780,7 +8756,7 @@ border-radius: 8px;</string>
                                        <item>
                                         <widget class="QProgressBar" name="suggested_defects_progressBar">
                                          <property name="maximum">
-                                          <number>1920</number>
+                                          <number>1792</number>
                                          </property>
                                          <property name="value">
                                           <number>0</number>
@@ -13986,7 +13962,7 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>92</width>
+                                      <width>63</width>
                                       <height>165</height>
                                      </rect>
                                     </property>
@@ -14013,7 +13989,7 @@ color : rgb(0,0,0);</string>
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>96</width>
+                                          <width>76</width>
                                           <height>49</height>
                                          </rect>
                                         </property>
@@ -14183,8 +14159,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>90</width>
-                                              <height>43</height>
+                                              <width>76</width>
+                                              <height>106</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">

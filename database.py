@@ -646,7 +646,7 @@ if __name__ == "__main__":
     #db.get_col_name('996','camera_settings','id')
 
     # data=(0,)*10
-    # data=(0,0,0,0,1920,1200,0,0,0,0,0)
+    # data=(0,0,0,0,1792,1200,0,0,0,0,0)
 
     # x=db.get_all_content('defects_info')
     # #print(x)
@@ -663,7 +663,7 @@ if __name__ == "__main__":
 
     #db.report_last('coils_info','id',30)
 
-    # db.remove_record('1920', 'camera_settings')
+    # db.remove_record('1792', 'camera_settings')
 
     #db.report_last('coils_info','id',30) 
 

@@ -4136,7 +4136,7 @@ class Ui_MainWindow(object):
 
         self.suggested_defects_progressBar = QProgressBar(self.frame_117)
         self.suggested_defects_progressBar.setObjectName(u"suggested_defects_progressBar")
-        self.suggested_defects_progressBar.setMaximum(1920)
+        self.suggested_defects_progressBar.setMaximum(1792)
         self.suggested_defects_progressBar.setValue(0)
 
         self.horizontalLayout_344.addWidget(self.suggested_defects_progressBar)

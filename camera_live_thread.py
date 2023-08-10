@@ -12,6 +12,7 @@ from PySide6.QtGui import QImage as sQImage
 from PySide6.QtGui import QPixmap as sQPixmap
 from main_UI import SHAMSI_DATE
 
+MOTION =True
 
 class ImageManager(sQObject):
     first_check_finished = sSignal()
@@ -24,7 +25,7 @@ class ImageManager(sQObject):
         self.cameras = cameras
         self.n_read_thread = 24
         self.read_thread = []
-        self.images = [np.zeros((1200, 1920))] * 24
+        self.images = [np.zeros((1024, 1792))] * 24
         self.db = database_utils.dataBaseUtils(ui_obj=self.ui)
         self.sheet_id = 0
         self.coil_dict = {}
@@ -96,7 +97,7 @@ class ImageManager(sQObject):
     def update_sheet(self, stop_cam, coil_dict):
         self.sheet_id = str(coil_dict['PLATE_ID'])
         self.nframe = [0] * 24
-        self.images = [np.zeros((1200, 1920))] * 24
+        self.images = [np.zeros((1024, 1792))] * 24
         self.stop_cam = stop_cam
         if 'LENGHT' in coil_dict.keys() and coil_dict['LENGHT']:
             self.last_frame = 1000 - self.check_length_th #int(coil_dict['LENGHT'] / self.camera_length) - self.check_length_th
@@ -121,7 +122,7 @@ class ImageManager(sQObject):
                 self.coil_dict['cameras'] = str(self.start_cam) + '-' + str(self.stop_cam)
             self.coil_dict['image_format'] = self.image_format
             
-            self.coil_dict.pop('speed')
+            # self.coil_dict.pop('speed')
             self.db.set_sheet(coil_dict=self.coil_dict)
 
     def threads_func(self, s, d, loop=False):
@@ -142,6 +143,12 @@ class ImageManager(sQObject):
                     ret, img = connected_cameras[str(camera_id)].getPictures()
                 
                     if ret:
+
+
+                        if MOTION:
+                            self.check_motion(camera_id,img,ret)
+
+
                         if camera_id < 13:
                             img = cv2.flip(img, 1)
                         if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame:
@@ -165,7 +172,7 @@ class ImageManager(sQObject):
                             cv2.imwrite(path, self.images[int(camera_id) - 1])
                 else:
                     if self.manual_flag:
-                        img = np.zeros((1200, 1920), dtype=np.uint8)
+                        img = np.zeros((1024, 1792), dtype=np.uint8)
                         if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame + 5:
                             img[:, :] = np.random.randint(self.check_th, 255)
                         else:
@@ -225,7 +232,7 @@ class ImageManager(sQObject):
         #             return
         #     else:
         #         if self.manual_flag:
-        #             img = np.zeros((1200, 1920), dtype=np.uint8)
+        #             img = np.zeros((1024, 1792), dtype=np.uint8)
         #             if i < 20:
         #                 img[:, :] = np.random.randint(self.check_th, 255)
         #                 i+=1
@@ -249,7 +256,7 @@ class ImageManager(sQObject):
             fs = sQImage(self.images[self.n_camera_live - 1], self.images[self.n_camera_live - 1].shape[1],
                          self.images[self.n_camera_live - 1].shape[0],
                          self.images[self.n_camera_live - 1].strides[0],
-                         sQImage.Format_RGB888)
+                         sQImage.Format_Grayscale8)
             self.ui.live.setPixmap(sQPixmap.fromImage(fs))
 
         if self.live_type == 1:
@@ -272,7 +279,7 @@ class ImageManager(sQObject):
             fs = sQImage(self.images[self.n_camera_live - 1], self.images[self.n_camera_live - 1].shape[1],
                          self.images[self.n_camera_live - 1].shape[0],
                          self.images[self.n_camera_live - 1].strides[0],
-                         sQImage.Format_BGR888)
+                         sQImage.Format_Grayscale8)
             self.ui.full_s_window.live.setPixmap(sQPixmap.fromImage(fs))
         
         if self.ui.full_t:
@@ -288,7 +295,7 @@ class ImageManager(sQObject):
         fs = sQImage(self.images[i], self.images[i].shape[1],
                      self.images[i].shape[0],
                      self.images[i].strides[0],
-                     sQImage.Format_RGB888)
+                     sQImage.Format_Grayscale8)
         s = 'self.ui.' + str(c) + 'live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
         exec(s)
 
@@ -296,7 +303,7 @@ class ImageManager(sQObject):
         fs = sQImage(self.images[i], self.images[i].shape[1],
                      self.images[i].shape[0],
                      self.images[i].strides[0],
-                     sQImage.Format_BGR888)
+                     sQImage.Format_Grayscale8)
         s = 'self.ui.full_'+ str(c) +'_window.' + str(c) + 'live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
         exec(s) 
         
@@ -327,3 +334,14 @@ class ImageManager(sQObject):
 
     def stop_sheet_checking(self):
         self.sheet_check_thread.join()
+
+
+
+    
+
+    def check_motion(self,camera_id,img,ret):
+        return
+        if ret:
+            if camera_id == 2:
+                diff = cv2.absdiff(img,self.last_frame)
+                self.last_frame = img

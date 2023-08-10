@@ -127,7 +127,7 @@ from storage_worker import storage_worker
 
 # _______JJ
 
-from MyTimer import MyTimer
+import getpass
 
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
@@ -145,19 +145,23 @@ FRAME_RATE = 7
 class API:
     def __init__(self, ui):
         self.ui = ui
+
+        self.remove_pypylon_chache()
+
         self.mouse = Mouse()
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils(ui_obj=self.ui)
+        # self.config_database()
         self.create_classlist_pie_chart()
         self.create_label_color()
         self.create_default_ds()
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
-            "mask": Label.maskLbl((1200, 1920), self.LABEL_COLOR),
+            "mask": Label.maskLbl((1024, 1792), self.LABEL_COLOR),
         }
         self.label_bakcend_neighbours = {
-            "mask": Label.maskLbl((1200, 1920), self.LABEL_COLOR),
+            "mask": Label.maskLbl((1024, 1792), self.LABEL_COLOR),
         }
 
         # Label.bbox_lbl()
@@ -341,6 +345,7 @@ class API:
         self.connect_plc()
         # self.load_plc_parms()  # should be commecnt in finbal version
         self.ui.start_wind_btn.clicked.connect(lambda: self.set_wind(True))
+        self.wind_mode = False
         self.start_auto_wind()
         # self.update_plc_parms()
         self.plc_timer = QTimer()
@@ -413,6 +418,16 @@ class API:
         self.stop_grab = False
         self.grab_main_thread = None
 
+    def remove_pypylon_chache(self):
+        path = os.getcwd()
+        os.chdir('/dev/shm')
+        listdir =os.listdir()
+        for gen in listdir:
+            if 'GenICam_XML' in gen:
+                os.system('rm {}'.format(gen))
+
+        os.chdir(path)
+
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
         if res:
@@ -453,7 +468,6 @@ class API:
                     self.storage_win.show()
                     self.s_api.clear_filters()
                     if self.sensor:
-                        pass
                         sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
                         self.s_api.add_filter(sheet_id)
                     self.s_api.start()
@@ -1468,11 +1482,10 @@ class API:
                     actives_camera=sheet.get_cameras(),
                     oriation=data_grabber.VERTICAL,
                 )
-
+                
                 selecteds = self.selected_images_for_label.get_sheet_side_selections(
                     str(self.sheet.get_id()), side
                 )
-
                 self.thechnicals_backend[side].update_selected(selecteds)
                 self.current_technical_side = side
                 self.refresh_thechnical(fp=1)  #
@@ -1557,7 +1570,6 @@ class API:
     def refresh_thechnical(self, fp):
         if self.t % fp == 0:
             self.t = 1
-
             self.thechnicals_backend[
                 self.current_technical_side
             ].update_sheet_img()  # update technical image
@@ -1566,8 +1578,6 @@ class API:
             ].get_real_img()  # get image of sheet corespond to mouse position
             self.ui.set_crop_image(img)  # show image in UI
             self.update_sheet_img(self.current_technical_side)
-            # self.ui.show_selected_side(self.current_technical_side)
-
         else:
             self.t += 1
 
@@ -1987,7 +1997,7 @@ class API:
             if os.path.exists(path):
                 img = Utils.read_image(path, "color")
             else:
-                img = np.zeros((1200, 1920, 3), dtype='uint8')
+                img = np.zeros((1024, 1792, 3), dtype='uint8')
             self.n_imgs.append(img)
 
         self.load_neighbour_annotations(neighbours, paths)
@@ -5798,7 +5808,6 @@ class API:
                             self.ui.auto_wind,
                             self.ui.auto_wind_intervals        
                             )
-        self.start_auto_wind()
         self.init_check_plc()
 
     def set_camera_parms(self):
@@ -6118,11 +6127,19 @@ class API:
         # print(type(self.sensor),self.sensor)
         if self.sensor and self.plc_connection_status:
             if self.ui.wind_itr == 1:
-                ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
-                ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(mode))
+                # ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+                t1 = time.time()
+                threading.Thread(target=self.my_plc.set_value,args=(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))).start()
+                # ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))
+                print('set_wind',time.time()-t1)
                 # if ret and mode:
                 if mode:
                     self.ui.start_wind()
+        
+            self.wind_mode = not self.wind_mode
+                
+                
+                
 
     def set_start_software_plc(self, mode):
         # #print("software on plc ", str(mode))
@@ -6285,7 +6302,7 @@ class API:
                         title=texts.Titles["connection_failed"],
                         message=texts.MESSEGES["connection_failed"],
                     )
-                print('%%%%%%'*5, details)
+                # print('%%%%%%'*5, details)
                 self.ImageManager.update_sheet(n_camera, details)
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)

@@ -33,7 +33,7 @@ def camera_simulator(i):
     with open('grab' + str(i) + '.txt', 'w', encoding='Utf-8') as grab:
         grab.write('True')
 
-    img = np.zeros((1200, 1920), dtype=np.uint8)
+    img = np.zeros((1200, 1792), dtype=np.uint8)
     img[:, :] = np.random.randint(0, 150)
     h, w = img.shape
     img = cv2.putText(img,

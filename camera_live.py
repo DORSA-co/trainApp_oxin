@@ -31,7 +31,7 @@ def read_image(cameras, qimage, qinfo, sheet_id, nframe, start_cam, stop_cam, s,
                     # #print((str(sheet_id.value), str(camera_id), str(nframe.value)))
                     qinfo.put((str(sheet_id.value), str(camera_id), str(nframe.value)))
                 # else:
-                #     img = np.zeros((1200, 1920))
+                #     img = np.zeros((1200, 1792))
                 #     qimage.put(img)
                 #     #print((str(sheet_id.value), str(camera_id), str(nframe.value)))
                 #     qinfo.put((str(sheet_id.value), str(camera_id), str(nframe.value)))

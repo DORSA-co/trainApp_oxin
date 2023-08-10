@@ -52,7 +52,7 @@ class connection_level2():
             projectors = int(np.ceil(float(self.data['WIDTH'])*self.max_projectors/self.max_width))
             return cameras, projectors, self.data
         else:
-            return 0, 0, self.dummy_dict
+            return 12, 6, self.dummy_dict
 
 
     def convert_data(self, data):
@@ -110,11 +110,13 @@ class connection_level2():
 
     def create_connection(self):
 
-        host='176.16.32.6'
-        port=11000
-
-        self.socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
+
+            host='176.16.32.6'
+            port=11000
+
+            self.socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # try:
             self.socket.bind((host,port))
             self.socket.listen(2)
         
@@ -127,11 +129,14 @@ class connection_level2():
             try:
                 conn,addr=self.socket.accept()
                 data=conn.recv(100000)
+        
                 conn.send(data)
                 self.convert_data(data)
+                # print('gg')
             except:
+                print('error')
                 pass
-                # print('cant connect')
+
 if __name__=='__main__':
 
     conn=connection_level2()

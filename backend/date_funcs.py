@@ -75,7 +75,7 @@ def get_time(folder_path=False):
     return time
 
 
-def get_datetime(persian=SHAMSI_DATE, folder_path=True):
+def get_datetime(persian=SHAMSI_DATE, folder_path=True,ret_list=False):
     """
     this function returns both curent date and time in wheater persian or miladi format
 
@@ -90,7 +90,10 @@ def get_datetime(persian=SHAMSI_DATE, folder_path=True):
     date = get_date(persian=persian, folder_path=folder_path)
     time = get_time(folder_path=folder_path)
 
-    return date + "-" + time
+    if ret_list:
+        return [date,time]
+    else:
+        return date + "-" + time
 
 
 def get_n_month_days(month=1, persian=SHAMSI_DATE):
@@ -105,6 +108,21 @@ def get_n_month_days(month=1, persian=SHAMSI_DATE):
         if month == 2:
             return 29
         return 30
+
+
+
+def convert_date(date,ret_miladi=True):
+    if ret_miladi:
+        date = JalaliDate(int(date[0]),int(date[1]),int(date[2])).to_gregorian() 
+        return date
+
+
+def convert_get_time(time):
+
+    time = datetime.time(int(time[0]),int(time[1]))
+
+    return time
+
 
 
 if __name__ == "__main__":
