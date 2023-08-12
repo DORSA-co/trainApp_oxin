@@ -1537,7 +1537,8 @@ class API:
         x, y = self.thechnicals_backend[
             self.current_technical_side
         ].get_pos()  # get mouse position normilized between [0,1]
-        x *= self.sheet.get_width()
+        # x *= self.sheet.get_width()
+        x *= 5000
         y *= self.sheet.get_length()
         y = np.round(y, 1)
         x = np.round(x, 1)
@@ -1564,22 +1565,22 @@ class API:
             self.thechnicals_backend[self.current_technical_side].update_pointer(
                 pt
             )  # update corespond backend mouse position
-            self.refresh_thechnical(fp=5)
+            self.refresh_thechnical(fp=1)
             self.show_pointer_position()
 
     def refresh_thechnical(self, fp):
-        if self.t % fp == 0:
-            self.t = 1
-            self.thechnicals_backend[
-                self.current_technical_side
-            ].update_sheet_img()  # update technical image
-            img = self.thechnicals_backend[
-                self.current_technical_side
-            ].get_real_img()  # get image of sheet corespond to mouse position
-            self.ui.set_crop_image(img)  # show image in UI
-            self.update_sheet_img(self.current_technical_side)
-        else:
-            self.t += 1
+        # if self.t % fp == 0:
+        self.t = 1
+        self.thechnicals_backend[
+            self.current_technical_side
+        ].update_sheet_img()  # update technical image
+        img = self.thechnicals_backend[
+            self.current_technical_side
+        ].get_real_img()  # get image of sheet corespond to mouse position
+        self.ui.set_crop_image(img)  # show image in UI
+        self.update_sheet_img(self.current_technical_side)
+        # else:
+        #     self.t += 1
 
     # ----------------------------------------------------------------------------------------
     #

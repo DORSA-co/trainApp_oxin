@@ -100,22 +100,45 @@
 
 
 
-import socket
-host='176.16.32.6'
-port=11000
-s=socket.socket()
-s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((host,port))
-s.listen(2)
+# import socket
+# host='176.16.32.6'
+# port=11000
+# s=socket.socket()
+# s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# s.bind((host,port))
+# s.listen(2)
 
-decode_utf8 = lambda data: data.decode("utf-32")
+# decode_utf8 = lambda data: data.decode("utf-32")
 
 
-while True:
-    conn,addr=s.accept()
-    print("Connected by",addr)
-    data=conn.recv(100000)
-    # a = decode_utf8(data)
-    print("received data:",data)
-    conn.send(data)
-    # print(a)
+# while True:
+#     conn,addr=s.accept()
+#     print("Connected by",addr)
+#     data=conn.recv(100000)
+#     # a = decode_utf8(data)
+#     print("received data:",data)
+#     conn.send(data)
+#     # print(a)
+
+
+import cv2
+import sys
+
+
+l = []
+# while True:
+a = cv2.imread('oxin_image_grabber/2023/07/23/14199ns/BOTTOM/2/68.png',0)
+    # l.append(a)
+
+for _ in range(24):
+    for _ in range(15):
+        for _ in range(10):
+            l.append(cv2.imread('oxin_image_grabber/2023/07/23/14199ns/BOTTOM/2/68.png',0))
+print('a')
+
+size =sys.getsizeof(l[0]) * len(l)
+
+size /=1024
+size /=1024
+size /=1024
+print(size)

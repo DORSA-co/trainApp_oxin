@@ -4,7 +4,7 @@ import random
 import string
 import re
 import socket
-
+import time
 
 RANDOM=True
 
@@ -19,7 +19,7 @@ class connection_level2():
         self.max_projectors = 6
 
         self.dummy_raw = ''
-        self.dummy_dict = {'PLATE_ID': 'ABC12345A', 'ORDER_ID': '123456789', 'HEAT_ID': '123456', 'QC_STANDARD': 'ASTM450', 'LENGHT': '6040', 'WIDTH': '2020', 'THICKNESS': '25.23', 'LENGHT_ORDER': '6000', 'WIDTH_ORDER': '2000', 'THICKNESS_ORDER': '25', 'speed': '1500'}
+        self.dummy_dict = {'PLATE_ID': '2023-08-02_22:10:22', 'ORDER_ID': '123456789', 'HEAT_ID': '123456', 'QC_STANDARD': 'ASTM450', 'LENGHT': '6040', 'WIDTH': '2020', 'THICKNESS': '25.23', 'LENGHT_ORDER': '6000', 'WIDTH_ORDER': '2000', 'THICKNESS_ORDER': '25', 'speed': '1500'}
 
     def ret_sheet_details(self):
         ret,details=self.connect()
@@ -134,7 +134,8 @@ class connection_level2():
                 self.convert_data(data)
                 # print('gg')
             except:
-                print('error')
+                time.sleep(2)
+                # print('error')
                 pass
 
 if __name__=='__main__':
