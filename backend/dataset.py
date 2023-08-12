@@ -14,8 +14,6 @@ import random
 import cv2
 import json
 
-IMAGES_TEMP_FOLDER = "temp_images"
-ANNOTATIONS_TEMP_FOLDER = "temp_annotations"
 IMAGE_FOLDERS = "images"
 ANNOTATIONS_FOLDER = "annotations"
 BINARY_FOLDER = "binary"
@@ -25,11 +23,11 @@ MASKS_FOLDER = "mask"
 DEFECT_SPLITED_FOLDER = "defect_splitted"
 PERFECT_SPLITED_FOLDER = "perfect_splitted"
 
-# -------------------
-WRONG_PREDICT_IMAGES = "wrong_predict_images"
-FP = "false_positive"
-FN = "false_negative"
-# -------------------
+#-------------------
+WRONG_PREDICT_IMAGES='wrong_predict_images'
+FP='false_positive'
+FN='false_negative'
+#-------------------
 
 FORMAT_IMAGE = ".jpg"
 #
@@ -41,8 +39,6 @@ headers_fa = ["نام مجموعه داده", "کاربر مالک", "آدرس �
 
 class Dataset:
     def __init__(self, dataset_path):
-        self.images_temp_folder = "temp_images"
-        self.annotations_temp_folder = "temp_annotations"
         self.images_folder = "images"
         self.annotations_folder = "annotations"
         self.binary_folder = "binary"
@@ -64,11 +60,11 @@ class Dataset:
         self.weights_yolo = "localization_and_classification"
         self.dataset_path = dataset_path
 
-        # --------------
-        self.wrong_images_folder = "wrong_predict_images"
-        self.wrong_images_folder_fp = "false_positive"
-        self.wrong_images_folder_fn = "false_negative"
-        # --------------
+        #--------------
+        self.wrong_images_folder = 'wrong_predict_images'
+        self.wrong_images_folder_fp = 'false_positive'
+        self.wrong_images_folder_fn = 'false_negative'
+        #--------------
 
         self.format_image = ".png"
 
@@ -83,10 +79,6 @@ class Dataset:
     def build_path(
         self,
     ):
-        self.images_temp_path = os.path.join(self.dataset_path, self.images_temp_folder)
-        self.annotations_temp_path = os.path.join(
-            self.dataset_path, self.annotations_temp_folder
-        )
         self.images_path = os.path.join(self.dataset_path, self.images_folder)
         self.annotations_path = os.path.join(self.dataset_path, self.annotations_folder)
         self.binary_path = os.path.join(self.dataset_path, self.binary_folder)
@@ -125,9 +117,11 @@ class Dataset:
         self.weights_classification_path = os.path.join(
             self.weights_path, self.weights_classification
         )
-        self.weights_yolo_path = os.path.join(self.weights_path, self.weights_yolo)
+        self.weights_yolo_path = os.path.join(
+            self.weights_path, self.weights_yolo
+        )
 
-        # -------------
+        #-------------
         self.wrong_images_path = os.path.join(
             self.dataset_path, self.wrong_images_folder
         )
@@ -137,13 +131,12 @@ class Dataset:
         # self.wrong_iamges_fn_path = os.path.join(
         #     self.wrong_iamges_path, self.wrong_images_folder_fn
         # )
-        # -------------
+        #-------------
+    
 
         # #print(self.annotations_folder)
         self.__creat_path__(self.dataset_path)
         self.__creat_path__(self.weights_path)
-        self.__creat_path__(self.images_temp_path)
-        self.__creat_path__(self.annotations_temp_path)
         self.__creat_path__(self.images_path)
         self.__creat_path__(self.annotations_path)
         self.__creat_path__(self.binary_path)
@@ -163,35 +156,33 @@ class Dataset:
         self.__creat_path__(self.weights_localization_path)
         self.__creat_path__(self.weights_classification_path)
         self.__creat_path__(self.weights_yolo_path)
-        # ---------------
+        #--------------- 
         self.__creat_path__(self.wrong_images_path)
         # self.__creat_path__(self.wrong_iamges_fp_path)
         # self.__creat_path__(self.wrong_iamges_fn_path)
-        # ---------------
+        #---------------
+    #____________________________________JJ ZONE
+    def creat_folder_structure_of_wrong_predict_images(self,pipline_name):
+        
+        #creat dirctory name
+        pipline_wrong_result_path=os.path.join(self.wrong_images_path, pipline_name)
+        self.pipline_wrong_result_fp_path=os.path.join(pipline_wrong_result_path,self.wrong_images_folder_fp)
+        self.pipline_wrong_result_fn_path=os.path.join(pipline_wrong_result_path,self.wrong_images_folder_fn)
 
-    # ____________________________________JJ ZONE
-    def creat_folder_structure_of_wrong_predict_images(self, pipline_name):
-        # creat dirctory name
-        pipline_wrong_result_path = os.path.join(self.wrong_images_path, pipline_name)
-        self.pipline_wrong_result_fp_path = os.path.join(
-            pipline_wrong_result_path, self.wrong_images_folder_fp
-        )
-        self.pipline_wrong_result_fn_path = os.path.join(
-            pipline_wrong_result_path, self.wrong_images_folder_fn
-        )
-
-        # creat dirctory
+        #creat dirctory 
         self.__creat_path__(pipline_wrong_result_path)
         self.__creat_path__(self.pipline_wrong_result_fp_path)
         self.__creat_path__(self.pipline_wrong_result_fn_path)
 
-    def write_image_in_fn_fp_folder(self, fn, img, file_name):
-        if fn:
-            cv2.imwrite(os.path.join(self.pipline_wrong_result_fn_path, file_name), img)
-        else:
-            cv2.imwrite(os.path.join(self.pipline_wrong_result_fp_path, file_name), img)
 
-    # ____________________________________JJ ZONE
+    def write_image_in_fn_fp_folder(self,fn,img,file_name):
+        if fn:
+            cv2.imwrite(os.path.join(self.pipline_wrong_result_fn_path,file_name),img)
+        else:
+            cv2.imwrite(os.path.join(self.pipline_wrong_result_fp_path,file_name),img)
+        
+    #____________________________________JJ ZONE
+
 
     def __random_name__(self, length):
         letters = string.ascii_lowercase + string.digits + string.ascii_uppercase
@@ -212,7 +203,7 @@ class Dataset:
             image_name = self.__file_name__(pos) + self.format_image
             res_path = os.path.join(self.images_temp_path, image_name)
             # shutil.copyfile(img_path, res_path)
-            img = Utils.read_image(img_path, "color")
+            img = Utils.read_image(img_path, 'color')
             cv2.imwrite(res_path, img)
             self.create_annotation_to_temp(sheet, image_name)
 
@@ -220,7 +211,7 @@ class Dataset:
         image_name = self.__file_name__(pos) + self.format_image
         res_path = os.path.join(self.images_path, image_name)
         # shutil.copyfile(img_path, res_path)
-        img = Utils.read_image(img_path, "color")
+        img = Utils.read_image(img_path, 'color')
         cv2.imwrite(res_path, img)
         self.create_annotation_to_ds(sheet, masks, image_name, pos[-1])
 
@@ -290,7 +281,7 @@ class Dataset:
         mask_path = os.path.join(self.defect_mask_path, image_name)
         loc_image_path = os.path.join(self.localization_image_path, image_name)
         loc_label_path = os.path.join(self.localization_label_path, image_name)
-        img = Utils.read_image(img_path, "color")
+        img = Utils.read_image(img_path, 'color')
         # shutil.copyfile(img_path, res_path)
         cv2.imwrite(res_path, img)
         # shutil.copyfile(img_path, loc_image_path)
@@ -313,7 +304,7 @@ class Dataset:
         image_name = self.__file_name__(pos) + self.format_image
         res_path = os.path.join(self.perfect_path, image_name)
         # shutil.copyfile(img_path, res_path)
-        img = Utils.read_image(img_path, "color")
+        img = Utils.read_image(img_path, 'color')
         cv2.imwrite(res_path, img)
 
     def delete_from_perfect(self, pos):
@@ -369,18 +360,11 @@ class Dataset:
             cv2.imwrite(res_path, label_crops[i])
 
     def save_yolo_splits(
-        self,
-        image_crops,
-        label_crops,
-        crops_annotations,
-        image_path,
-        label_path,
-        annotation_path,
-        name="",
+        self, image_crops, label_crops, crops_annotations, image_path, label_path, annotation_path, name=""
     ):
         for i in range(image_crops.shape[0]):
             image_name = name + "_(" + str(i) + ")" + self.format_image
-            ann_name = name + "_(" + str(i) + ")" + ".txt"
+            ann_name = name + "_(" + str(i) + ")" + '.txt'
 
             res_path = os.path.join(image_path, image_name)
             cv2.imwrite(res_path, image_crops[i])
@@ -389,13 +373,15 @@ class Dataset:
             cv2.imwrite(res_path, label_crops[i])
 
             res_path = os.path.join(annotation_path, ann_name)
-            with open(res_path, "w") as f:
+            with open(res_path, 'w') as f:
                 f.write(crops_annotations[i])
 
-    def save_yolo_resizes(self, annotation, annotation_path, name=""):
-        ann_name = name + ".txt"
+    def save_yolo_resizes(
+        self, annotation, annotation_path, name=""
+    ):
+        ann_name = name + '.txt'
         res_path = os.path.join(annotation_path, ann_name)
-        with open(res_path, "w") as f:
+        with open(res_path, 'w') as f:
             f.write(annotation)
 
     def check_binary_dataset(self, dataset_path):
@@ -403,34 +389,20 @@ class Dataset:
         defect_path = os.path.join(binary_path, self.defect_folder)
         perfect_path = os.path.join(binary_path, self.perfect_folder)
         defect_mask_path = os.path.join(binary_path, self.defect_mask_folder)
-        return (
-            os.path.exists(defect_path)
-            and os.path.exists(defect_path)
-            and os.path.exists(perfect_path)
-            and os.path.exists(defect_mask_path)
-        )
+        return os.path.exists(binary_path) and os.path.exists(defect_path) and os.path.exists(perfect_path) and os.path.exists(defect_mask_path)
 
     def check_localization_dataset(self, dataset_path):
         localization_path = os.path.join(dataset_path, self.localization_folder)
         image_path = os.path.join(localization_path, self.localization_folder_image)
         label_path = os.path.join(localization_path, self.localization_folder_label)
-        return (
-            os.path.exists(localization_path)
-            and os.path.exists(image_path)
-            and os.path.exists(label_path)
-        )
+        return os.path.exists(localization_path) and os.path.exists(image_path) and os.path.exists(label_path)
 
     def check_yolo_dataset(self, dataset_path):
         annotation_path = os.path.join(dataset_path, self.annotations_folder)
         localization_path = os.path.join(dataset_path, self.localization_folder)
         image_path = os.path.join(localization_path, self.localization_folder_image)
         label_path = os.path.join(localization_path, self.localization_folder_label)
-        return (
-            os.path.exists(annotation_path)
-            and os.path.exists(localization_path)
-            and os.path.exists(image_path)
-            and os.path.exists(label_path)
-        )
+        return os.path.exists(annotation_path) and os.path.exists(localization_path) and os.path.exists(image_path) and os.path.exists(label_path)
 
     def create_split_folder(self, dataset_path):
         dataset_path = os.path.join(dataset_path, self.binary_folder)
@@ -616,6 +588,7 @@ def get_selected_datasets(ui_obj, datasets_list, is_binarylist=False):
 
 
 def get_selected_datasets_for_PBT_loadDataSet_page(datasetname, datasets_list):
+
     list = []
     for dataset in datasets_list:
         if dataset["name"] == datasetname:

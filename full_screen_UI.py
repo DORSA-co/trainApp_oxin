@@ -1,6 +1,6 @@
 
 import sys
-from PyQt5.QtWidgets import * 
+# from PyQt5.QtWidgets import * 
 from PyQt5.QtGui import * 
 from PyQt5.QtGui import *
 from PySide6.QtCharts import *
@@ -9,6 +9,11 @@ from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 from PySide6 import QtCore as sQtCore
 import os
+from PySide6.QtGui import QImage as sQImage
+from PySide6.QtGui import QPixmap as sQPixmap
+from PySide6.QtWidgets import QWidget as sQWidget
+
+from PySide6.QtWidgets import QWidget
 
 ui, _ = loadUiType("UI/full_screen.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
@@ -29,7 +34,7 @@ class full_screen_window(QMainWindow, ui):
     widgets = ui
 
 
-    def __init__(self, type):
+    def __init__(self, type,parent=None):
         super(full_screen_window, self).__init__()
 
         self.setupUi(self)
@@ -109,6 +114,41 @@ class full_screen_window(QMainWindow, ui):
     #        self.help_win = help()
     #    self.help_win.set_text('neighbouring page')
     #    self.help_win.show()
+
+
+
+
+
+
+
+
+    def show_full_screen_live(self, images):
+        # if self.ui.full_s:
+            # fs = sQImage(images[n_camera_live - 1], images[n_camera_live - 1].shape[1],
+            #              images[n_camera_live - 1].shape[0],
+            #              images[n_camera_live - 1].strides[0],
+            #              sQImage.Format_BGR888)
+            # self.ui.full_s_window.live.setPixmap(sQPixmap.fromImage(fs))
+        
+        # if self.ui.full_t:
+        #     list(map(self.set_full_screen_image, ['t'] * 12, range(12)))
+
+        # if self.ui.full_b:
+        #     list(map(self.set_full_screen_image, ['b'] * 12, range(12, 24)))
+
+        # if self.ui.full_:
+        self.images = images
+        list(map(self.set_image, [''] * 24, list(range(24))))
+
+    def set_image(self, c, i):
+        fs = sQImage(self.images[i], self.images[i].shape[1],
+                     self.images[i].shape[0],
+                     self.images[i].strides[0],
+                     sQImage.Format_RGB888)
+        s = 'self.live' + str(i + 1) + '.setPixmap(sQPixmap.fromImage(fs))'
+        exec(s)
+
+
 
 
     

@@ -7,12 +7,12 @@ from PySide6.QtCore import Signal as sSignal
 from requests import head
 
 from backend import colors_pallete, chart_funcs, date_funcs
-import train_api, texts, texts_codes
+import train_api
+import texts, texts_codes
 import os
 from utils1 import Utils
 import json
 from random_split import *
-
 
 SHAMSI_DATE = False
 
@@ -94,9 +94,6 @@ binary_headers_dic = {
         "Batch-Size",
         "Learning-Rate",
         "Split Ratio",
-        "Dataset Path",
-        "Weights Path",
-        "Date Created",
         "Loss",
         "Accuracy",
         "Precision",
@@ -105,6 +102,9 @@ binary_headers_dic = {
         "Val-Accuracy",
         "Val-Precision",
         "Val-Recall",
+        "Dataset Path",
+        "Weights Path",
+        "Date Created",
     ],
     "fa": [
         "نام الگوریتم",
@@ -115,9 +115,6 @@ binary_headers_dic = {
         "اندازه دسته",
         "نرخ یادگیری",
         "نسبت تقسیم داده",
-        "آدرس مجموعه داده",
-        "آدرس وزن ها",
-        "تاریخ ایجاد",
         "Loss",
         "Accuracy",
         "Precision",
@@ -126,6 +123,9 @@ binary_headers_dic = {
         "اعتبارسنجی Accuracy",
         "اعتبارسنجی Precision",
         "اعتبارسنجی Recall",
+        "آدرس مجموعه داده",
+        "آدرس وزن ها",
+        "تاریخ ایجاد",
     ],
     "db": [
         "algo_name",
@@ -136,9 +136,6 @@ binary_headers_dic = {
         "batch_size",
         "lr",
         "split_ratio",
-        "dataset_pathes",
-        "weights_path",
-        "date_",
         "loss",
         "accuracy",
         "precision_",
@@ -147,6 +144,9 @@ binary_headers_dic = {
         "val_accuracy",
         "val_precision",
         "val_recall",
+        "dataset_pathes",
+        "weights_path",
+        "date_",
     ],
 }
 
@@ -215,81 +215,11 @@ localization_headers = {
         "date_",
     ],
 }
-# classification table headers
-classification_headers = {
-    "en": [
-        "Algorithm",
-        "Input-Size",
-        "Input-Type",
-        "N-Epochs",
-        "Batch-Size",
-        "Learning-Rate",
-        "Split Ratio",
-        "Target classes",
-        "Loss",
-        "Accuracy",
-        "Precision",
-        "Recall",
-        "Val-Loss",
-        "Val-Accuracy",
-        "Val-Precision",
-        "Val-Recall",
-        "Dataset Path",
-        "Weights Path",
-        "Date Created",
-        "Pretrain Weights",
-    ],
-    "fa": [
-        "نام الگوریتم",
-        "اندازه ورودی",
-        "نوع ورودی",
-        "تعداد اپوک",
-        "اندازه دسته",
-        "نرخ یادگیری",
-        "نسبت تقسیم داده",
-        "کلاس های هدف",
-        "Loss",
-        "Accuracy",
-        "Precision",
-        "Recall",
-        "اعتبارسنجی Loss",
-        "اعتبارسنجی Accuracy",
-        "اعتبارسنجی Precision",
-        "اعتبارسنجی Recall",
-        "آدرس مجموعه داده",
-        "آدرس وزن ها",
-        "تاریخ ایجاد",
-        "آدرس وزن از قبل آموزش دیده",
-    ],
-    "db": [
-        "algo_name",
-        "input_size",
-        "input_type",
-        "epochs",
-        "batch_size",
-        "lr",
-        "split_ratio",
-        "classes",
-        "loss",
-        "accuracy",
-        "precision_",
-        "recall",
-        "val_loss",
-        "val_accuracy",
-        "val_precision",
-        "val_recall",
-        "dataset_pathes",
-        "weights_path",
-        "date_",
-        "pretrain_path",
-    ],
-}
 # yolo table headers
 yolo_headers = {
     "en": [
         "Algorithm",
         "Input-Size",
-        "Input-Type",
         "N-Epochs",
         "Batch-Size",
         "Learning-Rate",
@@ -297,17 +227,16 @@ yolo_headers = {
         "Dataset Path",
         "Weights Path",
         "Date Created",
-        "Target classes",
-        "BOX-Loss",
-        "OBJ-Loss",
-        "CLS_Loss",
-        "Val_Precision",
-        "Val_Recall",
-        "Val_mAP05",
-        "Val_mAP0595",
-        "Val_BOX-Loss",
-        "Val_OBJ-Loss",
-        "Val_CLS_Loss",
+        "Loss",
+        "MP",
+        "MR",
+        "MAP50",
+        "MAP" "NT",
+        "Val_Loss",
+        "Val_MP",
+        "Val_MR",
+        "Val_MAP50",
+        "Val_MAP" "Val_NT",
     ],
     "fa": [
         "نام الگوریتم",
@@ -319,22 +248,22 @@ yolo_headers = {
         "آدرس مجموعه داده",
         "آدرس وزن ها",
         "تاریخ ایجاد",
-        "کلاس های هدف",
-        "BOX-Loss",
-        "OBJ-Loss",
-        "CLS_Loss",
-        "اعتبارسنجی Precision",
-        "اعتبارسنجی Recall",
-        "اعتبارسنجی mAP05",
-        "اعتبارسنجی mAP0595",
-        "اعتبارسنجی BOX-Loss",
-        "اعتبارسنجی OBJ-Loss",
-        "اعتبارسنجی CLS_Loss",
+        "loss",
+        "mp",
+        "mr",
+        "map50",
+        "map",
+        "nt",
+        "اعتبارسنجی loss",
+        "اعتبارسنجی mp",
+        "اعتبارسنجی mr",
+        "اعتبارسنجی map50",
+        "اعتبارسنجی map",
+        "اعتبارسنجی nt",
     ],
     "db": [
         "algo_name",
         "input_size",
-        "input_type",
         "epochs",
         "batch_size",
         "lr",
@@ -342,19 +271,21 @@ yolo_headers = {
         "dataset_pathes",
         "weights_path",
         "date_",
-        "classes",
-        "box_loss",
-        "obj_loss",
-        "cls_loss",
-        "val_precision",
-        "val_recall",
-        "val_mAP_0.5",
-        "val_mAP_0.5:0.95",
-        "val_box_loss",
-        "val_obj_loss",
-        "val_cls_loss",
+        "loss",
+        "mp",
+        "mr",
+        "map50",
+        "map",
+        "nt",
+        "val_loss",
+        "val_mp",
+        "val_mr",
+        "val_map50",
+        "val_map",
+        "val_nt",
     ],
 }
+
 # table number of rows and cols
 binary_table_ncols = len(binary_headers)
 binary_table_nrows = 20
@@ -407,6 +338,7 @@ def translate_binary_algorithm_id_to_name(
     :return: _description_
     :rtype: binary algorithm name/id (by respect to reverse value)
     """
+
     if not reverse:
         return train_api.ALGORITHM_NAMES[model_type][int(algo_id)]
     else:
@@ -428,6 +360,7 @@ def translate_model_algorithm_id_to_creator_function(
 
 
 def strInputSize_2_intInputSize(string, use_for_other_parameter=False):
+
     string = string[1:-1].split(",")
     if not use_for_other_parameter:
         return (int(string[0]), int(string[1]), 3)
@@ -436,7 +369,6 @@ def strInputSize_2_intInputSize(string, use_for_other_parameter=False):
 
 
 # ____________________________________________________________________JJ ZONE
-
 
 # show/set models history to UI tabel
 def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
@@ -471,6 +403,7 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
     # add users to table
     for row_idx, bmodel in enumerate(bmodels_list):
         for col_idx in range(binary_table_ncols):
+
             # translate algo-ids to name
             if col_idx == 0:
                 bmodel[
@@ -500,6 +433,7 @@ def set_bmodels_on_ui_tabel(ui_obj, bmodels_list):
 def set_bmodels_on_ui_tabel_edited_version(
     ui_obj, bmodels_list, model_type="binary", language="en"
 ):
+
     if model_type == "binary":
         headers = binary_headers_dic[language]
         headers_db = binary_headers_dic["db"]
@@ -512,11 +446,10 @@ def set_bmodels_on_ui_tabel_edited_version(
         headers = localization_headers[language]
         table_ncols = len(localization_headers[language])
         headers_db = localization_headers["db"]
-    else:
-        headers = classification_headers[language]
-        table_ncols = len(classification_headers[language])
-        headers_db = classification_headers["db"]
-
+    elif model_type == "classification":
+        headers = localization_headers[language]
+        table_ncols = len(localization_headers[language])
+        headers_db = localization_headers["db"]
     # define table parameters
     ui_obj.table_of_binary_classifaction_in_PBT_page.resizeColumnsToContents()
     ui_obj.table_of_binary_classifaction_in_PBT_page.setColumnCount(table_ncols)
@@ -525,13 +458,14 @@ def set_bmodels_on_ui_tabel_edited_version(
     else:
         ui_obj.table_of_binary_classifaction_in_PBT_page.setRowCount(0)
     ui_obj.table_of_binary_classifaction_in_PBT_page.verticalHeader().setVisible(True)
-    # ui_obj.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setSectionResizeMode(
-    #     sQHeaderView.Stretch
-    # )
+    ui_obj.table_of_binary_classifaction_in_PBT_page.horizontalHeader().setSectionResizeMode(
+        sQHeaderView.Stretch
+    )
 
     ui_obj.table_of_binary_classifaction_in_PBT_page.setHorizontalHeaderLabels(headers)
     # text color
     text_color = colors_pallete.black
+
     # add users to table
     for row_idx, bmodel in enumerate(bmodels_list):
         for col_idx in range(table_ncols):
@@ -540,16 +474,19 @@ def set_bmodels_on_ui_tabel_edited_version(
                 bmodel[headers_db[col_idx]] = translate_binary_algorithm_id_to_name(
                     algo_id=bmodel[headers_db[col_idx]], model_type=model_type
                 )
+            # print('bmodels_list',bmodels_list)
             table_item = sQTableWidgetItem(str(bmodel[headers_db[col_idx]]))
             # set checkbox (only first col)
             if col_idx == 0:
-                table_item.setFlags(sQtCore.Qt.ItemFlag.ItemIsEnabled)
+                table_item.setFlags(
+                    sQtCore.Qt.ItemFlag.ItemIsUserCheckable
+                    | sQtCore.Qt.ItemFlag.ItemIsEnabled
+                )
                 table_item.setCheckState(sQtCore.Qt.CheckState.Unchecked)
             table_item.setForeground(sQColor(text_color))
             ui_obj.table_of_binary_classifaction_in_PBT_page.setItem(
                 row_idx, col_idx, table_item
             )
-
     try:
         ui_obj.table_of_binary_classifaction_in_PBT_page.setRowCount(row_idx + 1)
     except:
@@ -586,7 +523,7 @@ def save_new_binary_model_record(ui_obj, db_obj, bmodel_records):
     """
 
     # add
-    print(bmodel_records["weights_path"])
+    # print(bmodel_records["weights_path"])
     if add_new_binary_model_to_db(db_obj=db_obj, new_bmodel_info=bmodel_records):
         ui_obj.notif_manager.append_new_notif(
             message=texts.MESSEGES["database_add_bmodel"][ui_obj.language], level=1
@@ -624,7 +561,7 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
             elif model_type == "classification":
                 bmodel_info["algo_name"] = [
                     translate_binary_algorithm_id_to_name(
-                        algo_id=ui_obj.cbBox_of_classification_model_in_PBT_page.currentText(),
+                        algo_id=ui_obj.cbBox_of_multiClassification_model_in_PBT_page.currentText(),
                         model_type="classification",
                         reverse=True,
                     )
@@ -640,13 +577,12 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
             elif model_type == "yolo":
                 bmodel_info["algo_name"] = [
                     translate_binary_algorithm_id_to_name(
-                        algo_id=ui_obj.cbBox_of_yolo_model_in_PBT_page.currentText(),
+                        algo_id=ui_obj.cbBox_of_localization_model_in_PBT_page.currentText(),
                         model_type="yolo",
                         reverse=True,
                     )
                 ]
-            else:
-                print("what the fuck!!!!!!!!1")
+
 
             bmodel_info["epochs"] = ["", ""]
             bmodel_info["tuning_epochs"] = ["", ""]
@@ -1268,8 +1204,6 @@ def get_filtered_binary_models_from_db(
         model_type = "classification_models"
     elif model_type == "localization":
         model_type = "localization_models"
-    elif model_type == "yolo":
-        model_type = "yolo_models"
 
     try:
         res, defects_list = db_obj.search_binary_model_by_filter(
@@ -1304,7 +1238,7 @@ class Binary_model_train_worker(sQObject):
 
     finished = sSignal()
     warning = sSignal(str, str, str, int)
-    reset_progressbar = sSignal(int, str)
+    reset_progressbar = sSignal(int , str)
     set_progressbar = sSignal()
     update_charts = sSignal(int, dict)
 
@@ -1320,28 +1254,15 @@ class Binary_model_train_worker(sQObject):
             if self.ds_obj.check_binary_dataset(path):
                 self.ds_obj.create_split_folder(path)
 
-                s_mask = os.path.join(
-                    path, self.ds_obj.binary_folder, self.ds_obj.defect_mask_folder
-                )
-                s_defect = os.path.join(
-                    path, self.ds_obj.binary_folder, self.ds_obj.defect_folder
-                )
-                d_defect = os.path.join(
-                    path, self.ds_obj.binary_folder, self.ds_obj.defect_splitted_folder
-                )
+                s_mask = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.defect_mask_folder)
+                s_defect = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.defect_folder)
+                d_defect = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.defect_splitted_folder)
 
-                s_perfect = os.path.join(
-                    path, self.ds_obj.binary_folder, self.ds_obj.perfect_folder
-                )
-                d_perfect = os.path.join(
-                    path, self.ds_obj.binary_folder, self.ds_obj.perfect_splitted_folder
-                )
+                s_perfect = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.perfect_folder)
+                d_perfect = os.path.join(path, self.ds_obj.binary_folder, self.ds_obj.perfect_splitted_folder)
 
                 imgs = os.listdir(s_defect)
-                self.reset_progressbar.emit(
-                    len(imgs) + len(os.listdir(s_perfect)),
-                    "Splitting dataset {}".format(i + 1),
-                )
+                self.reset_progressbar.emit(len(imgs) + len(os.listdir(s_perfect)), 'Splitting dataset {}'.format(i+1))
                 for i in imgs:
                     img = Utils.read_image(os.path.join(s_defect, i), color="color")
                     mask = Utils.read_image(os.path.join(s_mask, i), color="color")
@@ -1365,9 +1286,7 @@ class Binary_model_train_worker(sQObject):
                     if img is None:
                         continue
                     crops = get_crops_no_defect(img, n_split, size)
-                    self.ds_obj.save_to_perfect_splitted(
-                        crops, d_perfect, i.split(".")[0]
-                    )
+                    self.ds_obj.save_to_perfect_splitted(crops, d_perfect, i.split(".")[0])
                     self.set_progressbar.emit()
             else:
                 self.warning.emit(
@@ -1378,18 +1297,14 @@ class Binary_model_train_worker(sQObject):
         if self.b_parms[2]:
             self.split_binary_dataset(self.b_parms[-1], self.b_parms[1])
 
-        self.reset_progressbar.emit(self.b_parms[3], "Training")
+        self.reset_progressbar.emit(self.b_parms[3], 'Training')
         bmodel_records = train_api.train_binary(
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
-        print("bmodel_records", bmodel_records)
+        # print('bmodel_records',bmodel_records)
         if not bmodel_records[0]:
             self.warning.emit(
-                bmodel_records[1][0],
-                bmodel_records[1][1],
-                bmodel_records[1][2],
-                None,
-                1,
+                bmodel_records[1][0], bmodel_records[1][1], bmodel_records[1][2],None,1
             )
         else:
             bmodel_records = bmodel_records[1]
@@ -1427,25 +1342,13 @@ class Binary_model_train_worker(sQObject):
     def save_b_model(self, model, path, epoch):
         try:
             model.save(path)
-            self.ui_obj.logger.create_new_log(
-                message=texts.MESSEGES["SAVE_BMODEL_EPOCH"]["en"].format(epoch)
-            )
+            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['SAVE_BMODEL_EPOCH']['en'].format(epoch))
         except:
-            self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["SAVE_BMODEL_EPOCH_FAILED"]["en"].format(epoch),
-                level=5,
-            )
-            self.warning.emit(
-                texts.ERRORS["SAVE_BMODEL_EPOCH_FAILED"][self.api_obj.language].format(
-                    epoch
-                ),
-                "train",
-                None,
-                3,
-            )
+            self.ui_obj.logger.create_new_log(message=texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED']['en'].format(epoch), level=5)
+            self.warning.emit(texts.ERRORS['SAVE_BMODEL_EPOCH_FAILED'][self.api_obj.language].format(epoch), 'train', None, 3)
 
     def show_bmodel_train_result(self):
-        self.reset_progressbar.emit(1, "")
+        self.reset_progressbar.emit(1, '')
         self.ui_obj.binary_train.setEnabled(True)
         self.api_obj.running_b_model = False
         return

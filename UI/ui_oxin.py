@@ -2394,15 +2394,15 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_213.addWidget(self.line_34)
 
-        self.label_heat_number_5 = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_heat_number_5.setObjectName(u"label_heat_number_5")
+        self.label_heat_id_5 = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_heat_id_5.setObjectName(u"label_heat_id_5")
 
-        self.horizontalLayout_213.addWidget(self.label_heat_number_5)
+        self.horizontalLayout_213.addWidget(self.label_heat_id_5)
 
-        self.label_heat_number = QLabel(self.scrollAreaWidgetContents_5)
-        self.label_heat_number.setObjectName(u"label_heat_number")
+        self.label_heat_id = QLabel(self.scrollAreaWidgetContents_5)
+        self.label_heat_id.setObjectName(u"label_heat_id")
 
-        self.horizontalLayout_213.addWidget(self.label_heat_number)
+        self.horizontalLayout_213.addWidget(self.label_heat_id)
 
         self.line_51 = QFrame(self.scrollAreaWidgetContents_5)
         self.line_51.setObjectName(u"line_51")
@@ -3992,17 +3992,17 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_228.addWidget(self.line_65)
 
-        self.label_heat_number_3 = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_heat_number_3.setObjectName(u"label_heat_number_3")
-        sizePolicy.setHeightForWidth(self.label_heat_number_3.sizePolicy().hasHeightForWidth())
-        self.label_heat_number_3.setSizePolicy(sizePolicy)
+        self.label_heat_id_3 = QLabel(self.scrollAreaWidgetContents_6)
+        self.label_heat_id_3.setObjectName(u"label_heat_id_3")
+        sizePolicy.setHeightForWidth(self.label_heat_id_3.sizePolicy().hasHeightForWidth())
+        self.label_heat_id_3.setSizePolicy(sizePolicy)
 
-        self.horizontalLayout_228.addWidget(self.label_heat_number_3)
+        self.horizontalLayout_228.addWidget(self.label_heat_id_3)
 
-        self.label_heat_number_2 = QLabel(self.scrollAreaWidgetContents_6)
-        self.label_heat_number_2.setObjectName(u"label_heat_number_2")
+        self.label_heat_id_2 = QLabel(self.scrollAreaWidgetContents_6)
+        self.label_heat_id_2.setObjectName(u"label_heat_id_2")
 
-        self.horizontalLayout_228.addWidget(self.label_heat_number_2)
+        self.horizontalLayout_228.addWidget(self.label_heat_id_2)
 
         self.line_66 = QFrame(self.scrollAreaWidgetContents_6)
         self.line_66.setObjectName(u"line_66")
@@ -4136,7 +4136,7 @@ class Ui_MainWindow(object):
 
         self.suggested_defects_progressBar = QProgressBar(self.frame_117)
         self.suggested_defects_progressBar.setObjectName(u"suggested_defects_progressBar")
-        self.suggested_defects_progressBar.setMaximum(1920)
+        self.suggested_defects_progressBar.setMaximum(1792)
         self.suggested_defects_progressBar.setValue(0)
 
         self.horizontalLayout_344.addWidget(self.suggested_defects_progressBar)
@@ -16265,8 +16265,8 @@ class Ui_MainWindow(object):
         self.plc_warnings.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_156.setText(QCoreApplication.translate("MainWindow", u"Sheet ID :", None))
         self.label_sheet_id.setText(QCoreApplication.translate("MainWindow", u"-", None))
-        self.label_heat_number_5.setText(QCoreApplication.translate("MainWindow", u"Heat Number :", None))
-        self.label_heat_number.setText(QCoreApplication.translate("MainWindow", u"-", None))
+        self.label_heat_id_5.setText(QCoreApplication.translate("MainWindow", u"Heat Number :", None))
+        self.label_heat_id.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_159.setText(QCoreApplication.translate("MainWindow", u"Ps Number :", None))
         self.label_ps_number.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_132.setText(QCoreApplication.translate("MainWindow", u"Pdl Number :", None))
@@ -16395,8 +16395,8 @@ class Ui_MainWindow(object):
         self.prev_coil_btn.setText("")
         self.label_226.setText(QCoreApplication.translate("MainWindow", u"Sheet ID :", None))
         self.label_sheet_id_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
-        self.label_heat_number_3.setText(QCoreApplication.translate("MainWindow", u"Heat Number :", None))
-        self.label_heat_number_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
+        self.label_heat_id_3.setText(QCoreApplication.translate("MainWindow", u"Heat Number :", None))
+        self.label_heat_id_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_228.setText(QCoreApplication.translate("MainWindow", u"Ps Number :", None))
         self.label_ps_number_2.setText(QCoreApplication.translate("MainWindow", u"-", None))
         self.label_229.setText(QCoreApplication.translate("MainWindow", u"Pdl Number :", None))

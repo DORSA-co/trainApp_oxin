@@ -1,5 +1,8 @@
 import numpy as np
-from Defect_detection_modules.Division import ImageDivision
+try:
+    from Defect_detection_modules.Division import ImageDivision
+except:
+    from Division import ImageDivision
 
 
 def NoiseDetection(img, dim, ndim):
