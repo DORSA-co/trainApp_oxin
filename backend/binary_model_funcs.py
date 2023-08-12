@@ -94,6 +94,9 @@ binary_headers_dic = {
         "Batch-Size",
         "Learning-Rate",
         "Split Ratio",
+        "Dataset Path",
+        "Weights Path",
+        "Date Created",
         "Loss",
         "Accuracy",
         "Precision",
@@ -102,9 +105,6 @@ binary_headers_dic = {
         "Val-Accuracy",
         "Val-Precision",
         "Val-Recall",
-        "Dataset Path",
-        "Weights Path",
-        "Date Created",
     ],
     "fa": [
         "نام الگوریتم",
@@ -115,6 +115,9 @@ binary_headers_dic = {
         "اندازه دسته",
         "نرخ یادگیری",
         "نسبت تقسیم داده",
+        "آدرس مجموعه داده",
+        "آدرس وزن ها",
+        "تاریخ ایجاد",
         "Loss",
         "Accuracy",
         "Precision",
@@ -123,9 +126,6 @@ binary_headers_dic = {
         "اعتبارسنجی Accuracy",
         "اعتبارسنجی Precision",
         "اعتبارسنجی Recall",
-        "آدرس مجموعه داده",
-        "آدرس وزن ها",
-        "تاریخ ایجاد",
     ],
     "db": [
         "algo_name",
@@ -225,6 +225,7 @@ classification_headers = {
         "Batch-Size",
         "Learning-Rate",
         "Split Ratio",
+        "Target classes",
         "Loss",
         "Accuracy",
         "Precision",
@@ -236,6 +237,7 @@ classification_headers = {
         "Dataset Path",
         "Weights Path",
         "Date Created",
+        "Pretrain Weights",
     ],
     "fa": [
         "نام الگوریتم",
@@ -245,6 +247,7 @@ classification_headers = {
         "اندازه دسته",
         "نرخ یادگیری",
         "نسبت تقسیم داده",
+        "کلاس های هدف",
         "Loss",
         "Accuracy",
         "Precision",
@@ -256,6 +259,7 @@ classification_headers = {
         "آدرس مجموعه داده",
         "آدرس وزن ها",
         "تاریخ ایجاد",
+        "آدرس وزن از قبل آموزش دیده",
     ],
     "db": [
         "algo_name",
@@ -265,6 +269,7 @@ classification_headers = {
         "batch_size",
         "lr",
         "split_ratio",
+        "classes",
         "loss",
         "accuracy",
         "precision_",
@@ -276,6 +281,7 @@ classification_headers = {
         "dataset_pathes",
         "weights_path",
         "date_",
+        "pretrain_path",
     ],
 }
 # yolo table headers
@@ -283,20 +289,24 @@ yolo_headers = {
     "en": [
         "Algorithm",
         "Input-Size",
-        "Input-Type" "N-Epochs",
+        "Input-Type",
+        "N-Epochs",
         "Batch-Size",
         "Learning-Rate",
         "Split Ratio",
         "Dataset Path",
         "Weights Path",
         "Date Created",
-        "BOX-Loss" "OBJ-Loss",
+        "Target classes",
+        "BOX-Loss",
+        "OBJ-Loss",
         "CLS_Loss",
         "Val_Precision",
         "Val_Recall",
         "Val_mAP05",
         "Val_mAP0595",
-        "Val_BOX-Loss" "Val_OBJ-Loss",
+        "Val_BOX-Loss",
+        "Val_OBJ-Loss",
         "Val_CLS_Loss",
     ],
     "fa": [
@@ -309,13 +319,16 @@ yolo_headers = {
         "آدرس مجموعه داده",
         "آدرس وزن ها",
         "تاریخ ایجاد",
-        "BOX-Loss" "OBJ-Loss",
+        "کلاس های هدف",
+        "BOX-Loss",
+        "OBJ-Loss",
         "CLS_Loss",
         "اعتبارسنجی Precision",
         "اعتبارسنجی Recall",
         "اعتبارسنجی mAP05",
         "اعتبارسنجی mAP0595",
-        "اعتبارسنجی BOX-Loss" "اعتبارسنجی OBJ-Loss",
+        "اعتبارسنجی BOX-Loss",
+        "اعتبارسنجی OBJ-Loss",
         "اعتبارسنجی CLS_Loss",
     ],
     "db": [
@@ -342,7 +355,6 @@ yolo_headers = {
         "val_cls_loss",
     ],
 }
-
 # table number of rows and cols
 binary_table_ncols = len(binary_headers)
 binary_table_nrows = 20
@@ -537,6 +549,7 @@ def set_bmodels_on_ui_tabel_edited_version(
             ui_obj.table_of_binary_classifaction_in_PBT_page.setItem(
                 row_idx, col_idx, table_item
             )
+
     try:
         ui_obj.table_of_binary_classifaction_in_PBT_page.setRowCount(row_idx + 1)
     except:

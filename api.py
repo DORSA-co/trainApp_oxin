@@ -285,12 +285,17 @@ class API:
 
         # Level2 connection
         self.l2_connection = level2_connection.connection_level2()
-
         # PBT
 
-        self.current_b_model = None
-        self.current_l_model = None
-        self.current_c_model = None
+        self.current_b_model = ""
+        self.current_l_model = ""
+        self.current_c_model = ""
+        self.current_yolo_model = ""
+        self.current_b_model_weights = ""
+        self.current_l_model_weights = ""
+        self.current_c_model_weights = ""
+        self.current_yolo_model_weights = ""
+        self.pipline_type = ""
         self.pipline_name = ""
         self.binary_model_flag = False
         self.segmentation_model_flag = False
@@ -538,6 +543,15 @@ class API:
             self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(True)
             self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(58)
             self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(28)
+            if self.current_yolo_model != "":
+                if self.current_l_model != "":
+                    self.pipline_type = "BSY"
+                else:
+                    self.pipline_type = "BY"
+            elif self.current_c_model != "":
+                self.pipline_type = "BSC"
+            else:
+                self.pipline_type = "BS"
 
         else:
             self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
@@ -548,44 +562,45 @@ class API:
         """the function connect to 'BTN_apply_of_binary_classifaction_in_PBT_page',
         and if the user set models,by clicking the buttom ,load dataset page loaded
         """
-        if self.check_name_pipline():
-            classification_info = ""
-            if self.current_l_model != "" and self.current_c_model == "":
-                classification_info = texts.WARNINGS["Have_Classification_model"][
-                    self.language
-                ]
+        if self.ui.pipline_name.text() != "":
+            if self.check_name_pipline():
+                classification_info = ""
+                if self.current_l_model != "" and self.current_c_model == "":
+                    classification_info = texts.WARNINGS["Have_Classification_model"][
+                        self.language
+                    ]
 
-            if self.ui.show_question(
-                texts.WARNINGS["WARNING"][self.language],
-                texts.WARNINGS["Create_pipline"][self.language]
-                + self.ui.pipline_name.text()
-                + ")\n"
-                + classification_info,
-            ):
-                if self.create_and_add_pipline():
-                    self.ui.stackedWidget_pbt.setCurrentWidget(
-                        self.ui.page_load_dataset
-                    )
-                    self.ui.load_dataset_pbt_btn.setStyleSheet(
-                        "background-color: rgb(200,200,200)"
-                    )
-                    self.ui.history_pbt_btn.setStyleSheet(
-                        "background-color: rgb(100,100,100)"
-                    )
-                    self.ui.pipeline_pbt_btn.setStyleSheet(
-                        "background-color: rgb(100,100,100)"
-                    )
-                    self.refresh_datasets_table(PBT_page=True)
-                    self.add_piplines_in_combobox(
-                        piplinename=self.ui.pipline_name.text()
-                    )
-                    self.refresh_loadDataset_tabs_in_PBT()
-                else:
-                    self.ui.pipline_name_status.setText(
-                        texts.ERRORS["pipline_eror"][self.language]
-                    )
-        else:
-            pass
+                if self.ui.show_question(
+                    texts.WARNINGS["WARNING"][self.language],
+                    texts.WARNINGS["Create_pipline"][self.language]
+                    + self.ui.pipline_name.text()
+                    + ")\n"
+                    + classification_info,
+                ):
+                    if self.create_and_add_pipline():
+                        self.ui.stackedWidget_pbt.setCurrentWidget(
+                            self.ui.page_load_dataset
+                        )
+                        self.ui.load_dataset_pbt_btn.setStyleSheet(
+                            "background-color: rgb(200,200,200)"
+                        )
+                        self.ui.history_pbt_btn.setStyleSheet(
+                            "background-color: rgb(100,100,100)"
+                        )
+                        self.ui.pipeline_pbt_btn.setStyleSheet(
+                            "background-color: rgb(100,100,100)"
+                        )
+                        self.refresh_datasets_table(PBT_page=True)
+                        self.add_piplines_in_combobox(
+                            piplinename=self.ui.pipline_name.text()
+                        )
+                        self.refresh_loadDataset_tabs_in_PBT()
+                    else:
+                        self.ui.pipline_name_status.setText(
+                            texts.ERRORS["pipline_eror"][self.language]
+                        )
+            else:
+                pass
 
     def check_name_pipline(self):
         pipline_name = self.ui.pipline_name.text()
@@ -632,7 +647,7 @@ class API:
                 self.current_l_model_weights,
                 self.current_c_model_weights,
                 self.current_yolo_model_weights,
-                str(self.current_yolo_model != ""),
+                self.pipline_type,
             )  # path pipline null
             ret = self.db.add_pipline(data)
             return ret
@@ -655,9 +670,9 @@ class API:
         db_pipline_names = self.db.get_pipline_names()
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.clear()
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.addItems(db_pipline_names)
-        if piplinename != -1:
-            inx = db_pipline_names.index(piplinename)
-            self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setCurrentIndex(inx)
+        # if piplinename != -1:
+        #     inx = db_pipline_names.index(piplinename)
+        #     self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setCurrentIndex(inx)
 
     def load_image_btn_in_PBT_page(self):
         """
@@ -4571,6 +4586,7 @@ class API:
                     value=texts.MESSEGES["Part_can_not_build"][self.language],
                     row=0,
                 )
+                self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
         elif id == 2:  # if there is no yolo in pipline structer,segmention model build
             if flag_creation:
                 self.l_model = self.ModelsCreation.l_model
@@ -4590,6 +4606,7 @@ class API:
                     value=texts.MESSEGES["Part_can_not_build"][self.language],
                     row=1,
                 )
+                self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
         elif id == 3:
             if flag_creation:
                 self.c_model = self.ModelsCreation.c_model
@@ -4606,6 +4623,7 @@ class API:
                     value=texts.MESSEGES["Part_can_not_build"][self.language],
                     row=2,
                 )
+                self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
         elif id == 4:  # yolo model build
             self.use_yolo = True
             if self.pipline_type == "BY":
@@ -4628,7 +4646,7 @@ class API:
                     value=texts.MESSEGES["Part_can_not_build"][self.language],
                     row=3,
                 )
-
+                self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
         self.pipline_check = {
             "BY": (self.yolo_model_flag and self.binary_model_flag),
             "BS": (self.binary_model_flag and self.segmentation_model_flag),
