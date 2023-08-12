@@ -17,7 +17,7 @@ class cameraSetting:
 
         self.gain_top = gain_top
         self.path = main_path
-        self.heat_id = heat_id
+        self.heat_number = heat_number
         self.ps_number = ps_number #product scechule number
         self.pdl_number = pdl_number #product d??? number
         self.width = width
@@ -33,7 +33,7 @@ class cameraSetting:
         self.id = id
 
     def set_heatnumber(self, heat_num):
-        self.heat_id = heat_num
+        self.heat_number = heat_num
 
     def set_pdlnumber(self,num):
         self.pdl_number = num
@@ -73,7 +73,7 @@ class cameraSetting:
         return self.id
 
     def get_heatnumber(self):
-        return self.heat_id
+        return self.heat_number
 
     def get_pdlnumber(self):
         return self.pdl_number

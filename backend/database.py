@@ -283,22 +283,22 @@ if __name__ == "__main__":
     # db.get_col_name('996','camera_settings','id')
 
     # data=(0,)*10
-    #data=(0,0,0,0,1792,1200,0,0,0,0,0)
+    #data=(0,0,0,0,1920,1200,0,0,0,0,0)
 
     
     # x=db.get_all_content('users')
     # table_name,parametrs,len_parameters)
 
-    # db.add_record(data,'coils_info','(id,coil_number,heat_id,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
+    # db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
     # db.add_record(data,'camera_settings','(gain_top,gain_bottom,expo_top,expo_bottom,width,height,offset_x,offset_y,interpacket_delay,packet_size,id)',11)
  
-    #db.add_record(data,'coils_info','(id,coil_number,heat_id,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
+    #db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
 
     # x=db.report_last('users','id',30)
 
     # ##print(x)
 
-    # db.remove_record('1792', 'camera_settings')
+    # db.remove_record('1920', 'camera_settings')
 
     # db.remove_record('user_name', 'milad', 'users')
 
@@ -322,7 +322,7 @@ if __name__ == "__main__":
 # CREATE TABLE `saba_database`.`coils_info` (
 #   `id` INT NOT NULL,
 #   `coil_number` VARCHAR(45) NOT NULL,
-#   `heat_id` VARCHAR(45) NULL,
+#   `heat_number` VARCHAR(45) NULL,
 #   `ps_number` VARCHAR(45) NULL,
 #   `pdl_number` VARCHAR(45) NULL,
 #   `length` VARCHAR(45) NULL,

@@ -111,28 +111,28 @@ class management():
         """
 
         var = self.client.get_node(path)
-        # print(path,'    ',value)
-        try:
-            if type(value) == int:
-                # #print('number')
-                data = ua.DataValue(ua.Variant(value, ua.VariantType.Byte))
-                var.set_value(data)
+        print(path,'    ',value)
+        # try:
+        if type(value) == int:
+            # #print('number')
+            data = ua.DataValue(ua.Variant(value, ua.VariantType.Byte))
+            var.set_value(data)
 
+        else:
+            # #print('value:',value)
+            if value=='False':
+                value_=False
+                ##print(value_)
             else:
-                # #print('value:',value)
-                if value=='False':
-                    value_=False
-                    ##print(value_)
-                else:
-                    value_=True
+                value_=True
 
-                value = ua.DataValue(ua.Variant(value_,ua.VariantType.Boolean))
-                var.set_value(value)
-            
-            return True
+            value = ua.DataValue(ua.Variant(value_,ua.VariantType.Boolean))
+            var.set_value(value)
         
-        except:
-            return False
+        return True
+        
+        # except:
+        #     return False
             
 
     def set_file_name(self, name):

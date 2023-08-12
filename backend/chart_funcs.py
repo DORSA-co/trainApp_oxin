@@ -293,7 +293,7 @@ def update_chart(ui_obj, chart_postfixes, last_epoch, logs, scroll_obj, chart_ty
 
 
 #_____________________________________________________________________________________________________________________
-perfect_color = '#4dbf4d'
+perfect_color = '#00ff00'
 defect_color = '#ff0000'
 pie_background_color = '#282c34'
 pie_label_color = '#FFFFFF'
@@ -821,7 +821,6 @@ def create_storage_barchart_on_ui(ui_obj, frame_obj_storage, storage_type, chart
     # ui_obj.binary_barchart.setTheme(sQChart.ChartThemeDark)
     exec('ui_obj.{}_storage_barchart.legend().setVisible(False)'.format(storage_type))
     # exec('ui_obj.{}_storage_barchart.legend().setAlignment(Qt.AlignRight)'.format(storage_type))
-    
     # exec('ui_obj.{}_storage_barchart.legend().setLabelBrush(sQColor(pie_label_color))'.format(storage_type))
     exec('ui_obj.{}_storage_barchart.setBackgroundBrush(sQColor("#14165c"))'.format(storage_type))
     exec('ui_obj.{}_storage_barchart.setBackgroundRoundness(0)'.format(storage_type))
@@ -844,24 +843,24 @@ def update_storage_barchart(ui_obj, storage_type, storage_status):
     exec('ui_obj.bar_{}_storage_series.clear()'.format(storage_type))
     
     categories = list(storage_status.keys())
-    # ui_obj.axisX = QBarCategoryAxis()
-    # ui_obj.axisX.append(categories)
-    # exec('ui_obj.{}_storage_barchart.setAxisY(ui_obj.axisX, ui_obj.bar_{}_storage_series)'.format(storage_type, storage_type))
-    # ui_obj.axisX.setLabelsColor(sQColor(pie_label_color))
-    # ui_obj.axisX.setLabelsVisible(False)
+    ui_obj.axisX = QBarCategoryAxis()
+    ui_obj.axisX.append(categories)
+    exec('ui_obj.{}_storage_barchart.setAxisY(ui_obj.axisX, ui_obj.bar_{}_storage_series)'.format(storage_type, storage_type))
+    ui_obj.axisX.setLabelsColor(sQColor(pie_label_color))
+    ui_obj.axisX.setLabelsVisible(False)
 
-    # ui_obj.axisY = QValueAxis()
-    # exec('ui_obj.{}_storage_barchart.setAxisX(ui_obj.axisY, ui_obj.bar_{}_storage_series)'.format(storage_type, storage_type))
-    # ui_obj.axisY.setRange(0, 100)
-    # ui_obj.axisY.setLabelsColor(sQColor(pie_label_color))
-    # ui_obj.axisY.setLabelsFont(sQFont("Times", 5, sQFont.Normal))
+    ui_obj.axisY = QValueAxis()
+    exec('ui_obj.{}_storage_barchart.setAxisX(ui_obj.axisY, ui_obj.bar_{}_storage_series)'.format(storage_type, storage_type))
+    ui_obj.axisY.setRange(0, 100)
+    ui_obj.axisY.setLabelsColor(sQColor(pie_label_color))
+    ui_obj.axisY.setLabelsFont(sQFont("Times", 5, sQFont.Normal))
 
-    set0 = QBarSet('Used')
-    set1 = QBarSet('Free')
+    set0 = QBarSet('used')
+    set1 = QBarSet('free')
 
     for k in categories:
-        set0.append(storage_status[k]['Used'])
-        set1.append(storage_status[k]['Free'])
+        set0.append(storage_status[k]['used'])
+        set1.append(storage_status[k]['free'])
 
     set0.setBrush(sQColor(defect_color))
     set1.setBrush(sQColor(perfect_color))

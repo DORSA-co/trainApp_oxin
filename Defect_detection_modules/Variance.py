@@ -1,8 +1,5 @@
 import numpy as np
-try:
-    from Defect_detection_modules.Division import ImageDivision
-except:
-    from Division import ImageDivision
+from Defect_detection_modules.Division import ImageDivision
 
 
 def ImageBlockVariance(img, dim, ol):

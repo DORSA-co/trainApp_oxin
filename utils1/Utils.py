@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import os
 
-IMAGE_SHAPE = (1024, 1792)
+IMAGE_SHAPE = (1200, 1920)
 
 def get_selected_value(mylist , idxs):
     return np.array(mylist)[idxs].tolist()

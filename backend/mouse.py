@@ -23,6 +23,7 @@ class Mouse:
 
     def mouse_event(self, widget, function, button=None):
         def func(e):
+            
             self.btn =  BUTTONS.get(e.button(), self.btn )
 
             self.x, self.y = e.x(), e.y()

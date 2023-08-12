@@ -6,8 +6,7 @@ from PySide6.QtGui import QColor as sQColor
 from pyparsing import col
 
 from backend import colors_pallete
-import texts
-import train_api
+import train_api, texts
 
 
 # UI table header names

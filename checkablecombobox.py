@@ -58,7 +58,7 @@ class MyApp(QWidget):
             self.combo.addItem('Item {0}'.format(str(i)))
             self.combo.setItemChecked(i, False)
 
-        btn = QPushButton('print Values')
+        btn = QPushButton('#print Values')
         btn.clicked.connect(self.combo.getValue)
         mainLayout.addWidget(btn)
 

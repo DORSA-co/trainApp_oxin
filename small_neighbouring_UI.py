@@ -2,7 +2,7 @@ import time
 
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PySide6 import QtCore as sQtCore
+
 # from pyqt5_plugins import *
 from PySide6.QtCharts import *
 from PySide6.QtCore import *
@@ -102,18 +102,28 @@ class small_neighbouring(QMainWindow, ui):
             annotation_c = cv2.hconcat([self.anns[3], self.anns[8], self.anns[4]])
             annotation_d = cv2.hconcat([self.anns[5], self.anns[6], self.anns[7]])
             self.ann = cv2.vconcat([annotation_u, annotation_c, annotation_d])
-            self.img = Utils.add_layer_to_img(self.img, self.ann, opacity=0.4, compress=0.5)
+            self.img = Utils.add_layer_to_img(
+                self.img, self.ann, opacity=0.4, compress=0.5
+            )
 
-        self.image.setPixmap(QPixmap.fromImage(
-            QImage(self.img, self.img.shape[1], self.img.shape[0], self.img.strides[0],
-                   QImage.Format_BGR888)))
+        self.image.setPixmap(
+            QPixmap.fromImage(
+                QImage(
+                    self.img,
+                    self.img.shape[1],
+                    self.img.shape[0],
+                    self.img.strides[0],
+                    QImage.Format_BGR888,
+                )
+            )
+        )
 
 
 # api = labeling_api.labeling_API(win)
 import cv2
 
 if __name__ == "__main__":
-    img = cv2.imread('/home/reyhane/oxin_image_grabber/995/BOTTOM/1/5.png')
+    img = cv2.imread("/home/reyhane/oxin_image_grabber/995/BOTTOM/1/5.png")
     imgs = []
     for i in range(9):
         imgs.append(img)

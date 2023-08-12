@@ -873,28 +873,28 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.addWidget(self.btn_id_search)
 
         self.coil_search.addTab(self.id_page, "")
-        self.heat_id_page = QWidget()
-        self.heat_id_page.setObjectName(u"heat_id_page")
-        self.verticalLayout_6 = QVBoxLayout(self.heat_id_page)
+        self.heat_number_page = QWidget()
+        self.heat_number_page.setObjectName(u"heat_number_page")
+        self.verticalLayout_6 = QVBoxLayout(self.heat_number_page)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
-        self.label_5 = QLabel(self.heat_id_page)
+        self.label_5 = QLabel(self.heat_number_page)
         self.label_5.setObjectName(u"label_5")
 
         self.verticalLayout_6.addWidget(self.label_5)
 
-        self.list_heat_id = QListWidget(self.heat_id_page)
-        self.list_heat_id.setObjectName(u"list_heat_id")
+        self.list_heat_number = QListWidget(self.heat_number_page)
+        self.list_heat_number.setObjectName(u"list_heat_number")
 
-        self.verticalLayout_6.addWidget(self.list_heat_id)
+        self.verticalLayout_6.addWidget(self.list_heat_number)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
-        self.label_4 = QLabel(self.heat_id_page)
+        self.label_4 = QLabel(self.heat_number_page)
         self.label_4.setObjectName(u"label_4")
 
         self.horizontalLayout_9.addWidget(self.label_4)
 
-        self.line_search_heat = QLineEdit(self.heat_id_page)
+        self.line_search_heat = QLineEdit(self.heat_number_page)
         self.line_search_heat.setObjectName(u"line_search_heat")
         self.line_search_heat.setMinimumSize(QSize(150, 5))
 
@@ -903,13 +903,13 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_6.addLayout(self.horizontalLayout_9)
 
-        self.btn_heat_search = QPushButton(self.heat_id_page)
+        self.btn_heat_search = QPushButton(self.heat_number_page)
         self.btn_heat_search.setObjectName(u"btn_heat_search")
         self.btn_heat_search.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.verticalLayout_6.addWidget(self.btn_heat_search)
 
-        self.coil_search.addTab(self.heat_id_page, "")
+        self.coil_search.addTab(self.heat_number_page, "")
         self.psn_page = QWidget()
         self.psn_page.setObjectName(u"psn_page")
         self.verticalLayout_7 = QVBoxLayout(self.psn_page)
@@ -1102,9 +1102,9 @@ class Ui_MainWindow(object):
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Availabl HEAT Numbers :", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Number :", None))
         self.btn_heat_search.setText(QCoreApplication.translate("MainWindow", u"Search", None))
-        self.coil_search.setTabText(self.coil_search.indexOf(self.heat_id_page), QCoreApplication.translate("MainWindow", u"HEAT", None))
+        self.coil_search.setTabText(self.coil_search.indexOf(self.heat_number_page), QCoreApplication.translate("MainWindow", u"HEAT", None))
 #if QT_CONFIG(tooltip)
-        self.coil_search.setTabToolTip(self.coil_search.indexOf(self.heat_id_page), QCoreApplication.translate("MainWindow", u"heat number", None))
+        self.coil_search.setTabToolTip(self.coil_search.indexOf(self.heat_number_page), QCoreApplication.translate("MainWindow", u"heat number", None))
 #endif // QT_CONFIG(tooltip)
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Available Product Schedule Numbesr :", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Number :", None))

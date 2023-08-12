@@ -42,7 +42,7 @@ def create_sheet_path(main_path, id):
 def sheet_image_path(main_path,id, side, camera_numbers, n_frame, format_img):
     try:
         db = dataBaseUtils(ui_obj='Null')
-        date, main_path = db.load_sheet_date_mainpath(id)
+        date = db.load_sheet_date(id)
     except:
         date = date_funcs.get_date(persian=SHAMSI_DATE)
     year, month, day = date.split('/')
@@ -55,7 +55,7 @@ def sheet_image_path(main_path,id, side, camera_numbers, n_frame, format_img):
 def sheet_camera_path(main_path,id, side, camera_numbers):
     try:
         db = dataBaseUtils(ui_obj='Null')
-        date, main_path = db.load_sheet_date_mainpath(id)
+        date = db.load_sheet_date(id)
     except:
         date = date_funcs.get_date(persian=SHAMSI_DATE)
     year, month, day = date.split('/')
@@ -66,65 +66,17 @@ def sheet_camera_path(main_path,id, side, camera_numbers):
         return(os.path.join(main_path, year, month, day, str(id), 'BOTTOM', str(camera_numbers)))
 
 def sheet_path(main_path, id):
-    try:
-        db = dataBaseUtils(ui_obj='Null')
-        date, main_path = db.load_sheet_date_mainpath(id)
-    except:
-        date = date_funcs.get_date(persian=SHAMSI_DATE)
+    db = dataBaseUtils(ui_obj='Null')
+    date = db.load_sheet_date(id)
     year, month, day = date.split('/')
     return(os.path.join(main_path, year, month, day, str(id)))
 
-def create_sheet_suggestions_path(main_path, id):
-    try:
-        db = dataBaseUtils(ui_obj='Null')
-        date, _ = db.load_sheet_date_mainpath(id)
-    except:
-        date = date_funcs.get_date(persian=SHAMSI_DATE)
-    year, month, day = date.split('/')
-    sides = ['BOTTOM', 'TOP']
-    cams = 12
-    for side in sides:
-        for cam in range(1, cams+1):
-            path = os.path.join(main_path, year, month, day, str(id), side, str(cam))
-            if not os.path.exists(path):
-                os.makedirs(path)
 
-def sheet_suggestions_json_path(main_path,id, side, camera_numbers, n_frame, format='.json'):
-    try:
-        db = dataBaseUtils(ui_obj='Null')
-        date, _ = db.load_sheet_date_mainpath(id)
-        main_path = db.get_suggestions_path()
-    except:
-        date = date_funcs.get_date(persian=SHAMSI_DATE)
-    year, month, day = date.split('/')
-    if 'top' in side.lower() or 'up' in side.lower():
-        return(os.path.join(main_path, year, month, day, str(id), 'TOP', str(camera_numbers), str(n_frame) + str(format) ))
-    
-    elif 'bot' in side.lower() or 'down' in side.lower():
-        return(os.path.join(main_path, year, month, day, str(id), 'BOTTOM', str(camera_numbers), str(n_frame) + str(format)))
-    
-def sheet_suggestions_camera_path(main_path, id, side, camera_numbers):
-    try:
-        db = dataBaseUtils(ui_obj='Null')
-        date, _ = db.load_sheet_date_mainpath(id)
-        main_path = db.get_suggestions_path()
-    except:
-        date = date_funcs.get_date(persian=SHAMSI_DATE)
-    year, month, day = date.split('/')
-    if 'top' in side.lower() or 'up' in side.lower():
-        return(os.path.join(main_path, year, month, day, str(id), 'TOP', str(camera_numbers)))
-    
-    elif 'bot' in side.lower() or 'down' in side.lower():
-        return(os.path.join(main_path, year, month, day, str(id), 'BOTTOM', str(camera_numbers)))
 
-def sheet_suggestions_path(main_path, id):
-    try:
-        db = dataBaseUtils(ui_obj='Null')
-        date, _ = db.load_sheet_date_mainpath(id)
-        main_path = db.get_suggestions_path()
-    except:
-        date = date_funcs.get_date(persian=SHAMSI_DATE)
-    year, month, day = date.split('/')
-    return(os.path.join(main_path, year, month, day, str(id)))
-
+# def create_dataset_stracture(path):
+#
+#     os.mkdir(os.path.join(path,'annotations'))
+#     os.mkdir(os.path.join(path,'binary'))
+#     os.mkdir(os.path.join(path,'temp_annotations'))
+#     os.mkdir(os.path.join(path,'temp_images'))
 

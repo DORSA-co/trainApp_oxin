@@ -599,7 +599,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                        </item>
                       </layout>
                      </widget>
-                     <widget class="QWidget" name="heat_id_page">
+                     <widget class="QWidget" name="heat_number_page">
                       <attribute name="title">
                        <string>HEAT</string>
                       </attribute>
@@ -615,7 +615,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                         </widget>
                        </item>
                        <item>
-                        <widget class="QListWidget" name="list_heat_id"/>
+                        <widget class="QListWidget" name="list_heat_number"/>
                        </item>
                        <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_9">

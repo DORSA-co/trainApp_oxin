@@ -826,14 +826,15 @@ color: black;
                 <bool>false</bool>
                </property>
                <property name="sortingEnabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="rowCount">
-                <number>0</number>
+                <number>1</number>
                </property>
                <property name="columnCount">
-                <number>12</number>
+                <number>9</number>
                </property>
+               <row/>
                <column>
                 <property name="text">
                  <string>1</string>
@@ -844,9 +845,6 @@ color: black;
                  <string>2</string>
                 </property>
                </column>
-               <column/>
-               <column/>
-               <column/>
                <column/>
                <column/>
                <column/>
@@ -1071,131 +1069,9 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                      <property name="currentIndex">
                       <number>0</number>
                      </property>
-                     <widget class="QWidget" name="date_page">
-                      <attribute name="title">
-                       <string>Date or Time</string>
-                      </attribute>
-                      <layout class="QVBoxLayout" name="verticalLayout_9">
-                       <item>
-                        <widget class="QFrame" name="frame_8">
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>60</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>16777215</width>
-                           <height>60</height>
-                          </size>
-                         </property>
-                         <property name="frameShape">
-                          <enum>QFrame::StyledPanel</enum>
-                         </property>
-                         <property name="frameShadow">
-                          <enum>QFrame::Raised</enum>
-                         </property>
-                         <layout class="QHBoxLayout" name="horizontalLayout_7">
-                          <item>
-                           <widget class="QLabel" name="label_3">
-                            <property name="text">
-                             <string>Start Date :</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QLineEdit" name="coil_start_date"/>
-                          </item>
-                          <item>
-                           <widget class="QLabel" name="label">
-                            <property name="text">
-                             <string>End Date :</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QLineEdit" name="coil_end_date">
-                            <property name="placeholderText">
-                             <string>1402/12/31</string>
-                            </property>
-                           </widget>
-                          </item>
-                         </layout>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QFrame" name="frame_9">
-                         <property name="minimumSize">
-                          <size>
-                           <width>0</width>
-                           <height>60</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>16777215</width>
-                           <height>60</height>
-                          </size>
-                         </property>
-                         <property name="frameShape">
-                          <enum>QFrame::StyledPanel</enum>
-                         </property>
-                         <property name="frameShadow">
-                          <enum>QFrame::Raised</enum>
-                         </property>
-                         <layout class="QHBoxLayout" name="horizontalLayout_8">
-                          <item>
-                           <widget class="QLabel" name="label_10">
-                            <property name="text">
-                             <string>Start Date :</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QLineEdit" name="coil_start_time"/>
-                          </item>
-                          <item>
-                           <widget class="QLabel" name="label_11">
-                            <property name="text">
-                             <string>End Date :</string>
-                            </property>
-                           </widget>
-                          </item>
-                          <item>
-                           <widget class="QLineEdit" name="coil_end_time"/>
-                          </item>
-                         </layout>
-                        </widget>
-                       </item>
-                       <item>
-                        <spacer name="verticalSpacer">
-                         <property name="orientation">
-                          <enum>Qt::Vertical</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>20</width>
-                           <height>40</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="btn_date_search">
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="text">
-                          <string>Search</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
                      <widget class="QWidget" name="id_page">
                       <attribute name="title">
-                       <string>Plate ID</string>
+                       <string>ID</string>
                       </attribute>
                       <layout class="QVBoxLayout" name="verticalLayout_5">
                        <item>
@@ -1206,14 +1082,14 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                         </widget>
                        </item>
                        <item>
-                        <widget class="QListWidget" name="list_plate_id"/>
+                        <widget class="QListWidget" name="list_show_id"/>
                        </item>
                        <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_13">
                          <item>
                           <widget class="QLabel" name="label_12">
                            <property name="text">
-                            <string>ID:</string>
+                            <string>ID  :</string>
                            </property>
                           </widget>
                          </item>
@@ -1222,7 +1098,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                            <property name="minimumSize">
                             <size>
                              <width>150</width>
-                             <height>5</height>
+                             <height>27</height>
                             </size>
                            </property>
                           </widget>
@@ -1241,9 +1117,9 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                        </item>
                       </layout>
                      </widget>
-                     <widget class="QWidget" name="order_page">
+                     <widget class="QWidget" name="heat_number_page">
                       <attribute name="title">
-                       <string>Order ID</string>
+                       <string>HEAT</string>
                       </attribute>
                       <attribute name="toolTip">
                        <string>heat number</string>
@@ -1252,70 +1128,19 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                        <item>
                         <widget class="QLabel" name="label_5">
                          <property name="text">
-                          <string>Available Order IDs :</string>
+                          <string>Availabl HEAT Numbers :</string>
                          </property>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QListWidget" name="list_order_id"/>
+                        <widget class="QListWidget" name="list_heat_number"/>
                        </item>
                        <item>
                         <layout class="QHBoxLayout" name="horizontalLayout_9">
                          <item>
                           <widget class="QLabel" name="label_4">
                            <property name="text">
-                            <string>ID:</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <widget class="QLineEdit" name="line_search_order">
-                           <property name="minimumSize">
-                            <size>
-                             <width>150</width>
-                             <height>5</height>
-                            </size>
-                           </property>
-                          </widget>
-                         </item>
-                        </layout>
-                       </item>
-                       <item>
-                        <widget class="QPushButton" name="btn_order_search">
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="text">
-                          <string>Search</string>
-                         </property>
-                        </widget>
-                       </item>
-                      </layout>
-                     </widget>
-                     <widget class="QWidget" name="heat_page">
-                      <attribute name="title">
-                       <string>Heat ID</string>
-                      </attribute>
-                      <attribute name="toolTip">
-                       <string>Product Schedule Number</string>
-                      </attribute>
-                      <layout class="QVBoxLayout" name="verticalLayout_7">
-                       <item>
-                        <widget class="QLabel" name="label_6">
-                         <property name="text">
-                          <string>Available Head IDs :</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QListWidget" name="list_heat_id"/>
-                       </item>
-                       <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_10">
-                         <item>
-                          <widget class="QLabel" name="label_7">
-                           <property name="text">
-                            <string>ID:</string>
+                            <string>Number :</string>
                            </property>
                           </widget>
                          </item>
@@ -1343,35 +1168,35 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                        </item>
                       </layout>
                      </widget>
-                     <widget class="QWidget" name="qc_page">
+                     <widget class="QWidget" name="psn_page">
                       <attribute name="title">
-                       <string>QC Standard</string>
+                       <string>PSN</string>
                       </attribute>
                       <attribute name="toolTip">
-                       <string>Product Drift Line Number</string>
+                       <string>Product Schedule Number</string>
                       </attribute>
-                      <layout class="QVBoxLayout" name="verticalLayout_8">
+                      <layout class="QVBoxLayout" name="verticalLayout_7">
                        <item>
-                        <widget class="QLabel" name="label_9">
+                        <widget class="QLabel" name="label_6">
                          <property name="text">
-                          <string>Available QC Standard values :</string>
+                          <string>Available Product Schedule Numbesr :</string>
                          </property>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QListWidget" name="list_qc_standard"/>
+                        <widget class="QListWidget" name="list_ps_number"/>
                        </item>
                        <item>
-                        <layout class="QHBoxLayout" name="horizontalLayout_12">
+                        <layout class="QHBoxLayout" name="horizontalLayout_10">
                          <item>
-                          <widget class="QLabel" name="label_8">
+                          <widget class="QLabel" name="label_7">
                            <property name="text">
-                            <string>Vlaue:</string>
+                            <string>Number :</string>
                            </property>
                           </widget>
                          </item>
                          <item>
-                          <widget class="QLineEdit" name="line_search_qc">
+                          <widget class="QLineEdit" name="line_search_psn">
                            <property name="minimumSize">
                             <size>
                              <width>150</width>
@@ -1383,7 +1208,58 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                         </layout>
                        </item>
                        <item>
-                        <widget class="QPushButton" name="btn_qc_search">
+                        <widget class="QPushButton" name="btn_psn_search">
+                         <property name="cursor">
+                          <cursorShape>PointingHandCursor</cursorShape>
+                         </property>
+                         <property name="text">
+                          <string>Search</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                     <widget class="QWidget" name="PDLN_page">
+                      <attribute name="title">
+                       <string>PDLN</string>
+                      </attribute>
+                      <attribute name="toolTip">
+                       <string>Product Drift Line Number</string>
+                      </attribute>
+                      <layout class="QVBoxLayout" name="verticalLayout_8">
+                       <item>
+                        <widget class="QLabel" name="label_9">
+                         <property name="text">
+                          <string>Available Product Drift Line Numbers :</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QListWidget" name="list_pdl_number"/>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_12">
+                         <item>
+                          <widget class="QLabel" name="label_8">
+                           <property name="text">
+                            <string>Number :</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLineEdit" name="line_search_pdln">
+                           <property name="minimumSize">
+                            <size>
+                             <width>150</width>
+                             <height>5</height>
+                            </size>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="btn_pdln_search">
                          <property name="cursor">
                           <cursorShape>PointingHandCursor</cursorShape>
                          </property>
@@ -1464,13 +1340,6 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
                      </property>
                      <property name="text">
                       <string>Refresh</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QComboBox" name="comboBox_date_type">
-                     <property name="enabled">
-                      <bool>false</bool>
                      </property>
                     </widget>
                    </item>
