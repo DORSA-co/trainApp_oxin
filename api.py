@@ -325,7 +325,7 @@ class API:
         self.init_check_plc()
 
         # Level2 connection
-        self.l2_connection = level2_connection.connection_level2()
+        self.l2_connection = level2_connection.connection_level2(db_obj=self.db)
         self.l2_connection.create_connection()
         self.start_level2_threads()
 
