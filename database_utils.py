@@ -15,7 +15,7 @@ import inspect
 
 
 class dataBaseUtils:
-    def __init__(self, ui_obj, user_name="root", password="root"):
+    def __init__(self, ui_obj, user_name="root", password="Dorsa-1400"):
         if ui_obj != "Null":
             self.db = database.dataBase(
                 user_name,
