@@ -4,21 +4,24 @@ import random
 import string
 import re
 import socket
-
+try:
+    import date_funcs
+except:
+    from backend import date_funcs
 
 RANDOM=True
 
 class connection_level2():
 
-    def __init__(self):
+    def __init__(self, db_obj):
         # self.ui_obj=ui_obj
         # self.sheet_id = 900
+        self.db_obj = db_obj
         self.data = None
         self.max_cameras = 12
         self.max_width = 5000
         self.max_projectors = 6
 
-        self.dummy_raw = ''
         self.dummy_dict = {'PLATE_ID': 'ABC12345A', 'ORDER_ID': '123456789', 'HEAT_ID': '123456', 'QC_STANDARD': 'ASTM450', 'LENGHT': '6040', 'WIDTH': '2020', 'THICKNESS': '25.23', 'LENGHT_ORDER': '6000', 'WIDTH_ORDER': '2000', 'THICKNESS_ORDER': '25', 'speed': '1500'}
 
     def ret_sheet_details(self):
@@ -50,18 +53,18 @@ class connection_level2():
         if self.data:
             cameras = int(np.ceil(float(self.data['WIDTH'])*self.max_cameras/self.max_width))
             projectors = int(np.ceil(float(self.data['WIDTH'])*self.max_projectors/self.max_width))
+            projectors = 6
+            cameras = 12
             return cameras, projectors, self.data
         else:
-            return 12, 6, self.dummy_dict
-
+            res =self.dummy_dict.copy()
+            date = date_funcs.get_date(folder_path=True)
+            time = date_funcs.get_time(folder_path=True)
+            date_time = '{}_{}'.format(date, time)
+            res['PLATE_ID'] = date_time
+            return 12, 6, res
 
     def convert_data(self, data):
-        # print('*'*100)
-        # print(data)
-
-        if data == self.dummy_raw:
-            return
-        
         cleaned_data = data.decode("ISO-8859-1") 
         cleaned_data = ''.join(cleaned_data.split())
         cleaned_data = re.sub(r'[^a-zA-Z0-9_.]', '', cleaned_data)
@@ -80,12 +83,14 @@ class connection_level2():
             else:
                 res[k] = cleaned_data[indices[i]+len(k):]
                 res[k] = re.sub("[^.0-9]", "", res[k])
-
-        if self.dummy_raw == '' and res == self.dummy_dict:
-            self.dummy_raw = data
-            return
+        last_plate = self.db_obj.report_last_sheets(count=1)[0]
+        last_plate_id = last_plate.get_id()
+        if res['PLATE_ID'] == last_plate_id:
+            date = date_funcs.get_date(folder_path=True)
+            time = date_funcs.get_time(folder_path=True)
+            date_time = '{}_{}'.format(date, time)
+            res['PLATE_ID'] = '_{}'.format(date_time)
         self.data = res
-        # print('#'*100)
 
     def connect(self):
         # Should add connection function here and get details
@@ -106,21 +111,20 @@ class connection_level2():
         except:
             return False,None
 
-
-
     def create_connection(self):
 
-        host='176.16.32.6'
-        port=11000
-
-        self.socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
+
+            host='176.16.32.6'
+            port=11000
+
+            self.socket=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # try:
             self.socket.bind((host,port))
             self.socket.listen(2)
         
         except:
             print('Error open port')
-
 
     def get_data(self):
         while 1:
@@ -130,6 +134,7 @@ class connection_level2():
         
                 conn.send(data)
                 self.convert_data(data)
+                # print('gg')
             except:
                 pass
 
