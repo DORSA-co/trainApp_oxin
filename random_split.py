@@ -352,7 +352,7 @@ def main():
     for imgFile, maskFile in zip(imgFiles, maskFiles):
         # Read images
         img = cv2.imread(os.path.join(imgFolder, imgFile))
-        # img = cv2.resize(img, (1920, 1200))
+        # img = cv2.resize(img, (1792, 1200))
         mask = cv2.imread(os.path.join(maskFolder, maskFile))
         # Read annotation
         with open(os.path.join(annotFolder, imgFile.split(".")[0]) + ".json") as f:

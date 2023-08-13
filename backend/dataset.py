@@ -14,8 +14,6 @@ import random
 import cv2
 import json
 
-IMAGES_TEMP_FOLDER = "temp_images"
-ANNOTATIONS_TEMP_FOLDER = "temp_annotations"
 IMAGE_FOLDERS = "images"
 ANNOTATIONS_FOLDER = "annotations"
 BINARY_FOLDER = "binary"
@@ -41,8 +39,6 @@ headers_fa = ["نام مجموعه داده", "کاربر مالک", "آدرس �
 
 class Dataset:
     def __init__(self, dataset_path):
-        self.images_temp_folder = "temp_images"
-        self.annotations_temp_folder = "temp_annotations"
         self.images_folder = "images"
         self.annotations_folder = "annotations"
         self.binary_folder = "binary"
@@ -83,10 +79,6 @@ class Dataset:
     def build_path(
         self,
     ):
-        self.images_temp_path = os.path.join(self.dataset_path, self.images_temp_folder)
-        self.annotations_temp_path = os.path.join(
-            self.dataset_path, self.annotations_temp_folder
-        )
         self.images_path = os.path.join(self.dataset_path, self.images_folder)
         self.annotations_path = os.path.join(self.dataset_path, self.annotations_folder)
         self.binary_path = os.path.join(self.dataset_path, self.binary_folder)
@@ -142,8 +134,6 @@ class Dataset:
         # #print(self.annotations_folder)
         self.__creat_path__(self.dataset_path)
         self.__creat_path__(self.weights_path)
-        self.__creat_path__(self.images_temp_path)
-        self.__creat_path__(self.annotations_temp_path)
         self.__creat_path__(self.images_path)
         self.__creat_path__(self.annotations_path)
         self.__creat_path__(self.binary_path)

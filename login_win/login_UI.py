@@ -21,7 +21,6 @@ from PyQt5.QtGui import QPainter
 import os
 from login_win import login_api
 import cv2
-from qt_material import apply_stylesheet
 ui, _ = loadUiType("login_win/login_setting.ui")
 
 

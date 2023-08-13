@@ -14,7 +14,7 @@ BOTTOM="BOTTOM"
 HORIZONTAL = 3
 VERTICAL = 4
 
-IMAGE_SHAPE = (1200, 1920)
+IMAGE_SHAPE = (1024, 1792)
 
 
 class sheetOverView:
@@ -101,13 +101,12 @@ class sheetOverView:
     def update_defect(self):
         for c in range(1, self.actives_camera[1]+1):
             for f in range(1, self.sheet.get_nframe()+1):
-                json_path = pathStructure.sheet_image_path(
-                    self.sheet.get_main_path()+self.json_postfix,
+                json_path = pathStructure.sheet_suggestions_json_path(
+                    '',
                     self.sheet.get_id(),
-                    self.side,
-                    c,
-                    f,
-                    self.json_format
+                    self.side, 
+                    c, 
+                    f
                 )
                 if os.path.exists(json_path):
                     with open(json_path) as jfile:
@@ -464,15 +463,7 @@ class sheetOverView:
                     new_imgs.append(self.real_imgs[list_idx])
 
                 else:
-                    # res_path = os.path.join(
-                    #     self.sheet.get_main_path(),
-                    #     self.side,
-                    #     str(idx_cam),
-                    #     str(idx_frame) + '.jpg'
-                    # )
                     a = idx_cam
-                    # if idx_cam >= 12:
-                    #     a = 1
                     img_path = pathStructure.sheet_image_path(
                         self.sheet.get_main_path(),
                         self.sheet.get_id(),
@@ -481,18 +472,17 @@ class sheetOverView:
                         idx_frame+1,
                         self.sheet.get_image_format(),
                     )
-                    json_path = pathStructure.sheet_image_path(
-                        self.sheet.get_main_path()+self.json_postfix,
+                    json_path = pathStructure.sheet_suggestions_json_path(
+                        '',
                         self.sheet.get_id(),
-                        self.side,
+                        self.side, 
                         a+1,
-                        idx_frame+1,
-                        self.json_format
+                        idx_frame+1
                     )
 
                     img = None  
                     if os.path.exists(img_path):
-                        img = cv2.imread(img_path, 0)
+                        img = cv2.imread(img_path, 0)#[:,:,0]
                     if img is None:  # if image doesnt exist, black image substitute
                         img = np.zeros(IMAGE_SHAPE, np.uint8)
                     else:
@@ -524,13 +514,13 @@ class sheetOverView:
         res_h, res_w = h_img * gridn, w_img * gridn
 
         # merge images together
-        res_img = np.zeros((res_h, res_w, 3), np.uint8)
+        res_img = np.zeros((res_h, res_w), np.uint8)
         for n in range(len(self.real_imgs)):
             i = n // gridn
             j = n - gridn * i
             res_img[
                 j * h_img : (j + 1) * h_img, i * w_img : (i + 1) * w_img
-            ] = cv2.merge((self.real_imgs[n], self.real_imgs[n], self.real_imgs[n]))
+            ] = self.real_imgs[n]
         x, y = self.pt
         start_x_idx, start_y_idx = np.array(self.real_idxs).min(
             axis=0
@@ -557,9 +547,10 @@ class sheetOverView:
         y2 = y1 + h_img
         x2 = x1 + w_img
 
-        crop = res_img[y1:y2, x1:x2]
+        crop = res_img[y1:y2, x1:x2].copy()
+
         # -------------------
-        return cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
+        return crop #cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
 
     # _____________________________________________________________________________________________________________________________
     #
@@ -624,7 +615,7 @@ if __name__ == "__main__":
                 sheet_id=996,
                 main_path='/home/reyhane/PycharmProjects/trainApp_oxin8/oxin_image_grabber',
                 image_format='.png',
-                heat_number=0,
+                heat_id=0,
                 ps_number=1111,
                 pdl_number=2222,
                 width=480,
@@ -636,7 +627,7 @@ if __name__ == "__main__":
                 nframe=15,
                 cameras=[1, 12],)
 
-    img = np.zeros((1920, 1200, 3), dtype=np.uint8)
+    img = np.zeros((1792, 1024, 3), dtype=np.uint8)
 
     sheet_view = sheetOverView(
         sheet=sheet,

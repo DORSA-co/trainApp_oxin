@@ -114,6 +114,8 @@ SubTypes = {
     'Sheet_loaded_eror':'07-35',
     'Open_folder_eror':'07-36',
     'show_sheets_info':'07-37',
-    'show_sheets_info_eror':'07-37',
-    'sheet_window_search_error':'07-38'
+    'show_sheets_info_eror':'07-38',
+    'sheet_window_search_error':'07-39',
+    'Storage_opened': '07-40',
+    'Storage_open_failed': '07-41',
 }

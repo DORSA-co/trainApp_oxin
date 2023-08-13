@@ -1,11 +1,27 @@
+# from logging import _Level
+import ast
+from email.mime import image
+from importlib.resources import path
+from ntpath import join
+from operator import le
+from pickletools import uint8
 import re
-from tkinter import NO, PIESLICE
+from shutil import which
+from stat import FILE_ATTRIBUTE_NORMAL
+import sys
+from ast import Try
+import matplotlib
+
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QFileDialog
 from cv2 import log
 from PySide6.QtCore import *
 from PySide6.QtCore import QThread as sQThread
-from Defect_detection_modules.SteelSurfaceInspection import SSI
+from PySide6.QtGui import QPen, QPainter
+from matplotlib import pyplot as plt
+from matplotlib.style import use
+
+from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
 from app_settings import Settings
 from backend import data_grabber, camera_connection
 from backend.mouse import Mouse
@@ -33,6 +49,7 @@ from backend import (
     localization_model_funcs,
     yolo_model_funcs,
     pathStructure,
+    FileManager
 )
 import database_utils
 from utils1 import *
@@ -51,6 +68,7 @@ import image_processing_worker
 import save_all_worker
 import random
 from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
+
 from backend import pipelines
 from backend.pipline_creation_module import ModelsCreation_worker
 from backend.pipline_evaluation_module import Evaluation_worker
@@ -58,7 +76,27 @@ from backend.binary_list_funcs import PIPLINES_PATH
 from backend.pipelines import Pipeline
 import backend.pipelines
 
-# ___________________________________________
+
+from PySide6.QtWidgets import QVBoxLayout
+import matplotlib.pyplot as plt
+# from tensorflow.keras.metrics import Accuracy, Precision, Recall
+from Train_modules.deep_utils import metrics
+from backend import pipelines
+import tensorflow as tf
+from image_splitter import ImageCrops
+import json
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from PySide6.QtCore import QObject, QThread, Signal
+import sys
+sys.path.append('../oxin_storage_management')
+from storage_main_UI import storage_management
+from storage_api import storage_api
+from storage_worker import storage_worker
+
+
+import getpass
+
+
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
 HEIGHT_FRAME_SIZE = 51
@@ -75,19 +113,23 @@ FRAME_RATE = 7
 class API:
     def __init__(self, ui):
         self.ui = ui
+        
+        self.remove_pypylon_chache()
+
         self.mouse = Mouse()
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
         self.db = database_utils.dataBaseUtils(ui_obj=self.ui)
+        # self.config_database()
         self.create_classlist_pie_chart()
         self.create_label_color()
         self.create_default_ds()
         # self.mask_label_backend=Label.maskLbl(self.ui.get_size_label_image(), LABEL_COLOR)
         self.label_bakcend = {
-            "mask": Label.maskLbl((1200, 1920), self.LABEL_COLOR),
+            "mask": Label.maskLbl((1024, 1792), self.LABEL_COLOR),
         }
         self.label_bakcend_neighbours = {
-            "mask": Label.maskLbl((1200, 1920), self.LABEL_COLOR),
+            "mask": Label.maskLbl((1024, 1792), self.LABEL_COLOR),
         }
 
         # Label.bbox_lbl()
@@ -260,17 +302,16 @@ class API:
 
         # PLC
         self.retry_connecting_plc = 0
+        self.plc_connection_status = False
         self.set_plc_ip_to_ui()
         self.connect_plc()
         # self.load_plc_parms()  # should be commecnt in finbal version
         self.ui.start_wind_btn.clicked.connect(lambda: self.set_wind(True))
+        self.wind_mode = False
         self.start_auto_wind()
         # self.update_plc_parms()
         self.plc_timer = QTimer()
         self.plc_timer.timeout.connect(self.update_sensor_and_temp)
-        # self.plc_update = QTimer()
-        # self.plc_update.timeout.connect(self.test_t)
-
         self.update_plc_values()
 
         self.slab_detect = False
@@ -285,6 +326,9 @@ class API:
 
         # Level2 connection
         self.l2_connection = level2_connection.connection_level2()
+        self.l2_connection.create_connection()
+        self.start_level2_threads()
+
         # PBT
 
         self.current_b_model = ""
@@ -319,6 +363,7 @@ class API:
         self.running_l_model = False
         self.running_y_model = False
 
+
         self.ui.radioButton_use_yolo.setChecked(True)
         self.ui.radioButton_use_yolo.toggled.connect(
             lambda: self.set_pipline_mode("yolo")
@@ -328,7 +373,21 @@ class API:
         )
         self.set_pipline_mode("yolo")
         self.load_plc_parms()
-        # temp
+
+
+        # storage
+        self.ssd_image_file_manager = None
+        self.hdd_file_manager = None
+        self.storage_win = None
+        self.s_api = None
+        self.storage_timer = None
+
+        
+        self.read_storage_paths_from_db()
+        self.create_diskMemory_objs()
+        self.create_storage_window()
+        self.start_storage_checking()
+        
 
         # DEBUG_FUNCTIONS
         # -------------------------------------
@@ -337,7 +396,117 @@ class API:
         # self.__debug_select_for_label()
         self.__debug__login__()
 
-    def set_pipline_mode(self, key):
+
+        self.grab_time = 0
+        self.stop_grab = False
+        self.grab_main_thread = None
+
+    def remove_pypylon_chache(self):
+        try:
+            path = os.getcwd()
+            os.chdir('/dev/shm')
+            listdir =os.listdir()
+            for gen in listdir:
+                if 'GenICam_XML' in gen:
+                    os.system('rm {}'.format(gen))
+
+            os.chdir(path)
+        except:
+            print('ERROR Try remove cache pypylon ')
+    def read_storage_paths_from_db(self):
+        res, storage_settings = self.db.load_storage_setting()
+        if res:
+            self.update_time = storage_settings['update_time']
+            self.storage_upper_limit = storage_settings['storage_upper_limit']
+            self.hdd_path = storage_settings['hdd_path']
+            self.ssd_images_path = storage_settings['ssd_images_path']
+
+    def create_diskMemory_objs(self):
+        if not os.path.exists(self.hdd_path):
+            os.makedirs(self.hdd_path, exist_ok=True)
+        if not self.hdd_file_manager:
+            self.hdd_file_manager = FileManager.diskMemory(path=self.hdd_path)
+
+        if not os.path.exists(self.ssd_images_path):
+            os.makedirs(self.ssd_images_path, exist_ok=True)
+        if not self.ssd_image_file_manager:
+            self.ssd_image_file_manager = FileManager.diskMemory(path=self.ssd_images_path)
+
+    def create_storage_window(self):
+        if not self.storage_win:
+            self.storage_win = storage_management()
+            self.storage_win.apply_settings_btn.clicked.connect(self.restart_storage_checking)
+        if not self.s_api:
+            self.s_api = storage_api(self.storage_win)
+
+    def check_storage(self):
+        self.ssd_image_file_manager.refresh()
+        self.hdd_file_manager.refresh()
+
+        self.update_storage_charts()
+
+        if self.ssd_image_file_manager:
+            ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
+            if ssd_image_percent > self.storage_upper_limit:
+                try:
+                    self.storage_win.set_language(self.language)
+                    self.storage_win.show()
+                    self.s_api.clear_filters()
+                    if self.sensor:
+                        sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
+                        self.s_api.add_filter(sheet_id)
+                    self.s_api.start()
+                    self.ui.logger.create_new_log(
+                        code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"], level=1
+                    )
+                except:
+                    self.ui.logger.create_new_log(
+                        code=texts_codes.SubTypes['Storage_open_failed'], message=texts.MESSEGES["Storage_open_failed"]["en"], level=1
+                    )
+                    
+    def update_storage_charts(self):
+        self.ui.show_hdd_chart()
+        self.update_hdd_chart()
+
+        self.ui.show_ssd_chart()
+        self.update_ssd_chart()
+
+    def update_ssd_chart(self):
+        storage_status = {'SSD': {'Used':self.ssd_image_file_manager.used.toGB(), 
+                              'Free': self.ssd_image_file_manager.free.toGB()}, 
+                    }
+        chart_funcs.update_storage_barchart(
+            ui_obj=self.ui,
+            storage_type='SSD',
+            storage_status=storage_status
+        )
+
+    def update_hdd_chart(self):
+        storage_status = {'HDD': {'Used':self.hdd_file_manager.used.toGB(), 
+                            'Free': self.hdd_file_manager.free.toGB()}
+                    }
+        chart_funcs.update_storage_barchart(
+            ui_obj=self.ui,
+            storage_type='HDD',
+            storage_status=storage_status
+        )
+
+    def start_storage_checking(self):
+        self.check_storage()
+        if not self.storage_timer:
+            self.storage_timer = QTimer()
+            self.storage_timer.timeout.connect(self.check_storage)
+        self.storage_timer.start(1000*60*self.update_time)
+
+    def restart_storage_checking(self):
+        self.storage_timer.stop()
+        self.read_storage_paths_from_db()
+        self.ssd_image_file_manager = None
+        self.hdd_file_manager = None
+        self.create_diskMemory_objs()
+        self.start_storage_checking()
+
+    def set_pipline_mode(self,key):
         """
         set_pipline_mode function for setting type of pipeline,that use yolo vs unet
 
@@ -347,10 +516,7 @@ class API:
         key : str
            has 2 acceptable  values ,yolo and  localization
         """
-        self.pipline_dict = {
-            "yolo": [self.ui.page_yolo, self.ui.page_yolo_2],
-            "localization": [self.ui.page_localization, self.ui.page_localization_2],
-        }
+        self.pipline_dict = {'yolo':[self.ui.page_yolo,self.ui.page_yolo_2],'localization':[self.ui.page_localization,self.ui.page_localization_2]}
         self.pipline_selected = key
         self.ui.stackedWidget_3.setCurrentWidget(self.pipline_dict[key][0])
         self.ui.stackedWidget_4.setCurrentWidget(self.pipline_dict[key][1])
@@ -1569,11 +1735,11 @@ class API:
             if l != self.l:
                 for key in self.sheet_imgprocessing_mem.keys():
                     self.sheet_imgprocessing_mem[key] = False
-            jsons_path = pathStructure.sheet_path(
-                self.sheet.get_main_path() + "_imgProcessing", self.sheet.get_id()
-            )
+            jsons_main_path = self.db.get_suggestions_path()
+            jsons_path = pathStructure.sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
             if not os.path.exists(jsons_path):
                 self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
+                pathStructure.create_sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
             if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
                 self.ui.set_enabel(self.ui.load_coil_btn, False)
                 self.ui.set_enabel(self.ui.next_coil_btn, False)
@@ -1592,12 +1758,11 @@ class API:
                         image_processing_worker.image_processing_worker()
                     )
                     self.workers[-1].assign_parameters(
-                        n_cameras=((i * step) + 1, (i + 1) * step),
-                        n_frames=(1, self.sheet.get_nframe()),
-                        main_path=self.sheet.get_main_path(),
-                        res_main_path=self.sheet.get_main_path() + "_imgProcessing",
-                        sheet_id=self.sheet.get_id(),
-                        active_cameras=self.sheet.get_cameras(),
+                        n_cameras=((i*step)+1, (i+1)*step),
+                        n_frames=(1, self.sheet.get_nframe()), 
+                        res_main_path=jsons_main_path,
+                        sheet_id=self.sheet.get_id(), 
+                        active_cameras = self.sheet.get_cameras(),
                         img_format=self.sheet.get_image_format(),
                         img_shape=data_grabber.IMAGE_SHAPE,
                         api_obj=self,
@@ -1654,11 +1819,10 @@ class API:
                     actives_camera=sheet.get_cameras(),
                     oriation=data_grabber.VERTICAL,
                 )
-
+                
                 selecteds = self.selected_images_for_label.get_sheet_side_selections(
                     str(self.sheet.get_id()), side
                 )
-
                 self.thechnicals_backend[side].update_selected(selecteds)
                 self.current_technical_side = side
                 self.refresh_thechnical(fp=1)  #
@@ -1743,7 +1907,6 @@ class API:
     def refresh_thechnical(self, fp):
         if self.t % fp == 0:
             self.t = 1
-
             self.thechnicals_backend[
                 self.current_technical_side
             ].update_sheet_img()  # update technical image
@@ -1752,8 +1915,6 @@ class API:
             ].get_real_img()  # get image of sheet corespond to mouse position
             self.ui.set_crop_image(img)  # show image in UI
             self.update_sheet_img(self.current_technical_side)
-            # self.ui.show_selected_side(self.current_technical_side)
-
         else:
             self.t += 1
 
@@ -1775,10 +1936,12 @@ class API:
     # ----------------------------------------------------------------------------------------
     def show_sheet_loader(self):
         try:
+            # self.ui.show_loading_page()
             sheets = self.db.report_last_sheets(9999)
             self.ui.load_sheets_win.show_sheets_info(sheets)
             self.ui.load_sheets_win.reset_search_lines()
             self.ui.data_loader_win_show()
+            # self.ui.close_loading_page()
             self.ui.load_sheets_win.set_warning(
                 texts.MESSEGES["refresh_success"][self.language], level=1
             )
@@ -2050,7 +2213,7 @@ class API:
             for select_img in filtered_selected:
                 sheets.append(self.db.load_sheet(select_img[0]))
 
-            self.ds.save_to_temp(paths, sheets, filtered_selected)
+            # self.ds.save_to_temp(paths, sheets, filtered_selected)
 
             self.move_on_list.add(
                 list(zip(sheets, filtered_selected, paths)), "selected_imgs_for_label"
@@ -2180,7 +2343,7 @@ class API:
             if os.path.exists(path):
                 img = Utils.read_image(path, "color")
             else:
-                img = np.zeros((1200, 1920, 3), dtype="uint8")
+                img = np.zeros((1024, 1792, 3), dtype='uint8')
             self.n_imgs.append(img)
 
         self.load_neighbour_annotations(neighbours, paths)
@@ -3269,6 +3432,7 @@ class API:
         self.worker.update_progressbar.connect(self.update_save_all_progressbar)
         self.worker.question.connect(self.save_all_show_question)
         # Step 6: Start the thread
+        self.ui.save_all_dataset_btn.setEnabled(False)
         self.thread.start()
 
     def save_all_show_question(self, title, message):
@@ -3278,10 +3442,11 @@ class API:
         binary_count = self.ds_json.get_binary_count(None)
         chart_funcs.update_label_piechart(self.ui, binary_count)
         self.ui.set_warning(
-            texts.WARNINGS["IMAGES_SAVE_SUCCESSFULLY"][self.language],
-            "label",
-            level=1,
-        )
+                texts.WARNINGS["IMAGES_SAVE_SUCCESSFULLY"][self.language],
+                "label",
+                level=1,
+            )
+        self.ui.save_all_dataset_btn.setEnabled(True)
 
     def update_save_all_progressbar(self):
         self.ui.save_all_progressBar.setValue(self.ui.save_all_progressBar.value() + 1)
@@ -3657,7 +3822,75 @@ class API:
         cam_parms = self.db.load_cam_params(id)
         return cam_parms
 
+
     def connect_camera(self):
+
+
+        """
+        This camera is used to connect selected cameras
+        """
+        selected_cameras = self.ui.get_selected_cameras()
+
+        if not any(selected_cameras):
+            self.ui.set_warning(
+                texts.WARNINGS["no_camera_selected"][self.ui.language],
+                "camera_connection",
+                level=2
+            )
+            return
+        print(selected_cameras)
+
+        self.camera_threads = []
+        self.ret_dict ={}
+        for cam_num , cam in enumerate(selected_cameras):
+            if cam:
+                cam_parms = self.get_camera_config(str(cam_num+1))
+                thread = threading.Thread(target=self.cameras.add_camera,args=(str(cam_num+1), cam_parms,self.ret_dict,self.ui.logger))
+                thread.start()
+                self.camera_threads.append(thread)
+        
+        self.set_btns(False)
+        threading.Thread(target=self.check_finished).start()
+
+
+    def set_btns(self,mode):
+        self.ui.set_buttons_enable_or_disable(
+            [self.ui.disconnect_camera_btn, self.ui.connect_camera_btn],
+            enable=mode,
+        )
+        self.ui.checkBox_top.setEnabled(mode)
+        self.ui.checkBox_bottom.setEnabled(mode)
+        self.ui.checkBox_all.setEnabled(mode)
+        for i in range(1, 25):
+            if i < 10:
+                btn_name = eval("self.ui.camera0%s_btn" % i)
+            else:
+                btn_name = eval("self.ui.camera%s_btn" % i)
+            btn_name.setEnabled(mode)
+
+
+    def check_finished(self):
+        for thread in self.camera_threads:
+            thread.join()
+        self.update_camera_ui()
+        
+    def update_camera_ui(self):
+        self.set_available_cameras()
+        self.start_grab_camera()
+
+        myKeys = list(self.ret_dict.keys())
+        myKeys.sort()
+        sorted_dict = {i: self.ret_dict[i] for i in myKeys}
+
+        for cam_id, value in zip(sorted_dict.keys(),sorted_dict.values()):
+            if value[0]:
+                self.ui.set_img_btn_camera(cam_id)
+            else:
+                self.ui.set_img_btn_camera(cam_id, status="False")
+        self.set_btns(True)
+
+
+    def connect_camera_old(self):
         """
         This camera is used to connect selected cameras
         """
@@ -3840,6 +4073,7 @@ class API:
     def start_grab_camera(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
         for camera in connected_cameras:
+            # print('grabed')
             connected_cameras[camera].start_grabbing()
 
     def start_capture_func(self, disable_ui=True):
@@ -3853,8 +4087,9 @@ class API:
             )
             self.live_timer = QTimer(self.ui)
             self.live_timer.timeout.connect(self.ImageManager.show_live)
-            self.grab_timer = QTimer(self.ui)
-            self.grab_timer.timeout.connect(self.grab_image)
+            # self.grab_timer = QTimer(self.ui)
+            # self.grab_timer.timeout.connect(self.grab_image)
+            # self.grab_main_thread = threading.Thread(target=self.run_grab)
             self.ImageManager.first_check_finished.connect(self.start_capture_timers)
             self.ImageManager.second_check_finished.connect(self.stop_capture_timers)
             self.start_capture_flag = True
@@ -3901,27 +4136,50 @@ class API:
         # except:
         #     pass
         try:
-            _, _, speed, _ = self.l2_connection.get_full_info()  # get data from level2
-        except:
-            pass
+            _, _, data = self.l2_connection.get_full_info()  # get data from level2
+            speed = float(data['speed'])
+        except Exception as e:
+            raise e
         if speed > 0:
             self.ImageManager.start()
         self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_timer.start(int(1000 / (self.ui.frame_rate + 1)))
+        self.grab_main_thread = threading.Thread(target=self.run_grab)
+        self.grab_main_thread.start()
+        # self.grab_timer.start(int(1000/(self.ui.frame_rate)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
         self.live_timer.stop()
-        self.grab_timer.stop()
+        self.stop_grab_image()
+
+    def run_grab(self):
+        while True:
+            if self.stop_grab:
+                return
+            self.grab_time = time.time()
+            self.grab_image()
+            self.grab_time = time.time() - self.grab_time
+            if self.stop_grab:
+                return
+            t = 1/self.ui.frame_rate
+            if self.grab_time<t:
+                time.sleep(t - self.grab_time)
 
     def grab_image(self):
         try:
-            _, _, speed, _ = self.l2_connection.get_full_info()  # get data from level2
-        except:
-            pass
+            _, _, data = self.l2_connection.get_full_info()  # get data from level2
+            speed = float(data['speed'])
+        except Exception as e:
+            raise e
         if speed > 0:
             self.ImageManager.stop()
             self.ImageManager.start()
+
+    def stop_grab_image(self):
+        if self.grab_main_thread:
+            self.stop_grab = True
+            self.grab_main_thread.join()
+        self.stop_grab = False
 
     def change_live_camera(self, text):
         try:
@@ -4685,12 +4943,15 @@ class API:
             if self.data_is_ready:
                 self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
 
-        self.pipline_OBJ = self.ModelsCreation.pipline_OBJ
-        self.classes_num = self.ModelsCreation.classes_num
-        self.pipline_type = self.ModelsCreation.pipline_type
-        self.inputtype = self.ModelsCreation.inputtype
-        self.inputsize = self.ModelsCreation.inputsize
-        self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
+        try:
+            self.pipline_OBJ = self.ModelsCreation.pipline_OBJ
+            self.classes_num = self.ModelsCreation.classes_num
+            self.pipline_type = self.ModelsCreation.pipline_type
+            self.inputtype = self.ModelsCreation.inputtype
+            self.inputsize = self.ModelsCreation.inputsize
+            self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
+        except:
+            pass
 
     def reset_pipline(self):
         """
@@ -6209,14 +6470,12 @@ class API:
         self.db.set_language_font(lan, font)
 
     def set_plc_parms(self):
-        self.db.set_plc_params(
-            self.ui.manual_plc,
-            self.ui.update_timer_plc,
-            self.ui.update_wind_plc,
-            self.ui.auto_wind,
-            self.ui.auto_wind_intervals,
-        )
-        self.start_auto_wind()
+        self.db.set_plc_params(self.ui.manual_plc,
+                            self.ui.update_timer_plc,
+                            self.ui.update_wind_plc,
+                            self.ui.auto_wind,
+                            self.ui.auto_wind_intervals        
+                            )
         self.init_check_plc()
 
     def set_camera_parms(self):
@@ -6294,10 +6553,11 @@ class API:
             )
 
             # self.connect_plc()
-            if self.retry_connecting_plc < 10:
+            if self.retry_connecting_plc < 1:                   # retry connection
                 self.retry_connecting_plc += 1
                 self.ui.change_plc_status(status="retry")
-                # QTimer().singleShot(1000,self.connect_plc)
+                self.plc_connection_status = False
+                QTimer().singleShot(1000,self.connect_plc)
                 self.ui.set_status_plc(
                     auto=False,
                     text=texts.Titles["reconnect"][self.ui.language].format(
@@ -6307,6 +6567,7 @@ class API:
             else:
                 self.retry_connecting_plc = 0
                 self.ui.set_status_plc(mode=False)
+                self.plc_connection_status = False
                 self.ui.change_plc_status(status="disconnect")
                 self.ui.disconnect_plc_btn.setEnabled(False)
                 self.ui.connect_plc_btn.setEnabled(True)
@@ -6548,18 +6809,21 @@ class API:
 
     def set_wind(self, mode=True):
         # print(type(self.sensor),self.sensor)
-        if self.sensor:
-            if self.connection_status:
-                if self.ui.wind_itr == 1:
-                    ret = self.my_plc.set_value(
-                        self.dict_spec_pathes["MemUpValve"], str(mode)
-                    )
-                    ret = self.my_plc.set_value(
-                        self.dict_spec_pathes["MemDownValve"], str(mode)
-                    )
-                    # if ret and mode:
-                    if mode:
-                        self.ui.start_wind()
+        if self.sensor and self.plc_connection_status:
+            if self.ui.wind_itr == 1:
+                # ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+                t1 = time.time()
+                threading.Thread(target=self.my_plc.set_value,args=(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))).start()
+                # ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))
+                print('set_wind',time.time()-t1)
+                # if ret and mode:
+                if mode:
+                    self.ui.start_wind()
+        
+            self.wind_mode = not self.wind_mode
+                
+                
+                
 
     def set_start_software_plc(self, mode):
         # #print("software on plc ", str(mode))
@@ -6652,8 +6916,14 @@ class API:
         print("aaaa")
 
     def update_plc_values(self):
-        threading.Timer(1, self.get_sensor).start()
-        threading.Timer(1, self.get_temp_and_switch).start()
+
+        threading.Timer(1,self.get_sensor).start()
+        threading.Timer(1,self.get_temp_and_switch).start()
+
+    def start_level2_threads(self):
+        self.level2_thread = threading.Thread(target=self.l2_connection.get_data)
+        self.level2_thread.start()
+
 
     def update_sensor_and_temp(self):
         try:
@@ -6707,7 +6977,6 @@ class API:
                     (
                         n_camera,
                         projectors,
-                        speed,
                         details,
                     ) = self.l2_connection.get_full_info()  # get data from level2
                 except:
@@ -6716,15 +6985,13 @@ class API:
                         title=texts.Titles["connection_failed"],
                         message=texts.MESSEGES["connection_failed"],
                     )
-
+                # print('%%%%%%'*5, details)
                 self.ImageManager.update_sheet(n_camera, details)
                 self.start_capture_func(disable_ui=False)
                 self.ui.show_sheet_details(details, tab_live=True)
                 # if self.connection_status:
-                print("start thread set caemra and projector")
-                threading.Thread(
-                    target=self.my_plc.set_cams_and_prejector, args=(3, projectors)
-                ).start()
+                # print('start thread set caemra and projector')
+                threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start()
                 # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(

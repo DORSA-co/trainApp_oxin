@@ -39,6 +39,7 @@ class dataBaseUtils:
         self.image_processing = "image_processing"
         self.dataset = "datasets "
         self.plc = "plc_path"
+        self.storage_settings = "storage_settings"
         self.ui_obj = ui_obj
         self.piplines_evaluation_info = "piplines_info"
         # ________________________
@@ -67,15 +68,18 @@ class dataBaseUtils:
         hh, mm, _ = record["time"].split(":")
         sheet_obj = Sheet(
             id=record["id"],
-            sheet_id=record["sheet_id"],
+            sheet_id=record["PLATE_ID"],
             main_path=record["main_path"],
             image_format=record["image_format"],
-            heat_number=record["heat_number"],
-            ps_number=record["ps_number"],
-            pdl_number=record["pdl_number"],
-            width=record["width"],
-            length=record["length"],
-            thickness=record["thickness"],
+            order_id=record["ORDER_ID"],
+            heat_id=record["HEAT_ID"],
+            qc_standard=record["QC_STANDARD"],
+            width=record["WIDTH"],
+            length=record["LENGHT"],
+            thickness=record["THICKNESS"],
+            width_order=record["WIDTH_ORDER"],
+            length_order=record["LENGHT_ORDER"],
+            thickness_order=record["THICKNESS_ORDER"],
             date=datetime.date(int(y), int(m), int(d)),
             time=datetime.time(int(hh), int(mm)),
             user=record["user"],
@@ -94,29 +98,28 @@ class dataBaseUtils:
         data = ()
         db_headers = ""
         for key in coil_dict:
-            data = data + (coil_dict[key],)
-            db_headers = db_headers + key + ","
+            if key != 'speed':
+                data = data + (coil_dict[key],)
+                db_headers = db_headers + key + ","
         db_headers = "(" + db_headers[:-1] + ")"
 
-        try:
-            res = self.db.add_record(
-                data,
-                table_name=self.sheets_info_tabel,
-                parametrs=db_headers,
-                len_parameters=len(coil_dict),
-            )
-            return "True"
+        # try:
+        res = self.db.add_record(
+            data,
+            table_name=self.sheets_info_tabel,
+            parametrs=db_headers,
+            len_parameters=len(coil_dict)-1,
+        )
+        return "True"
 
-        except:
-            return "Database Error"
+        # except:
+        #     return "Database Error"
 
     # ________________________________________________________________
     #
     # ________________________________________________________________
     def load_sheet(self, id):
-        res, record = self.db.search(
-            self.sheets_info_tabel, "sheet_id", id, int_type=False
-        )
+        res, record = self.db.search(self.sheets_info_tabel, "PLATE_ID", id, int_type=False)
         record = record[0]
 
         return self.build_sheet(record)
@@ -127,7 +130,7 @@ class dataBaseUtils:
     def load_sheets(self, ids):
         sheets = []
         for id in ids:
-            res, record = self.db.search(self.sheets_info_tabel, "sheet_id", id)
+            res, record = self.db.search(self.sheets_info_tabel, "PLATE_ID", id)
             record = record[0]
 
             sheets.append(self.build_sheet(record))
@@ -136,13 +139,11 @@ class dataBaseUtils:
     # ________________________________________________________________
     #
     # ________________________________________________________________
-    def load_sheet_date(self, id):
-        res, record = self.db.search(
-            self.sheets_info_tabel, "sheet_id", id, int_type=False
-        )
+    def load_sheet_date_mainpath(self, id):
+        res, record = self.db.search(self.sheets_info_tabel, "PLATE_ID", id, int_type=False)
         record = record[0]
 
-        return record["date"]
+        return record['date'], record['main_path']
 
     # ________________________________________________________________
     #
@@ -156,7 +157,8 @@ class dataBaseUtils:
     #
     # ________________________________________________________________
     def report_last_sheets(self, count):
-        records = self.db.report_last(self.sheets_info_tabel, "sheet_id", count)
+
+        records = self.db.report_last(self.sheets_info_tabel, "PLATE_ID", count)
         res = []
         for record in records:
             res.append(self.build_sheet(record))
@@ -188,6 +190,13 @@ class dataBaseUtils:
         )
         record = record[0]
         return record["parent_path"]
+
+    def get_suggestions_path(self, value=0):
+        res, record = self.db.search(
+            table_name=self.setting_tabel, param_name="id", value=value
+        )
+        record = record[0]
+        return record["suggestions_path"]
 
     def set_dataset_path_user(self, path):
         #  update_record(self,data,table_name,col_name,value,id,id_value):
@@ -1318,6 +1327,62 @@ class dataBaseUtils:
         )
         record = record[0]
         return record["pipeline_json_path"]
+    
+    def load_storage_setting(self):
+        """This function is used to get storage settings from table
+
+        :return: A flag that indicates the success of the task along with the settings.
+        :rtype: tuple
+        """
+
+        res, settings = self.db.search(
+            self.storage_settings, "id", "1"
+        )
+        if res == database.SUCCESSFULL:
+            return True, settings[0]
+        else:
+            # Log Exception
+            return False, settings
+
+    def set_storage_setting(self, storage_upper_limit=None, storage_lower_limit=None, ssd_image_path=None, ssd_dataset_path=None, hdd_path=None):
+        """This function set settings in database table
+
+        :param storage_upper_limit: maximum percentage to cleanup.
+        :type storage_upper_limit: int
+        :param storage_lower_limit: minimum percentage to cleanup.
+        :type storage_lower_limit: int
+        :param ssd_image_path: path of images partition of ssd.
+        :type ssd_image_path: str
+        :param ssd_dataset_path: path of datasets partition of ssd.
+        :type ssd_dataset_path: str
+        :param hdd_path: path of hdd.
+        :type hdd_path: str
+        :return: True if all settings update successfully. False otherwise.
+        :rtype: bool
+        """
+        if storage_upper_limit:
+            res1 = self.db.update_record(self.storage_settings, "storage_upper_limit", str(storage_upper_limit), "id", "1")
+        else:
+            res1 = True
+        if storage_lower_limit:
+            res2 = self.db.update_record(self.storage_settings, "storage_lower_limit", str(storage_lower_limit), "id", "1")
+        else:
+            res2 = True
+        if ssd_image_path:
+            res3 = self.db.update_record(self.storage_settings, "ssd_images_path", str(ssd_image_path), "id", "1")
+        else:
+            res3 = True
+        if ssd_dataset_path:
+            res4 = self.db.update_record(self.storage_settings, "ssd_datasets_path", str(ssd_dataset_path), "id", "1")
+        else:
+            res4 = True
+        if hdd_path:
+            res5 = self.db.update_record(self.storage_settings, "hdd_path", str(hdd_path), "id", "1")
+        else:
+            res5 = True
+
+        return res1 and res2 and res3 and res4 and res5
+
 
     # #____________________________________JJ ZONE
     # def update_piplines_info_database(self,record):

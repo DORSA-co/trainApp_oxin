@@ -8,7 +8,7 @@ import threading
 PATH = '/home/reyhane/camera'
 coil_number = 889
 f = 1
-coil_dict = {'sheet_id': 996, 'heat_number': '0', 'ps_number': '1111', 'pdl_number': '2222.0', 'length': 1000.0,
+coil_dict = {'sheet_id': 996, 'heat_id': '0', 'ps_number': '1111', 'pdl_number': '2222.0', 'length': 1000.0,
              'width': 480.0, 'thickness': None}
 
 
@@ -33,7 +33,7 @@ def camera_simulator(i):
     with open('grab' + str(i) + '.txt', 'w', encoding='Utf-8') as grab:
         grab.write('True')
 
-    img = np.zeros((1200, 1920), dtype=np.uint8)
+    img = np.zeros((1200, 1792), dtype=np.uint8)
     img[:, :] = np.random.randint(0, 150)
     h, w = img.shape
     img = cv2.putText(img,

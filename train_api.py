@@ -5,7 +5,6 @@ import random
 import shutil
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-from tqdm import tqdm
 from PIL import Image, ImageDraw
 import numpy as np
 import matplotlib.pyplot as plt

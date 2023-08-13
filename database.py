@@ -1,5 +1,4 @@
 import re
-from tkinter import EXCEPTION
 from matplotlib.pyplot import flag
 import mysql.connector
 from mysql.connector import Error
@@ -729,8 +728,8 @@ if __name__ == "__main__":
     # return pipline_info
     # db.get_col_name('996','camera_settings','id')
 
-    #     # data=(0,)*10
-    #     # data=(0,0,0,0,1920,1200,0,0,0,0,0)
+    # data=(0,)*10
+    # data=(0,0,0,0,1792,1200,0,0,0,0,0)
 
     # x=db.get_all_content('defects_info')
     # #print(x)
@@ -740,12 +739,14 @@ if __name__ == "__main__":
 
 #     # table_name,parametrs,len_parameters)
 
-#     # db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
-#     # db.add_record(data,'camera_settings','(gain_top,gain_bottom,expo_top,expo_bottom,width,height,offset_x,offset_y,interpacket_delay,packet_size,id)',11)
+# db.add_record(data,'coils_info','(id,coil_number,heat_id,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
+# db.add_record(data,'camera_settings','(gain_top,gain_bottom,expo_top,expo_bottom,width,height,offset_x,offset_y,interpacket_delay,packet_size,id)',11)
+
+# db.add_record(data,'coils_info','(id,coil_number,heat_id,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
 
 #     # db.add_record(data,'coils_info','(id,coil_number,heat_number,ps_number,pdl_number,length,width,operator,time,date,main_path)',11)
 
-#     # db.report_last('coils_info','id',30)
+# db.remove_record('1792', 'camera_settings')
 
 #     # db.remove_record('1920', 'camera_settings')
 
@@ -760,15 +761,15 @@ if __name__ == "__main__":
 # # CREATE SCHEMA `saba_database` ;
 
 
-# # CREATE TABLE `saba_database`.`coils_info` (
-# #   `id` INT NOT NULL,
-# #   `coil_number` VARCHAR(45) NOT NULL,
-# #   `heat_number` VARCHAR(45) NULL,
-# #   `ps_number` VARCHAR(45) NULL,
-# #   `pdl_number` VARCHAR(45) NULL,
-# #   `length` VARCHAR(45) NULL,
-# #   `width` VARCHAR(45) NULL,
-# #   `operator` VARCHAR(45) NULL,
-# #   `time` VARCHAR(45) NULL,
-# #   `date` VARCHAR(45) NULL,
-# #   PRIMARY KEY (`id`));
+# CREATE TABLE `saba_database`.`coils_info` (
+#   `id` INT NOT NULL,
+#   `coil_number` VARCHAR(45) NOT NULL,
+#   `heat_id` VARCHAR(45) NULL,
+#   `ps_number` VARCHAR(45) NULL,
+#   `pdl_number` VARCHAR(45) NULL,
+#   `length` VARCHAR(45) NULL,
+#   `width` VARCHAR(45) NULL,
+#   `operator` VARCHAR(45) NULL,
+#   `time` VARCHAR(45) NULL,
+#   `date` VARCHAR(45) NULL,
+#   PRIMARY KEY (`id`));

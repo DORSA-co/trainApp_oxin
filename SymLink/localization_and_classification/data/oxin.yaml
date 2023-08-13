@@ -1,9 +1,0 @@
-names:
-- '0'
-- '121'
-- '122'
-- '123'
-- '124'
-nc: 5
-train: /home/dorsa/Desktop/trainApp_oxin/SymLink/localization_and_classification/partitions/images/train
-val: /home/dorsa/Desktop/trainApp_oxin/SymLink/localization_and_classification/partitions/images/val

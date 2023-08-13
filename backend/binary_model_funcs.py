@@ -7,7 +7,8 @@ from PySide6.QtCore import Signal as sSignal
 from requests import head
 
 from backend import colors_pallete, chart_funcs, date_funcs
-import train_api, texts, texts_codes
+import train_api
+import texts, texts_codes
 import os
 from utils1 import Utils
 import json
@@ -586,7 +587,7 @@ def save_new_binary_model_record(ui_obj, db_obj, bmodel_records):
     """
 
     # add
-    print(bmodel_records["weights_path"])
+    # print(bmodel_records["weights_path"])
     if add_new_binary_model_to_db(db_obj=db_obj, new_bmodel_info=bmodel_records):
         ui_obj.notif_manager.append_new_notif(
             message=texts.MESSEGES["database_add_bmodel"][ui_obj.language], level=1
@@ -645,8 +646,6 @@ def get_binary_model_filter_info_from_ui(ui_obj, wich_page, model_type="binary")
                         reverse=True,
                     )
                 ]
-            else:
-                print("what the fuck!!!!!!!!1")
 
             bmodel_info["epochs"] = ["", ""]
             bmodel_info["tuning_epochs"] = ["", ""]
@@ -1382,7 +1381,7 @@ class Binary_model_train_worker(sQObject):
         bmodel_records = train_api.train_binary(
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
-        print("bmodel_records", bmodel_records)
+        # print('bmodel_records',bmodel_records)
         if not bmodel_records[0]:
             self.warning.emit(
                 bmodel_records[1][0],

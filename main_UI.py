@@ -36,6 +36,7 @@ from app_settings import Settings
 from backend import (
     data_grabber,
     storage_funcs,
+    FileManager,
     chart_funcs,
     camera_connection,
     colors_pallete,
@@ -71,12 +72,15 @@ from login_win.login_UI import UI_login_window
 
 from Dataset_selection.ds_select_UI import Ds_selection
 
+from PySide6.QtCore import QThread as sQThread
+from loading_worker import loading_worker
+from PySide6.QtWidgets import QTableWidget as sQTableWidget
 # from login_win.login_api import
 
 from train_api import ALGORITHM_NAMES
-from train_api import ALGORITHM_NAMES
+# ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'], 'yolo': ['5n', '5s', '5m', '5l', '5x']}
 
-ui, _ = loadUiType("UI/oxin.ui")
+ui, _ = loadUiType("UI/new_oxin.ui")
 # os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
 
 
@@ -95,7 +99,7 @@ class UI_main_window(QMainWindow, ui):
         """
 
         super(UI_main_window, self).__init__()
-
+        
         self.setupUi(self)
         flags = Qt.WindowFlags(Qt.FramelessWindowHint)
         self.pos_ = self.pos()
@@ -114,7 +118,7 @@ class UI_main_window(QMainWindow, ui):
         # USE CUSTOM TITLE BAR | USE AS "False" FOR MAC OR LINUX
         # ///////////////////////////////////////////////////////////////
         Settings.ENABLE_CUSTOM_TITLE_BAR = False
-
+        
         # APP NAME
         # ///////////////////////////////////////////////////////////////
         title = "SENSE-Trainer"
@@ -210,7 +214,7 @@ class UI_main_window(QMainWindow, ui):
 
         # cameras settings info
         self.selelcted_cameras = [False] * 24
-
+        
         # labeling
         self.polygon_btn.clicked.connect(self.buttonClick)
         self.zoomIn_btn.clicked.connect(self.buttonClick)
@@ -226,7 +230,7 @@ class UI_main_window(QMainWindow, ui):
         # self.classification_class_list_table()
 
         # data aquization page
-        self.load_coil_btn.clicked.connect(self.buttonClick)
+        # self.load_coil_btn.clicked.connect(self.buttonClick)
 
         self.next_coil_btn.clicked.connect(self.buttonClick)
         self.prev_coil_btn.clicked.connect(self.buttonClick)
@@ -241,7 +245,7 @@ class UI_main_window(QMainWindow, ui):
         self.label_type = "mask"
         self.zoom_type = None
 
-        self.img = cv2.imread("images/dorsa-logo.png")
+        self.img = cv2.imread("images/dorsa-logo.png", 0)
         self.set_crop_image(self.img)
 
         img = cv2.imread("UI/images/male-placeholder.jpg")
@@ -601,9 +605,6 @@ class UI_main_window(QMainWindow, ui):
         chart_funcs.create_storage_barchart_on_ui(
             ui_obj=self, frame_obj_storage=self.hdd_chart_frame, storage_type="HDD"
         )
-        self.update_storage_chart()
-        self.start_storage_timer()
-
         # -----------------------------------------------------------------------------------------------------
         # PLC check buttons
         self.PLC_items = [
@@ -682,7 +683,7 @@ class UI_main_window(QMainWindow, ui):
         # Clock timer
 
         self.clock_timer = QTimer(self)
-
+        
         # adding action to timer
         self.clock_timer.timeout.connect(self.showTime)
 
@@ -694,41 +695,12 @@ class UI_main_window(QMainWindow, ui):
         # self.setFont(QtGui.QFont("Bariol", 18))
 
         self.show_labeling_help()
-
-        self.binary_table_metrics = QTableWidget(self)
-        self.yolo_table_metrics = QTableWidget(self)
-        self.segmention_table_metrics = QTableWidget(self)
-        self.classification_table_metrics = QTableWidget(self)
-
-    def update_storage_chart(self):
-        drives = storage_funcs.get_available_drives()
-        if len(drives) > 0:
-            drives = [drives[0]]
-            drives.append("/")
-            names = ["HDD", "SSD"]
-            self.label_289.setMaximumHeight(16777215)
-            self.hdd_chart_frame.setMaximumWidth(16777215)
-        else:
-            drives = ["/"]
-            names = ["SSD"]
-            self.label_289.setMaximumHeight(0)
-            self.hdd_chart_frame.setMaximumWidth(0)
-        storage_status = {}
-        for d, n in zip(drives, names):
-            status = storage_funcs.get_storage_status(d)
-            storage_status[n] = status
-
-            chart_funcs.update_storage_barchart(
-                ui_obj=self, storage_type=n, storage_status=storage_status
-            )
-
-            storage_status = {}
-
-    def start_storage_timer(self):
-        self.storage_timer = sQtCore.QTimer()
-        self.storage_timer.timeout.connect(self.update_storage_chart)
-        self.storage_timer.start(600000)
-        # self.storage_timer.start(10000)
+        
+        self.binary_table_metrics = QTableWidget()
+        self.yolo_table_metrics = QTableWidget()
+        self.segmention_table_metrics = QTableWidget()
+        self.classification_table_metrics = QTableWidget()
+       
 
     def showTime(self):
         # getting current time
@@ -1040,9 +1012,10 @@ class UI_main_window(QMainWindow, ui):
         Returns: None
         """
         image = QImage(
-            img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+            img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_Grayscale8
         )
         self.crop_image.setPixmap(QPixmap.fromImage(image))
+        
         # cv2.waitKey(200)
 
     def set_enabel(self, widget, status):
@@ -1298,7 +1271,7 @@ class UI_main_window(QMainWindow, ui):
 
             # ANIMATION
             self.animation = QPropertyAnimation(self.label_dorsa, b"minimumWidth")
-            self.animation.setDuration(1200)
+            self.animation.setDuration(1024)
             self.animation.setStartValue(width)
             self.animation.setEndValue(widthExtended)
             self.animation.setEasingCurve(QEasingCurve.InOutQuart)
@@ -1793,11 +1766,11 @@ class UI_main_window(QMainWindow, ui):
         """
         try:
             if tab_live:
-                self.set_label(self.label_sheet_id, str(details["sheet_id"]))
+                self.set_label(self.label_plate_id, str(details["PLATE_ID"]))
             else:
-                self.set_label(self.label_sheet_id_2, str(details["sheet_id"]))
+                self.set_label(self.label_plate_id_2, str(details["PLATE_ID"]))
         except Exception as e:
-            self.set_label(self.label_sheet_id_2, "-")
+            self.set_label(self.label_plate_id_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Error",
                 code=texts_codes.SubTypes["set_sheet_detail_error"],
@@ -1805,11 +1778,11 @@ class UI_main_window(QMainWindow, ui):
             )
         try:
             if tab_live:
-                self.set_label(self.label_heat_number, str(details["heat_number"]))
+                self.set_label(self.label_order_id, str(details["ORDER_ID"]))
             else:
-                self.set_label(self.label_heat_number_2, str(details["heat_number"]))
+                self.set_label(self.label_order_id_2, str(details["ORDER_ID"]))
         except Exception as e:
-            self.set_label(self.label_heat_number_2, "-")
+            self.set_label(self.label_order_id_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Error",
                 code=texts_codes.SubTypes["set_sheet_detail_error"],
@@ -1817,11 +1790,11 @@ class UI_main_window(QMainWindow, ui):
             )
         try:
             if tab_live:
-                self.set_label(self.label_ps_number, str(details["ps_number"]))
+                self.set_label(self.label_heat_id, str(details["HEAT_ID"]))
             else:
-                self.set_label(self.label_ps_number_2, str(details["ps_number"]))
+                self.set_label(self.label_heat_id_2, str(details["HEAT_ID"]))
         except Exception as e:
-            self.set_label(self.label_ps_number_2, "-")
+            self.set_label(self.label_heat_id_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Error",
                 code=texts_codes.SubTypes["set_sheet_detail_error"],
@@ -1829,11 +1802,11 @@ class UI_main_window(QMainWindow, ui):
             )
         try:
             if tab_live:
-                self.set_label(self.label_pdl_number, str(details["pdl_number"]))
+                self.set_label(self.label_qc_standard, str(details["QC_STANDARD"]))
             else:
-                self.set_label(self.label_pdl_number_2, str(details["pdl_number"]))
+                self.set_label(self.label_qc_standard_2, str(details["QC_STANDARD"]))
         except Exception as e:
-            self.set_label(self.label_pdl_number_2, "-")
+            self.set_label(self.label_qc_standard_2, "-")
             self.logger.create_new_log(
                 message="set sheet detail Error",
                 code=texts_codes.SubTypes["set_sheet_detail_error"],
@@ -1841,9 +1814,9 @@ class UI_main_window(QMainWindow, ui):
             )
         try:
             if tab_live:
-                self.set_label(self.label_length, str(details["length"]))
+                self.set_label(self.label_length, str(details["LENGHT"]))
             else:
-                self.set_label(self.label_length_2, str(details["length"]))
+                self.set_label(self.label_length_2, str(details["LENGHT"]))
         except Exception as e:
             self.set_label(self.label_length_2, "-")
             self.logger.create_new_log(
@@ -1853,9 +1826,9 @@ class UI_main_window(QMainWindow, ui):
             )
         try:
             if tab_live:
-                self.set_label(self.label_width, str(details["width"]))
+                self.set_label(self.label_width, str(details["WIDTH"]))
             else:
-                self.set_label(self.label_width_2, str(details["width"]))
+                self.set_label(self.label_width_2, str(details["WIDTH"]))
         except Exception as e:
             self.set_label(self.label_width_2, "-")
             self.logger.create_new_log(
@@ -1865,9 +1838,9 @@ class UI_main_window(QMainWindow, ui):
             )
         try:
             if tab_live:
-                self.set_label(self.label_thickness, str(details["thickness"]))
+                self.set_label(self.label_thickness, str(details["THICKNESS"]))
             else:
-                self.set_label(self.label_thickness_2, str(details["thickness"]))
+                self.set_label(self.label_thickness_2, str(details["THICKNESS"]))
         except Exception as e:
             self.set_label(self.label_thickness_2, "-")
             self.logger.create_new_log(
@@ -1875,9 +1848,37 @@ class UI_main_window(QMainWindow, ui):
                 code=texts_codes.SubTypes["set_sheet_detail_error"],
                 level=5,
             )
-        self.logger.create_new_log(
-            message="Set sheet details", code=texts_codes.SubTypes["set_sheet_detail"]
-        )
+        try:
+            if tab_live:
+                self.set_label(self.label_length_order, str(details["LENGHT_ORDER"]))
+            else:
+                self.set_label(self.label_length_order_2, str(details["LENGHT_ORDER"]))
+        except Exception as e:
+            self.set_label(self.label_length_order_2, "-")
+            self.logger.create_new_log(
+                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+            )
+        try:
+            if tab_live:
+                self.set_label(self.label_width_order, str(details["WIDTH_ORDER"]))
+            else:
+                self.set_label(self.label_width_order_2, str(details["WIDTH_ORDER"]))
+        except Exception as e:
+            self.set_label(self.label_width_order_2, "-")
+            self.logger.create_new_log(
+                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+            )
+        try:
+            if tab_live:
+                self.set_label(self.label_thickness_order, str(details["THICKNESS_ORDER"]))
+            else:
+                self.set_label(self.label_thickness_order_2, str(details["THICKNESS_ORDER"]))
+        except Exception as e:
+            self.set_label(self.label_thickness_order_2, "-")
+            self.logger.create_new_log(
+                message="set sheet detail Error", code=texts_codes.SubTypes['set_sheet_detail_error'], level=5
+            )
+        self.logger.create_new_log(message="Set sheet details", code=texts_codes.SubTypes['set_sheet_detail'])
 
     def set_warning(self, text, name, code=None, level=1):
         """Show warning with time delay 2 second , all labels for show warning has been set here"""
@@ -2935,30 +2936,30 @@ class UI_main_window(QMainWindow, ui):
             )
 
         if btnName == "full_single_btn":
-            if not self.full_s_window:
-                self.full_s_window = full_screen_window(type="single")
-                # self.full_s_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('s')))
+            if not self.full_s_window :
+                self.full_s_window = full_screen_window(type='single')
+                self.full_s_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('s')))
             self.full_s_window.show()
             self.full_s = True
 
         if btnName == "full_top_btn":
             if not self.full_t_window:
-                self.full_t_window = full_screen_window(type="top")
-                # self.full_t_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('t')))
+                self.full_t_window = full_screen_window(type='top')
+                self.full_t_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('t')))
             self.full_t_window.show()
             self.full_t = True
 
         if btnName == "full_bottom_btn":
             if not self.full_b_window:
-                self.full_b_window = full_screen_window(type="bottom")
-                # self.full_b_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('b')))
+                self.full_b_window = full_screen_window(type='bottom')
+                self.full_b_window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('b')))
             self.full_b_window.show()
             self.full_b = True
 
         if btnName == "full_all_btn":
             if not self.full__window:
-                self.full__window = full_screen_window(type="all")
-                # self.full__window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('')))
+                self.full__window = full_screen_window(type='all')
+                self.full__window.closeButton.clicked.connect(partial(lambda: self.set_full_screen_flags('')))
             self.full__window.show()
             self.full_ = True
 
@@ -3508,7 +3509,10 @@ class UI_main_window(QMainWindow, ui):
     def show_image_info_lable_page(self, sheet, pos):
         self.plabel_coil_num_txt.setText(str(sheet.get_id()))
         self.plabel_date_txt.setText(str(sheet.get_date_string()))
-        self.plabel_cam_txt.setText(str(pos[-1][0]))
+        if 'bot' in pos[1].lower() or 'down' in pos[1].lower():
+            self.plabel_cam_txt.setText(str(pos[-1][0] + 12))
+        else:
+            self.plabel_cam_txt.setText(str(pos[-1][0]))
         self.plabel_frame_txt.setText(str(pos[-1][1]))
 
     def show_image_btn(self, label_name, img_path):
@@ -3783,6 +3787,35 @@ class UI_main_window(QMainWindow, ui):
                 )
             )
 
+
+    def show_hdd_chart(self):
+        self.hdd_label.setMaximumHeight(16777215)
+        self.hdd_chart_frame.setMaximumWidth(310)
+
+    def hide_hdd_chart(self):
+        self.hdd_label.setMaximumHeight(0)
+        self.hdd_chart_frame.setMaximumWidth(0)
+
+    def show_ssd_chart(self):
+        self.ssd_label.setMaximumHeight(16777215)
+        self.ssd_chart_frame.setMaximumWidth(310)
+
+    def hide_ssd_chart(self):
+        self.ssd_label.setMaximumHeight(0)
+        self.ssd_chart_frame.setMaximumWidth(0)
+
+    def show_loading_page(self):
+        self.thread = sQThread()
+        self.worker = loading_worker()
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(lambda: self.worker.show_win('Please waite...'))
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.start()
+
+    def close_loading_page(self):
+        self.worker.close_win()
 
 if __name__ == "__main__":
     app = QApplication()
