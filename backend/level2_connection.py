@@ -4,7 +4,9 @@ import random
 import string
 import re
 import socket
-
+import logging as log
+import time
+import threading
 
 RANDOM=True
 
@@ -129,13 +131,16 @@ class connection_level2():
             try:
                 conn,addr=self.socket.accept()
                 data=conn.recv(100000)
-        
                 conn.send(data)
                 self.convert_data(data)
+                # self.time_get_data = 
                 # print('gg')
             except:
-                print('error')
-                pass
+                # if self.get_data
+                log.warning('Level2 connection Error')
+                time.sleep(1)
+            # threading.Timer(1,self.get_data).start()
+               
 
 if __name__=='__main__':
 
