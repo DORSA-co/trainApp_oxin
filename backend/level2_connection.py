@@ -7,6 +7,7 @@ import socket
 import logging as log
 import time
 import threading
+from datetime import datetime
 try:
     import date_funcs
 except:
@@ -130,19 +131,23 @@ class connection_level2():
             print('Error open port')
 
     def get_data(self):
-        while 1:
-            try:
-                conn,addr=self.socket.accept()
-                data=conn.recv(100000)
-                conn.send(data)
-                self.convert_data(data)
-                # self.time_get_data = 
-                # print('gg')
-            except:
-                # if self.get_data
-                log.warning('Level2 connection Error')
-                time.sleep(1)
-            # threading.Timer(1,self.get_data).start()
+        try:
+            t1 = datetime.now()
+            conn,addr=self.socket.accept()
+            data=conn.recv(100000)
+            conn.send(data)
+            self.convert_data(data)
+            # sel
+
+            # self.time_get_data = 
+            # print('gg')
+        except:
+            delta_time = (datetime.now() - t1 ).seconds
+            # if self.get_data
+            # log.warning('Level2 connection Error')
+            time.sleep(1)
+
+        threading.Timer(1,self.get_data).start()
                
 
 if __name__=='__main__':
