@@ -25,7 +25,7 @@ class connection_level2():
         self.max_cameras = 12
         self.max_width = 5000
         self.max_projectors = 6
-
+        self.retry_get_date = 0
         self.dummy_dict = {'PLATE_ID': 'ABC12345A', 'ORDER_ID': '123456789', 'HEAT_ID': '123456', 'QC_STANDARD': 'ASTM450', 'LENGHT': '6040', 'WIDTH': '2020', 'THICKNESS': '25.23', 'LENGHT_ORDER': '6000', 'WIDTH_ORDER': '2000', 'THICKNESS_ORDER': '25', 'speed': '1500'}
 
     def ret_sheet_details(self):
@@ -137,18 +137,18 @@ class connection_level2():
             data=conn.recv(100000)
             conn.send(data)
             self.convert_data(data)
-            # sel
+            self.retry_get_date = 0
 
-            # self.time_get_data = 
-            # print('gg')
         except:
-            delta_time = (datetime.now() - t1 ).seconds
-            # if self.get_data
+            self.retry_get_date+=1
+            if self.retry_get_date<10:
+                self.create_connection()
+                print('ERROR Level2 Get date')
             # log.warning('Level2 connection Error')
             time.sleep(1)
-
         threading.Timer(1,self.get_data).start()
                
+
 
 if __name__=='__main__':
 
