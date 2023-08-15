@@ -80,7 +80,7 @@ from PySide6.QtWidgets import QTableWidget as sQTableWidget
 from train_api import ALGORITHM_NAMES
 # ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'], 'yolo': ['5n', '5s', '5m', '5l', '5x']}
 
-ui, _ = loadUiType("UI/new_oxin.ui")
+ui, _ = loadUiType("UI/oxin.ui")
 # os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
 
 
@@ -308,8 +308,8 @@ class UI_main_window(QMainWindow, ui):
         self.pipeline_pbt_btn.clicked.connect(self.buttonClick)
 
         self.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
-        self.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(0)
-        self.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(0)
+        # self.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(0)
+        # self.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(0)
 
         self.load_dataset_pbt_btn.clicked.connect(self.buttonClick)
         self.history_pbt_btn.clicked.connect(self.buttonClick)

@@ -1140,6 +1140,10 @@ MESSEGES = {
         "fa": "آموزش با موفقیت به پایان رسید",
         "en": "Training completed successfully",
     },
+    "valid_pipline": {
+        "fa": "نام معتبر می باشد",
+        "en": "Valid Name",
+    },
 }
 
 Titles = {
@@ -1423,11 +1427,13 @@ Titles = {
         "fa": "برای مثال : تاریخ/ترکیبی از آدرس وزن....",
         "en": "Example : Date/Mix of weights/....",
     },
+
+
     "apply_pbt": {"fa": "اعمال", "en": "apply"},
     "refresh_pbt": {"fa": "بروزرسانی", "en": "refresh"},
-    "dataset_pbt": {"fa": "مجموعه دادگان", "en": "dataset"},
+    "dataset_pbt": {"fa": "مجموعه داده", "en": "dataset"},
     "title_of_gb_pbt": {
-        "fa": "انتخاب مجموعه دادگان/تصویر",
+        "fa": "انتخاب مجموعه داده/تصویر",
         "en": "Select Dataset / Image",
     },
     "validation data": {"fa": "داده ارزیابی", "en": "Validation Data"},

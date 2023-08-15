@@ -401,6 +401,15 @@ class API:
         self.stop_grab = False
         self.grab_main_thread = None
 
+
+
+        # milad_pbt
+
+
+        self.ui.pipline_name.textChanged.connect(self.check_name_pipline)
+
+
+
     def remove_pypylon_chache(self):
         try:
             path = os.getcwd()
@@ -723,8 +732,8 @@ class API:
 
         else:
             self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
-            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(0)
-            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(0)
+            # self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(0)
+            # self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(0)
 
     def apply_selected_model_after_push_applyBTN_in_PBT_page(self):
         """the function connect to 'BTN_apply_of_binary_classifaction_in_PBT_page',
@@ -770,12 +779,24 @@ class API:
             else:
                 pass
 
+
+    
+
+
     def check_name_pipline(self):
+
+        print('asdw')
+
         pipline_name = self.ui.pipline_name.text()
         if pipline_name == "":
             self.ui.pipline_name_status.setText(
                 texts.ERRORS["empty_name"][self.language]
             )
+
+            self.ui.pipline_name_status.setStyleSheet(
+                            "color: rgb(170, 0, 0);"
+                        )
+
             return False
 
         db_pipline_names = self.db.get_pipline_names()
@@ -784,8 +805,19 @@ class API:
             self.ui.pipline_name_status.setText(
                 texts.ERRORS["repeat_name"][self.language]
             )
+            self.ui.pipline_name_status.setStyleSheet(
+                            "color: rgb(170, 0, 0);"
+                        )
+
             return False
-        if pipline_name not in db_pipline_names:
+        else:
+            self.ui.pipline_name_status.setText(
+                texts.MESSEGES["valid_pipline"][self.language]
+            )
+            self.ui.pipline_name_status.setStyleSheet(
+                            "color: rgb(0, 170, 0);"
+                        )
+
             return True
         return False
 
