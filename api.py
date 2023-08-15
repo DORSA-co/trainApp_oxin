@@ -413,6 +413,8 @@ class API:
             os.chdir(path)
         except:
             print('ERROR Try remove cache pypylon ')
+
+            
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
         if res:
