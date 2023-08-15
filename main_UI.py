@@ -2973,9 +2973,11 @@ class UI_main_window(QMainWindow, ui):
 
         if btnName == "pbt_btn":
             self.left_bar_clear()
+            
             self.pbt_btn.setStyleSheet(
                 "background-image: url(./images/icons/PBT.png);background-color: rgb(170, 170, 212);color:rgb(0,0,0);"
             )
+
             self.stackedWidget.setCurrentWidget(self.page_pbt)
 
         if btnName == "log_btn":

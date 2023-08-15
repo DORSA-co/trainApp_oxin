@@ -4881,7 +4881,7 @@ border:None;</string>
                                         <rect>
                                          <x>0</x>
                                          <y>0</y>
-                                         <width>715</width>
+                                         <width>718</width>
                                          <height>30</height>
                                         </rect>
                                        </property>
@@ -5173,8 +5173,8 @@ QPushButton:disabled {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>692</width>
-                                      <height>18</height>
+                                      <width>707</width>
+                                      <height>17</height>
                                      </rect>
                                     </property>
                                     <layout class="QHBoxLayout" name="horizontalLayout_213">
@@ -8428,7 +8428,7 @@ border-radius: 8px;</string>
                                            <rect>
                                             <x>0</x>
                                             <y>0</y>
-                                            <width>692</width>
+                                            <width>707</width>
                                             <height>20</height>
                                            </rect>
                                           </property>
@@ -14068,7 +14068,7 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>107</width>
+                                              <width>109</width>
                                               <height>43</height>
                                              </rect>
                                             </property>
@@ -14119,7 +14119,7 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>106</width>
+                                              <width>108</width>
                                               <height>43</height>
                                              </rect>
                                             </property>
@@ -15897,8 +15897,8 @@ border:Transparent</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>337</width>
-                                      <height>783</height>
+                                      <width>347</width>
+                                      <height>767</height>
                                      </rect>
                                     </property>
                                     <layout class="QVBoxLayout" name="verticalLayout_64">

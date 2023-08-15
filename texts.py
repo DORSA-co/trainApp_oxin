@@ -1847,8 +1847,8 @@ def set_title(self, lang):
     self.label_btn.setToolTip(Titles["Label"][lang])
     self.tuning_btn.setText(Titles[" Tuning"][lang])
     self.tuning_btn.setToolTip(Titles[" Tuning"][lang])
-    self.pbt_btn.setText(Titles["Pipline Build & Test"][lang])
-    self.pbt_btn.setToolTip(Titles["Pipline Build & Test"][lang])
+    # self.pbt_btn.setText(Titles["Pipline Build & Test"][lang])
+    # self.pbt_btn.setToolTip(Titles["Pipline Build & Test"][lang])
     self.log_btn.setText(Titles["show_logs"][lang])
     self.log_btn.setToolTip(Titles["show_logs"][lang])
 

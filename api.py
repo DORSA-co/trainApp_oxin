@@ -414,7 +414,7 @@ class API:
         except:
             print('ERROR Try remove cache pypylon ')
 
-            
+
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
         if res:
@@ -1502,9 +1502,6 @@ class API:
         self.ui.Yolo_btn.clicked.connect(
             partial(lambda: self.user_access_pages(self.ui.Yolo_btn.objectName()))
         )
-        self.ui.pbt_btn.clicked.connect(
-            partial(lambda: self.user_access_pages(self.ui.pbt_btn.objectName()))
-        )
 
         # Settings
         # Language
@@ -1566,7 +1563,6 @@ class API:
             "Localization_btn": self.ui.page_Localization,
             "Classification_btn": self.ui.page_Classification,
             "Yolo_btn": self.ui.page_Yolo,
-            "pbt_btn": self.ui.page_pbt,
         }
         if self.logged_in:
             eval(
@@ -4243,6 +4239,9 @@ class API:
             level=1,
         )
 
+
+
+        
     def refresh_binary_models_table(
         self,
         nextorprev=False,
