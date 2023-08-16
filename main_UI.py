@@ -701,6 +701,8 @@ class UI_main_window(QMainWindow, ui):
         self.segmention_table_metrics = QTableWidget()
         self.classification_table_metrics = QTableWidget()
        
+        self.flag_close_win=False
+
 
     def showTime(self):
         # getting current time
@@ -1354,6 +1356,12 @@ class UI_main_window(QMainWindow, ui):
                 self.logger.create_new_log(
                     message="Close window", code=texts_codes.SubTypes["close_window"]
                 )
+
+                try:
+                    api.disconnect_plc()
+                except:
+                    print('Error close plc')
+                self.flag_close_win = True
                 self.close()
                 sys.exit()
 

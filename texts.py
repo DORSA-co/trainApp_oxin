@@ -1436,6 +1436,16 @@ Titles = {
         "fa": "انتخاب مجموعه داده/تصویر",
         "en": "Select Dataset / Image",
     },
+
+    "step_one": {
+        "fa": "قدم اول :",
+        "en": "Step One :",
+    },
+
+
+
+
+
     "validation data": {"fa": "داده ارزیابی", "en": "Validation Data"},
     "perfect_pbt": {"fa": "سالم", "en": "Perfect"},
     "defect_pbt": {"fa": "معیوب", "en": "Defect"},
@@ -2359,8 +2369,8 @@ def set_title(self, lang):
 
     # load dataset
     self.load_dataset_pbt_btn.setText(Titles["Load Dataset"][lang])
-    self.groupBox_6.setTitle(Titles["title_of_gb_pbt"][lang])
-    self.label_35.setText(Titles["dataset_pbt"][lang])
+    # self.groupBox_6.setTitle(Titles["title_of_gb_pbt"][lang])
+    self.label_35.setText(Titles["step_one"][lang])
     self.chbox_prefectdata_in_PBT_page.setText(Titles["perfect_pbt"][lang])
     # self.chbox_defectdata_in_PBT_page.setText(Titles['defect_pbt'][lang])
     self.BTN_load_in_PBT_page.setText(Titles["load_pbt"][lang])
@@ -2370,7 +2380,7 @@ def set_title(self, lang):
     self.label_36.setText(Titles["Pipline"][lang])
     self.BTN_set_pipline_in_PBT_page.setText(Titles["set_pbt"][lang])
     self.BTN_evaluate_image_in_PBT_page_2.setText(Titles["evaluate"][lang])
-    self.GBox_model_evaluation_details.setTitle(Titles["Evaluated Details"][lang])
+    self.evaluate_details.setText(Titles["Evaluated Details"][lang])
     self.label_37.setText(Titles["Orginal Images"][lang])
     self.label_40.setText(Titles["Evaluated Images"][lang])
 
@@ -2606,7 +2616,7 @@ def set_alignment(self, lang):
         self.pipline_name_status.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.pipline_name.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         # self.load_dataset_pbt_btn.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.groupBox_6.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.groupBox_6.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_35.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         # self.chbox_prefectdata_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         # self.chbox_defectdata_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2833,7 +2843,7 @@ def set_alignment(self, lang):
         self.pipline_name_status.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.pipline_name.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         # self.load_dataset_pbt_btn.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.groupBox_6.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # self.groupBox_6.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_35.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         # self.chbox_prefectdata_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         # self.chbox_defectdata_in_PBT_page.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)

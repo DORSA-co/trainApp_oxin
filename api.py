@@ -92,7 +92,7 @@ sys.path.append('../oxin_storage_management')
 from storage_main_UI import storage_management
 from storage_api import storage_api
 from storage_worker import storage_worker
-
+import time
 
 import getpass
 
@@ -325,7 +325,7 @@ class API:
         self.init_check_plc()
 
         # Level2 connection
-        self.l2_connection = level2_connection.connection_level2(db_obj=self.db)
+        self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win)
         self.l2_connection.create_connection()
         self.start_level2_threads()
 
@@ -4647,6 +4647,11 @@ class API:
             self.ui.LBL_data_is_ready.setText(
                 texts.MESSEGES["Data_Is_Not_Ready"][self.language]
             )
+            self.ui.LBL_data_is_ready.setStyleSheet(
+                            "color: rgb(170, 0, 0);"
+                        )
+
+
             self.ui.set_warning(
                 texts.MESSEGES["NO_IMAGE_AVAILABLE_IN_DATASET"][self.language],
                 "binarylist",
@@ -4687,6 +4692,10 @@ class API:
             self.ui.LBL_data_is_ready.setText(
                 texts.MESSEGES["Data_Is_Ready"][self.language]
             )
+            self.ui.LBL_data_is_ready.setStyleSheet(
+                            "color: rgb(0, 170, 0);"
+                        )
+            
             self.data_is_ready = True
             if self.pipline_is_ready:
                 self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
@@ -6792,7 +6801,7 @@ class API:
                 self.ui.logger.create_new_log(
                     message=texts.ERRORS["plc_disconnected_failed"]["en"], level=3
                 )
-
+        print('End function close thread plc')
     def set_plc_ip_to_ui(self):
         """
         this function is used to get plc ip from database and set to ui
@@ -6889,7 +6898,8 @@ class API:
         else:
             self.slab_detect = False
 
-        threading.Timer(0.1, self.get_sensor).start()
+        if not self.ui.flag_close_win:
+            threading.Timer(0.1, self.get_sensor).start()
 
     def get_temp_and_switch(self):
         try:
@@ -6943,7 +6953,9 @@ class API:
             self.down_in = False
             self.down_out = False
 
-        threading.Timer(5, self.get_temp_and_switch).start()
+        if not self.ui.flag_close_win:
+            threading.Timer(5, self.get_temp_and_switch).start()
+
 
     def test_t(self):
         print("aaaa")

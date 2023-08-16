@@ -17,10 +17,11 @@ RANDOM=True
 
 class connection_level2():
 
-    def __init__(self, db_obj):
+    def __init__(self, db_obj,close_ui):
         # self.ui_obj=ui_obj
         # self.sheet_id = 900
         self.db_obj = db_obj
+        self.close_ui = close_ui
         self.data = None
         self.max_cameras = 12
         self.max_width = 5000
@@ -146,7 +147,10 @@ class connection_level2():
                 print('ERROR Level2 Get date')
             # log.warning('Level2 connection Error')
             time.sleep(1)
-        threading.Timer(1,self.get_data).start()
+
+
+        if self.close_ui:
+            threading.Timer(1,self.get_data).start()
                
 
 
