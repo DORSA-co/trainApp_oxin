@@ -15,9 +15,6 @@ import matplotlib
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QFileDialog
 from cv2 import log
-
-from PySide6 import QtGui
-from PySide6.QtCharts import QPieSeries, QPieSlice, QChart, QChartView
 from PySide6.QtCore import *
 from PySide6.QtCore import QThread as sQThread
 from PySide6.QtGui import QPen, QPainter
@@ -27,34 +24,14 @@ from matplotlib.style import use
 from Defect_detection_modules.SteelSurfaceInspection import SSI, CreateHeatmap
 from app_settings import Settings
 from backend import data_grabber, camera_connection
-from backend.pipelines import (
-    MODEL_ACCURACY,
-    MODEL_DICE,
-    MODEL_F1,
-    MODEL_IOU,
-    MODEL_LOSS,
-    MODEL_PRECISION,
-    MODEL_RECALL,
-    Pipeline,
-)
-import backend.pipelines
 from backend.mouse import Mouse
 from backend.keyboard import Keyboard
-
-# from backend import Label
 import cv2
 import threading
-import time
-from PIL import ImageQt
 import numpy as np
 import math
 import os
-from datetime import date, time, datetime
-from PyQt5.QtWidgets import QListWidget, QApplication, QMessageBox
-from PyQt5.QtGui import QPixmap, QImage
-
-# from backend import add_remove_label
-from PyQt5 import QtCore, QtWidgets
+from PySide6.QtWidgets import QHeaderView as sQHeaderView
 from PySide6.QtCore import QThread
 from functools import partial
 from backend import (
@@ -74,40 +51,32 @@ from backend import (
     pathStructure,
     FileManager
 )
-
 import database_utils
 from utils1 import *
 from utils1.move_on_list import moveOnList, moveOnImagrList
-
 import texts  # eror and warnings texts
 import texts_codes
 from utils1 import tempMemory, Utils
-
 from backend.dataset import Dataset
-from random_split import get_crops_random, get_crops_no_defect, get_crops_no_defect2
 import train_api
-
-from labeling.labeling_UI import labeling
-
-from Dataset_selection.ds_select_UI import Ds_selection
-from FileDialog import FileDialog
-
 from labeling import labeling_api
-from pynput.mouse import Button, Controller
-
+from pynput.mouse import Controller
 from login_win.login_api import login_API
 from camera_live_thread import ImageManager
-from multiprocessing import Process
 import dataset_utils
 import image_processing_worker
 import save_all_worker
 import random
-
-# _______JJ importing:
-import random
-import time
-from PySide6.QtWidgets import QLabel as sQLabel, QProgressBar
 from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
+
+from backend import pipelines
+from backend.pipline_creation_module import ModelsCreation_worker
+from backend.pipline_evaluation_module import Evaluation_worker
+from backend.binary_list_funcs import PIPLINES_PATH
+from backend.pipelines import Pipeline
+import backend.pipelines
+
+
 from PySide6.QtWidgets import QVBoxLayout
 import matplotlib.pyplot as plt
 # from tensorflow.keras.metrics import Accuracy, Precision, Recall
@@ -118,16 +87,15 @@ from image_splitter import ImageCrops
 import json
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from PySide6.QtCore import QObject, QThread, Signal
-
 import sys
 sys.path.append('../oxin_storage_management')
 from storage_main_UI import storage_management
 from storage_api import storage_api
 from storage_worker import storage_worker
-
-# _______JJ
+import time
 
 import getpass
+
 
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
@@ -145,6 +113,9 @@ FRAME_RATE = 7
 class API:
     def __init__(self, ui):
         self.ui = ui
+        
+        self.remove_pypylon_chache()
+
         self.mouse = Mouse()
         self.keyboard = Keyboard()
         self.move_on_list = moveOnList()
@@ -216,8 +187,8 @@ class API:
         self.comboBox_connector()
         self.QTableWidget_connector()
         self.checkbox_connector()
-        self.perfect_show = True
-        self.defect_show = True
+        self.perfect_show = False
+        # self.defect_show = True
         # connet mouse event to correspondings functions in API
         self.mouse_connector()
         # connet keyboard event to correspondings functions in API
@@ -305,12 +276,6 @@ class API:
         # _________________________________________
         # create binarylist sliders on UI
 
-        self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedHeight(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
-        self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedHeight(0)
         self.raw_and_evaluated_Imagw_sliders_check = []
         self.raw_and_evaluated_Imagw_sliders_check.append(
             binary_list_funcs.set_image_on_loadDataSetSlider_in_PBT(
@@ -342,12 +307,12 @@ class API:
         self.connect_plc()
         # self.load_plc_parms()  # should be commecnt in finbal version
         self.ui.start_wind_btn.clicked.connect(lambda: self.set_wind(True))
+        self.wind_mode = False
         self.start_auto_wind()
         # self.update_plc_parms()
         self.plc_timer = QTimer()
         self.plc_timer.timeout.connect(self.update_sensor_and_temp)
         self.update_plc_values()
-
 
         self.slab_detect = False
         self.language = self.ui.language
@@ -360,15 +325,28 @@ class API:
         self.init_check_plc()
 
         # Level2 connection
-        self.l2_connection = level2_connection.connection_level2(db_obj=self.db)
+        self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win)
         self.l2_connection.create_connection()
         self.start_level2_threads()
 
         # PBT
 
-        self.current_b_model = None
-        self.current_l_model = None
-        self.current_c_model = None
+        self.current_b_model = ""
+        self.current_l_model = ""
+        self.current_c_model = ""
+        self.current_yolo_model = ""
+        self.current_b_model_weights = ""
+        self.current_l_model_weights = ""
+        self.current_c_model_weights = ""
+        self.current_yolo_model_weights = ""
+        self.pipline_type = ""
+        self.pipline_name = ""
+        self.binary_model_flag = False
+        self.segmentation_model_flag = False
+        self.classification_model_flag = False
+        self.yolo_model_flag = False
+        self.pipline_is_ready = False
+        self.data_is_ready = False
         self.add_piplines_in_combobox()
         self.add_dataset_in_combobox()
 
@@ -377,17 +355,25 @@ class API:
         self.finished_threads = 0
         self.l = self.db.get_image_processing_params()
 
-        #notif manager 
+        # notif manager
 
-        self.show_save_notif=False
+        self.show_save_notif = False
 
-        self.running_b_model=False
-        self.running_l_model=False
-        self.running_y_model=False
+        self.running_b_model = False
+        self.running_l_model = False
+        self.running_y_model = False
 
-        self.ui.radioButton_one.toggled.connect(lambda :self.set_pipline_mode('yolo') )
-        self.ui.radioButton_two.toggled.connect(lambda :self.set_pipline_mode('localization') )
-        self.set_pipline_mode('yolo')
+
+        self.ui.radioButton_use_yolo.setChecked(True)
+        self.ui.radioButton_use_yolo.toggled.connect(
+            lambda: self.set_pipline_mode("yolo")
+        )
+        self.ui.radioButton_use_unet.toggled.connect(
+            lambda: self.set_pipline_mode("localization")
+        )
+        self.set_pipline_mode("yolo")
+        self.load_plc_parms()
+
 
         # storage
         self.ssd_image_file_manager = None
@@ -402,6 +388,7 @@ class API:
         self.create_storage_window()
         self.start_storage_checking()
         
+
         # DEBUG_FUNCTIONS
         # -------------------------------------
         # self.__debug_load_sheet__(["996", "997"])
@@ -413,6 +400,29 @@ class API:
         self.grab_time = 0
         self.stop_grab = False
         self.grab_main_thread = None
+
+
+
+        # milad_pbt
+
+
+        self.ui.pipline_name.textChanged.connect(self.check_name_pipline)
+
+
+
+    def remove_pypylon_chache(self):
+        try:
+            path = os.getcwd()
+            os.chdir('/dev/shm')
+            listdir =os.listdir()
+            for gen in listdir:
+                if 'GenICam_XML' in gen:
+                    os.system('rm {}'.format(gen))
+
+            os.chdir(path)
+        except:
+            print('ERROR Try remove cache pypylon ')
+
 
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
@@ -508,10 +518,30 @@ class API:
         self.start_storage_checking()
 
     def set_pipline_mode(self,key):
+        """
+        set_pipline_mode function for setting type of pipeline,that use yolo vs unet
+
+
+        Parameters
+        ----------
+        key : str
+           has 2 acceptable  values ,yolo and  localization
+        """
         self.pipline_dict = {'yolo':[self.ui.page_yolo,self.ui.page_yolo_2],'localization':[self.ui.page_localization,self.ui.page_localization_2]}
         self.pipline_selected = key
         self.ui.stackedWidget_3.setCurrentWidget(self.pipline_dict[key][0])
         self.ui.stackedWidget_4.setCurrentWidget(self.pipline_dict[key][1])
+
+        if key == "yolo":
+            self.load_table_with_btn(self.ui.toolButton_yolo.objectName())
+            # self.ui.cbBox_of_yolo_model_in_PBT_page.setCurrentIndex(0)
+        elif key == "localization":
+            self.load_table_with_btn(self.ui.toolButton_localization.objectName())
+            self.load_table_with_btn(self.ui.toolButton_classification.objectName())
+            # self.ui.cbBox_of_localization_model_in_PBT_page.setCurrentIndex(0)
+            # self.ui.cbBox_of_classification_model_in_PBT_page.setCurrentIndex(0)
+        self.load_table_with_btn(self.ui.toolButton_binary.objectName())
+        # self.ui.cbBox_of_binary_model_in_PBT_page.setCurrentIndex(0)
 
     def __debug_load_sheet__(self, ids):
         self.move_on_list.add(ids, "sheets_id")
@@ -578,58 +608,65 @@ class API:
 
     # _____________________________________________________________________JJ ZONE BEGINE
 
-    def show_summery_of_selected_model_in_lineEdit_in_PBT_page(self, row, column):
-        """this function called,when the user select ,rows from tabel in UI(IN PBT PAGE)
-        and,pass number of selected row as input to the function
+    def display_models_info_on_table_in_pbt(self, item):
+        row = self.ui.table_of_binary_classifaction_in_PBT_page.indexFromItem(
+            item
+        ).row()
+        if (
+            self.ui.table_of_binary_classifaction_in_PBT_page.item(row, 0).checkState()
+            == Qt.CheckState.Checked
+        ):
+            self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                row, 0
+            ).setCheckState(Qt.CheckState.Unchecked)
+            model_summery_that_show = ""
+        else:
+            self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                row, 0
+            ).setCheckState(Qt.CheckState.Checked)
+            # create string as summery of model(or algorithm)
+            model_summery_that_show = "row {} selected,algorithm:{},that tarin in date:{},with dataset:{},and the weights is here {}".format(
+                row + 1,
+                self.bmodels_list[row]["algo_name"],
+                self.bmodels_list[row]["date_"],
+                self.bmodels_list[row]["dataset_pathes"],
+                self.bmodels_list[row]["weights_path"],
+            )
+            temp = self.bmodels_list[row]["input_size"]
+            input_size = tuple(map(int, temp[1:-1].split(",")))
 
-        Parameters
-        ----------
-        row : int
-            row number of item
-        column : int
-            column number of item
-        """
+            self.current_bmodel = self.bmodels_list[row]
 
-        # create string as summery of model(or algorithm)
-        model_summery_that_show = "algorithm:{},that tarin in date:{},with dataset:{},and the weights is here {}".format(
-            self.bmodels_list[row]["algo_name"],
-            self.bmodels_list[row]["date_"],
-            self.bmodels_list[row]["dataset_pathes"],
-            self.bmodels_list[row]["weights_path"],
-        )
-
-        temp = self.bmodels_list[row]["input_size"]
-        input_size = tuple(map(int, temp[1:-1].split(",")))
-
-        self.current_bmodel = self.bmodels_list[row]
         if self.bmodels_list[row]["algo_name"] in train_api.ALGORITHM_NAMES["binary"]:
             # set the  summery at the lineEdit ,that under the table
-            self.ui.LBL_of_selected_binary_classifaction_model_in_PBT_page.setText(
+            self.ui.LBL_of_selected_binary_model_in_PBT_page.setText(
                 model_summery_that_show
             )
-
-            self.algo_name_binary_model = self.bmodels_list[row]["algo_name"]
-            self.input_size_binary_model = input_size
-            self.weight_path_binary_model = self.bmodels_list[row]["weights_path"]
-
-            self.current_b_model = self.bmodels_list[row]
+            if model_summery_that_show != "":
+                self.input_size_binary_model = input_size
+                self.current_b_model = self.bmodels_list[row]
+                self.current_b_model_weights = self.current_b_model["weights_path"]
+            else:
+                self.input_size_binary_model = ""
+                self.current_b_model = ""
+                self.current_b_model_weights = ""
 
         elif (
             self.bmodels_list[row]["algo_name"]
             in train_api.ALGORITHM_NAMES["classification"]
         ):
             # set the  summery at the lineEdit ,that under the table
-            self.ui.LBL_of_selected_multiClassification_model_in_PBT_page.setText(
+            self.ui.LBL_of_selected_classification_model_in_PBT_page.setText(
                 model_summery_that_show
             )
-
-            self.algo_name_classification_model = self.bmodels_list[row]["algo_name"]
-            self.input_size_classification_model = input_size
-            self.weight_path_classification_model = self.bmodels_list[row][
-                "weights_path"
-            ]
-
-            self.current_c_model = self.bmodels_list[row]
+            if model_summery_that_show != "":
+                self.input_size_classification_model = input_size
+                self.current_c_model = self.bmodels_list[row]
+                self.current_c_model_weights = self.current_c_model["weights_path"]
+            else:
+                self.input_size_classification_model = ""
+                self.current_c_model = ""
+                self.current_c_model_weights = ""
 
         elif (
             self.bmodels_list[row]["algo_name"]
@@ -639,60 +676,127 @@ class API:
             self.ui.LBL_of_selected_localization_model_in_PBT_page.setText(
                 model_summery_that_show
             )
+            if model_summery_that_show != "":
+                self.input_size_localization_model = input_size
+                self.current_l_model = self.bmodels_list[row]
+                self.current_l_model_weights = self.current_l_model["weights_path"]
+            else:
+                self.input_size_localization_model = ""
+                self.current_l_model = ""
+                self.current_l_model_weights = ""
 
-            self.algo_name_localization_model = self.bmodels_list[row]["algo_name"]
-            self.input_size_localization_model = input_size
-            self.weight_path_localization_model = self.bmodels_list[row]["weights_path"]
+        elif self.bmodels_list[row]["algo_name"] in train_api.ALGORITHM_NAMES["yolo"]:
+            # set the  summery at the lineEdit ,that under the table
+            self.ui.LBL_of_selected_yolo_model_in_PBT_page.setText(
+                model_summery_that_show
+            )
+            if model_summery_that_show != "":
+                self.input_size_yolo_model = input_size
+                self.current_yolo_model = self.bmodels_list[row]
+                self.current_yolo_model_weights = self.current_yolo_model[
+                    "weights_path"
+                ]
+            else:
+                self.input_size_yolo_model = ""
+                self.current_yolo_model = ""
+                self.current_yolo_model_weights = ""
 
-            self.current_l_model = self.bmodels_list[row]
+        for i in range(self.ui.table_of_binary_classifaction_in_PBT_page.rowCount()):
+            if self.ui.table_of_binary_classifaction_in_PBT_page.item(i, 0) != None:
+                if (
+                    i != row
+                    and self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                        i, 0
+                    ).checkState()
+                    == Qt.CheckState.Checked
+                ):
+                    self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                        i, 0
+                    ).setCheckState(Qt.CheckState.Unchecked)
 
-        self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(True)
+        if self.current_b_model != "" and (
+            self.current_yolo_model != "" or self.current_l_model != ""
+        ):
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(True)
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(58)
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(28)
+            if self.current_yolo_model != "":
+                if self.current_l_model != "":
+                    self.pipline_type = "BSY"
+                else:
+                    self.pipline_type = "BY"
+            elif self.current_c_model != "":
+                self.pipline_type = "BSC"
+            else:
+                self.pipline_type = "BS"
+
+        else:
+            self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setEnabled(False)
+            # self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedWidth(0)
+            # self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.setFixedHeight(0)
 
     def apply_selected_model_after_push_applyBTN_in_PBT_page(self):
         """the function connect to 'BTN_apply_of_binary_classifaction_in_PBT_page',
         and if the user set models,by clicking the buttom ,load dataset page loaded
         """
-        if self.check_name_pipline():
-            if self.ui.show_question(
-                texts.WARNINGS["WARNING"][self.language],
-                texts.WARNINGS["Create_pipline"][self.language]
-                + self.ui.pipline_name.text()
-                + ")",
-            ):
-                if self.create_and_add_pipline():
-                    self.ui.stackedWidget_pbt.setCurrentWidget(
-                        self.ui.page_load_dataset
-                    )
-                    self.ui.load_dataset_pbt_btn.setStyleSheet(
-                        "background-color: rgb(200,200,200)"
-                    )
-                    self.ui.history_pbt_btn.setStyleSheet(
-                        "background-color: rgb(100,100,100)"
-                    )
-                    self.ui.pipeline_pbt_btn.setStyleSheet(
-                        "background-color: rgb(100,100,100)"
-                    )
-                    self.refresh_datasets_table(PBT_page=True)
-                    self.add_piplines_in_combobox(
-                        piplinename=self.ui.pipline_name.text()
-                    )
-                    self.refresh_loadDataset_tabs_in_PBT()
-                else:
-                    self.ui.pipline_name_status.setText(
-                        texts.ERRORS["pipline_eror"][self.language]
-                    )
+        if self.ui.pipline_name.text() != "":
+            if self.check_name_pipline():
+                classification_info = ""
+                if self.current_l_model != "" and self.current_c_model == "":
+                    classification_info = texts.WARNINGS["Have_Classification_model"][
+                        self.language
+                    ]
 
-        else:
-            pass
-            # #print("name not valid")
+                if self.ui.show_question(
+                    texts.WARNINGS["WARNING"][self.language],
+                    texts.WARNINGS["Create_pipline"][self.language]
+                    + self.ui.pipline_name.text()
+                    + ")\n"
+                    + classification_info,
+                ):
+                    if self.create_and_add_pipline():
+                        self.ui.stackedWidget_pbt.setCurrentWidget(
+                            self.ui.page_load_dataset
+                        )
+                        self.ui.load_dataset_pbt_btn.setStyleSheet(
+                            "background-color: rgb(200,200,200)"
+                        )
+                        self.ui.history_pbt_btn.setStyleSheet(
+                            "background-color: rgb(100,100,100)"
+                        )
+                        self.ui.pipeline_pbt_btn.setStyleSheet(
+                            "background-color: rgb(100,100,100)"
+                        )
+                        self.refresh_datasets_table(PBT_page=True)
+                        self.add_piplines_in_combobox(
+                            piplinename=self.ui.pipline_name.text()
+                        )
+                        self.refresh_loadDataset_tabs_in_PBT()
+                    else:
+                        self.ui.pipline_name_status.setText(
+                            texts.ERRORS["pipline_eror"][self.language]
+                        )
+            else:
+                pass
+
+
+    
+
 
     def check_name_pipline(self):
+
+        print('asdw')
 
         pipline_name = self.ui.pipline_name.text()
         if pipline_name == "":
             self.ui.pipline_name_status.setText(
                 texts.ERRORS["empty_name"][self.language]
             )
+
+            self.ui.pipline_name_status.setStyleSheet(
+                            "color: rgb(170, 0, 0);"
+                        )
+
             return False
 
         db_pipline_names = self.db.get_pipline_names()
@@ -701,13 +805,23 @@ class API:
             self.ui.pipline_name_status.setText(
                 texts.ERRORS["repeat_name"][self.language]
             )
+            self.ui.pipline_name_status.setStyleSheet(
+                            "color: rgb(170, 0, 0);"
+                        )
+
             return False
-        if pipline_name not in db_pipline_names:
+        else:
+            self.ui.pipline_name_status.setText(
+                texts.MESSEGES["valid_pipline"][self.language]
+            )
+            self.ui.pipline_name_status.setStyleSheet(
+                            "color: rgb(0, 170, 0);"
+                        )
+
             return True
         return False
 
     def add_dataset_in_combobox(self):
-
         res, self.datasets_list = dataset.get_datasets_list_from_db(db_obj=self.db)
         if not res:
             self.ui.notif_manager.append_new_notif(
@@ -725,61 +839,58 @@ class API:
         )
 
     def create_and_add_pipline(self):
-
         try:
-            # #print(self.current_b_model)
-            # data = pipline_name,user_name,pipline path if save , binary_weight path , local weight path , class weight path
             data = (
                 self.ui.pipline_name.text(),
                 self.login_user_name,
-                "Null",
-                self.current_b_model["weights_path"],
-                self.current_l_model["weights_path"],
-                self.current_c_model["weights_path"],
+                self.current_b_model_weights,
+                self.current_l_model_weights,
+                self.current_c_model_weights,
+                self.current_yolo_model_weights,
+                self.pipline_type,
             )  # path pipline null
             ret = self.db.add_pipline(data)
-
             return ret
 
         except:
-            #     self.ui.pipline_name_status.setText(texts.ERRORS['repeat_name'][self.language])
+            # self.ui.pipline_name_status.setText(texts.ERRORS['repeat_name'][self.language])
             return False
 
     def add_piplines_in_combobox(self, piplinename=-1):
+        """
+        add_piplines_in_combobox add created pipline info to sql ,in pipline table
 
+        check the name of piplie is new,if is new ,add pipline to sql table
+
+        Parameters
+        ----------
+        piplinename:str
+            name of pipline, by default -1
+        """
         db_pipline_names = self.db.get_pipline_names()
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.clear()
         self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.addItems(db_pipline_names)
-        if piplinename != -1:
-            inx = self.db_pipline_names.index(piplinename)
-            self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setCurrentIndex(inx)
+        # if piplinename != -1:
+        #     inx = db_pipline_names.index(piplinename)
+        #     self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setCurrentIndex(inx)
 
     def load_image_btn_in_PBT_page(self):
+        """
+        load_image_btn_in_PBT_page concet to toolbuttom for gettinh path of cutomized dataset
+
+        """
         path = QFileDialog.getExistingDirectory(self.ui, "Choose Directory", "")
         self.ui.lineEdit_of_path_displayment_in_PBT_page.setText(path)
         self.customized_datasets = [{"path": path}]
 
-    def set_perfect_defect_checkBox_dataset(self, state, perfectOrdefect):
-
-        if perfectOrdefect == "perfect":
-            self.perfect_show = state
-        elif perfectOrdefect == "defect":
-            self.defect_show = state
+    def set_perfect_defect_checkBox_dataset(self, state):
+        self.perfect_show = state
 
     def checkbox_connector(self):
         self.ui.chbox_prefectdata_in_PBT_page.stateChanged.connect(
             partial(
                 lambda x: self.set_perfect_defect_checkBox_dataset(
                     state=self.ui.chbox_prefectdata_in_PBT_page.isChecked(),
-                    perfectOrdefect="perfect",
-                )
-            )
-        )
-        self.ui.chbox_defectdata_in_PBT_page.stateChanged.connect(
-            partial(
-                lambda x: self.set_perfect_defect_checkBox_dataset(
-                    state=self.ui.chbox_defectdata_in_PBT_page.isChecked(),
-                    perfectOrdefect="defect",
                 )
             )
         )
@@ -788,9 +899,8 @@ class API:
         """by calling this function, the qtablewidget of UI connect to corresponding function.
         this function call in __init__ function
         """
-        # qtablewidget in PBT page that,indicate all information of  binary classification DL model,from SQL
-        self.ui.table_of_binary_classifaction_in_PBT_page.cellClicked.connect(
-            partial(self.show_summery_of_selected_model_in_lineEdit_in_PBT_page)
+        self.ui.table_of_binary_classifaction_in_PBT_page.itemClicked.connect(
+            partial(self.display_models_info_on_table_in_pbt)
         )
 
     def comboBox_connector(self):
@@ -803,7 +913,7 @@ class API:
             lambda: self.refresh_binary_models_table(filter_mode=True, wich_page="PBT")
         )
 
-        self.ui.cbBox_of_multiClassification_model_in_PBT_page.currentTextChanged.connect(
+        self.ui.cbBox_of_classification_model_in_PBT_page.currentTextChanged.connect(
             lambda: self.refresh_binary_models_table(
                 filter_mode=True, wich_page="PBT", model_type="classification"
             )
@@ -821,7 +931,6 @@ class API:
             )
         )
 
-
         self.ui.comboBox_ncamera_SI.currentTextChanged.connect(
             partial(self.set_ncamera_label)
         )
@@ -829,44 +938,275 @@ class API:
             partial(self.set_nframe_label)
         )
 
-    def load_table_with_btn(self, obj_name):
-        algo_name = obj_name.split("_")[1]
-        combo_name = eval(
-            "self.ui.{}".format("cbBox_of_" + algo_name + "_model_in_PBT_page")
+        self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentTextChanged.connect(
+            partial(self.update_pipline_table_title)
         )
-        index = combo_name.currentIndex()
 
-        if index != 0:
-            combo_name.setCurrentIndex(0)
-            combo_name.setCurrentIndex(index)
+    def load_table_with_btn(self, obj_name):
+        """
+        load_table_with_btn
+
+            by pushhing toolbuttom update tabel
+
+        Parameters
+        ----------
+        obj_name : str
+            by pushhing toolbuttom update tabel
+        """
+        algo_name = obj_name.split("_")[1]
+        self.refresh_binary_models_table(
+            filter_mode=True, wich_page="PBT", model_type=algo_name
+        )
+        self.remember_selected_item(algo_name=algo_name)
+
+    def remember_selected_item(
+        self,
+        algo_name,
+    ):
+        """
+        remember_selected_item function remember table change between model type changing
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        algo_name :str
+            indicate type of model
+        """
+        label = eval(
+            "self.ui.{}".format(" LBL_of_selected_" + algo_name + "_model_in_PBT_page")
+        )
+        txt = label.text()
+        if txt != "":
+            row = int(txt[4]) - 1
+            self.ui.table_of_binary_classifaction_in_PBT_page.item(
+                row, 0
+            ).setCheckState(Qt.CheckState.Checked)
+
+    def update_evaluation_metrics_table(self, pipline_type):
+        """
+        update_evaluation_metrics_table used for updateing  types of table metrics in page 2 of pbt
+
+        according to the type of pipline chage the cell structure of metrics table
+
+        Parameters
+        ----------
+        pipline_type : str
+            type of pipline:BY,BS,BSC,BSY
+        """
+        self.ui.tabWidget.clear()
+        metrics_list = pipelines.MODELS_METRICS[pipline_type]
+        tab_list = pipelines.TAB_TITLES[pipline_type]
+        for i, each_tab in enumerate(tab_list):
+            table = eval("self.ui.{}_table_metrics".format(each_tab))
+            self.ui.tabWidget.addTab(table, each_tab)
+            self.update_pipline_table_info(table=table, titles=metrics_list[i])
+
+    def update_pipline_table_title(self, pipline_name):
+        """
+        update_pipline_table_title _summary_
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        pipline_name : _type_
+            _description_
+        """
+        _, pipline_info = self.db.get_selected_pipline_record(value=pipline_name)
+        if pipline_info != []:
+            self.len_model_piplines = len(
+                pipelines.TABLE_TITLE[pipline_info[0]["pipline_type"]]
+            )
+
+            self.update_evaluation_metrics_table(
+                pipline_type=pipline_info[0]["pipline_type"]
+            )
+
+            self.update_pipline_table_info(
+                table=self.ui.tableWidget_pipline_info,
+                titles=pipelines.TABLE_TITLE[pipline_info[0]["pipline_type"]],
+                language=True,
+            )
+            self.assign_table_column(
+                table=self.ui.tableWidget_pipline_info,
+                number_of_rows=self.len_model_piplines,
+                refresh=True,
+            )
+            if pipline_name == self.pipline_name:
+                if self.binary_model_flag:
+                    self.update_table_value(
+                        table=self.ui.tableWidget_pipline_info,
+                        value=texts.MESSEGES["Part_is_ready"][self.language],
+                        row=0,
+                    )
+                if self.segmentation_model_flag:
+                    self.update_table_value(
+                        table=self.ui.tableWidget_pipline_info,
+                        value=texts.MESSEGES["Part_is_ready"][self.language],
+                        row=1,
+                    )
+                if self.classification_model_flag:
+                    self.update_table_value(
+                        table=self.ui.tableWidget_pipline_info,
+                        value=texts.MESSEGES["Part_is_ready"][self.language],
+                        row=2,
+                    )
+                if self.yolo_model_flag:
+                    if pipline_info[0]["pipline_type"] == "BY":
+                        row = 1
+                    else:
+                        row = 2
+                    self.update_table_value(
+                        table=self.ui.tableWidget_pipline_info,
+                        value=texts.MESSEGES["Part_is_ready"][self.language],
+                        row=row,
+                    )
+
+        elif pipline_name != "":
+            self.ui.create_alert_message(
+                title="ERROR",
+                message=texts.ERRORS["pipline_info_unfetchable"][self.language],
+            )
+
+    def update_pipline_table_info(self, table, titles, language=False):
+        """
+        update_pipline_table_info for refeshing table in page 2 of pbt
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        table : _type_
+            table obj
+        titles : list
+            list of string we want dispaly as title of colume one
+        language : bool, optional
+            _description_, by default False
+        """
+        table.resizeColumnsToContents()
+        table.setColumnCount(2)
+        table.setRowCount(len(titles))
+        table.horizontalHeader().setSectionResizeMode(sQHeaderView.Stretch)
+        table.verticalHeader().setSectionResizeMode(sQHeaderView.Stretch)
+        table.horizontalHeader().setVisible(False)
+        table.verticalHeader().setVisible(False)
+        for i, item in enumerate(titles):
+            if language:
+                table_item = sQTableWidgetItem(item[self.language])
+            else:
+                table_item = sQTableWidgetItem(item)
+            table.setItem(i, 0, table_item)
+
+    def update_table_value(self, table, value, row, col=1):
+        """
+        update_table_value used for chage vales of one item in tables
+
+        used for 3 table in page 2 of pbt
+        for changeing value of each label in colume two
+
+        Parameters
+        ----------
+        table : _type_
+            table obj ,we want to change value of it
+        value : str
+            value we want to dispaly on cell of table
+        row : int
+            number of row of the cell
+        col : int, optional
+            number of colume of the cell, by default 1
+        """
+        table_value = sQTableWidgetItem(value)
+        table.setItem(row, col, table_value)
+
+    def assign_table_column(self, table, number_of_rows, data_list=None, refresh=True):
+        """
+        assign_table_column
+
+        used for assigne value of refreshing tables in page 2 of pbt
+
+        Parameters
+        ----------
+        table : _type_
+            table obj
+        number_of_rows : int
+            number of rows of tabel
+        data_list : list, optional
+            list of data we want to assinge on tables item, by default None
+        refresh : bool, optional
+           indicate we want to refesh table or not , by default True
+        """
+        if refresh:
+            for i in range(number_of_rows):
+                self.update_table_value(
+                    table=table,
+                    value="",
+                    row=i,
+                )
         else:
-            combo_name.setCurrentIndex(1)
-            combo_name.setCurrentIndex(index)
+            for i, item in enumerate(data_list):
+                self.update_table_value(
+                    table=table,
+                    value=str(item),
+                    row=i,
+                )
 
     def refresh_loadDataset_tabs_in_PBT(self):
-        # labale updating
-        self.ui.LBL_of_data_is_ready_in_PBT_page.setText("")
-        self.ui.LBL_of_pipline_is_ready_in_PBT_page.setText("")
-        self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText("")
-        self.ui.LBL_of_evalution_of_binary_model_in_PBT_page.setText("")
-        self.ui.LBL_of_evalution_of_classification_model_in_PBT_page.setText("")
-        # progressbar updating
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
+        """
+        refresh_loadDataset_tabs_in_PBT used for refresh and reset page one of pbt
+
+        """
+        # tabel of data:
+        self.update_pipline_table_info(
+            table=self.ui.tableWidget_data_info,
+            titles=[
+                texts.Titles["validation data"][self.language],
+                texts.Titles["perfect_pbt"][self.language],
+                texts.Titles["defect_pbt"][self.language],
+            ],
+        )
+        # table of pipline:
+        self.update_pipline_table_title(
+            pipline_name=self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
+        )
         # combobox updating
         self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.clear()
         self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.addItems(self.PBT_option_list)
         self.add_piplines_in_combobox()
         # checkbox updating
-        self.ui.chbox_prefectdata_in_PBT_page.setChecked(True)
-        self.ui.chbox_defectdata_in_PBT_page.setChecked(True)
+        self.ui.chbox_prefectdata_in_PBT_page.setChecked(False)
         # lineEdit updating
         self.ui.lineEdit_of_path_displayment_in_PBT_page.setText("")
 
-        # slider updating
-        # ???????
-
-    # _____________________________________________________________________JJ ZONE END
+        for i, _ in enumerate(pipelines.MODELS_METRICS["BY"][0]):
+            self.update_table_value(
+                table=self.ui.binary_table_metrics,
+                value="",
+                row=i,
+            )
+        if "Y" in self.pipline_type:
+            for i, _ in enumerate(pipelines.MODELS_METRICS["BY"][1]):
+                self.update_table_value(
+                    table=self.ui.yolo_table_metrics,
+                    value="",
+                    row=i,
+                )
+        elif "S" in self.pipline_type:
+            for i, _ in enumerate(pipelines.MODELS_METRICS["BSC"][1]):
+                self.update_table_value(
+                    table=self.ui.segmention_table_metrics,
+                    value="",
+                    row=i,
+                )
+        elif "C" in self.pipline_type:
+            for i, _ in enumerate(pipelines.MODELS_METRICS["BSC"][2]):
+                self.update_table_value(
+                    table=self.ui.classification_table_metrics,
+                    value="",
+                    row=i,
+                )
+        else:
+            print("what happend!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
     def button_connector(self):
         """this function is used to connet UI buttons to their functionality"""
@@ -875,9 +1215,6 @@ class API:
             partial(self.apply_selected_model_after_push_applyBTN_in_PBT_page)
         )
         self.ui.pbt_btn.clicked.connect(
-            lambda: self.refresh_binary_models_table_onevent(wich_page="PBT")
-        )
-        self.ui.pipeline_pbt_btn.clicked.connect(
             lambda: self.refresh_binary_models_table_onevent(wich_page="PBT")
         )
         self.ui.BTN_of_goToNextpage_in_PBT_page.clicked.connect(
@@ -899,6 +1236,27 @@ class API:
         self.ui.load_dataset_pbt_btn.clicked.connect(
             self.refresh_loadDataset_tabs_in_PBT
         )
+        self.ui.pipline_type_rdBTN_BY.toggled.connect(
+            lambda: self.set_stackedWidget_in_history_pbt_page(
+                self.ui.pipline_type_rdBTN_BY
+            )
+        )
+        self.ui.pipline_type_rdBTN_BS.toggled.connect(
+            lambda: self.set_stackedWidget_in_history_pbt_page(
+                self.ui.pipline_type_rdBTN_BS
+            )
+        )
+        self.ui.pipline_type_rdBTN_BSC.toggled.connect(
+            lambda: self.set_stackedWidget_in_history_pbt_page(
+                self.ui.pipline_type_rdBTN_BSC
+            )
+        )
+        self.ui.pipline_type_rdBTN_BSY.toggled.connect(
+            lambda: self.set_stackedWidget_in_history_pbt_page(
+                self.ui.pipline_type_rdBTN_BSY
+            )
+        )
+
         # ______________ JJ
 
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
@@ -923,7 +1281,9 @@ class API:
         self.ui.save_dataset_btn.clicked.connect(partial(self.save_train_ds))
         self.ui.save_all_dataset_btn.clicked.connect(partial(self.save_all_train_ds))
         self.ui.heatmap_btn.clicked.connect(partial(self.create_Heatmap))
-        self.ui.suggested_defects_btn.clicked.connect(partial(self.image_processing_suggest))
+        self.ui.suggested_defects_btn.clicked.connect(
+            partial(self.image_processing_suggest)
+        )
         self.ui.checkBox_show_neighbours.stateChanged.connect(
             partial(self.show_neighbours)
         )
@@ -938,7 +1298,9 @@ class API:
         self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
         self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
 
-        self.ui.l_select_prep.clicked.connect(partial(self.select_localization_pretrain_path))
+        self.ui.l_select_prep.clicked.connect(
+            partial(self.select_localization_pretrain_path)
+        )
         self.ui.l_select_dp.clicked.connect(partial(self.select_localization_dataset))
         self.ui.l_delete_ds.clicked.connect(partial(self.delete_localization_dataset))
         self.ui.l_add_ok.clicked.connect(partial(self.ok_add_localization_ds))
@@ -977,7 +1339,9 @@ class API:
             partial(self.change_live_camera)
         )
         self.ui.live_tabWidget.currentChanged.connect(partial(self.change_live_type))
-        self.ui.checkBox_suggested_defects.stateChanged.connect(partial(self.load_suggestions))
+        self.ui.checkBox_suggested_defects.stateChanged.connect(
+            partial(self.load_suggestions)
+        )
 
         # binary-model history
         self.ui.binary_tabel_prev.clicked.connect(
@@ -1070,11 +1434,10 @@ class API:
         self.ui.yolo_filter_btn.clicked.connect(
             partial(lambda: self.refresh_yolo_models_table(filter_mode=True))
         )
-        self.ui.yolo_clearfilter_btn.clicked.connect(
-            partial(self.clear_yolo_filters)
-        )
+        self.ui.yolo_clearfilter_btn.clicked.connect(partial(self.clear_yolo_filters))
 
         # ______________________________________________JJ ZONE START
+
         self.ui.BTN_load_in_PBT_page.clicked.connect(
             self.load_binary_images_list_in_PBT_load_dataset_page
         )
@@ -1085,18 +1448,19 @@ class API:
             self.evaluate_model_on_selected_model
         )
         self.ui.BTN_set_pipline_in_PBT_page.clicked.connect(self.set_pipline)
+        self.ui.BTN_reset_pipline_in_PBT_page.clicked.connect(self.reset_pipline)
 
         self.ui.BTN_prev_original_image_in_PBT_page.clicked.connect(
             partial(
                 lambda: self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
-                    prevornext="prev", predict_eval=self.pred_each_path
+                    prevornext="prev", predict_eval=self.image_slider_path
                 )
             )
         )
         self.ui.BTN_next_original_image_in_PBT_page.clicked.connect(
             partial(
                 lambda: self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
-                    prevornext="next", predict_eval=self.pred_each_path
+                    prevornext="next", predict_eval=self.image_slider_path
                 )
             )
         )
@@ -1168,12 +1532,7 @@ class API:
             )
         )
         self.ui.Yolo_btn.clicked.connect(
-            partial(
-                lambda: self.user_access_pages(self.ui.Yolo_btn.objectName())
-            )
-        )
-        self.ui.pbt_btn.clicked.connect(
-            partial(lambda: self.user_access_pages(self.ui.pbt_btn.objectName()))
+            partial(lambda: self.user_access_pages(self.ui.Yolo_btn.objectName()))
         )
 
         # Settings
@@ -1197,10 +1556,13 @@ class API:
                 self.ui.toolButton_localization.objectName()
             )
         )
-        self.ui.toolButton_multiClassification.clicked.connect(
+        self.ui.toolButton_classification.clicked.connect(
             lambda: self.load_table_with_btn(
-                self.ui.toolButton_multiClassification.objectName()
+                self.ui.toolButton_classification.objectName()
             )
+        )
+        self.ui.toolButton_yolo.clicked.connect(
+            lambda: self.load_table_with_btn(self.ui.toolButton_yolo.objectName())
         )
         self.ui.history_pbt_btn.clicked.connect(self.laod_bpt_jsons)
         self.ui.pipline_tabel_next_PBT.clicked.connect(self.next_page_pipline_history)
@@ -1212,25 +1574,27 @@ class API:
         self.ui.connect_plc_btn.clicked.connect(self.connect_plc)
         self.ui.disconnect_plc_btn.clicked.connect(self.disconnect_plc)
 
-        self.ui.line_thickness_slider.valueChanged.connect(self.change_label_line_thickness)
-        self.ui.point_thickness_slider.valueChanged.connect(self.change_label_point_thickness)
+        self.ui.line_thickness_slider.valueChanged.connect(
+            self.change_label_line_thickness
+        )
+        self.ui.point_thickness_slider.valueChanged.connect(
+            self.change_label_point_thickness
+        )
 
     def change_label_line_thickness(self):
         x = self.ui.line_thickness_slider.value()
         self.label_bakcend["mask"].change_line_thickness(x)
-        
+
     def change_label_point_thickness(self):
         x = self.ui.point_thickness_slider.value()
         self.label_bakcend["mask"].change_radius(x)
 
     def user_access_pages(self, btn_name):
-
         dic = {
             "Binary_btn": self.ui.page_Binary,
             "Localization_btn": self.ui.page_Localization,
             "Classification_btn": self.ui.page_Classification,
             "Yolo_btn": self.ui.page_Yolo,
-            "pbt_btn": self.ui.page_pbt,
         }
         if self.logged_in:
             eval(
@@ -1238,12 +1602,17 @@ class API:
                     btn_name
                 )
             )
-            for btn in ['Binary_btn', 'Localization_btn', 'Classification_btn', 'Yolo_btn']:
+            for btn in [
+                "Binary_btn",
+                "Localization_btn",
+                "Classification_btn",
+                "Yolo_btn",
+            ]:
                 eval(
-                'self.ui.{}.setStyleSheet("background-color: rgb(230, 230, 230); color: black; text-align:center;")'.format(
-                    btn
+                    'self.ui.{}.setStyleSheet("background-color: rgb(230, 230, 230); color: black; text-align:center;")'.format(
+                        btn
+                    )
                 )
-            )
 
             eval(
                 'self.ui.{}.setStyleSheet("background-color: rgb(170, 170, 212); color: black; text-align:center;")'.format(
@@ -1283,9 +1652,7 @@ class API:
         )
 
     def change_image_save_status(self):
-        sheet, pos, img_path = self.move_on_list.get_current(
-            "selected_imgs_for_label"
-        )
+        sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
         self.image_save_status[img_path] = False
 
     # ----------------------------------------------------------------------------------------
@@ -1300,7 +1667,9 @@ class API:
             )
 
             self.ui.logger.create_new_log(
-                        code=texts_codes.SubTypes['Sheet_empty'], message=texts.MESSEGES["No_sheet_load"]["en"], level=1
+                code=texts_codes.SubTypes["Sheet_empty"],
+                message=texts.MESSEGES["No_sheet_load"]["en"],
+                level=1,
             )
 
             return
@@ -1335,11 +1704,15 @@ class API:
             self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
 
             self.ui.logger.create_new_log(
-                code=texts_codes.SubTypes['Sheet_loaded'], message=texts.MESSEGES["sheet_loaded"]["en"], level=1
+                code=texts_codes.SubTypes["Sheet_loaded"],
+                message=texts.MESSEGES["sheet_loaded"]["en"],
+                level=1,
             )
         except:
             self.ui.logger.create_new_log(
-                code=texts_codes.SubTypes['Sheet_loaded_eror'], message=texts.MESSEGES["sheet_load_eror"]["en"], level=1
+                code=texts_codes.SubTypes["Sheet_loaded_eror"],
+                message=texts.MESSEGES["sheet_load_eror"]["en"],
+                level=1,
             )
 
     # ----------------------------------------------------------------------------------------
@@ -1369,23 +1742,25 @@ class API:
                 self.thechnicals_backend[side].set_show_bboxes()
                 self.thechnicals_backend[side].update_defect()
                 selecteds = self.selected_images_for_label.get_sheet_side_selections(
-                        str(self.sheet.get_id()), side
-                    )
+                    str(self.sheet.get_id()), side
+                )
 
                 self.thechnicals_backend[side].update_selected(selecteds)
                 self.thechnicals_backend[side].update_real_imgs()
                 self.current_technical_side = side
-                self.refresh_thechnical(fp=1)  
+                self.refresh_thechnical(fp=1)
 
                 self.ui.set_enabel(self.ui.load_coil_btn, True)
                 self.ui.set_enabel(self.ui.next_coil_btn, True)
                 self.ui.set_enabel(self.ui.prev_coil_btn, True)
                 self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
-    
+
     def load_suggestions(self, state=0):
         if self.ui.checkBox_suggested_defects.isChecked():
             self.ui.suggested_defects_progressBar.setValue(0)
-            self.ui.suggested_defects_progressBar.setMaximum(self.sheet.get_cameras()[1]*2*self.sheet.get_nframe())
+            self.ui.suggested_defects_progressBar.setMaximum(
+                self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe()
+            )
             l = self.db.get_image_processing_params()
             if l != self.l:
                 for key in self.sheet_imgprocessing_mem.keys():
@@ -1409,7 +1784,9 @@ class API:
                 for i in range(self.n_threads):
                     self.threads.append(sQThread())
                     # Step 3: Create a worker object
-                    self.workers.append(image_processing_worker.image_processing_worker())
+                    self.workers.append(
+                        image_processing_worker.image_processing_worker()
+                    )
                     self.workers[-1].assign_parameters(
                         n_cameras=((i*step)+1, (i+1)*step),
                         n_frames=(1, self.sheet.get_nframe()), 
@@ -1417,22 +1794,22 @@ class API:
                         sheet_id=self.sheet.get_id(), 
                         active_cameras = self.sheet.get_cameras(),
                         img_format=self.sheet.get_image_format(),
-                        img_shape = data_grabber.IMAGE_SHAPE,
+                        img_shape=data_grabber.IMAGE_SHAPE,
                         api_obj=self,
                         ui_obj=self.ui,
-                        db_obj=self.db
+                        db_obj=self.db,
                     )
                     # Step 4: Move worker to the thread
                     self.workers[-1].moveToThread(self.threads[-1])
                     # Step 5: Connect signals and slots
                     self.threads[-1].started.connect(self.workers[-1].run_algorithm)
                     self.workers[-1].finished.connect(self.threads[-1].quit)
-                    self.workers[-1].finished.connect(
-                        self.finish_th
-                    )
+                    self.workers[-1].finished.connect(self.finish_th)
                     self.workers[-1].finished.connect(self.workers[-1].deleteLater)
                     self.threads[-1].finished.connect(self.threads[-1].deleteLater)
-                    self.workers[-1].update_progressbar.connect(self.update_suggestion_progressbar)
+                    self.workers[-1].update_progressbar.connect(
+                        self.update_suggestion_progressbar
+                    )
                     # Step 6: Start the thread
                     self.threads[-1].start()
 
@@ -1441,9 +1818,11 @@ class API:
                     self.thechnicals_backend[side].reset_real_imgs()
                     self.thechnicals_backend[side].set_show_bboxes()
                     self.thechnicals_backend[side].update_defect()
-                    selecteds = self.selected_images_for_label.get_sheet_side_selections(
+                    selecteds = (
+                        self.selected_images_for_label.get_sheet_side_selections(
                             str(self.sheet.get_id()), side
                         )
+                    )
 
                     self.thechnicals_backend[side].update_selected(selecteds)
                     self.thechnicals_backend[side].update_real_imgs()
@@ -1453,7 +1832,9 @@ class API:
             self.build_sheet_technical(self.sheet)
 
     def update_suggestion_progressbar(self):
-        self.ui.suggested_defects_progressBar.setValue(self.ui.suggested_defects_progressBar.value() + 1)
+        self.ui.suggested_defects_progressBar.setValue(
+            self.ui.suggested_defects_progressBar.value() + 1
+        )
 
     def build_sheet_technical(self, sheet):
         try:
@@ -1599,8 +1980,11 @@ class API:
                 texts.ERRORS["refresh_failed"][self.language], level=3
             )
             self.ui.logger.create_new_log(
-                code=texts_codes.SubTypes['Sheet_page_eror'], message=texts.MESSEGES["sheet_page_eror"]["en"], level=5
+                code=texts_codes.SubTypes["Sheet_page_eror"],
+                message=texts.MESSEGES["sheet_page_eror"]["en"],
+                level=5,
             )
+
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
@@ -1618,8 +2002,8 @@ class API:
 
         if self.ui.checkBox_all_imgs_SI.isChecked():
             side = ["up", "down"]
-            cameras = list(range(self.sheet.cameras[0], int(self.sheet.cameras[1])+1))
-            frames = list(range(1, self.sheet.nframe+1))
+            cameras = list(range(self.sheet.cameras[0], int(self.sheet.cameras[1]) + 1))
+            frames = list(range(1, self.sheet.nframe + 1))
         else:
             s = self.ui.comboBox_side_SI.currentText()
             if s == "TOP":
@@ -1629,12 +2013,14 @@ class API:
             elif s == "BOTH":
                 side = ["up", "down"]
             if self.ui.checkBox_all_camera_SI.isChecked():
-                cameras = list(range(self.sheet.cameras[0], int(self.sheet.cameras[1]+1)))
+                cameras = list(
+                    range(self.sheet.cameras[0], int(self.sheet.cameras[1] + 1))
+                )
             else:
                 cameras = self.ui.comboBox_ncamera_SI.getValue()
                 cameras = list(map(int, cameras))
             if self.ui.checkBox_all_frame_SI.isChecked():
-                frames = list(range(1, self.sheet.nframe+1))
+                frames = list(range(1, self.sheet.nframe + 1))
             else:
                 frames = self.ui.comboBox_nframe_SI.getValue()
                 frames = list(map(int, frames))
@@ -1659,8 +2045,8 @@ class API:
 
         for s in side:
             for c in cameras:
-                    for f in frames:
-                        self.selected_images_for_label.add(sheet_id, s, (c, f))
+                for f in frames:
+                    self.selected_images_for_label.add(sheet_id, s, (c, f))
             self.ui.add_selected_image(
                 self.selected_images_for_label.get_all_selections_list()
             )
@@ -1692,8 +2078,8 @@ class API:
 
         if self.ui.checkBox_all_imgs_SI.isChecked():
             side = ["up", "down"]
-            cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]+1))
-            frames = list(range(1, self.sheet.nframe+1))
+            cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1] + 1))
+            frames = list(range(1, self.sheet.nframe + 1))
         else:
             s = self.ui.comboBox_side_SI.currentText()
             if s == "TOP":
@@ -1703,12 +2089,12 @@ class API:
             elif s == "BOTH":
                 side = ["up", "down"]
             if self.ui.checkBox_all_camera_SI.isChecked():
-                cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1]+1))
+                cameras = list(range(self.sheet.cameras[0], self.sheet.cameras[1] + 1))
             else:
                 cameras = self.ui.comboBox_ncamera_SI.getValue()
                 cameras = list(map(int, cameras))
             if self.ui.checkBox_all_frame_SI.isChecked():
-                frames = list(range(1, self.sheet.nframe+1))
+                frames = list(range(1, self.sheet.nframe + 1))
             else:
                 frames = self.ui.comboBox_nframe_SI.getValue()
                 frames = list(map(int, frames))
@@ -1780,18 +2166,17 @@ class API:
                 level=2,
             )
         else:
-
             side = self.thechnicals_backend[self.current_technical_side].get_side()
             main_path = self.sheet.get_path()
 
-            x = main_path.split('/')
-            path = pathStructure.sheet_image_path(x[0], x[-1], side, cam, frame, '.png')
+            x = main_path.split("/")
+            path = pathStructure.sheet_image_path(x[0], x[-1], side, cam, frame, ".png")
 
             if not os.path.exists(path):
                 self.ui.set_warning(
-                texts.WARNINGS["image_not_exist"][self.language],
-                "data_auquzation",
-                level=2,
+                    texts.WARNINGS["image_not_exist"][self.language],
+                    "data_auquzation",
+                    level=2,
                 )
                 return
 
@@ -1819,7 +2204,6 @@ class API:
             )
 
     def remove_select_img(self):
-
         selected_img_for_remove = self.ui.get_selected_img()
         if len(selected_img_for_remove):
             self.selected_images_for_label.remove_by_index(selected_img_for_remove)
@@ -1853,7 +2237,6 @@ class API:
         selected_imgs = self.selected_images_for_label.get_all_selections_list()
         selected_idxs = self.ui.get_selected_img()
         if len(selected_idxs) > 0:
-
             filtered_selected = Utils.get_selected_value(selected_imgs, selected_idxs)
             paths = self.db.get_path_sheet_image(filtered_selected)
             sheets = []
@@ -1873,10 +2256,17 @@ class API:
                     label = self.ds.get_label_from_annotation(selected_img_pos)
                     f = []
                     for i in label:
-                        f.append([i["class"], np.array(i["mask"]), i['line_thickness'], i['point_thickness']])
+                        f.append(
+                            [
+                                i["class"],
+                                np.array(i["mask"]),
+                                i["line_thickness"],
+                                i["point_thickness"],
+                            ]
+                        )
                     if f:
                         self.label_memory.add(img_path, f, label_type)
-                
+
                 self.image_save_status[img_path] = False
 
             self.ui.show_label_page()
@@ -1922,7 +2312,7 @@ class API:
             self.ui.show_image_in_label(self.img)
 
         labels = self.label_bakcend[label_type].get()
-        
+
         if not fast:
             labels_name = []
             for label in labels:
@@ -1999,7 +2389,14 @@ class API:
                 label = self.ds.get_label_from_annotation(selected_img_pos)
                 f = []
                 for i in label:
-                    f.append([i["class"], np.array(i["mask"]), i["line_thickness"], i["point_thickness"]])
+                    f.append(
+                        [
+                            i["class"],
+                            np.array(i["mask"]),
+                            i["line_thickness"],
+                            i["point_thickness"],
+                        ]
+                    )
                 if f:
                     self.label_memory.add(img_path, f, label_type)
             label = self.label_memory.get_label(label_type, img_path)
@@ -2012,14 +2409,12 @@ class API:
 
     def next_label_img(self):
         # print(')))))))))))):', self.image_save_status)
-        _, _, img_path = self.move_on_list.get_current(
-            "selected_imgs_for_label"
-        )
+        _, _, img_path = self.move_on_list.get_current("selected_imgs_for_label")
         if not self.image_save_status[img_path]:
             t = self.ui.show_question(
-                    texts.WARNINGS["question"][self.language],
-                    texts.MESSEGES["changes_not_saved"][self.language],
-                )
+                texts.WARNINGS["question"][self.language],
+                texts.MESSEGES["changes_not_saved"][self.language],
+            )
             if not t:
                 return
             else:
@@ -2032,14 +2427,12 @@ class API:
             self.load_image_to_label_page()
 
     def prev_label_img(self):
-        _, _, img_path = self.move_on_list.get_current(
-            "selected_imgs_for_label"
-        )
+        _, _, img_path = self.move_on_list.get_current("selected_imgs_for_label")
         if not self.image_save_status[img_path]:
             t = self.ui.show_question(
-                    texts.WARNINGS["question"][self.language],
-                    texts.MESSEGES["changes_not_saved"][self.language],
-                )
+                texts.WARNINGS["question"][self.language],
+                texts.MESSEGES["changes_not_saved"][self.language],
+            )
             if not t:
                 return
             else:
@@ -2059,16 +2452,15 @@ class API:
         for _, _, img_path in l:
             if not self.image_save_status[img_path]:
                 t = self.ui.show_question(
-                        texts.WARNINGS["question"][self.language],
-                        texts.MESSEGES["changes_not_saved"][self.language],
-                    )
+                    texts.WARNINGS["question"][self.language],
+                    texts.MESSEGES["changes_not_saved"][self.language],
+                )
                 if not t:
                     return False
                 else:
                     return True
-        
+
         return True
-            
 
     # ----------------------------------------------------------------------------------------
     #
@@ -2095,7 +2487,6 @@ class API:
         return colors
 
     def label_image_mouse(self, wgt_name=""):
-
         label_type = self.ui.get_label_type()
         mouse_status = self.mouse.get_status()
         mouse_button = self.mouse.get_button()
@@ -2117,7 +2508,7 @@ class API:
                     self.selected_defects = []
                     neighbour_flag = True
 
-                elif ret == 'editing':
+                elif ret == "editing":
                     neighbour_flag = True
 
                 if self.label_bakcend[label_type].is_drawing_finish():
@@ -2145,7 +2536,7 @@ class API:
                 else:
                     self.ui.yes_defect.setChecked(False)
                     self.ui.no_defect.setChecked(True)
-                    
+
                 if neighbour_flag:
                     self.load_neighbour_images(pos)
                     self.image_save_status[img_path] = False
@@ -2201,14 +2592,16 @@ class API:
 
     def delete_all_labels(self):
         t = self.ui.show_question(
-                    texts.WARNINGS["question"][self.language],
-                    texts.MESSEGES["sure_delete"][self.language],
-                )
+            texts.WARNINGS["question"][self.language],
+            texts.MESSEGES["sure_delete"][self.language],
+        )
         if not t:
             return
         else:
             label_type = self.ui.get_label_type()
-            sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
+            sheet, pos, img_path = self.move_on_list.get_current(
+                "selected_imgs_for_label"
+            )
             img = Utils.read_image(img_path, "color")
             self.img = img
             self.label_bakcend[label_type].clear_labels()
@@ -2300,9 +2693,7 @@ class API:
     # login ---------------------------------
 
     def show_login(self):
-
         if self.logged_in == False:
-
             login_window = self.ui.ret_create_login()
             self.login_api = login_API(login_window, main_ui_obj=self.ui)
             # self.login_api.button_connector()
@@ -2313,7 +2704,6 @@ class API:
             self.show_message_logout()
 
     def show_message_logout(self):
-
         t = self.ui.show_question(
             texts.WARNINGS["question"][self.language],
             texts.WARNINGS["CONFIRM_LOGOUT"][self.language],
@@ -2342,13 +2732,16 @@ class API:
             chart_funcs.clear_userprofile_barchart(self.ui)
 
             self.ui.logger.create_new_log(
-                code=texts_codes.SubTypes['Logout_successfully'], message=texts.MESSEGES["Logout_successfully"]["en"], level=1
+                code=texts_codes.SubTypes["Logout_successfully"],
+                message=texts.MESSEGES["Logout_successfully"]["en"],
+                level=1,
             )
 
         except:
-
             self.ui.logger.create_new_log(
-                code=texts_codes.SubTypes['Logout_unsuccessfully'], message=texts.MESSEGES["Logout_unsuccessfully"]["en"], level=5
+                code=texts_codes.SubTypes["Logout_unsuccessfully"],
+                message=texts.MESSEGES["Logout_unsuccessfully"]["en"],
+                level=5,
             )
 
     def check_login(self):
@@ -2418,11 +2811,17 @@ class API:
                 self.datasets[current]["path"], self.datasets[current]["name"] + ".json"
             )
         )
-        if self.ui.stackedWidget_2.currentIndex() != 0 and self.ui.stackedWidget_2.currentIndex() != 3:
-            chart_funcs.update_userprofile_piechart(ui_obj=self.ui, binary_len=binary_count)
+        if (
+            self.ui.stackedWidget_2.currentIndex() != 0
+            and self.ui.stackedWidget_2.currentIndex() != 3
+        ):
+            chart_funcs.update_userprofile_piechart(
+                ui_obj=self.ui, binary_len=binary_count
+            )
             classification_count = self.ds_json.get_classification_count(
                 os.path.join(
-                    self.datasets[current]["path"], self.datasets[current]["name"] + ".json"
+                    self.datasets[current]["path"],
+                    self.datasets[current]["name"] + ".json",
                 )
             )
             chart_funcs.update_userprofile_barchart(
@@ -2455,8 +2854,13 @@ class API:
                 self.user_databases[current]["name"] + ".json",
             )
         )
-        if self.ui.stackedWidget_2.currentIndex() != 0 and self.ui.stackedWidget_2.currentIndex() != 3:
-            chart_funcs.update_userprofile_piechart(ui_obj=self.ui, binary_len=binary_count)
+        if (
+            self.ui.stackedWidget_2.currentIndex() != 0
+            and self.ui.stackedWidget_2.currentIndex() != 3
+        ):
+            chart_funcs.update_userprofile_piechart(
+                ui_obj=self.ui, binary_len=binary_count
+            )
             classification_count = self.ds_json.get_classification_count(
                 os.path.join(
                     self.user_databases[current]["path"],
@@ -2479,27 +2883,36 @@ class API:
             )
             chart_funcs.update_label_piechart(self.ui, binary_count)
             self.ui.set_warning(
-                texts.MESSEGES["SET_DATASET"][self.language], "profile", texts_codes.SubTypes['SET_DATASET'], level=1
+                texts.MESSEGES["SET_DATASET"][self.language],
+                "profile",
+                texts_codes.SubTypes["SET_DATASET"],
+                level=1,
             )
             self.ui.logger.create_new_log(
-                code=texts_codes.SubTypes['SET_DATASET'], message=texts.MESSEGES["SET_DATASET"]["en"], level=1
+                code=texts_codes.SubTypes["SET_DATASET"],
+                message=texts.MESSEGES["SET_DATASET"]["en"],
+                level=1,
             )
             self.ui.set_b_default_db_parms(self.ds.dataset_path)
             self.ui.set_l_default_db_parms(self.ds.dataset_path)
             self.ui.set_y_default_db_parms(self.ds.dataset_path)
         except:
             self.ui.set_warning(
-                texts.ERRORS["SET_DATASET_FAILED"][self.language], "profile", texts_codes.SubTypes['SET_DATASET_FAILED'], level=3
+                texts.ERRORS["SET_DATASET_FAILED"][self.language],
+                "profile",
+                texts_codes.SubTypes["SET_DATASET_FAILED"],
+                level=3,
             )
             self.ui.logger.create_new_log(
-                code=texts_codes.SubTypes['SET_DATASET_FAILED'], message=texts.ERRORS["SET_DATASET_FAILED"]["en"], level=5
+                code=texts_codes.SubTypes["SET_DATASET_FAILED"],
+                message=texts.ERRORS["SET_DATASET_FAILED"]["en"],
+                level=5,
             )
 
     # ---------------------------------------------------------------------///////////////////////////////////////////
     # dataset
 
     def create_dataset(self):
-
         t = self.ui.show_question(
             texts.WARNINGS["question"][self.language],
             texts.WARNINGS["CREATE_DATABASE"][self.language],
@@ -2516,11 +2929,13 @@ class API:
                 self.ui.set_warning(
                     texts.WARNINGS["CREATE_DATASET_EXIST"][self.language],
                     "profile",
-                    texts_codes.SubTypes['CREATE_DATASET_EXIST'],
+                    texts_codes.SubTypes["CREATE_DATASET_EXIST"],
                     level=2,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.WARNINGS["CREATE_DATASET_EXIST"]["en"], code=texts_codes.SubTypes['CREATE_DATASET_EXIST'], level=2
+                    message=texts.WARNINGS["CREATE_DATASET_EXIST"]["en"],
+                    code=texts_codes.SubTypes["CREATE_DATASET_EXIST"],
+                    level=2,
                 )
                 return
             try:
@@ -2532,20 +2947,27 @@ class API:
                 self.db.add_dataset(data)
 
                 self.ui.set_warning(
-                    texts.MESSEGES["CREATE_DATASET"][self.language], "profile", texts_codes.SubTypes['CREATE_DATASET'], level=1
+                    texts.MESSEGES["CREATE_DATASET"][self.language],
+                    "profile",
+                    texts_codes.SubTypes["CREATE_DATASET"],
+                    level=1,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.MESSEGES["CREATE_DATASET"]["en"], code=texts_codes.SubTypes['CREATE_DATASET'], level=1
+                    message=texts.MESSEGES["CREATE_DATASET"]["en"],
+                    code=texts_codes.SubTypes["CREATE_DATASET"],
+                    level=1,
                 )
             except:
                 self.ui.set_warning(
                     texts.ERRORS["CREATE_DATASET_FAILED"][self.language],
                     "profile",
-                    texts_codes.SubTypes['CREATE_DATASET_FAILED'],
+                    texts_codes.SubTypes["CREATE_DATASET_FAILED"],
                     level=3,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.ERRORS["CREATE_DATASET_FAILED"]["en"], code=texts_codes.SubTypes['CREATE_DATASET_FAILED'], level=5
+                    message=texts.ERRORS["CREATE_DATASET_FAILED"]["en"],
+                    code=texts_codes.SubTypes["CREATE_DATASET_FAILED"],
+                    level=5,
                 )
 
     # ----------------------------------------------------------------------///////////////////////
@@ -2633,37 +3055,55 @@ class API:
             # Step 3: Create a worker object
             self.bmodel_train_worker = binary_model_funcs.Binary_model_train_worker()
             self.bmodel_train_worker.assign_parameters(
-                b_parms=b_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db, ds_obj=self.ds
+                b_parms=b_parms,
+                api_obj=self,
+                ui_obj=self.ui,
+                db_obj=self.db,
+                ds_obj=self.ds,
             )
             # Step 4: Move worker to the thread
             self.bmodel_train_worker.moveToThread(self.bmodel_train_thread)
             # Step 5: Connect signals and slots
-            self.bmodel_train_thread.started.connect(self.bmodel_train_worker.train_model)
+            self.bmodel_train_thread.started.connect(
+                self.bmodel_train_worker.train_model
+            )
             self.bmodel_train_worker.finished.connect(self.bmodel_train_thread.quit)
             self.bmodel_train_worker.finished.connect(
                 self.bmodel_train_worker.show_bmodel_train_result
             )
-            self.bmodel_train_worker.finished.connect(self.bmodel_train_worker.deleteLater)
-            self.bmodel_train_thread.finished.connect(self.bmodel_train_thread.deleteLater)
+            self.bmodel_train_worker.finished.connect(
+                self.bmodel_train_worker.deleteLater
+            )
+            self.bmodel_train_thread.finished.connect(
+                self.bmodel_train_thread.deleteLater
+            )
 
             self.bmodel_train_worker.warning.connect(self.ui.set_warning)
-            self.bmodel_train_worker.reset_progressbar.connect(self.reset_binary_train_progressBar)
-            self.bmodel_train_worker.set_progressbar.connect(self.set_binary_train_progressBar)
-            self.bmodel_train_worker.update_charts.connect(self.assign_new_value_to_b_chart)
+            self.bmodel_train_worker.reset_progressbar.connect(
+                self.reset_binary_train_progressBar
+            )
+            self.bmodel_train_worker.set_progressbar.connect(
+                self.set_binary_train_progressBar
+            )
+            self.bmodel_train_worker.update_charts.connect(
+                self.assign_new_value_to_b_chart
+            )
 
             # Step 6: Start the thread
-            self.running_b_model=True
+            self.running_b_model = True
             self.bmodel_train_thread.start()
-            
+
             self.ui.binary_train.setEnabled(False)
 
     def reset_binary_train_progressBar(self, value, text):
         self.ui.binary_train_progressBar.setValue(0)
         self.ui.binary_train_progressBar.setMaximum(value)
-        self.ui.binary_train_progressBar_label.setText(text + ' ... ')
+        self.ui.binary_train_progressBar_label.setText(text + " ... ")
 
     def set_binary_train_progressBar(self):
-        self.ui.binary_train_progressBar.setValue(self.ui.binary_train_progressBar.value() + 1)
+        self.ui.binary_train_progressBar.setValue(
+            self.ui.binary_train_progressBar.value() + 1
+        )
 
     def update_b_chart_axis(self, nepoch):
         chart_funcs.update_axisX_range(ui_obj=self.ui, nepoch=nepoch)
@@ -2681,17 +3121,27 @@ class API:
                 logs=logs,
                 scroll_obj=self.ui.binary_chart_scrollbar,
             )
-            self.ui.logger.create_new_log(message=texts.MESSEGES['UPDATE_BCHART']['en'].format(last_epoch))
+            self.ui.logger.create_new_log(
+                message=texts.MESSEGES["UPDATE_BCHART"]["en"].format(last_epoch)
+            )
         except:
-            self.ui.logger.create_new_log(message=texts.ERRORS['UPDATE_BCHART_FAILED']['en'].format(last_epoch), level=5)
-            self.ui.set_warning(texts.ERRORS['UPDATE_BCHART_FAILED'][self.language].format(last_epoch), 'train', None, 3)
+            self.ui.logger.create_new_log(
+                message=texts.ERRORS["UPDATE_BCHART_FAILED"]["en"].format(last_epoch),
+                level=5,
+            )
+            self.ui.set_warning(
+                texts.ERRORS["UPDATE_BCHART_FAILED"][self.language].format(last_epoch),
+                "train",
+                None,
+                3,
+            )
 
     def set_l_parms(self):
         if not self.running_l_model:
             l_parms = self.ui.get_localization_parms()
             if not l_parms:
                 return
-            
+
             # update chart axis given train data
             self.update_l_chart_axis(l_parms[4])
 
@@ -2701,37 +3151,55 @@ class API:
                 localization_model_funcs.Localization_model_train_worker()
             )
             self.lmodel_train_worker.assign_parameters(
-                l_parms=l_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db, ds_obj=self.ds
+                l_parms=l_parms,
+                api_obj=self,
+                ui_obj=self.ui,
+                db_obj=self.db,
+                ds_obj=self.ds,
             )
             # Step 4: Move worker to the thread
             self.lmodel_train_worker.moveToThread(self.lmodel_train_thread)
             # Step 5: Connect signals and slots
-            self.lmodel_train_thread.started.connect(self.lmodel_train_worker.train_model)
+            self.lmodel_train_thread.started.connect(
+                self.lmodel_train_worker.train_model
+            )
             self.lmodel_train_worker.finished.connect(self.lmodel_train_thread.quit)
             self.lmodel_train_worker.finished.connect(
                 self.lmodel_train_worker.show_lmodel_train_result
             )
-            self.lmodel_train_worker.finished.connect(self.lmodel_train_worker.deleteLater)
-            self.lmodel_train_thread.finished.connect(self.lmodel_train_thread.deleteLater)
+            self.lmodel_train_worker.finished.connect(
+                self.lmodel_train_worker.deleteLater
+            )
+            self.lmodel_train_thread.finished.connect(
+                self.lmodel_train_thread.deleteLater
+            )
 
             self.lmodel_train_worker.warning.connect(self.ui.set_warning)
-            self.lmodel_train_worker.reset_progressbar.connect(self.reset_localization_train_progressBar)
-            self.lmodel_train_worker.set_progressbar.connect(self.set_localization_train_progressBar)
-            self.lmodel_train_worker.update_charts.connect(self.assign_new_value_to_l_chart)
+            self.lmodel_train_worker.reset_progressbar.connect(
+                self.reset_localization_train_progressBar
+            )
+            self.lmodel_train_worker.set_progressbar.connect(
+                self.set_localization_train_progressBar
+            )
+            self.lmodel_train_worker.update_charts.connect(
+                self.assign_new_value_to_l_chart
+            )
 
             # Step 6: Start the thread
-            self.running_l_model=True
+            self.running_l_model = True
             self.lmodel_train_thread.start()
-                
+
             self.ui.localization_train.setEnabled(False)
 
     def reset_localization_train_progressBar(self, value, text):
         self.ui.localization_train_progressBar.setValue(0)
         self.ui.localization_train_progressBar.setMaximum(value)
-        self.ui.localization_train_progressBar_label.setText(text + ' ... ')
+        self.ui.localization_train_progressBar_label.setText(text + " ... ")
 
     def set_localization_train_progressBar(self):
-        self.ui.localization_train_progressBar.setValue(self.ui.localization_train_progressBar.value() + 1)
+        self.ui.localization_train_progressBar.setValue(
+            self.ui.localization_train_progressBar.value() + 1
+        )
 
     def update_l_chart_axis(self, nepoch):
         # for chart_postfix in self.ui.loc_chart_names:
@@ -2757,12 +3225,24 @@ class API:
                 last_epoch=last_epoch,
                 logs=logs,
                 scroll_obj=self.ui.localization_chart_scrollbar,
-                chart_type='localization',
+                chart_type="localization",
             )
-            self.ui.logger.create_new_log(message=texts.MESSEGES['UPDATE_LCHART']['en'].format(last_epoch))
+            self.ui.logger.create_new_log(
+                message=texts.MESSEGES["UPDATE_LCHART"]["en"].format(last_epoch)
+            )
         except:
-            self.ui.logger.create_new_log(message=texts.ERRORS['UPDATE_LCHART_FAILED']['en'].format(last_epoch), level=5)
-            self.ui.set_warning(texts.ERRORS['UPDATE_LCHART_FAILED'][self.ui.language].format(last_epoch), 'l_train', None, 3)
+            self.ui.logger.create_new_log(
+                message=texts.ERRORS["UPDATE_LCHART_FAILED"]["en"].format(last_epoch),
+                level=5,
+            )
+            self.ui.set_warning(
+                texts.ERRORS["UPDATE_LCHART_FAILED"][self.ui.language].format(
+                    last_epoch
+                ),
+                "l_train",
+                None,
+                3,
+            )
 
     def set_y_parms(self):
         if not self.running_y_model:
@@ -2775,41 +3255,57 @@ class API:
 
             self.ymodel_train_thread = sQThread()
             # Step 3: Create a worker object
-            self.ymodel_train_worker = (
-                yolo_model_funcs.Yolo_model_train_worker()
-            )
+            self.ymodel_train_worker = yolo_model_funcs.Yolo_model_train_worker()
             self.ymodel_train_worker.assign_parameters(
-                y_parms=y_parms, api_obj=self, ui_obj=self.ui, db_obj=self.db, ds_obj=self.ds
+                y_parms=y_parms,
+                api_obj=self,
+                ui_obj=self.ui,
+                db_obj=self.db,
+                ds_obj=self.ds,
             )
             # Step 4: Move worker to the thread
             self.ymodel_train_worker.moveToThread(self.ymodel_train_thread)
             # Step 5: Connect signals and slots
-            self.ymodel_train_thread.started.connect(self.ymodel_train_worker.train_model)
+            self.ymodel_train_thread.started.connect(
+                self.ymodel_train_worker.train_model
+            )
             self.ymodel_train_worker.finished.connect(self.ymodel_train_thread.quit)
             self.ymodel_train_worker.finished.connect(
                 self.ymodel_train_worker.show_ymodel_train_result
             )
-            self.ymodel_train_worker.finished.connect(self.ymodel_train_worker.deleteLater)
-            self.ymodel_train_thread.finished.connect(self.ymodel_train_thread.deleteLater)
+            self.ymodel_train_worker.finished.connect(
+                self.ymodel_train_worker.deleteLater
+            )
+            self.ymodel_train_thread.finished.connect(
+                self.ymodel_train_thread.deleteLater
+            )
 
             self.ymodel_train_worker.warning.connect(self.ui.set_warning)
-            self.ymodel_train_worker.reset_progressbar.connect(self.reset_yolo_train_progressBar)
-            self.ymodel_train_worker.set_progressbar.connect(self.set_yolo_train_progressBar)
-            self.ymodel_train_worker.update_charts.connect(self.assign_new_value_to_yolo_chart)
+            self.ymodel_train_worker.reset_progressbar.connect(
+                self.reset_yolo_train_progressBar
+            )
+            self.ymodel_train_worker.set_progressbar.connect(
+                self.set_yolo_train_progressBar
+            )
+            self.ymodel_train_worker.update_charts.connect(
+                self.assign_new_value_to_yolo_chart
+            )
 
             # Step 6: Start the thread
-            self.running_y_model=True
+            self.running_y_model = True
             self.ymodel_train_thread.start()
-                
+
             self.ui.yolo_train.setEnabled(False)
 
     def reset_yolo_train_progressBar(self, value, text):
         self.ui.yolo_train_progressBar.setValue(0)
         self.ui.yolo_train_progressBar.setMaximum(value)
-        self.ui.yolo_train_progressBar_label.setText(text + ' ... ')
+        self.ui.yolo_train_progressBar_label.setText(text + " ... ")
 
     def set_yolo_train_progressBar(self):
-        self.ui.yolo_train_progressBar.setValue(self.ui.yolo_train_progressBar.value() + 1)
+        self.ui.yolo_train_progressBar.setValue(
+            self.ui.yolo_train_progressBar.value() + 1
+        )
 
     def update_yolo_chart_axis(self, nepoch):
         # for chart_postfix in self.ui.loc_chart_names:
@@ -2835,12 +3331,24 @@ class API:
                 last_epoch=last_epoch,
                 logs=logs,
                 scroll_obj=self.ui.yolo_chart_scrollbar,
-                chart_type='yolo',
+                chart_type="yolo",
             )
-            self.ui.logger.create_new_log(message=texts.MESSEGES['UPDATE_YCHART']['en'].format(last_epoch))
+            self.ui.logger.create_new_log(
+                message=texts.MESSEGES["UPDATE_YCHART"]["en"].format(last_epoch)
+            )
         except:
-            self.ui.logger.create_new_log(message=texts.ERRORS['UPDATE_YCHART_FAILED']['en'].format(last_epoch), level=5)
-            self.ui.set_warning(texts.ERRORS['UPDATE_YCHART_FAILED'][self.ui.language].format(last_epoch), 'y_train', None, 3)
+            self.ui.logger.create_new_log(
+                message=texts.ERRORS["UPDATE_YCHART_FAILED"]["en"].format(last_epoch),
+                level=5,
+            )
+            self.ui.set_warning(
+                texts.ERRORS["UPDATE_YCHART_FAILED"][self.ui.language].format(
+                    last_epoch
+                ),
+                "y_train",
+                None,
+                3,
+            )
 
     def save_to_dataset(self):
         sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
@@ -2862,7 +3370,7 @@ class API:
 
         saved_perfect = self.ds.check_saved_perfect(pos=pos)
         saved_defect = self.ds.check_saved_defect(pos=pos)
-        
+
         if self.ui.no_defect.isChecked():
             if masks:
                 self.ui.set_warning(
@@ -2915,7 +3423,7 @@ class API:
             )
             self.ds_json.modify_defect(self.ds.defect_path)
             self.image_save_status[img_path] = True
-        
+
         else:
             self.ui.set_warning(
                 texts.WARNINGS["IMAGE_STATUS"][self.language], "label", level=2
@@ -2941,10 +3449,7 @@ class API:
         self.thread = sQThread()
         # Step 3: Create a worker object
         self.worker = save_all_worker.save_all_worker()
-        self.worker.assign_parameters(
-            api_obj=self,
-            count = count
-        )
+        self.worker.assign_parameters(api_obj=self, count=count)
         # Step 4: Move worker to the thread
         self.worker.moveToThread(self.thread)
         # Step 5: Connect signals and slots
@@ -2992,11 +3497,12 @@ class API:
             # set path
             table_item = sQTableWidgetItem(str(ds["path"]))
             self.ui.select_ds_dialog.table.setItem(i, 2, table_item)
-        
 
-        self.ui.select_ds_dialog.ok_btn.clicked.connect(lambda: self.ok_selected_binary_datasets(page))
+        self.ui.select_ds_dialog.ok_btn.clicked.connect(
+            lambda: self.ok_selected_binary_datasets(page)
+        )
         self.ui.select_ds_dialog.show()
-    
+
     def ok_selected_binary_datasets(self, page="train"):
         selecteds = self.ui.select_ds_dialog.get_select_datasets()
 
@@ -3094,7 +3600,9 @@ class API:
         self.l_select_pre_dialog = QFileDialog()
         path = "./"
         filter = "h5(*.h5)"
-        dname = QFileDialog.getOpenFileName(self.l_select_pre_dialog, 'open', path, filter)[0]
+        dname = QFileDialog.getOpenFileName(
+            self.l_select_pre_dialog, "open", path, filter
+        )[0]
 
         if dname == "":
             return
@@ -3116,9 +3624,10 @@ class API:
             # set path
             table_item = sQTableWidgetItem(str(ds["path"]))
             self.ui.select_ds_dialog.table.setItem(i, 2, table_item)
-        
 
-        self.ui.select_ds_dialog.ok_btn.clicked.connect(lambda: self.ok_selected_localization_datasets(page))
+        self.ui.select_ds_dialog.ok_btn.clicked.connect(
+            lambda: self.ok_selected_localization_datasets(page)
+        )
         self.ui.select_ds_dialog.show()
 
     def ok_selected_localization_datasets(self, page="l_train"):
@@ -3230,9 +3739,10 @@ class API:
             # set path
             table_item = sQTableWidgetItem(str(ds["path"]))
             self.ui.select_ds_dialog.table.setItem(i, 2, table_item)
-        
 
-        self.ui.select_ds_dialog.ok_btn.clicked.connect(lambda: self.ok_selected_yolo_datasets(page))
+        self.ui.select_ds_dialog.ok_btn.clicked.connect(
+            lambda: self.ok_selected_yolo_datasets(page)
+        )
         self.ui.select_ds_dialog.show()
 
     def ok_selected_yolo_datasets(self, page="y_train"):
@@ -3328,7 +3838,7 @@ class API:
             self.group.addAnimation(self.left_box)
             self.group.start()
 
- # -------------------------------------------Camera conection and show ----------------------------------------
+    # -------------------------------------------Camera conection and show ----------------------------------------
 
     def get_camera_config(self, id):
         """
@@ -3420,7 +3930,7 @@ class API:
             self.ui.set_warning(
                 texts.WARNINGS["no_camera_selected"][self.ui.language],
                 "camera_connection",
-                level=2
+                level=2,
             )
             return
 
@@ -3448,9 +3958,11 @@ class API:
 
             if ret == "True":
                 self.ui.set_warning(
-                    texts.MESSEGES["Camera_successful"][self.ui.language].format(cam_num),
+                    texts.MESSEGES["Camera_successful"][self.ui.language].format(
+                        cam_num
+                    ),
                     "camera_connection",
-                    level=1
+                    level=1,
                 )
                 self.ui.set_img_btn_camera(cam_num)
 
@@ -3461,7 +3973,7 @@ class API:
                             cam_num
                         ),
                         "camera_connection",
-                        level=3
+                        level=3,
                     )
                 else:
                     self.ui.set_warning(
@@ -3469,7 +3981,7 @@ class API:
                             cam_num
                         ),
                         "camera_connection",
-                        level=3
+                        level=3,
                     )
 
                 self.ui.set_img_btn_camera(cam_num, status="False")
@@ -3495,15 +4007,8 @@ class API:
                 self.start_grab_camera()
                 return
             if selected_cameras[self.i]:
-                QTimer.singleShot(1, self.connect_camera)   # defult time 3000
+                QTimer.singleShot(1, self.connect_camera)  # defult time 3000
                 return
-
-
-
-
-
-
-
 
     def disconnect_camera(self):
         """
@@ -3515,7 +4020,7 @@ class API:
             self.ui.set_warning(
                 texts.WARNINGS["no_camera_selected"][self.ui.language],
                 "camera_connection",
-                level=2
+                level=2,
             )
             return
 
@@ -3548,7 +4053,7 @@ class API:
                         self.ui.language
                     ].format(cam_num),
                     "camera_connection",
-                    level=1
+                    level=1,
                 )
                 self.ui.set_img_btn_camera(cam_num, status="Disconnect")
 
@@ -3556,14 +4061,14 @@ class API:
                 self.ui.set_warning(
                     texts.ERRORS["no_connect"][self.ui.language].format(cam_num),
                     "camera_connection",
-                    level=3
+                    level=3,
                 )
 
             else:
                 self.ui.set_warning(
                     texts.ERRORS["disconnect_error"][self.ui.language].format(cam_num),
                     "camera_connection",
-                    level=3
+                    level=3,
                 )
 
         while 1:
@@ -3619,7 +4124,7 @@ class API:
             self.ImageManager.second_check_finished.connect(self.stop_capture_timers)
             self.start_capture_flag = True
             self.ready_capture_flag = True
-        
+
         if self.sensor and not disable_ui:
             self.start_capture_flag = True
             self.ImageManager.set_live_type(self.live_type)
@@ -3727,12 +4232,32 @@ class API:
 
     # binary-model history page functions
     def refresh_binary_models_table_onevent(self, wich_page="not PBT"):
+        """
+        refresh_binary_models_table_onevent _summary_
+
+        this function  used for refreshing and loading data of table
+
+        Parameters
+        ----------
+        wich_page : str, optional
+            this value set that function used update ui of pbt part or other part,
+            for using in pbt pass PBT string as value_, by default "not PBT"
+        """
         self.bmodel_tabel_itr = 1
         if wich_page == "PBT":
             self.ui.lineEdit_of_pageNumber_displayment_in_PBT_page.setText(
                 str(self.bmodel_tabel_itr)
             )
             self.ui.refresh_pipline_tabs_in_PBT()
+
+            # __________________________
+            self.ui.radioButton_use_yolo.setChecked(True)
+            self.ui.radioButton_use_unet.setChecked(False)
+            self.set_pipline_mode("yolo")
+            self.load_table_with_btn(self.ui.toolButton_binary.objectName())
+            self.load_table_with_btn(self.ui.toolButton_yolo.objectName())
+            # __________________________
+
         else:
             self.ui.binary_tabel_page.setText(str(self.bmodel_tabel_itr))
 
@@ -3746,6 +4271,9 @@ class API:
             level=1,
         )
 
+
+
+        
     def refresh_binary_models_table(
         self,
         nextorprev=False,
@@ -3769,12 +4297,16 @@ class API:
         """
         if model_type == "binary":
             model_type_ = "binary_models"
+            self.ui.LBL_tabel_title.setText("Binary Models")
         elif model_type == "classification":
             model_type_ = "classification_models"
+            self.ui.LBL_tabel_title.setText("Classification Models")
         elif model_type == "localization":
             model_type_ = "localization_models"
+            self.ui.LBL_tabel_title.setText("Localization Models")
         elif model_type == "yolo":
             model_type_ = "yolo_models"
+            self.ui.LBL_tabel_title.setText("Yolo Models")
         else:
             model_type_ = ""
 
@@ -3896,12 +4428,14 @@ class API:
 
         if len(bmodels_list) == 0 and nextorprev:
             return False
-
         # set returned models to UI table
         else:
             if wich_page == "PBT":
                 binary_model_funcs.set_bmodels_on_ui_tabel_edited_version(
-                    ui_obj=self.ui, bmodels_list=bmodels_list, model_type=model_type
+                    ui_obj=self.ui,
+                    bmodels_list=bmodels_list,
+                    model_type=model_type,
+                    language=self.language,
                 )
             else:
                 binary_model_funcs.set_bmodels_on_ui_tabel(
@@ -3951,7 +4485,6 @@ class API:
         #
         if next:
             self.bmodel_tabel_itr += 1
-
         elif self.bmodel_tabel_itr > 1:
             self.bmodel_tabel_itr -= 1
         #
@@ -4046,301 +4579,495 @@ class API:
 
     def pre_load_binary_images_list_in_PBT_load_dataset_page(self):
         if self.ui.lineEdit_of_path_displayment_in_PBT_page.text() != "":
-            self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText("")
             self.load_binary_images_list_in_PBT_load_dataset_page(
                 use_customized_flag=True
             )
         else:
-            self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText(
-                texts.ERRORS["data_not_ready"][self.language]
+            self.ui.LBL_data_is_ready.setFixedHeight(0)
+            self.assign_table_column(
+                table=self.ui.tableWidget_data_info, number_of_rows=3
+            )
+            self.ui.create_alert_message(
+                title="WARNING",
+                message=texts.ERRORS["data_not_ready"][self.language],
             )
 
     def load_binary_images_list_in_PBT_load_dataset_page(
         self, use_customized_flag=False
     ):
-
-        self.ui.LBL_of_data_is_ready_in_PBT_page_2.setText("")
-        if (
-            self.raw_and_evaluated_Imagw_sliders_check[0]
-            and self.raw_and_evaluated_Imagw_sliders_check[1]
-        ):
-            if use_customized_flag:
-                selected_datasets = self.customized_datasets
-                text = "Customized"
-            else:
-                text = self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.currentText()
-                selected_datasets = (
-                    dataset.get_selected_datasets_for_PBT_loadDataSet_page(
-                        text, self.datasets_list
-                    )
-                )
-
-            if len(selected_datasets) == 0:
-                self.ui.set_warning(
-                    texts.WARNINGS["SELECT_NO_DATASET"][self.language],
-                    "binarylist",
-                    level=2,
-                )
-                return
-
-            (
-                perfect_check,
-                perfect_image_pathes,
-                defect_check,
-                defect_image_pathes,
-                defect_annot_pathes,
-                binary_count,
-            ) = binary_list_funcs.get_binarylist_image_pathes_list(
-                ds_obj=self.ds, dataset_pathes=selected_datasets
-            )
-
-            if not perfect_check and not defect_check:
-                self.ui.set_warning(
-                    texts.MESSEGES["NO_IMAGE_AVAILABLE_IN_DATASET"][self.language],
-                    "binarylist",
-                    level=2,
-                )
-            else:
-                # msg
-                self.ui.set_warning(
-                    texts.MESSEGES["LOAD_IMAGES_DATASETS"][self.language],
-                    "binarylist",
-                    level=1,
-                )
-
-            if perfect_check or defect_check:
-                if self.perfect_show and self.defect_show:
-                    self.path_list = perfect_image_pathes + defect_image_pathes
-                elif self.perfect_show and not (self.defect_show):
-                    self.path_list = perfect_image_pathes
-                elif not (self.perfect_show) and self.defect_show:
-                    self.path_list = defect_image_pathes
-                else:
-                    self.path_list = []
-
-                random.shuffle(self.path_list)
-
-                self.original_and_evaluated_image_in_PBT.add(
-                    mylist=self.path_list,
-                    name="original",
-                )
-                self.original_image_list_next_func = (
-                    self.original_and_evaluated_image_in_PBT.build_next_func(
-                        name="original"
-                    )
-                )
-                self.original_image_list_prev_func = (
-                    self.original_and_evaluated_image_in_PBT.build_prev_func(
-                        name="original"
-                    )
-                )
-                # show message that data is ready
-                self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedWidth(175)
-                self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedHeight(83)
-                data_report = "\n {} dataset has: \n {} perfect images \n {} defect images \n {} total images".format(
-                    text,
-                    len(perfect_image_pathes),
-                    len(defect_image_pathes),
-                    len(self.path_list),
-                )
-                if use_customized_flag:
-                    self.ui.LBL_of_data_is_ready_in_PBT_page.setText(
-                        texts.MESSEGES["Customized Data is ready"][self.language],
-                        +data_report,
-                    )
-                else:
-
-                    self.ui.LBL_of_data_is_ready_in_PBT_page.setText(
-                        texts.MESSEGES["Data_Is_Ready"][self.language] + data_report
-                    )
-            else:
-                self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedWidth(175)
-                self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedHeight(16)
-                if use_customized_flag:
-                    self.ui.LBL_of_data_is_ready_in_PBT_page.setText(
-                        texts.MESSEGES["Customized Data is not ready"][self.language]
-                    )
-                else:
-                    self.ui.LBL_of_data_is_ready_in_PBT_page.setText(
-                        texts.MESSEGES["Data_Is_Not_Ready"][self.language]
-                    )
-
+        if use_customized_flag:
+            selected_datasets = self.customized_datasets
+            text = "Customized"
         else:
-            self.ui.set_warning(
-                texts.ERORS["BUILD_BINARYLIST_SLIDER_ERROR"][self.language],
-                "binarylist",
-                level=3,
+            text = self.ui.cbBox_of_dataset_in_PBT_page_load_dataset.currentText()
+            selected_datasets = dataset.get_selected_datasets_for_PBT_loadDataSet_page(
+                text, self.datasets_list
             )
+        if len(selected_datasets) == 0:
+            self.ui.set_warning(
+                texts.WARNINGS["SELECT_NO_DATASET"][self.language],
+                "binarylist",
+                level=2,
+            )
+            self.ui.create_alert_message(
+                title="WARNING",
+                message=texts.WARNINGS["SELECT_NO_DATASET"][self.language],
+            )
+            return
 
-    def set_pred_each_path(self, value, summaries):
-
-        self.ui.LBL_of_evalution_of_binary_model_in_PBT_page.setText(summaries[0])
-        self.ui.LBL_of_evalution_of_classification_model_in_PBT_page.setText(
-            summaries[1]
+        self.selected_datasets = selected_datasets
+        (
+            perfect_check,
+            perfect_image_pathes,
+            defect_check,
+            defect_image_pathes,
+            defect_annot_pathes,
+            binary_count,
+        ) = binary_list_funcs.get_binarylist_image_pathes_list(
+            ds_obj=self.ds, dataset_pathes=selected_datasets
         )
+        if not perfect_check and not defect_check:
+            self.path_list = []
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value="",
+                row=0,
+            )
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value="",
+                row=1,
+            )
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value="",
+                row=2,
+            )
+            self.ui.LBL_data_is_ready.setFixedHeight(30)
+            self.ui.LBL_data_is_ready.setText(
+                texts.MESSEGES["Data_Is_Not_Ready"][self.language]
+            )
+            self.ui.LBL_data_is_ready.setStyleSheet(
+                            "color: rgb(170, 0, 0);"
+                        )
 
-        # hide labels of task of evalution
-        # self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedWidth(0)
-        # self.ui.LBL_of_data_is_ready_in_PBT_page.setFixedHeight(0)
-        # self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedWidth(0)
-        # self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedHeight(0)
 
-        # after finishing progress,the progressBar will hide
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
+            self.ui.set_warning(
+                texts.MESSEGES["NO_IMAGE_AVAILABLE_IN_DATASET"][self.language],
+                "binarylist",
+                level=2,
+            )
+            self.ui.create_alert_message(
+                title="WARNING",
+                message=texts.MESSEGES["NO_IMAGE_AVAILABLE_IN_DATASET"][self.language],
+            )
+        else:
+            # msg
+            self.ui.set_warning(
+                texts.MESSEGES["LOAD_IMAGES_DATASETS"][self.language],
+                "binarylist",
+                level=1,
+            )
+            if self.perfect_show:
+                self.path_list = perfect_image_pathes + defect_image_pathes
+            else:
+                self.path_list = defect_image_pathes
+            random.shuffle(self.path_list)
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value=str(len(self.path_list)),
+                row=0,
+            )
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value=str(binary_count["perfect"]),
+                row=1,
+            )
+            self.update_table_value(
+                table=self.ui.tableWidget_data_info,
+                value=str(binary_count["defect"]),
+                row=2,
+            )
+            self.ui.LBL_data_is_ready.setFixedHeight(30)
+            self.ui.LBL_data_is_ready.setText(
+                texts.MESSEGES["Data_Is_Ready"][self.language]
+            )
+            self.ui.LBL_data_is_ready.setStyleSheet(
+                            "color: rgb(0, 170, 0);"
+                        )
+            
+            self.data_is_ready = True
+            if self.pipline_is_ready:
+                self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
 
+    def evaluation_ui_update(self, metrics_info, image_slider_path):
+        """this function after evaluation operation completed
+
+        Parameters
+        ----------
+        metrics_info : list
+            dictionary of evalution reports of each pipline's part
+        """
+
+        for i, metrics in enumerate(metrics_info["binary"]):
+            self.update_table_value(
+                table=self.ui.binary_table_metrics,
+                value=str(metrics),
+                row=i,
+            )
+        if "Y" in self.pipline_type:
+            for i, metrics in enumerate(metrics_info["yolo"]):
+                self.update_table_value(
+                    table=self.ui.yolo_table_metrics,
+                    value=str(metrics),
+                    row=i,
+                )
+        elif "S" in self.pipline_type:
+            for i, metrics in enumerate(metrics_info["segmention"]):
+                self.update_table_value(
+                    table=self.ui.segmention_table_metrics,
+                    value=str(metrics),
+                    row=i,
+                )
+        elif "C" in self.pipline_type:
+            for i, metrics in enumerate(metrics_info["classification"]):
+                self.update_table_value(
+                    table=self.ui.classification_table_metrics,
+                    value=str(metrics),
+                    row=i,
+                )
+        else:
+            print("what happend!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
+        # ________________slider data_________________#
+        self.original_and_evaluated_image_in_PBT.add(
+            mylist=list(image_slider_path.keys()),
+            name="original",
+        )
+        self.original_image_list_next_func = (
+            self.original_and_evaluated_image_in_PBT.build_next_func(name="original")
+        )
+        self.original_image_list_prev_func = (
+            self.original_and_evaluated_image_in_PBT.build_prev_func(name="original")
+        )
         self.ui.BTN_next_original_image_in_PBT_page.setEnabled(True)
         self.ui.BTN_prev_original_image_in_PBT_page.setEnabled(True)
-
-        # update slider
-        self.pred_each_path = value
         self.update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
-            predict_eval=self.pred_each_path
+            predict_eval=image_slider_path
         )
+        self.image_slider_path = image_slider_path
+
+    def pipline_saveing(self, pipline):
+        """
+        pipline_saveing save pipline obj as .json filr
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        pipline :pipline class
+            obj of evalution of pipline
+        """
+        pipline.save_json()
 
     def set_signal_from_evaluate_thread(self, percentage):
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(percentage)
+        """this function used to update progressbar percentage
+
+        Parameters
+        ----------
+        percentage : float
+            new quantity of progressbar ,that should update
+        """
+        self.ui.pgbar_evalution_precess.setValue(percentage)
 
     def evaluate_model_on_selected_model(self):
-        # ______________________pre task start:
-        # self.load_binary_images_list_in_PBT_load_dataset_page()
-        # self.set_pipline()
-        # ______________________pre task end.
+        """this function connect to evaluate button in ui ,at PBT page
+        if click it at proper time ,process of evalution with
+        selected pipline , on selected dataset will done
+        and it's data save as .json , some of the data will
+        show on ui
+        """
 
-        # _______________creat PIPLINE OBJ
-        dataset_path = os.path.dirname(os.path.dirname(self.path_list[0]))
-        pipline_name = self.pipline_OBJ.get(key=pipelines.PIPELINE_NAME)
-
-        """temporary"""
-        pipline_name = "JACK"
-
-        self.ds.creat_folder_structure_of_wrong_predict_images(
-            pipline_name=pipline_name
+        self.pipline_OBJ.set(
+            key=pipelines.EVALUATED_DATASETS, value=self.selected_datasets[0]["path"]
         )
-        self.path_of_mask_prediction_with_current_pipline = os.path.join(
-            dataset_path, "pred_of_" + pipline_name
-        )
-        self.ds.__creat_path__(self.path_of_mask_prediction_with_current_pipline)
-        # code....
-        # _______________creat PIPLINE OBJ
+
+        self.ui.chbox_prefectdata_in_PBT_page.setEnabled(False)
+        self.ui.BTN_load_in_PBT_page.setEnabled(False)
+        self.ui.BTN_load_image_in_PBT_page.setEnabled(False)
+        self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(False)
+        self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setEnabled(False)
 
         # display progressBar of progress of evaluating  dataset
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(150)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(23)
-
-        # Threading___________________
+        self.pgbar_value = 0
+        self.ui.pgbar_evalution_precess.setValue(self.pgbar_value)
+        self.ui.frame_118.setFixedHeight(60)
         self.evaluation_thread = QThread()
-        self.evaluation = evaluation_worker()
+        self.evaluation = Evaluation_worker()
         self.evaluation.set_params(
-            paths=self.path_list,
+            data_path=self.path_list,
+            pipline_obj=self.pipline_OBJ,
+            input_type=self.inputtype,
+            input_size=self.inputsize[0],
+            data_nc=self.classes_num,
             binary_model=self.b_model,
-            classification_model=self.c_model,
-            ds=self.ds,
-            split_size=self.split_size,
-            classes_num=self.classes_num,
-            path_of_mask_prediction_with_current_pipline=self.path_of_mask_prediction_with_current_pipline,
-            pipline_OBJ=self.pipline_OBJ,
+            binary_threshold=0.5,
+            yolo_model=self.yolo_model,
+            yolo_conf_thres=0.001,
+            yolo_iou_thres=0.6,
+            yolo_max_det=300,
         )
-
         self.evaluation.moveToThread(self.evaluation_thread)
         self.evaluation_thread.started.connect(self.evaluation.evaluate)
         self.evaluation.finished.connect(self.evaluation_thread.quit)
         self.evaluation.finished.connect(self.evaluation.deleteLater)
         self.evaluation_thread.finished.connect(self.evaluation_thread.deleteLater)
-        self.evaluation.progress.connect(self.set_pred_each_path)
+        self.evaluation.progress.connect(self.evaluation_ui_update)
         self.evaluation.pgb_bar_signal.connect(self.set_signal_from_evaluate_thread)
+        self.evaluation.pipline_signal.connect(self.pipline_saveing)
         self.evaluation_thread.start()
 
         self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(False)
         self.evaluation_thread.finished.connect(
             lambda: self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
         )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.frame_118.setFixedHeight(0)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.BTN_refresh_loadDataset_tab_in_PBT.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.chbox_prefectdata_in_PBT_page.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.BTN_load_image_in_PBT_page.setEnabled(True)
+        )
+        self.evaluation_thread.finished.connect(
+            lambda: self.ui.BTN_load_in_PBT_page.setEnabled(True)
+        )
 
-    # ______________________________________________________________________________________________________________________
+    def set_pipline_of_model(self, id, flag_creation):
+        """this function connect to the thread of model creation
+        for getting it's signal and update UI
 
-    def set_pipline_of_model(self, id):
-        if id == 1:
-            self.b_model = self.ModelsCreation.b_model
-            self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(50)
-        elif id == 2:
-            self.l_model = self.ModelsCreation.l_model
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(70)
-        elif id == 3:
-            self.c_model = self.ModelsCreation.c_model
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(95)
-        elif id == 4:
-            self.pipline_OBJ = self.ModelsCreation.pipline_OBJ
-            self.classes_num = self.ModelsCreation.classes_num
-            # self.split_size=self.ModelsCreation.split_size
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(100)
+        Parameters
+        ----------
+        id : int
+            this number indicate the pesentage of model creation process
+        """
 
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
-
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedWidth(150)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedHeight(16)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setText(
-                texts.MESSEGES["Pipline_Is_Ready"][self.language].format(
-                    self.pipline_OBJ.get(key=pipelines.PIPELINE_NAME)
+        if id == 0:
+            self.ui.create_alert_message(
+                title="ERROR",
+                message=texts.ERRORS["pipline_info_unfetchable"][self.language],
+            )
+        elif id == 1:  # binary model build
+            self.ui.frame_120.setFixedHeight(30)
+            self.pipline_type = self.ModelsCreation.pipline_type
+            if flag_creation:
+                self.b_model = self.ModelsCreation.b_model
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_is_ready"][self.language],
+                    row=0,
                 )
+                self.pgbar_value += 50
+                self.binary_model_flag = True
+            else:
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_can_not_build"][self.language],
+                    row=0,
+                )
+                self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
+        elif id == 2:  # if there is no yolo in pipline structer,segmention model build
+            if flag_creation:
+                self.l_model = self.ModelsCreation.l_model
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_is_ready"][self.language],
+                    row=1,
+                )
+                if self.pipline_type == "BS":
+                    self.pgbar_value += 50
+                else:
+                    self.pgbar_value += 30
+                self.segmentation_model_flag = True
+            else:
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_can_not_build"][self.language],
+                    row=1,
+                )
+                self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
+        elif id == 3:
+            if flag_creation:
+                self.c_model = self.ModelsCreation.c_model
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_is_ready"][self.language],
+                    row=2,
+                )
+                self.pgbar_value += 20
+                self.classification_model_flag = True
+            else:
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_can_not_build"][self.language],
+                    row=2,
+                )
+                self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
+        elif id == 4:  # yolo model build
+            self.use_yolo = True
+            if self.pipline_type == "BY":
+                row = 1
+                self.pgbar_value += 50
+            else:
+                row = 2
+                self.pgbar_value += 20
+            if flag_creation:
+                self.yolo_model = self.ModelsCreation.yolo_model
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_is_ready"][self.language],
+                    row=row,
+                )
+                self.yolo_model_flag = True
+            else:
+                self.update_table_value(
+                    table=self.ui.tableWidget_pipline_info,
+                    value=texts.MESSEGES["Part_can_not_build"][self.language],
+                    row=3,
+                )
+                self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
+        self.pipline_check = {
+            "BY": (self.yolo_model_flag and self.binary_model_flag),
+            "BS": (self.binary_model_flag and self.segmentation_model_flag),
+            "BSY": (
+                self.yolo_model_flag
+                and self.binary_model_flag
+                and self.segmentation_model_flag
+            ),
+            "BSC": (
+                self.binary_model_flag
+                and self.segmentation_model_flag
+                and self.classification_model_flag
+            ),
+        }
+
+        if self.pipline_check[self.pipline_type]:
+            self.ui.LBL_pipline_is_ready.setFixedHeight(20)
+            self.ui.LBL_pipline_is_ready.setText(
+                texts.MESSEGES["Complete_Pipline"][self.language]
             )
         else:
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(0)
-            self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(0)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedWidth(150)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setFixedHeight(16)
-            self.ui.LBL_of_pipline_is_ready_in_PBT_page.setText(
+            self.ui.LBL_pipline_is_ready.setFixedHeight(20)
+            self.ui.LBL_pipline_is_ready.setText(
                 texts.MESSEGES["Pipline_Is_Not_Ready"][self.language]
             )
 
+        if self.pgbar_value > 100:
+            self.pgbar_value = 100
+
+        self.ui.pgbar_pipline_creation.setValue(self.pgbar_value)
+        if self.pgbar_value == 100:
+            self.ui.frame_120.setFixedHeight(0)
+            self.ui.BTN_set_pipline_in_PBT_page.setEnabled(False)
+            self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(True)
+            self.pipline_is_ready = True
+            if self.data_is_ready:
+                self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(True)
+
+        try:
+            self.pipline_OBJ = self.ModelsCreation.pipline_OBJ
+            self.classes_num = self.ModelsCreation.classes_num
+            self.pipline_type = self.ModelsCreation.pipline_type
+            self.inputtype = self.ModelsCreation.inputtype
+            self.inputsize = self.ModelsCreation.inputsize
+            self.split_size = self.b_model.layers[0].output_shape[0][1:-1]
+        except:
+            pass
+
+    def reset_pipline(self):
+        """
+        reset_pipline reset all param of the creating pipline process
+
+        _extended_summary_
+        """
+        self.pgbar_value = 0
+        self.ui.pgbar_pipline_creation.setValue(self.pgbar_value)
+        self.ui.frame_120.setFixedHeight(0)
+        self.assign_table_column(
+            table=self.ui.tableWidget_pipline_info,
+            number_of_rows=self.len_model_piplines,
+            refresh=True,
+        )
+        self.binary_model_flag = False
+        self.segmentation_model_flag = False
+        self.classification_model_flag = False
+        self.yolo_model_flag = False
+        self.ui.LBL_pipline_is_ready.setText("")
+        self.ui.LBL_pipline_is_ready.setFixedHeight(0)
+        self.ui.BTN_set_pipline_in_PBT_page.setEnabled(True)
+        self.ui.BTN_reset_pipline_in_PBT_page.setEnabled(False)
+        self.pipline_name = ""
+        self.pipline_is_ready = False
+        self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(False)
+
     def set_pipline(self):
+        """this function connect to set button in ui,at PBT page
+        this creates models of selected
+        this shows notif of it on ui
+        """
 
-        # ______________________pre task start:
-        self.load_binary_images_list_in_PBT_load_dataset_page()
-        # ______________________pre task end.
+        self.pipline_name = (
+            self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
+        )
+        self.assign_table_column(
+            table=self.ui.tableWidget_pipline_info,
+            number_of_rows=self.len_model_piplines,
+            data_list=[texts.MESSEGES["Part_is_not_ready"][self.language]]
+            * self.len_model_piplines,
+            refresh=False,
+        )
 
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setValue(0)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedWidth(151)
-        self.ui.pgbar_of_pipiline_ready_in_PBT_page.setFixedHeight(23)
+        self.pgbar_value = 0
+        self.ui.pgbar_pipline_creation.setValue(self.pgbar_value)
+        self.binary_model_flag = False
+        self.segmentation_model_flag = False
+        self.classification_model_flag = False
+        self.yolo_model_flag = False
+        self.ui.LBL_pipline_is_ready.setText("")
+        self.ui.LBL_pipline_is_ready.setFixedHeight(0)
 
-        # CREAT PIPLINE OBJ:
-        pipline_name = self.ui.cbBox_of_pipline_in_PBT_page_load_dataset.currentText()
-        # """temporary"""
-        # pipline_name='asdwd'
-        # """temporary"""
-
-        # Threading___________________
+        # Threading............................
         self.ModelsCreation_thread = QThread()
         self.ModelsCreation = ModelsCreation_worker()
         self.ModelsCreation.set_params(
+            pipline_name=self.pipline_name,
+            database=self.db,
             login_user_name=self.login_user_name,
-            db=self.db,
-            language=self.language,
-            pipline_name=pipline_name,
         )
 
         self.ModelsCreation.moveToThread(self.ModelsCreation_thread)
-        self.ModelsCreation_thread.started.connect(self.ModelsCreation.set_pipline)
+        self.ModelsCreation_thread.started.connect(self.ModelsCreation.build_pipline)
         self.ModelsCreation.finished.connect(self.ModelsCreation_thread.quit)
         self.ModelsCreation.finished.connect(self.ModelsCreation.deleteLater)
         self.ModelsCreation_thread.finished.connect(
             self.ModelsCreation_thread.deleteLater
         )
-
         self.ModelsCreation.model_creation_signal.connect(self.set_pipline_of_model)
         self.ModelsCreation_thread.start()
 
         self.ui.BTN_set_pipline_in_PBT_page.setEnabled(False)
-        self.ModelsCreation_thread.finished.connect(
-            lambda: self.ui.BTN_set_pipline_in_PBT_page.setEnabled(True)
-        )
 
-    # ____________JJ ZONE STOP
-    # _________________________________________________________________________________________________
-    # _________________________________________________________________________________________________
-    # binary-list page functions
     # load binary images list
     def load_binary_images_list(self):
         """this function is used to show datasets images on binarylist page"""
@@ -4499,11 +5226,13 @@ class API:
             self.ui.set_warning(
                 texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"][self.language],
                 "binarylist",
-                texts_codes.SubTypes['BUILD_BINARYLIST_SLIDER_ERROR'],
+                texts_codes.SubTypes["BUILD_BINARYLIST_SLIDER_ERROR"],
                 level=3,
             )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"], code=texts_codes.SubTypes['BUILD_BINARYLIST_SLIDER_ERROR'], level=4
+                message=texts.ERRORS["BUILD_BINARYLIST_SLIDER_ERROR"]["en"],
+                code=texts_codes.SubTypes["BUILD_BINARYLIST_SLIDER_ERROR"],
+                level=4,
             )
 
     # update slider images
@@ -4570,22 +5299,26 @@ class API:
                 self.ui.set_warning(
                     texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"][self.language],
                     "binarylist",
-                    texts_codes.SubTypes['READ_BINARYLIST_IMAGES_ERROR'],
+                    texts_codes.SubTypes["READ_BINARYLIST_IMAGES_ERROR"],
                     level=3,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"]["en"], code=texts_codes.SubTypes['READ_BINARYLIST_IMAGES_ERROR'], level=4
+                    message=texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"]["en"],
+                    code=texts_codes.SubTypes["READ_BINARYLIST_IMAGES_ERROR"],
+                    level=4,
                 )
 
         except Exception as e:
             self.ui.set_warning(
                 texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"][self.language],
                 "binarylist",
-                texts_codes.SubTypes['READ_BINARYLIST_IMAGES_ERROR'],
+                texts_codes.SubTypes["READ_BINARYLIST_IMAGES_ERROR"],
                 level=3,
             )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"]["en"], code=texts_codes.SubTypes['READ_BINARYLIST_IMAGES_ERROR'], level=5
+                message=texts.ERRORS["READ_BINARYLIST_IMAGES_ERROR"]["en"],
+                code=texts_codes.SubTypes["READ_BINARYLIST_IMAGES_ERROR"],
+                level=5,
             )
 
     # ------------------------------------------------------------------------------------------------------------------------
@@ -4866,6 +5599,16 @@ class API:
     def update_rawANDmask_images_on_loadDataSetSlider_in_PBT(
         self, prevornext="False", predict_eval=None
     ):
+        """
+        update_rawANDmask_images_on_loadDataSetSlider_in_PBT for moving slider on image list
+
+        Parameters
+        ----------
+        prevornext : str, optional
+            _description_, by default "False"
+        predict_eval : _type_, optional
+            List of corresponding pred images, by default None
+        """
         # next or prev on list
         if prevornext == "next":
             self.original_image_list_next_func()
@@ -4877,23 +5620,11 @@ class API:
         current_image_list = self.original_and_evaluated_image_in_PBT.get_n_current(
             name="original"
         )
-        current_mask_list = []  # temp
         res = binary_list_funcs.set_image_to_ui_slider_eidted_version(
             ui_obj=self.ui,
-            sub_directory="xxx",
-            annot_sub_direcotory="xxxx",
             image_path_list=current_image_list,
-            mask_path_list=current_mask_list,
             predict_eval=predict_eval,
         )
-
-        # # validate
-        # if not res:
-        #     self.ui.set_warning(
-        #         texts.ERORS["READ_BINARYLIST_IMAGES_ERROR"][self.language],
-        #         "binarylist",
-        #         level=3,
-        #     )
 
     # ------------------------------------------------------------------------------------------------------------------------
     # yolo-model history page functions
@@ -4975,9 +5706,7 @@ class API:
                     (
                         res,
                         ymodels_list,
-                    ) = yolo_model_funcs.get_yolo_models_from_db(
-                        db_obj=self.db
-                    )
+                    ) = yolo_model_funcs.get_yolo_models_from_db(db_obj=self.db)
                     if not res:
                         self.ui.notif_manager.append_new_notif(
                             message=texts.ERRORS["database_get_ymodels_failed"][
@@ -4991,9 +5720,7 @@ class API:
                 (
                     res,
                     ymodels_list,
-                ) = yolo_model_funcs.get_yolo_models_from_db(
-                    db_obj=self.db
-                )
+                ) = yolo_model_funcs.get_yolo_models_from_db(db_obj=self.db)
                 if not res:
                     self.ui.notif_manager.append_new_notif(
                         message=texts.ERRORS["database_get_ymodels_failed"][
@@ -5007,9 +5734,7 @@ class API:
                 (
                     res,
                     ymodels_list,
-                ) = yolo_model_funcs.get_yolo_models_from_db(
-                    db_obj=self.db
-                )
+                ) = yolo_model_funcs.get_yolo_models_from_db(db_obj=self.db)
                 if not res:
                     self.ui.notif_manager.append_new_notif(
                         message=texts.ERRORS["database_get_ymodels_failed"][
@@ -5066,10 +5791,7 @@ class API:
         """
         if check:
             page_max = int(
-                math.ceil(
-                    self.ymodel_count
-                    / yolo_model_funcs.yolo_table_nrows
-                )
+                math.ceil(self.ymodel_count / yolo_model_funcs.yolo_table_nrows)
             )
 
             if self.ymodel_tabel_itr >= page_max:
@@ -5121,10 +5843,8 @@ class API:
         """
 
         if filter_signal:
-            self.filter_params = (
-                yolo_model_funcs.get_yolo_model_filter_info_from_ui(
-                    ui_obj=self.ui
-                )
+            self.filter_params = yolo_model_funcs.get_yolo_model_filter_info_from_ui(
+                ui_obj=self.ui
             )
         #
         if not self.filter_params:
@@ -5174,8 +5894,7 @@ class API:
             level=1,
         )
 
-
-   # classification page
+    # classification page
     # ------------------------------------------------------------------------------------------------------------------------
     # get defects from database and apply to defects table
     def refresh_classes_table(self):
@@ -5351,11 +6070,13 @@ class API:
                 self.ui.set_warning(
                     texts.MESSEGES["LOAD_IMAGES_WITH_DEFECT"][self.language],
                     "classlist_msg_label",
-                    texts_codes.SubTypes['LOAD_IMAGES_WITH_DEFECT'],
+                    texts_codes.SubTypes["LOAD_IMAGES_WITH_DEFECT"],
                     level=1,
                 )
                 self.ui.logger.create_new_log(
-                    message=texts.MESSEGES["LOAD_IMAGES_WITH_DEFECT"]["en"], code=texts_codes.SubTypes['LOAD_IMAGES_WITH_DEFECT'], level=1
+                    message=texts.MESSEGES["LOAD_IMAGES_WITH_DEFECT"]["en"],
+                    code=texts_codes.SubTypes["LOAD_IMAGES_WITH_DEFECT"],
+                    level=1,
                 )
                 # disable next/prev/buttons
                 self.ui.classlist_prev_btn.setEnabled(True)
@@ -5427,7 +6148,6 @@ class API:
         """this function is used to create needed piecharts on UI"""
 
         try:
-
             # classlist page
             chart_funcs.create_classlist_piechart_on_ui(
                 ui_obj=self.ui,
@@ -5458,7 +6178,9 @@ class API:
 
         except Exception as e:
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["piechart_create_failed"]["en"], code=texts_codes.SubTypes['piechart_create_failed'], level=5
+                message=texts.ERRORS["piechart_create_failed"]["en"],
+                code=texts_codes.SubTypes["piechart_create_failed"],
+                level=5,
             )
 
     # _________________________________________________________________________________________________
@@ -5661,11 +6383,13 @@ class API:
             self.ui.set_warning(
                 texts.MESSEGES["FILTERED_RESAULTS_SUCCUSSFULL"][self.language],
                 "classification_model_history",
-                texts_codes.SubTypes['FILTERED_RESAULTS_SUCCUSSFULL'],
+                texts_codes.SubTypes["FILTERED_RESAULTS_SUCCUSSFULL"],
                 level=1,
             )
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["FILTERED_RESAULTS_SUCCUSSFULL"]["en"], code=texts_codes.SubTypes['FILTERED_RESAULTS_SUCCUSSFULL'], level=1
+                message=texts.MESSEGES["FILTERED_RESAULTS_SUCCUSSFULL"]["en"],
+                code=texts_codes.SubTypes["FILTERED_RESAULTS_SUCCUSSFULL"],
+                level=1,
             )
             return True, res[1]
 
@@ -5747,33 +6471,33 @@ class API:
                 self.ui.show_neighbouring(image, annt)
 
     def maximize_labeling_helps(self, widget_name=""):
-        n = int(widget_name.split('_')[-1])
+        n = int(widget_name.split("_")[-1])
         self.ui.maximize_labeling_help_images(n)
 
     def load_settings(self):
         (
-            lan, 
-            font, 
+            lan,
+            font,
             manual_plc,
-            plc_update_time, 
-            wind_duration, 
-            automatic_wind, 
-            auto_wind_intervals, 
-            manual_cameras, 
-            frame_rate, 
-            live_update_time
+            plc_update_time,
+            wind_duration,
+            automatic_wind,
+            auto_wind_intervals,
+            manual_cameras,
+            frame_rate,
+            live_update_time,
         ) = self.db.load_settings()
         self.ui.set_settings(
-            lan, 
-            font, 
+            lan,
+            font,
             manual_plc,
-            plc_update_time, 
-            wind_duration, 
-            automatic_wind, 
-            auto_wind_intervals, 
-            manual_cameras, 
-            frame_rate, 
-            live_update_time
+            plc_update_time,
+            wind_duration,
+            automatic_wind,
+            auto_wind_intervals,
+            manual_cameras,
+            frame_rate,
+            live_update_time,
         )
 
     def set_language_font(self):
@@ -5794,14 +6518,14 @@ class API:
                             self.ui.auto_wind,
                             self.ui.auto_wind_intervals        
                             )
-        self.start_auto_wind()
         self.init_check_plc()
 
     def set_camera_parms(self):
-        self.db.set_camera_params(self.ui.manual_camera,
-                            self.ui.frame_rate,
-                            self.ui.update_timer_live_frame,      
-                            )
+        self.db.set_camera_params(
+            self.ui.manual_camera,
+            self.ui.frame_rate,
+            self.ui.update_timer_live_frame,
+        )
 
     # -----------------------------------------------------PLC setting -------------------------------------------------------
 
@@ -5828,13 +6552,14 @@ class API:
             res = self.load_plc_parms()
             if not res:
                 self.ui.set_warning(
-                    texts.ERRORS['database_get_plc_params_failed'][self.ui.language], 
-                    'camera_connection', 
-                    texts_codes.SubTypes['database_get_plc_params_failed'], 
-                    level=2)
+                    texts.ERRORS["database_get_plc_params_failed"][self.ui.language],
+                    "camera_connection",
+                    texts_codes.SubTypes["database_get_plc_params_failed"],
+                    level=2,
+                )
                 self.ui.logger.create_new_log(
                     message=texts.ERRORS["database_get_plc_params_failed"]["en"],
-                    code=texts_codes.SubTypes['database_get_plc_params_failed'],
+                    code=texts_codes.SubTypes["database_get_plc_params_failed"],
                     level=3,
                 )
                 return
@@ -5842,12 +6567,16 @@ class API:
                 # self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['database_get_plc_params'][self.ui.language], level=0)
 
                 self.ui.logger.create_new_log(
-                    message=texts.MESSEGES["database_get_plc_params"]["en"], code=texts_codes.SubTypes['database_get_plc_params'], level=1
+                    message=texts.MESSEGES["database_get_plc_params"]["en"],
+                    code=texts_codes.SubTypes["database_get_plc_params"],
+                    level=1,
                 )
 
             # self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_connection_apply'][self.ui.language], level=0)
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["plc_connection_apply"]["en"], code=texts_codes.SubTypes['plc_connection_apply'], level=1
+                message=texts.MESSEGES["plc_connection_apply"]["en"],
+                code=texts_codes.SubTypes["plc_connection_apply"],
+                level=1,
             )
             self.plc_connection_status = True
             self.ui.change_plc_status(status="connect")
@@ -5860,7 +6589,9 @@ class API:
             self.ui.set_status_plc(mode=False)
             # self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_connection_apply_failed'][self.ui.language], level=2)
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["plc_connection_apply_failed"]["en"], code=texts_codes.SubTypes['plc_connection_apply_failed'], level=4
+                message=texts.ERRORS["plc_connection_apply_failed"]["en"],
+                code=texts_codes.SubTypes["plc_connection_apply_failed"],
+                level=4,
             )
 
             # self.connect_plc()
@@ -5899,21 +6630,22 @@ class API:
             return False
         self.pathes = parms
         self.dict_spec_pathes = plc_managment.set_pathes(self.pathes)
-
-        self.up_high_threshold = self.my_plc.get_value(
-            self.dict_spec_pathes["UpHighThreshold"]
-        )
-        self.up_low_threshold = self.my_plc.get_value(
-            self.dict_spec_pathes["UpLowThreshold"]
-        )
-        self.down_high_threshold = self.my_plc.get_value(
-            self.dict_spec_pathes["DownHighThreshold"]
-        )
-        self.down_low_threshold = self.my_plc.get_value(
-            self.dict_spec_pathes["DownLowThreshold"]
-        )
+        try:
+            self.up_high_threshold = self.my_plc.get_value(
+                self.dict_spec_pathes["UpHighThreshold"]
+            )
+            self.up_low_threshold = self.my_plc.get_value(
+                self.dict_spec_pathes["UpLowThreshold"]
+            )
+            self.down_high_threshold = self.my_plc.get_value(
+                self.dict_spec_pathes["DownHighThreshold"]
+            )
+            self.down_low_threshold = self.my_plc.get_value(
+                self.dict_spec_pathes["DownLowThreshold"]
+            )
         # self.
-
+        except:
+            return False
         # #print('-'*50,self.up_high_threshold)
         # #print('88888888888888',self.dict_spec_pathes)
 
@@ -5988,7 +6720,6 @@ class API:
     #     #
     #     # self.ui.plc_main_frame.setEnabled(False)
 
-
     def disconnect_plc(self, on_close=False, force_close=False):
         """
         this function is used to disconnect from plc
@@ -6007,11 +6738,15 @@ class API:
             #
             self.plc_connection_status = False
             self.ui.change_plc_status(status="disconnect")
-            self.ui.set_status_plc(mode = False)
+            self.ui.set_status_plc(mode=False)
 
             del self.my_plc
             #
-            self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_by_error'][self.ui.language], level=2)
+            self.ui.show_mesagges(
+                self.ui.plc_warnings,
+                texts.ERRORS["plc_disconnected_by_error"][self.ui.language],
+                level=2,
+            )
 
             self.ui.notif_manager.append_new_notif(
                 message=texts.ERRORS["plc_disconnected_by_error"][self.ui.language],
@@ -6030,11 +6765,15 @@ class API:
             self.my_plc.disconnect()
             self.plc_connection_status = False
             self.ui.change_plc_status(status="disconnect")
-            self.ui.set_status_plc(mode = False)
-            
+            self.ui.set_status_plc(mode=False)
+
             del self.my_plc
             #
-            self.ui.show_mesagges(self.ui.plc_warnings, texts.MESSEGES['plc_disconnected'][self.ui.language], level=0)
+            self.ui.show_mesagges(
+                self.ui.plc_warnings,
+                texts.MESSEGES["plc_disconnected"][self.ui.language],
+                level=0,
+            )
 
             self.ui.notif_manager.append_new_notif(
                 message=texts.MESSEGES["plc_disconnected"][self.ui.language], level=1
@@ -6049,7 +6788,11 @@ class API:
         # failed to disconnect plc
         except:
             if not on_close:
-                self.ui.show_mesagges(self.ui.plc_warnings, texts.ERRORS['plc_disconnected_failed'][self.ui.language], level=2)
+                self.ui.show_mesagges(
+                    self.ui.plc_warnings,
+                    texts.ERRORS["plc_disconnected_failed"][self.ui.language],
+                    level=2,
+                )
 
                 self.ui.notif_manager.append_new_notif(
                     message=texts.ERRORS["plc_disconnected_failed"][self.ui.language],
@@ -6058,17 +6801,7 @@ class API:
                 self.ui.logger.create_new_log(
                     message=texts.ERRORS["plc_disconnected_failed"]["en"], level=3
                 )
-
-
-
-
-
-
-
-
-
-
-
+        print('End function close thread plc')
     def set_plc_ip_to_ui(self):
         """
         this function is used to get plc ip from database and set to ui
@@ -6083,19 +6816,23 @@ class API:
         # failed to get ip from database
         if not self.plc_ip:
             self.ui.set_warning(
-                    texts.ERRORS['database_get_plc_ip_failed'][self.ui.language], 
-                    'camera_connection', 
-                    texts_codes.SubTypes['database_get_plc_ip_failed'], 
-                    level=2
+                texts.ERRORS["database_get_plc_ip_failed"][self.ui.language],
+                "camera_connection",
+                texts_codes.SubTypes["database_get_plc_ip_failed"],
+                level=2,
             )
             self.ui.logger.create_new_log(
-                message=texts.ERRORS["database_get_plc_ip_failed"]["en"], code=texts_codes.SubTypes['database_get_plc_ip_failed'], level=4
+                message=texts.ERRORS["database_get_plc_ip_failed"]["en"],
+                code=texts_codes.SubTypes["database_get_plc_ip_failed"],
+                level=4,
             )
             return
         #
         else:
             self.ui.logger.create_new_log(
-                message=texts.MESSEGES["database_get_plc_ip"]["en"], code=texts_codes.SubTypes['database_get_plc_ip'], level=1
+                message=texts.MESSEGES["database_get_plc_ip"]["en"],
+                code=texts_codes.SubTypes["database_get_plc_ip"],
+                level=1,
             )
             self.ui.set_plc_ip(self.plc_ip)
 
@@ -6107,23 +6844,32 @@ class API:
         if self.ui.auto_wind:
             self.auto_wind_timer = QTimer()
             self.auto_wind_timer.timeout.connect(self.set_wind)
-            auto_wind_timer = self.ui.update_wind_plc*1000 + self.ui.auto_wind_intervals
+            auto_wind_timer = (
+                self.ui.update_wind_plc * 1000 + self.ui.auto_wind_intervals
+            )
             self.auto_wind_timer.start(auto_wind_timer)
 
     def set_wind(self, mode=True):
         # print(type(self.sensor),self.sensor)
         if self.sensor and self.plc_connection_status:
             if self.ui.wind_itr == 1:
-                ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
-                ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(mode))
+                # ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
+                t1 = time.time()
+                threading.Thread(target=self.my_plc.set_value,args=(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))).start()
+                # ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))
+                print('set_wind',time.time()-t1)
                 # if ret and mode:
                 if mode:
                     self.ui.start_wind()
+        
+            self.wind_mode = not self.wind_mode
+                
+                
+                
 
     def set_start_software_plc(self, mode):
         # #print("software on plc ", str(mode))
         try:
-
             self.my_plc.set_value(self.dict_spec_pathes["MemSoftwareStart"], str(mode))
 
         except:
@@ -6133,8 +6879,6 @@ class API:
         # print(time.time())
         try:
             if not self.ui.manual_plc:
-                
-            
                 self.sensor = self.my_plc.get_value(
                     self.dict_spec_pathes["MemDistanceSensor"]
                 )
@@ -6146,52 +6890,59 @@ class API:
                 else:
                     self.sensor = bool(self.sensor[0])
 
-            
-
         except:
             self.sensor = False
 
-            
         if self.sensor:
             self.slab_detect = True
         else:
             self.slab_detect = False
 
-        threading.Timer(0.1,self.get_sensor).start()
-
+        if not self.ui.flag_close_win:
+            threading.Timer(0.1, self.get_sensor).start()
 
     def get_temp_and_switch(self):
-
-
         try:
-
             self.top_temp = str(
-                round(self.my_plc.get_value(self.dict_spec_pathes["UpTemperature"])[0],2)
+                round(
+                    self.my_plc.get_value(self.dict_spec_pathes["UpTemperature"])[0], 2
+                )
             )
             self.bottom_temp = str(
-                round(self.my_plc.get_value(self.dict_spec_pathes["DownTemperature"])[0],2)
+                round(
+                    self.my_plc.get_value(self.dict_spec_pathes["DownTemperature"])[0],
+                    2,
+                )
             )
         except:
             self.top_temp = "0"
             self.bottom_temp = "0"
 
         try:
-            self.up_in = self.my_plc.get_value(self.dict_spec_pathes["MemUpLimitSwitchIn"])
+            self.up_in = self.my_plc.get_value(
+                self.dict_spec_pathes["MemUpLimitSwitchIn"]
+            )
             if self.up_in[0] == "-":
                 self.up_in = False
             else:
                 self.up_in = bool(self.up_in[0])
-            self.up_out = self.my_plc.get_value(self.dict_spec_pathes["MemUpLimitSwitchOut"])
+            self.up_out = self.my_plc.get_value(
+                self.dict_spec_pathes["MemUpLimitSwitchOut"]
+            )
             if self.up_out[0] == "-":
                 self.up_out = False
             else:
                 self.up_out = bool(self.up_out[0])
-            self.down_in = self.my_plc.get_value(self.dict_spec_pathes["MemDownLimitSwitchIn"])
+            self.down_in = self.my_plc.get_value(
+                self.dict_spec_pathes["MemDownLimitSwitchIn"]
+            )
             if self.down_in[0] == "-":
                 self.down_in = False
             else:
                 self.down_in = bool(self.down_in[0])
-            self.down_out = self.my_plc.get_value(self.dict_spec_pathes["MemDownLimitSwitchOut"])
+            self.down_out = self.my_plc.get_value(
+                self.dict_spec_pathes["MemDownLimitSwitchOut"]
+            )
             if self.down_out[0] == "-":
                 self.down_out = False
             else:
@@ -6202,13 +6953,12 @@ class API:
             self.down_in = False
             self.down_out = False
 
-
-        threading.Timer(5,self.get_temp_and_switch).start()
+        if not self.ui.flag_close_win:
+            threading.Timer(5, self.get_temp_and_switch).start()
 
 
     def test_t(self):
-        print('aaaa')
-
+        print("aaaa")
 
     def update_plc_values(self):
 
@@ -6221,7 +6971,6 @@ class API:
 
 
     def update_sensor_and_temp(self):
-
         try:
             if (
                 self.top_temp > self.up_high_threshold
@@ -6255,10 +7004,10 @@ class API:
         self.last_sensor = self.sensor
 
         self.ui.change_plc_check_status(mode=self.sensor)
-        self.ui.change_place_check_status(side='up', inout='in', mode=self.up_in)
-        self.ui.change_place_check_status(side='up', inout='out', mode=self.up_out)
-        self.ui.change_place_check_status(side='down', inout='in', mode=self.down_in)
-        self.ui.change_place_check_status(side='down', inout='out', mode=self.down_out)
+        self.ui.change_place_check_status(side="up", inout="in", mode=self.up_in)
+        self.ui.change_place_check_status(side="up", inout="out", mode=self.up_out)
+        self.ui.change_place_check_status(side="down", inout="in", mode=self.down_in)
+        self.ui.change_place_check_status(side="down", inout="out", mode=self.down_out)
         try:
             self.ui.update_plc_temp(self.top_temp, self.bottom_temp)
         except:
@@ -6306,7 +7055,8 @@ class API:
                 # self.my_plc.set_cams_and_prejector(3, 0)
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
-                        message=str(texts.MESSEGES["save_sheet"][self.ui.language]), level=1
+                        message=str(texts.MESSEGES["save_sheet"][self.ui.language]),
+                        level=1,
                     )
 
     def init_check_plc(self):
@@ -6343,42 +7093,60 @@ class API:
 
                     if not res:
                         self.ui.set_warning(
-                        texts.ERRORS["REMOVE_PIP_FAILED"][self.language],
-                        "profile",
-                        texts_codes.SubTypes['REMOVE_PIP_FAILED'],
-                        level=3,
+                            texts.ERRORS["REMOVE_PIP_FAILED"][self.language],
+                            "profile",
+                            texts_codes.SubTypes["REMOVE_PIP_FAILED"],
+                            level=3,
                         )
                         self.ui.logger.create_new_log(
-                            message=texts.ERRORS["REMOVE_PIP_FAILED"]["en"], code=texts_codes.SubTypes['REMOVE_PIP_FAILED'], level=5
+                            message=texts.ERRORS["REMOVE_PIP_FAILED"]["en"],
+                            code=texts_codes.SubTypes["REMOVE_PIP_FAILED"],
+                            level=5,
                         )
 
                     self.update_combo_piplines()
                     self.ui.set_warning(
-                        texts.MESSEGES["REMOVE_PIP"][self.language], "profile", texts_codes.SubTypes['REMOVE_PIP'], level=1
+                        texts.MESSEGES["REMOVE_PIP"][self.language],
+                        "profile",
+                        texts_codes.SubTypes["REMOVE_PIP"],
+                        level=1,
                     )
                     self.ui.logger.create_new_log(
-                        message=texts.MESSEGES["REMOVE_PIP"]["en"], code=texts_codes.SubTypes['REMOVE_PIP'], level=1
+                        message=texts.MESSEGES["REMOVE_PIP"]["en"],
+                        code=texts_codes.SubTypes["REMOVE_PIP"],
+                        level=1,
                     )
                 except:
                     self.ui.set_warning(
                         texts.ERRORS["REMOVE_PIP_FAILED"][self.language],
                         "profile",
-                        texts_codes.SubTypes['REMOVE_PIP_FAILED'],
+                        texts_codes.SubTypes["REMOVE_PIP_FAILED"],
                         level=3,
                     )
                     self.ui.logger.create_new_log(
-                        message=texts.ERRORS["REMOVE_PIP_FAILED"]["en"], code=texts_codes.SubTypes['REMOVE_PIP_FAILED'], level=5
+                        message=texts.ERRORS["REMOVE_PIP_FAILED"]["en"],
+                        code=texts_codes.SubTypes["REMOVE_PIP_FAILED"],
+                        level=5,
                     )
 
     # PBT Evaluate -----------------------------------------------
 
     def create_json_file(self, name):
-
         json_parent_path = self.db.get_json_parent_path()
         new_json = Pipeline(json_parent_path, name)
 
-    def laod_bpt_jsons(self):
+    def set_stackedWidget_in_history_pbt_page(self, b):
+        if b.isChecked():
+            if b.text() == "BY":
+                self.ui.stackedWidget_LC_metrics.setCurrentIndex(1)
+            elif b.text() == "BSY":
+                self.ui.stackedWidget_LC_metrics.setCurrentIndex(2)
+            elif b.text() == "BS":
+                self.ui.stackedWidget_LC_metrics.setCurrentIndex(3)
+            elif b.text() == "BSC":
+                self.ui.stackedWidget_LC_metrics.setCurrentIndex(0)
 
+    def laod_bpt_jsons(self):
         self.filter_json_flag = False
         json_parent_path = self.db.get_json_parent_path()
         self.len_json, self.content_json = pipelines.load_all_json_files_by_date(
@@ -6439,7 +7207,6 @@ class API:
             self.ui.pipline_tabel_next_PBT.setEnabled(False)
 
     def json_clear_filter_btn(self):
-
         self.filter_json_flag = False
 
         pipelines.set_piplines_on_ui_tabel(
@@ -6495,7 +7262,6 @@ class API:
         self.ui.pipline_minut_lineedit.setText("")
 
     def next_page_pipline_history(self):
-
         if not self.filter_json_flag:
             self.filter_content_json = self.content_json
 
@@ -6566,513 +7332,3 @@ class API:
                 )
         else:
             self.ui.label_pipline_details.setText("")
-
-
-# ____________________________JJ ZONE
-class evaluation_worker(QObject):
-
-    # vars for handling thread
-    finished = Signal()
-    progress = Signal(dict, list)
-    pgb_bar_signal = Signal(float)
-
-    def set_params(
-        self,
-        paths,
-        binary_model,
-        classification_model,
-        ds,
-        split_size,
-        classes_num,
-        path_of_mask_prediction_with_current_pipline,
-        pipline_OBJ,
-        binary_thresh=0.5,
-        classification_thresh=0.5,
-    ):
-        # var for handling evaluating
-        self.paths = paths
-        self.binary_thresh = binary_thresh
-        self.classification_thresh = classification_thresh
-        self.binary_model = binary_model
-        self.classification_model = classification_model
-        self.ds = ds
-        self.split_size = split_size
-        self.classes_num = classes_num
-        self.path_of_mask_prediction_with_current_pipline = (
-            path_of_mask_prediction_with_current_pipline
-        )
-
-        # will used:
-        self.pipline_OBJ = pipline_OBJ
-
-        self.pred_binary = []
-        self.true_binary = []
-        self.pred_classification = []
-        self.true_classification = []
-        self.pred_each_path = {}
-
-    def evaluate(self):
-        for i, path in enumerate(self.paths):
-
-            file_name = os.path.basename(path)
-            self.model_predicting(path=path, filename=file_name)
-
-            # ckecking evaluting of model
-            split_batch_size = self.pred_binary[-1].shape[0]
-            true_flag = [1] in self.true_binary[-1 * split_batch_size :]
-            pred_flag = [1] in self.pred_binary[-1]
-            self.pred_each_path[path] = binary_list_funcs.WRONG_RIGHT_SYMBOL[
-                (pred_flag == true_flag)
-            ]
-            # update progressbar
-            percentage = 100 * (i + 1) / len(self.paths)
-            self.pgb_bar_signal.emit(percentage)
-
-        # convert true/pred to numpy array for calculating metrics
-        # binary part
-        pred_binary_matrix = np.concatenate(self.pred_binary)
-        true_binary_matrix = np.array(self.true_binary)
-
-        # binary metrics calculation:
-        binary_acc = accuracy_score(
-            y_true=true_binary_matrix, y_pred=pred_binary_matrix
-        )
-        binary_recall = recall_score(
-            y_true=true_binary_matrix, y_pred=pred_binary_matrix
-        )
-        binary_precision = precision_score(
-            y_true=true_binary_matrix, y_pred=pred_binary_matrix
-        )
-        binary_f1 = f1_score(y_true=true_binary_matrix, y_pred=pred_binary_matrix)
-
-        # classification part
-        classification_acc = -1.000
-        classification_recall = -1.000
-        classification_precision = -1.000
-        classification_f1 = -1.000
-
-        if len(self.pred_classification) != 0:
-            pred_classification_matrix = np.concatenate(self.pred_classification)
-            true_classification_matrix = np.concatenate(self.true_classification)
-
-            # classification metrics calculation
-            classification_acc = accuracy_score(
-                y_true=true_classification_matrix, y_pred=pred_classification_matrix
-            )
-            classification_recall = recall_score(
-                y_true=true_classification_matrix,
-                y_pred=pred_classification_matrix,
-                average="micro",
-            )
-            classification_precision = precision_score(
-                y_true=true_classification_matrix,
-                y_pred=pred_classification_matrix,
-                average="micro",
-            )
-            classification_f1 = f1_score(
-                y_true=true_classification_matrix,
-                y_pred=pred_classification_matrix,
-                average="micro",
-            )
-
-        # """UI SETTING"""
-        # SHOW INFO IN UI
-        binary_summary = "BINARY: \n accuracy:{:.3f} \n precision:{:.3f} \n recall;{:.3f} \n f1:{:.3f}".format(
-            binary_acc, binary_precision, binary_recall, binary_f1
-        )
-        classification_summary = "CLASSIFICTION: \n accuracy:{:.3f} \n precision:{:.3f} \n recall;{:.3f} \n f1:{:.3f}".format(
-            classification_acc,
-            classification_precision,
-            classification_recall,
-            classification_f1,
-        )
-        summary_list = [binary_summary, classification_summary]
-
-        """temporary"""  # shoul be function for setting this parameter!!!!!!!!!!!!!!!!! in future
-        # binary part
-        self.pipline_OBJ.set_binary_model(key=pipelines.MODEL_ACCURACY, value=-1)
-        self.pipline_OBJ.set_binary_model(key=pipelines.MODEL_PRECISION, value=-1)
-        self.pipline_OBJ.set_binary_model(key=pipelines.MODEL_RECALL, value=-1)
-        self.pipline_OBJ.set_binary_model(key=pipelines.MODEL_F1, value=-1)
-        self.pipline_OBJ.set_binary_model(key=pipelines.MODEL_LOSS, value=-1)
-
-        """probably omit localization"""
-        # localization part
-        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_ACCURACY, value=-1)
-        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_IOU, value=-1)
-        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_DICE, value=-1)
-        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_F1, value=-1)
-        self.pipline_OBJ.set_localization_model(key=pipelines.MODEL_LOSS, value=-1)
-        """probably omit localization"""
-
-        # classification part
-        self.pipline_OBJ.set_classification_model(
-            key=pipelines.MODEL_ACCURACY, value=-1
-        )
-        self.pipline_OBJ.set_classification_model(
-            key=pipelines.MODEL_PRECISION, value=-1
-        )
-        self.pipline_OBJ.set_classification_model(key=pipelines.MODEL_RECALL, value=-1)
-        self.pipline_OBJ.set_classification_model(key=pipelines.MODEL_F1, value=-1)
-        self.pipline_OBJ.set_classification_model(key=pipelines.MODEL_LOSS, value=-1)
-        self.pipline_OBJ.set_classification_model(
-            key=pipelines.MODEL_PERCLASSS_ACCURACY, value=-1
-        )
-        self.pipline_OBJ.set_classification_model(
-            key=pipelines.MODEL_CONFUSION_MATRIX, value=-1
-        )
-        # """temporary"""
-
-        # self.pipline_OBJ.save_json()
-
-        self.progress.emit(self.pred_each_path, summary_list)
-        self.finished.emit()
-
-    def model_predicting(self, path, filename):
-        img_ = cv2.imread(path)
-        blocks_, _, _ = ImageCrops(img=img_, dim=self.split_size)
-        w, h = blocks_.shape[0:2]
-        blocks = np.reshape(
-            blocks_, (w * h,) + self.split_size + (3,)
-        )  # flatten all split (set them in a line)
-
-        """set prediction part"""
-        defects_inx, class_pred = self.set_grandpred(blocks=blocks)
-
-        """set true part"""
-        """process of setting true label/pred label/false positve/false negative for all three model"""
-        if path.find(binary_list_funcs.PERFECT_PATH) != -1:
-
-            if len(defects_inx) != 0:
-                # calculate the column and row of single split
-                # x=defects_inx/h
-                # x=np.trunc(x).astype(np.uint8)
-                # y=defects_inx-(h*x).astype(np.uint8)
-                """temporary coment"""
-                """save each split"""
-                # self.write_fp_fn_in_dir(blocks[defects_inx],x,y,file_name,'fp')
-                """save perfect image"""
-                self.write_perfect_fp_fn_in_dir(file_name=filename, img=img_, flag="fp")
-
-            # set true label
-            if class_pred is not None:
-                self.set_perfect_image_grandtrue(
-                    w=w, h=h, classification_shape=class_pred.shape
-                )
-            else:
-                self.set_perfect_image_grandtrue(
-                    w=w, h=h, classification_shape=class_pred
-                )
-        else:
-            if len(defects_inx) == 0:
-                self.write_perfect_fp_fn_in_dir(file_name=filename, img=img_, flag="fn")
-
-            mask_path = os.path.join(os.path.dirname(path), filename)
-            mask_ = cv2.imread(mask_path, 0)
-            mask_blocks_, rx, ry = ImageCrops(img=mask_, dim=self.split_size)
-            json_path = os.path.join(
-                os.path.dirname(os.path.dirname(os.path.dirname(path))),
-                binary_list_funcs.ANNOTATION_PATH,
-                filename[0:-3] + "json",
-            )
-            defects = self.indicate_defect_pixel(
-                json_path=json_path,
-                ratio_x=rx,
-                ratio_y=ry,
-                Length=mask_blocks_.shape[1] * self.split_size[1],
-                width=mask_blocks_.shape[0] * self.split_size[0],
-            )
-            self.set_defect_image_grandtrue(
-                img_blocks=blocks_,
-                defects=defects,
-                defects_inx=defects_inx,
-                h=h,
-                file_name=filename,
-            )
-
-    def set_grandpred(self, blocks):
-
-        """set predicting label"""
-        """set binary part"""
-        # give all split of a image to binary model and threshold the model output
-        pred = self.binary_model.predict(blocks)
-        pred = (pred > self.binary_thresh).astype("int32")
-        self.pred_binary.append(pred)  # set binary pred label of a single image
-        defects_inx = np.where(pred[:, 0] == 1)[0]
-
-        # mask_pred=None
-        class_pred = None
-        if len(defects_inx) != 0:
-            """set classification part"""
-            class_pred = self.classification_model.predict(blocks[defects_inx])
-            class_pred = (class_pred > self.classification_thresh).astype("int32")
-
-            self.pred_classification.append(class_pred)
-
-        return defects_inx, class_pred
-
-    def set_perfect_image_grandtrue(self, w, h, classification_shape):
-
-        """set true label"""
-        """process of setting true label/pred label/false positve/false negative for all three model"""
-
-        """set binary part"""
-        self.true_binary.extend(
-            [[0]] * (w * h)
-        )  # set binary true label of a single image
-
-        # """set localization part"""
-        # mask_true=np.zeros(localization_shape,dtype=np.uint8)
-        # self.true_localization.append(mask_true)
-
-        """set classification part"""
-
-        if classification_shape is not None:
-            true_label = np.zeros(classification_shape, dtype=np.uint8)
-            self.true_classification.append(true_label)
-
-    def set_defect_image_grandtrue(
-        self, img_blocks, defects, defects_inx, h, file_name
-    ):
-
-        # self.true_localization.append(blocks[defects_inx])
-
-        step = int(self.split_size[0])
-        for i in range(img_blocks.shape[0]):
-            for j in range(img_blocks.shape[1]):
-                true_label = np.zeros((1, self.classes_num), dtype=np.uint8)
-                binary_flag = False
-                for key in defects:
-                    flag = self.indicate_defect_split_class(
-                        x1=j * step,
-                        y1=i * step,
-                        x2=(j + 1) * step,
-                        y2=(i + 1) * step,
-                        pixels=defects[key],
-                        thresh=70,
-                    )
-                    if flag:
-                        true_label[0, int(key.split("_")[0])] = 1
-                        binary_flag = True
-
-                if binary_flag:
-                    self.true_binary.append([1])
-                else:
-                    self.true_binary.append([0])
-                    # self.write_fp_fn_in_dir(img_blocks[i,j],i,j,file_name,'fn',mode='other')
-
-                if ((i * h) + j) in defects_inx:
-                    self.true_classification.append(true_label)
-
-    def write_perfect_fp_fn_in_dir(self, file_name, img, flag):
-        path_dic = {
-            "fp": self.ds.pipline_wrong_result_fp_path,
-            "fn": self.ds.pipline_wrong_result_fn_path,
-        }
-        img_path = os.path.join(path_dic[flag], file_name)
-        cv2.imwrite(img_path, img)
-
-    def write_fp_fn_in_dir(self, imgs, x, y, file_name, flag="other", mode="loop"):
-        path_dic = {
-            "fp": self.ds.pipline_wrong_result_fp_path,
-            "fn": self.ds.pipline_wrong_result_fn_path,
-            "other": self.path_of_mask_prediction_with_current_pipline,
-        }
-        if mode == "loop":
-            fileNames = list(
-                map(self.creat_split_name_file, x, y, [file_name] * (imgs.shape[0]))
-            )
-            for i, filename in enumerate(fileNames):
-                dir = os.path.join(path_dic[flag], filename)
-                cv2.imwrite(dir, imgs[i])
-        else:
-            fileName = self.creat_split_name_file(x, y, file_name)
-            dir = os.path.join(path_dic[flag], fileName)
-            cv2.imwrite(dir, imgs)
-
-    def creat_split_name_file(
-        self,
-        x,
-        y,
-        file_name,
-    ):
-        fileName = "{f1}_{f2}_{f3}{f4}".format(
-            f1=file_name[0:-4], f2=x, f3=y, f4=file_name[-4:]
-        )
-        return fileName
-
-    def indicate_defect_pixel(self, json_path, ratio_x, ratio_y, Length, width):
-
-        with open(json_path, "r") as f:
-            json_info = json.load(f)
-        f.close()
-
-        defect_pixels = {}
-        defects = json_info["obj_masks"]
-        for i, defect in enumerate(defects):
-            key = str(defect["class"]) + "_" + str(i)
-            contour_angle = defect["mask"]
-            angles = [
-                (round(ratio_x * ele[0]), round(ratio_y * ele[1]))
-                for ele in contour_angle
-            ]
-            defect_pixels[key] = self.get_all_pixel_contour(
-                angles=angles, Length=Length, width=width
-            )
-
-        return defect_pixels
-
-    def get_all_pixel_contour(self, angles, Length, width):
-
-        mask = np.zeros((width, Length), dtype=np.uint8)
-
-        for i in range(len(angles) - 1):
-            mask = cv2.line(mask, angles[i], angles[i + 1], (255, 255, 255), 2)
-        mask = cv2.line(mask, angles[i + 1], angles[0], (255, 255, 255), 2)
-
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        mask = np.zeros((width, Length), dtype=np.uint8)
-        cv2.drawContours(mask, contours, 0, color=255, thickness=-1)
-        all_pixel = np.where(mask == 255)
-        all_pixel = list(zip(all_pixel[0], all_pixel[1]))
-
-        return all_pixel
-
-    def indicate_defect_split_class(self, x1, y1, x2, y2, pixels, thresh=30):
-
-        counter = 0
-        for px in pixels:
-            if px[0] >= y1 and px[1] >= x1 and px[0] <= y2 and px[1] <= x2:
-                counter += 1
-                if counter > thresh:
-                    return True
-        return False
-
-
-
-class ModelsCreation_worker(QObject):
-
-    # vars for handling thread
-    finished = Signal()
-    model_creation_signal = Signal(int)
-
-    def set_params(self, login_user_name, db, language, pipline_name):
-
-        self.login_user_name = login_user_name
-        self.db = db
-        self.lang = language
-        self.pipline_name = pipline_name
-
-    def set_pipline(self):
-
-        self.pipline_OBJ = pipelines.Pipeline(
-            pipeline_root=binary_list_funcs.PIPLINES_PATH,
-            pipeline_name=self.pipline_name,
-        )
-        self.pipline_OBJ.set(key=pipelines.OWNER, value=self.login_user_name)
-
-        res, pipline_info = self.db.get_selected_pipline_record(value=self.pipline_name)
-
-        if res:
-            res, binary_model_info = self.db.get_model(
-                self.db.binary_model, pipline_info[0]["binary_weight_path"]
-            )
-            if res:
-                res, localization_model_info = self.db.get_model(
-                    self.db.localization, pipline_info[0]["localization_weight_path"]
-                )
-            if res:
-                res, classification_model_info = self.db.get_model(
-                    self.db.classification,
-                    pipline_info[0]["classification_weight_path"],
-                )
-
-            self.binary_input_size = binary_model_funcs.strInputSize_2_intInputSize(
-                string=binary_model_info[0]["input_size"]
-            )
-            # set binary model parameter of pipline:
-            self.pipline_OBJ.set_binary_model(
-                key=pipelines.MODEL_ID, value=binary_model_info[0]["algo_name"]
-            )
-            self.pipline_OBJ.set_binary_model(
-                key=pipelines.MODEL_WEIGHTS_PATH,
-                value=binary_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
-            )
-
-            self.localization_input_size = (
-                binary_model_funcs.strInputSize_2_intInputSize(
-                    string=localization_model_info[0]["input_size"]
-                )
-            )
-            # set localization model parameter of pipline:
-            self.pipline_OBJ.set_localization_model(
-                key=pipelines.MODEL_ID, value=localization_model_info[0]["algo_name"]
-            )
-            self.pipline_OBJ.set_localization_model(
-                key=pipelines.MODEL_WEIGHTS_PATH,
-                value=localization_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
-            )
-
-            self.classification_input_size = (
-                binary_model_funcs.strInputSize_2_intInputSize(
-                    string=classification_model_info[0]["input_size"]
-                )
-            )
-            classes_num, classes = binary_model_funcs.strInputSize_2_intInputSize(
-                string=classification_model_info[0]["classes"],
-                use_for_other_parameter=True,
-            )
-            # set localization model parameter of pipline:
-            self.pipline_OBJ.set_classification_model(
-                key=pipelines.MODEL_ID, value=classification_model_info[0]["algo_name"]
-            )
-            self.pipline_OBJ.set_classification_model(
-                key=pipelines.MODEL_WEIGHTS_PATH,
-                value=classification_model_info[0][pipelines.MODEL_WEIGHTS_PATH],
-            )
-            self.pipline_OBJ.set_classification_model(
-                key=pipelines.TARGET_CLASSES, value=classes
-            )
-            if res:
-                try:
-                    b_algo_name = (
-                        binary_model_funcs.translate_binary_algorithm_id_to_name(
-                            binary_model_info[0]["algo_name"]
-                        )
-                    )
-                    l_algo_name = (
-                        binary_model_funcs.translate_binary_algorithm_id_to_name(
-                            localization_model_info[0]["algo_name"],
-                            model_type="localization",
-                        )
-                    )
-                    c_algo_name = (
-                        binary_model_funcs.translate_binary_algorithm_id_to_name(
-                            classification_model_info[0]["algo_name"],
-                            model_type="classification",
-                        )
-                    )
-
-                    self.b_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-                        algo_id=b_algo_name, input_size=self.binary_input_size
-                    )
-                    self.model_creation_signal.emit(1)
-                    self.l_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-                        algo_id=l_algo_name, input_size=self.localization_input_size
-                    )
-                    self.model_creation_signal.emit(2)
-                    self.classes_num = 5  # <------------------temporary
-                    self.c_model = binary_model_funcs.translate_model_algorithm_id_to_creator_function(
-                        algo_id=c_algo_name,
-                        input_size=self.classification_input_size,
-                        num_class=self.classes_num,
-                        mode="categorical",
-                    )
-                    self.model_creation_signal.emit(3)
-                except:
-                    self.model_creation_signal.emit(5)
-                    return
-
-            self.model_creation_signal.emit(4)
-            self.finished.emit()
-

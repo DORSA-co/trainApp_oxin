@@ -18,6 +18,7 @@ except:
 from tensorflow.keras import layers
 
 import segmentation_models as sm
+
 sm.set_framework("tf.keras")
 sm.framework()
 
@@ -27,6 +28,7 @@ except:
     import Unet
 # sm.set_framework("tf.keras")
 # sm.framework()
+from yolov5.models.common import DetectMultiBackend
 
 
 BINARY = "binary"
@@ -34,14 +36,17 @@ CATEGORICAL = "categorical"
 LOSS = {"DIFO": sm.losses.DiceLoss() + sm.losses.BinaryFocalLoss()}
 
 __loss__ = {CATEGORICAL: "categorical_crossentropy", BINARY: "binary_crossentropy"}
-#__activation__ = {CATEGORICAL: "softmax", BINARY: "sigmoid"}
+# __activation__ = {CATEGORICAL: "softmax", BINARY: "sigmoid"}
 __activation__ = {CATEGORICAL: "sigmoid", BINARY: "sigmoid"}
 
-def unet_model(input_size, learning_rate=1e-4, num_class=1, mode=BINARY, weights_path=None):
+
+def unet_model(
+    input_size, learning_rate=1e-4, num_class=1, mode=BINARY, weights_path=None
+):
     activation = "sigmoid" if num_class == 1 else "softmax"
     if weights_path is not None:
         model = Unet.unet(
-            backbone_name='efficientnetb2',
+            backbone_name="efficientnetb2",
             input_shape=input_size,
             classes=num_class,
             activation=activation,
@@ -51,7 +56,7 @@ def unet_model(input_size, learning_rate=1e-4, num_class=1, mode=BINARY, weights
         )
     else:
         model = Unet.unet(
-            backbone_name='efficientnetb2',
+            backbone_name="efficientnetb2",
             input_shape=input_size,
             classes=num_class,
             activation=activation,
@@ -60,8 +65,12 @@ def unet_model(input_size, learning_rate=1e-4, num_class=1, mode=BINARY, weights
         )
 
     optimizer = tf.keras.optimizers.Adam(learning_rate)
-    metrics = ['accuracy', sm.metrics.IOUScore(threshold=0.5), sm.metrics.FScore(threshold=0.5)]
-    loss = LOSS['DIFO']
+    metrics = [
+        "accuracy",
+        sm.metrics.IOUScore(threshold=0.5),
+        sm.metrics.FScore(threshold=0.5),
+    ]
+    loss = LOSS["DIFO"]
     model.compile(loss=loss, metrics=metrics, optimizer=optimizer)
     return model
 
@@ -571,7 +580,7 @@ def resnet_cnn(
 
 
     preprocess_input = tf.keras.applications.resnet_v2.preprocess_input
-    
+
     try:
         base_model = tf.keras.applications.ResNet50V2(
             include_top=False, weights=None, input_shape=input_size
@@ -582,8 +591,8 @@ def resnet_cnn(
     except:
 
         base_model = tf.keras.applications.ResNet50V2(
-        include_top=False, weights="imagenet", input_shape=input_size
-    )
+            include_top=False, weights="imagenet", input_shape=input_size
+        )
 
 
 
@@ -658,9 +667,12 @@ def xception_cnn(
     preprocess_input = tf.keras.applications.xception.preprocess_input
 
     try:
-        base_model = tf.keras.applications.Xception(include_top=False, weights=None, input_shape=input_size)
+        base_model = tf.keras.applications.Xception(
+            include_top=False, weights=None, input_shape=input_size
+        )
         base_model.load_weights(
-            'models/binary/xception_weights_tf_dim_ordering_tf_kernels_notop.h5')
+            "models/binary/xception_weights_tf_dim_ordering_tf_kernels_notop.h5"
+        )
     except:
         base_model = tf.keras.applications.Xception(
             include_top=False, weights="imagenet", input_shape=input_size
@@ -668,8 +680,14 @@ def xception_cnn(
 
     base_model.trainable = False
 
-    inpt = tf.keras.Input(shape=input_size)
-    inpt_pre = preprocess_input(inpt)
+    inpt = tf.keras.Input(shape=(input_size[0],input_size[1],1))
+
+    inpt2 = tf.keras.layers.Concatenate()([inpt]*3)
+
+    inpt_pre = preprocess_input(inpt2)
+
+    # inpt = tf.keras.Input(shape=input_size)
+    # inpt_pre = preprocess_input(inpt)
     # --------------------------------------------
     out_base = base_model(inpt_pre)
     # --------------------------------------------
@@ -685,7 +703,7 @@ def xception_cnn(
         model.load_weights(weights)
     # --------------------------------------------
     if fine_tune_layer > 0:
-        base_model = model.layers[3]
+        base_model = model.layers[4]
         base_model.trainable = True
         for i in range(fine_tune_layer):
             base_model.layers[i].trainable = False

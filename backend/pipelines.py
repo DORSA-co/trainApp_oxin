@@ -23,20 +23,80 @@ except:
 
 
 from train_api import ALGORITHM_NAMES
+import texts
 
 # from binary_model_funcs import translate_binary_algorithm_id_to_name
 
-# ____________________________________
+# ______________________________________
+TABLE_TITLE = {
+    "BY": [texts.Titles["binary_pipline"], texts.Titles["yolo_pipline"]],
+    "BSY": [
+        texts.Titles["binary_pipline"],
+        texts.Titles["segmention_pipline"],
+        texts.Titles["yolo_pipline"],
+    ],
+    "BS": [
+        texts.Titles["binary_pipline"],
+        texts.Titles["segmention_pipline"],
+    ],
+    "BSC": [
+        texts.Titles["binary_pipline"],
+        texts.Titles["segmention_pipline"],
+        texts.Titles["classification_pipline"],
+    ],
+}
+# ___________________________________________________________________
+MODELS_METRICS = {
+    "BY": [
+        ["loss", "acc", "precision", "recall", "f1"],
+        [
+            "mp",
+            "mr",
+            "map50",
+            "map",
+        ],
+    ],
+    "BSC": [
+        ["loss", "acc", "precision", "recall", "f1"],
+        ["loss", "accuracy", "iou", "fscore"],
+        ["loss", "acc", "precision", "recall", "f1"],
+    ],
+    "BSY": [
+        ["loss", "acc", "precision", "recall", "f1"],
+        ["loss", "accuracy", "iou", "fscore"],
+        [
+            "mp",
+            "mr",
+            "map50",
+            "map",
+        ],
+    ],
+    "BS": [
+        ["loss", "acc", "precision", "recall", "f1"],
+        ["loss", "accuracy", "iou", "fscore"],
+    ],
+}
+TAB_TITLES = {
+    "BY": ["binary", "yolo"],
+    "BSC": ["binary", "segmention", "classification"],
+    "BSY": ["binary", "segmention", "yolo"],
+    "BS": ["binary", "segmention"],
+}
+# ________________________________________________________________
+
 
 PIPELINE_ROOT = "root_path"
 PIPELINE_NAME = "name"
+PIPELINE_TYPE = "type"
 DATE_CREATED = "date_created"
 TIME_CREATED = "time_created"
 OWNER = "owner"
+USE_YOLO = "use_yolo"
 #
 BINARY_MODEL = "binary_model"
 CALSSIFICATION_MODEL = "classification_model"
 LOCALIZATION_MODEL = "localization_model"
+YOLO_MODEL = "yolo_model"
 #
 MODEL_ID = "id"
 MODEL_WEIGHTS_PATH = "weights_path"
@@ -47,8 +107,8 @@ MODEL_F1 = "f1"
 MODEL_LOSS = "loss"
 MODEL_DICE = "dice"
 MODEL_IOU = "iou"
-MODEL_PERCLASSS_ACCURACY = "perclass_accuracy"
-MODEL_CONFUSION_MATRIX = "confusion_matrix"
+MODEL_MAP05 = "mAP_0.5"
+MODEL_MAP0595 = "mAP_0.5:0.95"
 #
 TARGET_CLASSES = "target_classes"
 #
@@ -168,6 +228,7 @@ class Pipeline:
         self.pipline_json[DATE_CREATED] = date_created
         self.pipline_json[TIME_CREATED] = time_created
         self.pipline_json[OWNER] = None
+        self.pipline_json[USE_YOLO] = False
 
         # target classes
         self.pipline_json[TARGET_CLASSES] = None
@@ -195,11 +256,10 @@ class Pipeline:
             MODEL_RECALL: None,
             MODEL_LOSS: None,
             MODEL_F1: None,
-            MODEL_PERCLASSS_ACCURACY: None,
-            MODEL_CONFUSION_MATRIX: None,
         }
 
-        # localization model
+        # localizati
+        # on model
         self.pipline_json[LOCALIZATION_MODEL] = {
             MODEL_ID: None,
             MODEL_WEIGHTS_PATH: None,
@@ -209,11 +269,20 @@ class Pipeline:
             MODEL_IOU: None,
         }
 
+        # yolo model
+        self.pipline_json[YOLO_MODEL] = {
+            MODEL_ID: None,
+            MODEL_WEIGHTS_PATH: None,
+            MODEL_PRECISION: None,
+            MODEL_RECALL: None,
+            MODEL_MAP05: None,
+            MODEL_MAP0595: None,
+        }
+
     def save_json(self):
         """this function is used to save pipeline json object to path as a file"""
 
         try:
-            #print(self.pipline_json[PIPELINE_ROOT])
             json_path = os.path.join(
                 self.pipline_json[PIPELINE_ROOT],
                 "%s-%s-%s.json"
@@ -223,25 +292,11 @@ class Pipeline:
                     self.pipline_json[TIME_CREATED],
                 ),
             )
-            #print(json_path)
             with open(json_path, "w") as f:
                 json.dump(self.pipline_json, f)
             f.close()
-
-            #print(";" * 50)
-
         except:
-            try:
-                json_path = self.pipline_json[PIPELINE_ROOT]
-                json_path += ".json" if json_path[-5:] != ".json" else ""
-                #
-                with open(json_path, "w") as f:
-                    json.dump(self.pipline_json, f)
-                f.close()
-
-            except Exception as e:
-                pass
-                #print(e)
+            pass
 
     def load_json(self):
         """this function is used to load pipline info from json file"""
@@ -267,7 +322,6 @@ class Pipeline:
 
         except Exception as e:
             pass
-            #print(e)
 
     def set(self, key, value):
         self.pipline_json[key] = value
@@ -283,6 +337,12 @@ class Pipeline:
 
     def set_classification_model(self, key, value):
         self.pipline_json[CALSSIFICATION_MODEL][key] = value
+
+    def set_yolo_model(self, key, value):
+        self.pipline_json[YOLO_MODEL][key] = value
+
+    def get_yolo_model(self, key):
+        return self.pipline_json[YOLO_MODEL][key]
 
     def get_classification_model(self, key):
         return self.pipline_json[CALSSIFICATION_MODEL][key]
@@ -300,7 +360,7 @@ def load_all_json_files(dir_path):
         for path in os.listdir(dir_path):
             # check if current path is a file
             if os.path.isfile(os.path.join(dir_path, path)) and path[-4:] == "json":
-                #print(path)
+                # print(path)
                 with open(os.path.join(dir_path, path), "r") as f:
                     res.append(json.load(f))
         return len(res), res
@@ -315,6 +375,7 @@ MAIN_PARMS = [
     "target_classes",
     "evaluated_datasets",
 ]
+
 
 # show/set models history to UI tabel
 def set_piplines_on_ui_tabel(ui_obj, values):
@@ -398,16 +459,12 @@ def load_all_json_files_by_date(dir_path, reverse=False):
         file_paths = sorted(
             Path(dir_path).iterdir(), key=os.path.getmtime, reverse=True
         )
-        # return len(file_paths),file_paths
     except:
-        # return 0,[]
         file_paths = []
 
     for path in file_paths:
-
         path = os.path.normpath(path)
         if path[-4:] == "json":
-            # #print(path)
             with open(path, "r") as f:
                 res.append(json.load(f))
     return len(res), res
@@ -649,7 +706,6 @@ def filter_piplines(all_content, param_filter):
 def filter_model(param_filter_model, pipline, localization=False):
     param = param_filter_model.keys()
     if param != []:
-
         if MODEL_ID in param:
             if pipline[MODEL_ID] != param_filter_model[MODEL_ID]:
                 return True
