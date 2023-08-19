@@ -1034,6 +1034,47 @@ background-color: rgb(170, 170, 212);</string>
                  </spacer>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="storage_btn">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>45</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-image: url(./images/icons/storage.png)</string>
+                  </property>
+                  <property name="text">
+                   <string>Storage Management</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_226">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>10</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>10</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="log_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -13962,7 +14003,7 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>63</width>
+                                      <width>92</width>
                                       <height>165</height>
                                      </rect>
                                     </property>
@@ -13989,7 +14030,7 @@ color : rgb(0,0,0);</string>
                                          <rect>
                                           <x>0</x>
                                           <y>0</y>
-                                          <width>76</width>
+                                          <width>96</width>
                                           <height>49</height>
                                          </rect>
                                         </property>
@@ -14159,8 +14200,8 @@ color : rgb(0,0,0);</string>
                                              <rect>
                                               <x>0</x>
                                               <y>0</y>
-                                              <width>76</width>
-                                              <height>106</height>
+                                              <width>90</width>
+                                              <height>43</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_139">

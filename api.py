@@ -364,7 +364,7 @@ class API:
         self.init_check_plc()
 
         # Level2 connection
-        self.l2_connection = level2_connection.connection_level2()
+        self.l2_connection = level2_connection.connection_level2(self.db)
         self.l2_connection.create_connection()
         self.start_level2_threads()
 
@@ -454,6 +454,11 @@ class API:
         if not self.s_api:
             self.s_api = storage_api(self.storage_win)
 
+    def show_storage_window(self):
+        self.storage_win.set_language(self.language)
+        self.storage_win.show()
+        self.storage_win.show_main_page()
+
     def check_storage(self):
         self.ssd_image_file_manager.refresh()
         self.hdd_file_manager.refresh()
@@ -462,14 +467,15 @@ class API:
 
         if self.ssd_image_file_manager:
             ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
+            print('ssd image percent: ', ssd_image_percent)
+
             if ssd_image_percent > self.storage_upper_limit:
                 try:
-                    self.storage_win.set_language(self.language)
-                    self.storage_win.show()
-                    self.s_api.clear_filters()
-                    if self.sensor:
-                        sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
-                        self.s_api.add_filter(sheet_id)
+                    self.show_storage_window()
+                    # self.s_api.clear_filters()
+                    # if self.sensor:
+                    #     sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
+                    #     self.s_api.add_filter(sheet_id)
                     self.s_api.start()
                     self.ui.logger.create_new_log(
                         code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"], level=1
@@ -914,6 +920,8 @@ class API:
             self.refresh_loadDataset_tabs_in_PBT
         )
         # ______________ JJ
+
+        self.ui.storage_btn.clicked.connect(self.show_storage_window)
 
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
         self.ui.load_sheets_win.btn_refresh.clicked.connect(
@@ -1564,7 +1572,7 @@ class API:
             self.thechnicals_backend[self.current_technical_side].update_pointer(
                 pt
             )  # update corespond backend mouse position
-            self.refresh_thechnical(fp=5)
+            self.refresh_thechnical(fp=1)
             self.show_pointer_position()
 
     def refresh_thechnical(self, fp):
@@ -6130,8 +6138,9 @@ class API:
                 # ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
                 t1 = time.time()
                 threading.Thread(target=self.my_plc.set_value,args=(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))).start()
+                threading.Thread(target=self.my_plc.set_value,args=(self.dict_spec_pathes["MemUpValve"], str(self.wind_mode))).start()
                 # ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))
-                print('set_wind',time.time()-t1)
+                # print('set_wind',time.time()-t1)
                 # if ret and mode:
                 if mode:
                     self.ui.start_wind()
