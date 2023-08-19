@@ -385,7 +385,7 @@ class API:
         
         self.read_storage_paths_from_db()
         self.create_diskMemory_objs()
-        self.create_storage_window()
+        # self.create_storage_window()
         self.start_storage_checking()
         
 
@@ -408,8 +408,6 @@ class API:
 
         self.ui.pipline_name.textChanged.connect(self.check_name_pipline)
 
-
-
     def remove_pypylon_chache(self):
         try:
             path = os.getcwd()
@@ -422,7 +420,6 @@ class API:
             os.chdir(path)
         except:
             print('ERROR Try remove cache pypylon ')
-
 
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
@@ -455,6 +452,9 @@ class API:
         self.storage_win.show()
         self.storage_win.show_main_page()
 
+    def run_storage(self):
+        os.system("/bin/python3 ../oxin_storage_management/storage_main_UI.py")
+
     def check_storage(self):
         self.ssd_image_file_manager.refresh()
         self.hdd_file_manager.refresh()
@@ -467,18 +467,19 @@ class API:
 
             if ssd_image_percent > self.storage_upper_limit:
                 try:
-                    self.show_storage_window()
+                    threading.Thread(target = self.run_storage).start()
+                    # self.show_storage_window()
                     # self.s_api.clear_filters()
                     # if self.sensor:
                     #     sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
                     #     self.s_api.add_filter(sheet_id)
-                    self.s_api.start()
+                    # self.s_api.start()
                     self.ui.logger.create_new_log(
                         code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"], level=1
                     )
                 except:
                     self.ui.logger.create_new_log(
-                        code=texts_codes.SubTypes['Storage_open_failed'], message=texts.MESSEGES["Storage_open_failed"]["en"], level=1
+                        code=texts_codes.SubTypes['Storage_open_failed'], message=texts.MESSEGES["Storage_open_failed"]["en"], level=5
                     )
                     
     def update_storage_charts(self):
