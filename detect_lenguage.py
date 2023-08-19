@@ -29,11 +29,7 @@ def main_window(self):
     self.btn_about_us.setText('درباره ما')
     self.creditsLabel.setText('')
     self.btn_about_us.setText('درباره ما')
-    self.btn_about_us.setText('درباره ما')
-    self.btn_about_us.setText('درباره ما')
-    self.btn_about_us.setText('درباره ما')
-    self.btn_about_us.setText('درباره ما')
-    self.btn_about_us.setText('درباره ما')
+
     # self.tabWidget_2.setCurrentIndex(1)
     self.label_4.setText(': تاریخ')
     self.label_10.setText(': شماره ورق')

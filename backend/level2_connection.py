@@ -4,6 +4,10 @@ import random
 import string
 import re
 import socket
+import logging as log
+import time
+import threading
+from datetime import datetime
 try:
     import date_funcs
 except:
@@ -13,15 +17,16 @@ RANDOM=True
 
 class connection_level2():
 
-    def __init__(self, db_obj):
+    def __init__(self, db_obj,close_ui):
         # self.ui_obj=ui_obj
         # self.sheet_id = 900
         self.db_obj = db_obj
+        self.close_ui = close_ui
         self.data = None
         self.max_cameras = 12
         self.max_width = 5000
         self.max_projectors = 6
-
+        self.retry_get_date = 0
         self.dummy_dict = {'PLATE_ID': 'ABC12345A', 'ORDER_ID': '123456789', 'HEAT_ID': '123456', 'QC_STANDARD': 'ASTM450', 'LENGHT': '6040', 'WIDTH': '2020', 'THICKNESS': '25.23', 'LENGHT_ORDER': '6000', 'WIDTH_ORDER': '2000', 'THICKNESS_ORDER': '25', 'speed': '1500'}
 
     def ret_sheet_details(self):
@@ -83,14 +88,13 @@ class connection_level2():
             else:
                 res[k] = cleaned_data[indices[i]+len(k):]
                 res[k] = re.sub("[^.0-9]", "", res[k])
-        last_plate = self.db_obj.report_last_sheets(count=1)
-        if last_plate:
-            last_plate_id = last_plate[0].get_id()
-            if res['PLATE_ID'] == last_plate_id:
-                date = date_funcs.get_date(folder_path=True)
-                time = date_funcs.get_time(folder_path=True)
-                date_time = '{}_{}'.format(date, time)
-                res['PLATE_ID'] += '_{}'.format(date_time)
+        last_plate = self.db_obj.report_last_sheets(count=1)[0]
+        last_plate_id = last_plate.get_id()
+        if res['PLATE_ID'] == last_plate_id:
+            date = date_funcs.get_date(folder_path=True)
+            time = date_funcs.get_time(folder_path=True)
+            date_time = '{}_{}'.format(date, time)
+            res['PLATE_ID'] = '_{}'.format(date_time)
         self.data = res
 
     def connect(self):
@@ -128,17 +132,27 @@ class connection_level2():
             print('Error open port')
 
     def get_data(self):
-        while 1:
-            try:
-                conn,addr=self.socket.accept()
-                data=conn.recv(100000)
-        
-                conn.send(data)
-                self.convert_data(data)
-                # print('gg')
-            except Exception as e:
-                # print(e)
-                pass
+        try:
+            t1 = datetime.now()
+            conn,addr=self.socket.accept()
+            data=conn.recv(100000)
+            conn.send(data)
+            self.convert_data(data)
+            self.retry_get_date = 0
+
+        except:
+            self.retry_get_date+=1
+            if self.retry_get_date<10:
+                self.create_connection()
+                print('ERROR Level2 Get date')
+            # log.warning('Level2 connection Error')
+            time.sleep(1)
+
+
+        if self.close_ui:
+            threading.Timer(1,self.get_data).start()
+               
+
 
 if __name__=='__main__':
 

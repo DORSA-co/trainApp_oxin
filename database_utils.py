@@ -3,7 +3,12 @@ import database
 import datetime
 from Sheet import Sheet
 import os
-from backend import pathStructure, binary_model_funcs, localization_model_funcs, yolo_model_funcs
+from backend import (
+    pathStructure,
+    binary_model_funcs,
+    localization_model_funcs,
+    yolo_model_funcs,
+)
 import texts
 import texts_codes
 import inspect
@@ -11,9 +16,13 @@ import inspect
 
 class dataBaseUtils:
     def __init__(self, ui_obj, user_name="root", password="Dorsa-1400"):
-        if ui_obj!='Null':
+        if ui_obj != "Null":
             self.db = database.dataBase(
-                user_name, password, "localhost", "saba_database", logger_obj=ui_obj.logger
+                user_name,
+                password,
+                "localhost",
+                "saba_database",
+                logger_obj=ui_obj.logger,
             )
         else:
             self.db = database.dataBase(
@@ -32,18 +41,17 @@ class dataBaseUtils:
         self.plc = "plc_path"
         self.storage_settings = "storage_settings"
         self.ui_obj = ui_obj
-        self.piplines_evaluation_info='piplines_info'
-       #________________________
-        self.piplines='piplines'
-        self.binary_model='binary_models'
-        self.classification='classification_models'
-        self.localiztion='localization_models'
-        self.yolo='yolo_models'
+        self.piplines_evaluation_info = "piplines_info"
+        # ________________________
+        self.piplines = "piplines"
+        self.binary_model = "binary_models"
+        self.classification = "classification_models"
+        self.localiztion = "localization_models"
+        self.yolo = "yolo_models"
 
-        
-        self.piplines_name='name'
-        self.weights_path='weights_path'
-    
+        self.piplines_name = "name"
+        self.weights_path = "weights_path"
+
     def check_table_exist(self, table_name):
         ret = self.db.check_table_exist(table_name)
         return ret
@@ -275,17 +283,14 @@ class dataBaseUtils:
             return []
 
     def ret_sign_defect_table(self):
-
         res, sign = self.db.search(self.sign_tables, "id", "0")
 
         return sign[0]["defects_info"]
 
     def update_sign_table(self, col_name, value, id="id", id_value=0):
-
         self.db.update_record(self.sign_tables, col_name, value, id, id_value)
 
     def load_cam_params(self, input_camera_id):
-
         try:
             res, record = self.db.search(self.table_cameras, "id", input_camera_id)
             record = record[0]
@@ -329,29 +334,35 @@ class dataBaseUtils:
         # validation
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
-                message=texts.MESSEGES["database_get_bmodels"]["en"]+'  '+type_model,
-                code=texts_codes.SubTypes['database_get_bmodels'],
-                level=1
+                message=texts.MESSEGES["database_get_bmodels"]["en"]
+                + "  "
+                + type_model,
+                code=texts_codes.SubTypes["database_get_bmodels"],
+                level=1,
             )
             return True, bmodels
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"]+'  '+type_model,
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"]
+                + "  "
+                + type_model,
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_get_bmodels_failed"]["en"]+'  '+type_model, 
-                code=texts_codes.SubTypes['database_get_bmodels_failed'],
-                level=4
+                message=texts.ERRORS["database_get_bmodels_failed"]["en"]
+                + "  "
+                + type_model,
+                code=texts_codes.SubTypes["database_get_bmodels_failed"],
+                level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False, bmodels
-    
+
     def add_binary_model_record(self, params):
         """this function is used to add new binary model parameters to database
 
@@ -378,29 +389,28 @@ class dataBaseUtils:
         # validation
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
-                message=texts.MESSEGES["database_add_bmodel"]["en"], 
-                code=texts_codes.SubTypes['database_add_bmodel'],
-                level=1
+                message=texts.MESSEGES["database_add_bmodel"]["en"],
+                code=texts_codes.SubTypes["database_add_bmodel"],
+                level=1,
             )
             return True
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"], 
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_add_bmodel_failed"]["en"], 
-                code=texts_codes.SubTypes['database_add_bmodel_failed'],
-                level=4
+                message=texts.ERRORS["database_add_bmodel_failed"]["en"],
+                code=texts_codes.SubTypes["database_add_bmodel_failed"],
+                level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False
-
 
     def search_binary_model_by_filter(
         self,
@@ -444,24 +454,24 @@ class dataBaseUtils:
         # validation
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
-                message=texts.MESSEGES["database_get_bmodels"]["en"], 
-                code=texts_codes.SubTypes['database_get_bmodels'],
-                level=1
+                message=texts.MESSEGES["database_get_bmodels"]["en"],
+                code=texts_codes.SubTypes["database_get_bmodels"],
+                level=1,
             )
             return True, record
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
                 message=texts.ERRORS["database_conection_failed"]["en"],
-                code=texts_codes.SubTypes['database_conection_failed'], 
-                level=4
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_get_bmodels_failed"]["en"], 
-                code=texts_codes.SubTypes['database_get_bmodels_failed'],
-                level=4
+                message=texts.ERRORS["database_get_bmodels_failed"]["en"],
+                code=texts_codes.SubTypes["database_get_bmodels_failed"],
+                level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
@@ -469,7 +479,9 @@ class dataBaseUtils:
 
     # ________________________________________________________________________________________________________
     # localization models
-    def get_localization_models(self, count=False, limit=False, limit_size=20, offset=0):
+    def get_localization_models(
+        self, count=False, limit=False, limit_size=20, offset=0
+    ):
         """this function is used to get localization models info list from database
 
         :param count: a boolean determining whether to get count of table, defaults to False, defaults to False
@@ -483,31 +495,41 @@ class dataBaseUtils:
         :return: list of localization model info (in dict)
         :rtype: list of dicts
         """
-        
-        res, lmodels = self.db.get_all_content('localization_models', count=count, limit=limit, limit_size=limit_size, offset=offset, reverse_order=True)
+
+        res, lmodels = self.db.get_all_content(
+            "localization_models",
+            count=count,
+            limit=limit,
+            limit_size=limit_size,
+            offset=offset,
+            reverse_order=True,
+        )
         # validation
         if res == database.SUCCESSFULL:
-            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['database_get_lmodels']['en'],
-                                                code=texts_codes.SubTypes['database_get_lmodels'],
-                                                level=1
-                                            )
+            self.ui_obj.logger.create_new_log(
+                message=texts.MESSEGES["database_get_lmodels"]["en"],
+                code=texts_codes.SubTypes["database_get_lmodels"],
+                level=1,
+            )
             return True, lmodels
-        
+
         elif res == database.CONNECTION_ERROR:
-            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_conection_failed']['en'], 
-                                                code=texts_codes.SubTypes['database_conection_failed'],
-                                                level=4
-                                            )
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
+            )
         # exception error
         else:
-            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_get_lmodels_failed']['en'],
-                                                code=texts_codes.SubTypes['database_get_lmodels_failed'],
-                                                level=4
-                                            )
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_get_lmodels_failed"]["en"],
+                code=texts_codes.SubTypes["database_get_lmodels_failed"],
+                level=4,
+            )
             self.ui_obj.logger.create_new_log(message=res, level=4)
-        
+
         return False, lmodels
-    
+
     def add_localization_model_record(self, params):
         """this function is used to add new localization model parameters to database
 
@@ -534,30 +556,32 @@ class dataBaseUtils:
         # validation
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
-                message=texts.MESSEGES["database_add_lmodel"]["en"], 
-                code=texts_codes.SubTypes['database_add_lmodel'],
-                level=1
+                message=texts.MESSEGES["database_add_lmodel"]["en"],
+                code=texts_codes.SubTypes["database_add_lmodel"],
+                level=1,
             )
             return True
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"], 
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_add_lmodel_failed"]["en"], 
-                code=texts_codes.SubTypes['database_add_lmodel_failed'],
-                level=4
+                message=texts.ERRORS["database_add_lmodel_failed"]["en"],
+                code=texts_codes.SubTypes["database_add_lmodel_failed"],
+                level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False
-   
-    def search_localization_model_by_filter(self, parms, cols, limit=False, limit_size=20, offset=0, count=False):
+
+    def search_localization_model_by_filter(
+        self, parms, cols, limit=False, limit_size=20, offset=0, count=False
+    ):
         """this function is used to search in localization models table by filtering params
 
         :param parms: filtering parameters
@@ -578,26 +602,37 @@ class dataBaseUtils:
         :rtype: _type_
         """
 
-        res, record = self.db.search_with_range('localization_models', cols, parms, limit=limit, limit_size=limit_size, offset=offset, count=count)
+        res, record = self.db.search_with_range(
+            "localization_models",
+            cols,
+            parms,
+            limit=limit,
+            limit_size=limit_size,
+            offset=offset,
+            count=count,
+        )
         # validation
         if res == database.SUCCESSFULL:
-            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['database_get_lmodels']['en'],
-                                                code=texts_codes.SubTypes['database_get_lmodels'],
-                                                level=1)
+            self.ui_obj.logger.create_new_log(
+                message=texts.MESSEGES["database_get_lmodels"]["en"],
+                code=texts_codes.SubTypes["database_get_lmodels"],
+                level=1,
+            )
             return True, record
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"], 
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
-            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_get_lmodels_failed']['en'], 
-                                                code=texts_codes.SubTypes['database_get_lmodels_failed'],
-                                                level=4
-                                            )
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_get_lmodels_failed"]["en"],
+                code=texts_codes.SubTypes["database_get_lmodels_failed"],
+                level=4,
+            )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False, record
@@ -618,31 +653,41 @@ class dataBaseUtils:
         :return: list of yolo model info (in dict)
         :rtype: list of dicts
         """
-        
-        res, ymodels = self.db.get_all_content('yolo_models', count=count, limit=limit, limit_size=limit_size, offset=offset, reverse_order=True)
+
+        res, ymodels = self.db.get_all_content(
+            "yolo_models",
+            count=count,
+            limit=limit,
+            limit_size=limit_size,
+            offset=offset,
+            reverse_order=True,
+        )
         # validation
         if res == database.SUCCESSFULL:
-            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['database_get_ymodels']['en'],
-                                                code=texts_codes.SubTypes['database_get_ymodels'],
-                                                level=1
-                                            )
+            self.ui_obj.logger.create_new_log(
+                message=texts.MESSEGES["database_get_ymodels"]["en"],
+                code=texts_codes.SubTypes["database_get_ymodels"],
+                level=1,
+            )
             return True, ymodels
-        
+
         elif res == database.CONNECTION_ERROR:
-            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_conection_failed']['en'], 
-                                                code=texts_codes.SubTypes['database_conection_failed'],
-                                                level=4
-                                            )
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
+            )
         # exception error
         else:
-            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_get_ymodels_failed']['en'],
-                                                code=texts_codes.SubTypes['database_get_ymodels_failed'],
-                                                level=4
-                                            )
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_get_ymodels_failed"]["en"],
+                code=texts_codes.SubTypes["database_get_ymodels_failed"],
+                level=4,
+            )
             self.ui_obj.logger.create_new_log(message=res, level=4)
-        
+
         return False, ymodels
-    
+
     def add_yolo_model_record(self, params):
         """this function is used to add new yolo model parameters to database
 
@@ -669,30 +714,32 @@ class dataBaseUtils:
         # validation
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
-                message=texts.MESSEGES["database_add_ymodel"]["en"], 
-                code=texts_codes.SubTypes['database_add_ymodel'],
-                level=1
+                message=texts.MESSEGES["database_add_ymodel"]["en"],
+                code=texts_codes.SubTypes["database_add_ymodel"],
+                level=1,
             )
             return True
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"], 
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_add_ymodel_failed"]["en"], 
-                code=texts_codes.SubTypes['database_add_ymodel_failed'],
-                level=4
+                message=texts.ERRORS["database_add_ymodel_failed"]["en"],
+                code=texts_codes.SubTypes["database_add_ymodel_failed"],
+                level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False
-   
-    def search_yolo_model_by_filter(self, parms, cols, limit=False, limit_size=20, offset=0, count=False):
+
+    def search_yolo_model_by_filter(
+        self, parms, cols, limit=False, limit_size=20, offset=0, count=False
+    ):
         """this function is used to search in yolo models table by filtering params
 
         :param parms: filtering parameters
@@ -713,26 +760,37 @@ class dataBaseUtils:
         :rtype: _type_
         """
 
-        res, record = self.db.search_with_range('yolo_models', cols, parms, limit=limit, limit_size=limit_size, offset=offset, count=count)
+        res, record = self.db.search_with_range(
+            "yolo_models",
+            cols,
+            parms,
+            limit=limit,
+            limit_size=limit_size,
+            offset=offset,
+            count=count,
+        )
         # validation
         if res == database.SUCCESSFULL:
-            self.ui_obj.logger.create_new_log(message=texts.MESSEGES['database_get_ymodels']['en'],
-                                                code=texts_codes.SubTypes['database_get_ymodels'],
-                                                level=1)
+            self.ui_obj.logger.create_new_log(
+                message=texts.MESSEGES["database_get_ymodels"]["en"],
+                code=texts_codes.SubTypes["database_get_ymodels"],
+                level=1,
+            )
             return True, record
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"], 
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
-            self.ui_obj.logger.create_new_log(message=texts.ERRORS['database_get_ymodels_failed']['en'], 
-                                                code=texts_codes.SubTypes['database_get_ymodels_failed'],
-                                                level=4
-                                            )
+            self.ui_obj.logger.create_new_log(
+                message=texts.ERRORS["database_get_ymodels_failed"]["en"],
+                code=texts_codes.SubTypes["database_get_ymodels_failed"],
+                level=4,
+            )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
         return False, record
@@ -767,23 +825,23 @@ class dataBaseUtils:
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
                 message=texts.MESSEGES["database_get_classmodels"]["en"],
-                code=texts_codes.SubTypes['database_get_classmodels'],
-                level=1
+                code=texts_codes.SubTypes["database_get_classmodels"],
+                level=1,
             )
             return True, bmodels
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"], 
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
                 message=texts.ERRORS["database_get_classmodels_failed"]["en"],
-                code=texts_codes.SubTypes['database_get_classmodels_failed'],
-                level=4
+                code=texts_codes.SubTypes["database_get_classmodels_failed"],
+                level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
@@ -825,22 +883,22 @@ class dataBaseUtils:
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
                 message=texts.MESSEGES["database_get_filtered_cls_models"]["en"],
-                code=texts_codes.SubTypes['database_get_filtered_cls_models'],
+                code=texts_codes.SubTypes["database_get_filtered_cls_models"],
                 level=1,
             )
             return True, record
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"], 
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
                 message=texts.ERRORS["database_get_filtered_cls_models_failed"]["en"],
-                code=texts_codes.SubTypes['database_get_filtered_cls_models_failed'],
+                code=texts_codes.SubTypes["database_get_filtered_cls_models_failed"],
                 level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
@@ -857,24 +915,24 @@ class dataBaseUtils:
         # validation
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
-                message=texts.MESSEGES["database_get_defects"]["en"], 
-                code=texts_codes.SubTypes['database_get_defects'],
-                level=1
+                message=texts.MESSEGES["database_get_defects"]["en"],
+                code=texts_codes.SubTypes["database_get_defects"],
+                level=1,
             )
             return True, defects
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"], 
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
                 message=texts.ERRORS["database_get_defects_failed"]["en"],
-                code=texts_codes.SubTypes['database_get_defects_failed'],
-                level=4
+                code=texts_codes.SubTypes["database_get_defects_failed"],
+                level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
@@ -898,23 +956,23 @@ class dataBaseUtils:
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
                 message=texts.MESSEGES["database_get_defect_groups"]["en"],
-                code=texts_codes.SubTypes['database_get_defect_groups'], 
-                level=1
+                code=texts_codes.SubTypes["database_get_defect_groups"],
+                level=1,
             )
             return True, record
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
                 message=texts.ERRORS["database_conection_failed"]["en"],
-                code=texts_codes.SubTypes['database_conection_failed'], 
-                level=4
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
                 message=texts.ERRORS["database_get_defect_groups_failed"]["en"],
-                code=texts_codes.SubTypes['database_get_defect_groups_failed'],
-                level=4
+                code=texts_codes.SubTypes["database_get_defect_groups_failed"],
+                level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
@@ -935,24 +993,24 @@ class dataBaseUtils:
         # validation
         if res == database.SUCCESSFULL:
             self.ui_obj.logger.create_new_log(
-                message=texts.MESSEGES["database_get_datasets"]["en"], 
-                code=texts_codes.SubTypes['database_get_datasets'],
-                level=1
+                message=texts.MESSEGES["database_get_datasets"]["en"],
+                code=texts_codes.SubTypes["database_get_datasets"],
+                level=1,
             )
             return True, datasets
 
         elif res == database.CONNECTION_ERROR:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_conection_failed"]["en"], 
-                code=texts_codes.SubTypes['database_conection_failed'],
-                level=4
+                message=texts.ERRORS["database_conection_failed"]["en"],
+                code=texts_codes.SubTypes["database_conection_failed"],
+                level=4,
             )
         # exception error
         else:
             self.ui_obj.logger.create_new_log(
-                message=texts.ERRORS["database_get_datasets_failed"]["en"], 
-                code=texts_codes.SubTypes['database_get_datasets_failed'],
-                level=4
+                message=texts.ERRORS["database_get_datasets_failed"]["en"],
+                code=texts_codes.SubTypes["database_get_datasets_failed"],
+                level=4,
             )
             self.ui_obj.logger.create_new_log(message=res, level=4)
 
@@ -963,7 +1021,6 @@ class dataBaseUtils:
     # ___________________________________________________________________________________
 
     def search_user(self, input_user_name):
-
         try:
             res, record = self.db.search(
                 self.table_user, "user_name", input_user_name, int_type=False
@@ -972,19 +1029,17 @@ class dataBaseUtils:
             res, record_ds = self.db.search(
                 self.datasets_table, "id", record["default_dataset"], int_type=False
             )
-            if record_ds !=[]:
+            if record_ds != []:
                 record_ds = record_ds[0]
                 record["default_dataset"] = record_ds["name"]
             else:
-                record["default_dataset"] = 'default_dataset'
-                
+                record["default_dataset"] = "default_dataset"
 
             return record
         except:
             return []
 
     def get_default_dataset(self, user_name):
-
         try:
             res, record = self.db.search(
                 self.table_user, "user_name", user_name, int_type=False
@@ -993,7 +1048,6 @@ class dataBaseUtils:
 
             return record["default_dataset"]
         except:
-
             return []
 
     def get_dateset_name(self, id):
@@ -1001,18 +1055,15 @@ class dataBaseUtils:
             res, record = self.db.search(self.datasets_table, "id", id, int_type=False)
             record = record[0]
 
-
             return record["name"]
         except:
             # #print('exept get_dateset_name database utils')
             return []
 
     def get_path_dataset(self, dataset_id):
-
         try:
             res, record = self.db.search(self.dataset, "id", dataset_id, int_type=False)
             record = record[0]
-
 
             return record["path"]
         except:
@@ -1020,31 +1071,29 @@ class dataBaseUtils:
             return []
 
     def get_all_datasets(self):
-
         records = self.db.report_last(self.dataset, "id", 99, side="ASC")
 
         return records
 
     def get_user_databases(self, user_name, default=True):
-
         try:
             res, record = self.db.search(
                 self.dataset, "user_own", user_name, int_type=False
             )
 
             if default:
-                res, default_record = self.db.search(self.dataset, "id", 0, int_type=False)
+                res, default_record = self.db.search(
+                    self.dataset, "id", 0, int_type=False
+                )
                 record += default_record
 
             default_ds = self.get_default_dataset(user_name)
-
 
             for i in range(len(record)):
                 if str(record[i]["id"]) == default_ds:
                     break
 
             record.insert(0, record.pop(i))
-
 
             return record
 
@@ -1053,13 +1102,11 @@ class dataBaseUtils:
             return []
 
     def update_dataset_default(self, dataset_id, user_name):
-
         self.db.update_record(
             self.table_user, "default_dataset", str(dataset_id), "user_name", user_name
         )
 
     def add_dataset(self, data):
-
         # try:
         res = self.db.add_record(
             data,
@@ -1075,41 +1122,63 @@ class dataBaseUtils:
     def set_language(self, name):
         self.db.update_record(self.setting_tabel, "language", str(name), "id", "0")
 
-
     def set_language_font(self, lan, font):
         self.db.update_record(self.setting_tabel, "language", str(lan), "id", "0")
         self.db.update_record(self.setting_tabel, "font_style", str(font), "id", "0")
 
-    def set_plc_params(self, 
-                    manual_plc,
-                    plc_update_time, 
-                    wind_duration, 
-                    automatic_wind, 
-                    auto_wind_intervals):
-        self.db.update_record(self.setting_tabel, "manual_plc", str(manual_plc), "id", "0")
-        self.db.update_record(self.setting_tabel, "plc_update_time", str(plc_update_time), "id", "0")
-        self.db.update_record(self.setting_tabel, "wind_duration", str(wind_duration), "id", "0")
-        self.db.update_record(self.setting_tabel, "automatic_wind", str(automatic_wind), "id", "0")
-        self.db.update_record(self.setting_tabel, "auto_wind_intervals", str(auto_wind_intervals), "id", "0")
+    def set_plc_params(
+        self,
+        manual_plc,
+        plc_update_time,
+        wind_duration,
+        automatic_wind,
+        auto_wind_intervals,
+    ):
+        self.db.update_record(
+            self.setting_tabel, "manual_plc", str(manual_plc), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "plc_update_time", str(plc_update_time), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "wind_duration", str(wind_duration), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "automatic_wind", str(automatic_wind), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel,
+            "auto_wind_intervals",
+            str(auto_wind_intervals),
+            "id",
+            "0",
+        )
 
     def set_camera_params(self, manual_cameras, frame_rate, live_update_time):
-        self.db.update_record(self.setting_tabel, "manual_cameras", str(manual_cameras), "id", "0")
-        self.db.update_record(self.setting_tabel, "frame_rate", str(frame_rate), "id", "0")
-        self.db.update_record(self.setting_tabel, "live_update_time", str(live_update_time), "id", "0")
+        self.db.update_record(
+            self.setting_tabel, "manual_cameras", str(manual_cameras), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "frame_rate", str(frame_rate), "id", "0"
+        )
+        self.db.update_record(
+            self.setting_tabel, "live_update_time", str(live_update_time), "id", "0"
+        )
 
     def load_settings(self):
         res, record = self.db.search(self.setting_tabel, "id", "0")
         record = record[0]
-        return (record["language"],
-            record['font_style'],
-            record['manual_plc'],
-            record['plc_update_time'],
-            record['wind_duration'],
-            record['automatic_wind'],
-            record['auto_wind_intervals'],
-            record['manual_cameras'],
-            record['frame_rate'],
-            record['live_update_time'],
+        return (
+            record["language"],
+            record["font_style"],
+            record["manual_plc"],
+            record["plc_update_time"],
+            record["wind_duration"],
+            record["automatic_wind"],
+            record["auto_wind_intervals"],
+            record["manual_cameras"],
+            record["frame_rate"],
+            record["live_update_time"],
         )
 
     def load_plc_parms(self):
@@ -1143,7 +1212,6 @@ class dataBaseUtils:
 
         try:
             for _, param in enumerate(plc_parms.keys()):
-
                 try:
                     min_value = str(int(plc_parms[param][1]))
                 except:
@@ -1204,51 +1272,53 @@ class dataBaseUtils:
         except:
             return False
 
-
-    def get_pipline_names(self,spec_name=False):
-        names=[]
-        spec_names=[]
+    def get_pipline_names(self, spec_name=False):
+        names = []
+        spec_names = []
         records = self.db.report_last(self.piplines, "name", 999, side="ASC")
         for name in records:
-            names.append(name['name'])
-            if spec_name!=False:
-                if name['user_own']==spec_name:
-                    spec_names.append(name['name'])
+            names.append(name["name"])
+            if spec_name != False:
+                if name["user_own"] == spec_name:
+                    spec_names.append(name["name"])
 
-        if spec_name==False:
+        if spec_name == False:
             return names
-        
+
         else:
-            return names,spec_names
-    
+            return names, spec_names
 
-
-
-    def add_pipline(self,data):
+    def add_pipline(self, data):
         try:
             res = self.db.add_record(
                 data,
                 table_name=self.piplines,
-                parametrs="(name,user_own,path,binary_weight_path,localization_weight_path,classification_weight_path)",
-                len_parameters=6,
+                parametrs="(name,user_own,binary_weight_path,localization_weight_path,classification_weight_path,yolo_weight_path,pipline_type)",
+                len_parameters=7,
             )
             return True
         except:
             return False
 
+    def remove_pipline(self, name):
+        res = self.db.remove_record(col_name="name", id=name, table_name=self.piplines)
 
-
-    def remove_pipline(self,name):
-        
-        res = self.db.remove_record(col_name='name',id=name,table_name=self.piplines)
-        return res
-
-
-    def get_selected_pipline_record(self,value):
-        pipline_info=self.db.search(table_name=self.piplines,param_name=self.piplines_name,value=value,int_type=False)
+    def get_selected_pipline_record(self, value):
+        pipline_info = self.db.search(
+            table_name=self.piplines,
+            param_name=self.piplines_name,
+            value=value,
+            int_type=False,
+        )
         return pipline_info
-    def get_model(self,table_name,value):
-        model_info=self.db.search(table_name=table_name,param_name=self.weights_path,value=value,int_type=False)
+
+    def get_model(self, table_name, value):
+        model_info = self.db.search(
+            table_name=table_name,
+            param_name=self.weights_path,
+            value=value,
+            int_type=False,
+        )
         return model_info
 
     def get_json_parent_path(self, value=0):
@@ -1320,7 +1390,7 @@ class dataBaseUtils:
     #     hh, mm, _ = record["time"].split(":")
     #     date=datetime.date(int(y), int(m), int(d))
     #     time=datetime.time(int(hh), int(mm))
-        
+
     #     pipline_name=record['pipline_name']
     #     binary_model=record['binary_model']
     #     localization_model=record['localization_model']
@@ -1341,9 +1411,8 @@ class dataBaseUtils:
     # #____________________________________JJ ZONE
 
 
-
 if __name__ == "__main__":
-    db = dataBaseUtils('Null')
+    db = dataBaseUtils("Null")
     ids = db.get_defects_id()
     print(ids)
     # db.get_pipline_names()
@@ -1361,17 +1430,17 @@ if __name__ == "__main__":
     # #print('name',name)
     # #print('defe',defects)
 
-    # x=db.get_sign('defects_info')
+# x=db.get_sign('defects_info')
 
-    # db.update_sign_table('defects_info','4')
-    # d=db.get_user_databases('ali')
-    # data=('dataset_name','ali','adwad')
-    # d=db.add_dataset(data)
-    # #print(d)
-    # #print(x)
-    # name,defects=db.get_defects()
-    # #print('name',name)
-    # #print('defe',defects)
+# db.update_sign_table('defects_info','4')
+# d=db.get_user_databases('ali')
+# data=('dataset_name','ali','adwad')
+# d=db.add_dataset(data)
+# #print(d)
+# #print(x)
+# name,defects=db.get_defects()
+# #print('name',name)
+# #print('defe',defects)
 
-    # db.get_path(['997', 'up', (5, 5)])
-    # pass
+# db.get_path(['997', 'up', (5, 5)])
+# pass

@@ -1,6 +1,8 @@
-!First GUI
 
-<!-- The bellow command will remove git version control on folder (Train_modules/deep_utils/__pycache__/) which you had version control on them. the files which you added to .gitignore before of running git control -->
-git rm -r --cached Train_modules/deep_utils/__pycache__/
+## First Run
 
-![alt text](themes/sample2.PNG)
+- Clone train_app
+- clone oxin_storage_app in the same directory
+- import databases from database folder
+- change password in both database_utils.py in train_app and oxin_storage_app
+- Enjoy it !
