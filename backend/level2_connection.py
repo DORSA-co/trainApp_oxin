@@ -8,6 +8,7 @@ import logging as log
 import time
 import threading
 from datetime import datetime
+import time
 try:
     import date_funcs
 except:
@@ -60,6 +61,15 @@ class connection_level2():
             projectors = int(np.ceil(float(self.data['WIDTH'])*self.max_projectors/self.max_width))
             projectors = 6
             cameras = 12
+            t = time.time()
+            last_plate = self.db_obj.report_last_sheets(count=1)[0]
+            last_plate_id = last_plate.get_id()
+            if self.data['PLATE_ID'] == last_plate_id:
+                date = date_funcs.get_date(folder_path=True)
+                time = date_funcs.get_time(folder_path=True)
+                date_time = '{}_{}'.format(date, time)
+                self.data['PLATE_ID'] = '_{}'.format(date_time)
+            print('level2 db time: ', (time.time() - t)*1000)
             return cameras, projectors, self.data
         else:
             res =self.dummy_dict.copy()
@@ -88,13 +98,7 @@ class connection_level2():
             else:
                 res[k] = cleaned_data[indices[i]+len(k):]
                 res[k] = re.sub("[^.0-9]", "", res[k])
-        last_plate = self.db_obj.report_last_sheets(count=1)[0]
-        last_plate_id = last_plate.get_id()
-        if res['PLATE_ID'] == last_plate_id:
-            date = date_funcs.get_date(folder_path=True)
-            time = date_funcs.get_time(folder_path=True)
-            date_time = '{}_{}'.format(date, time)
-            res['PLATE_ID'] = '_{}'.format(date_time)
+        
         self.data = res
 
     def connect(self):
@@ -156,7 +160,7 @@ class connection_level2():
 
 if __name__=='__main__':
 
-    conn=connection_level2()
+    conn=connection_level2(None, None)
     conn.create_connection()
     # cameras,projectors,details = conn.get_full_info()
     #print(cameras,projectors,details )
