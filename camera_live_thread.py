@@ -308,8 +308,8 @@ class ImageManager(sQObject):
         exec(s) 
         
     def join_all(self):
-        for t in self.read_thread:
-            t.join()
+        # for t in self.read_thread:
+        #     t.join()
         self.read_thread = []
 
     def start(self, loop=False):

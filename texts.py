@@ -2627,7 +2627,7 @@ def set_alignment(self, lang):
         self.label_36.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         # self.BTN_set_pipline_in_PBT_page.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         # self.BTN_evaluate_image_in_PBT_page_2.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.GBox_model_evaluation_details.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        # self.GBox_model_evaluation_details.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_37.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_4.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 

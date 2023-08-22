@@ -385,7 +385,7 @@ class API:
         
         self.read_storage_paths_from_db()
         self.create_diskMemory_objs()
-        self.create_storage_window()
+        # self.create_storage_window()
         self.start_storage_checking()
         
 
@@ -408,8 +408,6 @@ class API:
 
         self.ui.pipline_name.textChanged.connect(self.check_name_pipline)
 
-
-
     def remove_pypylon_chache(self):
         try:
             path = os.getcwd()
@@ -422,7 +420,6 @@ class API:
             os.chdir(path)
         except:
             print('ERROR Try remove cache pypylon ')
-
 
     def read_storage_paths_from_db(self):
         res, storage_settings = self.db.load_storage_setting()
@@ -450,6 +447,14 @@ class API:
         if not self.s_api:
             self.s_api = storage_api(self.storage_win)
 
+    def show_storage_window(self):
+        self.storage_win.set_language(self.language)
+        self.storage_win.show()
+        self.storage_win.show_main_page()
+
+    def run_storage(self):
+        os.system("/bin/python3 ../oxin_storage_management/storage_main_UI.py")
+
     def check_storage(self):
         self.ssd_image_file_manager.refresh()
         self.hdd_file_manager.refresh()
@@ -458,21 +463,23 @@ class API:
 
         if self.ssd_image_file_manager:
             ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
+            print('ssd image percent: ', ssd_image_percent)
+
             if ssd_image_percent > self.storage_upper_limit:
                 try:
-                    self.storage_win.set_language(self.language)
-                    self.storage_win.show()
-                    self.s_api.clear_filters()
-                    if self.sensor:
-                        sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
-                        self.s_api.add_filter(sheet_id)
-                    self.s_api.start()
+                    threading.Thread(target = self.run_storage).start()
+                    # self.show_storage_window()
+                    # self.s_api.clear_filters()
+                    # if self.sensor:
+                    #     sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
+                    #     self.s_api.add_filter(sheet_id)
+                    # self.s_api.start()
                     self.ui.logger.create_new_log(
                         code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"], level=1
                     )
                 except:
                     self.ui.logger.create_new_log(
-                        code=texts_codes.SubTypes['Storage_open_failed'], message=texts.MESSEGES["Storage_open_failed"]["en"], level=1
+                        code=texts_codes.SubTypes['Storage_open_failed'], message=texts.MESSEGES["Storage_open_failed"]["en"], level=5
                     )
                     
     def update_storage_charts(self):
@@ -1259,6 +1266,8 @@ class API:
 
         # ______________ JJ
 
+        # self.ui.storage_btn.clicked.connect(self.show_storage_window)
+
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
         self.ui.load_sheets_win.btn_refresh.clicked.connect(
             partial(self.show_sheet_loader)
@@ -1931,7 +1940,7 @@ class API:
             self.thechnicals_backend[self.current_technical_side].update_pointer(
                 pt
             )  # update corespond backend mouse position
-            self.refresh_thechnical(fp=5)
+            self.refresh_thechnical(fp=1)
             self.show_pointer_position()
 
     def refresh_thechnical(self, fp):
@@ -6856,8 +6865,9 @@ class API:
                 # ret = self.my_plc.set_value(self.dict_spec_pathes["MemUpValve"], str(mode))
                 t1 = time.time()
                 threading.Thread(target=self.my_plc.set_value,args=(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))).start()
+                threading.Thread(target=self.my_plc.set_value,args=(self.dict_spec_pathes["MemUpValve"], str(self.wind_mode))).start()
                 # ret = self.my_plc.set_value(self.dict_spec_pathes["MemDownValve"], str(self.wind_mode))
-                print('set_wind',time.time()-t1)
+                # print('set_wind',time.time()-t1)
                 # if ret and mode:
                 if mode:
                     self.ui.start_wind()
