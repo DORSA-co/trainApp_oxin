@@ -556,16 +556,18 @@ class sheetOverView:
     #
     # _____________________________________________________________________________________________________________________________
     def fit(self, pt):
-
+        
         real_img_x, real_img_y = (
             pt[0],
             pt[1],
         )  # normalize position of  mouse clicl event in real_img_window
         real_img_x, real_img_y = real_img_x - 0.5, real_img_y - 0.5
+        
 
         x, y = self.pt
-        cx = x / (self.cell_shape[1] - 1)
-        cy = y / (self.cell_shape[0] - 1)
+        
+        cx = x / (self.cell_shape[1] )
+        cy = y / (self.cell_shape[0] )
 
         cx = cx + real_img_x
         cy = cy + real_img_y
@@ -575,6 +577,13 @@ class sheetOverView:
 
         new_x = int(idx_x * (self.cell_shape[1]) + self.cell_shape[1] // 2)
         new_y = int(idx_y * (self.cell_shape[0]) + self.cell_shape[0] // 2)
+
+        
+        res = self.sheet_img.copy()
+        res = cv2.circle(res, (self.pt), 15, color=(255,0,0), thickness=-1)
+        res = cv2.circle(res, (new_x, new_y), 15, color=(0,0,255), thickness=-1)
+        cv2.imwrite('res.png', res)
+
 
         self.pt = (new_x, new_y)
         self.is_fit = True
