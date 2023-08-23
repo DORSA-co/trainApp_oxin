@@ -9,7 +9,7 @@ class Loading_UI(QWidget, ui):
     global widgets
     widgets = ui
 
-    def __init__(self) -> None:
+    def __init__(self, lang) -> None:
         super(Loading_UI, self).__init__()
         self.setupUi(self)
 
@@ -19,10 +19,13 @@ class Loading_UI(QWidget, ui):
         self.setWindowFlags(flags)
         self.setAttribute(Qt.WA_TranslucentBackground)
 
-        self.movie = QMovie("Loading_page/loading1.gif")
+        self.movie = QMovie("Loading_page/loading6.gif")
         self.gif_label.setMovie(self.movie)
 
-        self.set_text('Please Waite ...')
+        if lang == 'en':
+            self.set_text('Please Waite ...')
+        else:
+            self.set_text('لطفا منتظر بمانید...')
   
         self.startAnimation()
 
@@ -48,7 +51,10 @@ class Loading_UI(QWidget, ui):
 
 
 if __name__ == "__main__":
-    app = QApplication()
-    win = Loading_UI()
+    app = QApplication(sys.argv)
+    if len(sys.argv) > 1:
+        win = Loading_UI(sys.argv[1])
+    else:
+        win = Loading_UI('en')
     win.show()
     sys.exit(app.exec())

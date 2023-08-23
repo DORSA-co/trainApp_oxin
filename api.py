@@ -95,7 +95,7 @@ from storage_worker import storage_worker
 import time
 
 import getpass
-
+import subprocess
 
 
 WIDTH_TECHNICAL_SIDE = 49 * 12
@@ -353,7 +353,6 @@ class API:
         # ImageProcessing
         self.sheet_imgprocessing_mem = {}
         self.finished_threads = 0
-        self.l = self.db.get_image_processing_params()
 
         # notif manager
 
@@ -381,6 +380,8 @@ class API:
         self.storage_win = None
         self.s_api = None
         self.storage_timer = None
+        self.storage_start_process = None
+        self.storage_show_process = None
 
         
         self.read_storage_paths_from_db()
@@ -447,13 +448,35 @@ class API:
         if not self.s_api:
             self.s_api = storage_api(self.storage_win)
 
-    def show_storage_window(self):
-        self.storage_win.set_language(self.language)
-        self.storage_win.show()
-        self.storage_win.show_main_page()
-
-    def run_storage(self):
-        os.system("/bin/python3 ../oxin_storage_management/storage_main_UI.py")
+    def show_storage_window(self, start=False):
+        # self.storage_win.set_language(self.language)
+        # self.storage_win.show()
+        # self.storage_win.show_main_page()
+        try:
+            if start:
+                if not self.storage_start_process or self.storage_start_process.poll() != None:
+                    if self.storage_show_process and self.storage_show_process.poll() == None:
+                        self.storage_show_process.terminate()
+                    self.storage_start_process = subprocess.Popen(
+                        ['/bin/python3', '../oxin_storage_management/storage_main_UI.py', self.language, str(start)]
+                        )
+                    self.ui.logger.create_new_log(
+                        code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"] + ' start={}'.format(start), level=1
+                    )
+            else:
+                if not self.storage_show_process or self.storage_show_process.poll() != None:
+                    if self.storage_start_process and self.storage_start_process.poll() == None:
+                        return
+                    self.storage_show_process = subprocess.Popen(
+                        ['/bin/python3', '../oxin_storage_management/storage_main_UI.py', self.language, str(start)]
+                        )
+                    self.ui.logger.create_new_log(
+                        code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"] + ' start={}'.format(start), level=1
+                    )
+        except:
+            self.ui.logger.create_new_log(
+                code=texts_codes.SubTypes['Storage_open_failed'], message=texts.MESSEGES["Storage_open_failed"]["en"], level=5
+            )
 
     def check_storage(self):
         self.ssd_image_file_manager.refresh()
@@ -466,21 +489,14 @@ class API:
             print('ssd image percent: ', ssd_image_percent)
 
             if ssd_image_percent > self.storage_upper_limit:
-                try:
-                    threading.Thread(target = self.run_storage).start()
-                    # self.show_storage_window()
-                    # self.s_api.clear_filters()
-                    # if self.sensor:
-                    #     sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
-                    #     self.s_api.add_filter(sheet_id)
-                    # self.s_api.start()
-                    self.ui.logger.create_new_log(
-                        code=texts_codes.SubTypes['Storage_opened'], message=texts.MESSEGES["Storage_opened"]["en"], level=1
-                    )
-                except:
-                    self.ui.logger.create_new_log(
-                        code=texts_codes.SubTypes['Storage_open_failed'], message=texts.MESSEGES["Storage_open_failed"]["en"], level=5
-                    )
+                self.show_storage_window(start=True)
+                # self.show_storage_window()
+                # self.s_api.clear_filters()
+                # if self.sensor:
+                #     sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
+                #     self.s_api.add_filter(sheet_id)
+                # self.s_api.start()
+                
                     
     def update_storage_charts(self):
         self.ui.show_hdd_chart()
@@ -1217,6 +1233,9 @@ class API:
 
     def button_connector(self):
         """this function is used to connet UI buttons to their functionality"""
+
+        self.ui.storage_btn.clicked.connect(lambda: self.show_storage_window(start=False))
+
         # ______________JJ Zone start
         self.ui.BTN_apply_of_binary_classifaction_in_PBT_page.clicked.connect(
             partial(self.apply_selected_model_after_push_applyBTN_in_PBT_page)
@@ -1680,7 +1699,6 @@ class API:
                 message=texts.MESSEGES["No_sheet_load"]["en"],
                 level=1,
             )
-
             return
         self.move_on_list.add(sheets_id, "sheets_id")
         for sheet_id in sheets_id:
@@ -1704,13 +1722,13 @@ class API:
                 selceted_sheets_id
             )  # load inference of Sheet class from database by sheet id
             self.build_sheet_technical(self.sheet)  # build technical sheet
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
             if self.ui.checkBox_suggested_defects.isChecked():
                 self.load_suggestions()
             self.ui.show_sheet_details(
                 self.sheet.get_info_dict()
             )  # show sheet details in UI.details_label
             self.load_filter_params()
-            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
 
             self.ui.logger.create_new_log(
                 code=texts_codes.SubTypes["Sheet_loaded"],
@@ -1746,6 +1764,7 @@ class API:
         if self.finished_threads == self.n_threads:
             self.finished_threads = 0
             self.sheet_imgprocessing_mem[self.sheet.get_id()] = True
+            loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', self.language])
             for side, _ in self.ui.get_technical(name=False).items():
                 self.thechnicals_backend[side].reset_real_imgs()
                 self.thechnicals_backend[side].set_show_bboxes()
@@ -1763,6 +1782,7 @@ class API:
                 self.ui.set_enabel(self.ui.next_coil_btn, True)
                 self.ui.set_enabel(self.ui.prev_coil_btn, True)
                 self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
+            loading_process.terminate()
 
     def load_suggestions(self, state=0):
         if self.ui.checkBox_suggested_defects.isChecked():
@@ -1770,10 +1790,6 @@ class API:
             self.ui.suggested_defects_progressBar.setMaximum(
                 self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe()
             )
-            l = self.db.get_image_processing_params()
-            if l != self.l:
-                for key in self.sheet_imgprocessing_mem.keys():
-                    self.sheet_imgprocessing_mem[key] = False
             jsons_main_path = self.db.get_suggestions_path()
             jsons_path = pathStructure.sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
             if not os.path.exists(jsons_path):
@@ -1785,8 +1801,8 @@ class API:
                 self.ui.set_enabel(self.ui.prev_coil_btn, False)
                 self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
 
-                self.n_threads = 4
-                step = 3
+                self.n_threads = 12
+                step = 1
 
                 self.threads = []
                 self.workers = []
@@ -1823,6 +1839,7 @@ class API:
                     self.threads[-1].start()
 
             else:
+                loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py'])
                 for side, _ in self.ui.get_technical(name=False).items():
                     self.thechnicals_backend[side].reset_real_imgs()
                     self.thechnicals_backend[side].set_show_bboxes()
@@ -1837,6 +1854,8 @@ class API:
                     self.thechnicals_backend[side].update_real_imgs()
                     self.current_technical_side = side
                     self.refresh_thechnical(fp=1)
+                loading_process.terminate()
+                
         else:
             self.build_sheet_technical(self.sheet)
 
@@ -1975,7 +1994,6 @@ class API:
     # ----------------------------------------------------------------------------------------
     def show_sheet_loader(self):
         try:
-            # self.ui.show_loading_page()
             sheets = self.db.report_last_sheets(9999)
             self.ui.load_sheets_win.show_sheets_info(sheets)
             self.ui.load_sheets_win.reset_search_lines()

@@ -834,7 +834,7 @@ border: 1px solid black;
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_8">
                 <property name="spacing">
-                 <number>0</number>
+                 <number>6</number>
                 </property>
                 <property name="leftMargin">
                  <number>0</number>
@@ -1034,6 +1034,49 @@ background-color: rgb(170, 170, 212);</string>
                  </spacer>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="storage_btn">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>45</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>ubuntu</family>
+                    <pointsize>11</pointsize>
+                    <weight>50</weight>
+                    <italic>false</italic>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="toolTip">
+                   <string>Storage Management</string>
+                  </property>
+                  <property name="layoutDirection">
+                   <enum>Qt::LeftToRight</enum>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">background-image: url(./images/icons/storage.png)</string>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QPushButton" name="log_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -1072,7 +1115,7 @@ background-color: rgb(170, 170, 212);</string>
                    <string notr="true">background-image: url(./images/icons/log.png)</string>
                   </property>
                   <property name="text">
-                   <string>Show Logs</string>
+                   <string/>
                   </property>
                  </widget>
                 </item>
@@ -2445,7 +2488,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>3</number>
+                         <number>0</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -5177,7 +5220,7 @@ QPushButton:disabled {
                                       <x>0</x>
                                       <y>0</y>
                                       <width>1025</width>
-                                      <height>17</height>
+                                      <height>20</height>
                                      </rect>
                                     </property>
                                     <layout class="QHBoxLayout" name="horizontalLayout_213">
@@ -8471,7 +8514,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>1025</width>
-                                            <height>17</height>
+                                            <height>20</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_364">
@@ -8740,7 +8783,9 @@ border-radius: 8px;</string>
                                           </size>
                                          </property>
                                          <property name="styleSheet">
-                                          <string notr="true"/>
+                                          <string notr="true">QCheckBox:disabled{
+	color:gray;
+}</string>
                                          </property>
                                          <property name="text">
                                           <string>Show suggested defects</string>
@@ -10048,7 +10093,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>17</height>
+                                        <height>822</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -10300,7 +10345,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>17</height>
+                                        <height>822</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">

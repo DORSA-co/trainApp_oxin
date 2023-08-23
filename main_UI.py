@@ -3814,19 +3814,6 @@ class UI_main_window(QMainWindow, ui):
         self.ssd_label.setMaximumHeight(0)
         self.ssd_chart_frame.setMaximumWidth(0)
 
-    def show_loading_page(self):
-        self.thread = sQThread()
-        self.worker = loading_worker()
-        self.worker.moveToThread(self.thread)
-        self.thread.started.connect(lambda: self.worker.show_win('Please waite...'))
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        self.thread.start()
-
-    def close_loading_page(self):
-        self.worker.close_win()
-
 if __name__ == "__main__":
     app = QApplication()
     win = UI_main_window()

@@ -58,7 +58,8 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: White;</string>
+      <string notr="true">color: Black;
+</string>
      </property>
      <property name="text">
       <string>Please Waite ...</string>
