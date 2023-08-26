@@ -1,7 +1,7 @@
 import time
 import cv2
 import numpy as np
-from backend.pathStructure import create_sheet_path, sheet_image_path, settings
+from backend.pathStructure import create_sheet_path, sheet_image_path, rename_sheet_folder
 from PySide6.QtCore import Signal as sSignal
 from PySide6.QtCore import QObject as sQObject
 import database_utils
@@ -109,7 +109,8 @@ class ImageManager(sQObject):
             if self.save_flag:
                 create_sheet_path(self.main_path, self.sheet_id)
         
-
+    def rename_sheet(self):
+        rename_sheet_folder(self.main_path, self.dummy_sheet_id, self.sheet_id)
 
     def update_database(self):
         if self.save_flag:
