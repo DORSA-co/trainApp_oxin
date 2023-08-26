@@ -4151,7 +4151,7 @@ class API:
             # self.grab_main_thread = threading.Thread(target=self.run_grab)
             self.ImageManager.first_check_finished.connect(self.start_capture_timers)
             self.ImageManager.second_check_finished.connect(self.stop_capture_timers)
-            self.start_capture_flag = True
+            # self.start_capture_flag = True
             self.ready_capture_flag = True
 
         if self.sensor and not disable_ui:
@@ -7095,10 +7095,11 @@ class API:
                         level=1,
                     )
             else:
-                if not self.get_info_flag:
-                    self.start_get_date_time_info()
-                self.ImageManager.rename_sheet()
-                self.ImageManager.update_database()
+                if self.start_capture_flag:
+                    if not self.get_info_flag:
+                        self.start_get_date_time_info()
+                    self.ImageManager.rename_sheet()
+                    self.ImageManager.update_database()
                 self.stop_capture_func(disable_ui=False)
                 # if self.connection_status:
                 # self.my_plc.set_cams_and_prejector(3, 0)
