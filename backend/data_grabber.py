@@ -20,8 +20,8 @@ IMAGE_SHAPE = (1024, 1792)
 class sheetOverView:
     def __init__(
         self,
-        sheet,
-        side,
+        sheet:Sheet,
+        side: str,
         sheet_shape,
         sheet_grid,
         actives_camera=(1, 12),
@@ -79,6 +79,50 @@ class sheetOverView:
 
         self.select_layer = self.init_img((0, 0, 0))
         self.update_pointer((0, 0))
+
+
+    def load_images_from_file(self,):
+        first_cam, last_cam = sheet.get_cameras()
+        frame_counts = sheet.get_nframe()
+        for frame_idx in range(1, frame_counts+1):
+            for cam_idx in range(first_cam, last_cam+1):
+
+                img_path = pathStructure.sheet_image_path(
+                            self.sheet.get_main_path(),
+                            self.sheet.get_id(),
+                            self.side,
+                            cam_idx,
+                            frame_idx,
+                            self.sheet.get_image_format(),
+                        )
+                
+                json_path = pathStructure.sheet_suggestions_json_path(
+                        '',
+                        self.sheet.get_id(),
+                        self.side, 
+                        cam_idx,
+                        frame_idx
+                    )
+
+                img = None  
+                if os.path.exists(img_path):
+                    img = cv2.imread(img_path, 0)
+
+                # if img is None:  # if image doesnt exist, black image substitute
+                #     img = np.zeros(IMAGE_SHAPE, np.uint8)
+                #     else:
+                #         img = cv2.resize(img, (IMAGE_SHAPE[1], IMAGE_SHAPE[0]))
+                #     if self.show_bboxes:
+                #         if os.path.exists(json_path):
+                #             with open(json_path) as jfile:
+                #                 file = json.load(jfile)
+                #                 bboxes = file['bboxes']
+
+                #                 for cntr in bboxes:
+                #                     x1, y1 = cntr[0]
+                #                     x2, y2 = cntr[1]
+                #                     cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
+
 
     def init_img(self, color):
         img = np.ones((self.sheet_shape[0], self.sheet_shape[1], 3), dtype=np.uint8)

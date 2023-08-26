@@ -1230,6 +1230,8 @@ Titles = {
     "all_cameras": {"fa": "همه ی دوربین ها", "en": "All Cameras"},
     "camera_number": {"fa": "شماره دوربین", "en": "Camera Number"},
     "detect sensor": {"fa": "سنسور تشخیص", "en": "Detect sensor"},
+    "line speed": {"fa": "سرعت خط ", "en": "Line Speed : "},
+    
     "air cleaning": {"fa": "فشار هوا", "en": "Air cleaning"},
     "search by": {"fa": "جست و جو براساس: ", "en": "Search By: "},
     "refresh": {"fa": "به روز رسانی", "en": "Refresh"},
@@ -1955,6 +1957,7 @@ def set_title(self, lang):
 
     self.label_166.setText(Titles["camera_number"][lang])
     self.label_27.setText(Titles["detect sensor"][lang])
+    self.label_226.setText(Titles["line speed"][lang])
     self.label_235.setText(Titles["air cleaning"][lang])
 
     self.full_single_btn.setText(Titles["full_screen"][lang])

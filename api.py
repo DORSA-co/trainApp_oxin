@@ -326,6 +326,7 @@ class API:
 
         # Level2 connection
         self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win)
+        self.l2_connection.get_speed()
         # self.l2_connection.create_connection()
         self.start_level2_thread()
         (
@@ -410,9 +411,33 @@ class API:
 
 
         # milad_pbt
-
-
         self.ui.pipline_name.textChanged.connect(self.check_name_pipline)
+
+
+        # show level2 speed 
+        self.show_speed_timer = QTimer()
+        self.show_speed_timer.timeout.connect(self.show_speed)
+        self.show_speed_timer.start(100)
+        self.speed_mode = True
+        
+    def show_speed(self):
+        # print(self.l2_connection.last_speed)
+        
+
+
+        if self.l2_connection.last_speed>0 and not self.speed_mode:
+            self.ui.label_228.setStyleSheet("color : #1A5D1A")
+            self.speed_mode = True
+            self.ui.label_228.setText(str(self.l2_connection.last_speed))
+        if self.l2_connection.last_speed<=0 and self.speed_mode:
+            self.ui.label_228.setStyleSheet("color : #C51605")
+            self.speed_mode = False
+            self.ui.label_228.setText('STOP 0.0 ')
+
+        
+        
+
+
 
     def remove_pypylon_chache(self):
         try:
@@ -4194,12 +4219,12 @@ class API:
         #     self.ImageManager.stop_sheet_checking()
         # except:
         #     pass
-        
-        self.ImageManager.start()
-        self.live_timer.start(self.ui.update_timer_live_frame)
-        self.grab_main_thread = threading.Thread(target=self.run_grab)
-        self.grab_main_thread.start()
-        # self.grab_timer.start(int(1000/(self.ui.frame_rate)))
+        if self.l2_connection.last_speed:
+            self.ImageManager.start()
+            self.live_timer.start(self.ui.update_timer_live_frame)
+            self.grab_main_thread = threading.Thread(target=self.run_grab)
+            self.grab_main_thread.start()
+            # self.grab_timer.start(int(1000/(self.ui.frame_rate)))
 
     def stop_capture_timers(self):
         self.ImageManager.stop()
@@ -4221,7 +4246,8 @@ class API:
 
     def grab_image(self):
         self.ImageManager.stop()
-        self.ImageManager.start()
+        if self.l2_connection.last_speed:
+            self.ImageManager.start()
 
     def stop_grab_image(self):
         if self.grab_main_thread:
