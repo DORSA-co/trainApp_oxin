@@ -326,9 +326,14 @@ class API:
 
         # Level2 connection
         self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win)
-        self.l2_connection.create_connection()
+        # self.l2_connection.create_connection()
         self.start_level2_thread()
-
+        (
+            self.n_camera,
+            self.projectors,
+            self.details,
+        ) = self.l2_connection.get_dummy_info()
+        self.get_info_flag = False
         # PBT
 
         self.current_b_model = ""
@@ -6987,17 +6992,27 @@ class API:
         (
             n_camera,
             projectors,
-            details,
-            flag
+            details
         ) = self.l2_connection.get_full_info()  # get data from level2
-        if flag and details != self.details:
+        if details and details != self.details:
             self.details = details
             self.n_camera = n_camera
             self.projectors = projectors
             self.ImageManager.update_sheet(self.n_camera, self.details, reset=False)
             self.ui.show_sheet_details(self.details, tab_live=True)
+            self.get_info_flag = True
 
-        threading.Timer(1, target=self.start_get_full_data).start()
+        else:
+            threading.Timer(0.5, self.start_get_full_data).start()
+
+    def start_get_date_time_info(self):
+        (
+            n_camera,
+            projectors,
+            details
+        ) = self.l2_connection.get_date_time_info()
+        self.ImageManager.update_sheet(n_camera, details, reset=False)
+        self.ui.show_sheet_details(details, tab_live=True)
 
     def update_sensor_and_temp(self):
         try:
@@ -7049,9 +7064,9 @@ class API:
                 self.set_start_software_plc(True)
                 # try:
                 (
-                    self.n_camera,
-                    self.projectors,
-                    self.details,
+                    n_camera,
+                    projectors,
+                    details,
                 ) = self.l2_connection.get_dummy_info()  # get data from level2
                 # except:
                 #     self.stop_capture_func(disable_ui=True)
@@ -7060,25 +7075,29 @@ class API:
                 #         message=texts.MESSEGES["connection_failed"],
                 #     )
                 # print('%%%%%%'*5, details)
-                self.ImageManager.update_sheet(self.n_camera, self.details)
+                self.ImageManager.update_sheet(n_camera, details)
                 self.start_capture_func(disable_ui=False)
-                self.ui.show_sheet_details(self.details, tab_live=True)
+                # self.ui.show_sheet_details(details, tab_live=True)
+                self.get_info_flag = False
                 # if self.connection_status:
                 # print('start thread set caemra and projector')
-                threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, self.projectors)).start()
-                threading.Timer(1, target=self.start_get_full_data).start()
+                # threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start() ## set in init
+                threading.Timer(0.5, self.start_get_full_data).start()
                 # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
                         message=str(
                             texts.MESSEGES["start_captring"][self.ui.language]
-                            + str(self.n_camera)
+                            + str(n_camera)
                             + " - "
-                            + str(self.projectors)
+                            + str(projectors)
                         ),
                         level=1,
                     )
             else:
+                if not self.get_info_flag:
+                    self.start_get_date_time_info()
+                self.ImageManager.rename_sheet()
                 self.ImageManager.update_database()
                 self.stop_capture_func(disable_ui=False)
                 # if self.connection_status:
