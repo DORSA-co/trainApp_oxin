@@ -23,12 +23,16 @@ class connection_level2():
         # self.sheet_id = 900
         self.db_obj = db_obj
         self.close_ui = close_ui
+        self.get_data_timer = 1
         self.data = None
         self.max_cameras = 12
         self.max_width = 5000
         self.max_projectors = 6
         self.retry_get_date = 0
         self.dummy_dict = {'PLATE_ID': 'ABC12345A', 'ORDER_ID': '123456789', 'HEAT_ID': '123456', 'QC_STANDARD': 'ASTM450', 'LENGHT': '6040', 'WIDTH': '2020', 'THICKNESS': '25.23', 'LENGHT_ORDER': '6000', 'WIDTH_ORDER': '2000', 'THICKNESS_ORDER': '25', 'speed': '1500'}
+
+    def set_get_data_timer(self, timer):
+        self.get_data_timer = timer
 
     def ret_sheet_details(self):
         ret,details=self.connect()
@@ -54,14 +58,19 @@ class connection_level2():
     def get_number_camera_projector(self):
         cameras,projectors,_=self.calculate_camera_and_projector()
         return cameras,projectors
+    
+    def get_dummy_info(self):
+        return 12, 6, self.dummy_dict
 
     def get_full_info(self):
+
+        get=True
         if self.data:
             cameras = int(np.ceil(float(self.data['WIDTH'])*self.max_cameras/self.max_width))
             projectors = int(np.ceil(float(self.data['WIDTH'])*self.max_projectors/self.max_width))
             projectors = 6
             cameras = 12
-            t = time.time()
+            # t = time.time()
             last_plate = self.db_obj.report_last_sheets(count=1)[0]
             last_plate_id = last_plate.get_id()
             if self.data['PLATE_ID'] == last_plate_id:
@@ -69,15 +78,18 @@ class connection_level2():
                 time = date_funcs.get_time(folder_path=True)
                 date_time = '{}_{}'.format(date, time)
                 self.data['PLATE_ID'] = '_{}'.format(date_time)
-            print('level2 db time: ', (time.time() - t)*1000)
-            return cameras, projectors, self.data
+                get=False
+            # print('level2 db time: ', (time.time() - t)*1000)
+                return cameras, projectors, self.data,False
+            return cameras, projectors, self.data,True
+            
         else:
             res =self.dummy_dict.copy()
             date = date_funcs.get_date(folder_path=True)
             time = date_funcs.get_time(folder_path=True)
             date_time = '{}_{}'.format(date, time)
             res['PLATE_ID'] = date_time
-            return 12, 6, res
+            return 12, 6, res ,False
 
     def convert_data(self, data):
         cleaned_data = data.decode("ISO-8859-1") 
@@ -87,10 +99,10 @@ class connection_level2():
         keywords = ['PLATE_ID', 'ORDER_ID', 'HEAT_ID', 'QC_STANDARD', 'LENGHT', 'WIDTH', 'THICKNESS', 'LENGHT_ORDER', 'WIDTH_ORDER', 'THICKNESS_ORDER', 'speed']
         indices = [cleaned_data.find(k) for k in keywords]
 
-        indices = list(filter(lambda x: x>0, indices))
-        keywords = keywords[:len(indices)]
+        filterd_data = [(index, key) for index, key in zip(indices, keywords) if index!=-1]
+        indices, keywords = zip(*filterd_data)
 
-        res = {}
+        res = self.dummy_dict.copy()
 
         for i, k in enumerate(keywords):
             if i != len(keywords) - 1:
@@ -153,14 +165,14 @@ class connection_level2():
             time.sleep(1)
 
 
-        if self.close_ui:
-            threading.Timer(1,self.get_data).start()
+        if not self.close_ui:
+            threading.Timer(self.get_data_timer, self.get_data).start()
                
 
 
 if __name__=='__main__':
 
-    conn=connection_level2(None, None)
+    conn=connection_level2(None, False)
     conn.create_connection()
     # cameras,projectors,details = conn.get_full_info()
     #print(cameras,projectors,details )

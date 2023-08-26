@@ -327,7 +327,7 @@ class API:
         # Level2 connection
         self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win)
         self.l2_connection.create_connection()
-        self.start_level2_threads()
+        self.start_level2_thread()
 
         # PBT
 
@@ -492,9 +492,6 @@ class API:
                 self.show_storage_window(start=True)
                 # self.show_storage_window()
                 # self.s_api.clear_filters()
-                # if self.sensor:
-                #     sheet_id = self.l2_connection.get_full_info()[-1]['PLATE_ID']
-                #     self.s_api.add_filter(sheet_id)
                 # self.s_api.start()
                 
                     
@@ -526,11 +523,11 @@ class API:
         )
 
     def start_storage_checking(self):
-        self.check_storage()
+        # self.check_storage()
         if not self.storage_timer:
             self.storage_timer = QTimer()
             self.storage_timer.timeout.connect(self.check_storage)
-        self.storage_timer.start(1000*60*self.update_time)
+        # self.storage_timer.start(1000*60*self.update_time)
 
     def restart_storage_checking(self):
         self.storage_timer.stop()
@@ -4192,13 +4189,8 @@ class API:
         #     self.ImageManager.stop_sheet_checking()
         # except:
         #     pass
-        try:
-            _, _, data = self.l2_connection.get_full_info()  # get data from level2
-            speed = float(data['speed'])
-        except Exception as e:
-            raise e
-        if speed > 0:
-            self.ImageManager.start()
+        
+        self.ImageManager.start()
         self.live_timer.start(self.ui.update_timer_live_frame)
         self.grab_main_thread = threading.Thread(target=self.run_grab)
         self.grab_main_thread.start()
@@ -4223,14 +4215,8 @@ class API:
                 time.sleep(t - self.grab_time)
 
     def grab_image(self):
-        try:
-            _, _, data = self.l2_connection.get_full_info()  # get data from level2
-            speed = float(data['speed'])
-        except Exception as e:
-            raise e
-        if speed > 0:
-            self.ImageManager.stop()
-            self.ImageManager.start()
+        self.ImageManager.stop()
+        self.ImageManager.start()
 
     def stop_grab_image(self):
         if self.grab_main_thread:
@@ -6993,10 +6979,25 @@ class API:
         threading.Timer(1,self.get_sensor).start()
         threading.Timer(1,self.get_temp_and_switch).start()
 
-    def start_level2_threads(self):
+    def start_level2_thread(self):
         self.level2_thread = threading.Thread(target=self.l2_connection.get_data)
         self.level2_thread.start()
 
+    def start_get_full_data(self):
+        (
+            n_camera,
+            projectors,
+            details,
+            flag
+        ) = self.l2_connection.get_full_info()  # get data from level2
+        if flag and details != self.details:
+            self.details = details
+            self.n_camera = n_camera
+            self.projectors = projectors
+            self.ImageManager.update_sheet(self.n_camera, self.details, reset=False)
+            self.ui.show_sheet_details(self.details, tab_live=True)
+
+        threading.Timer(1, target=self.start_get_full_data).start()
 
     def update_sensor_and_temp(self):
         try:
@@ -7046,33 +7047,34 @@ class API:
         if self.ready_capture_flag:
             if self.sensor:
                 self.set_start_software_plc(True)
-                try:
-                    (
-                        n_camera,
-                        projectors,
-                        details,
-                    ) = self.l2_connection.get_full_info()  # get data from level2
-                except:
-                    self.stop_capture_func(disable_ui=True)
-                    self.ui.create_alert_message(
-                        title=texts.Titles["connection_failed"],
-                        message=texts.MESSEGES["connection_failed"],
-                    )
+                # try:
+                (
+                    self.n_camera,
+                    self.projectors,
+                    self.details,
+                ) = self.l2_connection.get_dummy_info()  # get data from level2
+                # except:
+                #     self.stop_capture_func(disable_ui=True)
+                #     self.ui.create_alert_message(
+                #         title=texts.Titles["connection_failed"],
+                #         message=texts.MESSEGES["connection_failed"],
+                #     )
                 # print('%%%%%%'*5, details)
-                self.ImageManager.update_sheet(n_camera, details)
+                self.ImageManager.update_sheet(self.n_camera, self.details)
                 self.start_capture_func(disable_ui=False)
-                self.ui.show_sheet_details(details, tab_live=True)
+                self.ui.show_sheet_details(self.details, tab_live=True)
                 # if self.connection_status:
                 # print('start thread set caemra and projector')
-                threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start()
+                threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, self.projectors)).start()
+                threading.Timer(1, target=self.start_get_full_data).start()
                 # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
                         message=str(
                             texts.MESSEGES["start_captring"][self.ui.language]
-                            + str(n_camera)
+                            + str(self.n_camera)
                             + " - "
-                            + str(projectors)
+                            + str(self.projectors)
                         ),
                         level=1,
                     )
