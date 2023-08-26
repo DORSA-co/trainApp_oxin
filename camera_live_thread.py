@@ -109,7 +109,7 @@ class ImageManager(sQObject):
             if self.save_flag:
                 create_sheet_path(self.main_path, self.sheet_id)
         
-    def 
+
 
     def update_database(self):
         if self.save_flag:

@@ -325,8 +325,9 @@ class API:
         self.init_check_plc()
 
         # Level2 connection
-        self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win)
-        self.l2_connection.create_connection()
+        self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win,port=11000)
+        # self.l2_connection.create_connection()
+        
         self.start_level2_thread()
 
         # PBT
