@@ -160,7 +160,7 @@ class connection_level2():
 
 if __name__=='__main__':
 
-    conn=connection_level2(None, None)
+    conn=connection_level2(None, True)
     conn.create_connection()
     # cameras,projectors,details = conn.get_full_info()
     #print(cameras,projectors,details )
