@@ -1147,7 +1147,9 @@ MESSEGES = {
 }
 
 Titles = {
+
     "sense": {"fa": "سنس", "en": "SENSE"},
+    "stop": {"fa": " توقف " , "en": "STOP"},
     "trainer": {"fa": "نرم افزار آموزشی    ", "en": "    Trainer App"},
     "message": {"fa": "پیغام", "en": "Message"},
     "persian": {"fa": "فارسی", "en": "Persian"},

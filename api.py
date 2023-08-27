@@ -422,9 +422,6 @@ class API:
         
     def show_speed(self):
         # print(self.l2_connection.last_speed)
-        
-
-
         if self.l2_connection.last_speed>0 and not self.speed_mode:
             self.ui.label_228.setStyleSheet("color : #1A5D1A")
             self.speed_mode = True
@@ -432,12 +429,7 @@ class API:
         if self.l2_connection.last_speed<=0 and self.speed_mode:
             self.ui.label_228.setStyleSheet("color : #C51605")
             self.speed_mode = False
-            self.ui.label_228.setText('STOP 0.0 ')
-
-        
-        
-
-
+            self.ui.label_228.setText('{} 0.0 '.format(texts.Titles['stop'][self.language]))
 
     def remove_pypylon_chache(self):
         try:
@@ -553,11 +545,11 @@ class API:
         )
 
     def start_storage_checking(self):
-        # self.check_storage()
+        self.check_storage()
         if not self.storage_timer:
             self.storage_timer = QTimer()
             self.storage_timer.timeout.connect(self.check_storage)
-        # self.storage_timer.start(1000*60*self.update_time)
+        self.storage_timer.start(1000*60*self.update_time)
 
     def restart_storage_checking(self):
         self.storage_timer.stop()
@@ -4149,10 +4141,12 @@ class API:
 
     def set_available_cameras(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
-        sn_available = list(connected_cameras.keys())
+        sn_available = sorted(list(connected_cameras.keys()))
         # sn_available = [str(i) for i in range(1, 25)]
         self.ui.comboBox_connected_cams.clear()
         self.ui.comboBox_connected_cams.addItems(sn_available)
+        val = self.ui.comboBox_connected_cams.currentText()
+        self.change_live_camera(val)
 
     def start_grab_camera(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
@@ -4221,9 +4215,9 @@ class API:
         #     pass
         if self.l2_connection.last_speed:
             self.ImageManager.start()
-            self.live_timer.start(self.ui.update_timer_live_frame)
-            self.grab_main_thread = threading.Thread(target=self.run_grab)
-            self.grab_main_thread.start()
+        self.live_timer.start(self.ui.update_timer_live_frame)
+        self.grab_main_thread = threading.Thread(target=self.run_grab)
+        self.grab_main_thread.start()
             # self.grab_timer.start(int(1000/(self.ui.frame_rate)))
 
     def stop_capture_timers(self):

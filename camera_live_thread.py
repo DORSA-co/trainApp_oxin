@@ -150,8 +150,8 @@ class ImageManager(sQObject):
                     if ret:
 
 
-                        if MOTION:
-                            self.check_motion(camera_id,img,ret)
+                        # if MOTION:
+                        #     self.check_motion(camera_id,img,ret)
 
 
                         if camera_id < 13:
@@ -166,14 +166,15 @@ class ImageManager(sQObject):
                         if self.save_flag:
                             if int(camera_id) <= 12:
                                 side = 'TOP'
-                                path = sheet_image_path(self.main_path, self.sheet_id, side, camera_id,
+                                path = sheet_image_path(self.main_path, self.dummy_sheet_id, side, camera_id,
                                                         str(self.nframe[int(camera_id) - 1]),
                                                         self.image_format)
                             else:
                                 side = 'BOTTOM'
-                                path = sheet_image_path(self.main_path, self.sheet_id, side, str(camera_id - 12),
+                                path = sheet_image_path(self.main_path, self.dummy_sheet_id, side, str(camera_id - 12),
                                                         str(self.nframe[int(camera_id) - 1]),
                                                         self.image_format)
+                            
                             cv2.imwrite(path, self.images[int(camera_id) - 1])
                 else:
                     if self.manual_flag:
