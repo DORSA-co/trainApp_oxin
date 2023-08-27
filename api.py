@@ -419,6 +419,8 @@ class API:
         self.show_speed_timer.timeout.connect(self.show_speed)
         self.show_speed_timer.start(100)
         self.speed_mode = True
+
+        self.technical_scale = 1
         
     def show_speed(self):
         # print(self.l2_connection.last_speed)
@@ -1313,7 +1315,8 @@ class API:
         # ______________ JJ
 
         # self.ui.storage_btn.clicked.connect(self.show_storage_window)
-
+        self.ui.technical_zoom_in.clicked.connect(partial(self.technical_zoom_in))
+        self.ui.technical_zoom_out.clicked.connect(partial(self.technical_zoom_out))
         self.ui.load_sheets_win.load_btn.clicked.connect(partial(self.load_sheets))
         self.ui.load_sheets_win.btn_refresh.clicked.connect(
             partial(self.show_sheet_loader)
@@ -1733,8 +1736,9 @@ class API:
                 self.sheet_imgprocessing_mem[sheet_id] = False
         self.selected_images_for_label.clear()
         self.ui.clear_table()
-        self.ui.load_sheets_win.close()
+        # self.ui.load_sheets_win.close()
         self.load_sheet()
+        self.ui.load_sheets_win.close()
 
         # ----------------------------------------------------------------------------------------
 
@@ -1891,8 +1895,39 @@ class API:
             self.ui.suggested_defects_progressBar.value() + 1
         )
 
+    def update_loading_progressBar(self):
+        self.ui.load_sheets_win.loading_progressBar.setValue(
+            self.ui.load_sheets_win.loading_progressBar.value() + 1
+        )
+
+    def reset_loading_progressBar(self, max_value):
+        self.ui.load_sheets_win.loading_progressBar.setValue(0)
+        self.ui.load_sheets_win.loading_progressBar.setMaximum(max_value)
+
+    def technical_zoom_in(self):
+        current_side = self.current_technical_side
+        self.technical_scale = min(self.technical_scale*2, 4)
+        for side, _ in self.ui.get_technical(name=False).items():
+            self.thechnicals_backend[side].set_zoom_scale(self.technical_scale)
+            self.current_technical_side = side
+            self.refresh_thechnical(fp=1)
+
+        self.current_technical_side = current_side
+        
+
+    def technical_zoom_out(self):
+        current_side = self.current_technical_side
+        self.technical_scale = max(self.technical_scale*0.5, 0.125)
+        for side, _ in self.ui.get_technical(name=False).items():
+            self.thechnicals_backend[side].set_zoom_scale(self.technical_scale)
+            self.current_technical_side = side
+            self.refresh_thechnical(fp=1)
+
+        self.current_technical_side = current_side
+
     def build_sheet_technical(self, sheet):
         try:
+            self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1] - sheet.get_cameras()[0])*2)
             self.thechnicals_backend = {}
             for side, _ in self.ui.get_technical(name=False).items():
                 self.thechnicals_backend[side] = data_grabber.sheetOverView(
@@ -1903,6 +1938,7 @@ class API:
                     # sheet.get_grade_shape(),
                     actives_camera=sheet.get_cameras(),
                     oriation=data_grabber.VERTICAL,
+                    loading_callback=self.update_loading_progressBar
                 )
                 
                 selecteds = self.selected_images_for_label.get_sheet_side_selections(

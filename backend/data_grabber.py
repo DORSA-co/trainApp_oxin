@@ -69,7 +69,7 @@ class sheetOverView:
         self.viewport_size = IMAGE_SHAPE #size of crop image frome full image to show into real image
         self.loading_callback = loading_callback
         
-        self.set_zoom_scale(0.5)
+        self.set_zoom_scale(1)
         self.sheet_img = self.init_img(self.color_map["sheet"])
         self.result_img = self.init_img(self.color_map["sheet"])
         self.sheet_img = self.draw_slines(self.sheet_img, -1)
@@ -85,8 +85,6 @@ class sheetOverView:
         self.sheet_full_image = self.initsheet_full_image()
         self.load_images_from_file()
 
-        pass
-
     def set_loading_callback(self, func):
         self.loading_callback = func
 
@@ -100,11 +98,6 @@ class sheetOverView:
         """
         first_cam, last_cam = self.sheet.get_cameras()
         frame_counts = self.sheet.get_nframe()
-
-        #SHOULD  BE MODIFY:
-        
-        ###################
-
             
         total_loop = frame_counts*(last_cam - first_cam + 1)
         n = 0
@@ -121,7 +114,7 @@ class sheetOverView:
                         )
                 
                 
-
+                
                 #img = None  
                 #if os.path.exists(img_path):
                 img = cv2.imread(img_path, 0)
@@ -142,7 +135,8 @@ class sheetOverView:
 
                 n += 1 
                 if self.loading_callback is not None:
-                    self.loading_callback( n/total_loop * 100)
+                    #self.loading_callback( int(n/total_loop * 100) )
+                    self.loading_callback()
 
     # def merge_single_images(self,):
     #     nrows = len(self.__loaded_images__)
