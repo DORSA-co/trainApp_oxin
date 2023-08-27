@@ -1793,7 +1793,7 @@ class API:
             self.sheet_imgprocessing_mem[self.sheet.get_id()] = True
             loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', self.language])
             for side, _ in self.ui.get_technical(name=False).items():
-                self.thechnicals_backend[side].reset_real_imgs()
+                #self.thechnicals_backend[side].reset_real_imgs()
                 self.thechnicals_backend[side].set_show_bboxes()
                 self.thechnicals_backend[side].update_defect()
                 selecteds = self.selected_images_for_label.get_sheet_side_selections(
@@ -1868,7 +1868,7 @@ class API:
             else:
                 loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py'])
                 for side, _ in self.ui.get_technical(name=False).items():
-                    self.thechnicals_backend[side].reset_real_imgs()
+                    #self.thechnicals_backend[side].reset_real_imgs()
                     self.thechnicals_backend[side].set_show_bboxes()
                     self.thechnicals_backend[side].update_defect()
                     selecteds = (
