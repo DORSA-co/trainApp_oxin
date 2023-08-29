@@ -1,7 +1,7 @@
 import time
 import cv2
 import numpy as np
-from backend.pathStructure import create_sheet_path, sheet_image_path, settings
+from backend.pathStructure import create_sheet_path, sheet_image_path, rename_sheet_folder
 from PySide6.QtCore import Signal as sSignal
 from PySide6.QtCore import QObject as sQObject
 import database_utils
@@ -28,6 +28,7 @@ class ImageManager(sQObject):
         self.images = [np.zeros((1024, 1792))] * 24
         self.db = database_utils.dataBaseUtils(ui_obj=self.ui)
         self.sheet_id = 0
+        self.dummy_sheet_id = 'ABC12345A'
         self.coil_dict = {}
         self.image_format = '.png'
         self.nframe = [0] * 24
@@ -94,18 +95,22 @@ class ImageManager(sQObject):
     def start_sheet_checking_thread(self):
         self.sheet_check_thread.start()
 
-    def update_sheet(self, stop_cam, coil_dict):
+    def update_sheet(self, stop_cam, coil_dict, reset=True):
         self.sheet_id = str(coil_dict['PLATE_ID'])
-        self.nframe = [0] * 24
-        self.images = [np.zeros((1024, 1792))] * 24
         self.stop_cam = stop_cam
-        if 'LENGHT' in coil_dict.keys() and coil_dict['LENGHT']:
-            self.last_frame = 1000 - self.check_length_th #int(coil_dict['LENGHT'] / self.camera_length) - self.check_length_th
-        else:
-            self.last_frame = 0
-        if self.save_flag:
-            create_sheet_path(self.main_path, self.sheet_id)
         self.coil_dict = coil_dict
+        # if 'LENGHT' in coil_dict.keys() and coil_dict['LENGHT']:
+        #     self.last_frame = 1000 - self.check_length_th #int(coil_dict['LENGHT'] / self.camera_length) - self.check_length_th
+        # else:
+        #     self.last_frame = 0
+        if reset:
+            self.nframe = [0] * 24
+            self.images = [np.zeros((1024, 1792))] * 24
+            if self.save_flag:
+                create_sheet_path(self.main_path, self.sheet_id)
+        
+    def rename_sheet(self):
+        rename_sheet_folder(self.main_path, self.dummy_sheet_id, self.sheet_id)
 
     def update_database(self):
         if self.save_flag:
@@ -151,11 +156,11 @@ class ImageManager(sQObject):
 
                         if camera_id < 13:
                             img = cv2.flip(img, 1)
-                        if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame:
-                            check = self.sheet_check(img)
-                            if not check:
-                                self.second_check_finished.emit()
-                                return
+                        # if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame:
+                        #     check = self.sheet_check(img)
+                        #     if not check:
+                        #         self.second_check_finished.emit()
+                        #         return
                         self.images[int(camera_id) - 1] = img
                         self.nframe[int(camera_id) - 1] += 1
                         if self.save_flag:
@@ -173,16 +178,16 @@ class ImageManager(sQObject):
                 else:
                     if self.manual_flag:
                         img = np.zeros((1024, 1792), dtype=np.uint8)
-                        if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame + 5:
-                            img[:, :] = np.random.randint(self.check_th, 255)
-                        else:
-                            img[:, :] = np.random.randint(0, 150)
+                        # if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame + 5:
+                        #     img[:, :] = np.random.randint(self.check_th, 255)
+                        # else:
+                        img[:, :] = np.random.randint(0, 150)
 
-                        if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame:
-                            check = self.sheet_check(img)
-                            if not check:
-                                self.second_check_finished.emit()
-                                return
+                        # if self.nframe[int(camera_id) - 1] + 1 >= self.last_frame:
+                        #     check = self.sheet_check(img)
+                        #     if not check:
+                        #         self.second_check_finished.emit()
+                        #         return
 
                         self.images[int(camera_id) - 1] = img
                         self.nframe[int(camera_id) - 1] += 1

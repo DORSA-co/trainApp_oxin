@@ -135,10 +135,13 @@ class connection_level2():
         
                 conn.send(data)
                 self.convert_data(data)
-                # print('gg')
+                print('gg',data)
             except Exception as e:
                 # print(e)
                 pass
+
+
+
 
 if __name__=='__main__':
 

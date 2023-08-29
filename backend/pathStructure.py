@@ -74,6 +74,11 @@ def sheet_path(main_path, id):
     year, month, day = date.split('/')
     return(os.path.join(main_path, year, month, day, str(id)))
 
+def rename_sheet_folder(main_path, old_id, new_id):
+    old_path = sheet_path(main_path, old_id)
+    new_path = sheet_path(main_path, new_id)
+    os.rename(old_path, new_path)
+
 def create_sheet_suggestions_path(main_path, id):
     try:
         db = dataBaseUtils(ui_obj='Null')
