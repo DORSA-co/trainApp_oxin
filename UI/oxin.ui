@@ -8843,6 +8843,102 @@ border-radius: 8px;</string>
                                          </property>
                                         </widget>
                                        </item>
+                                       <item>
+                                        <widget class="Line" name="line_7">
+                                         <property name="orientation">
+                                          <enum>Qt::Vertical</enum>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QPushButton" name="technical_zoom_in">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>0</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="toolTip">
+                                          <string>Zoom In</string>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QPushButton {
+background-color:transparent;
+border:0px
+}
+QToolTip {
+	color: rgb(0,0,0);
+	background-color: rgb(255,255,255);
+	border: 1px solid rgb(44, 49, 58);
+	background-image: none;
+	background-position: left center;
+    background-repeat: no-repeat;
+	border: none;
+	border-left: 2px solid rgb(180,180,180);
+	text-align: left;
+	padding-left: 8px;
+	margin: 0px;
+}
+</string>
+                                         </property>
+                                         <property name="text">
+                                          <string/>
+                                         </property>
+                                         <property name="icon">
+                                          <iconset>
+                                           <normaloff>images/zoom_in.png</normaloff>images/zoom_in.png</iconset>
+                                         </property>
+                                         <property name="iconSize">
+                                          <size>
+                                           <width>30</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                       <item>
+                                        <widget class="QPushButton" name="technical_zoom_out">
+                                         <property name="minimumSize">
+                                          <size>
+                                           <width>0</width>
+                                           <height>0</height>
+                                          </size>
+                                         </property>
+                                         <property name="toolTip">
+                                          <string>Zoom Out</string>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true">QPushButton {
+background-color:transparent;
+border:0px
+}
+QToolTip {
+	color: rgb(0,0,0);
+	background-color: rgb(255,255,255);
+	border: 1px solid rgb(44, 49, 58);
+	background-image: none;
+	background-position: left center;
+    background-repeat: no-repeat;
+	border: none;
+	border-left: 2px solid rgb(180,180,180);
+	text-align: left;
+	padding-left: 8px;
+	margin: 0px;
+}
+</string>
+                                         </property>
+                                         <property name="icon">
+                                          <iconset>
+                                           <normaloff>images/zoom_out.png</normaloff>images/zoom_out.png</iconset>
+                                         </property>
+                                         <property name="iconSize">
+                                          <size>
+                                           <width>30</width>
+                                           <height>30</height>
+                                          </size>
+                                         </property>
+                                        </widget>
+                                       </item>
                                       </layout>
                                      </widget>
                                     </item>
@@ -10630,12 +10726,12 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/zoom-in.png</normaloff>images/zoom-in.png</iconset>
+                                    <normaloff>images/zoom_in.png</normaloff>images/zoom_in.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
-                                    <width>24</width>
-                                    <height>31</height>
+                                    <width>36</width>
+                                    <height>28</height>
                                    </size>
                                   </property>
                                  </widget>
@@ -10682,12 +10778,12 @@ QToolTip {
                                   </property>
                                   <property name="icon">
                                    <iconset>
-                                    <normaloff>images/zoom-out.png</normaloff>images/zoom-out.png</iconset>
+                                    <normaloff>images/zoom_out.png</normaloff>images/zoom_out.png</iconset>
                                   </property>
                                   <property name="iconSize">
                                    <size>
                                     <width>36</width>
-                                    <height>31</height>
+                                    <height>28</height>
                                    </size>
                                   </property>
                                  </widget>

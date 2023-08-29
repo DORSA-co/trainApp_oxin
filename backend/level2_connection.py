@@ -94,7 +94,7 @@ class connection_level2():
             cameras = int(np.ceil(float(self.data['WIDTH'])*self.max_cameras/self.max_width))
             projectors = int(np.ceil(float(self.data['WIDTH'])*self.max_projectors/self.max_width))
             projectors = 6
-            cameras = 12
+            # cameras = 12
             return cameras, projectors, self.data
         else:
             return 0, 0, None
@@ -220,23 +220,21 @@ class connection_level2():
 
     def get_speed(self):
         
-        # try:
-        t1 = datetime.now()
-        conn,addr=self.get_speed_socket.accept()
-        data=conn.recv(100000)
-        conn.send(data)
-        self.convert_speed(data)
-        self.retry_get_speed = 0
-        # except:
-        #     print('Except')
-        #     self.retry_get_speed+=1
-        #     data = SAMPLE
-        #     self.convert_speed(data)
-        #     if self.retry_get_speed<10:
-        #         self.get_speed_socket = self.create_connection(PORT_SPEED)
-        #         print('ERROR Level2 Get Speed')
-        #     # log.warning('Level2 connection Error')
-        #     time.sleep(1)
+        try:
+            t1 = datetime.now()
+            conn,addr=self.get_speed_socket.accept()
+            data=conn.recv(100000)
+            conn.send(data)
+            self.convert_speed(data)
+            self.retry_get_speed = 0
+        except:
+            # print('Except')
+            self.retry_get_speed+=1
+            if self.retry_get_speed<10:
+                self.get_speed_socket = self.create_connection(PORT_SPEED)
+                print('ERROR Level2 Get Speed')
+            # log.warning('Level2 connection Error')
+            time.sleep(1)
 
         if not self.close_ui:
             threading.Timer(0.9, self.get_speed).start()

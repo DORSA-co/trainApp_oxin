@@ -110,7 +110,15 @@ class ImageManager(sQObject):
                 create_sheet_path(self.main_path, self.sheet_id)
         
     def rename_sheet(self):
-        rename_sheet_folder(self.main_path, self.dummy_sheet_id, self.sheet_id)
+        try:
+            rename_sheet_folder(self.main_path, self.dummy_sheet_id, self.sheet_id)
+        except OSError as e:
+            date = date_funcs.get_date(folder_path=True)
+            time = date_funcs.get_time(folder_path=True)
+            date_time = '{}_{}'.format(date, time)
+            self.coil_dict['PLATE_ID'] = '{}_{}'.format(self.sheet_id, date_time) 
+            self.sheet_id = str(self.coil_dict['PLATE_ID'])
+            rename_sheet_folder(self.main_path, self.dummy_sheet_id, self.sheet_id)
 
     def update_database(self):
         if self.save_flag:

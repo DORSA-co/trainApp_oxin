@@ -22,19 +22,20 @@ class sheetOverView:
         self,
         sheet:Sheet,
         side: str,
-        sheet_shape,
+        technical_sheet_shape,
         sheet_grid,
         actives_camera=(1, 12),
         color_map=COLOR_MAP,
         thickness_map=THINKNESS_MAP,
         oriation=VERTICAL,
+        loading_callback = None
     ):
         self.show_bboxes = False
         self.sheet = sheet
         # self.sheet.get_main_path() = path
         # self.sheet_id = sheet_id
         self.side = side
-        self.sheet_shape = sheet_shape
+        self.technical_sheet_shape = technical_sheet_shape
         self.sheet_grid = sheet_grid
         self.actives_camera = actives_camera
         self.oriation = oriation
@@ -43,31 +44,32 @@ class sheetOverView:
         self.json_postfix = '_imgProcessing'
         self.json_format = '.json'
 
-        assert self.sheet_shape[0] / self.sheet_grid[0] == int(
-            self.sheet_shape[0] / self.sheet_grid[0]
+        assert self.technical_sheet_shape[0] / self.sheet_grid[0] == int(
+            self.technical_sheet_shape[0] / self.sheet_grid[0]
         ), "error thechnical grid sheep doesn't match with shape"
-        assert self.sheet_shape[1] / self.sheet_grid[1] == int(
-            self.sheet_shape[1] / self.sheet_grid[1]
+        assert self.technical_sheet_shape[1] / self.sheet_grid[1] == int(
+            self.technical_sheet_shape[1] / self.sheet_grid[1]
         ), "error thechnical grid sheep doesn't match with shape"
 
         self.cell_shape = (
-            int(self.sheet_shape[0] / self.sheet_grid[0]),
-            int(self.sheet_shape[1] / self.sheet_grid[1]),
+            int(self.technical_sheet_shape[0] / self.sheet_grid[0]),
+            int(self.technical_sheet_shape[1] / self.sheet_grid[1]),
         )
-        # #print(self.sheet_shape, self.sheet_grid, self.cell_shape)
+        # #print(self.technical_sheet_shape, self.sheet_grid, self.cell_shape)
         assert (
             self.cell_shape[0] % 2 == 1 and self.cell_shape[1] % 2 == 1
         ), "cell shape should be odd"
 
         self.n = 0
-
-        # #print(self.cell_shape)
-
         self.pt = (0, 0)
         self.real_imgs = []
         self.real_idxs = []
         self.real_res = 0
-
+        self.single_image_shape = IMAGE_SHAPE
+        self.viewport_size = IMAGE_SHAPE #size of crop image frome full image to show into real image
+        self.loading_callback = loading_callback
+        
+        self.set_zoom_scale(1)
         self.sheet_img = self.init_img(self.color_map["sheet"])
         self.result_img = self.init_img(self.color_map["sheet"])
         self.sheet_img = self.draw_slines(self.sheet_img, -1)
@@ -79,13 +81,38 @@ class sheetOverView:
 
         self.select_layer = self.init_img((0, 0, 0))
         self.update_pointer((0, 0))
+        #-----------------------------------------News
+        self.sheet_full_image = self.initsheet_full_image()
+        #self.load_images_from_file()
 
+    def set_loading_callback(self, func):
+        self.loading_callback = func
 
-    def load_images_from_file(self,):
-        first_cam, last_cam = sheet.get_cameras()
-        frame_counts = sheet.get_nframe()
-        for frame_idx in range(1, frame_counts+1):
-            for cam_idx in range(first_cam, last_cam+1):
+    def set_zoom_scale(self, scale):
+        self.scale = scale
+        self.viewport_size = int(self.single_image_shape[0] / scale) , int(self.single_image_shape[1] / scale)
+        self.viewport_pointer_size = int( self.cell_shape[0] / scale) , int( self.cell_shape[1] / scale) #size of rectangle pointer
+
+    def load_images_from_file(self):
+        """load all images from file and merge them into single image
+        """
+        first_cam, last_cam = self.sheet.get_cameras()
+        frame_counts = self.sheet.get_nframe()
+        self.load_custom_images_from_file( camera_range=(first_cam, last_cam + 1),
+                                          frame_range=(1, frame_counts + 1)
+                                          )   
+         
+        
+    
+    def load_custom_images_from_file(self, camera_range:tuple, frame_range:tuple):
+        if frame_range is None:
+            frame_range = (1, self.sheet.get_nframe() + 1)
+        if camera_range is None:
+            first_cam, last_cam = self.sheet.get_cameras()
+            camera_range = first_cam, last_cam + 1
+
+        for frame_idx in range(*frame_range):
+            for cam_idx in range(*camera_range):
 
                 img_path = pathStructure.sheet_image_path(
                             self.sheet.get_main_path(),
@@ -96,36 +123,111 @@ class sheetOverView:
                             self.sheet.get_image_format(),
                         )
                 
-                json_path = pathStructure.sheet_suggestions_json_path(
+                
+                
+                img = None  
+                if os.path.exists(img_path):
+                    img = cv2.imread(img_path, 0)
+                #print(cam_idx, frame_idx, img_path)
+                #print(img)
+                if img is not None:
+                    #img = cv2.resize(img, (IMAGE_SHAPE[1], IMAGE_SHAPE[0]))
+                    if self.show_bboxes:
+                        img = self.draw_defect_bbox_on_single_image(img, cam_idx, frame_idx)
+
+                    if self.single_image_shape is None:
+                        self.single_image_shape = img.shape[:2]
+
+                    i = cam_idx - camera_range[0]
+                    j = frame_idx - 1
+                    self.append_single_image_into_full_image(img, i, j)
+                else:
+                    print(f'Warning: image of camera{cam_idx} and frame{frame_idx} not exist')
+
+                #n += 1 
+                if self.loading_callback is not None:
+                    #self.loading_callback( int(n/total_loop * 100) )
+                    self.loading_callback()
+        print('load finish', self)
+        print(f'thecnicak sheet {self.side} loaded')
+    # def merge_single_images(self,):
+    #     nrows = len(self.__loaded_images__)
+    #     ncols = len(self.__loaded_images__[0])
+    #     self.sheet_full_image = None
+    #     for j in range(nrows):
+    #         row_image = None
+    #         for i in range(ncols):
+    #             img = self.__loaded_images__[j].pop(0)
+    #             if row_image is None:
+                
+
+    def initsheet_full_image(self) -> np.ndarray :
+        """generate an black image of full sheet image (all in one)
+
+        Returns:
+            np.ndarray: _description_
+        """
+        first_cam, last_cam = self.sheet.get_cameras()
+        frame_counts = self.sheet.get_nframe()
+
+        #SHOULD  BE MODIFY:
+        #frame_counts = int(frame_counts/10)
+        ###################
+        camera_counts = last_cam - first_cam + 1
+        
+        single_h, single_w = self.single_image_shape
+        return np.zeros( (single_h*frame_counts, single_w*camera_counts ), dtype=np.uint8)
+    
+
+    def draw_defect_bbox_on_single_image(self, img:np.ndarray, cam_idx:int, frame_idx:int) -> np.ndarray:
+        """draws defects bounding boxes on single image
+
+        Args:
+            img (np.ndarray): orginal image
+            cam_idx (int): number of camera . start from 1
+            frame_idx (int): frame number. start from 1
+
+        Returns:
+            np.ndarray: result image
+        """
+        json_path = pathStructure.sheet_suggestions_json_path(
                         '',
                         self.sheet.get_id(),
                         self.side, 
                         cam_idx,
                         frame_idx
                     )
+        
+        if os.path.exists(json_path):
+            with open(json_path) as jfile:
+                file = json.load(jfile)
+                bboxes = file['bboxes']
 
-                img = None  
-                if os.path.exists(img_path):
-                    img = cv2.imread(img_path, 0)
+                for cntr in bboxes:
+                    x1, y1 = cntr[0]
+                    x2, y2 = cntr[1]
+                    #SHOULD BE CHANGE (image is gray scale)
+                    res = cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
+        
+        return res
+    
+    def append_single_image_into_full_image(self, img:np.ndarray, i:int, j:int):
+        """puts a singlee image in correct position of full sheet image
 
-                # if img is None:  # if image doesnt exist, black image substitute
-                #     img = np.zeros(IMAGE_SHAPE, np.uint8)
-                #     else:
-                #         img = cv2.resize(img, (IMAGE_SHAPE[1], IMAGE_SHAPE[0]))
-                #     if self.show_bboxes:
-                #         if os.path.exists(json_path):
-                #             with open(json_path) as jfile:
-                #                 file = json.load(jfile)
-                #                 bboxes = file['bboxes']
+        Args:
+            img (np.ndarray): single image
+            i (int): horizentaly index. always start from 0
+            j (int): verticaly index. always start from 0
+        """
+        h,w = img.shape
+        self.sheet_full_image[j*h: (j+1)*h,
+                              i*w: (i+1)*w
+                              ] = img
+        
 
-                #                 for cntr in bboxes:
-                #                     x1, y1 = cntr[0]
-                #                     x2, y2 = cntr[1]
-                #                     cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
-
-
+    
     def init_img(self, color):
-        img = np.ones((self.sheet_shape[0], self.sheet_shape[1], 3), dtype=np.uint8)
+        img = np.ones((self.technical_sheet_shape[0], self.technical_sheet_shape[1], 3), dtype=np.uint8)
         img[:, :] *= np.array(self.__rgb2bgr__(color), np.uint8)
         return img
 
@@ -174,29 +276,52 @@ class sheetOverView:
         x, y = 0, 0
         if pt is None and key is not None:  # for keyboard press keys event
             x, y = self.pt
-            x += int(self.cell_shape[0] * MOVEMENTS_KEYS[key][0])
-            y += int(self.cell_shape[1] * MOVEMENTS_KEYS[key][1])
+            x += int(self.viewport_pointer_size[0] * MOVEMENTS_KEYS[key][0])
+            y += int(self.viewport_pointer_size[1] * MOVEMENTS_KEYS[key][1])
 
         else:  # for mouse drag event
-            x, y = int(pt[0] * (self.sheet_shape[1] - 1)), int(
-                pt[1] * (self.sheet_shape[0] - 1)
+            x, y = int(pt[0] * (self.technical_sheet_shape[1] - 1)), int(
+                pt[1] * (self.technical_sheet_shape[0] - 1)
             )
 
+        # cell_h, cell_w = self.cell_shape
+        # first_cam, last_cam = self.actives_camera
+       
+
+        # start_w = (first_cam-1) * cell_w #pointer shouldent be out of actives cameras
+        # end_w = last_cam * cell_w - 1
+        # start_h = 0
+        # end_h = self.technical_sheet_shape[0] - 1
+
+        # x = min(max(x, start_w), end_w - self.viewport_pointer_size[1])
+        # y = min(max(y, start_h), end_h - self.viewport_pointer_size[0])
+
+        self.pt = self.clip_pt((x,y)) #this show top-left corner of viewport pointer
+        self.update_real_imgs()
+    
+
+    def clip_pt(self, pt):
+        """check upper and lower limit of pt
+
+        Args:
+            pt (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        x,y = pt
         cell_h, cell_w = self.cell_shape
         first_cam, last_cam = self.actives_camera
-        first_cam -= 1
+       
 
-        start_w = first_cam * cell_w
-        end_w = last_cam * cell_w - 1
+        start_w = (first_cam-1) * cell_w #pointer shouldent be out of actives cameras
+        end_w = last_cam * cell_w 
         start_h = 0
-        end_h = self.sheet_shape[0] - 1
+        end_h = self.technical_sheet_shape[0] 
 
-        x = min(max(x, start_w + cell_w // 2), end_w - cell_w // 2)
-        y = min(max(y, start_h + cell_h // 2), end_h - cell_h // 2)
-
-        self.pt = (x, y)
-        # #print('pt',self.pt)
-        self.update_real_imgs()
+        x = min(max(x, start_w), end_w - self.viewport_pointer_size[1])
+        y = min(max(y, start_h), end_h - self.viewport_pointer_size[0])
+        return x,y
 
     # ______________________________________________________________________________________________________________________________
     #
@@ -248,10 +373,10 @@ class sheetOverView:
     # ______________________________________________________________________________________________________________________________
     def pointer2rect(self, pt):
         x, y = pt
-        xmin = x - self.cell_shape[1] // 2
-        xmax = x + self.cell_shape[1] // 2
-        ymin = y - self.cell_shape[0] // 2
-        ymax = y + self.cell_shape[0] // 2
+        xmin = x
+        xmax = x + self.viewport_pointer_size[1]
+        ymin = y
+        ymax = y + self.viewport_pointer_size[0]
         return (xmin, ymin), (xmax, ymax)
 
     # ______________________________________________________________________________________________________________________________
@@ -288,23 +413,23 @@ class sheetOverView:
         res = np.copy(img)
         if n == -1:
             if self.oriation == HORIZONTAL:
-                n = (self.sheet_shape[1] // self.cell_shape[1]) + 1
+                n = (self.technical_sheet_shape[1] // self.cell_shape[1]) + 1
             if self.oriation == VERTICAL:
-                n = (self.sheet_shape[0] // self.cell_shape[0]) + 1
+                n = (self.technical_sheet_shape[0] // self.cell_shape[0]) + 1
 
         if self.oriation == HORIZONTAL:
             for i in range(1, n):
                 x1 = self.cell_shape[1] * i
                 x2 = self.cell_shape[1] * i
                 y1 = 0
-                y2 = self.sheet_shape[0]
+                y2 = self.technical_sheet_shape[0]
 
                 self.draw_dline(img, (x1, y1), (x2, y2))
 
         if self.oriation == VERTICAL:
             for i in range(1, n):
                 x1 = 0
-                x2 = self.sheet_shape[1]
+                x2 = self.technical_sheet_shape[1]
                 y1 = self.cell_shape[0] * i
                 y2 = self.cell_shape[0] * i
 
@@ -460,9 +585,7 @@ class sheetOverView:
     #
     # _____________________________________________________________________________________________________________________________
     def reset_real_imgs(self):
-        self.real_imgs = []
-        self.real_idxs = []
-        self.real_res = 0
+        pass
 
 
     def set_show_bboxes(self):
@@ -471,127 +594,19 @@ class sheetOverView:
 
     def update_real_imgs(self):
         # try:
-        x, y = self.pt
-        center_cam = x // self.cell_shape[1]
-        center_frame = y // self.cell_shape[0]
-        start_cam = center_cam - 1
-        end_cam = center_cam + 1
-        # -----------
-        start_frame = center_frame - 1
-        end_frame = center_frame + 1
-        # #print('start_frame',start_frame,'end_frame',end_frame)
-        # -------------------------------------------
-        # -------------------------------------------
-        start_cam = min(
-            max(start_cam, 0), self.actives_camera[1] - 3
-        )
-        end_cam = min(max(end_cam, start_cam + 2), self.actives_camera[1]-1)
-        # -----------
-        start_frame = min(max(start_frame, 0), self.sheet_grid[0] - 3)
-        end_frame = min(max(end_frame, start_frame + 2), self.sheet_grid[0] - 1)
-        # #print(start_frame,end_frame)
-        # -------------------------------------------
-        # -------------------------------------------
-
-        new_idxs = []
-        new_imgs = []
-        for idx_cam in range(start_cam, end_cam+1):
-            for idx_frame in range(start_frame, end_frame+1):
-                idx = (idx_cam, idx_frame)
-                new_idxs.append(idx)
-
-                if (
-                    idx in self.real_idxs
-                ):  # if image corespond to this idx loaded befor,
-                    list_idx = self.real_idxs.index(idx)
-                    new_imgs.append(self.real_imgs[list_idx])
-
-                else:
-                    a = idx_cam
-                    img_path = pathStructure.sheet_image_path(
-                        self.sheet.get_main_path(),
-                        self.sheet.get_id(),
-                        self.side,
-                        a+1,
-                        idx_frame+1,
-                        self.sheet.get_image_format(),
-                    )
-                    json_path = pathStructure.sheet_suggestions_json_path(
-                        '',
-                        self.sheet.get_id(),
-                        self.side, 
-                        a+1,
-                        idx_frame+1
-                    )
-
-                    img = None  
-                    if os.path.exists(img_path):
-                        img = cv2.imread(img_path, 0)#[:,:,0]
-                    if img is None:  # if image doesnt exist, black image substitute
-                        img = np.zeros(IMAGE_SHAPE, np.uint8)
-                    else:
-                        img = cv2.resize(img, (IMAGE_SHAPE[1], IMAGE_SHAPE[0]))
-                    if self.show_bboxes:
-                        if os.path.exists(json_path):
-                            with open(json_path) as jfile:
-                                file = json.load(jfile)
-                                bboxes = file['bboxes']
-
-                                for cntr in bboxes:
-                                    x1, y1 = cntr[0]
-                                    x2, y2 = cntr[1]
-                                    cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
-                    new_imgs.append(img)
-
-        # #print(new_idxs)
-        self.real_idxs = new_idxs
-        self.real_imgs = new_imgs
-        # except:
-        #     #print("error load image")
+        pass
 
     # _____________________________________________________________________________________________________________________________
     #
     # _____________________________________________________________________________________________________________________________
     def get_real_img(self):
-        h_img, w_img = self.real_imgs[0].shape[:2]
-        gridn = int(len(self.real_imgs) ** 0.5)  # 9 images are 3x3
-        res_h, res_w = h_img * gridn, w_img * gridn
-
-        # merge images together
-        res_img = np.zeros((res_h, res_w), np.uint8)
-        for n in range(len(self.real_imgs)):
-            i = n // gridn
-            j = n - gridn * i
-            res_img[
-                j * h_img : (j + 1) * h_img, i * w_img : (i + 1) * w_img
-            ] = self.real_imgs[n]
-        x, y = self.pt
-        start_x_idx, start_y_idx = np.array(self.real_idxs).min(
-            axis=0
-        )  # start idx_x and idx_y of images that concatinate in res_img
-        # conver position of mouse in technical sheet image to normalized position of mouse in res_img
-        px = (
-            (x % self.cell_shape[1]) / (self.cell_shape[1] - 1)
-            + x // self.cell_shape[1]
-            - start_x_idx
-        )
-        py = (
-            (y % self.cell_shape[0]) / (self.cell_shape[0] - 1)
-            + y // self.cell_shape[0]
-            - start_y_idx
-        )
-        # denormalized position of mouse in res_img
-        px = int(px * w_img)
-        py = int(py * h_img)
-        # calc ROI on res_img
-        x1, y1 = px - w_img // 2, py - h_img // 2
-        x1 = min(max(x1, 0), res_w - w_img)
-        y1 = min(max(y1, 0), res_h - h_img)
+        norm_x, norm_y = self.get_pos()
+        h,w = self.sheet_full_image.shape
+        x = int(norm_x * w)
+        y = int(norm_y * h)
         
-        y2 = y1 + h_img
-        x2 = x1 + w_img
-
-        crop = res_img[y1:y2, x1:x2].copy()
+        crop = np.copy(self.sheet_full_image[ y:y+self.viewport_size[0], 
+                                     x:x+ self.viewport_size[1]])
 
         # -------------------
         return crop #cv2.cvtColor(crop, cv2.COLOR_BGR2RGB)
@@ -601,11 +616,10 @@ class sheetOverView:
     # _____________________________________________________________________________________________________________________________
     def fit(self, pt):
         
-        real_img_x, real_img_y = (
-            pt[0],
-            pt[1],
-        )  # normalize position of  mouse clicl event in real_img_window
-        real_img_x, real_img_y = real_img_x - 0.5, real_img_y - 0.5
+        real_img_x, real_img_y = pt[0],pt[1]
+        
+        # normalize position of  mouse clicl event in real_img_window
+        real_img_x, real_img_y = real_img_x / self.scale, real_img_y/ self.scale
         
 
         x, y = self.pt
@@ -619,17 +633,30 @@ class sheetOverView:
         idx_x = int(cx)
         idx_y = int(cy)
 
-        new_x = int(idx_x * (self.cell_shape[1]) + self.cell_shape[1] // 2)
-        new_y = int(idx_y * (self.cell_shape[0]) + self.cell_shape[0] // 2)
+        new_x = int(idx_x * (self.cell_shape[1]))
+        new_y = int(idx_y * (self.cell_shape[0]))
 
+
+      
+        # real_img_x, real_img_y = int(real_img_x ), int(real_img_y )
         
-        res = self.sheet_img.copy()
-        res = cv2.circle(res, (self.pt), 15, color=(255,0,0), thickness=-1)
-        res = cv2.circle(res, (new_x, new_y), 15, color=(0,0,255), thickness=-1)
-        cv2.imwrite('res.png', res)
+
+        # x, y = self.pt
+        
+        # cx = x / (self.cell_shape[1] )
+        # cy = y / (self.cell_shape[0] )
+
+        # cx = cx + real_img_x
+        # cy = cy + real_img_y
+
+        # idx_x = int(cx)
+        # idx_y = int(cy)
+
+        # new_x = int(idx_x * (self.cell_shape[1]))
+        # new_y = int(idx_y * (self.cell_shape[0]))
 
 
-        self.pt = (new_x, new_y)
+        self.pt = self.clip_pt((new_x, new_y))
         self.is_fit = True
 
     # _____________________________________________________________________________________________________________________________
@@ -641,9 +668,15 @@ class sheetOverView:
         return cv2.cvtColor(self.result_img, cv2.COLOR_BGR2RGB)
 
 
-    def get_pos(self):
-        pt_norm_x = self.pt[0] / self.sheet_shape[1]
-        pt_norm_y = self.pt[1] / self.sheet_shape[0]
+    def get_pos(self)-> tuple:
+        """returns normalized coordinate on thechnical sheet
+
+        Returns:
+            tuple: norm_x, norm_y
+        """
+
+        pt_norm_x = self.pt[0] / self.technical_sheet_shape[1]
+        pt_norm_y = self.pt[1] / self.technical_sheet_shape[0]
 
         return (pt_norm_x, pt_norm_y)
 
@@ -685,7 +718,7 @@ if __name__ == "__main__":
     sheet_view = sheetOverView(
         sheet=sheet,
         side=TOP,
-        sheet_shape=(51*sheet.get_nframe(), 41*12),
+        technical_sheet_shape=(51*sheet.get_nframe(), 41*12),
         sheet_grid=(sheet.get_nframe(), 12),
         oriation=VERTICAL,
     )
