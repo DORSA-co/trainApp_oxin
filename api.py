@@ -59,25 +59,25 @@ import texts  # eror and warnings texts
 import texts_codes
 from utils1 import tempMemory, Utils
 from backend.dataset import Dataset
-import train_api
+# import train_api
 from labeling import labeling_api
 from pynput.mouse import Controller
 from login_win.login_api import login_API
 from camera_live_thread import ImageManager
 import dataset_utils
 import image_processing_worker
+from technical_load_sheet_worker import technical_load_sheet_worker
 import save_all_worker
 import random
 from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
 
 from backend import pipelines
-from backend.pipline_creation_module import ModelsCreation_worker
+# from backend.pipline_creation_module import ModelsCreation_worker
 from backend.pipline_evaluation_module import Evaluation_worker
 from backend.binary_list_funcs import PIPLINES_PATH
 from backend.pipelines import Pipeline
 import backend.pipelines
 
-from technical_load_sheet_worker import technical_load_sheet_worker, Alaki
 from PySide6.QtWidgets import QVBoxLayout
 import matplotlib.pyplot as plt
 # from tensorflow.keras.metrics import Accuracy, Precision, Recall
@@ -359,7 +359,6 @@ class API:
 
         # ImageProcessing
         self.sheet_imgprocessing_mem = {}
-        self.finished_threads = 0
 
         # notif manager
 
@@ -426,6 +425,13 @@ class API:
         self.technical_threads = {}
         self.technical_workers = {}
         self.technical_thread_cnt = {}
+
+        self.suggestion_threads = []
+        self.suggestion_workers = []
+
+        self.update_defect_threads = {}
+        self.update_defect_workers = {}
+        self.update_defect_thread_cnt = {}
         
     def show_speed(self):
         # print(self.l2_connection.last_speed)
@@ -1787,37 +1793,9 @@ class API:
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
-    def finish_th(self):
-        self.finished_threads += 1
-        if self.finished_threads == self.n_threads:
-            self.finished_threads = 0
-            self.sheet_imgprocessing_mem[self.sheet.get_id()] = True
-            loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', self.language])
-            for side, _ in self.ui.get_technical(name=False).items():
-                #self.thechnicals_backend[side].reset_real_imgs()
-                self.thechnicals_backend[side].set_show_bboxes()
-                self.thechnicals_backend[side].update_defect()
-                selecteds = self.selected_images_for_label.get_sheet_side_selections(
-                    str(self.sheet.get_id()), side
-                )
-
-                self.thechnicals_backend[side].update_selected(selecteds)
-                self.thechnicals_backend[side].update_real_imgs()
-                self.current_technical_side = side
-                self.refresh_thechnical(fp=1)
-
-                self.ui.set_enabel(self.ui.load_coil_btn, True)
-                self.ui.set_enabel(self.ui.next_coil_btn, True)
-                self.ui.set_enabel(self.ui.prev_coil_btn, True)
-                self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
-            loading_process.terminate()
 
     def load_suggestions(self, state=0):
         if self.ui.checkBox_suggested_defects.isChecked():
-            self.ui.suggested_defects_progressBar.setValue(0)
-            self.ui.suggested_defects_progressBar.setMaximum(
-                self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe()
-            )
             jsons_main_path = self.db.get_suggestions_path()
             jsons_path = pathStructure.sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
             if not os.path.exists(jsons_path):
@@ -1829,68 +1807,147 @@ class API:
                 self.ui.set_enabel(self.ui.prev_coil_btn, False)
                 self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
 
-                self.n_threads = 12
-                step = 1
+                self.reset_suggestion_progressbar(self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe() * 2)
 
-                self.threads = []
-                self.workers = []
-                for i in range(self.n_threads):
-                    self.threads.append(sQThread())
-                    # Step 3: Create a worker object
-                    self.workers.append(
-                        image_processing_worker.image_processing_worker()
-                    )
-                    self.workers[-1].assign_parameters(
-                        n_cameras=((i*step)+1, (i+1)*step),
-                        n_frames=(1, self.sheet.get_nframe()), 
-                        res_main_path=jsons_main_path,
-                        sheet_id=self.sheet.get_id(), 
-                        active_cameras = self.sheet.get_cameras(),
-                        img_format=self.sheet.get_image_format(),
-                        img_shape=data_grabber.IMAGE_SHAPE,
-                        api_obj=self,
-                        ui_obj=self.ui,
-                        db_obj=self.db,
-                    )
-                    # Step 4: Move worker to the thread
-                    self.workers[-1].moveToThread(self.threads[-1])
-                    # Step 5: Connect signals and slots
-                    self.threads[-1].started.connect(self.workers[-1].run_algorithm)
-                    self.workers[-1].finished.connect(self.threads[-1].quit)
-                    self.workers[-1].finished.connect(self.finish_th)
-                    self.workers[-1].finished.connect(self.workers[-1].deleteLater)
-                    self.threads[-1].finished.connect(self.threads[-1].deleteLater)
-                    self.workers[-1].update_progressbar.connect(
-                        self.update_suggestion_progressbar
-                    )
-                    # Step 6: Start the thread
-                    self.threads[-1].start()
+                self.start_suggestion_threads(jsons_main_path=jsons_main_path, n_threads=12)
 
             else:
-                loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py'])
-                for side, _ in self.ui.get_technical(name=False).items():
-                    #self.thechnicals_backend[side].reset_real_imgs()
-                    self.thechnicals_backend[side].set_show_bboxes()
-                    self.thechnicals_backend[side].update_defect()
-                    selecteds = (
-                        self.selected_images_for_label.get_sheet_side_selections(
-                            str(self.sheet.get_id()), side
-                        )
-                    )
-
-                    self.thechnicals_backend[side].update_selected(selecteds)
-                    self.thechnicals_backend[side].update_real_imgs()
-                    self.current_technical_side = side
-                    self.refresh_thechnical(fp=1)
-                loading_process.terminate()
-                
+                self.reset_suggestion_progressbar(self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe())
+                self.update_technical_with_suggestions()
         else:
             self.build_sheet_technical(self.sheet)
+
+    def start_suggestion_threads(self, jsons_main_path, n_threads):
+        self.suggestion_nthreads = n_threads
+        self.suggestion_thread_cnt = 0
+
+        step = NCAMERA//n_threads
+
+        self.suggestion_threads = []
+        self.suggestion_workers = []
+
+        for i in range(n_threads):
+            self.suggestion_threads.append(sQThread())
+            self.suggestion_workers.append(
+                image_processing_worker.image_processing_worker(
+                    n_cameras=((i*step)+1, (i+1)*step),
+                    n_frames=(1, self.sheet.get_nframe()),
+                    res_main_path=jsons_main_path,
+                    sheet_id=self.sheet.get_id(),
+                    active_cameras = self.sheet.get_cameras(),
+                    img_format=self.sheet.get_image_format(),
+                    img_shape=data_grabber.IMAGE_SHAPE,
+                    api_obj=self,
+                    ui_obj=self.ui,
+                    db_obj=self.db,
+                )
+            )
+            self.suggestion_workers[-1].moveToThread(self.suggestion_threads[-1])
+            self.suggestion_threads[-1].started.connect(self.suggestion_workers[-1].run_algorithm)
+            self.suggestion_workers[-1].finished.connect(self.finish_suggestion_loading_threads)
+            self.suggestion_workers[-1].update_progressbar.connect(self.update_suggestion_progressbar)
+            self.suggestion_workers[-1].finished.connect(self.suggestion_threads[-1].quit)
+            self.suggestion_workers[-1].finished.connect(self.suggestion_workers[-1].deleteLater)
+            self.suggestion_threads[-1].finished.connect(self.suggestion_threads[-1].deleteLater)
+
+            self.suggestion_threads[-1].start()
+
+    def finish_suggestion_loading_threads(self):
+        self.suggestion_thread_cnt += 1
+        if self.suggestion_thread_cnt == self.suggestion_nthreads:
+            self.sheet_imgprocessing_mem[self.sheet.get_id()] = True
+
+            self.update_technical_with_suggestions()
+
+            self.ui.set_enabel(self.ui.load_coil_btn, True)
+            self.ui.set_enabel(self.ui.next_coil_btn, True)
+            self.ui.set_enabel(self.ui.prev_coil_btn, True)
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
+
+    def update_technical_with_suggestions(self):
+        # loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', self.language])
+        for side, _ in self.ui.get_technical(name=False).items():
+            self.thechnicals_backend[side].set_show_bboxes()
+            # self.thechnicals_backend[side].update_defect()
+            self.start_update_defects_threads(self.thechnicals_backend[side], n_threads=1)
+            # selecteds = self.selected_images_for_label.get_sheet_side_selections(
+            #     str(self.sheet.get_id()), side
+            # )
+
+            # self.thechnicals_backend[side].update_selected(selecteds)
+            # self.thechnicals_backend[side].update_real_imgs()
+            # self.current_technical_side = side
+            # self.refresh_thechnical(fp=1)
+
+        # loading_process.terminate()
+
+    def start_update_defects_threads(self, technical_obj, n_threads):
+        side  = technical_obj.get_side()
+        self.update_defect_workers[side] = []
+        self.update_defect_threads[side] = []
+
+        ncamera = technical_obj.sheet.get_cameras()
+        nframe = technical_obj.sheet.get_nframe()
+
+        batch_frame = int(np.ceil(nframe / n_threads)) 
+        self.update_defect_nthreads = n_threads
+        self.update_defect_thread_cnt[side] = 0
+
+        for i in range(n_threads):
+            self.update_defect_threads[side].append(sQThread())
+
+            start_cam = ncamera[0]
+            end_cam = ncamera[1] + 1
+
+            start_frame = (i*batch_frame)+1
+            end_frame = min((i+1)*batch_frame+1, nframe+1)
+            
+            self.update_defect_workers[side].append( 
+                image_processing_worker.update_defects_worker(
+                                            technical_obj,
+                                            n_cameras=(start_cam, end_cam),
+                                            n_frames=(start_frame, end_frame),
+                                            )
+                                        )
+            
+            self.update_defect_workers[side][-1].moveToThread(self.update_defect_threads[side][-1])
+            self.update_defect_threads[side][-1].started.connect(self.update_defect_workers[side][-1].run)
+            self.update_defect_workers[side][-1].finished.connect(self.finish_update_defects_threads(side))
+            self.update_defect_workers[side][-1].update_progressbar_update_defects.connect(self.update_suggestion_progressbar2)
+            self.update_defect_workers[side][-1].finished.connect(self.update_defect_threads[side][-1].quit)
+            self.update_defect_workers[side][-1].finished.connect(self.update_defect_workers[side][-1].deleteLater)
+            self.update_defect_threads[side][-1].finished.connect(self.update_defect_threads[side][-1].deleteLater)
+
+            self.update_defect_threads[side][-1].start()
+
+    def finish_update_defects_threads(self, side):
+        def func():
+            selecteds = self.selected_images_for_label.get_sheet_side_selections(
+                str(self.sheet.get_id()), side
+            )
+
+            self.thechnicals_backend[side].update_selected(selecteds)
+            self.thechnicals_backend[side].update_real_imgs()
+            self.current_technical_side = side
+            self.refresh_thechnical(fp=1)
+        return func
 
     def update_suggestion_progressbar(self):
         self.ui.suggested_defects_progressBar.setValue(
             self.ui.suggested_defects_progressBar.value() + 1
         )
+        
+    def update_suggestion_progressbar2(self):
+        self.ui.suggested_defects_progressBar.setValue(
+            self.ui.suggested_defects_progressBar.value() + 1
+        )
+
+    def reset_suggestion_progressbar(self, max_value):
+        self.ui.suggested_defects_progressBar.setValue(0)
+        if max_value:
+            self.ui.suggested_defects_progressBar.setMaximum(max_value)
+        else:
+            self.ui.load_sheets_win.suggested_defects_progressBar.setMaximum(100)
 
     def update_loading_progressBar(self):
         self.ui.load_sheets_win.loading_progressBar.setValue(
@@ -1899,7 +1956,10 @@ class API:
 
     def reset_loading_progressBar(self, max_value):
         self.ui.load_sheets_win.loading_progressBar.setValue(0)
-        self.ui.load_sheets_win.loading_progressBar.setMaximum(max_value)
+        if max_value:
+            self.ui.load_sheets_win.loading_progressBar.setMaximum(max_value)
+        else:
+            self.ui.load_sheets_win.loading_progressBar.setMaximum(100)
 
     def technical_zoom_in(self):
         current_side = self.current_technical_side
@@ -1910,7 +1970,6 @@ class API:
             self.refresh_thechnical(fp=1)
 
         self.current_technical_side = current_side
-        
 
     def technical_zoom_out(self):
         current_side = self.current_technical_side
@@ -1934,102 +1993,44 @@ class API:
                                                             (self.sheet.get_nframe(), NCAMERA),
                                                             actives_camera=sheet.get_cameras(),
                                                         )
-
-                o1 = data_grabber.sheetOverView(
-                                                            sheet,
-                                                            side,  # side of sheet that is UO
-                                                            (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
-                                                            (self.sheet.get_nframe(), NCAMERA),
-                                                            actives_camera=sheet.get_cameras(),
-                                                        )
-                o2 = data_grabber.sheetOverView(
-                                                            sheet,
-                                                            side,  # side of sheet that is UO
-                                                            (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
-                                                            (self.sheet.get_nframe(), NCAMERA),
-                                                            actives_camera=sheet.get_cameras(),
-                                                        )
-                o_alaki = Alaki(sheet)
-                self.start_technical_loading_threads(self.thechnicals_backend[side], o1, o2,o_alaki, n_threads=5)
-                # self.technical_backend[side] = thechnicals_backend[side]
                 
+                self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=5)
 
         except Exception as e:
+            print('*'*20)
             print(e)
-            # #print("Error!: load_sheet() in API")
+            print('*'*20)
 
-    def start_technical_loading_threads(self, technical_obj: data_grabber.sheetOverView, o1, o2,o_alaki, n_threads):
-        
+    def start_technical_loading_threads(self, technical_obj: data_grabber.sheetOverView, n_threads: int):
         side  = technical_obj.get_side()
         self.technical_workers[side] = []
         self.technical_threads[side] = []
 
+        ncamera = technical_obj.sheet.get_cameras()
         nframe = technical_obj.sheet.get_nframe()
-        batch_frame = int(np.ceil(nframe / n_threads)) #frame count for each thread
+
+        batch_frame = int(np.ceil(nframe / n_threads)) 
         self.technical_nthreads = n_threads
         self.technical_thread_cnt[side] = 0
         self.close_technical_nside = 2
         self.close_technical_cnt = 0
 
-        # if side == 'bottom':
-        #     return
-
-        # i = 0
-        # start_frame = (i*batch_frame)+1
-        # end_frame = min((i+1)*batch_frame+1, nframe+1)
-
-        
-
-        # self.technical_worker_up1 = technical_load_sheet_worker(technical_obj, o_alaki,
-        #                                     frame_range=(start_frame, end_frame),
-        #                                     )
-        
-        
-        # self.technical_thread_up1 = sQThread()
-
-        # self.technical_worker_up1.moveToThread(self.technical_thread_up1)
-        # self.technical_thread_up1.started.connect(self.technical_worker_up1.run)
-        # self.technical_worker_up1.finished.connect(self.finish_technical_loading_threads(side))
-        # self.technical_worker_up1.update_progressbar.connect(self.update_loading_progressBar)
-        # self.technical_worker_up1.finished.connect(self.technical_thread_up1.quit)
-        # self.technical_worker_up1.finished.connect(self.technical_worker_up1.deleteLater)
-        # self.technical_thread_up1.finished.connect(self.technical_thread_up1.deleteLater)
-
-        
-
-        # i = 1
-        # start_frame = (i*batch_frame)+1
-        # end_frame = min((i+1)*batch_frame+1, nframe+1)
-
-        # self.technical_worker_up2 = technical_load_sheet_worker(technical_obj, o_alaki,
-        #                                     frame_range=(start_frame, end_frame),
-        #                                     )
-        
-        # self.technical_thread_up2 = sQThread()
-
-        # self.technical_worker_up2.moveToThread(self.technical_thread_up2)
-        # self.technical_thread_up2.started.connect(self.technical_worker_up2.run)
-        # self.technical_worker_up2.finished.connect(self.finish_technical_loading_threads(side))
-        # self.technical_worker_up2.update_progressbar.connect(self.update_loading_progressBar)
-        # self.technical_worker_up2.finished.connect(self.technical_thread_up2.quit)
-        # self.technical_worker_up2.finished.connect(self.technical_worker_up2.deleteLater)
-        # self.technical_thread_up2.finished.connect(self.technical_thread_up2.deleteLater)
-
-        # self.technical_thread_up2.start()
-        # #time.sleep(5)
-        # self.technical_thread_up1.start()
-
-        
         for i in range(n_threads):
             self.technical_threads[side].append(sQThread())
 
+            start_cam = ncamera[0]
+            end_cam = ncamera[1] + 1
+
             start_frame = (i*batch_frame)+1
             end_frame = min((i+1)*batch_frame+1, nframe+1)
+            
             self.technical_workers[side].append( 
-                technical_load_sheet_worker(technical_obj, 
+                technical_load_sheet_worker(
+                                            technical_obj,
+                                            camera_range=(start_cam, end_cam),
                                             frame_range=(start_frame, end_frame),
                                             )
-                )
+                                        )
             
             self.technical_workers[side][-1].moveToThread(self.technical_threads[side][-1])
             self.technical_threads[side][-1].started.connect(self.technical_workers[side][-1].run)
@@ -2039,11 +2040,7 @@ class API:
             self.technical_workers[side][-1].finished.connect(self.technical_workers[side][-1].deleteLater)
             self.technical_threads[side][-1].finished.connect(self.technical_threads[side][-1].deleteLater)
 
-        for i in range(n_threads):
-            self.technical_threads[side][i].start()
-
-
-            print('THREAD {} {} STARTED'.format(side, i))
+            self.technical_threads[side][-1].start()
 
     def finish_technical_loading_threads(self, side):
         def func():

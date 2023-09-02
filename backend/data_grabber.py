@@ -83,7 +83,6 @@ class sheetOverView:
         self.update_pointer((0, 0))
         #-----------------------------------------News
         self.sheet_full_image = self.initsheet_full_image()
-        #self.load_images_from_file()
 
     def set_loading_callback(self, func):
         self.loading_callback = func
@@ -92,74 +91,33 @@ class sheetOverView:
         self.scale = scale
         self.viewport_size = int(self.single_image_shape[0] / scale) , int(self.single_image_shape[1] / scale)
         self.viewport_pointer_size = int( self.cell_shape[0] / scale) , int( self.cell_shape[1] / scale) #size of rectangle pointer
+ 
+    def load_custom_images_from_file(self, camera_range:tuple, frame_idx:int, cam_idx:int):
+        img_path = pathStructure.sheet_image_path(
+                    self.sheet.get_main_path(),
+                    self.sheet.get_id(),
+                    self.side,
+                    cam_idx,
+                    frame_idx,
+                    self.sheet.get_image_format(),
+                )
 
-    def load_images_from_file(self):
-        """load all images from file and merge them into single image
-        """
-        first_cam, last_cam = self.sheet.get_cameras()
-        frame_counts = self.sheet.get_nframe()
-        self.load_custom_images_from_file( camera_range=(first_cam, last_cam + 1),
-                                          frame_range=(1, frame_counts + 1)
-                                          )   
-         
-        
-    
-    def load_custom_images_from_file(self, camera_range:tuple, frame_range:tuple):
-        if frame_range is None:
-            frame_range = (1, self.sheet.get_nframe() + 1)
-        if camera_range is None:
-            first_cam, last_cam = self.sheet.get_cameras()
-            camera_range = first_cam, last_cam + 1
+        img = None  
+        if os.path.exists(img_path):
+            img = cv2.imread(img_path, 0)
 
-        for frame_idx in range(*frame_range):
-            for cam_idx in range(*camera_range):
+        if img is not None:
+            if self.show_bboxes:
+                img = self.draw_defect_bbox_on_single_image(img, cam_idx, frame_idx)
 
-                img_path = pathStructure.sheet_image_path(
-                            self.sheet.get_main_path(),
-                            self.sheet.get_id(),
-                            self.side,
-                            cam_idx,
-                            frame_idx,
-                            self.sheet.get_image_format(),
-                        )
-                
-                
-                
-                img = None  
-                if os.path.exists(img_path):
-                    img = cv2.imread(img_path, 0)
-                #print(cam_idx, frame_idx, img_path)
-                #print(img)
-                if img is not None:
-                    #img = cv2.resize(img, (IMAGE_SHAPE[1], IMAGE_SHAPE[0]))
-                    if self.show_bboxes:
-                        img = self.draw_defect_bbox_on_single_image(img, cam_idx, frame_idx)
+            if self.single_image_shape is None:
+                self.single_image_shape = img.shape[:2]
 
-                    if self.single_image_shape is None:
-                        self.single_image_shape = img.shape[:2]
-
-                    i = cam_idx - camera_range[0]
-                    j = frame_idx - 1
-                    self.append_single_image_into_full_image(img, i, j)
-                else:
-                    print(f'Warning: image of camera{cam_idx} and frame{frame_idx} not exist')
-
-                #n += 1 
-                if self.loading_callback is not None:
-                    #self.loading_callback( int(n/total_loop * 100) )
-                    self.loading_callback()
-        print('load finish', self)
-        print(f'thecnicak sheet {self.side} loaded')
-    # def merge_single_images(self,):
-    #     nrows = len(self.__loaded_images__)
-    #     ncols = len(self.__loaded_images__[0])
-    #     self.sheet_full_image = None
-    #     for j in range(nrows):
-    #         row_image = None
-    #         for i in range(ncols):
-    #             img = self.__loaded_images__[j].pop(0)
-    #             if row_image is None:
-                
+            i = cam_idx - camera_range[0]
+            j = frame_idx - 1
+            self.append_single_image_into_full_image(img, i, j)
+        else:
+            print(f'Warning: image of camera{cam_idx} and frame{frame_idx} not exist')
 
     def initsheet_full_image(self) -> np.ndarray :
         """generate an black image of full sheet image (all in one)
@@ -197,7 +155,7 @@ class sheetOverView:
                         cam_idx,
                         frame_idx
                     )
-        
+        res = None
         if os.path.exists(json_path):
             with open(json_path) as jfile:
                 file = json.load(jfile)
@@ -207,9 +165,12 @@ class sheetOverView:
                     x1, y1 = cntr[0]
                     x2, y2 = cntr[1]
                     #SHOULD BE CHANGE (image is gray scale)
-                    res = cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
+                    res = cv2.rectangle(img, (x1, y1), (x2, y2), 255, 2)
         
-        return res
+        if res is not None:
+            return res
+        else:
+            return img
     
     def append_single_image_into_full_image(self, img:np.ndarray, i:int, j:int):
         """puts a singlee image in correct position of full sheet image
@@ -244,23 +205,21 @@ class sheetOverView:
     # ______________________________________________________________________________________________________________________________
     #
     # ______________________________________________________________________________________________________________________________
-    def update_defect(self):
-        for c in range(1, self.actives_camera[1]+1):
-            for f in range(1, self.sheet.get_nframe()+1):
-                json_path = pathStructure.sheet_suggestions_json_path(
-                    '',
-                    self.sheet.get_id(),
-                    self.side, 
-                    c, 
-                    f
-                )
-                if os.path.exists(json_path):
-                    with open(json_path) as jfile:
-                        file = json.load(jfile)
-                        status = file['status']
-                else:
-                    status = 'black'
-                self.sheet_img = self.draw_defect(self.sheet_img, [c-1, f-1], status)
+    def update_defect(self, c, f):
+        json_path = pathStructure.sheet_suggestions_json_path(
+            '',
+            self.sheet.get_id(),
+            self.side, 
+            c, 
+            f
+        )
+        if os.path.exists(json_path):
+            with open(json_path) as jfile:
+                file = json.load(jfile)
+                status = file['status']
+        else:
+            status = 'black'
+        self.sheet_img = self.draw_defect(self.sheet_img, [c-1, f-1], status)
 
     # ______________________________________________________________________________________________________________________________
     #
