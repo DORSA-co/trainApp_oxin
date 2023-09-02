@@ -83,7 +83,7 @@ class sheetOverView:
         self.update_pointer((0, 0))
         #-----------------------------------------News
         self.sheet_full_image = self.initsheet_full_image()
-        self.load_images_from_file()
+        #self.load_images_from_file()
 
     def set_loading_callback(self, func):
         self.loading_callback = func
@@ -98,11 +98,21 @@ class sheetOverView:
         """
         first_cam, last_cam = self.sheet.get_cameras()
         frame_counts = self.sheet.get_nframe()
-            
-        total_loop = frame_counts*(last_cam - first_cam + 1)
-        n = 0
-        for frame_idx in range(1, frame_counts+1):
-            for cam_idx in range(first_cam, last_cam+1):
+        self.load_custom_images_from_file( camera_range=(first_cam, last_cam + 1),
+                                          frame_range=(1, frame_counts + 1)
+                                          )   
+         
+        
+    
+    def load_custom_images_from_file(self, camera_range:tuple, frame_range:tuple):
+        if frame_range is None:
+            frame_range = (1, self.sheet.get_nframe() + 1)
+        if camera_range is None:
+            first_cam, last_cam = self.sheet.get_cameras()
+            camera_range = first_cam, last_cam + 1
+
+        for frame_idx in range(*frame_range):
+            for cam_idx in range(*camera_range):
 
                 img_path = pathStructure.sheet_image_path(
                             self.sheet.get_main_path(),
@@ -115,10 +125,11 @@ class sheetOverView:
                 
                 
                 
-                #img = None  
-                #if os.path.exists(img_path):
-                img = cv2.imread(img_path, 0)
-                    
+                img = None  
+                if os.path.exists(img_path):
+                    img = cv2.imread(img_path, 0)
+                #print(cam_idx, frame_idx, img_path)
+                #print(img)
                 if img is not None:
                     #img = cv2.resize(img, (IMAGE_SHAPE[1], IMAGE_SHAPE[0]))
                     if self.show_bboxes:
@@ -127,13 +138,13 @@ class sheetOverView:
                     if self.single_image_shape is None:
                         self.single_image_shape = img.shape[:2]
 
-                    i = cam_idx - first_cam
+                    i = cam_idx - camera_range[0]
                     j = frame_idx - 1
                     self.append_single_image_into_full_image(img, i, j)
                 else:
                     print(f'Warning: image of camera{cam_idx} and frame{frame_idx} not exist')
 
-                n += 1 
+                #n += 1 
                 if self.loading_callback is not None:
                     #self.loading_callback( int(n/total_loop * 100) )
                     self.loading_callback()

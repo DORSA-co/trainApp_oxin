@@ -44,7 +44,7 @@ class data_loader(QMainWindow, ui):
     def __init__(self, main_ui_obj):
         super(data_loader, self).__init__()
         self.setupUi(self)
-        flags = Qt.WindowFlags(Qt.FramelessWindowHint|Qt.WindowStaysOnTopHint)
+        flags = Qt.WindowFlags(Qt.FramelessWindowHint)#|Qt.WindowStaysOnTopHint)
         self.pos_ = self.pos()
         self.setWindowFlags(flags)
         title = "SENSE-Sheet Loader"

@@ -158,7 +158,7 @@ class Sheet:
         return self.main_path
 
     def get_nframe(self):
-        return int(self.nframe / 10)
+        return int(self.nframe)
 
     def get_cameras(self):
         return self.cameras

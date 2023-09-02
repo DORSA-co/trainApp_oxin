@@ -94,7 +94,7 @@ class connection_level2():
             cameras = int(np.ceil(float(self.data['WIDTH'])*self.max_cameras/self.max_width))
             projectors = int(np.ceil(float(self.data['WIDTH'])*self.max_projectors/self.max_width))
             projectors = 6
-            cameras = 12
+            # cameras = 12
             return cameras, projectors, self.data
         else:
             return 0, 0, None
@@ -104,7 +104,6 @@ class connection_level2():
         cleaned_data = data.decode("ISO-8859-1") 
         cleaned_data = ''.join(cleaned_data.split())
         cleaned_data = re.sub(r'[^a-zA-Z0-9_.]', '', cleaned_data)
-        print(cleaned_data)
         keywords = ['PLATE_ID', 'ORDER_ID', 'HEAT_ID', 'QC_STANDARD', 'LENGHT', 'WIDTH', 'THICKNESS', 'LENGHT_ORDER', 'WIDTH_ORDER', 'THICKNESS_ORDER', 'speed']
         indices = [cleaned_data.find(k) for k in keywords]
 
@@ -122,8 +121,9 @@ class connection_level2():
         
         self.data = res
     def convert_speed(self,data,last_speed=True):
-        cleaned_data = data
-        # cleaned_data = data.decode("ISO-8859-1") 
+        
+    
+        cleaned_data = data.decode("ISO-8859-1") 
         cleaned_data = ''.join(cleaned_data.split())
         cleaned_data = re.sub(r'[^a-zA-Z0-9_.]', '', cleaned_data)
         keywords = ['T'+str(i) for i in range(21)]
@@ -138,21 +138,21 @@ class connection_level2():
         for i in range(len(indices) - 1):
             res.append(cleaned_data[indices[i]+5:indices[i+1]])
         res.append(cleaned_data[indices[-1]+5:])
-        print(res)
+        # print(res)
 
 
         if last_speed:
-            try:
+            # try:
                 
                 if len(res)>9:
                     self.last_speed=(float(res[-1][3:]))
                 else:
-                    last_speed = float(res[-1][2:])
-                print('last_speed : ',self.last_speed)
+                    self.last_speed = float(res[-1][2:])
+                # print('last_speed : ',self.last_speed)
                 return self.last_speed
-            except:
-                print('Get Speed Error')
-                return -1
+            # except:
+            #     print('Get Speed Error')
+            #     return -1
                         
     def connect(self):
         # Should add connection function here and get details
@@ -215,48 +215,21 @@ class connection_level2():
             threading.Timer(self.get_data_timer, self.get_data).start()
                
 
-    def get_speed(self):
-
-        # try:
-        t1 = datetime.now()
-        conn,addr=self.get_speed_socket.accept()
-        data=conn.recv(100000)
-        speed=self.convert_speed(data)
-        print(speed)
-        conn.send(data)
-        # self.convert_data(data)
-        self.retry_get_speed = 0
-        # except:
-        #     print('Except')
-        #     self.retry_get_speed+=1
-        #     data = SAMPLE
-        #     self.convert_speed(data)
-        #     if self.retry_get_speed<10:
-        #         self.get_speed_socket = self.create_connection(PORT_SPEED)
-        #         print('ERROR Level2 Get Speed')
-        #     # log.warning('Level2 connection Error')
-        #     time.sleep(1)
-
-        if not self.close_ui:
-            threading.Timer(0.9, self.get_speed).start()
-
 
 
 
     def get_speed(self):
-
+        
         try:
             t1 = datetime.now()
             conn,addr=self.get_speed_socket.accept()
             data=conn.recv(100000)
             conn.send(data)
-            # self.convert_data(data)
+            self.convert_speed(data)
             self.retry_get_speed = 0
         except:
-            print('Except')
+            # print('Except')
             self.retry_get_speed+=1
-            data = SAMPLE
-            self.convert_speed(data)
             if self.retry_get_speed<10:
                 self.get_speed_socket = self.create_connection(PORT_SPEED)
                 print('ERROR Level2 Get Speed')

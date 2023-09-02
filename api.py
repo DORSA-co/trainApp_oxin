@@ -1,4 +1,5 @@
 # from logging import _Level
+import copy
 import ast
 from email.mime import image
 from importlib.resources import path
@@ -76,7 +77,7 @@ from backend.binary_list_funcs import PIPLINES_PATH
 from backend.pipelines import Pipeline
 import backend.pipelines
 
-
+from technical_load_sheet_worker import technical_load_sheet_worker, Alaki
 from PySide6.QtWidgets import QVBoxLayout
 import matplotlib.pyplot as plt
 # from tensorflow.keras.metrics import Accuracy, Precision, Recall
@@ -421,12 +422,13 @@ class API:
         self.speed_mode = True
 
         self.technical_scale = 1
+
+        self.technical_threads = {}
+        self.technical_workers = {}
+        self.technical_thread_cnt = {}
         
     def show_speed(self):
         # print(self.l2_connection.last_speed)
-        
-
-
         if self.l2_connection.last_speed>0 and not self.speed_mode:
             self.ui.label_228.setStyleSheet("color : #1A5D1A")
             self.speed_mode = True
@@ -434,12 +436,7 @@ class API:
         if self.l2_connection.last_speed<=0 and self.speed_mode:
             self.ui.label_228.setStyleSheet("color : #C51605")
             self.speed_mode = False
-            self.ui.label_228.setText('STOP 0.0 ')
-
-        
-        
-
-
+            self.ui.label_228.setText('{} 0.0 '.format(texts.Titles['stop'][self.language]))
 
     def remove_pypylon_chache(self):
         try:
@@ -555,11 +552,11 @@ class API:
         )
 
     def start_storage_checking(self):
-        # self.check_storage()
+        self.check_storage()
         if not self.storage_timer:
             self.storage_timer = QTimer()
             self.storage_timer.timeout.connect(self.check_storage)
-        # self.storage_timer.start(1000*60*self.update_time)
+        self.storage_timer.start(1000*60*self.update_time)
 
     def restart_storage_checking(self):
         self.storage_timer.stop()
@@ -1738,7 +1735,7 @@ class API:
         self.ui.clear_table()
         # self.ui.load_sheets_win.close()
         self.load_sheet()
-        self.ui.load_sheets_win.close()
+        
 
         # ----------------------------------------------------------------------------------------
 
@@ -1927,30 +1924,144 @@ class API:
 
     def build_sheet_technical(self, sheet):
         try:
-            self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1] - sheet.get_cameras()[0])*2)
-            self.thechnicals_backend = {}
+            self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
+            self.technical_backend = {}
             for side, _ in self.ui.get_technical(name=False).items():
                 self.thechnicals_backend[side] = data_grabber.sheetOverView(
-                    sheet,
-                    side,  # side of sheet that is UO
-                    (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
-                    (self.sheet.get_nframe(), NCAMERA),
-                    # sheet.get_grade_shape(),
-                    actives_camera=sheet.get_cameras(),
-                    oriation=data_grabber.VERTICAL,
-                    loading_callback=self.update_loading_progressBar
-                )
+                                                            sheet,
+                                                            side,  # side of sheet that is UO
+                                                            (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
+                                                            (self.sheet.get_nframe(), NCAMERA),
+                                                            actives_camera=sheet.get_cameras(),
+                                                        )
+
+                o1 = data_grabber.sheetOverView(
+                                                            sheet,
+                                                            side,  # side of sheet that is UO
+                                                            (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
+                                                            (self.sheet.get_nframe(), NCAMERA),
+                                                            actives_camera=sheet.get_cameras(),
+                                                        )
+                o2 = data_grabber.sheetOverView(
+                                                            sheet,
+                                                            side,  # side of sheet that is UO
+                                                            (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
+                                                            (self.sheet.get_nframe(), NCAMERA),
+                                                            actives_camera=sheet.get_cameras(),
+                                                        )
+                o_alaki = Alaki(sheet)
+                self.start_technical_loading_threads(self.thechnicals_backend[side], o1, o2,o_alaki, n_threads=5)
+                # self.technical_backend[side] = thechnicals_backend[side]
                 
-                selecteds = self.selected_images_for_label.get_sheet_side_selections(
-                    str(self.sheet.get_id()), side
+
+        except Exception as e:
+            print(e)
+            # #print("Error!: load_sheet() in API")
+
+    def start_technical_loading_threads(self, technical_obj: data_grabber.sheetOverView, o1, o2,o_alaki, n_threads):
+        
+        side  = technical_obj.get_side()
+        self.technical_workers[side] = []
+        self.technical_threads[side] = []
+
+        nframe = technical_obj.sheet.get_nframe()
+        batch_frame = int(np.ceil(nframe / n_threads)) #frame count for each thread
+        self.technical_nthreads = n_threads
+        self.technical_thread_cnt[side] = 0
+        self.close_technical_nside = 2
+        self.close_technical_cnt = 0
+
+        # if side == 'bottom':
+        #     return
+
+        # i = 0
+        # start_frame = (i*batch_frame)+1
+        # end_frame = min((i+1)*batch_frame+1, nframe+1)
+
+        
+
+        # self.technical_worker_up1 = technical_load_sheet_worker(technical_obj, o_alaki,
+        #                                     frame_range=(start_frame, end_frame),
+        #                                     )
+        
+        
+        # self.technical_thread_up1 = sQThread()
+
+        # self.technical_worker_up1.moveToThread(self.technical_thread_up1)
+        # self.technical_thread_up1.started.connect(self.technical_worker_up1.run)
+        # self.technical_worker_up1.finished.connect(self.finish_technical_loading_threads(side))
+        # self.technical_worker_up1.update_progressbar.connect(self.update_loading_progressBar)
+        # self.technical_worker_up1.finished.connect(self.technical_thread_up1.quit)
+        # self.technical_worker_up1.finished.connect(self.technical_worker_up1.deleteLater)
+        # self.technical_thread_up1.finished.connect(self.technical_thread_up1.deleteLater)
+
+        
+
+        # i = 1
+        # start_frame = (i*batch_frame)+1
+        # end_frame = min((i+1)*batch_frame+1, nframe+1)
+
+        # self.technical_worker_up2 = technical_load_sheet_worker(technical_obj, o_alaki,
+        #                                     frame_range=(start_frame, end_frame),
+        #                                     )
+        
+        # self.technical_thread_up2 = sQThread()
+
+        # self.technical_worker_up2.moveToThread(self.technical_thread_up2)
+        # self.technical_thread_up2.started.connect(self.technical_worker_up2.run)
+        # self.technical_worker_up2.finished.connect(self.finish_technical_loading_threads(side))
+        # self.technical_worker_up2.update_progressbar.connect(self.update_loading_progressBar)
+        # self.technical_worker_up2.finished.connect(self.technical_thread_up2.quit)
+        # self.technical_worker_up2.finished.connect(self.technical_worker_up2.deleteLater)
+        # self.technical_thread_up2.finished.connect(self.technical_thread_up2.deleteLater)
+
+        # self.technical_thread_up2.start()
+        # #time.sleep(5)
+        # self.technical_thread_up1.start()
+
+        
+        for i in range(n_threads):
+            self.technical_threads[side].append(sQThread())
+
+            start_frame = (i*batch_frame)+1
+            end_frame = min((i+1)*batch_frame+1, nframe+1)
+            self.technical_workers[side].append( 
+                technical_load_sheet_worker(technical_obj, 
+                                            frame_range=(start_frame, end_frame),
+                                            )
                 )
+            
+            self.technical_workers[side][-1].moveToThread(self.technical_threads[side][-1])
+            self.technical_threads[side][-1].started.connect(self.technical_workers[side][-1].run)
+            self.technical_workers[side][-1].finished.connect(self.finish_technical_loading_threads(side))
+            self.technical_workers[side][-1].update_progressbar.connect(self.update_loading_progressBar)
+            self.technical_workers[side][-1].finished.connect(self.technical_threads[side][-1].quit)
+            self.technical_workers[side][-1].finished.connect(self.technical_workers[side][-1].deleteLater)
+            self.technical_threads[side][-1].finished.connect(self.technical_threads[side][-1].deleteLater)
+
+        for i in range(n_threads):
+            self.technical_threads[side][i].start()
+
+
+            print('THREAD {} {} STARTED'.format(side, i))
+
+    def finish_technical_loading_threads(self, side):
+        def func():
+            self.technical_thread_cnt[side] += 1
+            if self.technical_thread_cnt[side] == self.technical_nthreads:
+                selecteds = self.selected_images_for_label.get_sheet_side_selections(
+                        str(self.sheet.get_id()), side
+                    )
                 self.thechnicals_backend[side].update_selected(selecteds)
                 self.current_technical_side = side
-                self.refresh_thechnical(fp=1)  #
-
-        except:
-            pass
-            # #print("Error!: load_sheet() in API")
+                self.refresh_thechnical(fp=1)  
+                self.close_load_sheet_win()
+        return func
+    
+    def close_load_sheet_win(self):
+        self.close_technical_cnt += 1
+        if self.close_technical_cnt == self.close_technical_nside:
+            self.ui.load_sheets_win.close()
 
     # ----------------------------------------------------------------------------------------
     # when next next_coil_btn clicked this function move on next coil id and load it
@@ -2007,6 +2118,7 @@ class API:
         )
         self.refresh_thechnical(fp=1)
         self.show_pointer_position()
+        print( self.thechnicals_backend[self.current_technical_side].get_pos())
 
     def update_technical_pointer_mouse(self, widget_name):
         if len(self.thechnicals_backend) == 0:
@@ -4185,10 +4297,12 @@ class API:
 
     def set_available_cameras(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
-        sn_available = list(connected_cameras.keys())
+        sn_available = sorted(list(connected_cameras.keys()))
         # sn_available = [str(i) for i in range(1, 25)]
         self.ui.comboBox_connected_cams.clear()
         self.ui.comboBox_connected_cams.addItems(sn_available)
+        val = self.ui.comboBox_connected_cams.currentText()
+        self.change_live_camera(val)
 
     def start_grab_camera(self):
         connected_cameras = self.cameras.get_connected_cameras_by_id()
@@ -4257,9 +4371,9 @@ class API:
         #     pass
         if self.l2_connection.last_speed:
             self.ImageManager.start()
-            self.live_timer.start(self.ui.update_timer_live_frame)
-            self.grab_main_thread = threading.Thread(target=self.run_grab)
-            self.grab_main_thread.start()
+        self.live_timer.start(self.ui.update_timer_live_frame)
+        self.grab_main_thread = threading.Thread(target=self.run_grab)
+        self.grab_main_thread.start()
             # self.grab_timer.start(int(1000/(self.ui.frame_rate)))
 
     def stop_capture_timers(self):
