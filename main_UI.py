@@ -3814,6 +3814,9 @@ class UI_main_window(QMainWindow, ui):
         self.ssd_label.setMaximumHeight(0)
         self.ssd_chart_frame.setMaximumWidth(0)
 
+
+
+
 if __name__ == "__main__":
     app = QApplication()
     win = UI_main_window()

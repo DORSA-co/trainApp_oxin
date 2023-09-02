@@ -110,7 +110,15 @@ class ImageManager(sQObject):
                 create_sheet_path(self.main_path, self.sheet_id)
         
     def rename_sheet(self):
-        rename_sheet_folder(self.main_path, self.dummy_sheet_id, self.sheet_id)
+        try:
+            rename_sheet_folder(self.main_path, self.dummy_sheet_id, self.sheet_id)
+        except OSError as e:
+            date = date_funcs.get_date(folder_path=True)
+            time = date_funcs.get_time(folder_path=True)
+            date_time = '{}_{}'.format(date, time)
+            self.coil_dict['PLATE_ID'] = '{}_{}'.format(self.sheet_id, date_time) 
+            self.sheet_id = str(self.coil_dict['PLATE_ID'])
+            rename_sheet_folder(self.main_path, self.dummy_sheet_id, self.sheet_id)
 
     def update_database(self):
         if self.save_flag:
@@ -150,8 +158,8 @@ class ImageManager(sQObject):
                     if ret:
 
 
-                        if MOTION:
-                            self.check_motion(camera_id,img,ret)
+                        # if MOTION:
+                        #     self.check_motion(camera_id,img,ret)
 
 
                         if camera_id < 13:
@@ -166,14 +174,15 @@ class ImageManager(sQObject):
                         if self.save_flag:
                             if int(camera_id) <= 12:
                                 side = 'TOP'
-                                path = sheet_image_path(self.main_path, self.sheet_id, side, camera_id,
+                                path = sheet_image_path(self.main_path, self.dummy_sheet_id, side, camera_id,
                                                         str(self.nframe[int(camera_id) - 1]),
                                                         self.image_format)
                             else:
                                 side = 'BOTTOM'
-                                path = sheet_image_path(self.main_path, self.sheet_id, side, str(camera_id - 12),
+                                path = sheet_image_path(self.main_path, self.dummy_sheet_id, side, str(camera_id - 12),
                                                         str(self.nframe[int(camera_id) - 1]),
                                                         self.image_format)
+                            
                             cv2.imwrite(path, self.images[int(camera_id) - 1])
                 else:
                     if self.manual_flag:

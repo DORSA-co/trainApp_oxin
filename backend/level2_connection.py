@@ -22,6 +22,12 @@ PORT_CHECK = 13000
 SAMPLE = "\x00\x01\x00\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x04\x01\x00\x00\x00\xe2\x01System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x04\x00\x00\x00\x07Version\x08Comparer\x08HashSize\rKeyValuePairs\x00\x03\x00\x03\x08\x92\x01System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x08\xe6\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]][]\x14\x00\x00\x00\t\x02\x00\x00\x00%\x00\x00\x00\t\x03\x00\x00\x00\x04\x02\x00\x00\x00\x92\x01System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x00\x00\x00\x00\x07\x03\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00\x00\x00\x03\xe4\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x04\xfc\xff\xff\xff\xe4\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x02\x00\x00\x00\x03key\x05value\x01\x02\x06\x05\x00\x00\x00\x07speedT1\x06\x06\x00\x00\x00\x0b1000.000000\x01\xf9\xff\xff\xff\xfc\xff\xff\xff\x06\x08\x00\x00\x00\x07speedT2\x06\t\x00\x00\x00\x0b1000.000000\x01\xf6\xff\xff\xff\xfc\xff\xff\xff\x06\x0b\x00\x00\x00\x07speedT3\x06\x0c\x00\x00\x00\x0b1000.000000\x01\xf3\xff\xff\xff\xfc\xff\xff\xff\x06\x0e\x00\x00\x00\x07speedT4\x06\x0f\x00\x00\x00\x0b1000.000000\x01\xf0\xff\xff\xff\xfc\xff\xff\xff\x06\x11\x00\x00\x00\x07speedT5\x06\x12\x00\x00\x00\x0b1000.000000\x01\xed\xff\xff\xff\xfc\xff\xff\xff\x06\x14\x00\x00\x00\x07speedT6\x06\x15\x00\x00\x00\x0b1000.000000\x01\xea\xff\xff\xff\xfc\xff\xff\xff\x06\x17\x00\x00\x00\x07speedT7\x06\x18\x00\x00\x00\x0b1000.000000\x01\xe7\xff\xff\xff\xfc\xff\xff\xff\x06\x1a\x00\x00\x00\x07speedT8\x06\x1b\x00\x00\x00\x0b1000.000000\x01\xe4\xff\xff\xff\xfc\xff\xff\xff\x06\x1d\x00\x00\x00\x07speedT9\x06\x1e\x00\x00\x00\x0b1000.000000\x01\xe1\xff\xff\xff\xfc\xff\xff\xff\x06 \x00\x00\x00\x08speedT10\x06!\x00\x00\x00\x0b1000.000000\x01\xde\xff\xff\xff\xfc\xff\xff\xff\x06#\x00\x00\x00\x08speedT11\x06$\x00\x00\x00\x0b1000.000000\x01\xdb\xff\xff\xff\xfc\xff\xff\xff\x06&\x00\x00\x00\x08speedT12\x06'\x00\x00\x00\x0b1000.000000\x01\xd8\xff\xff\xff\xfc\xff\xff\xff\x06)\x00\x00\x00\x08speedT13\x06*\x00\x00\x00\x0b1000.000000\x01\xd5\xff\xff\xff\xfc\xff\xff\xff\x06,\x00\x00\x00\x08speedT14\x06-\x00\x00\x00\x0b1000.000000\x01\xd2\xff\xff\xff\xfc\xff\xff\xff\x06/\x00\x00\x00\x08speedT15\x060\x00\x00\x00\x0b1000.000000\x01\xcf\xff\xff\xff\xfc\xff\xff\xff\x062\x00\x00\x00\x08speedT16\x063\x00\x00\x00\x0b1000.000000\x01\xcc\xff\xff\xff\xfc\xff\xff\xff\x065\x00\x00\x00\x08speedT17\x066\x00\x00\x00\x0b1000.000000\x01\xc9\xff\xff\xff\xfc\xff\xff\xff\x068\x00\x00\x00\x08speedT18\x069\x00\x00\x00\x0b1000.000000\x01\xc6\xff\xff\xff\xfc\xff\xff\xff\x06;\x00\x00\x00\x08speedT19\x06<\x00\x00\x00\x0b1000.000000\x01\xc3\xff\xff\xff\xfc\xff\xff\xff\x06>\x00\x00\x00\x08speedT20\x06?\x00\x00\x00\x0b1000.000000\x0b"
 
 
+PORT_DATA = 11000
+PORT_SPEED = 12000
+PORT_CHECK = 13000
+
+SAMPLE = "\x00\x01\x00\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x04\x01\x00\x00\x00\xe2\x01System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x04\x00\x00\x00\x07Version\x08Comparer\x08HashSize\rKeyValuePairs\x00\x03\x00\x03\x08\x92\x01System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x08\xe6\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]][]\x14\x00\x00\x00\t\x02\x00\x00\x00%\x00\x00\x00\t\x03\x00\x00\x00\x04\x02\x00\x00\x00\x92\x01System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x00\x00\x00\x00\x07\x03\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00\x00\x00\x03\xe4\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x04\xfc\xff\xff\xff\xe4\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x02\x00\x00\x00\x03key\x05value\x01\x02\x06\x05\x00\x00\x00\x07speedT1\x06\x06\x00\x00\x00\x0b1000.000000\x01\xf9\xff\xff\xff\xfc\xff\xff\xff\x06\x08\x00\x00\x00\x07speedT2\x06\t\x00\x00\x00\x0b000.000000\x01\xf6\xff\xff\xff\xfc\xff\xff\xff\x06\x0b\x00\x00\x00\x07speedT3\x06\x0c\x00\x00\x00\x0b1000.000000\x01\xf3\xff\xff\xff\xfc\xff\xff\xff\x06\x0e\x00\x00\x00\x07speedT4\x06\x0f\x00\x00\x00\x0b1000.000000\x01\xf0\xff\xff\xff\xfc\xff\xff\xff\x06\x11\x00\x00\x00\x07speedT5\x06\x12\x00\x00\x00\x0b1000.000000\x01\xed\xff\xff\xff\xfc\xff\xff\xff\x06\x14\x00\x00\x00\x07speedT6\x06\x15\x00\x00\x00\x0b1000.000000\x01\xea\xff\xff\xff\xfc\xff\xff\xff\x06\x17\x00\x00\x00\x07speedT7\x06\x18\x00\x00\x00\x0b1000.000000\x01\xe7\xff\xff\xff\xfc\xff\xff\xff\x06\x1a\x00\x00\x00\x07speedT8\x06\x1b\x00\x00\x00\x0b1000.000000\x01\xe4\xff\xff\xff\xfc\xff\xff\xff\x06\x1d\x00\x00\x00\x07speedT9\x06\x1e\x00\x00\x00\x0b1000.000000\x01\xe1\xff\xff\xff\xfc\xff\xff\xff\x06 \x00\x00\x00\x08speedT10\x06!\x00\x00\x00\x0b1000.000000\x01\xde\xff\xff\xff\xfc\xff\xff\xff\x06#\x00\x00\x00\x08speedT11\x06$\x00\x00\x00\x0b1000.000000\x01\xdb\xff\xff\xff\xfc\xff\xff\xff\x06&\x00\x00\x00\x08speedT12\x06'\x00\x00\x00\x0b1000.000000\x01\xd8\xff\xff\xff\xfc\xff\xff\xff\x06)\x00\x00\x00\x08speedT13\x06*\x00\x00\x00\x0b1000.000000\x01\xd5\xff\xff\xff\xfc\xff\xff\xff\x06,\x00\x00\x00\x08speedT14\x06-\x00\x00\x00\x0b1000.000000\x01\xd2\xff\xff\xff\xfc\xff\xff\xff\x06/\x00\x00\x00\x08speedT15\x060\x00\x00\x00\x0b1000.000000\x01\xcf\xff\xff\xff\xfc\xff\xff\xff\x062\x00\x00\x00\x08speedT16\x063\x00\x00\x00\x0b1000.000000\x01\xcc\xff\xff\xff\xfc\xff\xff\xff\x065\x00\x00\x00\x08speedT17\x066\x00\x00\x00\x0b1000.000000\x01\xc9\xff\xff\xff\xfc\xff\xff\xff\x068\x00\x00\x00\x08speedT18\x069\x00\x00\x00\x0b1000.000000\x01\xc6\xff\xff\xff\xfc\xff\xff\xff\x06;\x00\x00\x00\x08speedT19\x06<\x00\x00\x00\x0b1000.000000\x01\xc3\xff\xff\xff\xfc\xff\xff\xff\x06>\x00\x00\x00\x08speedT20\x06?\x00\x00\x00\x0b0000.000000\x0b"
+
 class connection_level2():
 
     def __init__(self, db_obj,close_ui):
@@ -88,7 +94,7 @@ class connection_level2():
             cameras = int(np.ceil(float(self.data['WIDTH'])*self.max_cameras/self.max_width))
             projectors = int(np.ceil(float(self.data['WIDTH'])*self.max_projectors/self.max_width))
             projectors = 6
-            cameras = 12
+            # cameras = 12
             return cameras, projectors, self.data
         else:
             return 0, 0, None
@@ -98,7 +104,6 @@ class connection_level2():
         cleaned_data = data.decode("ISO-8859-1") 
         cleaned_data = ''.join(cleaned_data.split())
         cleaned_data = re.sub(r'[^a-zA-Z0-9_.]', '', cleaned_data)
-        print(cleaned_data)
         keywords = ['PLATE_ID', 'ORDER_ID', 'HEAT_ID', 'QC_STANDARD', 'LENGHT', 'WIDTH', 'THICKNESS', 'LENGHT_ORDER', 'WIDTH_ORDER', 'THICKNESS_ORDER', 'speed']
         indices = [cleaned_data.find(k) for k in keywords]
 
@@ -116,7 +121,8 @@ class connection_level2():
         
         self.data = res
     def convert_speed(self,data,last_speed=True):
-
+        
+    
         cleaned_data = data.decode("ISO-8859-1") 
         cleaned_data = ''.join(cleaned_data.split())
         cleaned_data = re.sub(r'[^a-zA-Z0-9_.]', '', cleaned_data)
@@ -132,21 +138,21 @@ class connection_level2():
         for i in range(len(indices) - 1):
             res.append(cleaned_data[indices[i]+5:indices[i+1]])
         res.append(cleaned_data[indices[-1]+5:])
-        print(res)
+        # print(res)
 
 
         if last_speed:
-            try:
+            # try:
                 
                 if len(res)>9:
                     self.last_speed=(float(res[-1][3:]))
                 else:
-                    last_speed = float(res[-1][2:])
-                print('last_speed : ',self.last_speed)
+                    self.last_speed = float(res[-1][2:])
+                # print('last_speed : ',self.last_speed)
                 return self.last_speed
-            except:
-                print('Get Speed Error')
-                return -1
+            # except:
+            #     print('Get Speed Error')
+            #     return -1
                         
     def connect(self):
         # Should add connection function here and get details
@@ -181,6 +187,12 @@ class connection_level2():
         except:
             print('Error open port')
 
+
+
+
+
+
+
     def get_data(self):
         try:
             t1 = datetime.now()
@@ -203,30 +215,32 @@ class connection_level2():
             threading.Timer(self.get_data_timer, self.get_data).start()
                
 
-    def get_speed(self):
 
-        # try:
-        t1 = datetime.now()
-        conn,addr=self.get_speed_socket.accept()
-        data=conn.recv(100000)
-        speed=self.convert_speed(data)
-        print(speed)
-        conn.send(data)
-        # self.convert_data(data)
-        self.retry_get_speed = 0
-        # except:
-        #     print('Except')
-        #     self.retry_get_speed+=1
-        #     data = SAMPLE
-        #     self.convert_speed(data)
-        #     if self.retry_get_speed<10:
-        #         self.get_speed_socket = self.create_connection(PORT_SPEED)
-        #         print('ERROR Level2 Get Speed')
-        #     # log.warning('Level2 connection Error')
-        #     time.sleep(1)
+
+
+    def get_speed(self):
+        
+        try:
+            t1 = datetime.now()
+            conn,addr=self.get_speed_socket.accept()
+            data=conn.recv(100000)
+            conn.send(data)
+            self.convert_speed(data)
+            self.retry_get_speed = 0
+        except:
+            # print('Except')
+            self.retry_get_speed+=1
+            if self.retry_get_speed<10:
+                self.get_speed_socket = self.create_connection(PORT_SPEED)
+                print('ERROR Level2 Get Speed')
+            # log.warning('Level2 connection Error')
+            time.sleep(1)
 
         if not self.close_ui:
             threading.Timer(0.9, self.get_speed).start()
+
+
+
 
 
 
