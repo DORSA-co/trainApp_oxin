@@ -38,7 +38,7 @@ class connection_level2():
         self.get_data_timer = 1
         self.data = None
         self.max_cameras = 12
-        self.max_width = 5000
+        self.max_width = 4800
         self.max_projectors = 6
         self.retry_get_data = 0
         self.retry_get_speed = 0
