@@ -59,7 +59,7 @@ import texts  # eror and warnings texts
 import texts_codes
 from utils1 import tempMemory, Utils
 from backend.dataset import Dataset
-# import train_api
+import train_api
 from labeling import labeling_api
 from pynput.mouse import Controller
 from login_win.login_api import login_API
@@ -72,7 +72,7 @@ import random
 from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
 
 from backend import pipelines
-# from backend.pipline_creation_module import ModelsCreation_worker
+from backend.pipline_creation_module import ModelsCreation_worker
 from backend.pipline_evaluation_module import Evaluation_worker
 from backend.binary_list_funcs import PIPLINES_PATH
 from backend.pipelines import Pipeline
@@ -2944,7 +2944,7 @@ class API:
         # #print(self.ui.mask_table_widget.selectedIndexes())
         self.selected_defects = []
         for i in range(self.ui.mask_table_widget.rowCount()):
-            if self.ui.mask_table_widget.item(i, 0).checkState() == QtCore.Qt.Checked:
+            if self.ui.mask_table_widget.item(i, 0).checkState() == Qt.Checked:
                 self.selected_defects.append(i)
         label_type = self.ui.get_label_type()
         sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")
