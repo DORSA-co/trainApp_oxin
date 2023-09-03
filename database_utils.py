@@ -148,9 +148,10 @@ class dataBaseUtils:
     # ________________________________________________________________
     #
     # ________________________________________________________________
-    def get_camera_setting(self):
-        x = self.db.report_last(self.camera_settings_table, "id", "0")
-
+    def get_camera_config(self):
+        # x = self.db.report_last(self.camera_settings_table, "id", "1")[0]
+        x = self.db.search(self.camera_settings_table, "id", "1", int_type=True)[1][0]
+        return x['height'],x['width'],x['baseline']
         # cam_setting = self.db.search( 'camera_settings', 'id', id )[0]
 
     # ________________________________________________________________
@@ -1384,37 +1385,30 @@ class dataBaseUtils:
         return res1 and res2 and res3 and res4 and res5
 
 
-    # #____________________________________JJ ZONE
-    # def update_piplines_info_database(self,record):
-    #     y, m, d = record["date"].split("/")
-    #     hh, mm, _ = record["time"].split(":")
-    #     date=datetime.date(int(y), int(m), int(d))
-    #     time=datetime.time(int(hh), int(mm))
+    def get_baselines(self):
 
-    #     pipline_name=record['pipline_name']
-    #     binary_model=record['binary_model']
-    #     localization_model=record['localization_model']
-    #     classification_model=record['classification_model']
-    #     binary_acc=record['binary_acc']
-    #     binary_recall=record['binary_recall']
-    #     binary_precision=record['binary_precision']
-    #     binary_f1=record['binary_f1']
-    #     classification_acc=record['classification_acc']
-    #     classification_recall=record['classification_recall']
-    #     classification_precision=record['classification_precision']
-    #     classification_f1=record['classification_f1']
-    #     localization_dice=record['localization_dice']
-    #     localization_iou=record['localization_iou']
-    #     dataset_name=record['dataset_name']
-    #     dataset_path=record['dataset_path']
+        try:
+            res, parms = self.db.get_all_content(self.camera_settings_table)
+            if res != database.SUCCESSFULL:
+                return None
+            baselines =[]
+            for i in parms:
+                baselines.append(i['baseline'])
+            return baselines
 
-    # #____________________________________JJ ZONE
+        except:
+            return None
+
+
+    # def get_camera_setting
+
 
 
 if __name__ == "__main__":
     db = dataBaseUtils("Null")
-    ids = db.get_defects_id()
-    print(ids)
+    # ids = db.get_defects_id()
+    # print(ids)
+    print(db.get_baseline())
     # db.get_pipline_names()
     # x = db.load_plc_parms()
     # # x=db.load_language()

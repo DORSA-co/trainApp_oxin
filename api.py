@@ -427,6 +427,11 @@ class API:
         self.technical_workers = {}
         self.technical_thread_cnt = {}
         
+
+        #milad
+        self.baselines =None
+
+
     def show_speed(self):
         # print(self.l2_connection.last_speed)
         if self.l2_connection.last_speed>0 and not self.speed_mode:
@@ -2106,8 +2111,29 @@ class API:
         x, y = self.thechnicals_backend[
             self.current_technical_side
         ].get_pos()  # get mouse position normilized between [0,1]
-        x *= self.sheet.get_width()
-        y *= self.sheet.get_length()
+
+
+        current_cam = self.thechnicals_backend[
+            self.current_technical_side
+        ].actives_camera[1]
+
+        if self.baselines==None:
+            self.baselines = self.db.get_baselines()
+        current =0
+        current = self.baselines[current_cam-1]
+        if current_cam>1:
+            current += (self.baselines[current_cam-1] - self.baselines[current_cam-2])/2
+            # current+=self.baselines[1]
+            x = current*x
+
+
+
+        n_frame = self.thechnicals_backend[self.current_technical_side].sheet.get_nframe()
+        h,w,base = self.db.get_camera_config()
+        y*=n_frame*base/(w/2)*h   
+
+        # x *= self.sheet.get_width()
+        # y *= self.sheet.get_length()
         y = np.round(y, 1)
         x = np.round(x, 1)
         self.ui.show_current_position((x, y))
@@ -3216,8 +3242,19 @@ class API:
         self.ui.listWidget_logs.addItem("Cache Cleared")
 
     def show_current_pos(self, pt):
+
+        
+
+        # return
+
+
+
+
         if self.widget_name == "down_side_technical":
             x, y = self.obj_sheet_down.get_pos()
+
+            self.baselines
+
 
             self.ui.current_pos_x.setText(
                 str(int(x * 280))

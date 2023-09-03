@@ -698,6 +698,9 @@ class sheetOverView:
 
     def get_side(self):
         return self.side.lower()
+    
+    def get_current_cam(self,):
+        return self.pt[0] // self.cell_shape[1] + 1
 
 
 if __name__ == "__main__":
