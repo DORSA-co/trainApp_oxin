@@ -1,3 +1,4 @@
+from typing import Optional
 from PySide6.QtCore import QObject as sQObject
 from PySide6.QtCore import Signal as sSignal
 import os
@@ -15,7 +16,9 @@ class image_processing_worker(sQObject):
     finished = sSignal()
     update_progressbar = sSignal()
 
-    def assign_parameters(self, n_cameras, n_frames, res_main_path, sheet_id, active_cameras, img_format, img_shape, api_obj, ui_obj, db_obj):
+    def __init__(self, n_cameras, n_frames, res_main_path, sheet_id, active_cameras, img_format, img_shape, api_obj, ui_obj, db_obj):
+        super(image_processing_worker, self).__init__()
+
         self.n_cameras = n_cameras
         self.n_frames = n_frames
         self.res_main_path = res_main_path
@@ -38,13 +41,8 @@ class image_processing_worker(sQObject):
                 for c in range(self.n_cameras[0], self.n_cameras[1]+1):
                     if self.active_cameras[0] <= c <= self.active_cameras[1]:
                         for f in range(self.n_frames[0], self.n_frames[1]+1):
-                            # self.ui_obj.suggested_defects_progressBar.setValue(self.ui_obj.suggested_defects_progressBar.value() + 1)
-                            # path = os.path.join(self.main_path, self.sheet_id, s, str(c), str(f)+self.img_format)
                             path = pathStructure.sheet_image_path('', self.sheet_id, s, str(c), str(f), self.img_format)
-                            # res_path = os.path.join(self.res_main_path, self.sheet_id, s, str(c))
                             res_path = pathStructure.sheet_suggestions_json_path(self.res_main_path, self.sheet_id, s, c, f)
-                            # if not os.path.exists(res_path):
-                            #     os.makedirs(res_path)
                             if os.path.exists(path):
                                 img = cv2.imread(path, 0)
                                 img = cv2.resize(img, (self.img_shape[1], self.img_shape[0]))
@@ -56,3 +54,26 @@ class image_processing_worker(sQObject):
             self.finished.emit()
         except:
             self.finished.emit()
+
+
+class update_defects_worker(sQObject):
+    finished = sSignal()
+    update_progressbar_update_defects = sSignal()
+
+    def __init__(self, grabber_obj, n_cameras, n_frames) -> None:
+        super(update_defects_worker, self).__init__()
+
+        self.grabber_obj = grabber_obj
+        self.n_cameras = n_cameras
+        self.n_frames = n_frames
+
+    def run(self):
+        for frame_idx in range(*self.n_frames):
+            for cam_idx in range(*self.n_cameras):
+                self.grabber_obj.update_defect(
+                    cam_idx,
+                    frame_idx,
+                )
+                self.update_progressbar_update_defects.emit()
+        self.finished.emit()
+

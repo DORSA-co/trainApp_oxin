@@ -192,10 +192,10 @@ class management():
 
         # try:
         for proj in range(1,7):
-            if proj<=n_projector:
-                mode=True
-            else:
-                mode=False
+            # if proj<=n_projector:
+            mode=True
+            # else:
+            #     mode=False
             # try:
                     #print('Projector top/bottom {} set {}'.format(proj,mode))
             threading.Thread(target=self.set_value,args=(self.spec_pathes['MemDownProjectorOnOff{}'.format(proj)], str(mode))).start()

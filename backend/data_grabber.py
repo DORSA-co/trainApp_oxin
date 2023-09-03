@@ -83,7 +83,6 @@ class sheetOverView:
         self.update_pointer((0, 0))
         #-----------------------------------------News
         self.sheet_full_image = self.initsheet_full_image()
-        #self.load_images_from_file()
 
     def set_loading_callback(self, func):
         self.loading_callback = func
@@ -92,6 +91,16 @@ class sheetOverView:
         self.scale = scale
         self.viewport_size = int(self.single_image_shape[0] / scale) , int(self.single_image_shape[1] / scale)
         self.viewport_pointer_size = int( self.cell_shape[0] / scale) , int( self.cell_shape[1] / scale) #size of rectangle pointer
+ 
+    def load_custom_images_from_file(self, camera_range:tuple, frame_idx:int, cam_idx:int):
+        img_path = pathStructure.sheet_image_path(
+                    self.sheet.get_main_path(),
+                    self.sheet.get_id(),
+                    self.side,
+                    cam_idx,
+                    frame_idx,
+                    self.sheet.get_image_format(),
+                )
 
     def load_images_from_file(self):
         """load all images from file and merge them into single image
@@ -196,7 +205,7 @@ class sheetOverView:
                         cam_idx,
                         frame_idx
                     )
-        
+        res = None
         if os.path.exists(json_path):
             with open(json_path) as jfile:
                 file = json.load(jfile)
@@ -206,9 +215,12 @@ class sheetOverView:
                     x1, y1 = cntr[0]
                     x2, y2 = cntr[1]
                     #SHOULD BE CHANGE (image is gray scale)
-                    res = cv2.rectangle(img, (x1, y1), (x2, y2), (255, 255, 255), 2)
+                    res = cv2.rectangle(img, (x1, y1), (x2, y2), 255, 2)
         
-        return res
+        if res is not None:
+            return res
+        else:
+            return img
     
     def append_single_image_into_full_image(self, img:np.ndarray, i:int, j:int):
         """puts a singlee image in correct position of full sheet image
@@ -243,23 +255,21 @@ class sheetOverView:
     # ______________________________________________________________________________________________________________________________
     #
     # ______________________________________________________________________________________________________________________________
-    def update_defect(self):
-        for c in range(1, self.actives_camera[1]+1):
-            for f in range(1, self.sheet.get_nframe()+1):
-                json_path = pathStructure.sheet_suggestions_json_path(
-                    '',
-                    self.sheet.get_id(),
-                    self.side, 
-                    c, 
-                    f
-                )
-                if os.path.exists(json_path):
-                    with open(json_path) as jfile:
-                        file = json.load(jfile)
-                        status = file['status']
-                else:
-                    status = 'black'
-                self.sheet_img = self.draw_defect(self.sheet_img, [c-1, f-1], status)
+    def update_defect(self, c, f):
+        json_path = pathStructure.sheet_suggestions_json_path(
+            '',
+            self.sheet.get_id(),
+            self.side, 
+            c, 
+            f
+        )
+        if os.path.exists(json_path):
+            with open(json_path) as jfile:
+                file = json.load(jfile)
+                status = file['status']
+        else:
+            status = 'black'
+        self.sheet_img = self.draw_defect(self.sheet_img, [c-1, f-1], status)
 
     # ______________________________________________________________________________________________________________________________
     #

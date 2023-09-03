@@ -2,13 +2,13 @@
     "basic": {
         "dataset_name": "default_dataset",
         "date_created": "1401/10/27",
-        "date_modify": "2023-08-27-12-06-20",
+        "date_modify": "2023-09-02-11-08-16",
         "path": "default_dataset",
         "user_id": 0,
         "user_name": "root"
     },
     "binary": {
-        "count_defect": 1,
+        "count_defect": 3,
         "count_perfect": 8
     },
     "classification": {
@@ -40,11 +40,15 @@
         "117": [],
         "118": [],
         "119": [],
-        "120": [],
+        "120": [
+            "AXM38754Aup10_2.png"
+        ],
         "121": [],
         "122": [],
         "123": [],
-        "124": [],
+        "124": [
+            "AXM39209Aup1_20.png"
+        ],
         "125": [
             "2023-08-16_15-25-26down1_1.png",
             "2023-08-16_15-25-26up2_2.png",
