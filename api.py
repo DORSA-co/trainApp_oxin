@@ -330,6 +330,10 @@ class API:
         self.down_out = False
         self.init_check_plc()
         self.create_level2_ui()
+
+        self.my_plc.set_cams_and_prejector()
+
+
         # Level2 connection
         self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win,logger = self.ui.logger)
         
@@ -461,7 +465,7 @@ class API:
     def reconnect_level2(self):
         self.l2_connection.close_ui=True
         self.ui.logger.create_new_log(
-                        code=texts_codes.SubTypes['RESET_LEVEL2_GET_DATA'], message=texts.MESSEGES["Storage_opened"]["en"] + ' start={}'.format(start), level=1
+                        code=texts_codes.SubTypes['RESET_LEVEL2_GET_DATA'], message=texts.MESSEGES["RESET_LEVEL2_GET_DATA"]["en"], level=1
                     )
         threading.Timer(10,self.start_level2_thread).start()
 
@@ -7379,9 +7383,9 @@ class API:
                 self.get_info_flag = False
                 # if self.connection_status:
                 # print('start thread set caemra and projector')
-                # threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start() ## set in init
+                
                 threading.Timer(0.5, self.start_get_full_data).start()
-                # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
+
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
                         message=str(
@@ -7412,7 +7416,6 @@ class API:
         try:
             self.plc_timer.stop()
             # self.plc_update.stop()
-
         except:
             pass
         self.plc_timer.start(1000)

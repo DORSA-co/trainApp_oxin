@@ -179,35 +179,17 @@ class management():
 
 
 
-    def set_cams_and_prejector(self,n_cam,n_projector):
-        #try:
-            #print('Set Camera {}'.format(n_cam))
-        # print('test'*20)
-        # n_cam=3
-        # ret_set_ncam=self.set_value(self.spec_pathes['NCamera'], n_cam)   # temp disable
-        # print('aaaaaaaaaa',self.get_value(self.spec_pathes['NCamera']))
-        #except:
-        ret_set_ncam=False
-        
+    def set_cams_and_prejector(self):
+        n_cam=3
+        print('Set Camera {}'.format(n_cam))
+        threading.Thread(target=self.set_value,args=(self.spec_pathes['NCamera'], n_cam)).start()
 
-        # try:
         for proj in range(1,7):
-            # if proj<=n_projector:
             mode=True
-            # else:
-            #     mode=False
-            # try:
-                    #print('Projector top/bottom {} set {}'.format(proj,mode))
             threading.Thread(target=self.set_value,args=(self.spec_pathes['MemDownProjectorOnOff{}'.format(proj)], str(mode))).start()
             threading.Thread(target=self.set_value,args=(self.spec_pathes['MemUpProjectorOnOff{}'.format(proj)], str(mode))).start()
-            # ret_set_ncam=self.set_value(self.spec_pathes['MemDownProjectorOnOff{}'.format(proj)], str(mode))
-            # ret_set_ncam=self.set_value(self.spec_pathes['MemUpProjectorOnOff{}'.format(proj)], str(mode))
-            # except:
-            #     pass
+        
         return True
-        # except:
-        #     print('error in set cam num in plc managment')
-        #     return False
 
 
 
