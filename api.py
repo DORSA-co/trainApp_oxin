@@ -6863,7 +6863,7 @@ class API:
         # get plc ip
         ip = self.plc_ip
         # connect to plc
-        self.my_plc = plc_managment.management(ip, ui_obj=self.ui)
+        self.my_plc = plc_managment.management(ip, ui_obj=self.ui,logger=self.ui.logger)
         self.connection_status = self.my_plc.connection()
         # parms=self.db.load_plc_parms()
         # #print(parms)

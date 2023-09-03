@@ -23,6 +23,10 @@ SubTypes = {
     'plc_disconnected': '02-4',
     'plc_disconnected_failed': '02-5',
     'plc': '02-6',
+    'plc_write_successfully': '02-7',
+    'plc_write_failed': '02-6',
+
+
     # Camera/Imaging
     'cameras': '03-1',
     'cameras_capturing_eror':'03-2',
