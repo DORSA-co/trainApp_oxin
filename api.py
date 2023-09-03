@@ -1761,9 +1761,6 @@ class API:
                 selceted_sheets_id
             )  # load inference of Sheet class from database by sheet id
             self.build_sheet_technical(self.sheet)  # build technical sheet
-            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
-            if self.ui.checkBox_suggested_defects.isChecked():
-                self.load_suggestions()
             self.ui.show_sheet_details(
                 self.sheet.get_info_dict()
             )  # show sheet details in UI.details_label
@@ -1806,12 +1803,13 @@ class API:
             if not os.path.exists(jsons_path):
                 self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
                 pathStructure.create_sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
-            if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
-                self.ui.set_enabel(self.ui.load_coil_btn, False)
-                self.ui.set_enabel(self.ui.next_coil_btn, False)
-                self.ui.set_enabel(self.ui.prev_coil_btn, False)
-                self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
 
+            self.ui.set_enabel(self.ui.load_coil_btn, False)
+            self.ui.set_enabel(self.ui.next_coil_btn, False)
+            self.ui.set_enabel(self.ui.prev_coil_btn, False)
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
+
+            if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
                 self.reset_suggestion_progressbar(self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe() * 2)
 
                 self.start_suggestion_threads(jsons_main_path=jsons_main_path, n_threads=12)
@@ -1863,11 +1861,6 @@ class API:
             self.sheet_imgprocessing_mem[self.sheet.get_id()] = True
 
             self.update_technical_with_suggestions()
-
-            self.ui.set_enabel(self.ui.load_coil_btn, True)
-            self.ui.set_enabel(self.ui.next_coil_btn, True)
-            self.ui.set_enabel(self.ui.prev_coil_btn, True)
-            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
 
     def update_technical_with_suggestions(self):
         # loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', self.language])
@@ -1935,6 +1928,11 @@ class API:
             self.thechnicals_backend[side].update_real_imgs()
             self.current_technical_side = side
             self.refresh_thechnical(fp=1)
+
+            self.ui.set_enabel(self.ui.load_coil_btn, True)
+            self.ui.set_enabel(self.ui.next_coil_btn, True)
+            self.ui.set_enabel(self.ui.prev_coil_btn, True)
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
         return func
 
     def update_suggestion_progressbar(self):
@@ -1988,6 +1986,10 @@ class API:
 
     def build_sheet_technical(self, sheet):
         try:
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
+            self.ui.set_enabel(self.ui.next_coil_btn, False)
+            self.ui.set_enabel(self.ui.prev_coil_btn, False)
+            self.ui.set_enabel(self.ui.load_sheets_win.load_btn, False)
             self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
             self.technical_backend = {}
             for side, _ in self.ui.get_technical(name=False).items():
@@ -2064,6 +2066,14 @@ class API:
         self.close_technical_cnt += 1
         if self.close_technical_cnt == self.close_technical_nside:
             self.ui.load_sheets_win.close()
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
+            self.ui.set_enabel(self.ui.next_coil_btn, True)
+            self.ui.set_enabel(self.ui.prev_coil_btn, True)
+            self.ui.set_enabel(self.ui.load_sheets_win.load_btn, True)
+            self.ui.set_enabel(self.ui.technical_zoom_in, True)
+            self.ui.set_enabel(self.ui.technical_zoom_out, True)
+            if self.ui.checkBox_suggested_defects.isChecked():
+                self.load_suggestions()
 
     # ----------------------------------------------------------------------------------------
     # when next next_coil_btn clicked this function move on next coil id and load it

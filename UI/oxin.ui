@@ -2488,7 +2488,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>1</number>
+                         <number>0</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -2747,7 +2747,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
 }</string>
                                </property>
                                <property name="currentIndex">
-                                <number>0</number>
+                                <number>1</number>
                                </property>
                                <widget class="QWidget" name="tab_5">
                                 <attribute name="title">
@@ -8402,13 +8402,13 @@ border: None;</string>
                                         <number>3</number>
                                        </property>
                                        <property name="topMargin">
-                                        <number>3</number>
+                                        <number>1</number>
                                        </property>
                                        <property name="rightMargin">
                                         <number>3</number>
                                        </property>
                                        <property name="bottomMargin">
-                                        <number>3</number>
+                                        <number>1</number>
                                        </property>
                                        <item>
                                         <widget class="QPushButton" name="load_coil_btn">
@@ -8454,15 +8454,24 @@ QPushButton:enabled {
                                          </property>
                                          <item>
                                           <widget class="QPushButton" name="next_coil_btn">
+                                           <property name="enabled">
+                                            <bool>true</bool>
+                                           </property>
+                                           <property name="sizePolicy">
+                                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                             <horstretch>0</horstretch>
+                                             <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                           </property>
                                            <property name="minimumSize">
                                             <size>
-                                             <width>17</width>
-                                             <height>17</height>
+                                             <width>0</width>
+                                             <height>0</height>
                                             </size>
                                            </property>
                                            <property name="maximumSize">
                                             <size>
-                                             <width>17</width>
+                                             <width>22</width>
                                              <height>16777215</height>
                                             </size>
                                            </property>
@@ -8473,7 +8482,8 @@ QPushButton:enabled {
                                             <string>Next Sheet</string>
                                            </property>
                                            <property name="styleSheet">
-                                            <string notr="true">background-color: rgb(71, 71, 71);
+                                            <string notr="true">background-color: transparent;
+border: None;
 border-radius: 8px;</string>
                                            </property>
                                            <property name="text">
@@ -8481,27 +8491,36 @@ border-radius: 8px;</string>
                                            </property>
                                            <property name="icon">
                                             <iconset>
-                                             <normaloff>images/icons/cil-arrow-circle-right.png</normaloff>images/icons/cil-arrow-circle-right.png</iconset>
+                                             <normaloff>images/icons/next.png</normaloff>images/icons/next.png</iconset>
                                            </property>
                                            <property name="iconSize">
                                             <size>
-                                             <width>13</width>
-                                             <height>13</height>
+                                             <width>22</width>
+                                             <height>22</height>
                                             </size>
                                            </property>
                                           </widget>
                                          </item>
                                          <item>
                                           <widget class="QPushButton" name="prev_coil_btn">
+                                           <property name="enabled">
+                                            <bool>true</bool>
+                                           </property>
+                                           <property name="sizePolicy">
+                                            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                             <horstretch>0</horstretch>
+                                             <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                           </property>
                                            <property name="minimumSize">
                                             <size>
-                                             <width>17</width>
-                                             <height>17</height>
+                                             <width>0</width>
+                                             <height>0</height>
                                             </size>
                                            </property>
                                            <property name="maximumSize">
                                             <size>
-                                             <width>17</width>
+                                             <width>22</width>
                                              <height>16777215</height>
                                             </size>
                                            </property>
@@ -8512,7 +8531,8 @@ border-radius: 8px;</string>
                                             <string>Previous Sheet</string>
                                            </property>
                                            <property name="styleSheet">
-                                            <string notr="true">background-color: rgb(71, 71, 71);
+                                            <string notr="true">background-color: transparent;
+border: None;
 border-radius: 8px;</string>
                                            </property>
                                            <property name="text">
@@ -8520,12 +8540,12 @@ border-radius: 8px;</string>
                                            </property>
                                            <property name="icon">
                                             <iconset>
-                                             <normaloff>images/icons/cil-arrow-circle-left.png</normaloff>images/icons/cil-arrow-circle-left.png</iconset>
+                                             <normaloff>images/icons/prev.png</normaloff>images/icons/prev.png</iconset>
                                            </property>
                                            <property name="iconSize">
                                             <size>
-                                             <width>13</width>
-                                             <height>13</height>
+                                             <width>22</width>
+                                             <height>22</height>
                                             </size>
                                            </property>
                                           </widget>
@@ -8852,11 +8872,17 @@ border-radius: 8px;</string>
                                        </item>
                                        <item>
                                         <widget class="QPushButton" name="technical_zoom_in">
+                                         <property name="enabled">
+                                          <bool>false</bool>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>0</width>
                                            <height>0</height>
                                           </size>
+                                         </property>
+                                         <property name="cursor">
+                                          <cursorShape>PointingHandCursor</cursorShape>
                                          </property>
                                          <property name="toolTip">
                                           <string>Zoom In</string>
@@ -8898,11 +8924,17 @@ QToolTip {
                                        </item>
                                        <item>
                                         <widget class="QPushButton" name="technical_zoom_out">
+                                         <property name="enabled">
+                                          <bool>false</bool>
+                                         </property>
                                          <property name="minimumSize">
                                           <size>
                                            <width>0</width>
                                            <height>0</height>
                                           </size>
+                                         </property>
+                                         <property name="cursor">
+                                          <cursorShape>PointingHandCursor</cursorShape>
                                          </property>
                                          <property name="toolTip">
                                           <string>Zoom Out</string>
