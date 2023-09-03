@@ -410,7 +410,7 @@ class API:
         # self.__debug_load_sheet__(["996", "997"])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
-        self.__debug__login__()
+        # self.__debug__login__()
 
 
         self.grab_time = 0
