@@ -796,6 +796,21 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox_typesLevel2">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QCheckBox:disabled  {
+	color: rgb(70, 70, 70);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Level2 (08)</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>

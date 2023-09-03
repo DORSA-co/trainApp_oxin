@@ -1144,6 +1144,19 @@ MESSEGES = {
         "fa": "نام معتبر می باشد",
         "en": "Valid Name",
     },
+    "Get_data_SUCCUSSFULL": {"fa": " دیتا از لول ۲ با موفقیت دریافت گردید", "en": "Get data succussful"},
+    "Get_data_FAILED": {"fa": " دیتا از لول ۲ دریافت نگردید", "en": "Get data failed"},
+    "Get_speed_SUCCUSSFULL": {"fa": " سرعت از لول ۲ با موفقیت دریافت گردید", "en": "Get speed succussful"},
+    "Get_speed_FAILED": {"fa": " سرعت از لول نگردید", "en": "Get speed failed"},
+    "Get_check_data_SUCCUSSFULL": {"fa": " دیتای تست از لول ۲ با موفقیت دریافت گردید", "en": "Get check_data succussful"},
+    "Get_check_data_FAILED": {"fa": " دیتای تست از لول ۲ نگردید", "en": "Get check data failed"},
+    "RESET_LEVEL2_GET_DATA": {"fa": " اتصال مجدد لول ۲", "en": "reset level2 get data"},
+    "plc_write_successfully": {"fa": " مقادیر به درستی اعمال گردید", "en": "plc_write_successfully"},
+    "plc_write_failed": {"fa": " مقادیر اعمال نگردید", "en": "plc_write_failed"},
+
+
+
+
 }
 
 Titles = {
