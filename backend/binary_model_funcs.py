@@ -7,7 +7,7 @@ from PySide6.QtCore import Signal as sSignal
 from requests import head
 
 from backend import colors_pallete, chart_funcs, date_funcs
-# import train_api
+import train_api
 import texts, texts_codes
 import os
 from utils1 import Utils
@@ -408,13 +408,13 @@ def translate_binary_algorithm_id_to_name(
     :return: _description_
     :rtype: binary algorithm name/id (by respect to reverse value)
     """
-    # if not reverse:
-    #     return train_api.ALGORITHM_NAMES[model_type][int(algo_id)]
-    # else:
-    #     try:
-    #         return train_api.ALGORITHM_NAMES[model_type].index(algo_id)
-    #     except:
-    return -1
+    if not reverse:
+        return train_api.ALGORITHM_NAMES[model_type][int(algo_id)]
+    else:
+        try:
+            return train_api.ALGORITHM_NAMES[model_type].index(algo_id)
+        except:
+            return -1
 
 
 # ____________________________________________________________________JJ ZONE

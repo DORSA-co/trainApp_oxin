@@ -286,7 +286,8 @@ class Dataset:
         # shutil.copyfile(img_path, loc_image_path)
         cv2.imwrite(loc_image_path, img)
         cv2.imwrite(mask_path, mask)
-        shutil.copyfile(mask_path, loc_label_path)
+        cv2.imwrite(loc_label_path, mask)
+        # shutil.copyfile(mask_path, loc_label_path)
 
     def delete_from_defect(self, pos):
         image_name = self.__file_name__(pos) + self.format_image
