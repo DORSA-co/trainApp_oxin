@@ -368,8 +368,8 @@ class sheetOverView:
     # ______________________________________________________________________________________________________________________________
 
     def draw_slines(self, img, n=-1):
-        DASH_N = 30
-        res = np.copy(img)
+        #DASH_N = 30
+        #res = np.copy(img)
         if n == -1:
             if self.oriation == HORIZONTAL:
                 n = (self.technical_sheet_shape[1] // self.cell_shape[1]) + 1
@@ -394,12 +394,19 @@ class sheetOverView:
 
                 self.draw_dline(img, (x1, y1), (x2, y2))
 
+            
+            for i_cam in range(self.actives_camera[0], self.actives_camera[1]):
+                y1 = 0
+                x1 = i_cam * self.cell_shape[1]
+                y2 = self.technical_sheet_shape[0]
+                cv2.line(img, (x1, y1), (x1, y2), color=self.color_map["sline"], thickness=1)
+
         return img
 
     # ______________________________________________________________________________________________________________________________
     #
     # ______________________________________________________________________________________________________________________________
-    def draw_dline(self, img, pt1, pt2):
+    def draw_dline(self, img, pt1, pt2,):
         dash_size = 5
         x1, y1 = pt1
         x2, y2 = pt2
@@ -562,7 +569,7 @@ class sheetOverView:
         norm_x, norm_y = self.get_pos()
         h,w = self.sheet_full_image.shape
         x = int(norm_x * w)
-        y = int(norm_y * h)
+        y = int(norm_y * h) 
         
         crop = np.copy(self.sheet_full_image[ y:y+self.viewport_size[0], 
                                      x:x+ self.viewport_size[1]])
@@ -634,9 +641,8 @@ class sheetOverView:
             tuple: norm_x, norm_y
         """
 
-        pt_norm_x = self.pt[0] / self.technical_sheet_shape[1]
+        pt_norm_x = self.pt[0] / (self.cell_shape[1] * (self.actives_camera[1] - self.actives_camera[0] + 1))#self.technical_sheet_shape[0]
         pt_norm_y = self.pt[1] / self.technical_sheet_shape[0]
-
         return (pt_norm_x, pt_norm_y)
 
 
@@ -652,6 +658,9 @@ class sheetOverView:
 
     def get_side(self):
         return self.side.lower()
+    
+    def get_current_cam(self,):
+        return self.pt[0] // self.cell_shape[1] + 1
 
 
 if __name__ == "__main__":
