@@ -94,7 +94,7 @@ from storage_main_UI import storage_management
 from storage_api import storage_api
 from storage_worker import storage_worker
 import time
-
+from level2_UI import levl2_UI
 import getpass
 import subprocess
 
@@ -108,6 +108,11 @@ TECHNICAL_WGT_NAME_TO_SIDE = {"up_side_technical", "top", "bottom"}
 MAX_SHOW_IN_PAGE = 20
 
 FRAME_RATE = 7
+
+
+TRUE_COLOR = '#4E9A06'
+FALSE_COLOR = '#A40000'
+
 
 
 # down_side_technical     ,   up_side_technical
@@ -324,10 +329,14 @@ class API:
         self.down_in = False
         self.down_out = False
         self.init_check_plc()
+        self.create_level2_ui()
+
+        self.my_plc.set_cams_and_prejector()
+
 
         # Level2 connection
-        self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win)
-        self.l2_connection.get_speed()
+        self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win,logger = self.ui.logger)
+        
         # self.l2_connection.create_connection()
         self.start_level2_thread()
         (
@@ -336,6 +345,10 @@ class API:
             self.details,
         ) = self.l2_connection.get_dummy_info()
         self.get_info_flag = False
+
+        self.ui.level2_btn.clicked.connect(self.show_level_ui)
+
+
         # PBT
 
         self.current_b_model = ""
@@ -420,6 +433,14 @@ class API:
         self.show_speed_timer.start(100)
         self.speed_mode = True
 
+        #show level2 status
+        self.show_speed_timer = QTimer()
+        self.show_speed_timer.timeout.connect(self.show_status_level2)
+        self.show_speed_timer.start(1000)
+
+        self.level2_win.reconnect_btn.clicked.connect(self.reconnect_level2)
+
+
         self.technical_scale = 1
 
         self.technical_threads = {}
@@ -436,18 +457,91 @@ class API:
 
         #milad
         self.baselines =None
+    def create_level2_ui(self):
+        self.level2_win = levl2_UI()
+    def show_level_ui(self):
+        self.level2_win.show()
+
+    def reconnect_level2(self):
+        self.l2_connection.close_ui=True
+        self.ui.logger.create_new_log(
+                        code=texts_codes.SubTypes['RESET_LEVEL2_GET_DATA'], message=texts.MESSEGES["RESET_LEVEL2_GET_DATA"]["en"], level=1
+                    )
+        threading.Timer(10,self.start_level2_thread).start()
 
 
+
+    def start_level2_thread(self):
+        self.l2_connection.reset_retry_values()
+        self.l2_connection.close_ui=False
+        self.level2_thread_data = threading.Thread(target=self.l2_connection.get_data)
+        self.level2_thread_data.start()
+
+        self.level2_thread_speed = threading.Thread(target=self.l2_connection.get_speed)
+        self.level2_thread_speed.start()
+    
+
+        self.level2_thread_check_data = threading.Thread(target=self.l2_connection.get_check_data)
+        self.level2_thread_check_data.start()
+
+
+    def show_status_level2(self):
+        t1 = QTime.currentTime().toString("hh:mm:ss")
+        flag = True
+        if self.l2_connection.last_speed:
+            self.set_ui_status_time('speed',True,t1)
+        else:
+            flag = False
+            self.set_ui_status_time('speed',False,t1)
+
+        #level2 data show status on ui
+
+        if self.l2_connection.data:
+            self.set_ui_status_time('level2',True,t1)
+        else:
+            flag = False
+            self.set_ui_status_time('level2',False,t1)
+
+
+        # level2 data dummy check on ui
+        if self.l2_connection.check_data:
+            self.set_ui_status_time('dummy',True,t1)
+        else:
+            flag = False
+            self.set_ui_status_time('dummy',False,t1)
+
+        if flag:
+            self.ui.level2_btn.setStyleSheet('QPushButton {background-color: #4E9A06;border-radius: 10px;border-color: beige;padding: 6px;color : white;}')
+        else:
+            self.ui.level2_btn.setStyleSheet('QPushButton {background-color: #A40000;border-radius: 10px;border-color: beige;padding: 6px;color : white;}')           
     def show_speed(self):
         # print(self.l2_connection.last_speed)
+
+
         if self.l2_connection.last_speed>0 and not self.speed_mode:
             self.ui.label_228.setStyleSheet("color : #1A5D1A")
             self.speed_mode = True
             self.ui.label_228.setText(str(self.l2_connection.last_speed))
+
         if self.l2_connection.last_speed<=0 and self.speed_mode:
             self.ui.label_228.setStyleSheet("color : #C51605")
             self.speed_mode = False
             self.ui.label_228.setText('{} 0.0 '.format(texts.Titles['stop'][self.language]))
+
+
+
+
+
+    def set_ui_status_time(self,frame_name,status,time):
+
+        self.level2_win.set_style_sheet(frame_name,status)
+        self.level2_win.set_time(frame_name,time)
+
+
+
+
+
+
 
     def remove_pypylon_chache(self):
         try:
@@ -1761,9 +1855,6 @@ class API:
                 selceted_sheets_id
             )  # load inference of Sheet class from database by sheet id
             self.build_sheet_technical(self.sheet)  # build technical sheet
-            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
-            if self.ui.checkBox_suggested_defects.isChecked():
-                self.load_suggestions()
             self.ui.show_sheet_details(
                 self.sheet.get_info_dict()
             )  # show sheet details in UI.details_label
@@ -1806,12 +1897,13 @@ class API:
             if not os.path.exists(jsons_path):
                 self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
                 pathStructure.create_sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
-            if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
-                self.ui.set_enabel(self.ui.load_coil_btn, False)
-                self.ui.set_enabel(self.ui.next_coil_btn, False)
-                self.ui.set_enabel(self.ui.prev_coil_btn, False)
-                self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
 
+            self.ui.set_enabel(self.ui.load_coil_btn, False)
+            self.ui.set_enabel(self.ui.next_coil_btn, False)
+            self.ui.set_enabel(self.ui.prev_coil_btn, False)
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
+
+            if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
                 self.reset_suggestion_progressbar(self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe() * 2)
 
                 self.start_suggestion_threads(jsons_main_path=jsons_main_path, n_threads=12)
@@ -1863,11 +1955,6 @@ class API:
             self.sheet_imgprocessing_mem[self.sheet.get_id()] = True
 
             self.update_technical_with_suggestions()
-
-            self.ui.set_enabel(self.ui.load_coil_btn, True)
-            self.ui.set_enabel(self.ui.next_coil_btn, True)
-            self.ui.set_enabel(self.ui.prev_coil_btn, True)
-            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
 
     def update_technical_with_suggestions(self):
         # loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', self.language])
@@ -1935,6 +2022,11 @@ class API:
             self.thechnicals_backend[side].update_real_imgs()
             self.current_technical_side = side
             self.refresh_thechnical(fp=1)
+
+            self.ui.set_enabel(self.ui.load_coil_btn, True)
+            self.ui.set_enabel(self.ui.next_coil_btn, True)
+            self.ui.set_enabel(self.ui.prev_coil_btn, True)
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
         return func
 
     def update_suggestion_progressbar(self):
@@ -1988,6 +2080,10 @@ class API:
 
     def build_sheet_technical(self, sheet):
         try:
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
+            self.ui.set_enabel(self.ui.next_coil_btn, False)
+            self.ui.set_enabel(self.ui.prev_coil_btn, False)
+            self.ui.set_enabel(self.ui.load_sheets_win.load_btn, False)
             self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
             self.technical_backend = {}
             for side, _ in self.ui.get_technical(name=False).items():
@@ -2064,6 +2160,14 @@ class API:
         self.close_technical_cnt += 1
         if self.close_technical_cnt == self.close_technical_nside:
             self.ui.load_sheets_win.close()
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
+            self.ui.set_enabel(self.ui.next_coil_btn, True)
+            self.ui.set_enabel(self.ui.prev_coil_btn, True)
+            self.ui.set_enabel(self.ui.load_sheets_win.load_btn, True)
+            self.ui.set_enabel(self.ui.technical_zoom_in, True)
+            self.ui.set_enabel(self.ui.technical_zoom_out, True)
+            if self.ui.checkBox_suggested_defects.isChecked():
+                self.load_suggestions()
 
     # ----------------------------------------------------------------------------------------
     # when next next_coil_btn clicked this function move on next coil id and load it
@@ -6769,7 +6873,7 @@ class API:
         # get plc ip
         ip = self.plc_ip
         # connect to plc
-        self.my_plc = plc_managment.management(ip, ui_obj=self.ui)
+        self.my_plc = plc_managment.management(ip, ui_obj=self.ui,logger=self.ui.logger)
         self.connection_status = self.my_plc.connection()
         # parms=self.db.load_plc_parms()
         # #print(parms)
@@ -7194,9 +7298,7 @@ class API:
         threading.Timer(1,self.get_sensor).start()
         threading.Timer(1,self.get_temp_and_switch).start()
 
-    def start_level2_thread(self):
-        self.level2_thread = threading.Thread(target=self.l2_connection.get_data)
-        self.level2_thread.start()
+    #levl2 data
 
     def start_get_full_data(self):
         (
@@ -7291,9 +7393,9 @@ class API:
                 self.get_info_flag = False
                 # if self.connection_status:
                 # print('start thread set caemra and projector')
-                # threading.Thread(target=self.my_plc.set_cams_and_prejector,args=(3, projectors)).start() ## set in init
+                
                 threading.Timer(0.5, self.start_get_full_data).start()
-                # self.my_plc.set_cams_and_prejector(3, projectors)  # temo test ncamera = 1
+
                 if self.show_save_notif:
                     self.ui.notif_manager.append_new_notif(
                         message=str(
@@ -7324,7 +7426,6 @@ class API:
         try:
             self.plc_timer.stop()
             # self.plc_update.stop()
-
         except:
             pass
         self.plc_timer.start(1000)

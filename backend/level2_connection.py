@@ -13,6 +13,8 @@ try:
     import date_funcs
 except:
     from backend import date_funcs
+import texts_codes
+import texts
 
 RANDOM=True
 PORT_DATA = 11000
@@ -30,24 +32,31 @@ SAMPLE = "\x00\x01\x00\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x
 
 class connection_level2():
 
-    def __init__(self, db_obj,close_ui):
+    def __init__(self, db_obj,close_ui,logger=False):
         # self.ui_obj=ui_obj
         # self.sheet_id = 900
         self.db_obj = db_obj
         self.close_ui = close_ui
+
+        self.logger = logger
+        # ------------------------------------------
         self.get_data_timer = 1
         self.data = None
+        self.check_data = False
         self.max_cameras = 12
         self.max_width = 4800
         self.max_projectors = 6
         self.retry_get_data = 0
         self.retry_get_speed = 0
+        self.retry_get_check_data=0
         self.last_speed = -1
         self.dummy_dict = {'PLATE_ID': 'ABC12345A', 'ORDER_ID': '123456789', 'HEAT_ID': '123456', 'QC_STANDARD': 'ASTM450', 'LENGHT': '6040', 'WIDTH': '2020', 'THICKNESS': '25.23', 'LENGHT_ORDER': '6000', 'WIDTH_ORDER': '2000', 'THICKNESS_ORDER': '25', 'speed': '1500'}
-
         self.get_data_socket = self.create_connection(PORT_DATA)
         self.get_speed_socket = self.create_connection(PORT_SPEED)
         self.check_socket = self.create_connection(PORT_CHECK)
+
+
+
 
 
     def set_get_data_timer(self, timer):
@@ -202,18 +211,57 @@ class connection_level2():
             self.convert_data(data)
             self.retry_get_data = 0
 
+            self.logger.create_new_log(
+                code=texts_codes.SubTypes["Get_data_SUCCUSSFULL"],
+                message=texts.MESSEGES["Get_data_SUCCUSSFULL"]["en"]+self.data,
+                level=5,
+            )
         except:
             self.retry_get_data+=1
             if self.retry_get_data<10:
                 self.get_data_socket = self.create_connection(PORT_DATA)
-                print('ERROR Level2 Get data')
-            # log.warning('Level2 connection Error')
+                self.logger.create_new_log(
+                    code=texts_codes.SubTypes["Get_data_FAILED"],
+                    message=texts.MESSEGES["Get_data_FAILED"]["en"],
+                    level=5,
+                )
+            self.data=False
             time.sleep(1)
-
-
         if not self.close_ui:
             threading.Timer(self.get_data_timer, self.get_data).start()
                
+
+    def get_check_data(self):
+        try:
+            t1 = datetime.now()
+            conn,addr=self.check_socket.accept()
+            self.check_data=conn.recv(100000)
+            # conn.send(data)
+            # self.convert_data(data)
+            self.retry_get_check_data = 0
+            self.logger.create_new_log(
+                code=texts_codes.SubTypes["Get_check_data_SUCCUSSFULL"],
+                message=texts.MESSEGES["Get_check_data_SUCCUSSFULL"]["en"],
+                level=5,
+            )
+        except:
+            self.retry_get_check_data+=1
+            if self.retry_get_check_data<10:
+                self.check_socket = self.create_connection(PORT_DATA)          
+                self.logger.create_new_log(
+                    code=texts_codes.SubTypes["Get_check_data_FAILED"],
+                    message=texts.MESSEGES["Get_check_data_FAILED"]["en"],
+                    level=5,
+                )
+            time.sleep(1)
+            self.check_data=False
+
+        if not self.close_ui:
+            threading.Timer(self.get_data_timer, self.get_check_data).start()
+
+
+
+
 
 
 
@@ -227,13 +275,24 @@ class connection_level2():
             conn.send(data)
             self.convert_speed(data)
             self.retry_get_speed = 0
+            self.logger.create_new_log(
+                code=texts_codes.SubTypes["Get_speed_SUCCUSSFULL"],
+                message=texts.MESSEGES["Get_speed_SUCCUSSFULL"]["en"]+'  '+str(self.last_speed),
+                level=5,
+            )   
+
         except:
             # print('Except')
             self.retry_get_speed+=1
             if self.retry_get_speed<10:
                 self.get_speed_socket = self.create_connection(PORT_SPEED)
-                print('ERROR Level2 Get Speed')
+                self.logger.create_new_log(
+                code=texts_codes.SubTypes["Get_speed_FAILED"],
+                message=texts.MESSEGES["Get_speed_FAILED"]["en"],
+                level=5,
+                )
             # log.warning('Level2 connection Error')
+            self.last_speed=False
             time.sleep(1)
 
         if not self.close_ui:
@@ -241,9 +300,16 @@ class connection_level2():
 
 
 
+    def set_ui_status_time(self,frame_name,status,time):
+
+        self.ui_obj.set_style_sheet(frame_name,status)
+        self.ui_obj.set_time(frame_name,time)
 
 
-
+    def reset_retry_values(self):
+        self.retry_get_data=0
+        self.retry_get_speed=0
+        self.retry_get_check_data=0
 
 if __name__=='__main__':
 

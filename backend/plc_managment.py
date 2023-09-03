@@ -1,5 +1,6 @@
 from opcua import Client, ua
 import os
+import texts_codes
 import json
 try:
     from backend import texts
@@ -32,12 +33,12 @@ class management():
     Returns: PLC object
     """
 
-    def __init__(self, ip, ui_obj):
+    def __init__(self, ip, ui_obj,logger):
         self.ip=ip
         self.set_file_name('text_plc_parms')
         self.ui_obj = ui_obj
         self.spec_pathes=set_pathes(PLC_DEFAULT)
-
+        self.logger = logger
     
 
     def connection(self):
@@ -129,9 +130,23 @@ class management():
                 value = ua.DataValue(ua.Variant(value_,ua.VariantType.Boolean))
                 var.set_value(value)
             
+            self.logger.create_new_log(
+                code=texts_codes.SubTypes["plc_write_successfully"],
+                message=texts.MESSEGES["plc_write_successfully"]["en"]+' '+str(path)+str(value),
+                level=5,
+                )
+
             return True
         
         except:
+
+            self.logger.create_new_log(
+                code=texts_codes.SubTypes["plc_write_failed"],
+                message=texts.MESSEGES["plc_write_failed"]["en"]+' '+str(path)+str(value),
+                level=5,
+                )
+
+
             return False
             
 
@@ -179,35 +194,16 @@ class management():
 
 
 
-    def set_cams_and_prejector(self,n_cam,n_projector):
-        #try:
-            #print('Set Camera {}'.format(n_cam))
-        # print('test'*20)
-        # n_cam=3
-        # ret_set_ncam=self.set_value(self.spec_pathes['NCamera'], n_cam)   # temp disable
-        # print('aaaaaaaaaa',self.get_value(self.spec_pathes['NCamera']))
-        #except:
-        ret_set_ncam=False
-        
+    def set_cams_and_prejector(self):
+        n_cam=3
+        threading.Thread(target=self.set_value,args=(self.spec_pathes['NCamera'], n_cam)).start()
 
-        # try:
         for proj in range(1,7):
-            # if proj<=n_projector:
             mode=True
-            # else:
-            #     mode=False
-            # try:
-                    #print('Projector top/bottom {} set {}'.format(proj,mode))
             threading.Thread(target=self.set_value,args=(self.spec_pathes['MemDownProjectorOnOff{}'.format(proj)], str(mode))).start()
             threading.Thread(target=self.set_value,args=(self.spec_pathes['MemUpProjectorOnOff{}'.format(proj)], str(mode))).start()
-            # ret_set_ncam=self.set_value(self.spec_pathes['MemDownProjectorOnOff{}'.format(proj)], str(mode))
-            # ret_set_ncam=self.set_value(self.spec_pathes['MemUpProjectorOnOff{}'.format(proj)], str(mode))
-            # except:
-            #     pass
+        print('*'*100)
         return True
-        # except:
-        #     print('error in set cam num in plc managment')
-        #     return False
 
 
 

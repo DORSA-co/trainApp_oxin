@@ -6,6 +6,7 @@ Types = {
     'Training': '05',
     'Database': '06',
     'Others': '07',
+    'Level2' : '08',
 }
 
 SubTypes = {
@@ -22,6 +23,10 @@ SubTypes = {
     'plc_disconnected': '02-4',
     'plc_disconnected_failed': '02-5',
     'plc': '02-6',
+    'plc_write_successfully': '02-7',
+    'plc_write_failed': '02-6',
+
+
     # Camera/Imaging
     'cameras': '03-1',
     'cameras_capturing_eror':'03-2',
@@ -118,4 +123,15 @@ SubTypes = {
     'sheet_window_search_error':'07-39',
     'Storage_opened': '07-40',
     'Storage_open_failed': '07-41',
+
+    #level2
+
+    'Get_data_SUCCUSSFUL': '08-1',
+    'Get_data_FAILED': '08-2',
+    'Get_speed_SUCCUSSFULL': '08-3',
+    'Get_speed_FAILED': '08-4',
+    'Get_check_data_SUCCUSSFULL': '08-5',
+    'Get_check_data_FAILED': '08-6',
+    'RESET_LEVEL2_GET_DATA': '08-7',
+
 }

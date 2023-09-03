@@ -105,10 +105,9 @@ class sheetOverView:
         img = None  
         if os.path.exists(img_path):
             img = cv2.imread(img_path, 0)
-
         if img is not None:
-            if self.show_bboxes:
-                img = self.draw_defect_bbox_on_single_image(img, cam_idx, frame_idx)
+            # if self.show_bboxes:
+            #     img = self.draw_defect_bbox_on_single_image(img, cam_idx, frame_idx)
 
             if self.single_image_shape is None:
                 self.single_image_shape = img.shape[:2]
@@ -137,7 +136,7 @@ class sheetOverView:
         return np.zeros( (single_h*frame_counts, single_w*camera_counts ), dtype=np.uint8)
     
 
-    def draw_defect_bbox_on_single_image(self, img:np.ndarray, cam_idx:int, frame_idx:int) -> np.ndarray:
+    def draw_defect_bbox_on_single_image(self, cam_idx:int, frame_idx:int) -> np.ndarray:
         """draws defects bounding boxes on single image
 
         Args:
@@ -148,6 +147,13 @@ class sheetOverView:
         Returns:
             np.ndarray: result image
         """
+        i = cam_idx - 1
+        j = frame_idx - 1
+        h = 1024
+        w = 1792
+        img = self.sheet_full_image[j*h: (j+1)*h,
+                              i*w: (i+1)*w
+                              ]
         json_path = pathStructure.sheet_suggestions_json_path(
                         '',
                         self.sheet.get_id(),
@@ -155,6 +161,7 @@ class sheetOverView:
                         cam_idx,
                         frame_idx
                     )
+        
         res = None
         if os.path.exists(json_path):
             with open(json_path) as jfile:
@@ -220,6 +227,7 @@ class sheetOverView:
         else:
             status = 'black'
         self.sheet_img = self.draw_defect(self.sheet_img, [c-1, f-1], status)
+        self.draw_defect_bbox_on_single_image(c, f)
 
     # ______________________________________________________________________________________________________________________________
     #
