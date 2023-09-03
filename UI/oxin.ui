@@ -2488,7 +2488,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>1</number>
+                         <number>0</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -4925,7 +4925,7 @@ border:None;</string>
                                       <widget class="QWidget" name="scrollAreaWidgetContents_3">
                                        <property name="geometry">
                                         <rect>
-                                         <x>0</x>
+                                         <x>-113</x>
                                          <y>0</y>
                                          <width>882</width>
                                          <height>32</height>
@@ -5064,7 +5064,7 @@ QCheckBox::indicator:unchecked {
                                            <string notr="true">color: rgb(239, 41, 41);</string>
                                           </property>
                                           <property name="text">
-                                           <string>0</string>
+                                           <string>0 STOP</string>
                                           </property>
                                          </widget>
                                         </item>
@@ -5234,6 +5234,56 @@ QPushButton:disabled {
                                        </size>
                                       </property>
                                      </spacer>
+                                    </item>
+                                    <item>
+                                     <widget class="Line" name="line_70">
+                                      <property name="orientation">
+                                       <enum>Qt::Vertical</enum>
+                                      </property>
+                                     </widget>
+                                    </item>
+                                    <item>
+                                     <widget class="QPushButton" name="level2_btn">
+                                      <property name="enabled">
+                                       <bool>true</bool>
+                                      </property>
+                                      <property name="minimumSize">
+                                       <size>
+                                        <width>92</width>
+                                        <height>30</height>
+                                       </size>
+                                      </property>
+                                      <property name="maximumSize">
+                                       <size>
+                                        <width>92</width>
+                                        <height>30</height>
+                                       </size>
+                                      </property>
+                                      <property name="cursor">
+                                       <cursorShape>PointingHandCursor</cursorShape>
+                                      </property>
+                                      <property name="styleSheet">
+                                       <string notr="true">QPushButton {
+    background-color: #A40000;
+    border-style: outset;
+
+    border-radius: 10px;
+    border-color: beige;
+    padding: 6px;
+	color : white;
+}
+QPushButton:disabled {
+	background-color:#cccccc;
+	color:black;	
+    border-radius: 10px;
+    border-color: beige;
+    padding: 6px;
+}</string>
+                                      </property>
+                                      <property name="text">
+                                       <string>Level2</string>
+                                      </property>
+                                     </widget>
                                     </item>
                                    </layout>
                                   </widget>
@@ -14246,7 +14296,7 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>92</width>
+                                      <width>65</width>
                                       <height>164</height>
                                      </rect>
                                     </property>
@@ -14369,7 +14419,7 @@ color : rgb(0,0,0);</string>
                                               <x>0</x>
                                               <y>0</y>
                                               <width>133</width>
-                                              <height>25</height>
+                                              <height>35</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_41">

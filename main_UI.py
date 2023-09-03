@@ -48,6 +48,7 @@ import api
 from Sheet_loader_win.data_loader_UI import data_loader
 from labeling.labeling_UI import labeling
 from help_UI import help
+
 from neighbouring_UI import neighbouring
 from small_neighbouring_UI import small_neighbouring
 from full_screen_UI import full_screen_window
@@ -704,8 +705,16 @@ class UI_main_window(QMainWindow, ui):
         self.flag_close_win=False
 
 
+
+        #LEVEL2 UI
+        
+
+
+
+
     def showTime(self):
         # getting current time
+        
         current_time = QTime.currentTime()
 
         # converting QTime object to string
