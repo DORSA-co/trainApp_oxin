@@ -23,10 +23,6 @@ class technical_load_sheet_worker(sQObject):
         
     
     def progressbar_event_func(self,):
-<<<<<<< HEAD
-        # print('load3 finish', self.grabber_obj, self)
-=======
->>>>>>> 69b52540a7e6950c09905d391dd23537e17ddf50
         self.update_progressbar.emit()
 
     def run(self):
