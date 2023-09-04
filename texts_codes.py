@@ -126,7 +126,7 @@ SubTypes = {
 
     #level2
 
-    'Get_data_SUCCUSSFUL': '08-1',
+    'Get_data_SUCCUSSFULL': '08-1',
     'Get_data_FAILED': '08-2',
     'Get_speed_SUCCUSSFULL': '08-3',
     'Get_speed_FAILED': '08-4',

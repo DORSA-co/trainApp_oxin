@@ -133,7 +133,7 @@ class management():
             self.logger.create_new_log(
                 code=texts_codes.SubTypes["plc_write_successfully"],
                 message=texts.MESSEGES["plc_write_successfully"]["en"]+' '+str(path)+str(value),
-                level=5,
+                level=1,
                 )
 
             return True

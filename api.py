@@ -434,9 +434,9 @@ class API:
         self.speed_mode = True
 
         #show level2 status
-        self.show_speed_timer = QTimer()
-        self.show_speed_timer.timeout.connect(self.show_status_level2)
-        self.show_speed_timer.start(1000)
+        self.show_l2_status = QTimer()
+        self.show_l2_status.timeout.connect(self.show_status_level2)
+        self.show_l2_status.start(1000)
 
         self.level2_win.reconnect_btn.clicked.connect(self.reconnect_level2)
 
@@ -488,7 +488,7 @@ class API:
     def show_status_level2(self):
         t1 = QTime.currentTime().toString("hh:mm:ss")
         flag = True
-        if self.l2_connection.last_speed:
+        if self.l2_connection.last_speed !=False or int(self.l2_connection.last_speed)==0:
             self.set_ui_status_time('speed',True,t1)
         else:
             flag = False
@@ -502,12 +502,12 @@ class API:
             flag = False
             self.set_ui_status_time('level2',False,t1)
 
-
+        print('Flag ',flag)
         # level2 data dummy check on ui
         if self.l2_connection.check_data:
             self.set_ui_status_time('dummy',True,t1)
         else:
-            flag = False
+            # flag = False
             self.set_ui_status_time('dummy',False,t1)
 
         if flag:
