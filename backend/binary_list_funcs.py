@@ -699,10 +699,10 @@ def create_mask_from_annotation_file(ui_obj, db_obj, image, annotation_path):
                 )
                 image_mask2 = cv2.putText(
                     image_mask2,
-                    defect_info["short_name"],
+                    defect_info["defect_ID"]+' '+defect_info["short_name"],
                     pts_center,
                     cv2.FONT_HERSHEY_SIMPLEX,
-                    1.5,
+                    4,
                     html_to_bgr(defect_info["color"]),
                     2,
                 )
