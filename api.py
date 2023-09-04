@@ -59,7 +59,7 @@ import texts  # eror and warnings texts
 import texts_codes
 from utils1 import tempMemory, Utils
 from backend.dataset import Dataset
-# import train_api
+import train_api
 from labeling import labeling_api
 from pynput.mouse import Controller
 from login_win.login_api import login_API
@@ -72,7 +72,7 @@ import random
 from PySide6.QtWidgets import QTableWidgetItem as sQTableWidgetItem
 
 from backend import pipelines
-# from backend.pipline_creation_module import ModelsCreation_worker
+from backend.pipline_creation_module import ModelsCreation_worker
 from backend.pipline_evaluation_module import Evaluation_worker
 from backend.binary_list_funcs import PIPLINES_PATH
 from backend.pipelines import Pipeline
@@ -434,9 +434,9 @@ class API:
         self.speed_mode = True
 
         #show level2 status
-        self.show_speed_timer = QTimer()
-        self.show_speed_timer.timeout.connect(self.show_status_level2)
-        self.show_speed_timer.start(1000)
+        self.show_l2_status = QTimer()
+        self.show_l2_status.timeout.connect(self.show_status_level2)
+        self.show_l2_status.start(1000)
 
         self.level2_win.reconnect_btn.clicked.connect(self.reconnect_level2)
 
@@ -488,7 +488,7 @@ class API:
     def show_status_level2(self):
         t1 = QTime.currentTime().toString("hh:mm:ss")
         flag = True
-        if self.l2_connection.last_speed:
+        if self.l2_connection.last_speed !=False or int(self.l2_connection.last_speed)==0:
             self.set_ui_status_time('speed',True,t1)
         else:
             flag = False
@@ -502,12 +502,12 @@ class API:
             flag = False
             self.set_ui_status_time('level2',False,t1)
 
-
+        print('Flag ',flag)
         # level2 data dummy check on ui
         if self.l2_connection.check_data:
             self.set_ui_status_time('dummy',True,t1)
         else:
-            flag = False
+            # flag = False
             self.set_ui_status_time('dummy',False,t1)
 
         if flag:
@@ -1855,9 +1855,6 @@ class API:
                 selceted_sheets_id
             )  # load inference of Sheet class from database by sheet id
             self.build_sheet_technical(self.sheet)  # build technical sheet
-            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
-            if self.ui.checkBox_suggested_defects.isChecked():
-                self.load_suggestions()
             self.ui.show_sheet_details(
                 self.sheet.get_info_dict()
             )  # show sheet details in UI.details_label
@@ -1900,12 +1897,13 @@ class API:
             if not os.path.exists(jsons_path):
                 self.sheet_imgprocessing_mem[self.sheet.get_id()] = False
                 pathStructure.create_sheet_suggestions_path(jsons_main_path, self.sheet.get_id())
-            if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
-                self.ui.set_enabel(self.ui.load_coil_btn, False)
-                self.ui.set_enabel(self.ui.next_coil_btn, False)
-                self.ui.set_enabel(self.ui.prev_coil_btn, False)
-                self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
 
+            self.ui.set_enabel(self.ui.load_coil_btn, False)
+            self.ui.set_enabel(self.ui.next_coil_btn, False)
+            self.ui.set_enabel(self.ui.prev_coil_btn, False)
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
+
+            if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
                 self.reset_suggestion_progressbar(self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe() * 2)
 
                 self.start_suggestion_threads(jsons_main_path=jsons_main_path, n_threads=12)
@@ -1957,11 +1955,6 @@ class API:
             self.sheet_imgprocessing_mem[self.sheet.get_id()] = True
 
             self.update_technical_with_suggestions()
-
-            self.ui.set_enabel(self.ui.load_coil_btn, True)
-            self.ui.set_enabel(self.ui.next_coil_btn, True)
-            self.ui.set_enabel(self.ui.prev_coil_btn, True)
-            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
 
     def update_technical_with_suggestions(self):
         # loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', self.language])
@@ -2029,6 +2022,11 @@ class API:
             self.thechnicals_backend[side].update_real_imgs()
             self.current_technical_side = side
             self.refresh_thechnical(fp=1)
+
+            self.ui.set_enabel(self.ui.load_coil_btn, True)
+            self.ui.set_enabel(self.ui.next_coil_btn, True)
+            self.ui.set_enabel(self.ui.prev_coil_btn, True)
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
         return func
 
     def update_suggestion_progressbar(self):
@@ -2082,6 +2080,10 @@ class API:
 
     def build_sheet_technical(self, sheet):
         try:
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
+            self.ui.set_enabel(self.ui.next_coil_btn, False)
+            self.ui.set_enabel(self.ui.prev_coil_btn, False)
+            self.ui.set_enabel(self.ui.load_sheets_win.load_btn, False)
             self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
             self.technical_backend = {}
             for side, _ in self.ui.get_technical(name=False).items():
@@ -2158,6 +2160,14 @@ class API:
         self.close_technical_cnt += 1
         if self.close_technical_cnt == self.close_technical_nside:
             self.ui.load_sheets_win.close()
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
+            self.ui.set_enabel(self.ui.next_coil_btn, True)
+            self.ui.set_enabel(self.ui.prev_coil_btn, True)
+            self.ui.set_enabel(self.ui.load_sheets_win.load_btn, True)
+            self.ui.set_enabel(self.ui.technical_zoom_in, True)
+            self.ui.set_enabel(self.ui.technical_zoom_out, True)
+            if self.ui.checkBox_suggested_defects.isChecked():
+                self.load_suggestions()
 
     # ----------------------------------------------------------------------------------------
     # when next next_coil_btn clicked this function move on next coil id and load it
@@ -2934,7 +2944,7 @@ class API:
         # #print(self.ui.mask_table_widget.selectedIndexes())
         self.selected_defects = []
         for i in range(self.ui.mask_table_widget.rowCount()):
-            if self.ui.mask_table_widget.item(i, 0).checkState() == QtCore.Qt.Checked:
+            if self.ui.mask_table_widget.item(i, 0).checkState() == Qt.Checked:
                 self.selected_defects.append(i)
         label_type = self.ui.get_label_type()
         sheet, pos, img_path = self.move_on_list.get_current("selected_imgs_for_label")

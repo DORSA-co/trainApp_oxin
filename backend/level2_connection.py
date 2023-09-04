@@ -13,9 +13,11 @@ try:
     import date_funcs
 except:
     from backend import date_funcs
-import texts_codes
-import texts
-
+try:
+    import texts_codes
+    import texts
+except:
+    pass
 RANDOM=True
 PORT_DATA = 11000
 PORT_SPEED = 12000
@@ -23,10 +25,6 @@ PORT_CHECK = 13000
 
 SAMPLE = "\x00\x01\x00\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x04\x01\x00\x00\x00\xe2\x01System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x04\x00\x00\x00\x07Version\x08Comparer\x08HashSize\rKeyValuePairs\x00\x03\x00\x03\x08\x92\x01System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x08\xe6\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]][]\x14\x00\x00\x00\t\x02\x00\x00\x00%\x00\x00\x00\t\x03\x00\x00\x00\x04\x02\x00\x00\x00\x92\x01System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x00\x00\x00\x00\x07\x03\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00\x00\x00\x03\xe4\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x04\xfc\xff\xff\xff\xe4\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x02\x00\x00\x00\x03key\x05value\x01\x02\x06\x05\x00\x00\x00\x07speedT1\x06\x06\x00\x00\x00\x0b1000.000000\x01\xf9\xff\xff\xff\xfc\xff\xff\xff\x06\x08\x00\x00\x00\x07speedT2\x06\t\x00\x00\x00\x0b1000.000000\x01\xf6\xff\xff\xff\xfc\xff\xff\xff\x06\x0b\x00\x00\x00\x07speedT3\x06\x0c\x00\x00\x00\x0b1000.000000\x01\xf3\xff\xff\xff\xfc\xff\xff\xff\x06\x0e\x00\x00\x00\x07speedT4\x06\x0f\x00\x00\x00\x0b1000.000000\x01\xf0\xff\xff\xff\xfc\xff\xff\xff\x06\x11\x00\x00\x00\x07speedT5\x06\x12\x00\x00\x00\x0b1000.000000\x01\xed\xff\xff\xff\xfc\xff\xff\xff\x06\x14\x00\x00\x00\x07speedT6\x06\x15\x00\x00\x00\x0b1000.000000\x01\xea\xff\xff\xff\xfc\xff\xff\xff\x06\x17\x00\x00\x00\x07speedT7\x06\x18\x00\x00\x00\x0b1000.000000\x01\xe7\xff\xff\xff\xfc\xff\xff\xff\x06\x1a\x00\x00\x00\x07speedT8\x06\x1b\x00\x00\x00\x0b1000.000000\x01\xe4\xff\xff\xff\xfc\xff\xff\xff\x06\x1d\x00\x00\x00\x07speedT9\x06\x1e\x00\x00\x00\x0b1000.000000\x01\xe1\xff\xff\xff\xfc\xff\xff\xff\x06 \x00\x00\x00\x08speedT10\x06!\x00\x00\x00\x0b1000.000000\x01\xde\xff\xff\xff\xfc\xff\xff\xff\x06#\x00\x00\x00\x08speedT11\x06$\x00\x00\x00\x0b1000.000000\x01\xdb\xff\xff\xff\xfc\xff\xff\xff\x06&\x00\x00\x00\x08speedT12\x06'\x00\x00\x00\x0b1000.000000\x01\xd8\xff\xff\xff\xfc\xff\xff\xff\x06)\x00\x00\x00\x08speedT13\x06*\x00\x00\x00\x0b1000.000000\x01\xd5\xff\xff\xff\xfc\xff\xff\xff\x06,\x00\x00\x00\x08speedT14\x06-\x00\x00\x00\x0b1000.000000\x01\xd2\xff\xff\xff\xfc\xff\xff\xff\x06/\x00\x00\x00\x08speedT15\x060\x00\x00\x00\x0b1000.000000\x01\xcf\xff\xff\xff\xfc\xff\xff\xff\x062\x00\x00\x00\x08speedT16\x063\x00\x00\x00\x0b1000.000000\x01\xcc\xff\xff\xff\xfc\xff\xff\xff\x065\x00\x00\x00\x08speedT17\x066\x00\x00\x00\x0b1000.000000\x01\xc9\xff\xff\xff\xfc\xff\xff\xff\x068\x00\x00\x00\x08speedT18\x069\x00\x00\x00\x0b1000.000000\x01\xc6\xff\xff\xff\xfc\xff\xff\xff\x06;\x00\x00\x00\x08speedT19\x06<\x00\x00\x00\x0b1000.000000\x01\xc3\xff\xff\xff\xfc\xff\xff\xff\x06>\x00\x00\x00\x08speedT20\x06?\x00\x00\x00\x0b1000.000000\x0b"
 
-
-PORT_DATA = 11000
-PORT_SPEED = 12000
-PORT_CHECK = 13000
 
 SAMPLE = "\x00\x01\x00\x00\x00\xff\xff\xff\xff\x01\x00\x00\x00\x00\x00\x00\x00\x04\x01\x00\x00\x00\xe2\x01System.Collections.Generic.Dictionary`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x04\x00\x00\x00\x07Version\x08Comparer\x08HashSize\rKeyValuePairs\x00\x03\x00\x03\x08\x92\x01System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x08\xe6\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]][]\x14\x00\x00\x00\t\x02\x00\x00\x00%\x00\x00\x00\t\x03\x00\x00\x00\x04\x02\x00\x00\x00\x92\x01System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x00\x00\x00\x00\x07\x03\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00\x00\x00\x03\xe4\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x04\xfc\xff\xff\xff\xe4\x01System.Collections.Generic.KeyValuePair`2[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089],[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\x02\x00\x00\x00\x03key\x05value\x01\x02\x06\x05\x00\x00\x00\x07speedT1\x06\x06\x00\x00\x00\x0b1000.000000\x01\xf9\xff\xff\xff\xfc\xff\xff\xff\x06\x08\x00\x00\x00\x07speedT2\x06\t\x00\x00\x00\x0b000.000000\x01\xf6\xff\xff\xff\xfc\xff\xff\xff\x06\x0b\x00\x00\x00\x07speedT3\x06\x0c\x00\x00\x00\x0b1000.000000\x01\xf3\xff\xff\xff\xfc\xff\xff\xff\x06\x0e\x00\x00\x00\x07speedT4\x06\x0f\x00\x00\x00\x0b1000.000000\x01\xf0\xff\xff\xff\xfc\xff\xff\xff\x06\x11\x00\x00\x00\x07speedT5\x06\x12\x00\x00\x00\x0b1000.000000\x01\xed\xff\xff\xff\xfc\xff\xff\xff\x06\x14\x00\x00\x00\x07speedT6\x06\x15\x00\x00\x00\x0b1000.000000\x01\xea\xff\xff\xff\xfc\xff\xff\xff\x06\x17\x00\x00\x00\x07speedT7\x06\x18\x00\x00\x00\x0b1000.000000\x01\xe7\xff\xff\xff\xfc\xff\xff\xff\x06\x1a\x00\x00\x00\x07speedT8\x06\x1b\x00\x00\x00\x0b1000.000000\x01\xe4\xff\xff\xff\xfc\xff\xff\xff\x06\x1d\x00\x00\x00\x07speedT9\x06\x1e\x00\x00\x00\x0b1000.000000\x01\xe1\xff\xff\xff\xfc\xff\xff\xff\x06 \x00\x00\x00\x08speedT10\x06!\x00\x00\x00\x0b1000.000000\x01\xde\xff\xff\xff\xfc\xff\xff\xff\x06#\x00\x00\x00\x08speedT11\x06$\x00\x00\x00\x0b1000.000000\x01\xdb\xff\xff\xff\xfc\xff\xff\xff\x06&\x00\x00\x00\x08speedT12\x06'\x00\x00\x00\x0b1000.000000\x01\xd8\xff\xff\xff\xfc\xff\xff\xff\x06)\x00\x00\x00\x08speedT13\x06*\x00\x00\x00\x0b1000.000000\x01\xd5\xff\xff\xff\xfc\xff\xff\xff\x06,\x00\x00\x00\x08speedT14\x06-\x00\x00\x00\x0b1000.000000\x01\xd2\xff\xff\xff\xfc\xff\xff\xff\x06/\x00\x00\x00\x08speedT15\x060\x00\x00\x00\x0b1000.000000\x01\xcf\xff\xff\xff\xfc\xff\xff\xff\x062\x00\x00\x00\x08speedT16\x063\x00\x00\x00\x0b1000.000000\x01\xcc\xff\xff\xff\xfc\xff\xff\xff\x065\x00\x00\x00\x08speedT17\x066\x00\x00\x00\x0b1000.000000\x01\xc9\xff\xff\xff\xfc\xff\xff\xff\x068\x00\x00\x00\x08speedT18\x069\x00\x00\x00\x0b1000.000000\x01\xc6\xff\xff\xff\xfc\xff\xff\xff\x06;\x00\x00\x00\x08speedT19\x06<\x00\x00\x00\x0b1000.000000\x01\xc3\xff\xff\xff\xfc\xff\xff\xff\x06>\x00\x00\x00\x08speedT20\x06?\x00\x00\x00\x0b0000.000000\x0b"
 
@@ -147,18 +145,14 @@ class connection_level2():
         for i in range(len(indices) - 1):
             res.append(cleaned_data[indices[i]+5:indices[i+1]])
         res.append(cleaned_data[indices[-1]+5:])
-        # print(res)
-
 
         if last_speed:
             # try:
-                
-                if len(res)>9:
-                    self.last_speed=(float(res[-1][3:]))
-                else:
-                    self.last_speed = float(res[-1][2:])
-                # print('last_speed : ',self.last_speed)
-                return self.last_speed
+            if len(res)>9:
+                self.last_speed=(float(res[-1][3:]))
+            else:
+                self.last_speed = float(res[-1][2:])
+            return self.last_speed
             # except:
             #     print('Get Speed Error')
             #     return -1
@@ -196,35 +190,29 @@ class connection_level2():
         except:
             print('Error open port')
 
-
-
-
-
-
-
     def get_data(self):
         try:
-            t1 = datetime.now()
-            conn,addr=self.get_data_socket.accept()
-            data=conn.recv(100000)
+            conn, addr = self.get_data_socket.accept()
+            data = conn.recv(100000)
             conn.send(data)
             self.convert_data(data)
             self.retry_get_data = 0
-
-            self.logger.create_new_log(
-                code=texts_codes.SubTypes["Get_data_SUCCUSSFULL"],
-                message=texts.MESSEGES["Get_data_SUCCUSSFULL"]["en"]+self.data,
-                level=5,
-            )
+            if self.logger:
+                self.logger.create_new_log(
+                    code=texts_codes.SubTypes["Get_data_SUCCUSSFULL"],
+                    message=texts.MESSEGES["Get_data_SUCCUSSFULL"]["en"]+str(self.data),
+                    level=1,
+                )
         except:
             self.retry_get_data+=1
             if self.retry_get_data<10:
                 self.get_data_socket = self.create_connection(PORT_DATA)
-                self.logger.create_new_log(
-                    code=texts_codes.SubTypes["Get_data_FAILED"],
-                    message=texts.MESSEGES["Get_data_FAILED"]["en"],
-                    level=5,
-                )
+                if self.logger:
+                    self.logger.create_new_log(
+                        code=texts_codes.SubTypes["Get_data_FAILED"],
+                        message=texts.MESSEGES["Get_data_FAILED"]["en"],
+                        level=5,
+                    )
             self.data=False
             time.sleep(1)
         if not self.close_ui:
@@ -239,59 +227,55 @@ class connection_level2():
             # conn.send(data)
             # self.convert_data(data)
             self.retry_get_check_data = 0
-            self.logger.create_new_log(
-                code=texts_codes.SubTypes["Get_check_data_SUCCUSSFULL"],
-                message=texts.MESSEGES["Get_check_data_SUCCUSSFULL"]["en"],
-                level=5,
-            )
+            if self.logger:
+                self.logger.create_new_log(
+                    code=texts_codes.SubTypes["Get_check_data_SUCCUSSFULL"],
+                    message=texts.MESSEGES["Get_check_data_SUCCUSSFULL"]["en"],
+                    level=1,
+                )
         except:
             self.retry_get_check_data+=1
             if self.retry_get_check_data<10:
-                self.check_socket = self.create_connection(PORT_DATA)          
-                self.logger.create_new_log(
-                    code=texts_codes.SubTypes["Get_check_data_FAILED"],
-                    message=texts.MESSEGES["Get_check_data_FAILED"]["en"],
-                    level=5,
-                )
+                self.check_socket = self.create_connection(PORT_DATA)    
+                if self.logger:      
+                    self.logger.create_new_log(
+                        code=texts_codes.SubTypes["Get_check_data_FAILED"],
+                        message=texts.MESSEGES["Get_check_data_FAILED"]["en"],
+                        level=5,
+                    )
             time.sleep(1)
             self.check_data=False
 
         if not self.close_ui:
             threading.Timer(self.get_data_timer, self.get_check_data).start()
 
-
-
-
-
-
-
-
     def get_speed(self):
         
         try:
+            # print('start get speed')
             t1 = datetime.now()
             conn,addr=self.get_speed_socket.accept()
             data=conn.recv(100000)
             conn.send(data)
             self.convert_speed(data)
             self.retry_get_speed = 0
-            self.logger.create_new_log(
-                code=texts_codes.SubTypes["Get_speed_SUCCUSSFULL"],
-                message=texts.MESSEGES["Get_speed_SUCCUSSFULL"]["en"]+'  '+self.last_speed,
-                level=5,
-            )   
+            # if self.logger:
+            #     self.logger.create_new_log(
+            #         code=texts_codes.SubTypes["Get_speed_SUCCUSSFULL"],
+            #         message=texts.MESSEGES["Get_speed_SUCCUSSFULL"]["en"]+'  '+str(self.last_speed),
+            #         level=1,
+            #     )
 
         except:
-            # print('Except')
             self.retry_get_speed+=1
             if self.retry_get_speed<10:
                 self.get_speed_socket = self.create_connection(PORT_SPEED)
-                self.logger.create_new_log(
-                code=texts_codes.SubTypes["Get_speed_FAILED"],
-                message=texts.MESSEGES["Get_speed_FAILED"]["en"],
-                level=5,
-                )
-            # log.warning('Level2 connection Error')
+                if self.logger:
+                    self.logger.create_new_log(
+                    code=texts_codes.SubTypes["Get_speed_FAILED"],
+                    message=texts.MESSEGES["Get_speed_FAILED"]["en"],
+                    level=5,
+                    )
             self.last_speed=False
             time.sleep(1)
 
@@ -313,10 +297,13 @@ class connection_level2():
 
 if __name__=='__main__':
 
-    conn=connection_level2(None, False)
+    conn=connection_level2(None, False,logger=False)
     # conn.create_connection()
     # cameras,projectors,details = conn.get_full_info()
     #print(cameras,projectors,details )
     # conn.get_data()
-    conn.get_speed()
+    threading.Thread(target= conn.get_speed).start()
+    threading.Thread(target= conn.get_check_data).start()
+    
+    conn.get_data()
         

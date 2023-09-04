@@ -78,8 +78,8 @@ from loading_worker import loading_worker
 from PySide6.QtWidgets import QTableWidget as sQTableWidget
 # from login_win.login_api import
 
-# from train_api import ALGORITHM_NAMES
-ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'], 'yolo': ['5n', '5s', '5m', '5l', '5x']}
+from train_api import ALGORITHM_NAMES
+# ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'], 'yolo': ['5n', '5s', '5m', '5l', '5x']}
 
 ui, _ = loadUiType("UI/oxin.ui")
 # os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%

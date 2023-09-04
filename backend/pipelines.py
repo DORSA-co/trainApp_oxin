@@ -22,7 +22,7 @@ except:
     import colors_pallete
 
 
-# from train_api import ALGORITHM_NAMES
+from train_api import ALGORITHM_NAMES
 import texts
 
 # from binary_model_funcs import translate_binary_algorithm_id_to_name
