@@ -163,6 +163,7 @@ class show_logs(QMainWindow, ui):
         self.checkBox_typesTraining.setEnabled(s)
         self.checkBox_typesDatabase.setEnabled(s)
         self.checkBox_typesOthers.setEnabled(s)
+        self.checkBox_typesLevel2.setEnabled(s)
 
     def set_date(self):
         date = date_funcs.get_date(persian=SHAMSI_DATE)
@@ -267,6 +268,8 @@ class show_logs(QMainWindow, ui):
                                 if self.checkBox_typesDatabase.isChecked() and type == texts_codes.Types['Database']:
                                     type_match = True
                                 if self.checkBox_typesOthers.isChecked() and type == texts_codes.Types['Others']:
+                                    type_match = True
+                                if self.checkBox_typesLevel2.isChecked() and type == texts_codes.Types['Level2']:
                                     type_match = True
                             else:
                                 type_match = True
