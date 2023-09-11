@@ -114,7 +114,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = False
+DEBUG = True
 
 
 
@@ -3647,9 +3647,16 @@ class API:
 
             # Step 6: Start the thread
             self.running_y_model = True
-            self.ymodel_train_thread.start()
 
-            self.ui.yolo_train.setEnabled(False)
+            if not DEBUG:
+
+                self.ymodel_train_thread.start()
+
+                self.ui.yolo_train.setEnabled(False)
+
+            if DEBUG:
+                self.ymodel_train_worker.train_model()
+
 
     def reset_yolo_train_progressBar(self, value, text):
         self.ui.yolo_train_progressBar.setValue(0)
@@ -6764,6 +6771,9 @@ class API:
 
     def get_image(self):
         return self.img
+
+
+
 
     def create_mask_from_mask(self, img_path):
         labels = self.label_memory.get_label("mask", img_path)

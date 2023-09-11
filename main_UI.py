@@ -706,7 +706,10 @@ class UI_main_window(QMainWindow, ui):
 
 
 
-        #LEVEL2 UI
+        #Update br of image
+        self.btightness_slider.valueChanged.connect(self.update_image_brightess)
+        self.contrast_slider.valueChanged.connect(self.update_image_brightess)
+        
         
 
 
@@ -1992,6 +1995,16 @@ class UI_main_window(QMainWindow, ui):
         )
         self.stackedWidget.setCurrentWidget(self.page_label)
 
+
+
+    def update_image_brightess(self):
+        br = self.btightness_slider.value()
+        cr = self.contrast_slider.value()
+        img=api.get_image()
+        img = cv2.convertScaleAbs(img, alpha=br, beta=cr)
+        self.show_image_in_label(img)
+
+
     def show_image_in_label(self, img=None, scale=1, position=(0, 0)):
         """show image in main image label_page with incoming scale and position and enable left buttons
         Args:
@@ -2062,6 +2075,8 @@ class UI_main_window(QMainWindow, ui):
             QRect(position[0], position[1], self.image.width(), self.image.height()),
         )
         painter.end()
+
+
 
         self.image.setPixmap(pixmap)
 
