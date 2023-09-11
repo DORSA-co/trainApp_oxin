@@ -131,7 +131,7 @@ def train_binary(
             tf.config.run_functions_eagerly(True)
             # GPU config
             gpu = tf.config.list_physical_devices("GPU")
-            tf.config.experimental.set_memory_growth(gpu[binary_gpu], True)
+            # tf.config.experimental.set_memory_growth(gpu[binary_gpu], True)
             tf.config.experimental.set_visible_devices(gpu[binary_gpu], "GPU")
         else:
             cpu = tf.config.list_physical_devices("CPU")
@@ -168,40 +168,40 @@ def train_binary(
         )
 
     # Get train and test generators
-    try:
-        if not binary_input_type:
-            trainGen, testGen = dataGenerator.get_binarygenerator(
-                binary_dp,
-                binary_input_size,
-                "defect",
-                "perfect",
-                data_gen_args,
-                api_obj,
-                batch_size=binary_batch,
-                validation_split=binary_vs,
-            )
-        else:
-            trainGen, testGen = dataGenerator.get_binarygenerator(
-                binary_dp,
-                binary_input_size,
-                "defect_splitted",
-                "perfect_splitted",
-                data_gen_args,
-                api_obj,
-                batch_size=binary_batch,
-                validation_split=binary_vs,
-            )
-        api_obj.ui.logger.create_new_log(
-            message=texts.MESSEGES["CREATE_BINARY_GEN"]["en"]
+    # try:
+    if not binary_input_type:
+        trainGen, testGen = dataGenerator.get_binarygenerator(
+            binary_dp,
+            binary_input_size,
+            "defect",
+            "perfect",
+            data_gen_args,
+            api_obj,
+            batch_size=binary_batch,
+            validation_split=binary_vs,
         )
-    except Exception as e:
-        api_obj.ui.logger.create_new_log(
-            message=texts.ERRORS["CREATE_BINARY_GEN_FAILED"]["en"], level=5
+    else:
+        trainGen, testGen = dataGenerator.get_binarygenerator(
+            binary_dp,
+            binary_input_size,
+            "defect_splitted",
+            "perfect_splitted",
+            data_gen_args,
+            api_obj,
+            batch_size=binary_batch,
+            validation_split=binary_vs,
         )
-        return (
-            False,
-            (texts.ERRORS["CREATE_BINARY_GEN_FAILED"][api_obj.language], "train", 3),
-        )
+    api_obj.ui.logger.create_new_log(
+        message=texts.MESSEGES["CREATE_BINARY_GEN"]["en"]
+    )
+    # except Exception as e:
+    #     api_obj.ui.logger.create_new_log(
+    #         message=texts.ERRORS["CREATE_BINARY_GEN_FAILED"]["en"], level=5
+    #     )
+    #     return (
+    #         False,
+    #         (texts.ERRORS["CREATE_BINARY_GEN_FAILED"][api_obj.language], "train", 3),
+    #     )
 
     # Create models
     try:

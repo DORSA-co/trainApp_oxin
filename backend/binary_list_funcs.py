@@ -688,7 +688,10 @@ def create_mask_from_annotation_file(ui_obj, db_obj, image, annotation_path):
             pts = pts.reshape((-1, 1, 2))
             # Draw a line nofilled polygon
             # draw a filled polygon
-            line_thickness = obj_mask["line_thickness"]
+            try:
+                line_thickness = obj_mask["line_thickness"]
+            except:
+                line_thickness = 1
             if res:
                 image_mask = cv2.polylines(
                     image_mask,
@@ -699,10 +702,10 @@ def create_mask_from_annotation_file(ui_obj, db_obj, image, annotation_path):
                 )
                 image_mask2 = cv2.putText(
                     image_mask2,
-                    defect_info["short_name"],
+                    defect_info["defect_ID"]+' '+defect_info["short_name"],
                     pts_center,
                     cv2.FONT_HERSHEY_SIMPLEX,
-                    1.5,
+                    4,
                     html_to_bgr(defect_info["color"]),
                     2,
                 )

@@ -10,7 +10,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "/Sense_Softwares_Dev/trainApp_oxin/main_UI.py",
+            "program": "/home/dorsa/Desktop/Oxin_Softwares/trainApp_oxin/main_UI.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
