@@ -49,9 +49,9 @@ class connection_level2():
         self.retry_get_check_data=0
         self.last_speed = -1
         self.dummy_dict = {'PLATE_ID': 'ABC12345A', 'ORDER_ID': '123456789', 'HEAT_ID': '123456', 'QC_STANDARD': 'ASTM450', 'LENGHT': '6040', 'WIDTH': '2020', 'THICKNESS': '25.23', 'LENGHT_ORDER': '6000', 'WIDTH_ORDER': '2000', 'THICKNESS_ORDER': '25', 'speed': '1500'}
-        self.get_data_socket = self.create_connection(PORT_DATA)
-        self.get_speed_socket = self.create_connection(PORT_SPEED)
-        self.check_socket = self.create_connection(PORT_CHECK)
+        # self.get_data_socket = self.create_connection(PORT_DATA)
+        # self.get_speed_socket = self.create_connection(PORT_SPEED)
+        # self.check_socket = self.create_connection(PORT_CHECK)
 
 
 

@@ -165,7 +165,7 @@ class UI_main_window(QMainWindow, ui):
         self.load_sheets_win = data_loader(main_ui_obj=self)
 
         self.labeling_win = None
-        self.login_window = UI_login_window()
+        self.login_window = UI_login_window()  
         self.help_win = help(lang=self.language)
 
         self.suggested_defects_btn.setIcon(QIcon("UI/images/suggest.png"))

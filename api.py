@@ -338,7 +338,8 @@ class API:
         self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win,logger = self.ui.logger)
         
         # self.l2_connection.create_connection()
-        self.start_level2_thread()
+        # self.start_level2_thread()
+
         (
             self.n_camera,
             self.projectors,
@@ -501,8 +502,7 @@ class API:
         else:
             flag = False
             self.set_ui_status_time('level2',False,t1)
-
-        print('Flag ',flag)
+            
         # level2 data dummy check on ui
         if self.l2_connection.check_data:
             self.set_ui_status_time('dummy',True,t1)
