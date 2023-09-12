@@ -114,7 +114,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = True
+DEBUG = False
 
 
 
@@ -6771,8 +6771,10 @@ class API:
     # _____________________________________________________________________________________________________
 
     def get_image(self):
-        return self.img
 
+        
+        return self.img
+                    
 
 
 

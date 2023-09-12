@@ -122,11 +122,20 @@
 
 import cv2
 
-img = cv2.imread('/home/dorsa/1/3.png')
+img = cv2.imread('default_dataset/binary/defect/2023-08-19_17-34-55up1_55.png',0)
+img_r = cv2.resize(img,(640,480))
 alpha = 1.5 # Contrast control
 beta = 10 # Brightness control
 
 # call convertScaleAbs function
-adjusted = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
-cv2.imshow('adjusted', adjusted)
-cv2.waitKey()
+# adjusted = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
+# cv2.imshow('adjusted', adjusted)
+# cv2.waitKey()
+
+# img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+img_hist = cv2.equalizeHist(img_r)
+# self.set_annotations()
+cv2.imshow('img_r',img_r)
+cv2.imshow('img_hist',img_hist)
+cv2.waitKey(0)

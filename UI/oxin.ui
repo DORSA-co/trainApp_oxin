@@ -11701,6 +11701,19 @@ border: None;</string>
                                          </property>
                                         </widget>
                                        </item>
+                                       <item>
+                                        <widget class="QCheckBox" name="checkBox_eq_hist">
+                                         <property name="enabled">
+                                          <bool>true</bool>
+                                         </property>
+                                         <property name="styleSheet">
+                                          <string notr="true"/>
+                                         </property>
+                                         <property name="text">
+                                          <string>EQ Hist</string>
+                                         </property>
+                                        </widget>
+                                       </item>
                                       </layout>
                                      </item>
                                     </layout>
@@ -11828,7 +11841,7 @@ border: None;</string>
                                       <item>
                                        <widget class="QFrame" name="frame_128">
                                         <property name="frameShape">
-                                         <enum>QFrame::StyledPanel</enum>
+                                         <enum>QFrame::NoFrame</enum>
                                         </property>
                                         <property name="frameShadow">
                                          <enum>QFrame::Raised</enum>
@@ -11890,7 +11903,7 @@ border: None;</string>
                                       <item>
                                        <widget class="QFrame" name="frame_129">
                                         <property name="frameShape">
-                                         <enum>QFrame::StyledPanel</enum>
+                                         <enum>QFrame::NoFrame</enum>
                                         </property>
                                         <property name="frameShadow">
                                          <enum>QFrame::Raised</enum>
