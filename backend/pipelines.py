@@ -296,6 +296,7 @@ class Pipeline:
                 json.dump(self.pipline_json, f)
             f.close()
         except:
+            print('Error in save json')
             pass
 
     def load_json(self):
