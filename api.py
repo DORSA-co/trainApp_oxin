@@ -3456,6 +3456,9 @@ class API:
         self.ui.binary_train_progressBar_label.setText(text + " ... ")
 
     def set_binary_train_progressBar(self):
+        if self.ui.binary_train_progressBar.value()==99:
+            print('asd')
+            pass
         self.ui.binary_train_progressBar.setValue(
             self.ui.binary_train_progressBar.value() + 1
         )

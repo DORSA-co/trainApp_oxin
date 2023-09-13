@@ -949,6 +949,7 @@ class Yolo_model_train_worker(sQObject):
         self.class_name_to_id_mapping = class_to_id(self.db_obj)
         text = ""
         for b in annotation["obj_masks"]:
+            print(self.class_name_to_id_mapping[b])
             class_id = self.class_name_to_id_mapping[b["class"]]
 
             xmin, ymin, w, h = cv2.boundingRect(np.array(b["mask"]))

@@ -8,7 +8,7 @@
         "user_name": "root"
     },
     "binary": {
-        "count_defect": 5,
+        "count_defect": 80,
         "count_perfect": 8
     },
     "classification": {
