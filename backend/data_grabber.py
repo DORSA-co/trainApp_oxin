@@ -17,6 +17,7 @@ VERTICAL = 4
 IMAGE_SHAPE = (1024, 1792)
 
 
+
 class sheetOverView:
     def __init__(
         self,
@@ -102,9 +103,22 @@ class sheetOverView:
                     self.sheet.get_image_format(),
                 )
 
+        img_path_operator = pathStructure.sheet_image_path_operator(
+                    self.sheet.get_main_path(),
+                    self.sheet.get_id(),
+                    self.side,
+                    cam_idx,
+                    frame_idx,
+                    self.sheet.get_image_format(),
+                )
+
+
         img = None  
         if os.path.exists(img_path):
-            img = cv2.imread(img_path, 0)
+                img = cv2.imread(img_path, 0)
+        elif os.path.exists(img_path_operator):
+                img = cv2.imread(img_path_operator, 0)
+
         if img is not None:
             # if self.show_bboxes:
             #     img = self.draw_defect_bbox_on_single_image(img, cam_idx, frame_idx)
@@ -116,6 +130,7 @@ class sheetOverView:
             j = frame_idx - 1
             self.append_single_image_into_full_image(img, i, j)
         else:
+            print(img_path)
             print(f'Warning: image of camera{cam_idx} and frame{frame_idx} not exist')
 
     def initsheet_full_image(self) -> np.ndarray :

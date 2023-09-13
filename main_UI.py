@@ -165,7 +165,7 @@ class UI_main_window(QMainWindow, ui):
         self.load_sheets_win = data_loader(main_ui_obj=self)
 
         self.labeling_win = None
-        self.login_window = UI_login_window()
+        self.login_window = UI_login_window()  
         self.help_win = help(lang=self.language)
 
         self.suggested_defects_btn.setIcon(sQIcon("UI/images/suggest.png"))
@@ -706,7 +706,10 @@ class UI_main_window(QMainWindow, ui):
 
 
 
-        #LEVEL2 UI
+        #Update br of image
+        self.btightness_slider.valueChanged.connect(self.update_image_brightess)
+        self.contrast_slider.valueChanged.connect(self.update_image_brightess)
+        self.checkBox_eq_hist.stateChanged.connect(self.equalize_img)
         
 
 
@@ -1992,6 +1995,37 @@ class UI_main_window(QMainWindow, ui):
         )
         self.stackedWidget.setCurrentWidget(self.page_label)
 
+
+
+    def update_image_brightess(self):
+        br = self.btightness_slider.value()
+        cr = self.contrast_slider.value()
+        img=api.get_image()
+        img = cv2.convertScaleAbs(img, alpha=br, beta=cr)
+        self.show_image_in_label(img)
+
+    def equalize_img(self):
+        img=api.get_image()
+        _,_,c = img.shape
+        if self.checkBox_eq_hist.isChecked():
+            self.last_image=img
+            if c==3:
+                img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+                img = cv2.equalizeHist(img)
+                img = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
+            else:
+                img = cv2.equalizeHist(img)
+            self.show_image_in_label(img)
+
+        else:
+            try:
+                self.show_image_in_label(self.last_image)
+            except:
+                print('error equalize in main')
+                pass
+
+
+
     def show_image_in_label(self, img=None, scale=1, position=(0, 0)):
         """show image in main image label_page with incoming scale and position and enable left buttons
         Args:
@@ -2062,6 +2096,8 @@ class UI_main_window(QMainWindow, ui):
             QRect(position[0], position[1], self.image.width(), self.image.height()),
         )
         painter.end()
+
+
 
         self.image.setPixmap(pixmap)
 

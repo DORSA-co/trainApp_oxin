@@ -31,6 +31,9 @@ except:
 
 from backend.pathStructure import sheet_path
 
+
+OPERATOR_PATH='Images'
+
 ui, _ = loadUiType("Sheet_loader_win/data_loader.ui")
 # ui, _ = loadUiType("UI/data_loader.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
@@ -202,7 +205,7 @@ class data_loader(QMainWindow, ui):
         text = ''
         for i in range(self.tableWidget_dataset.rowCount()):
             if self.tableWidget_dataset.item(i, 0).checkState() == Qt.CheckState.Checked:
-                if not os.path.isdir(self.table_sheets[i].get_path()):
+                if (not os.path.isdir(self.table_sheets[i].get_path())) and (not os.path.isdir(os.path.join(self.table_sheets[i].get_path(),OPERATOR_PATH))):
                     text += texts.ERRORS['sheet_not_exist'][self.language].format(self.table_sheets[i].get_id())
                     text += '\n'
                     exist = True

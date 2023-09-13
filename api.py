@@ -113,6 +113,10 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
+DEBUG = True
+
+
+
 
 # down_side_technical     ,   up_side_technical
 class API:
@@ -337,7 +341,8 @@ class API:
         self.l2_connection = level2_connection.connection_level2(db_obj=self.db,close_ui=self.ui.flag_close_win,logger = self.ui.logger)
         
         # self.l2_connection.create_connection()
-        self.start_level2_thread()
+        # self.start_level2_thread()
+
         (
             self.n_camera,
             self.projectors,
@@ -413,7 +418,7 @@ class API:
         # self.__debug_load_sheet__(["996", "997"])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
-        # self.__debug__login__()
+        self.__debug__login__()
 
 
         self.grab_time = 0
@@ -487,7 +492,7 @@ class API:
     def show_status_level2(self):
         t1 = QTime.currentTime().toString("hh:mm:ss")
         flag = True
-        if self.l2_connection.last_speed !=False or int(self.l2_connection.last_speed)==0:
+        if int(self.l2_connection.last_speed) !=-1:
             self.set_ui_status_time('speed',True,t1)
         else:
             flag = False
@@ -501,6 +506,7 @@ class API:
             flag = False
             self.set_ui_status_time('level2',False,t1)
 
+    
         # level2 data dummy check on ui
         if self.l2_connection.check_data:
             self.set_ui_status_time('dummy',True,t1)
@@ -3419,10 +3425,19 @@ class API:
 
             # Step 6: Start the thread
             self.running_b_model = True
-            self.bmodel_train_thread.start()
-            # self.bmodel_train_worker.train_model()
 
-            self.ui.binary_train.setEnabled(False)
+            if not DEBUG:
+
+                self.bmodel_train_thread.start()
+
+                self.ui.binary_train.setEnabled(False)
+
+
+
+            if DEBUG:
+                self.bmodel_train_worker.train_model()
+
+
 
     def reset_binary_train_progressBar(self, value, text):
         self.ui.binary_train_progressBar.setValue(0)
@@ -3430,6 +3445,9 @@ class API:
         self.ui.binary_train_progressBar_label.setText(text + " ... ")
 
     def set_binary_train_progressBar(self):
+        if self.ui.binary_train_progressBar.value()==99:
+            print('asd')
+            pass
         self.ui.binary_train_progressBar.setValue(
             self.ui.binary_train_progressBar.value() + 1
         )
@@ -3622,9 +3640,16 @@ class API:
 
             # Step 6: Start the thread
             self.running_y_model = True
-            self.ymodel_train_thread.start()
 
-            self.ui.yolo_train.setEnabled(False)
+            if not DEBUG:
+
+                self.ymodel_train_thread.start()
+
+                self.ui.yolo_train.setEnabled(False)
+
+            if DEBUG:
+                self.ymodel_train_worker.train_model()
+
 
     def reset_yolo_train_progressBar(self, value, text):
         self.ui.yolo_train_progressBar.setValue(0)
@@ -6738,7 +6763,12 @@ class API:
     # _____________________________________________________________________________________________________
 
     def get_image(self):
+
+        
         return self.img
+                    
+
+
 
     def create_mask_from_mask(self, img_path):
         labels = self.label_memory.get_label("mask", img_path)
