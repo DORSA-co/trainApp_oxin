@@ -949,29 +949,32 @@ class Yolo_model_train_worker(sQObject):
         self.class_name_to_id_mapping = class_to_id(self.db_obj)
         text = ""
         for b in annotation["obj_masks"]:
-            print(self.class_name_to_id_mapping[b])
-            class_id = self.class_name_to_id_mapping[b["class"]]
+            if b["class"] in self.class_name_to_id_mapping .keys():
+                class_id = self.class_name_to_id_mapping[b["class"]]
 
-            xmin, ymin, w, h = cv2.boundingRect(np.array(b["mask"]))
-            xmax = xmin + w
-            ymax = ymin + h
-            b_center_x = (xmin + xmax) / 2
-            b_center_y = (ymin + ymax) / 2
-            b_width = xmax - xmin
-            b_height = ymax - ymin
+                xmin, ymin, w, h = cv2.boundingRect(np.array(b["mask"]))
+                xmax = xmin + w
+                ymax = ymin + h
+                b_center_x = (xmin + xmax) / 2
+                b_center_y = (ymin + ymax) / 2
+                b_width = xmax - xmin
+                b_height = ymax - ymin
 
-            image_h, image_w = size
-            b_center_x /= image_w
-            b_center_y /= image_h
-            b_width /= image_w
-            b_height /= image_h
+                image_h, image_w = size
+                b_center_x /= image_w
+                b_center_y /= image_h
+                b_width /= image_w
+                b_height /= image_h
 
-            text += "{} {:.3f} {:.3f} {:.3f} {:.3f}".format(
-                class_id, b_center_x, b_center_y, b_width, b_height
-            )
-            text += "\n"
+                text += "{} {:.3f} {:.3f} {:.3f} {:.3f}".format(
+                    class_id, b_center_x, b_center_y, b_width, b_height
+                )
+                text += "\n"
 
-        return text
+                return text
+            else:
+                print('Error convert annt to yolo')
+                return ""
 
     def split_yolo_dataset(self, paths, size):
         for i, path in enumerate(paths):

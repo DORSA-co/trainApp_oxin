@@ -114,7 +114,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = False
+DEBUG = True
 
 
 
