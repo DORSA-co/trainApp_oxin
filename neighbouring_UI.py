@@ -48,14 +48,36 @@ class neighbouring(QMainWindow, ui):
 
         # btn connector
         self.annot_checkbox.stateChanged.connect(self.set_annotations)
+        self.eq_hist.stateChanged.connect(self.equalize_img)
         self.n_image.mousePressEvent = self.mousePressImage()
         self.n_image.mouseReleaseEvent = self.mouseReleaseImage()
         self.n_image.mouseMoveEvent = self.mouseMoveImage()
+
+        
 
         self.help_win = None
         
         self.language = lang
         self.annot_checkbox.setText(texts.Titles['show_labels'][lang])
+
+
+        self.org_image = self.img
+        self.org_image_annt = self.annotated_image
+
+
+
+        #Update br of image
+        self.btightness_slider.valueChanged.connect(self.update_image_brightess)
+        self.contrast_slider.valueChanged.connect(self.update_image_brightess)
+        
+        self.equalize_img()
+
+
+
+
+
+
+
 
     def mousePressEvent(self, event):
         if event.button() == sQtCore.Qt.LeftButton:
@@ -216,10 +238,44 @@ class neighbouring(QMainWindow, ui):
 
 
 
+
+
+    def update_image_brightess(self):
+        br = self.btightness_slider.value()
+        cr = self.contrast_slider.value()
+        self.img = cv2.convertScaleAbs(self.org_image, alpha=br, beta=cr)
+        self.annotated_image = cv2.convertScaleAbs(self.org_image_annt, alpha=br, beta=cr)
+        self.set_annotations()
+
+
+    def equalize_img(self):
+
+
+        if self.eq_hist.isChecked():
+
+            self.img = cv2.cvtColor(self.img,cv2.COLOR_BGR2GRAY)
+            self.img = cv2.equalizeHist(self.img)
+            self.img = cv2.cvtColor(self.img,cv2.COLOR_GRAY2BGR)
+            self.set_annotations()
+
+        else:
+            self.img = self.org_image
+            self.set_annotations()
+            pass
+
+
+
+
+
+
+
+
+
+
 # api = labeling_api.labeling_API(win)
 import cv2
 if __name__ == "__main__":
-    img = cv2.imread('/home/reyhane/PythonProjects/trainApp_oxin/oxin_image_grabber/995/BOTTOM/1/5.png')
+    img = cv2.imread('default_dataset/binary/defect/2023-08-19_17-34-55up1_55.png',0)
     app = QApplication()
     win = neighbouring(img)
     win.show()

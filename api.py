@@ -114,7 +114,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = True
+DEBUG = False
 
 
 
@@ -3456,6 +3456,9 @@ class API:
         self.ui.binary_train_progressBar_label.setText(text + " ... ")
 
     def set_binary_train_progressBar(self):
+        if self.ui.binary_train_progressBar.value()==99:
+            print('asd')
+            pass
         self.ui.binary_train_progressBar.setValue(
             self.ui.binary_train_progressBar.value() + 1
         )
@@ -6771,8 +6774,10 @@ class API:
     # _____________________________________________________________________________________________________
 
     def get_image(self):
-        return self.img
 
+        
+        return self.img
+                    
 
 
 

@@ -709,7 +709,7 @@ class UI_main_window(QMainWindow, ui):
         #Update br of image
         self.btightness_slider.valueChanged.connect(self.update_image_brightess)
         self.contrast_slider.valueChanged.connect(self.update_image_brightess)
-        
+        self.checkBox_eq_hist.stateChanged.connect(self.equalize_img)
         
 
 
@@ -2003,6 +2003,27 @@ class UI_main_window(QMainWindow, ui):
         img=api.get_image()
         img = cv2.convertScaleAbs(img, alpha=br, beta=cr)
         self.show_image_in_label(img)
+
+    def equalize_img(self):
+        img=api.get_image()
+        _,_,c = img.shape
+        if self.checkBox_eq_hist.isChecked():
+            self.last_image=img
+            if c==3:
+                img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+                img = cv2.equalizeHist(img)
+                img = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
+            else:
+                img = cv2.equalizeHist(img)
+            self.show_image_in_label(img)
+
+        else:
+            try:
+                self.show_image_in_label(self.last_image)
+            except:
+                print('error equalize in main')
+                pass
+
 
 
     def show_image_in_label(self, img=None, scale=1, position=(0, 0)):
