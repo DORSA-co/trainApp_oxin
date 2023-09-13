@@ -662,11 +662,11 @@ class API:
         )
 
     def start_storage_checking(self):
-        self.check_storage()
+        # self.check_storage()
         if not self.storage_timer:
             self.storage_timer = QTimer()
             self.storage_timer.timeout.connect(self.check_storage)
-        self.storage_timer.start(1000*60*self.update_time)
+        # self.storage_timer.start(1000*60*self.update_time)
 
     def restart_storage_checking(self):
         self.storage_timer.stop()
