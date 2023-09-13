@@ -92,7 +92,6 @@ import sys
 sys.path.append('../oxin_storage_management')
 from storage_main_UI import storage_management
 from storage_api import storage_api
-from storage_worker import storage_worker
 import time
 from level2_UI import levl2_UI
 import getpass
@@ -457,8 +456,10 @@ class API:
 
         #milad
         self.baselines =None
+
     def create_level2_ui(self):
         self.level2_win = levl2_UI()
+        
     def show_level_ui(self):
         self.level2_win.show()
 
@@ -468,8 +469,6 @@ class API:
                         code=texts_codes.SubTypes['RESET_LEVEL2_GET_DATA'], message=texts.MESSEGES["RESET_LEVEL2_GET_DATA"]["en"], level=1
                     )
         threading.Timer(10,self.start_level2_thread).start()
-
-
 
     def start_level2_thread(self):
         self.l2_connection.reset_retry_values()
@@ -502,7 +501,6 @@ class API:
             flag = False
             self.set_ui_status_time('level2',False,t1)
 
-        print('Flag ',flag)
         # level2 data dummy check on ui
         if self.l2_connection.check_data:
             self.set_ui_status_time('dummy',True,t1)
@@ -514,9 +512,9 @@ class API:
             self.ui.level2_btn.setStyleSheet('QPushButton {background-color: #4E9A06;border-radius: 10px;border-color: beige;padding: 6px;color : white;}')
         else:
             self.ui.level2_btn.setStyleSheet('QPushButton {background-color: #A40000;border-radius: 10px;border-color: beige;padding: 6px;color : white;}')           
+    
     def show_speed(self):
         # print(self.l2_connection.last_speed)
-
 
         if self.l2_connection.last_speed>0 and not self.speed_mode:
             self.ui.label_228.setStyleSheet("color : #1A5D1A")
@@ -528,20 +526,10 @@ class API:
             self.speed_mode = False
             self.ui.label_228.setText('{} 0.0 '.format(texts.Titles['stop'][self.language]))
 
-
-
-
-
     def set_ui_status_time(self,frame_name,status,time):
 
         self.level2_win.set_style_sheet(frame_name,status)
         self.level2_win.set_time(frame_name,time)
-
-
-
-
-
-
 
     def remove_pypylon_chache(self):
         try:
@@ -3432,6 +3420,7 @@ class API:
             # Step 6: Start the thread
             self.running_b_model = True
             self.bmodel_train_thread.start()
+            # self.bmodel_train_worker.train_model()
 
             self.ui.binary_train.setEnabled(False)
 

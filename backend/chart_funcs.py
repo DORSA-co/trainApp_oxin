@@ -839,7 +839,6 @@ def create_storage_barchart_on_ui(ui_obj, frame_obj_storage, storage_type, chart
     
     exec('frame_obj_storage.layout().addWidget(ui_obj.{}_storage_barchartview)'.format(storage_type, storage_type))
 
-
 def update_storage_barchart(ui_obj, storage_type, storage_status):
     exec('ui_obj.bar_{}_storage_series.clear()'.format(storage_type))
     

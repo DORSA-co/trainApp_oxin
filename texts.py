@@ -756,7 +756,7 @@ WARNINGS = {
     },
     "parameters_error": {
         "fa": "پارامتر‌های ورودی به درستی مقدار دهی نشده‌اند.",
-        "en": "The input parameters are not set correctly.",
+        "en": "The input fields are not initialized correctly.",
     },
     "image_not_exist": {
         "fa": "فایل تصویر وجود ندارد.",
@@ -777,7 +777,6 @@ MESSEGES = {
         "fa": "خطا در اجرای نرم افزار مدیریت حافظه",
         "en": "Error in running the storage management software",
     },
-    "": {"fa": "", "en": ""},
     "Login_successfully": {
         "fa": " ورود کاربر با موفقت ایجاد شد",
         "en": "Login successfully ",

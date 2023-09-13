@@ -307,7 +307,42 @@ def train_binary(
             (texts.ERRORS["SAVE_BMODEL_FAILED"][api_obj.language], "train", 3),
         )
 
+    ########################################### Fine Tune ############################################
     if binary_te > 0:
+        try:
+            if not binary_input_type:
+                trainGen, testGen = dataGenerator.get_binarygenerator(
+                    binary_dp,
+                    binary_input_size,
+                    "defect",
+                    "perfect",
+                    data_gen_args,
+                    api_obj,
+                    batch_size=binary_batch,
+                    validation_split=binary_vs,
+                )
+            else:
+                trainGen, testGen = dataGenerator.get_binarygenerator(
+                    binary_dp,
+                    binary_input_size,
+                    "defect_splitted",
+                    "perfect_splitted",
+                    data_gen_args,
+                    api_obj,
+                    batch_size=binary_batch,
+                    validation_split=binary_vs,
+                )
+            api_obj.ui.logger.create_new_log(
+                message=texts.MESSEGES["CREATE_BINARY_GEN"]["en"]
+            )
+        except Exception as e:
+            api_obj.ui.logger.create_new_log(
+                message=texts.ERRORS["CREATE_BINARY_GEN_FAILED"]["en"], level=5
+            )
+            return (
+                False,
+                (texts.ERRORS["CREATE_BINARY_GEN_FAILED"][api_obj.language], "train", 3),
+            )
         # Create model for fine tunning
         if binary_algorithm_name == ALGORITHM_NAMES["binary"][0]:
             try:
