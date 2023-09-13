@@ -115,9 +115,6 @@ FALSE_COLOR = '#A40000'
 
 DEBUG = True
 
-
-
-
 # down_side_technical     ,   up_side_technical
 class API:
     def __init__(self, ui):
@@ -418,7 +415,8 @@ class API:
         # self.__debug_load_sheet__(["996", "997"])
         # self.__debug_select_random__()
         # self.__debug_select_for_label()
-        self.__debug__login__()
+        if DEBUG:
+            self.__debug__login__()
 
 
         self.grab_time = 0
@@ -612,12 +610,12 @@ class API:
 
         self.update_storage_charts()
 
-        if self.ssd_image_file_manager:
-            ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
-            print('ssd image percent: ', ssd_image_percent)
+        # if self.ssd_image_file_manager:
+        #     ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
+        #     print('ssd image percent: ', ssd_image_percent)
 
-            if ssd_image_percent > self.storage_upper_limit:
-                self.show_storage_window(start=True)
+        #     if ssd_image_percent > self.storage_upper_limit:
+        #         self.show_storage_window(start=True)
                 # self.show_storage_window()
                 # self.s_api.clear_filters()
                 # self.s_api.start()
@@ -1834,6 +1832,7 @@ class API:
         self.ui.clear_table()
         # self.ui.load_sheets_win.close()
         self.load_sheet()
+        self.ui.load_sheets_win.close()
         
 
         # ----------------------------------------------------------------------------------------
@@ -2041,16 +2040,16 @@ class API:
             self.ui.load_sheets_win.suggested_defects_progressBar.setMaximum(100)
 
     def update_loading_progressBar(self):
-        self.ui.load_sheets_win.loading_progressBar.setValue(
-            self.ui.load_sheets_win.loading_progressBar.value() + 1
+        self.ui.load_sheet_progressBar.setValue(
+            self.ui.load_sheet_progressBar.value() + 1
         )
 
     def reset_loading_progressBar(self, max_value):
-        self.ui.load_sheets_win.loading_progressBar.setValue(0)
+        self.ui.load_sheet_progressBar.setValue(0)
         if max_value:
-            self.ui.load_sheets_win.loading_progressBar.setMaximum(max_value)
+            self.ui.load_sheet_progressBar.setMaximum(max_value)
         else:
-            self.ui.load_sheets_win.loading_progressBar.setMaximum(100)
+            self.ui.load_sheet_progressBar.setMaximum(100)
 
     def technical_zoom_in(self):
         current_side = self.current_technical_side
@@ -2079,6 +2078,7 @@ class API:
             self.ui.set_enabel(self.ui.prev_coil_btn, False)
             self.ui.set_enabel(self.ui.load_sheets_win.load_btn, False)
             self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
+            self.ui.show_load_sheet_progressbar()
             self.technical_backend = {}
             for side, _ in self.ui.get_technical(name=False).items():
                 self.thechnicals_backend[side] = data_grabber.sheetOverView(
@@ -2147,19 +2147,19 @@ class API:
                 self.thechnicals_backend[side].update_selected(selecteds)
                 self.current_technical_side = side
                 self.refresh_thechnical(fp=1)  
-                self.close_load_sheet_win()
+                self.finish_load_sheet()
         return func
     
-    def close_load_sheet_win(self):
+    def finish_load_sheet(self):
         self.close_technical_cnt += 1
         if self.close_technical_cnt == self.close_technical_nside:
-            self.ui.load_sheets_win.close()
             self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
             self.ui.set_enabel(self.ui.next_coil_btn, True)
             self.ui.set_enabel(self.ui.prev_coil_btn, True)
             self.ui.set_enabel(self.ui.load_sheets_win.load_btn, True)
             self.ui.set_enabel(self.ui.technical_zoom_in, True)
             self.ui.set_enabel(self.ui.technical_zoom_out, True)
+            self.ui.hide_load_sheet_progressbar()
             if self.ui.checkBox_suggested_defects.isChecked():
                 self.load_suggestions()
 
@@ -2494,8 +2494,8 @@ class API:
 
             x = main_path.split("/")
             path = pathStructure.sheet_image_path(x[0], x[-1], side, cam, frame, ".png")
-
-            if not os.path.exists(path):
+            path_operator = pathStructure.sheet_image_path_operator(x[0], x[-1], side, cam, frame, ".png")
+            if not os.path.exists(path) and not os.path.exists(path_operator):
                 self.ui.set_warning(
                     texts.WARNINGS["image_not_exist"][self.language],
                     "data_auquzation",

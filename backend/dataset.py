@@ -370,18 +370,23 @@ class Dataset:
         name="",
     ):
         for i in range(image_crops.shape[0]):
-            image_name = name + "_(" + str(i) + ")" + self.format_image
-            ann_name = name + "_(" + str(i) + ")" + ".txt"
+            if crops_annotations[i] is not None:
+                image_name = name + "_(" + str(i) + ")" + self.format_image
+                ann_name = name + "_(" + str(i) + ")" + ".txt"
 
-            res_path = os.path.join(image_path, image_name)
-            cv2.imwrite(res_path, image_crops[i])
+                res_path = os.path.join(image_path, image_name)
+                cv2.imwrite(res_path, image_crops[i])
 
-            res_path = os.path.join(label_path, image_name)
-            cv2.imwrite(res_path, label_crops[i])
+                res_path = os.path.join(label_path, image_name)
+                cv2.imwrite(res_path, label_crops[i])
 
-            res_path = os.path.join(annotation_path, ann_name)
-            with open(res_path, "w") as f:
-                f.write(crops_annotations[i])
+                res_path = os.path.join(annotation_path, ann_name)
+                try:
+                    
+                    with open(res_path, "w") as f:
+                        f.write(crops_annotations[i])
+                except:
+                    print('f.write(crops_annotations[i])')
 
     def save_yolo_resizes(self, annotation, annotation_path, name=""):
         ann_name = name + ".txt"

@@ -229,6 +229,18 @@ class dataBaseUtils:
                 sheet.get_image_format(),
             )
 
+            if not os.path.exists(path):
+                
+                path = pathStructure.sheet_image_path_operator(
+                sheet.get_main_path(),
+                sheet_id,
+                side,
+                ncam,
+                nframe,
+                sheet.get_image_format(),
+                )
+
+
             paths.append(path)
 
         return paths

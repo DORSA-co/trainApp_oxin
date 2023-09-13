@@ -1,1 +1,1 @@
-Failed to disconnect from PLC:::3:::5000
+خطای قطع اتصال پی ال سی:::3:::5000

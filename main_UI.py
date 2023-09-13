@@ -2047,6 +2047,7 @@ class UI_main_window(QMainWindow, ui):
         self.heatmap_btn.setEnabled(True)
         self.checkBox_show_neighbours.setEnabled(True)
         self.checkBox_show_neighbours_labels.setEnabled(True)
+        self.checkBox_eq_hist.setEnabled(True)
         # self.yes_defect.setEnabled(True)
         # self.no_defect.setEnabled(True)
         self.save_dataset_btn.setEnabled(True)
@@ -3860,7 +3861,44 @@ class UI_main_window(QMainWindow, ui):
         self.ssd_label.setMaximumHeight(0)
         self.ssd_chart_frame.setMaximumWidth(0)
 
+    def show_load_sheet_progressbar(self):
+        width = self.frame_load_sheet.width()
+        self.load_sheet_animation = QPropertyAnimation(self.frame_load_sheet, b"maximumWidth")
+        self.load_sheet_animation.setDuration(Settings.TIME_ANIMATION)
+        self.load_sheet_animation.setStartValue(width)
+        self.load_sheet_animation.setEndValue(672)
+        self.load_sheet_animation.setEasingCurve(QEasingCurve.InOutQuart)
 
+        self.suggestion_animation = QPropertyAnimation(self.frame_suggestions, b"maximumWidth")
+        self.suggestion_animation.setDuration(Settings.TIME_ANIMATION)
+        self.suggestion_animation.setStartValue(672)
+        self.suggestion_animation.setEndValue(width)
+        self.suggestion_animation.setEasingCurve(QEasingCurve.InOutQuart)
+
+        self.load_sheet_animation.start()
+        self.suggestion_animation.start()
+
+        # self.frame_load_sheet.setMaximumWidth(16777215)
+        # self.frame_suggestions.setMaximumWidth(0)
+
+    def hide_load_sheet_progressbar(self):
+        width = self.frame_load_sheet.width()
+        self.load_sheet_animation = QPropertyAnimation(self.frame_load_sheet, b"maximumWidth")
+        self.load_sheet_animation.setDuration(Settings.TIME_ANIMATION)
+        self.load_sheet_animation.setStartValue(width)
+        self.load_sheet_animation.setEndValue(0)
+        self.load_sheet_animation.setEasingCurve(QEasingCurve.InOutQuart)
+
+        self.suggestion_animation = QPropertyAnimation(self.frame_suggestions, b"maximumWidth")
+        self.suggestion_animation.setDuration(Settings.TIME_ANIMATION)
+        self.suggestion_animation.setStartValue(0)
+        self.suggestion_animation.setEndValue(width)
+        self.suggestion_animation.setEasingCurve(QEasingCurve.InOutQuart)
+
+        self.load_sheet_animation.start()
+        self.suggestion_animation.start()
+        # self.frame_load_sheet.setMaximumWidth(0)
+        # self.frame_suggestions.setMaximumWidth(16777215)
 
 
 if __name__ == "__main__":

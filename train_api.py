@@ -834,24 +834,24 @@ def train_yolo(
     class_name_to_id_mapping,
     api_obj,
 ):
-    # try:
-    #     if y_gpu > 0:
-    #         device = torch.device('cuda:{}'.format())
-    #         torch.cuda.set_device(device)
-    #     api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SET_PROCESSOR']['en'])
-    # except:
-    #     api_obj.ui.logger.create_new_log(message=texts.ERRORS['SET_PROCESSOR_FAILED']['en'], level=5)
-    #     return (False, (texts.ERRORS['SET_PROCESSOR_FAILED'][api_obj.language], 'y_train', 3))
+    try:
+        if y_gpu > 0:
+            device = torch.device('cuda:{}'.format())
+            torch.cuda.set_device(device)
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SET_PROCESSOR']['en'])
+    except:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['SET_PROCESSOR_FAILED']['en'], level=5)
+        return (False, (texts.ERRORS['SET_PROCESSOR_FAILED'][api_obj.language], 'y_train', 3))
 
     # Create weights path
-    # weights_path = os.path.join(weights_path, date_funcs.get_datetime(persian=SHAMSI_DATE, folder_path=True))
-    # try:
-    #     if not os.path.exists(weights_path):
-    #         os.makedirs(weights_path)
-    #     api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_YWPATH']['en'] + weights_path)
-    # except Exception as e:
-    #     api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_YWPATH_FAILED']['en'] + weights_path, level=5)
-    #     return (False, (texts.ERRORS['CREATE_YWPATH_FAILED'][api_obj.language], 'y_train', 3))
+    weights_path = os.path.join(weights_path, date_funcs.get_datetime(persian=SHAMSI_DATE, folder_path=True))
+    try:
+        if not os.path.exists(weights_path):
+            os.makedirs(weights_path)
+        api_obj.ui.logger.create_new_log(message=texts.MESSEGES['CREATE_YWPATH']['en'] + weights_path)
+    except Exception as e:
+        api_obj.ui.logger.create_new_log(message=texts.ERRORS['CREATE_YWPATH_FAILED']['en'] + weights_path, level=5)
+        return (False, (texts.ERRORS['CREATE_YWPATH_FAILED'][api_obj.language], 'y_train', 3))
 
     try:
         if not y_input_type:
@@ -941,7 +941,7 @@ def train_yolo(
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES["FIT_MODEL"]["en"])
     except:
         api_obj.ui.logger.create_new_log(
-            message=texts.ERRORS["FIT_MODEL_FAILED"]["enALGORITHM_NAMES"], level=5
+            message=texts.ERRORS["FIT_MODEL_FAILED"]["en"], level=5
         )
         return (
             False,
