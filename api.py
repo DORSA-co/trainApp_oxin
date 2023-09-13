@@ -493,7 +493,7 @@ class API:
     def show_status_level2(self):
         t1 = QTime.currentTime().toString("hh:mm:ss")
         flag = True
-        if self.l2_connection.last_speed !=False or int(self.l2_connection.last_speed)==0:
+        if int(self.l2_connection.last_speed) !=-1:
             self.set_ui_status_time('speed',True,t1)
         else:
             flag = False
@@ -2505,8 +2505,8 @@ class API:
 
             x = main_path.split("/")
             path = pathStructure.sheet_image_path(x[0], x[-1], side, cam, frame, ".png")
-
-            if not os.path.exists(path):
+            path_operator = pathStructure.sheet_image_path_operator(x[0], x[-1], side, cam, frame, ".png")
+            if not os.path.exists(path) and not os.path.exists(path_operator):
                 self.ui.set_warning(
                     texts.WARNINGS["image_not_exist"][self.language],
                     "data_auquzation",

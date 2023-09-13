@@ -973,6 +973,7 @@ class Yolo_model_train_worker(sQObject):
 
                 return text
             else:
+
                 print('Error convert annt to yolo')
                 return ""
 
