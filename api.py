@@ -493,7 +493,7 @@ class API:
     def show_status_level2(self):
         t1 = QTime.currentTime().toString("hh:mm:ss")
         flag = True
-        if self.l2_connection.last_speed !=False or int(self.l2_connection.last_speed)==0:
+        if int(self.l2_connection.last_speed) !=-1:
             self.set_ui_status_time('speed',True,t1)
         else:
             flag = False

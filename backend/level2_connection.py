@@ -23,7 +23,7 @@ PORT_DATA = 11000
 PORT_SPEED = 12000
 PORT_CHECK = 13000
 
-DEBUG=True
+DEBUG=False
 
 if DEBUG:
     MAX_RETRY=1
@@ -284,7 +284,7 @@ class connection_level2():
                     message=texts.MESSEGES["Get_speed_FAILED"]["en"],
                     level=5,
                     )
-            self.last_speed=False
+            self.last_speed=-1
             time.sleep(1)
 
         if not self.close_ui:
