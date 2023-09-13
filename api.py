@@ -114,7 +114,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = True
+DEBUG = False
 
 
 
@@ -3660,6 +3660,8 @@ class API:
 
             if DEBUG:
                 self.ymodel_train_worker.train_model()
+                self.ui.yolo_train.setEnabled(True)
+
 
 
     def reset_yolo_train_progressBar(self, value, text):
@@ -5170,7 +5172,7 @@ class API:
             binary_model=self.b_model,
             binary_threshold=0.5,
             yolo_model=self.yolo_model,
-            yolo_conf_thres=0.001,
+            yolo_conf_thres=0.4,
             yolo_iou_thres=0.6,
             yolo_max_det=300,
         )
@@ -5182,7 +5184,13 @@ class API:
         self.evaluation.progress.connect(self.evaluation_ui_update)
         self.evaluation.pgb_bar_signal.connect(self.set_signal_from_evaluate_thread)
         self.evaluation.pipline_signal.connect(self.pipline_saveing)
-        self.evaluation_thread.start()
+        
+
+        if DEBUG:
+            self.evaluation.evaluate()
+        else:
+            self.evaluation_thread.start()
+
 
         self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(False)
         self.evaluation_thread.finished.connect(
@@ -5421,7 +5429,14 @@ class API:
             self.ModelsCreation_thread.deleteLater
         )
         self.ModelsCreation.model_creation_signal.connect(self.set_pipline_of_model)
-        self.ModelsCreation_thread.start()
+        
+
+
+        if DEBUG:
+            self.ModelsCreation.build_pipline()
+        
+        else:
+            self.ModelsCreation_thread.start()
 
         self.ui.BTN_set_pipline_in_PBT_page.setEnabled(False)
 

@@ -246,13 +246,13 @@ class Evaluation_worker(QObject):
                 os.path.splitext(os.path.basename(img_path))[0]
             ] = True
             # load input ------->img
-            img = cv2.imread(img_path)
+            img = cv2.imread(img_path,0)
             # load output ------->label
             defect = True if img_path.find(DEFECT_FOLDER) != -1 else False
-            if self.input_type == SPLITED_INPUT_TYPE:
+            if self.input_type == SPLITED_INPUT_TYPE or int(self.input_type) ==1:
                 if defect:
                     mask_path = img_path.replace(DEFECT_FOLDER, DEFECT_MASK_FOLDER)
-                    mask = cv2.imread(mask_path)
+                    mask = cv2.imread(mask_path,0)
                     annotation_path = img_path.replace(
                         os.path.join(BINARY_FOLDER, DEFECT_FOLDER), ANNOTATION_FOLDER
                     )
@@ -457,6 +457,9 @@ class Evaluation_worker(QObject):
         final_image_path = os.path.join(
             save_path, "{}{}".format(full_image_name, IMG_EXTENSION_JPG)
         )
+
+        # if os.path.exists(final_image_path):
+
         if self.dic_of_Cimag[useing][full_image_name]:
             num1 = (self.target_size[0] // self.input_size) * split.shape[0]
             num2 = (self.target_size[1] // self.input_size) * split.shape[1]
@@ -483,7 +486,8 @@ class Evaluation_worker(QObject):
 
         cv2.imwrite(final_image_path, raw_image)
         os.remove(save_path_)
-
+    # else:
+    #     print('Image not Exsit')
     def Binary2Yolo(self, path):
         # find points plot and target image size:
         temp_img = cv2.imread(self.data_path[0])
@@ -614,7 +618,7 @@ class Evaluation_worker(QObject):
                 )
         # Compute metrics
         stats = [torch.cat(x, 0).cpu().numpy() for x in zip(*stats)]  # to numpy
-        if len(stats) and stats[0].any():
+        if len(stats) :#and stats[0].any():
             tp, fp, p, r, f1, ap, ap_class = ap_per_class(
                 *stats, plot=False, save_dir="", names=names
             )

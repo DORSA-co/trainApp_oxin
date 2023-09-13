@@ -2488,7 +2488,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>1</number>
+                         <number>3</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -2747,7 +2747,7 @@ QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
 }</string>
                                </property>
                                <property name="currentIndex">
-                                <number>0</number>
+                                <number>1</number>
                                </property>
                                <widget class="QWidget" name="tab_5">
                                 <attribute name="title">
@@ -8599,7 +8599,7 @@ border-radius: 8px;</string>
                                             <x>0</x>
                                             <y>0</y>
                                             <width>1025</width>
-                                            <height>17</height>
+                                            <height>20</height>
                                            </rect>
                                           </property>
                                           <layout class="QHBoxLayout" name="horizontalLayout_364">
@@ -14461,7 +14461,7 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>65</width>
+                                      <width>92</width>
                                       <height>164</height>
                                      </rect>
                                     </property>
@@ -14584,7 +14584,7 @@ color : rgb(0,0,0);</string>
                                               <x>0</x>
                                               <y>0</y>
                                               <width>133</width>
-                                              <height>35</height>
+                                              <height>25</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -15383,7 +15383,7 @@ QPushButton:enabled-hover{
 </string>
                                       </property>
                                       <property name="currentIndex">
-                                       <number>1</number>
+                                       <number>0</number>
                                       </property>
                                       <widget class="QWidget" name="tab">
                                        <attribute name="title">
@@ -15422,13 +15422,13 @@ QPushButton:enabled-hover{
                                          <widget class="QComboBox" name="cbBox_of_dataset_in_PBT_page_load_dataset">
                                           <property name="minimumSize">
                                            <size>
-                                            <width>180</width>
+                                            <width>200</width>
                                             <height>0</height>
                                            </size>
                                           </property>
                                           <property name="maximumSize">
                                            <size>
-                                            <width>180</width>
+                                            <width>200</width>
                                             <height>25</height>
                                            </size>
                                           </property>
@@ -15579,7 +15579,7 @@ background-color: rgb(52, 101, 164);</string>
                                   <widget class="QGroupBox" name="groupBox_7">
                                    <property name="minimumSize">
                                     <size>
-                                     <width>271</width>
+                                     <width>385</width>
                                      <height>0</height>
                                     </size>
                                    </property>
@@ -15596,7 +15596,7 @@ background-color: rgb(52, 101, 164);</string>
                                     <item>
                                      <widget class="QFrame" name="frame_113">
                                       <property name="frameShape">
-                                       <enum>QFrame::StyledPanel</enum>
+                                       <enum>QFrame::NoFrame</enum>
                                       </property>
                                       <property name="frameShadow">
                                        <enum>QFrame::Raised</enum>
@@ -15785,7 +15785,7 @@ background-color: rgb(52, 101, 164);</string>
                                        <bool>true</bool>
                                       </property>
                                       <property name="frameShape">
-                                       <enum>QFrame::StyledPanel</enum>
+                                       <enum>QFrame::NoFrame</enum>
                                       </property>
                                       <property name="frameShadow">
                                        <enum>QFrame::Raised</enum>
@@ -15853,7 +15853,7 @@ background-color: rgb(52, 101, 164);</string>
                                        </size>
                                       </property>
                                       <property name="frameShape">
-                                       <enum>QFrame::StyledPanel</enum>
+                                       <enum>QFrame::NoFrame</enum>
                                       </property>
                                       <property name="frameShadow">
                                        <enum>QFrame::Raised</enum>
@@ -16333,7 +16333,7 @@ border:Transparent</string>
                                             </property>
                                             <property name="icon">
                                              <iconset>
-                                              <normaloff>D:/trainApp_oxin/UI/images/arrow-left.png</normaloff>D:/trainApp_oxin/UI/images/arrow-left.png</iconset>
+                                              <normaloff>images/arrow-left.png</normaloff>images/arrow-left.png</iconset>
                                             </property>
                                             <property name="iconSize">
                                              <size>
@@ -16436,7 +16436,7 @@ border:Transparent</string>
                                             </property>
                                             <property name="icon">
                                              <iconset>
-                                              <normaloff>D:/trainApp_oxin/UI/images/arrow-right.png</normaloff>D:/trainApp_oxin/UI/images/arrow-right.png</iconset>
+                                              <normaloff>images/arrow-right.png</normaloff>images/arrow-right.png</iconset>
                                             </property>
                                             <property name="iconSize">
                                              <size>

@@ -800,8 +800,8 @@ def train_yolo(
     api_obj,
 ):
     try:
-        if y_gpu > 0:
-            device = torch.device('cuda:{}'.format())
+        if y_gpu >= 0:
+            device = torch.device('cuda:{}'.format(y_gpu))
             torch.cuda.set_device(device)
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SET_PROCESSOR']['en'])
     except:
@@ -880,7 +880,7 @@ def train_yolo(
             (texts.ERRORS["CALLBACK_CREATE_FAILED"][api_obj.language], "y_train", 3),
         )
 
-    if y_gpu > 0:
+    if y_gpu >= 0:
         y_gpu = y_gpu
     else:
         y_gpu = "cpu"
