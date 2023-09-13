@@ -130,6 +130,7 @@ class sheetOverView:
             j = frame_idx - 1
             self.append_single_image_into_full_image(img, i, j)
         else:
+            print(img_path)
             print(f'Warning: image of camera{cam_idx} and frame{frame_idx} not exist')
 
     def initsheet_full_image(self) -> np.ndarray :
