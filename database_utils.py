@@ -1339,7 +1339,7 @@ class dataBaseUtils:
             table_name=self.setting_tabel, param_name="id", value=value
         )
         record = record[0]
-        return record["pipeline_json_path"]
+        return record["pipline_json_path"]
     
     def load_storage_setting(self):
         """This function is used to get storage settings from table
