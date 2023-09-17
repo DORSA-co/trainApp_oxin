@@ -16,7 +16,7 @@ from PyQt5.QtGui import *
 
 from PySide6.QtCharts import *
 from PySide6.QtCore import *
-import PySide6.QtGui as PG
+import PySide6.QtGui as PG 
 from PySide6.QtGui import QImage as sQImage
 from PySide6.QtGui import QPixmap as sQPixmap
 from PySide6.QtUiTools import loadUiType

@@ -2,14 +2,14 @@
     "basic": {
         "dataset_name": "default_dataset",
         "date_created": "1401/10/27",
-        "date_modify": "2023-09-13-11-40-01",
+        "date_modify": "2023-09-17-10-32-17",
         "path": "default_dataset",
         "user_id": 0,
         "user_name": "root"
     },
     "binary": {
         "count_defect": 74,
-        "count_perfect": 1
+        "count_perfect": 11
     },
     "classification": {
         "0": [
