@@ -16,8 +16,6 @@ VERTICAL = 4
 
 IMAGE_SHAPE = (1024, 1792)
 
-
-
 class sheetOverView:
     def __init__(
         self,
@@ -130,7 +128,6 @@ class sheetOverView:
             j = frame_idx - 1
             self.append_single_image_into_full_image(img, i, j)
         else:
-            print(img_path)
             print(f'Warning: image of camera{cam_idx} and frame{frame_idx} not exist')
 
     def initsheet_full_image(self) -> np.ndarray :
@@ -149,9 +146,8 @@ class sheetOverView:
         
         single_h, single_w = self.single_image_shape
         return np.zeros( (single_h*frame_counts, single_w*camera_counts ), dtype=np.uint8)
-    
 
-    def draw_defect_bbox_on_single_image(self, cam_idx:int, frame_idx:int) -> np.ndarray:
+    def draw_defect_bbox_on_single_image(self, cam_idx:int, frame_idx:int, bboxes: list) -> np.ndarray:
         """draws defects bounding boxes on single image
 
         Args:
@@ -164,36 +160,17 @@ class sheetOverView:
         """
         i = cam_idx - 1
         j = frame_idx - 1
-        h = 1024
-        w = 1792
+        h, w = IMAGE_SHAPE
         img = self.sheet_full_image[j*h: (j+1)*h,
                               i*w: (i+1)*w
                               ]
-        json_path = pathStructure.sheet_suggestions_json_path(
-                        '',
-                        self.sheet.get_id(),
-                        self.side, 
-                        cam_idx,
-                        frame_idx
-                    )
-        
-        res = None
-        if os.path.exists(json_path):
-            with open(json_path) as jfile:
-                file = json.load(jfile)
-                bboxes = file['bboxes']
 
-                for cntr in bboxes:
-                    x1, y1 = cntr[0]
-                    x2, y2 = cntr[1]
-                    #SHOULD BE CHANGE (image is gray scale)
-                    res = cv2.rectangle(img, (x1, y1), (x2, y2), 255, 2)
-        
-        if res is not None:
-            return res
-        else:
-            return img
-    
+        for cntr in bboxes:
+            x1, y1 = cntr[0]
+            x2, y2 = cntr[1]
+            #SHOULD BE CHANGE (image is gray scale)
+            res = cv2.rectangle(img, (x1, y1), (x2, y2), 255, 2)
+ 
     def append_single_image_into_full_image(self, img:np.ndarray, i:int, j:int):
         """puts a singlee image in correct position of full sheet image
 
@@ -206,9 +183,7 @@ class sheetOverView:
         self.sheet_full_image[j*h: (j+1)*h,
                               i*w: (i+1)*w
                               ] = img
-        
 
-    
     def init_img(self, color):
         img = np.ones((self.technical_sheet_shape[0], self.technical_sheet_shape[1], 3), dtype=np.uint8)
         img[:, :] *= np.array(self.__rgb2bgr__(color), np.uint8)
@@ -239,10 +214,13 @@ class sheetOverView:
             with open(json_path) as jfile:
                 file = json.load(jfile)
                 status = file['status']
+                bboxes = file['bboxes']
         else:
             status = 'black'
+            bboxes = []
         self.sheet_img = self.draw_defect(self.sheet_img, [c-1, f-1], status)
-        self.draw_defect_bbox_on_single_image(c, f)
+        if bboxes:
+            self.draw_defect_bbox_on_single_image(c, f, bboxes)
 
     # ______________________________________________________________________________________________________________________________
     #
@@ -656,7 +634,6 @@ class sheetOverView:
         return res
         return cv2.cvtColor(self.result_img, cv2.COLOR_BGR2RGB)
 
-
     def get_pos(self)-> tuple:
         """returns normalized coordinate on thechnical sheet
 
@@ -668,7 +645,6 @@ class sheetOverView:
         pt_norm_y = self.pt[1] / self.technical_sheet_shape[0]
         return (pt_norm_x, pt_norm_y)
 
-
     def get_current_img_position(self):
         if self.is_fit:
             x, y = self.pt
@@ -678,10 +654,9 @@ class sheetOverView:
 
         return -1, -1
 
-
     def get_side(self):
         return self.side.lower()
-    
+
     def get_current_cam(self,):
         return self.pt[0] // self.cell_shape[1] + 1
 

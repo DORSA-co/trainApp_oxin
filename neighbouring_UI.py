@@ -53,31 +53,22 @@ class neighbouring(QMainWindow, ui):
         self.n_image.mouseReleaseEvent = self.mouseReleaseImage()
         self.n_image.mouseMoveEvent = self.mouseMoveImage()
 
-        
-
         self.help_win = None
         
         self.language = lang
         self.annot_checkbox.setText(texts.Titles['show_labels'][lang])
+        self.label_303.setText(texts.Titles['brightness'][lang])
+        self.label_305.setText(texts.Titles['contrast'][lang])
 
 
         self.org_image = self.img
         self.org_image_annt = self.annotated_image
-
-
 
         #Update br of image
         self.btightness_slider.valueChanged.connect(self.update_image_brightess)
         self.contrast_slider.valueChanged.connect(self.update_image_brightess)
         
         self.equalize_img()
-
-
-
-
-
-
-
 
     def mousePressEvent(self, event):
         if event.button() == sQtCore.Qt.LeftButton:

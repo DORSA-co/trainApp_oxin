@@ -92,7 +92,6 @@ import sys
 sys.path.append('../oxin_storage_management')
 from storage_main_UI import storage_management
 from storage_api import storage_api
-from storage_worker import storage_worker
 import time
 from level2_UI import levl2_UI
 import getpass
@@ -114,10 +113,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = False
-
-
-
+DEBUG = True
 
 # down_side_technical     ,   up_side_technical
 class API:
@@ -463,8 +459,10 @@ class API:
 
         #milad
         self.baselines =None
+
     def create_level2_ui(self):
         self.level2_win = levl2_UI()
+        
     def show_level_ui(self):
         self.level2_win.show()
 
@@ -474,8 +472,6 @@ class API:
                         code=texts_codes.SubTypes['RESET_LEVEL2_GET_DATA'], message=texts.MESSEGES["RESET_LEVEL2_GET_DATA"]["en"], level=1
                     )
         threading.Timer(10,self.start_level2_thread).start()
-
-
 
     def start_level2_thread(self):
         self.l2_connection.reset_retry_values()
@@ -520,9 +516,9 @@ class API:
             self.ui.level2_btn.setStyleSheet('QPushButton {background-color: #4E9A06;border-radius: 10px;border-color: beige;padding: 6px;color : white;}')
         else:
             self.ui.level2_btn.setStyleSheet('QPushButton {background-color: #A40000;border-radius: 10px;border-color: beige;padding: 6px;color : white;}')           
+    
     def show_speed(self):
         # print(self.l2_connection.last_speed)
-
 
         if self.l2_connection.last_speed>0 and not self.speed_mode:
             self.ui.label_228.setStyleSheet("color : #1A5D1A")
@@ -534,20 +530,10 @@ class API:
             self.speed_mode = False
             self.ui.label_228.setText('{} 0.0 '.format(texts.Titles['stop'][self.language]))
 
-
-
-
-
     def set_ui_status_time(self,frame_name,status,time):
 
         self.level2_win.set_style_sheet(frame_name,status)
         self.level2_win.set_time(frame_name,time)
-
-
-
-
-
-
 
     def remove_pypylon_chache(self):
         try:
@@ -624,12 +610,12 @@ class API:
 
         self.update_storage_charts()
 
-        if self.ssd_image_file_manager:
-            ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
-            print('ssd image percent: ', ssd_image_percent)
+        # if self.ssd_image_file_manager:
+        #     ssd_image_percent = self.ssd_image_file_manager.used.toPercent()
+        #     print('ssd image percent: ', ssd_image_percent)
 
-            if ssd_image_percent > self.storage_upper_limit:
-                self.show_storage_window(start=True)
+        #     if ssd_image_percent > self.storage_upper_limit:
+        #         self.show_storage_window(start=True)
                 # self.show_storage_window()
                 # self.s_api.clear_filters()
                 # self.s_api.start()
@@ -663,11 +649,11 @@ class API:
         )
 
     def start_storage_checking(self):
-        # self.check_storage()
+        self.check_storage()
         if not self.storage_timer:
             self.storage_timer = QTimer()
             self.storage_timer.timeout.connect(self.check_storage)
-        # self.storage_timer.start(1000*60*self.update_time)
+        self.storage_timer.start(1000*60*self.update_time)
 
     def restart_storage_checking(self):
         self.storage_timer.stop()
@@ -1846,6 +1832,7 @@ class API:
         self.ui.clear_table()
         # self.ui.load_sheets_win.close()
         self.load_sheet()
+        self.ui.load_sheets_win.close()
         
 
         # ----------------------------------------------------------------------------------------
@@ -2053,16 +2040,16 @@ class API:
             self.ui.load_sheets_win.suggested_defects_progressBar.setMaximum(100)
 
     def update_loading_progressBar(self):
-        self.ui.load_sheets_win.loading_progressBar.setValue(
-            self.ui.load_sheets_win.loading_progressBar.value() + 1
+        self.ui.load_sheet_progressBar.setValue(
+            self.ui.load_sheet_progressBar.value() + 1
         )
 
     def reset_loading_progressBar(self, max_value):
-        self.ui.load_sheets_win.loading_progressBar.setValue(0)
+        self.ui.load_sheet_progressBar.setValue(0)
         if max_value:
-            self.ui.load_sheets_win.loading_progressBar.setMaximum(max_value)
+            self.ui.load_sheet_progressBar.setMaximum(max_value)
         else:
-            self.ui.load_sheets_win.loading_progressBar.setMaximum(100)
+            self.ui.load_sheet_progressBar.setMaximum(100)
 
     def technical_zoom_in(self):
         current_side = self.current_technical_side
@@ -2091,6 +2078,7 @@ class API:
             self.ui.set_enabel(self.ui.prev_coil_btn, False)
             self.ui.set_enabel(self.ui.load_sheets_win.load_btn, False)
             self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
+            self.ui.show_load_sheet_progressbar()
             self.technical_backend = {}
             for side, _ in self.ui.get_technical(name=False).items():
                 self.thechnicals_backend[side] = data_grabber.sheetOverView(
@@ -2159,19 +2147,19 @@ class API:
                 self.thechnicals_backend[side].update_selected(selecteds)
                 self.current_technical_side = side
                 self.refresh_thechnical(fp=1)  
-                self.close_load_sheet_win()
+                self.finish_load_sheet()
         return func
     
-    def close_load_sheet_win(self):
+    def finish_load_sheet(self):
         self.close_technical_cnt += 1
         if self.close_technical_cnt == self.close_technical_nside:
-            self.ui.load_sheets_win.close()
             self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
             self.ui.set_enabel(self.ui.next_coil_btn, True)
             self.ui.set_enabel(self.ui.prev_coil_btn, True)
             self.ui.set_enabel(self.ui.load_sheets_win.load_btn, True)
             self.ui.set_enabel(self.ui.technical_zoom_in, True)
             self.ui.set_enabel(self.ui.technical_zoom_out, True)
+            self.ui.hide_load_sheet_progressbar()
             if self.ui.checkBox_suggested_defects.isChecked():
                 self.load_suggestions()
 
@@ -3661,6 +3649,8 @@ class API:
 
             if DEBUG:
                 self.ymodel_train_worker.train_model()
+                self.ui.yolo_train.setEnabled(True)
+
 
 
     def reset_yolo_train_progressBar(self, value, text):
@@ -5171,7 +5161,7 @@ class API:
             binary_model=self.b_model,
             binary_threshold=0.5,
             yolo_model=self.yolo_model,
-            yolo_conf_thres=0.001,
+            yolo_conf_thres=0.4,
             yolo_iou_thres=0.6,
             yolo_max_det=300,
         )
@@ -5183,7 +5173,13 @@ class API:
         self.evaluation.progress.connect(self.evaluation_ui_update)
         self.evaluation.pgb_bar_signal.connect(self.set_signal_from_evaluate_thread)
         self.evaluation.pipline_signal.connect(self.pipline_saveing)
-        self.evaluation_thread.start()
+        
+
+        if DEBUG:
+            self.evaluation.evaluate()
+        else:
+            self.evaluation_thread.start()
+
 
         self.ui.BTN_evaluate_image_in_PBT_page_2.setEnabled(False)
         self.evaluation_thread.finished.connect(
@@ -5422,7 +5418,14 @@ class API:
             self.ModelsCreation_thread.deleteLater
         )
         self.ModelsCreation.model_creation_signal.connect(self.set_pipline_of_model)
-        self.ModelsCreation_thread.start()
+        
+
+
+        if DEBUG:
+            self.ModelsCreation.build_pipline()
+        
+        else:
+            self.ModelsCreation_thread.start()
 
         self.ui.BTN_set_pipline_in_PBT_page.setEnabled(False)
 

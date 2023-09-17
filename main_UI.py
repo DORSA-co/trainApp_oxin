@@ -168,7 +168,7 @@ class UI_main_window(QMainWindow, ui):
         self.login_window = UI_login_window()  
         self.help_win = help(lang=self.language)
 
-        self.suggested_defects_btn.setIcon(QIcon("UI/images/suggest.png"))
+        self.suggested_defects_btn.setIcon(sQIcon("UI/images/suggest.png"))
 
         self.label_dorsa_open(enable=True)
         # /////////Setting
@@ -801,7 +801,7 @@ class UI_main_window(QMainWindow, ui):
             self.load_sheets_win.set_language("fa")
             img_path = "UI/images/persian.png"
 
-        pixmap = QPixmap(img_path)
+        pixmap = sQPixmap(img_path)
         self.label_language.setPixmap(pixmap)
 
         texts.set_title(self, self.language)
@@ -841,7 +841,7 @@ class UI_main_window(QMainWindow, ui):
         else:
             img_path = "UI/images/persian.png"
 
-        pixmap = QPixmap(img_path)
+        pixmap = sQPixmap(img_path)
         self.label_language.setPixmap(pixmap)
 
     def change_wind_setting_status(self):
@@ -1008,15 +1008,15 @@ class UI_main_window(QMainWindow, ui):
         Returns: None
         """
         if side == "up" or side == self.up_side_technical.objectName():
-            image = QImage(
-                img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+            image = sQImage(
+                img, img.shape[1], img.shape[0], img.strides[0], sQImage.Format_BGR888
             )
-            self.up_side_technical.setPixmap(QPixmap.fromImage(image))
+            self.up_side_technical.setPixmap(sQPixmap.fromImage(image))
         if side == "down" or side == self.down_side_technical.objectName():
-            image = QImage(
-                img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+            image = sQImage(
+                img, img.shape[1], img.shape[0], img.strides[0], sQImage.Format_BGR888
             )
-            self.down_side_technical.setPixmap(QPixmap.fromImage(image))
+            self.down_side_technical.setPixmap(sQPixmap.fromImage(image))
 
     def set_crop_image(self, img):
         """
@@ -1025,10 +1025,10 @@ class UI_main_window(QMainWindow, ui):
             img (aray): new image
         Returns: None
         """
-        image = QImage(
-            img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_Grayscale8
+        image = sQImage(
+            img, img.shape[1], img.shape[0], img.strides[0], sQImage.Format_Grayscale8
         )
-        self.crop_image.setPixmap(QPixmap.fromImage(image))
+        self.crop_image.setPixmap(sQPixmap.fromImage(image))
         
         # cv2.waitKey(200)
 
@@ -2047,16 +2047,17 @@ class UI_main_window(QMainWindow, ui):
         self.heatmap_btn.setEnabled(True)
         self.checkBox_show_neighbours.setEnabled(True)
         self.checkBox_show_neighbours_labels.setEnabled(True)
+        self.checkBox_eq_hist.setEnabled(True)
         # self.yes_defect.setEnabled(True)
         # self.no_defect.setEnabled(True)
         self.save_dataset_btn.setEnabled(True)
         self.save_all_dataset_btn.setEnabled(True)
-        self.fs = QImage(
-            img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+        self.fs = sQImage(
+            img, img.shape[1], img.shape[0], img.strides[0], sQImage.Format_BGR888
         )
         if scale == 1:
             self.image.setScaledContents(True)
-            self.image.setPixmap(QPixmap.fromImage(self.fs))
+            self.image.setPixmap(sQPixmap.fromImage(self.fs))
         else:
             self.fs = self.fs.scaled(self.image.size() * scale)
             # self.image.setPixmap(QPixmap.fromImage(self.fs).scaled(self.image.size() * scale))
@@ -2072,7 +2073,7 @@ class UI_main_window(QMainWindow, ui):
         :return: end draw position
         :rtype: tuple
         """
-        pixmap = QPixmap(self.image.size())
+        pixmap = sQPixmap(self.image.size())
         px, py = position
         px = (
             px
@@ -2428,6 +2429,7 @@ class UI_main_window(QMainWindow, ui):
             binary_batch = int(float(self.b_batch.text()))
             binary_lr = float(self.b_lr.text())
             binary_te = int(float(self.b_te.text()))
+            assert binary_te < binary_epoch
             binary_vs = float(self.b_vs.text()) / 100
             if binary_vs > 0.5:
                 binary_vs = 0.5
@@ -3266,14 +3268,14 @@ class UI_main_window(QMainWindow, ui):
             self.stackedWidget.setCurrentWidget(self.page_label)
             image = ImageQt.fromqpixmap(self.crop_image.pixmap())
             image = np.ascontiguousarray(image)
-            self.fs = QImage(
+            self.fs = sQImage(
                 image,
                 image.shape[1],
                 image.shape[0],
                 image.strides[0],
-                QImage.Format_BGR888,
+                sQImage.Format_BGR888,
             )
-            self.image.setPixmap(QPixmap.fromImage(self.fs))
+            self.image.setPixmap(sQPixmap.fromImage(self.fs))
 
         if btnName == "b_add_ds":
             self.add_binary_dataset()
@@ -3662,7 +3664,7 @@ class UI_main_window(QMainWindow, ui):
         label_name.setPixmap(sQPixmap.fromImage(convert_to_Qt_format))
 
     def set_btn_image(self, btn_name, path):
-        btn_name.setIcon(QIcon(path))
+        btn_name.setIcon(sQIcon(path))
 
     def set_widget_page(self, widget, page_name):
         """set widget page with page name"""
@@ -3833,8 +3835,8 @@ class UI_main_window(QMainWindow, ui):
         help_images = sorted(os.listdir(path))
         for i in range(n_helps):
             img = cv2.imread(os.path.join(path, help_images[i]))
-            image = QImage(
-                img, img.shape[1], img.shape[0], img.strides[0], QImage.Format_BGR888
+            image = sQImage(
+                img, img.shape[1], img.shape[0], img.strides[0], sQImage.Format_BGR888
             )
             exec(
                 "self.labeling_help_{}.setPixmap(QPixmap.fromImage(image))".format(
@@ -3859,7 +3861,44 @@ class UI_main_window(QMainWindow, ui):
         self.ssd_label.setMaximumHeight(0)
         self.ssd_chart_frame.setMaximumWidth(0)
 
+    def show_load_sheet_progressbar(self):
+        width = self.frame_load_sheet.width()
+        self.load_sheet_animation = QPropertyAnimation(self.frame_load_sheet, b"maximumWidth")
+        self.load_sheet_animation.setDuration(Settings.TIME_ANIMATION)
+        self.load_sheet_animation.setStartValue(width)
+        self.load_sheet_animation.setEndValue(672)
+        self.load_sheet_animation.setEasingCurve(QEasingCurve.InOutQuart)
 
+        self.suggestion_animation = QPropertyAnimation(self.frame_suggestions, b"maximumWidth")
+        self.suggestion_animation.setDuration(Settings.TIME_ANIMATION)
+        self.suggestion_animation.setStartValue(672)
+        self.suggestion_animation.setEndValue(width)
+        self.suggestion_animation.setEasingCurve(QEasingCurve.InOutQuart)
+
+        self.load_sheet_animation.start()
+        self.suggestion_animation.start()
+
+        # self.frame_load_sheet.setMaximumWidth(16777215)
+        # self.frame_suggestions.setMaximumWidth(0)
+
+    def hide_load_sheet_progressbar(self):
+        width = self.frame_load_sheet.width()
+        self.load_sheet_animation = QPropertyAnimation(self.frame_load_sheet, b"maximumWidth")
+        self.load_sheet_animation.setDuration(Settings.TIME_ANIMATION)
+        self.load_sheet_animation.setStartValue(width)
+        self.load_sheet_animation.setEndValue(0)
+        self.load_sheet_animation.setEasingCurve(QEasingCurve.InOutQuart)
+
+        self.suggestion_animation = QPropertyAnimation(self.frame_suggestions, b"maximumWidth")
+        self.suggestion_animation.setDuration(Settings.TIME_ANIMATION)
+        self.suggestion_animation.setStartValue(0)
+        self.suggestion_animation.setEndValue(width)
+        self.suggestion_animation.setEasingCurve(QEasingCurve.InOutQuart)
+
+        self.load_sheet_animation.start()
+        self.suggestion_animation.start()
+        # self.frame_load_sheet.setMaximumWidth(0)
+        # self.frame_suggestions.setMaximumWidth(16777215)
 
 
 if __name__ == "__main__":

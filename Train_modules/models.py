@@ -671,7 +671,7 @@ def xception_cnn(
             include_top=False, weights=None, input_shape=input_size
         )
         base_model.load_weights(
-            "models/binary/xception_weights_tf_dim_ordering_tf_kernels_notop.h5"
+            "/mnt/782F28BD242E495A/models/binary/xception_weights_tf_dim_ordering_tf_kernels_notop.h5"
         )
     except:
         base_model = tf.keras.applications.Xception(

@@ -43,6 +43,8 @@ class image_processing_worker(sQObject):
                         for f in range(self.n_frames[0], self.n_frames[1]+1):
                             path = pathStructure.sheet_image_path('', self.sheet_id, s, str(c), str(f), self.img_format)
                             res_path = pathStructure.sheet_suggestions_json_path(self.res_main_path, self.sheet_id, s, c, f)
+                            if not os.path.exists(path):
+                                path = pathStructure.sheet_image_path_operator('', self.sheet_id, s, str(c), str(f), self.img_format)
                             if os.path.exists(path):
                                 img = cv2.imread(path, 0)
                                 img = cv2.resize(img, (self.img_shape[1], self.img_shape[0]))

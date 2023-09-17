@@ -35,7 +35,9 @@ DEFCET_PATH = "defect"
 PERFECT_PATH = "perfect"
 DEFCET_MASK_PATH = "defect_mask"
 ANNOTATION_PATH = "annotations"
-PIPLINES_PATH = "evaluated_jsons"
+PIPLINES_PATH = "pipelines"
+if not os.path.exists(PIPLINES_PATH):
+    os.mkdir(PIPLINES_PATH)
 WRONG_RIGHT_SYMBOL = {True: r"UI\images\true.jpg", False: r"UI\images\wrong.jpg"}
 
 # ______________________________________________________________________JJ

@@ -6,7 +6,10 @@ from backend import pipelines
 from backend.binary_list_funcs import PIPLINES_PATH
 from backend.binary_model_funcs import strInputSize_2_intInputSize
 from Train_modules.model_creator import translate_model_database_info_to_modelOBJ
+import os
 
+YOLO_MODEL_NAME = 'best.pt'
+BINARY_MODEL_NAME = 'binary_model.h5'
 
 # _______Threading Management Class_______#
 class ModelsCreation_worker(QObject):
@@ -113,7 +116,8 @@ class ModelsCreation_worker(QObject):
                         "num_class": 1,
                         "mode": "binary",
                     },
-                    weights_path=binary_model_info[0]["weights_path"],
+                    
+                    weights_path=os.path.join(binary_model_info[0]["weights_path"],BINARY_MODEL_NAME),
                     model_type="binary",
                 )
                 # send signal for updataing progress bar
@@ -201,34 +205,34 @@ class ModelsCreation_worker(QObject):
                     self.classes_num,
                     _,
                 ) = strInputSize_2_intInputSize(
-                    string=LC_model_info["yolo"][0]["classes"],
+                    string=LC_model_info["yolo"][0]["input_size"],
                     use_for_other_parameter=True,
                 )
-                try:
+                # try:
                     # create yolo model object
-                    self.yolo_model = translate_model_database_info_to_modelOBJ(
-                        info_dict={
-                            "algo_name": LC_model_info["yolo"][0]["algo_name"],
-                            "device": "",
-                            "batch_size": LC_model_info["yolo"][0]["batch_size"],
-                        },
-                        weights_path=LC_model_info["yolo"][0]["weights_path"],
-                        model_type="yolo",
-                    )
-                    # send signal for updataing progress bar
-                    self.model_creation_signal.emit(4, True)
-                    self.pipline_OBJ.set_yolo_model(
-                        key=pipelines.MODEL_ID,
-                        value=LC_model_info["yolo"][0]["algo_name"],
-                    )
-                    self.pipline_OBJ.set_yolo_model(
-                        key=pipelines.MODEL_WEIGHTS_PATH,
-                        value=LC_model_info["yolo"][0]["weights_path"],
-                    )
-                    self.pipline_OBJ.set(pipelines.USE_YOLO, value=True)
-                except:
-                    # send notif of there is problem in creating models of pipline(here yolo)
-                    self.model_creation_signal.emit(4, False)
+                self.yolo_model = translate_model_database_info_to_modelOBJ(
+                    info_dict={
+                        "algo_name": LC_model_info["yolo"][0]["algo_name"],
+                        "device": "",
+                        "batch_size": LC_model_info["yolo"][0]["batch_size"],
+                    },
+                    weights_path=os.path.join(LC_model_info["yolo"][0]["weights_path"],YOLO_MODEL_NAME),
+                    model_type="yolo",
+                )
+                # send signal for updataing progress bar
+                self.model_creation_signal.emit(4, True)
+                self.pipline_OBJ.set_yolo_model(
+                    key=pipelines.MODEL_ID,
+                    value=LC_model_info["yolo"][0]["algo_name"],
+                )
+                self.pipline_OBJ.set_yolo_model(
+                    key=pipelines.MODEL_WEIGHTS_PATH,
+                    value=LC_model_info["yolo"][0]["weights_path"],
+                )
+                self.pipline_OBJ.set(pipelines.USE_YOLO, value=True)
+                # except:
+                #     # send notif of there is problem in creating models of pipline(here yolo)
+                #     self.model_creation_signal.emit(4, False)
 
             if pipline_type == "BS":
                 self.classes_num = 1

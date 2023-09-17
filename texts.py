@@ -756,7 +756,7 @@ WARNINGS = {
     },
     "parameters_error": {
         "fa": "پارامتر‌های ورودی به درستی مقدار دهی نشده‌اند.",
-        "en": "The input parameters are not set correctly.",
+        "en": "The input fields are not initialized correctly.",
     },
     "image_not_exist": {
         "fa": "فایل تصویر وجود ندارد.",
@@ -777,7 +777,6 @@ MESSEGES = {
         "fa": "خطا در اجرای نرم افزار مدیریت حافظه",
         "en": "Error in running the storage management software",
     },
-    "": {"fa": "", "en": ""},
     "Login_successfully": {
         "fa": " ورود کاربر با موفقت ایجاد شد",
         "en": "Login successfully ",
@@ -1318,6 +1317,8 @@ Titles = {
     },
     "line_thickness": {"fa": ": ضخامت خط", "en": "Line Thickness :"},
     "point_thickness": {"fa": ": ضخامت نقطه", "en": "Point Thickness :"},
+    "brightness": {"fa": " : روشنایی", "en": "Brightness : "},
+    "contrast": {"fa": " : کنتراست", "en": "Contrast : "},
     "defect": {"fa": ":معیوب", "en": "Defect:"},
     "defect2": {"fa": "معیوب:", "en": "Defect:"},
     "perfect": {"fa": "سالم:", "en": "Perfect:"},
@@ -1513,6 +1514,10 @@ Titles = {
         "fa": "نمایش عیوب پیشنهادی",
         "en": "Show suggested defects",
     },
+    "loading": {
+        "fa": "... در حال بارگذاری",
+        "en": "loading ...",
+    },
     "next_sheet": {"fa": "ورق بعدی", "en": "Next Sheet"},
     "prev_sheet": {"fa": "ورق قبلی", "en": "Previous Sheet"},
     "add_image": {"fa": "اضافه کردن تصویر", "en": "Add Image"},
@@ -1530,7 +1535,7 @@ Titles = {
     },
     "delete_polygons": {"fa": "حذف چند‌ضلعی‌ها", "en": "Delete Polygons"},
     "search_bar": {"fa": "نوار جست و جو", "en": "Search Bar"},
-    "date": {"fa": "تاریخ", "en": "Date"},
+    "date2": {"fa": "تاریخ", "en": "Date"},
     "all_dates": {"fa": "همه‌ی تاریخ‌ها", "en": "All Dates"},
     "from_date": {"fa": ":از تاریخ", "en": "From Date:"},
     "to_date": {"fa": ":تا تاریخ", "en": "To Date:"},
@@ -1552,6 +1557,7 @@ Titles = {
     "export": {"fa": "خروجی گرفتن", "en": "Export"},
     "reset_to_default": {"fa": "بازگشت به مقدار پیش‌فرض", "en": "Reset to default"},
     "full_screen": {"fa": "تمام صفحه", "en": "Full Screen"},
+    
     # ---------------------------------------------------------------------
     # ----------------------Setting Sofwtare-------------------------------
     # ---------------------------------------------------------------------
@@ -1940,6 +1946,7 @@ def set_title(self, lang):
     self.label_290.setText(Titles["Thickness Order :"][lang])
 
     self.checkBox_suggested_defects.setText(Titles["show_suggested_defects"][lang])
+    self.label_229.setText(Titles["loading"][lang])
     self.next_coil_btn.setToolTip(Titles["next_sheet"][lang])
     self.prev_coil_btn.setToolTip(Titles["prev_sheet"][lang])
     self.add_btn_SI.setToolTip(Titles["add_image"][lang])
@@ -2069,6 +2076,8 @@ def set_title(self, lang):
     self.label_288.setText(Titles["frame_number"][lang])
     self.label_285.setText(Titles["line_thickness"][lang])
     self.label_286.setText(Titles["point_thickness"][lang])
+    self.label_303.setText(Titles["brightness"][lang])
+    self.label_305.setText(Titles["contrast"][lang])
     self.checkBox_show_neighbours.setText(Titles["show_neighbours"][lang])
     self.checkBox_show_neighbours_labels.setText(Titles["show_neighbours_labels"][lang])
 
@@ -2949,7 +2958,7 @@ def set_alignment(self, lang):
 
 def set_show_log(self, lang):
     self.show_log_win.groupBox.setTitle(Titles["search_bar"][lang])
-    self.show_log_win.groupBox_3.setTitle(Titles["date"][lang])
+    self.show_log_win.groupBox_3.setTitle(Titles["date2"][lang])
 
     self.show_log_win.checkBox_allDates.setText(Titles["all_dates"][lang])
     self.show_log_win.label.setText(Titles["from_date"][lang])

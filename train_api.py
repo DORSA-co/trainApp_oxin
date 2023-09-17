@@ -307,7 +307,42 @@ def train_binary(
             (texts.ERRORS["SAVE_BMODEL_FAILED"][api_obj.language], "train", 3),
         )
 
+    ########################################### Fine Tune ############################################
     if binary_te > 0:
+        try:
+            if not binary_input_type:
+                trainGen, testGen = dataGenerator.get_binarygenerator(
+                    binary_dp,
+                    binary_input_size,
+                    "defect",
+                    "perfect",
+                    data_gen_args,
+                    api_obj,
+                    batch_size=binary_batch,
+                    validation_split=binary_vs,
+                )
+            else:
+                trainGen, testGen = dataGenerator.get_binarygenerator(
+                    binary_dp,
+                    binary_input_size,
+                    "defect_splitted",
+                    "perfect_splitted",
+                    data_gen_args,
+                    api_obj,
+                    batch_size=binary_batch,
+                    validation_split=binary_vs,
+                )
+            api_obj.ui.logger.create_new_log(
+                message=texts.MESSEGES["CREATE_BINARY_GEN"]["en"]
+            )
+        except Exception as e:
+            api_obj.ui.logger.create_new_log(
+                message=texts.ERRORS["CREATE_BINARY_GEN_FAILED"]["en"], level=5
+            )
+            return (
+                False,
+                (texts.ERRORS["CREATE_BINARY_GEN_FAILED"][api_obj.language], "train", 3),
+            )
         # Create model for fine tunning
         if binary_algorithm_name == ALGORITHM_NAMES["binary"][0]:
             try:
@@ -800,8 +835,8 @@ def train_yolo(
     api_obj,
 ):
     try:
-        if y_gpu > 0:
-            device = torch.device('cuda:{}'.format())
+        if y_gpu >= 0:
+            device = torch.device('cuda:{}'.format(y_gpu))
             torch.cuda.set_device(device)
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES['SET_PROCESSOR']['en'])
     except:
@@ -880,7 +915,7 @@ def train_yolo(
             (texts.ERRORS["CALLBACK_CREATE_FAILED"][api_obj.language], "y_train", 3),
         )
 
-    if y_gpu > 0:
+    if y_gpu >= 0:
         y_gpu = y_gpu
     else:
         y_gpu = "cpu"
