@@ -131,14 +131,16 @@ def train_binary(
             tf.config.run_functions_eagerly(True)
             # GPU config
             gpu = tf.config.list_physical_devices("GPU")
-            # tf.config.experimental.set_memory_growth(gpu[binary_gpu], True)
+            print('binary_gpu',binary_gpu)
+            tf.config.experimental.set_memory_growth(gpu[binary_gpu], True)
             tf.config.experimental.set_visible_devices(gpu[binary_gpu], "GPU")
         else:
             cpu = tf.config.list_physical_devices("CPU")
             # tf.config.experimental.set_memory_growth(cpu[0], True)
             tf.config.experimental.set_visible_devices(cpu[0], "CPU")
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES["SET_PROCESSOR"]["en"])
-    except:
+    except Exception as e:
+        print(e)
         api_obj.ui.logger.create_new_log(
             message=texts.ERRORS["SET_PROCESSOR_FAILED"]["en"], level=5
         )
@@ -159,6 +161,7 @@ def train_binary(
             message=texts.MESSEGES["CREATE_BWPATH"]["en"] + weights_path
         )
     except Exception as e:
+        print(e)
         api_obj.ui.logger.create_new_log(
             message=texts.ERRORS["CREATE_BWPATH_FAILED"]["en"] + weights_path, level=5
         )
@@ -168,40 +171,41 @@ def train_binary(
         )
 
     # Get train and test generators
-    # try:
-    if not binary_input_type:
-        trainGen, testGen = dataGenerator.get_binarygenerator(
-            binary_dp,
-            binary_input_size,
-            "defect",
-            "perfect",
-            data_gen_args,
-            api_obj,
-            batch_size=binary_batch,
-            validation_split=binary_vs,
+    try:
+        if not binary_input_type:
+            trainGen, testGen = dataGenerator.get_binarygenerator(
+                binary_dp,
+                binary_input_size,
+                "defect",
+                "perfect",
+                data_gen_args,
+                api_obj,
+                batch_size=binary_batch,
+                validation_split=binary_vs,
+            )
+        else:
+            trainGen, testGen = dataGenerator.get_binarygenerator(
+                binary_dp,
+                binary_input_size,
+                "defect_splitted",
+                "perfect_splitted",
+                data_gen_args,
+                api_obj,
+                batch_size=binary_batch,
+                validation_split=binary_vs,
+            )
+        api_obj.ui.logger.create_new_log(
+            message=texts.MESSEGES["CREATE_BINARY_GEN"]["en"]
         )
-    else:
-        trainGen, testGen = dataGenerator.get_binarygenerator(
-            binary_dp,
-            binary_input_size,
-            "defect_splitted",
-            "perfect_splitted",
-            data_gen_args,
-            api_obj,
-            batch_size=binary_batch,
-            validation_split=binary_vs,
+    except Exception as e:
+        print(e)
+        api_obj.ui.logger.create_new_log(
+            message=texts.ERRORS["CREATE_BINARY_GEN_FAILED"]["en"], level=5
         )
-    api_obj.ui.logger.create_new_log(
-        message=texts.MESSEGES["CREATE_BINARY_GEN"]["en"]
-    )
-    # except Exception as e:
-    #     api_obj.ui.logger.create_new_log(
-    #         message=texts.ERRORS["CREATE_BINARY_GEN_FAILED"]["en"], level=5
-    #     )
-    #     return (
-    #         False,
-    #         (texts.ERRORS["CREATE_BINARY_GEN_FAILED"][api_obj.language], "train", 3),
-    #     )
+        return (
+            False,
+            (texts.ERRORS["CREATE_BINARY_GEN_FAILED"][api_obj.language], "train", 3),
+        )
 
     # Create models
     try:
@@ -223,6 +227,7 @@ def train_binary(
             message=texts.MESSEGES["CREATE_MODEL"]["en"].format(binary_algorithm_name)
         )
     except Exception as e:
+        print(e)
         api_obj.ui.logger.create_new_log(
             message=texts.ERRORS["CREATE_MODEL_FAILED"]["en"].format(
                 binary_algorithm_name
@@ -251,7 +256,8 @@ def train_binary(
         api_obj.ui.logger.create_new_log(
             message=texts.MESSEGES["CALLBACK_CREATED"]["en"]
         )
-    except:
+    except Exception as e:
+        print(e)
         api_obj.ui.logger.create_new_log(
             message=texts.ERRORS["CALLBACK_CREATE_FAILED"]["en"], level=5
         )
@@ -290,6 +296,7 @@ def train_binary(
         )
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES["FIT_MODEL"]["en"])
     except Exception as e:
+        print(e)
         api_obj.ui.logger.create_new_log(
             message=texts.ERRORS["FIT_MODEL_FAILED"]["en"], level=5
         )
@@ -299,6 +306,7 @@ def train_binary(
         model.save(os.path.join(weights_path, "binary_model.h5"))
         api_obj.ui.logger.create_new_log(message=texts.MESSEGES["SAVE_BMODEL"]["en"])
     except Exception as e:
+        print(e)
         api_obj.ui.logger.create_new_log(
             message=texts.ERRORS["SAVE_BMODEL_FAILED"]["en"], level=5
         )
@@ -309,40 +317,6 @@ def train_binary(
 
     ########################################### Fine Tune ############################################
     if binary_te > 0:
-        try:
-            if not binary_input_type:
-                trainGen, testGen = dataGenerator.get_binarygenerator(
-                    binary_dp,
-                    binary_input_size,
-                    "defect",
-                    "perfect",
-                    data_gen_args,
-                    api_obj,
-                    batch_size=binary_batch,
-                    validation_split=binary_vs,
-                )
-            else:
-                trainGen, testGen = dataGenerator.get_binarygenerator(
-                    binary_dp,
-                    binary_input_size,
-                    "defect_splitted",
-                    "perfect_splitted",
-                    data_gen_args,
-                    api_obj,
-                    batch_size=binary_batch,
-                    validation_split=binary_vs,
-                )
-            api_obj.ui.logger.create_new_log(
-                message=texts.MESSEGES["CREATE_BINARY_GEN"]["en"]
-            )
-        except Exception as e:
-            api_obj.ui.logger.create_new_log(
-                message=texts.ERRORS["CREATE_BINARY_GEN_FAILED"]["en"], level=5
-            )
-            return (
-                False,
-                (texts.ERRORS["CREATE_BINARY_GEN_FAILED"][api_obj.language], "train", 3),
-            )
         # Create model for fine tunning
         if binary_algorithm_name == ALGORITHM_NAMES["binary"][0]:
             try:
@@ -360,6 +334,7 @@ def train_binary(
                     )
                 )
             except Exception as e:
+                print(e)
                 api_obj.ui.logger.create_new_log(
                     message=texts.ERRORS["CREATE_FTMODEL_FAILED"]["en"].format(
                         binary_algorithm_name
@@ -393,6 +368,7 @@ def train_binary(
                     )
                 )
             except Exception as e:
+                print(e)
                 api_obj.ui.logger.create_new_log(
                     message=texts.ERRORS["CREATE_FTMODEL_FAILED"]["en"].format(
                         binary_algorithm_name
@@ -409,13 +385,25 @@ def train_binary(
                         3,
                     ),
                 )
-
-        # Create call back
-        my_callback = callbacks.CustomCallback(
-            os.path.join(weights_path, "checkpoint.h5"),
-            model_type="binary",
-            api_obj=api_obj,
-        )
+            
+        try:
+            my_callback = callbacks.CustomCallback(
+                os.path.join(weights_path, "checkpoint.h5"),
+                model_type="binary",
+                api_obj=api_obj,
+            )
+            api_obj.ui.logger.create_new_log(
+                message=texts.MESSEGES["CALLBACK_CREATED"]["en"]
+            )
+        except Exception as e:
+            print(e)
+            api_obj.ui.logger.create_new_log(
+                message=texts.ERRORS["CALLBACK_CREATE_FAILED"]["en"], level=5
+            )
+            return (
+                False,
+                (texts.ERRORS["CALLBACK_CREATE_FAILED"][api_obj.language], "train", 3),
+            )
 
         # Fit model for fine tunning
         try:
@@ -432,6 +420,7 @@ def train_binary(
                 message=texts.MESSEGES["FIT_FTMODEL"]["en"]
             )
         except Exception as e:
+            print(e)
             api_obj.ui.logger.create_new_log(
                 message=texts.ERRORS["FIT_FTMODEL_FAILED"]["en"], level=5
             )
@@ -446,6 +435,7 @@ def train_binary(
                 message=texts.MESSEGES["SAVE_FTBMODEL"]["en"]
             )
         except Exception as e:
+            print(e)
             api_obj.ui.logger.create_new_log(
                 message=texts.ERRORS["SAVE_FTBMODEL_FAILED"]["en"], level=5
             )
@@ -456,7 +446,8 @@ def train_binary(
 
     try:
         binary_algorithm_name = ALGORITHM_NAMES["binary"].index(binary_algorithm_name)
-    except:
+    except Exception as e:
+        print(e)
         binary_algorithm_name = -1
 
     return (

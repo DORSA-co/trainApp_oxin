@@ -113,7 +113,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = True
+DEBUG = False
 
 # down_side_technical     ,   up_side_technical
 class API:

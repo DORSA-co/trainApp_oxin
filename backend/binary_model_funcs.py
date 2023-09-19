@@ -1381,13 +1381,12 @@ class Binary_model_train_worker(sQObject):
         bmodel_records = train_api.train_binary(
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
-        print('bmodel_records',bmodel_records)
         if not bmodel_records[0]:
             self.warning.emit(
                 bmodel_records[1][0],
                 bmodel_records[1][1],
                 None,
-                1,
+                bmodel_records[1][2],
             )
         else:
             bmodel_records = bmodel_records[1]

@@ -2289,11 +2289,11 @@ class UI_main_window(QMainWindow, ui):
             "algorithm_name": "Xbc",
             "input_type": True,
             "epochs": "20",
-            "batch_size": "8",
+            "batch_size": "128",
             "learning_rate": "1e-3",
-            "tuning_epochs": "1",
+            "tuning_epochs": "0",
             "validation_split": "20",
-            "proc": "CPU",
+            "proc": "GPU 0",
         }
 
         self.b_algorithms.setCurrentText(b_parms["algorithm_name"])
