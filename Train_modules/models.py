@@ -8,6 +8,8 @@ from tensorflow.keras.models import *
 from tensorflow.keras.layers import *
 from tensorflow.keras.optimizers import *
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from tensorflow.keras.models import load_model
+
 
 # from tensorflow.keras import backend as keras
 try:
@@ -646,6 +648,8 @@ def xception_cnn(
     mode=BINARY,
     fine_tune_layer=-1,
     weights=None,
+    weights_path=None,
+    pretrain_severstal_path = False
 ):
     """Create Xception model.
 
@@ -667,13 +671,15 @@ def xception_cnn(
     preprocess_input = tf.keras.applications.xception.preprocess_input
 
     try:
+
         base_model = tf.keras.applications.Xception(
-            include_top=False, weights=None, input_shape=input_size
+        include_top=False, weights=None, input_shape=input_size
         )
         base_model.load_weights(
             "/mnt/782F28BD242E495A/models/binary/xception_weights_tf_dim_ordering_tf_kernels_notop.h5"
-        )
+            )
     except:
+        print('Exception model Not loaded')
         base_model = tf.keras.applications.Xception(
             include_top=False, weights="imagenet", input_shape=input_size
         )
@@ -699,8 +705,11 @@ def xception_cnn(
     model = tf.keras.Model(inpt, out)
 
     # --------------------------------------------
-    if weights is not None:
-        model.load_weights(weights)
+    if weights_path is not None:
+        pass
+        pretrain_model = load_model(weights_path)
+        weights = pretrain_model.get_weights()
+        model.set_weights(weights)
     # --------------------------------------------
     if fine_tune_layer > 0:
         base_model = model.layers[4]

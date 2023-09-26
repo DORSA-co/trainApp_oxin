@@ -282,22 +282,22 @@ class Pipeline:
     def save_json(self):
         """this function is used to save pipeline json object to path as a file"""
 
-        try:
-            json_path = os.path.join(
-                self.pipline_json[PIPELINE_ROOT],
-                "%s-%s-%s.json"
-                % (
-                    self.pipline_json[PIPELINE_NAME],
-                    self.pipline_json[DATE_CREATED],
-                    self.pipline_json[TIME_CREATED],
-                ),
-            )
-            with open(json_path, "w") as f:
-                json.dump(self.pipline_json, f)
-            f.close()
-        except:
-            print('Error in save json')
-            pass
+        # try:
+        json_path = os.path.join(
+            self.pipline_json[PIPELINE_ROOT],
+            "%s-%s-%s.json"
+            % (
+                self.pipline_json[PIPELINE_NAME],
+                self.pipline_json[DATE_CREATED],
+                self.pipline_json[TIME_CREATED],
+            ),
+        )
+        with open(json_path, "w") as f:
+            json.dump(self.pipline_json, f)
+        f.close()
+        # except:
+        #     print('Error in save json')
+     
 
     def load_json(self):
         """this function is used to load pipline info from json file"""

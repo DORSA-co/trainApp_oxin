@@ -7727,3 +7727,13 @@ class API:
                 )
         else:
             self.ui.label_pipline_details.setText("")
+
+
+
+    def get_pretrain_severstal_path(self):
+        servetal_path = 'servstal_models/epoch_10.h5'
+
+        if self.ui.checkBox_pretrain.isChecked():
+            return servetal_path
+        else:
+            return False

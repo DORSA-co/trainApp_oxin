@@ -97,6 +97,7 @@ def train_binary(
     binary_dp,
     weights_path,
     api_obj,
+    pretrain_severstal_path,
 ):
     """Create and fit binary model
 
@@ -215,7 +216,11 @@ def train_binary(
                 learning_rate=binary_lr,
                 num_class=1,
                 mode=models.BINARY,
+                pretrain_severstal_path =pretrain_severstal_path,
+                weights_path=None
             )
+            # if pretrain_severstal_path:
+            #     model.load_weights(pretrain_severstal_path)
         elif binary_algorithm_name == ALGORITHM_NAMES["binary"][1]:
             model = models.resnet_cnn(
                 input_size=binary_input_size + (3,),

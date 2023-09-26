@@ -318,7 +318,7 @@ class Dataset:
         if pos != "":
             name = self.__file_name__(pos)
         for i in range(crops.shape[0]):
-            image_name = name + "_(" + str(i) + ")" + self.format_image
+            image_name = name + "_" + str(i) + "" + self.format_image
             res_path = os.path.join(path, image_name)
             cv2.imwrite(res_path, crops[i])
 
@@ -336,7 +336,7 @@ class Dataset:
         if pos != "":
             name = self.__file_name__(pos)
         for i in range(crops.shape[0]):
-            image_name = name + "_(" + str(i) + ")" + self.format_image
+            image_name = name + "_" + str(i) + "" + self.format_image
             res_path = os.path.join(path, image_name)
             cv2.imwrite(res_path, crops[i])
 
@@ -352,7 +352,7 @@ class Dataset:
         self, image_crops, label_crops, image_path, label_path, name=""
     ):
         for i in range(image_crops.shape[0]):
-            image_name = name + "_(" + str(i) + ")" + self.format_image
+            image_name = name + "_" + str(i) + "" + self.format_image
             res_path = os.path.join(image_path, image_name)
             cv2.imwrite(res_path, image_crops[i])
 

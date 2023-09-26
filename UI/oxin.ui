@@ -21856,6 +21856,40 @@ border:Transparent</string>
                                      </layout>
                                     </item>
                                     <item>
+                                     <widget class="QFrame" name="frame_127">
+                                      <property name="minimumSize">
+                                       <size>
+                                        <width>0</width>
+                                        <height>30</height>
+                                       </size>
+                                      </property>
+                                      <property name="frameShape">
+                                       <enum>QFrame::StyledPanel</enum>
+                                      </property>
+                                      <property name="frameShadow">
+                                       <enum>QFrame::Raised</enum>
+                                      </property>
+                                      <layout class="QVBoxLayout" name="verticalLayout_118">
+                                       <property name="topMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <property name="bottomMargin">
+                                        <number>0</number>
+                                       </property>
+                                       <item>
+                                        <widget class="QCheckBox" name="checkBox_pretrain">
+                                         <property name="text">
+                                          <string>Use Severstal as pretrain</string>
+                                         </property>
+                                         <property name="checked">
+                                          <bool>true</bool>
+                                         </property>
+                                        </widget>
+                                       </item>
+                                      </layout>
+                                     </widget>
+                                    </item>
+                                    <item>
                                      <layout class="QHBoxLayout" name="horizontalLayout_122">
                                       <item>
                                        <spacer name="horizontalSpacer_69">

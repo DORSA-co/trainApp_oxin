@@ -2429,7 +2429,7 @@ class UI_main_window(QMainWindow, ui):
             binary_batch = int(float(self.b_batch.text()))
             binary_lr = float(self.b_lr.text())
             binary_te = int(float(self.b_te.text()))
-            assert binary_te < binary_epoch
+            # assert binary_te < binary_epoch
             binary_vs = float(self.b_vs.text()) / 100
             if binary_vs > 0.5:
                 binary_vs = 0.5

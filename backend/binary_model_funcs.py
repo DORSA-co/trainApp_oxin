@@ -16,7 +16,7 @@ from random_split import *
 
 
 SHAMSI_DATE = False
-
+DEBUG = False
 
 # binary table headers
 binary_headers = [
@@ -1374,12 +1374,13 @@ class Binary_model_train_worker(sQObject):
                 )
 
     def train_model(self):
-        if self.b_parms[2]:
-            self.split_binary_dataset(self.b_parms[-1], self.b_parms[1])
+        if not DEBUG :
+            if self.b_parms[2]:
+                self.split_binary_dataset(self.b_parms[-1], self.b_parms[1])
 
         self.reset_progressbar.emit(self.b_parms[3], "Training")
         bmodel_records = train_api.train_binary(
-            *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
+            *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj,self.api_obj.get_pretrain_severstal_path()
         )
         if not bmodel_records[0]:
             self.warning.emit(
