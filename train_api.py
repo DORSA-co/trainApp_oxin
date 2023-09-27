@@ -217,7 +217,7 @@ def train_binary(
                 num_class=1,
                 mode=models.BINARY,
                 pretrain_severstal_path =pretrain_severstal_path,
-                weights_path=None
+                weights_path='servstal_models_good/epoch_21'
             )
             # if pretrain_severstal_path:
             #     model.load_weights(pretrain_severstal_path)

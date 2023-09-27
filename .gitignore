@@ -14,3 +14,7 @@ oxin_image_grabber_imgProcessing/
 default_dataset/
 SymLink/
 .cometml-runs/
+binary_epoch/
+binary_epoch/
+servstal_models/
+servstal_models_good/
