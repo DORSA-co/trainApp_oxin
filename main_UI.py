@@ -2139,7 +2139,7 @@ class UI_main_window(QMainWindow, ui):
         # self.b_algorithms.setCurrentText(str(records[0][0]))   #Must change
 
     def validate_binary_train_params(self):
-        reg_ex1 = sQtCore.QRegularExpression("[1-9][0-9]+")
+        reg_ex1 = sQtCore.QRegularExpression("[0-9][0-9]+")
         input_validator = PG.QRegularExpressionValidator(reg_ex1, self.b_epochs)
         self.b_epochs.setValidator(input_validator)
 
@@ -2421,6 +2421,9 @@ class UI_main_window(QMainWindow, ui):
         """
         try:
             binary_algorithm_name = self.b_algorithms.currentText()
+            binary_pretrain_path = self.b_prep.toPlainText()
+            if not binary_pretrain_path:
+                binary_pretrain_path = None
             binary_input_size = tuple(
                 (self.input_size1.value(), self.input_size1.value())
             )
@@ -2429,8 +2432,8 @@ class UI_main_window(QMainWindow, ui):
             binary_batch = int(float(self.b_batch.text()))
             binary_lr = float(self.b_lr.text())
             binary_te = int(float(self.b_te.text()))
-            # assert binary_te < binary_epoch
             binary_vs = float(self.b_vs.text()) / 100
+            assert binary_te > 0 or binary_epoch > 0
             if binary_vs > 0.5:
                 binary_vs = 0.5
             str = self.b_gpu.currentText().split(" ")
@@ -2454,6 +2457,7 @@ class UI_main_window(QMainWindow, ui):
 
             return (
                 binary_algorithm_name,
+                binary_pretrain_path,
                 binary_input_size,
                 binary_input_type,
                 binary_epoch,

@@ -113,7 +113,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = False
+DEBUG = True
 
 # down_side_technical     ,   up_side_technical
 class API:
@@ -1446,6 +1446,9 @@ class API:
         self.ui.mask_table_widget.clicked.connect(self.select_defect)
 
         # trainig
+        self.ui.b_select_prep.clicked.connect(
+            partial(self.select_binary_pretrain_path)
+        )
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
         self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
         self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
@@ -3383,7 +3386,7 @@ class API:
                 return
 
             # update chart axis given train data
-            self.update_b_chart_axis(b_parms[3])
+            self.update_b_chart_axis(b_parms[4])
 
             self.bmodel_train_thread = sQThread()
             # Step 3: Create a worker object
@@ -3837,6 +3840,16 @@ class API:
     def update_save_all_progressbar(self):
         self.ui.save_all_progressBar.setValue(self.ui.save_all_progressBar.value() + 1)
 
+    def select_binary_pretrain_path(self):
+        path = self.ds.weights_path
+        dname = QFileDialog.getExistingDirectory(
+            self.ui, "Select a directory", path
+        )
+
+        if dname == "":
+            return
+        self.ui.b_prep.setText(dname)
+
     def select_binary_dataset(self, page="train"):
         self.ui.create_ds_selection_dialog()
 
@@ -3954,7 +3967,7 @@ class API:
 
     def select_localization_pretrain_path(self):
         self.l_select_pre_dialog = QFileDialog()
-        path = "./"
+        path = self.ds.weights_path
         filter = "h5(*.h5)"
         dname = QFileDialog.getOpenFileName(
             self.l_select_pre_dialog, "open", path, filter
@@ -7727,13 +7740,3 @@ class API:
                 )
         else:
             self.ui.label_pipline_details.setText("")
-
-
-
-    def get_pretrain_severstal_path(self):
-        servetal_path = 'servstal_models/epoch_10.h5'
-
-        if self.ui.checkBox_pretrain.isChecked():
-            return servetal_path
-        else:
-            return False

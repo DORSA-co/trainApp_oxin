@@ -2119,6 +2119,8 @@ def set_title(self, lang):
     ## training
 
     self.label_137.setText(Titles["algorithm_name"][lang])
+    self.label_319.setText(Titles["pretrained_weights_path"][lang])
+    self.b_select_prep.setText(Titles["select_file"][lang])
     self.label_144.setText(Titles["input_size"][lang])
     self.label_7.setText(Titles["input_type"][lang])
     self.input_type_resize.setText(Titles["resize"][lang])
@@ -2547,6 +2549,7 @@ def set_alignment(self, lang):
         self.label_286.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.label_137.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.label_319.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_144.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_7.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_138.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2770,6 +2773,7 @@ def set_alignment(self, lang):
         self.label_286.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_137.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.label_319.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_144.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_7.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_138.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)

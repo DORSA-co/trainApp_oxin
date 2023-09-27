@@ -1375,12 +1375,12 @@ class Binary_model_train_worker(sQObject):
 
     def train_model(self):
         if not DEBUG :
-            if self.b_parms[2]:
-                self.split_binary_dataset(self.b_parms[-1], self.b_parms[1])
+            if self.b_parms[3]:
+                self.split_binary_dataset(self.b_parms[-1], self.b_parms[2])
 
-        self.reset_progressbar.emit(self.b_parms[3], "Training")
+        self.reset_progressbar.emit(self.b_parms[4], "Training")
         bmodel_records = train_api.train_binary(
-            *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj,self.api_obj.get_pretrain_severstal_path()
+            *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
         if not bmodel_records[0]:
             self.warning.emit(
@@ -1424,7 +1424,8 @@ class Binary_model_train_worker(sQObject):
 
     def save_b_model(self, model, path, epoch):
         try:
-            model.save(path)
+            model.save_weights(os.path.join(path, 'epoch_{}.h5'.format(epoch)))
+            model.save(os.path.join(path, 'epoch_{}'.format(epoch)))
             self.ui_obj.logger.create_new_log(
                 message=texts.MESSEGES["SAVE_BMODEL_EPOCH"]["en"].format(epoch)
             )
