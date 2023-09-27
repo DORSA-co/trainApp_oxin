@@ -31,8 +31,6 @@ class CustomCallback(keras.callbacks.Callback):
         :type logs: dict, optional
         """
         # Set to UI
-        self.model.save_weights('servstal_models/epoch_{}.h5'.format(epoch))
-        self.model.save('servstal_models/epoch_{}'.format(epoch))
         epoch += 1
         if self.model_type == 'binary':
             # Update bianry train charts
