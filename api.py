@@ -1736,6 +1736,8 @@ class API:
             self.change_label_point_thickness
         )
 
+        self.ui.show_labels_checkBox.stateChanged.connect(self.draw_labels)
+
     def change_label_line_thickness(self):
         x = self.ui.line_thickness_slider.value()
         self.label_bakcend["mask"].change_line_thickness(x)
@@ -1885,6 +1887,11 @@ class API:
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
+    def draw_labels(self, state):
+        for side, _ in self.ui.get_technical(name=False).items():
+            self.thechnicals_backend[side].draw_labels(state)
+            self.refresh_thechnical(fp=1)
+
 
     def load_suggestions(self, state=0):
         if self.ui.checkBox_suggested_defects.isChecked():
@@ -2090,6 +2097,7 @@ class API:
                                                             (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
                                                             (self.sheet.get_nframe(), NCAMERA),
                                                             actives_camera=sheet.get_cameras(),
+                                                            dataset_annotation_path = os.path.join(self.ds.dataset_path, self.ds.annotations_folder)
                                                         )
                 
                 self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=5)
@@ -2139,6 +2147,7 @@ class API:
             self.technical_threads[side][-1].finished.connect(self.technical_threads[side][-1].deleteLater)
 
             self.technical_threads[side][-1].start()
+            # self.technical_workers[side][-1].run()
 
     def finish_technical_loading_threads(self, side):
         def func():
@@ -2165,6 +2174,14 @@ class API:
             self.ui.hide_load_sheet_progressbar()
             if self.ui.checkBox_suggested_defects.isChecked():
                 self.load_suggestions()
+
+
+        # self.thechnicals_backend['down'].update_pointer(
+        #     (0.2,0.2)
+        # )  # update corespond backend mouse position
+        # self.refresh_thechnical(fp=1)
+        # self.show_pointer_position()
+
 
     # ----------------------------------------------------------------------------------------
     # when next next_coil_btn clicked this function move on next coil id and load it

@@ -7,7 +7,7 @@ import json
 from consts.consts import MOVEMENTS_KEYS, THINKNESS_MAP, COLOR_MAP
 from backend import pathStructure
 from Sheet import Sheet
-
+from backend.Annotation import Annotation
 
 TOP = "TOP"
 BOTTOM="BOTTOM"
@@ -23,6 +23,7 @@ class sheetOverView:
         side: str,
         technical_sheet_shape,
         sheet_grid,
+        dataset_annotation_path,
         actives_camera=(1, 12),
         color_map=COLOR_MAP,
         thickness_map=THINKNESS_MAP,
@@ -40,8 +41,7 @@ class sheetOverView:
         self.oriation = oriation
         self.color_map = color_map
         self.thickness_map = thickness_map
-        self.json_postfix = '_imgProcessing'
-        self.json_format = '.json'
+        self.dataset_annotation_path = dataset_annotation_path
 
         assert self.technical_sheet_shape[0] / self.sheet_grid[0] == int(
             self.technical_sheet_shape[0] / self.sheet_grid[0]
@@ -75,6 +75,7 @@ class sheetOverView:
         self.sheet_img = self.draw_discamera(self.sheet_img, self.actives_camera)
         self.result_img = np.copy(self.sheet_img)
         self.is_fit = False
+        self.labeled_images = []
 
         self.update_line(self.sheet_grid[0])
 
@@ -91,7 +92,7 @@ class sheetOverView:
         self.viewport_size = int(self.single_image_shape[0] / scale) , int(self.single_image_shape[1] / scale)
         self.viewport_pointer_size = int( self.cell_shape[0] / scale) , int( self.cell_shape[1] / scale) #size of rectangle pointer
  
-    def load_custom_images_from_file(self, camera_range:tuple, frame_idx:int, cam_idx:int):
+    def load_custom_images_from_file(self, frame_idx:int, cam_idx:int):
         img_path = pathStructure.sheet_image_path(
                     self.sheet.get_main_path(),
                     self.sheet.get_id(),
@@ -118,17 +119,60 @@ class sheetOverView:
                 img = cv2.imread(img_path_operator, 0)
 
         if img is not None:
-            # if self.show_bboxes:
-            #     img = self.draw_defect_bbox_on_single_image(img, cam_idx, frame_idx)
+            
+            annotation_path  = pathStructure.get_image_annotation_path(self.dataset_annotation_path,
+                                                    self.sheet.get_id(),
+                                                    side = self.side,
+                                                    camera_numbers=cam_idx,
+                                                    n_frame=frame_idx,
+                                                    )
+            
+            print(annotation_path)
+            if os.path.exists(annotation_path):
+                annotation = Annotation()
+                annotation.read(annotation_path)
+                masks = annotation.get_masks()
+                self.labeled_images.append(
+                    {
+                        'camera': cam_idx,
+                        'frame': frame_idx,
+                        'img': img.copy(),
+                        'masks': masks,
+                    }
+                )
+                
 
             if self.single_image_shape is None:
                 self.single_image_shape = img.shape[:2]
 
-            i = cam_idx - camera_range[0]
+            i = cam_idx - self.actives_camera[0]
             j = frame_idx - 1
             self.append_single_image_into_full_image(img, i, j)
         else:
             print(f'Warning: image of camera{cam_idx} and frame{frame_idx} not exist')
+
+    def draw_labels(self, state=True):
+        for label_img in self.labeled_images:
+            img = label_img['img'].copy()
+            
+            if state:
+                masks = label_img['masks']
+                cnts = list( map( lambda x:x.get_mask_contour(), masks) )
+                #layer_label = np.zeros_like(img)
+                img = cv2.drawContours(img, cnts, -1, 255, thickness=3)
+
+                # cv2.addWeighted(img, )
+            
+
+            self.append_single_image_into_full_image(
+                img=img,
+                i = label_img['camera' ] - self.actives_camera[0],
+                j = label_img['frame'] - 1, 
+            )
+
+
+
+
 
     def initsheet_full_image(self) -> np.ndarray :
         """generate an black image of full sheet image (all in one)
@@ -253,7 +297,7 @@ class sheetOverView:
         # start_h = 0
         # end_h = self.technical_sheet_shape[0] - 1
 
-        # x = min(max(x, start_w), end_w - self.viewport_pointer_size[1])
+        # x = min(max(x, start_w), end_imw - self.viewport_pointer_size[1])
         # y = min(max(y, start_h), end_h - self.viewport_pointer_size[0])
 
         self.pt = self.clip_pt((x,y)) #this show top-left corner of viewport pointer

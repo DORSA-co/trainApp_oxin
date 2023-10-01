@@ -23,6 +23,7 @@ CLASS_KEY = 'class'
 LINE_THICKNESS_KEY = 'line_thickness'
 POINT_THICKNESS_KEY = 'point_thickness'
 NAME = 'name'
+IMAGE_SHAPE = (1792, 1024)
 
 
 #______________________________________________________________________________________________________________________________________________
@@ -49,7 +50,7 @@ class Mask():
     #______________________________________________________________________________________________________________________________________________
     def draw_mask(self):
         mask = np.zeros( self.refrenced_shape, dtype=np.uint8)
-        pts = np.array( pts ).astype(np.int32)
+        pts = np.array( self.pts ).astype(np.int32)
         pts = pts.reshape((-1,2,1)) #reshape to opencv contour shape
         return cv2.drawContours(mask, [pts], 0, color=255, thickness=-1)
 
@@ -78,7 +79,10 @@ class Mask():
         return self.pts
 
 
-
+    def get_mask_contour(self,):
+        pts = np.array( self.pts ).astype(np.int32)
+        pts = pts.reshape((-1,2,1)) #reshape to opencv contour shape
+        return pts
 
 
 
@@ -212,6 +216,7 @@ class Annotation():
     def read(self, path):
         with open(path) as jfile:
             file = json.load(jfile)
+            self.annotation = file
         return file
         
 
@@ -306,7 +311,7 @@ class Annotation():
         return cv2.imread( self.get_fullpath() )
 
     def get_img_size(self):
-        return tuple( self.annotation['size'] )
+        return tuple( self.annotation.get('size', IMAGE_SHAPE) )
 
     def get_classes(self):
         assert self.have_object(), "There is no object"
@@ -317,8 +322,8 @@ class Annotation():
         return np.array(classes)
     
     def get_masks(self):
-        assert self.have_object(), "There is no object"
-        assert self.is_lbl_mask(), "Label type is not mask"
+        # assert self.have_object(), "There is no object"
+        # assert self.is_lbl_mask(), "Label type is not mask"
 
         labels = self.annotation[OBJ_MASKS_KEY]
         mask_list = []
@@ -374,8 +379,8 @@ class Annotation():
 
 
     def convert_mask_to_bbox(self):
-        assert self.is_lbl_mask() , 'Your annotation is BBOX and cannot be converted.'
-        assert self.have_object() , 'Your annotation dose not contatin an object'
+        # assert self.is_lbl_mask() , 'Your annotation is BBOX and cannot be converted.'
+        #assert self.have_object() , 'Your annotation dose not contatin an object'
         bboxes = list()
 
         for mask in self.get_masks():
