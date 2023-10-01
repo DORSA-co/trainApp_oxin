@@ -175,19 +175,19 @@ class Evaluation_worker(QObject):
             round(f1, 2),
         ]
         self.pipline_obj.set_binary_model(
-            key=pipelines.MODEL_LOSS, value=str(round(loss, 3))
+            key=pipelines.MODEL_LOSS, value=int(round(loss, 3))
         )
         self.pipline_obj.set_binary_model(
-            key=pipelines.MODEL_ACCURACY, value=str(round(accuracy, 2))
+            key=pipelines.MODEL_ACCURACY, value=int(round(accuracy, 2))
         )
         self.pipline_obj.set_binary_model(
-            key=pipelines.MODEL_PRECISION, value=str(round(precision, 2))
+            key=pipelines.MODEL_PRECISION, value=int(round(precision, 2))
         )
         self.pipline_obj.set_binary_model(
-            key=pipelines.MODEL_RECALL, value=str(round(recall, 2))
+            key=pipelines.MODEL_RECALL, value=int(round(recall, 2))
         )
         self.pipline_obj.set_binary_model(
-            key=pipelines.MODEL_F1, value=str(round(f1, 2))
+            key=pipelines.MODEL_F1, value=int(round(f1, 2))
         )
         self.pgb_bar_signal.emit(self.binary_evaluation_part)
         yolo_data_path = self.PrepareBinaryOutputForYolo(
@@ -204,16 +204,16 @@ class Evaluation_worker(QObject):
 
         ymetrics = [round(mp, 2), round(mr, 2), round(map50, 2), round(map, 2)]
         self.pipline_obj.set_yolo_model(
-            key=pipelines.MODEL_PRECISION, value=(str(round(mp, 2)))
+            key=pipelines.MODEL_PRECISION, value=(int(round(mp, 2)))
         )
         self.pipline_obj.set_yolo_model(
-            key=pipelines.MODEL_RECALL, value=str(round(mr, 2))
+            key=pipelines.MODEL_RECALL, value=int(round(mr, 2))
         )
         self.pipline_obj.set_yolo_model(
-            key=pipelines.MODEL_MAP05, value=str(round(map50, 2))
+            key=pipelines.MODEL_MAP05, value=int(round(map50, 2))
         )
         self.pipline_obj.set_yolo_model(
-            key=pipelines.MODEL_MAP0595, value=str(round(map, 2))
+            key=pipelines.MODEL_MAP0595, value=int(round(map, 2))
         )
         metrics_info = {"binary": bmetrics, "yolo": ymetrics}
 

@@ -1446,6 +1446,9 @@ class API:
         self.ui.mask_table_widget.clicked.connect(self.select_defect)
 
         # trainig
+        self.ui.b_select_prep.clicked.connect(
+            partial(self.select_binary_pretrain_path)
+        )
         self.ui.b_select_dp.clicked.connect(partial(self.select_binary_dataset))
         self.ui.b_delete_ds.clicked.connect(partial(self.delete_binary_dataset))
         self.ui.b_add_ok.clicked.connect(partial(self.ok_add_binary_ds))
@@ -3383,7 +3386,7 @@ class API:
                 return
 
             # update chart axis given train data
-            self.update_b_chart_axis(b_parms[3])
+            self.update_b_chart_axis(b_parms[4]+b_parms[7])
 
             self.bmodel_train_thread = sQThread()
             # Step 3: Create a worker object
@@ -3837,6 +3840,16 @@ class API:
     def update_save_all_progressbar(self):
         self.ui.save_all_progressBar.setValue(self.ui.save_all_progressBar.value() + 1)
 
+    def select_binary_pretrain_path(self):
+        path = self.ds.weights_path
+        dname = QFileDialog.getExistingDirectory(
+            self.ui, "Select a directory", path
+        )
+
+        if dname == "":
+            return
+        self.ui.b_prep.setText(dname)
+
     def select_binary_dataset(self, page="train"):
         self.ui.create_ds_selection_dialog()
 
@@ -3954,7 +3967,7 @@ class API:
 
     def select_localization_pretrain_path(self):
         self.l_select_pre_dialog = QFileDialog()
-        path = "./"
+        path = self.ds.weights_path
         filter = "h5(*.h5)"
         dname = QFileDialog.getOpenFileName(
             self.l_select_pre_dialog, "open", path, filter

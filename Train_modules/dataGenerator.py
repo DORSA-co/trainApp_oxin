@@ -50,11 +50,13 @@ def create_binary_symlink(paths, binary_folder, defect_folder, perfect_folder):
     for path in paths:
         path = os.path.join(path, binary_folder)
         absPath = os.path.abspath(path)
-        defect_path = os.path.join(absPath, defect_folder+'/*')
-        os.system('ln -s ' + defect_path + ' ' + symlink_defect_path)
+        defect_path = os.path.join(absPath, defect_folder)
+        for i in os.listdir(defect_path):
+            os.system('ln -s ' + os.path.join(defect_path, i) + ' ' + symlink_defect_path)
 
-        perfect_path = os.path.join(absPath, perfect_folder+'/*')
-        os.system('ln -s ' + perfect_path + ' ' + symlink_perfect_path)
+        perfect_path = os.path.join(absPath, perfect_folder)
+        for i in os.listdir(perfect_path):
+            os.system('ln -s ' + os.path.join(perfect_path, i) + ' ' + symlink_perfect_path)
 
 
 def get_binarygenerator(paths, target_size, defective_folder, perfect_folder, aug_dict, api_obj, batch_size=8, validation_split=0.2):

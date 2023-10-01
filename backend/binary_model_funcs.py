@@ -16,7 +16,7 @@ from random_split import *
 
 
 SHAMSI_DATE = False
-
+DEBUG = False
 
 # binary table headers
 binary_headers = [
@@ -1342,8 +1342,8 @@ class Binary_model_train_worker(sQObject):
                     "Splitting dataset {}".format(i + 1),
                 )
                 for i in imgs:
-                    img = Utils.read_image(os.path.join(s_defect, i), color="color")
-                    mask = Utils.read_image(os.path.join(s_mask, i), color="color")
+                    img = Utils.read_image(os.path.join(s_defect, i))
+                    mask = Utils.read_image(os.path.join(s_mask, i))
                     if img is None or mask is None:
                         continue
                     crops, _, _ = get_crops_random(img, mask, size)
@@ -1360,10 +1360,10 @@ class Binary_model_train_worker(sQObject):
                 else:
                     n_split = 0
                 for i in imgs:
-                    img = Utils.read_image(os.path.join(s_perfect, i), color="color")
+                    img = Utils.read_image(os.path.join(s_perfect, i))
                     if img is None:
                         continue
-                    crops = get_crops_no_defect(img, n_split, size)
+                    crops = get_crops_no_defect3(img, size)
                     self.ds_obj.save_to_perfect_splitted(
                         crops, d_perfect, i.split(".")[0]
                     )
@@ -1374,10 +1374,11 @@ class Binary_model_train_worker(sQObject):
                 )
 
     def train_model(self):
-        if self.b_parms[2]:
-            self.split_binary_dataset(self.b_parms[-1], self.b_parms[1])
+        if not DEBUG :
+            if self.b_parms[3]:
+                self.split_binary_dataset(self.b_parms[-1], self.b_parms[2])
 
-        self.reset_progressbar.emit(self.b_parms[3], "Training")
+        self.reset_progressbar.emit(self.b_parms[4] + self.b_parms[7], "Training")
         bmodel_records = train_api.train_binary(
             *self.b_parms, self.api_obj.ds.weights_binary_path, self.api_obj
         )
@@ -1423,7 +1424,8 @@ class Binary_model_train_worker(sQObject):
 
     def save_b_model(self, model, path, epoch):
         try:
-            model.save(path)
+            model.save_weights(os.path.join(path, 'epoch_{}.h5'.format(epoch)))
+            model.save(os.path.join(path, 'epoch_{}'.format(epoch)))
             self.ui_obj.logger.create_new_log(
                 message=texts.MESSEGES["SAVE_BMODEL_EPOCH"]["en"].format(epoch)
             )

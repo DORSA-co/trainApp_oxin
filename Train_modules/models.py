@@ -8,6 +8,8 @@ from tensorflow.keras.models import *
 from tensorflow.keras.layers import *
 from tensorflow.keras.optimizers import *
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from tensorflow.keras.models import load_model
+
 
 # from tensorflow.keras import backend as keras
 try:
@@ -583,18 +585,13 @@ def resnet_cnn(
 
     try:
         base_model = tf.keras.applications.ResNet50V2(
-            include_top=False, weights=None, input_shape=input_size
-        )
-        base_model.load_weights(
-            "models/binary/resnet_weights_tf_dim_ordering_tf_kernels_notop.h5"
-        )
-    except:
-
-        base_model = tf.keras.applications.ResNet50V2(
             include_top=False, weights="imagenet", input_shape=input_size
         )
-
-
+    except Exception as e:
+        print(e)
+        base_model = tf.keras.applications.ResNet50V2(
+            include_top=False, weights=None, input_shape=input_size
+        )
 
     base_model.trainable = False
 
@@ -616,7 +613,9 @@ def resnet_cnn(
     model = tf.keras.Model(inpt, out)
     # --------------------------------------------
     if weights is not None:
-        model.load_weights(weights)
+        pretrain_model = load_model(weights)
+        weights = pretrain_model.get_weights()
+        model.set_weights(weights)
     # --------------------------------------------
     if fine_tune_layer > 0:
         base_model = model.layers[4]
@@ -668,14 +667,12 @@ def xception_cnn(
 
     try:
         base_model = tf.keras.applications.Xception(
-            include_top=False, weights=None, input_shape=input_size
-        )
-        base_model.load_weights(
-            "/mnt/782F28BD242E495A/models/binary/xception_weights_tf_dim_ordering_tf_kernels_notop.h5"
-        )
-    except:
-        base_model = tf.keras.applications.Xception(
             include_top=False, weights="imagenet", input_shape=input_size
+        )
+    except Exception as e:
+        print(e)
+        base_model = tf.keras.applications.Xception(
+            include_top=False, weights=None, input_shape=input_size
         )
 
     base_model.trainable = False
@@ -700,7 +697,9 @@ def xception_cnn(
 
     # --------------------------------------------
     if weights is not None:
-        model.load_weights(weights)
+        pretrain_model = load_model(weights)
+        weights = pretrain_model.get_weights()
+        model.set_weights(weights)
     # --------------------------------------------
     if fine_tune_layer > 0:
         base_model = model.layers[4]

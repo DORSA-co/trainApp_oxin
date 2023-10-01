@@ -36,6 +36,7 @@ class CustomCallback(keras.callbacks.Callback):
             # Update bianry train charts
             self.api_obj.bmodel_train_worker.assign_new_value_to_b_chart(last_epoch=epoch, logs=logs)
 
+
             # Save model weights to given address
             self.api_obj.bmodel_train_worker.save_b_model(model=self.model, path=self.out_path, epoch=epoch)
 
@@ -55,4 +56,7 @@ class CustomCallback(keras.callbacks.Callback):
         # values = list(logs.values())
         # #print("\nEnd epoch {} of training; got log keys: {} got log values {}\n".format(epoch, keys, values))
 
-
+    def on_epoch_begin(self, epoch, logs=None):
+        
+        keys = list(logs.keys())
+        print("Start epoch {} of training; got log keys: {}".format(epoch, keys))

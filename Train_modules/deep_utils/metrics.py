@@ -14,7 +14,7 @@ class BIN_Metrics():
     :param threshold: Threshold by witch convert predicted label to zero or one. Defaults to 0.5, defaults to 0.5.
     :type threshold: float, optional
     """
-    def __init__(self, threshold=0.5): 
+    def __init__(self, threshold=0.8): 
         """Constructor method.
         """ 
         # Set threshold
@@ -118,6 +118,8 @@ class BIN_Metrics():
         """
         tp = self.True_Pos(y_true, y_pred)
         fn = self.False_Neg(y_true, y_pred)
+        print(fn, tp,'*'*80)
+        return 10
         return tf.reduce_mean(tf.math.divide_no_nan(tp, (tp + fn)))
 
     def precision(self, y_true, y_pred):

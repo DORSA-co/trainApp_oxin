@@ -3,6 +3,7 @@ __pycache__/
 app_logs/
 .venv10/
 models/
+servstal_models/
 Train_modules/deep_utils/__pycache__/*.*
 Train_modules/deep_utils/__pycache__
 Train_modules/deep_utils/__pycache__/*.*.*
@@ -13,3 +14,7 @@ oxin_image_grabber_imgProcessing/
 default_dataset/
 SymLink/
 .cometml-runs/
+binary_epoch/
+binary_epoch/
+servstal_models/
+servstal_models_good/
