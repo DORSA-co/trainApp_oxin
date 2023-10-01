@@ -1,0 +1,6 @@
+[Desktop Entry]
+name=Test
+Comment = script
+Exec = /Sense_Softwares_Dev/trainApp_oxin/run_train.sh
+Terminal = True
+Type = Application
