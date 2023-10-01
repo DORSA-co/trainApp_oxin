@@ -666,7 +666,6 @@ def xception_cnn(
     preprocess_input = tf.keras.applications.xception.preprocess_input
 
     try:
-        a = 2/0
         base_model = tf.keras.applications.Xception(
             include_top=False, weights="imagenet", input_shape=input_size
         )

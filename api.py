@@ -113,7 +113,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = True
+DEBUG = False
 
 # down_side_technical     ,   up_side_technical
 class API:
@@ -3386,7 +3386,7 @@ class API:
                 return
 
             # update chart axis given train data
-            self.update_b_chart_axis(b_parms[4])
+            self.update_b_chart_axis(b_parms[4]+b_parms[7])
 
             self.bmodel_train_thread = sQThread()
             # Step 3: Create a worker object

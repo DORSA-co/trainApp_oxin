@@ -61,27 +61,27 @@ if DEBUG:
     tf.config.experimental.set_memory_growth(gpu[0], True)
 
 data_gen_args = dict(
-    rotation_range=0.2,
+    rotation_range=0.4,
     width_shift_range=0.05,
     height_shift_range=0.05,
     shear_range=0.1,
     zoom_range=0.1,
     horizontal_flip=True,
-    brightness_range=[0.6, 1],
+    brightness_range=[0.1, 1],
     vertical_flip=True,
     fill_mode="nearest",
 )
 
 
-data_gen_args_2 = dict(
-    rotation_range=15,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    shear_range=0.05,
-    zoom_range=0.1,
-    horizontal_flip=True,
-    fill_mode="constant",
-)
+# data_gen_args_2 = dict(
+#     rotation_range=15,
+#     width_shift_range=0.1,
+#     height_shift_range=0.1,
+#     shear_range=0.05,
+#     zoom_range=0.1,
+#     horizontal_flip=True,
+#     fill_mode="constant",
+# )
 
 
 def train_binary(
@@ -329,10 +329,11 @@ def train_binary(
                     binary_input_size + (3,),
                     learning_rate=binary_lr,
                     num_class=1,
-                    mode=models.CATEGORICAL,
-                    fine_tune_layer=120,
-                    weights=os.path.join(weights_path, 'epoch_{}'.format(binary_epoch)) if binary_epoch>0 else binary_pretrain_path,
+                    mode=models.BINARY,
+                    fine_tune_layer=-1,
+                    weights=os.path.join(weights_path, 'epoch_{}'.format(int(binary_epoch))) if binary_epoch>0 else binary_pretrain_path,
                 )
+
                 api_obj.ui.logger.create_new_log(
                     message=texts.MESSEGES["CREATE_FTMODEL"]["en"].format(
                         binary_algorithm_name
@@ -363,7 +364,7 @@ def train_binary(
                     binary_input_size + (3,),
                     learning_rate=binary_lr,
                     num_class=1,
-                    mode=models.CATEGORICAL,
+                    mode=models.BINARY,
                     fine_tune_layer=120,
                     weights=os.path.join(weights_path, 'epoch_{}'.format(binary_epoch)),
                 )
@@ -415,11 +416,11 @@ def train_binary(
             history = model.fit(
                 trainGen,
                 steps_per_epoch=spe,
-                epochs=binary_te,
+                epochs=binary_te + binary_epoch,
                 callbacks=[my_callback],
                 validation_data=testGen,
                 validation_steps=vspe,
-                initial_epoch=0,
+                initial_epoch=binary_epoch,
             )
             api_obj.ui.logger.create_new_log(
                 message=texts.MESSEGES["FIT_FTMODEL"]["en"]

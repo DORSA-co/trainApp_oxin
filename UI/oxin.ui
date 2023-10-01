@@ -2488,7 +2488,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>0</number>
+                         <number>5</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -25015,13 +25015,13 @@ QPushButton:hover {
                                 </property>
                                 <property name="minimumSize">
                                  <size>
-                                  <width>350</width>
+                                  <width>280</width>
                                   <height>50</height>
                                  </size>
                                 </property>
                                 <property name="maximumSize">
                                  <size>
-                                  <width>320</width>
+                                  <width>280</width>
                                   <height>16777215</height>
                                  </size>
                                 </property>
@@ -25039,12 +25039,6 @@ QPushButton:hover {
                                      <horstretch>0</horstretch>
                                      <verstretch>0</verstretch>
                                     </sizepolicy>
-                                   </property>
-                                   <property name="minimumSize">
-                                    <size>
-                                     <width>330</width>
-                                     <height>50</height>
-                                    </size>
                                    </property>
                                    <property name="frameShape">
                                     <enum>QFrame::StyledPanel</enum>
@@ -25851,6 +25845,9 @@ QPushButton:hover {
                                  <enum>QFrame::Raised</enum>
                                 </property>
                                 <layout class="QVBoxLayout" name="verticalLayout_106">
+                                 <property name="spacing">
+                                  <number>0</number>
+                                 </property>
                                  <property name="leftMargin">
                                   <number>9</number>
                                  </property>

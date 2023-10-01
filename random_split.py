@@ -337,6 +337,21 @@ def get_crops_no_defect2(img, n_split, size):
 
     return img_crops
 
+def get_crops_no_defect3(img, size):
+    height, width = img.shape
+    window_height, window_width = size
+
+    num_windows_height = height // window_height
+    num_windows_width = width // window_width
+
+    windows = img.reshape(
+        num_windows_height, window_height, num_windows_width, window_width
+    ).transpose(0, 2, 1, 3)
+
+    windows = windows.reshape(-1, window_height, window_width)
+
+    return windows
+
 
 def main():
     imgFolder = "/home/reyhane/PythonProjects/trainApp_oxin_new/default_dataset/localization/image"
