@@ -1514,6 +1514,14 @@ Titles = {
         "fa": "نمایش عیوب پیشنهادی",
         "en": "Show suggested defects",
     },
+    "show_labels":{
+        "fa": "نمایش برچسب‌ها",
+        "en": "show labels"
+    },
+    "improve_light":{
+        "fa": "بهبود نور",
+        "en": "Improve Light"
+    },
     "loading": {
         "fa": "... در حال بارگذاری",
         "en": "loading ...",
@@ -1946,6 +1954,8 @@ def set_title(self, lang):
     self.label_290.setText(Titles["Thickness Order :"][lang])
 
     self.checkBox_suggested_defects.setText(Titles["show_suggested_defects"][lang])
+    self.show_labels_checkBox.setText(Titles["show_labels"][lang])
+    self.light_checkBox.setText(Titles["improve_light"][lang])
     self.label_229.setText(Titles["loading"][lang])
     self.next_coil_btn.setToolTip(Titles["next_sheet"][lang])
     self.prev_coil_btn.setToolTip(Titles["prev_sheet"][lang])

@@ -1736,6 +1736,10 @@ class API:
             self.change_label_point_thickness
         )
 
+        self.ui.show_labels_checkBox.stateChanged.connect(self.draw_labels)
+        self.ui.light_checkBox.stateChanged.connect(lambda x: self.refresh_thechnical())
+        self.ui.light_slider.valueChanged.connect(lambda x: self.refresh_thechnical())
+
     def change_label_line_thickness(self):
         x = self.ui.line_thickness_slider.value()
         self.label_bakcend["mask"].change_line_thickness(x)
@@ -1885,6 +1889,11 @@ class API:
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
+    def draw_labels(self, state):
+        for side, _ in self.ui.get_technical(name=False).items():
+            self.thechnicals_backend[side].draw_labels(state)
+            self.refresh_thechnical(fp=1)
+
 
     def load_suggestions(self, state=0):
         if self.ui.checkBox_suggested_defects.isChecked():
@@ -2055,14 +2064,17 @@ class API:
             self.ui.load_sheet_progressBar.setMaximum(100)
 
     def technical_zoom_in(self):
+
         current_side = self.current_technical_side
         self.technical_scale = min(self.technical_scale*2, 4)
         for side, _ in self.ui.get_technical(name=False).items():
             self.thechnicals_backend[side].set_zoom_scale(self.technical_scale)
             self.current_technical_side = side
             self.refresh_thechnical(fp=1)
+            
 
         self.current_technical_side = current_side
+        self.refresh_thechnical(fp=1)
 
     def technical_zoom_out(self):
         current_side = self.current_technical_side
@@ -2073,6 +2085,7 @@ class API:
             self.refresh_thechnical(fp=1)
 
         self.current_technical_side = current_side
+        self.refresh_thechnical(fp=1)
 
     def build_sheet_technical(self, sheet):
         try:
@@ -2090,6 +2103,7 @@ class API:
                                                             (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
                                                             (self.sheet.get_nframe(), NCAMERA),
                                                             actives_camera=sheet.get_cameras(),
+                                                            dataset_annotation_path = os.path.join(self.ds.dataset_path, self.ds.annotations_folder)
                                                         )
                 
                 self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=5)
@@ -2139,6 +2153,7 @@ class API:
             self.technical_threads[side][-1].finished.connect(self.technical_threads[side][-1].deleteLater)
 
             self.technical_threads[side][-1].start()
+            # self.technical_workers[side][-1].run()
 
     def finish_technical_loading_threads(self, side):
         def func():
@@ -2165,6 +2180,14 @@ class API:
             self.ui.hide_load_sheet_progressbar()
             if self.ui.checkBox_suggested_defects.isChecked():
                 self.load_suggestions()
+
+
+        # self.thechnicals_backend['down'].update_pointer(
+        #     (0.2,0.2)
+        # )  # update corespond backend mouse position
+        # self.refresh_thechnical(fp=1)
+        # self.show_pointer_position()
+
 
     # ----------------------------------------------------------------------------------------
     # when next next_coil_btn clicked this function move on next coil id and load it
@@ -2261,7 +2284,7 @@ class API:
             self.refresh_thechnical(fp=1)
             self.show_pointer_position()
 
-    def refresh_thechnical(self, fp):
+    def refresh_thechnical(self, fp=1):
         if self.t % fp == 0:
             self.t = 1
             self.thechnicals_backend[
@@ -2269,7 +2292,10 @@ class API:
             ].update_sheet_img()  # update technical image
             img = self.thechnicals_backend[
                 self.current_technical_side
-            ].get_real_img()  # get image of sheet corespond to mouse position
+            ].get_real_img(
+                eq=self.ui.light_checkBox.isChecked(),
+                intensity=self.ui.light_slider.value()
+            )  # get image of sheet corespond to mouse position
             self.ui.set_crop_image(img)  # show image in UI
             self.update_sheet_img(self.current_technical_side)
         else:
@@ -2283,7 +2309,10 @@ class API:
             self.mouse.get_relative_position()
         )
         self.refresh_thechnical(1)
-        real_img = self.thechnicals_backend[self.current_technical_side].get_real_img()
+        real_img = self.thechnicals_backend[self.current_technical_side].get_real_img(
+            eq=self.ui.light_checkBox.isChecked(),
+            intensity=self.ui.light_slider.value()
+        )
         self.ui.set_crop_image(real_img)
         self.ui.set_enabel(self.ui.add_btn_SI, True)
         self.show_pointer_position()

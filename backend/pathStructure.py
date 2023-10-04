@@ -71,7 +71,12 @@ def sheet_image_path_operator(main_path,id, side, camera_numbers, n_frame, forma
     elif 'bot' in side.lower() or 'down' in side.lower():
         return(os.path.join(main_path, year, month, day, str(id),OPERATOR_PATH ,'BOTTOM', str(camera_numbers), str(n_frame) + str(format_img)))
     
-
+def get_image_annotation_path(annotation_path, id, side, camera_numbers, n_frame, annotation_format='.json'):
+    if 'top' in side.lower() or 'up' in side.lower():
+        return(os.path.join(annotation_path, id+'up'+str(camera_numbers)+'_'+str(n_frame)+annotation_format))
+    
+    elif 'bot' in side.lower() or 'down' in side.lower():
+        return(os.path.join(annotation_path, id+'down'+str(camera_numbers)+'_'+str(n_frame)+annotation_format))
 
 
 def sheet_camera_path(main_path,id, side, camera_numbers):

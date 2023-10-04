@@ -29,7 +29,7 @@ class technical_load_sheet_worker(sQObject):
         for frame_idx in range(*self.frame_range):
             for cam_idx in range(*self.camera_range):
                 self.grabber_obj.load_custom_images_from_file(
-                    self.camera_range,
+                    #self.camera_range,
                     frame_idx,
                     cam_idx
                 )
