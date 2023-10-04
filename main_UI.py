@@ -707,9 +707,9 @@ class UI_main_window(QMainWindow, ui):
 
 
         #Update br of image
-        self.btightness_slider.valueChanged.connect(self.update_image_brightess)
-        self.contrast_slider.valueChanged.connect(self.update_image_brightess)
-        self.checkBox_eq_hist.stateChanged.connect(self.equalize_img)
+        self.btightness_slider.valueChanged.connect(lambda: self.show_image_in_label(img=None))
+        self.contrast_slider.valueChanged.connect(lambda: self.show_image_in_label(img=None))
+        self.checkBox_eq_hist.stateChanged.connect(lambda: self.show_image_in_label(img=None))
         
 
 
@@ -1379,7 +1379,7 @@ class UI_main_window(QMainWindow, ui):
 
     def maxmize_minimize(self):
         """Maximize or Minimize window"""
-        self.show_image_in_label()
+        # self.show_image_in_label()
         if self.isMaximized():
             self.showNormal()
         else:
@@ -1997,15 +1997,16 @@ class UI_main_window(QMainWindow, ui):
 
 
 
-    def update_image_brightess(self):
+    def update_image_brightess(self,img):
         br = self.btightness_slider.value()
         cr = self.contrast_slider.value()
-        img=api.get_image()
+        # img=api.get_image()
         img = cv2.convertScaleAbs(img, alpha=br, beta=cr)
-        self.show_image_in_label(img)
+        # self.show_image_in_label(img)
+        return img
 
-    def equalize_img(self):
-        img=api.get_image()
+    def equalize_img(self,img):
+        # img=api.get_image()
         _,_,c = img.shape
         if self.checkBox_eq_hist.isChecked():
             self.last_image=img
@@ -2015,16 +2016,8 @@ class UI_main_window(QMainWindow, ui):
                 img = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
             else:
                 img = cv2.equalizeHist(img)
-            self.show_image_in_label(img)
-
-        else:
-            try:
-                self.show_image_in_label(self.last_image)
-            except:
-                print('error equalize in main')
-                pass
-
-
+            # self.show_image_in_label(img)
+        return img
 
     def show_image_in_label(self, img=None, scale=1, position=(0, 0)):
         """show image in main image label_page with incoming scale and position and enable left buttons
@@ -2032,10 +2025,15 @@ class UI_main_window(QMainWindow, ui):
             scale (int): zoom level
             position : offset of image after zoom
         """
+
         if img is None:
             img = api.get_image()
             if img is None:
                 return
+            
+        img=self.update_image_brightess(img)
+        img = self.equalize_img(img)
+
         self.next_img_label_btn.setEnabled(True)
         self.prev_img_label_btn.setEnabled(True)
         self.zoomIn_btn.setEnabled(True)

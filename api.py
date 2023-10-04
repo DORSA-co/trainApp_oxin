@@ -2848,57 +2848,62 @@ class API:
         mouse_pt = self.mouse.get_relative_position()
 
         if self.ui.get_zoom_type() is None:
-            try:
-                sheet, pos, img_path = self.move_on_list.get_current(
-                    "selected_imgs_for_label"
-                )
-                img = Utils.read_image(img_path, "color")
-                ret = self.label_bakcend[label_type].mouse_event(
-                    mouse_status, mouse_button, mouse_pt
-                )
+            # try:
+            sheet, pos, img_path = self.move_on_list.get_current(
+                "selected_imgs_for_label"
+            )
+            img = Utils.read_image(img_path, "color")
 
-                neighbour_flag = False
+            # img=self.ui.update_image_brightess(img)
+            # img = self.ui.equalize_img(img)
 
-                if ret == "mask":
-                    self.selected_defects = []
-                    neighbour_flag = True
+            ret = self.label_bakcend[label_type].mouse_event(
+                mouse_status, mouse_button, mouse_pt
+            )
 
-                elif ret == "editing":
-                    neighbour_flag = True
+            neighbour_flag = False
 
-                if self.label_bakcend[label_type].is_drawing_finish():
-                    self.label_bakcend[label_type].save("0")
-                    neighbour_flag = True
+            if ret == "mask":
+                self.selected_defects = []
+                neighbour_flag = True
 
-                label_img = self.label_bakcend[label_type].draw(self.selected_defects)
-                # self.ui.update_center_image(img, label_img)
-                img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
-                self.ui.show_image_in_label(img, self.scale, self.position)
-                self.img = img
+            elif ret == "editing":
+                neighbour_flag = True
 
-                labels = self.label_bakcend[label_type].get()
-                self.label_memory.add(img_path, labels, label_type)
-                labels_name = []
-                for label in labels:
-                    labels_name.append(self.defects_name_dict[label[0]])
-                self.ui.show_labels(
-                    labels, labels_name, label_type, self.selected_defects
-                )
+            if self.label_bakcend[label_type].is_drawing_finish():
+                self.label_bakcend[label_type].save("0")
+                neighbour_flag = True
 
-                if len(labels) > 0:
-                    self.ui.yes_defect.setChecked(True)
-                    self.ui.no_defect.setChecked(False)
-                else:
-                    self.ui.yes_defect.setChecked(False)
-                    self.ui.no_defect.setChecked(True)
+            label_img = self.label_bakcend[label_type].draw(self.selected_defects)
+            # self.ui.update_center_image(img, label_img)
+            img = Utils.add_layer_to_img(img, label_img, opacity=0.4, compress=0.5)
 
-                if neighbour_flag:
-                    self.load_neighbour_images(pos)
-                    self.image_save_status[img_path] = False
-            except:
-                self.ui.set_warning(
-                    texts.WARNINGS["NO_IMAGE_LOADED"][self.language], "label", level=2
-                )
+
+            self.ui.show_image_in_label(img, self.scale, self.position)
+
+            labels = self.label_bakcend[label_type].get()
+            self.label_memory.add(img_path, labels, label_type)
+            labels_name = []
+            for label in labels:
+                labels_name.append(self.defects_name_dict[label[0]])
+            self.ui.show_labels(
+                labels, labels_name, label_type, self.selected_defects
+            )
+
+            if len(labels) > 0:
+                self.ui.yes_defect.setChecked(True)
+                self.ui.no_defect.setChecked(False)
+            else:
+                self.ui.yes_defect.setChecked(False)
+                self.ui.no_defect.setChecked(True)
+
+            if neighbour_flag:
+                self.load_neighbour_images(pos)
+                self.image_save_status[img_path] = False
+            # except:
+            #     self.ui.set_warning(
+            #         texts.WARNINGS["NO_IMAGE_LOADED"][self.language], "label", level=2
+            #     )
                 return
 
         elif self.ui.get_zoom_type() != "drag":

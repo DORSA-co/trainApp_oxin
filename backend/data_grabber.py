@@ -81,6 +81,7 @@ class sheetOverView:
         self.update_line(self.sheet_grid[0])
 
         self.select_layer = self.init_img((0, 0, 0))
+        self.labeled_layer = self.init_img((200, 200, 200))
         self.update_pointer((0, 0))
         #-----------------------------------------News
         self.sheet_full_image = self.initsheet_full_image()
@@ -128,7 +129,6 @@ class sheetOverView:
                                                     n_frame=frame_idx,
                                                     )
             
-            print(annotation_path)
             if os.path.exists(annotation_path):
                 annotation = Annotation()
                 annotation.read(annotation_path)
@@ -141,6 +141,8 @@ class sheetOverView:
                         'masks': masks,
                     }
                 )
+
+                self.draw_selected(self.labeled_layer, (cam_idx, frame_idx), color=(200,0,0))
                 
 
             if self.single_image_shape is None:
@@ -338,12 +340,18 @@ class sheetOverView:
         # return cv2.cvtColor( self.res, cv2.COLOR_BGR2RGB)
         self.result_img = self.update_sheet_img()
 
+    # ______________________________________________________________________________________________________________________________
+    #
+    # ______________________________________________________________________________________________________________________________
+
+
     # _____________________________________________________________________________________________________________________________
     #
     # _____________________________________________________________________________________________________________________________
     def update_sheet_img(self):
         # res = self.__add__(self.sheet_layer, self.selec)
         res = cv2.addWeighted(self.sheet_img, 0.5, self.select_layer, 0.5, 1)
+        res = cv2.addWeighted(res, 0.5, self.labeled_layer, 0.5, 1)
         # res = self.__add__(res, self.line_layer)
         return res
 
@@ -518,7 +526,7 @@ class sheetOverView:
     # ______________________________________________________________________________________________________________________________
     #
     # ______________________________________________________________________________________________________________________________
-    def draw_selected(self, img, coordinate):
+    def draw_selected(self, img, coordinate, color=None):
         i, j = coordinate
         i-=1
         j-=1
@@ -533,13 +541,16 @@ class sheetOverView:
             xmax = (i + 1) * self.cell_shape[1]
             ymin = j * self.cell_shape[0]
             ymax = (j + 1) * self.cell_shape[0]
+        
+        if color is None:
+            color = self.__rgb2bgr__(self.color_map["select"])
 
         # select_img = np.copy(img)
         img = cv2.rectangle(
             img,
             (xmin, ymin),
             (xmax, ymax),
-            self.__rgb2bgr__(self.color_map["select"]),
+            color,
             thickness=-1,
         )
 
