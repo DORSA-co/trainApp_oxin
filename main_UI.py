@@ -2422,10 +2422,19 @@ class UI_main_window(QMainWindow, ui):
             binary_pretrain_path = self.b_prep.toPlainText()
             if not binary_pretrain_path:
                 binary_pretrain_path = None
-            binary_input_size = tuple(
-                (self.input_size1.value(), self.input_size1.value())
-            )
+
             binary_input_type = self.input_type_split.isChecked()
+
+            if binary_input_type:
+                binary_input_size = tuple(
+                    (self.input_size1.value(), self.input_size1.value())
+                )
+
+            else:
+                binary_input_size = tuple(
+                    (self.input_size1.value(), self.input_size2.value())
+                )
+
             binary_epoch = int(float(self.b_epochs.text()))
             binary_batch = int(float(self.b_batch.text()))
             binary_lr = float(self.b_lr.text())
@@ -2452,6 +2461,8 @@ class UI_main_window(QMainWindow, ui):
                 return []
             pattern = r"[0-9]+. "
             binary_dp = [s.rstrip() for s in re.split(pattern, text)[1:]]
+
+
 
             return (
                 binary_algorithm_name,

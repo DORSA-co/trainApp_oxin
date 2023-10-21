@@ -678,6 +678,7 @@ def xception_cnn(
     base_model.trainable = False
 
     inpt = tf.keras.Input(shape=(input_size[0],input_size[1],1))
+    print(input_size)
 
     inpt2 = tf.keras.layers.Concatenate()([inpt]*3)
 
@@ -691,21 +692,40 @@ def xception_cnn(
     x = tf.keras.layers.GlobalAveragePooling2D()(out_base)
     x = tf.keras.layers.Dropout(0.2)(x)
     x = tf.keras.layers.Dense(512, activation="relu")(x)
+    x = tf.keras.layers.Dropout(0.2)(x)
     x = tf.keras.layers.Dense(256, activation="relu")(x)
     out = tf.keras.layers.Dense(num_class, activation=__activation__[mode])(x)
     model = tf.keras.Model(inpt, out)
 
     # --------------------------------------------
     if weights is not None:
-        pretrain_model = load_model(weights)
-        weights = pretrain_model.get_weights()
-        model.set_weights(weights)
+        # pretrain_model = load_model(weights)
+        # weights = pretrain_model.get_weights()
+        # model.set_weights(weights)
+        model.load_weights(weights)
+
+
+    fine_tune_layer=-4
     # --------------------------------------------
     if fine_tune_layer > 0:
         base_model = model.layers[4]
         base_model.trainable = True
         for i in range(fine_tune_layer):
             base_model.layers[i].trainable = False
+
+
+    elif fine_tune_layer<0:
+        fine_tune_layer = abs(fine_tune_layer) 
+        len_model = len(model.layers)
+
+        for i in range(4,len_model-fine_tune_layer):
+
+            model.layers[i].trainable = False
+
+
+
+
+
     # --------------------------------------------
 
     model.compile(
@@ -926,6 +946,7 @@ def efficientnetb2_base_cnn(
 
 
 if __name__ == "__main__":
-    model = resnet_cnn( (255,255,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
+    # model = resnet_cnn( (255,255,3), num_class=5, mode=BINARY, fine_tune_layer=100 )
     # model = efficientnetb2_base_cnn((128, 800, 3), num_class=1, mode=BINARY)
+    model = xception_cnn((256,256,3),fine_tune_layer=1)
     end = True

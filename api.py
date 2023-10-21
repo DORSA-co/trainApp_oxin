@@ -113,7 +113,7 @@ TRUE_COLOR = '#4E9A06'
 FALSE_COLOR = '#A40000'
 
 
-DEBUG = False
+DEBUG = True
 
 # down_side_technical     ,   up_side_technical
 class API:
@@ -918,6 +918,7 @@ class API:
                             piplinename=self.ui.pipline_name.text()
                         )
                         self.refresh_loadDataset_tabs_in_PBT()
+                        
                     else:
                         self.ui.pipline_name_status.setText(
                             texts.ERRORS["pipline_eror"][self.language]
@@ -5166,6 +5167,43 @@ class API:
         """
         pipline.save_json()
 
+
+
+
+
+    def pipline_saveing_new(self):
+        self.pipline_obj
+
+
+        self.evaluation = Evaluation_worker()
+        self.evaluation.set_params(
+            data_path=self.path_list,
+            pipline_obj=self.pipline_OBJ,
+            input_type=self.inputtype,
+            input_size=self.inputsize[0],
+            data_nc=self.classes_num,
+            binary_model=self.b_model,
+            binary_threshold=0.5,
+            yolo_model=self.yolo_model,
+            yolo_conf_thres=0.4,
+            yolo_iou_thres=0.6,
+            yolo_max_det=300,
+        )
+
+        self.evaluation_thread.evaluate()
+
+
+
+        # self.evaluation_thread.started.connect(self.evaluation.evaluate)
+        # self.evaluation.finished.connect(self.evaluation_thread.quit)
+        # self.evaluation.finished.connect(self.evaluation.deleteLater)
+        # self.evaluation_thread.finished.connect(self.evaluation_thread.deleteLater)
+        # self.evaluation.progress.connect(self.evaluation_ui_update)
+        # self.evaluation.pgb_bar_signal.connect(self.set_signal_from_eval/uate_thread)
+        self.evaluation.pipline_signal.connect(self.pipline_saveing)
+
+
+
     def set_signal_from_evaluate_thread(self, percentage):
         """this function used to update progressbar percentage
 
@@ -5221,6 +5259,8 @@ class API:
         self.evaluation.progress.connect(self.evaluation_ui_update)
         self.evaluation.pgb_bar_signal.connect(self.set_signal_from_evaluate_thread)
         self.evaluation.pipline_signal.connect(self.pipline_saveing)
+
+        # self.BTN_apply_of_binary_classifaction_in_PBT_page.clicked.connect(self.pipline_saveing_new)
         
 
         if DEBUG:
