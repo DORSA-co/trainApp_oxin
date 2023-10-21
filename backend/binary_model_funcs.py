@@ -16,7 +16,7 @@ from random_split import *
 
 
 SHAMSI_DATE = False
-DEBUG = False
+DEBUG = True
 
 # binary table headers
 binary_headers = [
@@ -1315,6 +1315,8 @@ class Binary_model_train_worker(sQObject):
         self.ds_obj = ds_obj
 
     def split_binary_dataset(self, paths, size):
+        print('milad'*1000)
+
         for i, path in enumerate(paths):
             if self.ds_obj.check_binary_dataset(path):
                 self.ds_obj.create_split_folder(path)
@@ -1342,8 +1344,8 @@ class Binary_model_train_worker(sQObject):
                     "Splitting dataset {}".format(i + 1),
                 )
                 for i in imgs:
-                    img = Utils.read_image(os.path.join(s_defect, i))
-                    mask = Utils.read_image(os.path.join(s_mask, i))
+                    img = cv2.imread(os.path.join(s_defect, i), 0)
+                    mask = cv2.imread(os.path.join(s_mask, i), 0)
                     if img is None or mask is None:
                         continue
                     crops, _, _ = get_crops_random(img, mask, size)
@@ -1360,7 +1362,8 @@ class Binary_model_train_worker(sQObject):
                 else:
                     n_split = 0
                 for i in imgs:
-                    img = Utils.read_image(os.path.join(s_perfect, i))
+                    # img = Utils.read_image(os.path.join(s_perfect, i))
+                    img = cv2.imread(os.path.join(s_perfect, i), 0)
                     if img is None:
                         continue
                     crops = get_crops_no_defect3(img, size)
@@ -1374,9 +1377,9 @@ class Binary_model_train_worker(sQObject):
                 )
 
     def train_model(self):
-        if not DEBUG :
-            if self.b_parms[3]:
-                self.split_binary_dataset(self.b_parms[-1], self.b_parms[2])
+        # if not DEBUG :
+        #     if self.b_parms[3]:
+        #         self.split_binary_dataset(self.b_parms[-1], self.b_parms[2])
 
         self.reset_progressbar.emit(self.b_parms[4] + self.b_parms[7], "Training")
         bmodel_records = train_api.train_binary(

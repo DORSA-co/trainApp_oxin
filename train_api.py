@@ -174,6 +174,9 @@ def train_binary(
     # Get train and test generators
     try:
         if not binary_input_type:
+
+            
+
             trainGen, testGen = dataGenerator.get_binarygenerator(
                 binary_dp,
                 binary_input_size,

@@ -110,7 +110,7 @@ class Dataset:
             self.localization_path, self.localization_folder_annotations
         )
         self.weights_path = os.path.join(self.dataset_path, self.weights)
-        self.weights_binary_path = os.path.join(self.weights_path, self.weights_binary)
+        self.weights_binary_path = os.path.join(os.getcwd() , self.weights_path, self.weights_binary)
         self.weights_localization_path = os.path.join(
             self.weights_path, self.weights_localization
         )
@@ -331,6 +331,7 @@ class Dataset:
                 os.remove(path)
 
     def save_to_perfect_splitted(self, crops, path="", pos="", name=""):
+        print('milad'*1000)
         if path == "":
             path = self.perfect_splitted_path
         if pos != "":

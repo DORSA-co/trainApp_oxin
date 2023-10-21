@@ -337,7 +337,18 @@ def get_crops_no_defect2(img, n_split, size):
 
     return img_crops
 
+def ImageResize(img, dim):
+    fx, fy = get_resize_ratio(img.shape, dim)
+    return cv2.resize(img, dsize=(0, 0), fx=fx, fy=fy)
+
+def get_resize_ratio(shape, dim):
+    fx = int(np.floor(shape[1] / dim[1]) * dim[1]) / shape[1]
+    fy = int(np.floor(shape[0] / dim[0]) * dim[0]) / shape[0]
+    return fx, fy
+
 def get_crops_no_defect3(img, size):
+    img = ImageResize(img, size)
+
     height, width = img.shape
     window_height, window_width = size
 

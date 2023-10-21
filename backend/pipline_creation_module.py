@@ -121,6 +121,7 @@ class ModelsCreation_worker(QObject):
                     model_type="binary",
                 )
                 # send signal for updataing progress bar
+                # print('weights_path'*8,weights_path)
                 self.model_creation_signal.emit(
                     1,
                     True,
