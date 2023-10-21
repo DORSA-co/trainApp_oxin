@@ -2,14 +2,14 @@
     "basic": {
         "dataset_name": "default_dataset",
         "date_created": "2023/09/07",
-        "date_modify": "2023-10-04-16-11-04",
+        "date_modify": "2023-10-12-12-46-30",
         "path": "default_dataset",
         "user_id": 0,
         "user_name": "Default"
     },
     "binary": {
-        "count_defect": 18,
-        "count_perfect": 61
+        "count_defect": 40,
+        "count_perfect": 53
     },
     "classification": {
         "0": [
@@ -50,8 +50,17 @@
             "AXM47817Aup1_4.png",
             "AXM47817Aup8_5.png",
             "AXM47817Aup11_1.png",
-            "AXM47817Aup11_5.png"
+            "AXM47817Aup11_5.png",
+            "AXM49372Aup5_26.png",
+            "AXM49397Aup4_43.png",
+            "AXM49397Aup3_43.png",
+            "AXM49397Aup2_43.png",
+            "AXM49397Aup3_55.png",
+            "AXM49397Aup2_55.png"
         ],
-        "125": []
+        "125": [
+            "ASA48981Bup4_15.png",
+            "ASA48981Bup4_16.png"
+        ]
     }
 }

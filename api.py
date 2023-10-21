@@ -1911,7 +1911,7 @@ class API:
             if not self.sheet_imgprocessing_mem[self.sheet.get_id()]:
                 self.reset_suggestion_progressbar(self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe() * 2)
 
-                self.start_suggestion_threads(jsons_main_path=jsons_main_path, n_threads=12)
+                self.start_suggestion_threads(jsons_main_path=jsons_main_path, n_threads=6)
 
             else:
                 self.reset_suggestion_progressbar(self.sheet.get_cameras()[1] * 2 * self.sheet.get_nframe())
@@ -1952,7 +1952,8 @@ class API:
             self.suggestion_workers[-1].finished.connect(self.suggestion_workers[-1].deleteLater)
             self.suggestion_threads[-1].finished.connect(self.suggestion_threads[-1].deleteLater)
 
-            self.suggestion_threads[-1].start()
+        for i in range(n_threads):
+            self.suggestion_threads[i].start()
 
     def finish_suggestion_loading_threads(self):
         self.suggestion_thread_cnt += 1
