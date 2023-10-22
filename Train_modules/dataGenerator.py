@@ -82,7 +82,7 @@ def get_binarygenerator(paths, target_size, defective_folder, perfect_folder, au
     :rtype: tuple
     """
     binary_folder = api_obj.ds.binary_folder
-    create_binary_symlink(paths, binary_folder, defective_folder, perfect_folder)
+    create_binary_symlink(paths, binary_folder, defective_folder, defective_folder)
     path = symlinkPath
 
     # For path generate train and val generator
