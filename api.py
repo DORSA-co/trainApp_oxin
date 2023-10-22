@@ -2048,6 +2048,8 @@ class API:
 
             self.reset_suggestion_progressbar(self.sheet.get_cameras()[1] * self.sheet.get_nframe() * 2)
 
+            self.model_suggestions_nside = 2
+            self.model_suggestions_cnt = 0
             for side, _ in self.ui.get_technical(name=False).items():
                 self.start_load_suggestion_from_model_threads(self.thechnicals_backend[side], n_threads=1)
 
@@ -2091,25 +2093,28 @@ class API:
             self.model_suggestions_workers[side][-1].finished.connect(self.model_suggestions_workers[side][-1].deleteLater)
             self.model_suggestions_threads[side][-1].finished.connect(self.model_suggestions_threads[side][-1].deleteLater)
 
-            # self.model_suggestions_threads[side][-1].start()
-
-            self.model_suggestions_workers[side][-1].run()
+            self.model_suggestions_threads[side][-1].start()
 
     def finish_load_suggestion_from_model_threads(self, side):
         def func():
-            selecteds = self.selected_images_for_label.get_sheet_side_selections(
-                str(self.sheet.get_id()), side
-            )
+            self.model_suggestions_thread_cnt[side] += 1
+            if self.model_suggestions_thread_cnt[side] == self.model_suggestions_nthreads:
+                selecteds = self.selected_images_for_label.get_sheet_side_selections(
+                    str(self.sheet.get_id()), side
+                )
 
-            self.thechnicals_backend[side].update_selected(selecteds)
-            self.thechnicals_backend[side].update_real_imgs()
-            self.current_technical_side = side
-            self.refresh_thechnical(fp=1)
+                self.thechnicals_backend[side].update_selected(selecteds)
+                self.thechnicals_backend[side].update_real_imgs()
+                self.current_technical_side = side
+                self.refresh_thechnical(fp=1)
 
-            self.ui.set_enabel(self.ui.load_coil_btn, True)
-            self.ui.set_enabel(self.ui.next_coil_btn, True)
-            self.ui.set_enabel(self.ui.prev_coil_btn, True)
-            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
+                self.model_suggestions_cnt += 1
+
+            if self.model_suggestions_cnt == self.model_suggestions_nside:
+                self.ui.set_enabel(self.ui.load_coil_btn, True)
+                self.ui.set_enabel(self.ui.next_coil_btn, True)
+                self.ui.set_enabel(self.ui.prev_coil_btn, True)
+                self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
         return func
 
     def update_suggestion_progressbar(self):
@@ -2166,30 +2171,30 @@ class API:
         self.refresh_thechnical(fp=1)
 
     def build_sheet_technical(self, sheet):
-        # try:
-        self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
-        self.ui.set_enabel(self.ui.next_coil_btn, False)
-        self.ui.set_enabel(self.ui.prev_coil_btn, False)
-        self.ui.set_enabel(self.ui.load_sheets_win.load_btn, False)
-        self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
-        self.ui.show_load_sheet_progressbar()
-        self.technical_backend = {}
-        for side, _ in self.ui.get_technical(name=False).items():
-            self.thechnicals_backend[side] = data_grabber.sheetOverView(
-                                                        sheet,
-                                                        side,  # side of sheet that is UO
-                                                        (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
-                                                        (self.sheet.get_nframe(), NCAMERA),
-                                                        actives_camera=sheet.get_cameras(),
-                                                        dataset_annotation_path = os.path.join(self.ds.dataset_path, self.ds.annotations_folder)
-                                                    )
-            
-            self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=1)
+        try:
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
+            self.ui.set_enabel(self.ui.next_coil_btn, False)
+            self.ui.set_enabel(self.ui.prev_coil_btn, False)
+            self.ui.set_enabel(self.ui.load_sheets_win.load_btn, False)
+            self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
+            self.ui.show_load_sheet_progressbar()
+            self.technical_backend = {}
+            for side, _ in self.ui.get_technical(name=False).items():
+                self.thechnicals_backend[side] = data_grabber.sheetOverView(
+                                                            sheet,
+                                                            side,  # side of sheet that is UO
+                                                            (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
+                                                            (self.sheet.get_nframe(), NCAMERA),
+                                                            actives_camera=sheet.get_cameras(),
+                                                            dataset_annotation_path = os.path.join(self.ds.dataset_path, self.ds.annotations_folder)
+                                                        )
+                
+                self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=1)
 
-        # except Exception as e:
-        #     print('*'*20)
-        #     print(e)
-        #     print('*'*20)
+        except Exception as e:
+            print('*'*20)
+            print(e)
+            print('*'*20)
 
     def start_technical_loading_threads(self, technical_obj: data_grabber.sheetOverView, n_threads: int):
         side  = technical_obj.get_side()
