@@ -1373,6 +1373,7 @@ class UI_main_window(QMainWindow, ui):
                     api.disconnect_plc()
                 except:
                     print('Error close plc')
+                api.delete_unwanted_files()
                 self.flag_close_win = True
                 self.close()
                 sys.exit()

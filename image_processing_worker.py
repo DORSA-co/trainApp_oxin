@@ -79,3 +79,21 @@ class update_defects_worker(sQObject):
                 self.update_progressbar_update_defects.emit()
         self.finished.emit()
 
+
+class model_suggestions_worker(sQObject):
+    finished = sSignal()
+    update_progressbar_model_suggestions = sSignal()
+
+    def __init__(self, grabber_obj, n_cameras, n_frames) -> None:
+        super(model_suggestions_worker, self).__init__()
+
+        self.grabber_obj = grabber_obj
+        self.n_cameras = n_cameras
+        self.n_frames = n_frames
+
+    def run(self):
+        for frame_idx in range(*self.n_frames):
+            for cam_idx in range(*self.n_cameras):
+                self.grabber_obj.update_defect_from_model(cam_idx, frame_idx)
+                self.update_progressbar_model_suggestions.emit()
+        self.finished.emit()

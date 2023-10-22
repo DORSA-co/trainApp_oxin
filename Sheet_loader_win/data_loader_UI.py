@@ -205,7 +205,7 @@ class data_loader(QMainWindow, ui):
         text = ''
         for i in range(self.tableWidget_dataset.rowCount()):
             if self.tableWidget_dataset.item(i, 0).checkState() == Qt.CheckState.Checked:
-                if (not os.path.isdir(self.table_sheets[i].get_path())) and (not os.path.isdir(os.path.join(self.table_sheets[i].get_path(),OPERATOR_PATH))):
+                if (not os.path.isdir(self.table_sheets[i].get_path())) and (not os.path.isdir(os.path.join(self.table_sheets[i].get_path(),OPERATOR_PATH))) or self.table_sheets[i].get_nframe()==0:
                     text += texts.ERRORS['sheet_not_exist'][self.language].format(self.table_sheets[i].get_id())
                     text += '\n'
                     exist = True

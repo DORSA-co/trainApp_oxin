@@ -12,6 +12,7 @@ from stat import FILE_ATTRIBUTE_NORMAL
 import sys
 from ast import Try
 import matplotlib
+import shutil
 
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QFileDialog
@@ -82,6 +83,7 @@ from PySide6.QtWidgets import QVBoxLayout
 import matplotlib.pyplot as plt
 # from tensorflow.keras.metrics import Accuracy, Precision, Recall
 from Train_modules.deep_utils import metrics
+from Train_modules.dataGenerator import symlinkMainPath
 from backend import pipelines
 import tensorflow as tf
 from image_splitter import ImageCrops
@@ -455,7 +457,10 @@ class API:
         self.update_defect_threads = {}
         self.update_defect_workers = {}
         self.update_defect_thread_cnt = {}
-        
+
+        self.model_suggestions_threads = {}
+        self.model_suggestions_workers = {}
+        self.model_suggestions_thread_cnt = {}
 
         #milad
         self.baselines =None
@@ -1496,7 +1501,7 @@ class API:
         )
         self.ui.live_tabWidget.currentChanged.connect(partial(self.change_live_type))
         self.ui.checkBox_suggested_defects.stateChanged.connect(
-            partial(self.load_suggestions)
+            partial(self.load_suggestions_from_model)
         )
 
         # binary-model history
@@ -1833,9 +1838,9 @@ class API:
             )
             return
         self.move_on_list.add(sheets_id, "sheets_id")
-        for sheet_id in sheets_id:
-            if sheet_id not in self.sheet_imgprocessing_mem.keys():
-                self.sheet_imgprocessing_mem[sheet_id] = False
+        # for sheet_id in sheets_id:
+        #     if sheet_id not in self.sheet_imgprocessing_mem.keys():
+        #         self.sheet_imgprocessing_mem[sheet_id] = False
         self.selected_images_for_label.clear()
         self.ui.clear_table()
         # self.ui.load_sheets_win.close()
@@ -1894,7 +1899,6 @@ class API:
         for side, _ in self.ui.get_technical(name=False).items():
             self.thechnicals_backend[side].draw_labels(state)
             self.refresh_thechnical(fp=1)
-
 
     def load_suggestions(self, state=0):
         if self.ui.checkBox_suggested_defects.isChecked():
@@ -1966,7 +1970,6 @@ class API:
     def update_technical_with_suggestions(self):
         # loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', self.language])
         for side, _ in self.ui.get_technical(name=False).items():
-            self.thechnicals_backend[side].set_show_bboxes()
             # self.thechnicals_backend[side].update_defect()
             self.start_update_defects_threads(self.thechnicals_backend[side], n_threads=1)
             # selecteds = self.selected_images_for_label.get_sheet_side_selections(
@@ -2020,6 +2023,79 @@ class API:
             self.update_defect_threads[side][-1].start()
 
     def finish_update_defects_threads(self, side):
+        def func():
+            selecteds = self.selected_images_for_label.get_sheet_side_selections(
+                str(self.sheet.get_id()), side
+            )
+
+            self.thechnicals_backend[side].update_selected(selecteds)
+            self.thechnicals_backend[side].update_real_imgs()
+            self.current_technical_side = side
+            self.refresh_thechnical(fp=1)
+
+            self.ui.set_enabel(self.ui.load_coil_btn, True)
+            self.ui.set_enabel(self.ui.next_coil_btn, True)
+            self.ui.set_enabel(self.ui.prev_coil_btn, True)
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, True)
+        return func
+
+    def load_suggestions_from_model(self, state=0):
+        if self.ui.checkBox_suggested_defects.isChecked():
+            self.ui.set_enabel(self.ui.load_coil_btn, False)
+            self.ui.set_enabel(self.ui.next_coil_btn, False)
+            self.ui.set_enabel(self.ui.prev_coil_btn, False)
+            self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
+
+            self.reset_suggestion_progressbar(self.sheet.get_cameras()[1] * self.sheet.get_nframe() * 2)
+
+            for side, _ in self.ui.get_technical(name=False).items():
+                self.start_load_suggestion_from_model_threads(self.thechnicals_backend[side], n_threads=1)
+
+        else:
+            self.build_sheet_technical(self.sheet)
+
+    def start_load_suggestion_from_model_threads(self, technical_obj, n_threads):
+        side  = technical_obj.get_side()
+        self.model_suggestions_workers[side] = []
+        self.model_suggestions_threads[side] = []
+
+        ncamera = technical_obj.sheet.get_cameras()
+        nframe = technical_obj.sheet.get_nframe()
+
+        batch_frame = int(np.ceil(nframe / n_threads)) 
+        self.model_suggestions_nthreads = n_threads
+        self.model_suggestions_thread_cnt[side] = 0
+
+        for i in range(n_threads):
+            self.model_suggestions_threads[side].append(sQThread())
+
+            start_cam = ncamera[0]
+            end_cam = ncamera[1] + 1
+
+            start_frame = (i*batch_frame)+1
+            end_frame = min((i+1)*batch_frame+1, nframe+1)
+            
+            self.model_suggestions_workers[side].append( 
+                image_processing_worker.model_suggestions_worker(
+                                            technical_obj,
+                                            n_cameras=(start_cam, end_cam),
+                                            n_frames=(start_frame, end_frame),
+                                            )
+                                        )
+            
+            self.model_suggestions_workers[side][-1].moveToThread(self.model_suggestions_threads[side][-1])
+            self.model_suggestions_threads[side][-1].started.connect(self.model_suggestions_workers[side][-1].run)
+            self.model_suggestions_workers[side][-1].finished.connect(self.finish_load_suggestion_from_model_threads(side))
+            self.model_suggestions_workers[side][-1].update_progressbar_model_suggestions.connect(self.update_suggestion_progressbar)
+            self.model_suggestions_workers[side][-1].finished.connect(self.model_suggestions_threads[side][-1].quit)
+            self.model_suggestions_workers[side][-1].finished.connect(self.model_suggestions_workers[side][-1].deleteLater)
+            self.model_suggestions_threads[side][-1].finished.connect(self.model_suggestions_threads[side][-1].deleteLater)
+
+            # self.model_suggestions_threads[side][-1].start()
+
+            self.model_suggestions_workers[side][-1].run()
+
+    def finish_load_suggestion_from_model_threads(self, side):
         def func():
             selecteds = self.selected_images_for_label.get_sheet_side_selections(
                 str(self.sheet.get_id()), side
@@ -2090,30 +2166,30 @@ class API:
         self.refresh_thechnical(fp=1)
 
     def build_sheet_technical(self, sheet):
-        try:
-            self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
-            self.ui.set_enabel(self.ui.next_coil_btn, False)
-            self.ui.set_enabel(self.ui.prev_coil_btn, False)
-            self.ui.set_enabel(self.ui.load_sheets_win.load_btn, False)
-            self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
-            self.ui.show_load_sheet_progressbar()
-            self.technical_backend = {}
-            for side, _ in self.ui.get_technical(name=False).items():
-                self.thechnicals_backend[side] = data_grabber.sheetOverView(
-                                                            sheet,
-                                                            side,  # side of sheet that is UO
-                                                            (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
-                                                            (self.sheet.get_nframe(), NCAMERA),
-                                                            actives_camera=sheet.get_cameras(),
-                                                            dataset_annotation_path = os.path.join(self.ds.dataset_path, self.ds.annotations_folder)
-                                                        )
-                
-                self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=5)
+        # try:
+        self.ui.set_enabel(self.ui.checkBox_suggested_defects, False)
+        self.ui.set_enabel(self.ui.next_coil_btn, False)
+        self.ui.set_enabel(self.ui.prev_coil_btn, False)
+        self.ui.set_enabel(self.ui.load_sheets_win.load_btn, False)
+        self.reset_loading_progressBar(sheet.get_nframe()*(sheet.get_cameras()[1]-sheet.get_cameras()[0]+1)*2)
+        self.ui.show_load_sheet_progressbar()
+        self.technical_backend = {}
+        for side, _ in self.ui.get_technical(name=False).items():
+            self.thechnicals_backend[side] = data_grabber.sheetOverView(
+                                                        sheet,
+                                                        side,  # side of sheet that is UO
+                                                        (HEIGHT_FRAME_SIZE * sheet.get_nframe(), WIDTH_TECHNICAL_SIDE),
+                                                        (self.sheet.get_nframe(), NCAMERA),
+                                                        actives_camera=sheet.get_cameras(),
+                                                        dataset_annotation_path = os.path.join(self.ds.dataset_path, self.ds.annotations_folder)
+                                                    )
+            
+            self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=1)
 
-        except Exception as e:
-            print('*'*20)
-            print(e)
-            print('*'*20)
+        # except Exception as e:
+        #     print('*'*20)
+        #     print(e)
+        #     print('*'*20)
 
     def start_technical_loading_threads(self, technical_obj: data_grabber.sheetOverView, n_threads: int):
         side  = technical_obj.get_side()
@@ -2181,7 +2257,7 @@ class API:
             self.ui.set_enabel(self.ui.technical_zoom_out, True)
             self.ui.hide_load_sheet_progressbar()
             if self.ui.checkBox_suggested_defects.isChecked():
-                self.load_suggestions()
+                self.load_suggestions_from_model()
 
 
         # self.thechnicals_backend['down'].update_pointer(
@@ -2818,6 +2894,14 @@ class API:
                     return True
 
         return True
+    
+    def delete_unwanted_files(self):
+        jsons_main_path = self.db.get_suggestions_path()
+        if os.path.exists(jsons_main_path):
+            shutil.rmtree(jsons_main_path)
+
+        if os.path.exists(symlinkMainPath):
+            shutil.rmtree(symlinkMainPath)
 
     # ----------------------------------------------------------------------------------------
     #
