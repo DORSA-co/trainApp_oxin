@@ -23,6 +23,8 @@ aug_dict = dict(rotation_range=15,
                 horizontal_flip=True,
                 fill_mode='constant',
                 )
+
+symlinkMainPath = 'SymLink'
 symlinkPath = 'SymLink/binary'
 yolo_data_path = 'SymLink/localization_and_classification/data' #'/home/reyhane/.local/lib/python3.10/site-packages/yolov5/data'
 

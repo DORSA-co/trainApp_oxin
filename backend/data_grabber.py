@@ -269,6 +269,46 @@ class sheetOverView:
         if bboxes:
             self.draw_defect_bbox_on_single_image(c, f, bboxes)
 
+    def update_defect_from_model(self, c, f):
+        json_path = pathStructure.sheet_annotation_path_operator(
+            self.sheet.get_main_path,
+            self.sheet.get_id(),
+            self.side,
+            c,
+            f
+        )
+
+        info_path = pathStructure.sheet_info_path_operator(
+            self.sheet.get_main_path,
+            self.sheet.get_id(),
+        )
+
+        if os.path.exists(json_path):
+            with open(json_path) as jfile:
+                file = json.load(jfile)
+                status = str(any(file['binary']))
+                binary_indices = list(filter(lambda i_x: file['binary'][i_x]==1 , range(len(file["binary"]))))
+                bboxes = []
+
+                if os.path.exists(info_path):
+                    with open(info_path) as info_file:
+                        info = json.load(info_file)
+                        image_shape = info['image_shape']
+                        pip_input_shape = info['pipline_input_shape']
+
+                        nx = image_shape[1]//pip_input_shape[0]
+                        for i in binary_indices:
+                            x1 = (i % nx) * pip_input_shape[0]
+                            y1 = (i // nx) * pip_input_shape[0]
+                            bboxes.append(((x1, y1), (x1+pip_input_shape[0], y1+pip_input_shape[1])))
+        else:
+            status = 'False'
+            bboxes = []
+
+        self.sheet_img = self.draw_defect(self.sheet_img, [c-1, f-1], status)
+        if bboxes:
+            self.draw_defect_bbox_on_single_image(c, f, bboxes)
+
     # ______________________________________________________________________________________________________________________________
     #
     # ______________________________________________________________________________________________________________________________

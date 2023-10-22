@@ -26,7 +26,9 @@ from database_utils import dataBaseUtils
 SHAMSI_DATE = False
 
 
-OPERATOR_PATH='Images'
+OPERATOR_IMAGES_PATH='Images'
+OPERATOR_ANNOTATIONS_PATH='Annotations'
+OPERATOR_INFO_PATH='Sheets_Info'
 
 
 settings = {
@@ -55,8 +57,6 @@ def sheet_image_path(main_path,id, side, camera_numbers, n_frame, format_img):
     
     elif 'bot' in side.lower() or 'down' in side.lower():
         return(os.path.join(main_path, year, month, day, str(id), 'BOTTOM', str(camera_numbers), str(n_frame) + str(format_img)))
-    
-
 
 def sheet_image_path_operator(main_path,id, side, camera_numbers, n_frame, format_img):
     try:
@@ -66,11 +66,33 @@ def sheet_image_path_operator(main_path,id, side, camera_numbers, n_frame, forma
         date = date_funcs.get_date(persian=SHAMSI_DATE)
     year, month, day = date.split('/')
     if 'top' in side.lower() or 'up' in side.lower():
-        return(os.path.join(main_path, year, month, day, str(id),OPERATOR_PATH, 'TOP', str(camera_numbers), str(n_frame) + str(format_img) ))
+        return(os.path.join(main_path, year, month, day, str(id),OPERATOR_IMAGES_PATH, 'TOP', str(camera_numbers), str(n_frame) + str(format_img) ))
     
     elif 'bot' in side.lower() or 'down' in side.lower():
-        return(os.path.join(main_path, year, month, day, str(id),OPERATOR_PATH ,'BOTTOM', str(camera_numbers), str(n_frame) + str(format_img)))
+        return(os.path.join(main_path, year, month, day, str(id),OPERATOR_IMAGES_PATH ,'BOTTOM', str(camera_numbers), str(n_frame) + str(format_img)))
     
+def sheet_annotation_path_operator(main_path, id, side, camera_numbers, n_frame, format='.json'):
+    try:
+        db = dataBaseUtils(ui_obj='Null')
+        date, main_path = db.load_sheet_date_mainpath(id)
+    except:
+        date = date_funcs.get_date(persian=SHAMSI_DATE)
+    year, month, day = date.split('/')
+    if 'top' in side.lower() or 'up' in side.lower():
+        return(os.path.join(main_path, year, month, day, str(id),OPERATOR_ANNOTATIONS_PATH, 'TOP', str(camera_numbers), str(n_frame) + str(format)))
+    
+    elif 'bot' in side.lower() or 'down' in side.lower():
+        return(os.path.join(main_path, year, month, day, str(id),OPERATOR_ANNOTATIONS_PATH ,'BOTTOM', str(camera_numbers), str(n_frame) + str(format)))
+    
+def sheet_info_path_operator(main_path, id, format='.json'):
+    try:
+        db = dataBaseUtils(ui_obj='Null')
+        date, main_path = db.load_sheet_date_mainpath(id)
+    except:
+        date = date_funcs.get_date(persian=SHAMSI_DATE)
+    year, month, day = date.split('/')
+    return(os.path.join(main_path, year, month, day, str(id), OPERATOR_INFO_PATH, 'info{}'.format(format)))
+
 def get_image_annotation_path(annotation_path, id, side, camera_numbers, n_frame, annotation_format='.json'):
     if 'top' in side.lower() or 'up' in side.lower():
         return(os.path.join(annotation_path, id+'up'+str(camera_numbers)+'_'+str(n_frame)+annotation_format))
