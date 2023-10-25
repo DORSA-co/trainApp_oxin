@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>1527</width>
-    <height>960</height>
+    <height>935</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2488,7 +2488,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>1</number>
+                         <number>0</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -10420,7 +10420,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>819</height>
+                                        <height>794</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -10672,7 +10672,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>819</height>
+                                        <height>794</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -25071,7 +25071,7 @@ QPushButton:hover {
                           <item>
                            <widget class="QStackedWidget" name="stackedWidget_localization">
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="page_localization_training">
                              <layout class="QHBoxLayout" name="horizontalLayout_62">
