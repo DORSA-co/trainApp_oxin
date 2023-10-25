@@ -47,7 +47,6 @@ import setting
 import api
 from Sheet_loader_win.data_loader_UI import data_loader
 from labeling.labeling_UI import labeling
-from help_UI import help
 
 from neighbouring_UI import neighbouring
 from small_neighbouring_UI import small_neighbouring
@@ -79,7 +78,8 @@ from PySide6.QtWidgets import QTableWidget as sQTableWidget
 # from login_win.login_api import
 
 from train_api import ALGORITHM_NAMES
-# ALGORITHM_NAMES = {'binary': ['Xbc', 'Rbe'], 'localization': ['Ulnim', 'Ulnpr'], 'classification': ['Xcc', 'Rce'], 'yolo': ['5n', '5s', '5m', '5l', '5x']}
+import subprocess
+sys.path.append('../oxin_help')
 
 ui, _ = loadUiType("UI/oxin.ui")
 # os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
@@ -165,8 +165,7 @@ class UI_main_window(QMainWindow, ui):
         self.load_sheets_win = data_loader(main_ui_obj=self)
 
         self.labeling_win = None
-        self.login_window = UI_login_window()  
-        self.help_win = help(lang=self.language)
+        self.login_window = UI_login_window()
 
         self.suggested_defects_btn.setIcon(sQIcon("UI/images/suggest.png"))
 
@@ -712,7 +711,7 @@ class UI_main_window(QMainWindow, ui):
         self.checkBox_eq_hist.stateChanged.connect(lambda: self.show_image_in_label(img=None))
         
 
-
+        self.help_process = None
 
 
     def showTime(self):
@@ -789,7 +788,6 @@ class UI_main_window(QMainWindow, ui):
             self.language = "en"
             api.language = "en"
             self.sn.language = "en"
-            self.help_win.set_language(lang="en")
             self.load_sheets_win.set_language("en")
             img_path = "UI/images/english.png"
 
@@ -797,7 +795,6 @@ class UI_main_window(QMainWindow, ui):
             self.language = "fa"
             api.language = "fa"
             self.sn.language = "fa"
-            self.help_win.set_language(lang="fa")
             self.load_sheets_win.set_language("fa")
             img_path = "UI/images/persian.png"
 
@@ -1380,7 +1377,7 @@ class UI_main_window(QMainWindow, ui):
 
     def maxmize_minimize(self):
         """Maximize or Minimize window"""
-        # self.show_image_in_label()
+        # self.show_image_in_label()subprocess
         if self.isMaximized():
             self.showNormal()
         else:
@@ -1391,119 +1388,70 @@ class UI_main_window(QMainWindow, ui):
         )
 
     def show_help(self):
-        help_image = None
-        text = ""
+        if self.help_process is not None and self.help_process.poll() is None:
+            self.help_process.terminate()
+
         name = self.stackedWidget.currentWidget().objectName()
         if name == "page_software_setting":
-            text = texts.HELPS["SETTINGS_PAGE"][self.language]
-            help_image = cv2.imread(texts.HELPS_ADDRESS["SETTINGS_PAGE"][self.language])
+            text = texts.Titles['settings'][self.language]
         elif name == "page_data_auquzation":
             tab_name = self.tabWidget_2.currentWidget().objectName()
             if tab_name == "tab_5":
-                text = texts.HELPS["LIVE_PAGE"][self.language]
-                help_image = cv2.imread(texts.HELPS_ADDRESS["LIVE_PAGE"][self.language])
+                text = texts.Titles['Live'][self.language]
             elif tab_name == "tab_6":
-                text = texts.HELPS["TECHNICAL_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["TECHNICAL_PAGE"][self.language]
-                )
+                text = texts.Titles['Technical View'][self.language]
         elif name == "page_label":
-            text = texts.HELPS["LABEL_PAGE"][self.language]
-            help_image = cv2.imread(texts.HELPS_ADDRESS["LABEL_PAGE"][self.language])
+            text = texts.Titles['Label'][self.language]
         elif name == "page_user_profile":
             stack_name = self.stackedWidget_2.currentWidget().objectName()
             if stack_name == "page_create_db":
-                text = texts.HELPS["PROFILE_CREATEDS_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PROFILE_CREATEDS_PAGE"][self.language]
-                )
+                text = texts.Titles['create_new_ds'][self.language]
             elif stack_name == "page_all_db":
-                text = texts.HELPS["PROFILE_ALLDS_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PROFILE_ALLDS_PAGE"][self.language]
-                )
+                text = texts.Titles['all_ds'][self.language]
             elif stack_name == "page_my_db":
-                text = texts.HELPS["PROFILE_MYDS_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PROFILE_MYDS_PAGE"][self.language]
-                )
+                text = texts.Titles['my_ds'][self.language]
             elif stack_name == "page_my_pipelines":
-                text = texts.HELPS["PROFILE_MYPIP_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PROFILE_MYPIP_PAGE"][self.language]
-                )
+                text = texts.Titles['pipelines'][self.language]
         elif name == "page_pbt":
             tab_name = self.stackedWidget_pbt.currentWidget().objectName()
             if tab_name == "page_pipeline":
-                text = texts.HELPS["PBT_PIPLINE_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PBT_PIPLINE_PAGE"][self.language]
-                )
+                text = texts.Titles['Pipline'][self.language]
             elif tab_name == "page_load_dataset":
-                text = texts.HELPS["PBT_LOADDATASET_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PBT_LOADDATASET_PAGE"][self.language]
-                )
+                text = texts.Titles['Load Dataset'][self.language]
             elif tab_name == "page_history":
-                text = texts.HELPS["PBT_HISTORY_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["PBT_HISTORY_PAGE"][self.language]
-                )
+                text = texts.Titles['History'][self.language]
         elif name == "page_Binary":
             stack_name = self.stackedWidget_binary.currentWidget().objectName()
             if stack_name == "page_binary_list":
-                text = texts.HELPS["BINARYLIST_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["BINARYLIST_PAGE"][self.language]
-                )
+                text = texts.Titles['binary_list'][self.language]
             if stack_name == "page_binary_training":
-                text = texts.HELPS["BINARY_TRAINING_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["BINARY_TRAINING_PAGE"][self.language]
-                )
+                text = texts.Titles['binary_training'][self.language]
             if stack_name == "page_binary_history":
-                text = texts.HELPS["BINARY_HISTORY_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["BINARY_HISTORY_PAGE"][self.language]
-                )
+                text = texts.Titles["binary_history"][self.language]
         elif name == "page_Localization":
             stack_name = self.stackedWidget_localization.currentWidget().objectName()
             if stack_name == "page_localization_training":
-                text = texts.HELPS["LOC_TRAINING_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["LOC_TRAINING_PAGE"][self.language]
-                )
+                text = texts.Titles['localization_training'][self.language]
             elif stack_name == "page_localization_history":
-                text = texts.HELPS["LOC_HISTORY_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["LOC_HISTORY_PAGE"][self.language]
-                )
-        elif name == "page_Yolo":
-            stack_name = self.stackedWidget_yolo.currentWidget().objectName()
-            if stack_name == "page_yolo_training":
-                text = texts.HELPS["YOLO_TRAINING_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["YOLO_TRAINING_PAGE"][self.language]
-                )
-            elif stack_name == "page_yolo_history":
-                text = texts.HELPS["YOLO_HISTORY_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["YOLO_HISTORY_PAGE"][self.language]
-                )
+                text = texts.Titles['localization_history'][self.language]
         elif name == "page_Classification":
             stack_name = self.stackedWidget_classification.currentWidget().objectName()
             if stack_name == "page_classification_class_list":
-                text = texts.HELPS["CLASSLIST_PAGE"][self.language]
-                help_image = cv2.imread(
-                    texts.HELPS_ADDRESS["CLASSLIST_PAGE"][self.language]
-                )
-            elif stack_name == "page_classification_training":
-                pass
-            elif stack_name == "page_classification_history":
-                pass
+                text = texts.Titles['classes_list'][self.language]
+        elif name == "page_Yolo":
+            stack_name = self.stackedWidget_yolo.currentWidget().objectName()
+            if stack_name == "page_yolo_training":
+                text = texts.Titles['yolo_training'][self.language]
+            elif stack_name == "page_yolo_history":
+                text = texts.Titles['yolo_history'][self.language]
 
-        self.help_win.set_help_image(help_image, text)
-        self.help_win.show()
+        self.help_process = subprocess.Popen(
+                        ['/bin/python3', '../oxin_help/help_UI.py',
+                        self.language,
+                        text
+                        ]
+                    )
+
 
     def left_bar_clear(self):
         """change left bar image with base color (white)"""

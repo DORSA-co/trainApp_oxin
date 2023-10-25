@@ -31,6 +31,9 @@ except:
 
 from backend.pathStructure import sheet_path
 
+import subprocess
+sys.path.append('../oxin_help')
+
 
 OPERATOR_PATH='Images'
 
@@ -87,6 +90,7 @@ class data_loader(QMainWindow, ui):
 
         self.comboBox_date_type.currentTextChanged.connect(self.change_date_type)
 
+        self.help_process = None
 
     def change_date_type(self):
 
@@ -142,14 +146,15 @@ class data_loader(QMainWindow, ui):
         self.close()
 
     def show_help(self):
-        if not self.help_win:
-            self.help_win = help(lang=self.language)
-        text = texts.HELPS["LOADSHEET_PAGE"][self.language]
-        help_image = cv2.imread(
-            texts.HELPS_ADDRESS["LOADSHEET_PAGE"][self.language]
-        )
-        self.help_win.set_help_image(help_image, text)
-        self.help_win.show()
+        if self.help_process is not None and self.help_process.poll() is None:
+            self.help_process.terminate()
+        text = texts.Titles['load_sheet'][self.language]
+        self.help_process = subprocess.Popen(
+                        ['/bin/python3', '../oxin_help/help_UI.py',
+                        self.language,
+                        text
+                        ]
+                    )
 
     def set_language(self, lang='en'):
         self.language = lang
