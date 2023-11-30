@@ -8,9 +8,11 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
-from help_UI import help
 import os
 import texts
+
+import subprocess
+sys.path.append('../oxin_help')
 
 ui, _ = loadUiType("UI/neighbour_imgs.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
@@ -52,14 +54,11 @@ class neighbouring(QMainWindow, ui):
         self.n_image.mousePressEvent = self.mousePressImage()
         self.n_image.mouseReleaseEvent = self.mouseReleaseImage()
         self.n_image.mouseMoveEvent = self.mouseMoveImage()
-
-        self.help_win = None
         
         self.language = lang
         self.annot_checkbox.setText(texts.Titles['show_labels'][lang])
         self.label_303.setText(texts.Titles['brightness'][lang])
         self.label_305.setText(texts.Titles['contrast'][lang])
-
 
         self.org_image = self.img
         self.org_image_annt = self.annotated_image
@@ -69,6 +68,8 @@ class neighbouring(QMainWindow, ui):
         self.contrast_slider.valueChanged.connect(self.update_image_brightess)
         
         self.equalize_img()
+
+        self.help_process = None
 
     def mousePressEvent(self, event):
         if event.button() == sQtCore.Qt.LeftButton:
@@ -192,14 +193,15 @@ class neighbouring(QMainWindow, ui):
         self.close()
 
     def show_help(self):
-        if not self.help_win:
-            self.help_win = help(lang=self.language)
-        text = texts.HELPS["IMAGEENLARGEMENT_PAGE"][self.language]
-        help_image = cv2.imread(
-            texts.HELPS_ADDRESS["IMAGEENLARGEMENT_PAGE"][self.language]
-        )
-        self.help_win.set_help_image(help_image, text)
-        self.help_win.show()
+        if self.help_process is not None and self.help_process.poll() is None:
+            self.help_process.terminate()
+        text = texts.Titles['image_enlargement'][self.language]
+        self.help_process = subprocess.Popen(
+                        ['/bin/python3', '../oxin_help/help_UI.py',
+                        self.language,
+                        text
+                        ]
+                    )
 
     def center(self):
         frame_geo = self.frameGeometry()

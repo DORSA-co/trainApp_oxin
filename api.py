@@ -1971,7 +1971,7 @@ class API:
         # loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', self.language])
         for side, _ in self.ui.get_technical(name=False).items():
             # self.thechnicals_backend[side].update_defect()
-            self.start_update_defects_threads(self.thechnicals_backend[side], n_threads=1)
+            self.start_update_defects_threads(self.thechnicals_backend[side], n_threads=2)
             # selecteds = self.selected_images_for_label.get_sheet_side_selections(
             #     str(self.sheet.get_id()), side
             # )
@@ -2189,7 +2189,7 @@ class API:
                                                             dataset_annotation_path = os.path.join(self.ds.dataset_path, self.ds.annotations_folder)
                                                         )
                 
-                self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=1)
+                self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=6)
 
         except Exception as e:
             print('*'*20)
@@ -2405,7 +2405,7 @@ class API:
     # ----------------------------------------------------------------------------------------
     def show_sheet_loader(self):
         try:
-            sheets = self.db.report_last_sheets(9999)
+            sheets = self.db.report_last_sheets(999999)
             self.ui.load_sheets_win.show_sheets_info(sheets)
             self.ui.load_sheets_win.reset_search_lines()
             self.ui.data_loader_win_show()

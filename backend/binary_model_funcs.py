@@ -16,7 +16,7 @@ from random_split import *
 
 
 SHAMSI_DATE = False
-DEBUG = False
+DEBUG = True
 
 # binary table headers
 binary_headers = [

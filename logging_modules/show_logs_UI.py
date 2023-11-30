@@ -8,12 +8,14 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
-from help_UI import help
 import os
 from backend import date_funcs
 import texts
 import texts_codes
 import cv2
+
+import subprocess
+sys.path.append('../oxin_help')
 
 SHAMSI_DATE = False
 
@@ -38,8 +40,6 @@ class show_logs(QMainWindow, ui):
         self.activate_()
         self.center()
         self._old_pos = None
-
-        self.help_win = None
         
         self.language = lang
         self.log_mainfolderpath = log_mainfolderpath
@@ -58,6 +58,8 @@ class show_logs(QMainWindow, ui):
         self.export_btn.clicked.connect(self.export_logs)
 
         self.search_logs()
+
+        self.help_process = None
 
     def mousePressEvent(self, event):
         if event.button() == sQtCore.Qt.LeftButton:
@@ -93,14 +95,15 @@ class show_logs(QMainWindow, ui):
         self.close()
 
     def show_help(self):
-        if not self.help_win:
-            self.help_win = help(lang=self.language)
-        text = texts.HELPS["SHOWLOGS_PAGE"][self.language]
-        help_image = cv2.imread(
-            texts.HELPS_ADDRESS["SHOWLOGS_PAGE"][self.language]
-        )
-        self.help_win.set_help_image(help_image, text)
-        self.help_win.show()
+        if self.help_process is not None and self.help_process.poll() is None:
+            self.help_process.terminate()
+        text = texts.Titles['show_logs'][self.language]
+        self.help_process = subprocess.Popen(
+                        ['/bin/python3', '../oxin_help/help_UI.py',
+                        self.language,
+                        text
+                        ]
+                    )
 
     def center(self):
         frame_geo = self.frameGeometry()
