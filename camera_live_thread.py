@@ -10,8 +10,8 @@ from math import ceil
 import threading
 from PySide6.QtGui import QImage as sQImage
 from PySide6.QtGui import QPixmap as sQPixmap
-from main_UI import SHAMSI_DATE
 
+SHAMSI_DATE = False
 MOTION =True
 
 class ImageManager(sQObject):

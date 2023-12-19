@@ -37,7 +37,7 @@ sys.path.append('../oxin_help')
 
 OPERATOR_PATH='Images'
 
-ui, _ = loadUiType("Sheet_loader_win/data_loader.ui")
+ui, _ = loadUiType(os.path.join(os.path.dirname(os.path.abspath(__file__)), "data_loader.ui"))
 # ui, _ = loadUiType("UI/data_loader.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 
@@ -81,7 +81,6 @@ class data_loader(QMainWindow, ui):
         
         self.tables=[self.list_plate_id, self.list_order_id, self.list_heat_id,self.list_qc_standard]
 
-        self.help_win = None
         self._old_pos = None
 
 
@@ -158,8 +157,6 @@ class data_loader(QMainWindow, ui):
 
     def set_language(self, lang='en'):
         self.language = lang
-        if self.help_win:
-            self.help_win.set_language(self.language)
 
     def clear_tables(self):
         for table_name in self.tables:

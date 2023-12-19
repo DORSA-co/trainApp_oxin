@@ -1,59 +1,35 @@
-# import subprocess
-# import time
-# import threading
+import numpy as np
+import torch
 
-# t = time.time()
+id2class = {1: '101', 2: '102', 3: '103', 4: '104'}
+batch_size = 1
+yolo_conf_thresh = 0.25
 
-# def test():
-#     global t
-#     print((time.time() - t)*1000)
-#     print('test')
-#     t = time.time()
-#     threading.Timer(0.001, test).start()
-#     print('after')
-
-# test()
-
-# # process = subprocess.Popen(
-# #             ['/bin/python3', '../oxin_storage_management/storage_main_UI.py', 'en', 'False']
-# #             )
-
-# # while True:
-# #     print(process.poll())
-# # import subprocess
-# # import time
-
-# # process = subprocess.Popen(
-# #             ['/bin/python3', '../oxin_storage_management/storage_main_UI.py', 'en', 'False']
-# #             )
-
-# # while True:
-# #     print(process.poll())
-
-# # a = [ 'T'+str(i) for i in range(5)]
-# # print(a)
-
-# a = ['T10.000000', 'T20.000000', 'T30.000000', 'T40.000000', 'T50.000000', 'T60.000000', 'T70.000000']#, 'T80.000000', 'T90.000000', 'T100.000000', 'T110.000000', 'T120.000000', 'T130.000000', 'T140.000000', 'T1500.0000002', 'T1630.0000005', 'T1760.0000008', 'T1890.000000', 'T190.000000', 'T200.000000']
-
-# if len(a)>9:
-#     print(float(a[-1][3:]))
-# else:
-#     print(a[-1][2:])
-
-
-import os
-def remove_pypylon_chache():
-    try:
-        path = os.getcwd()
-        os.chdir('/dev/shm')
-        listdir =os.listdir()
-        for gen in listdir:
-            if 'GenICam_XML' in gen:
-                os.system('rm {}'.format(gen))
-
-        os.chdir(path)
-    except:
-        print('ERROR Try remove cache pypylon ')
-
+def create_random_yolo_output():
+        pred = torch.tensor([[ 63.78859,  -2.85292, 178.54024, 256.59985,   0.33153,   1.00000],
+                [ 17.03750,  -6.66229,  64.83273, 256.72855,   0.29511,   2.00000]])
+        return pred
     
-remove_pypylon_chache()
+def yolo_batch_preds_post_processing(preds):
+    if batch_size == 1:
+        preds = [preds]
+    preds = list(map(yolo_single_preds_post_processing, preds))
+    print(preds)
+    return preds
+
+def yolo_single_preds_post_processing(preds):
+    preds = preds[preds[:, 4] >= yolo_conf_thresh]
+    preds[:, :-2] = torch.round(preds[:, :-2])
+    preds[:, :-2] = torch.clamp(preds[:, :-2], min=0, max=256)
+    bboxes = preds[:, :-2]
+    classes = preds[:, -1].tolist()
+    d = {0.0: '110', 1.0: '120', 2.0: '124'}
+    classes = [d[key] for key in classes if key in d]
+    areas = (bboxes[:, 2] - bboxes[:, 0]) * (bboxes[:, 3] - bboxes[:, 1])
+    areas = areas.unsqueeze(1)
+    bboxes = torch.cat((areas, bboxes), dim=1).tolist()
+    return bboxes, classes
+
+
+preds = create_random_yolo_output()
+yolo_batch_preds_post_processing(preds)

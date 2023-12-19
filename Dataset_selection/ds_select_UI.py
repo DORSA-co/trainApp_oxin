@@ -10,7 +10,7 @@ from PySide6.QtCore import *
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
 import os
-ui, _ = loadUiType("Dataset_selection/dataset_select.ui")
+ui, _ = loadUiType(os.path.join(os.path.dirname(os.path.abspath(__file__)), "dataset_select.ui"))
 
 
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%

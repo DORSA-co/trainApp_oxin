@@ -15,7 +15,7 @@ import texts
 import subprocess
 sys.path.append('../oxin_help')
 
-ui, _ = loadUiType("UI/neighbour_imgs.ui")
+ui, _ = loadUiType(os.path.join(os.path.dirname(os.path.abspath(__file__)), "UI/neighbour_imgs.ui"))
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 
 
@@ -56,8 +56,6 @@ class neighbouring(QMainWindow, ui):
         self.n_image.mouseReleaseEvent = self.mouseReleaseImage()
         self.n_image.mouseMoveEvent = self.mouseMoveImage()
 
-        self.help_win = None
-        
         self.language = lang
         self.annot_checkbox.setText(texts.Titles['show_labels'][lang])
         self.label_303.setText(texts.Titles['brightness'][lang])
