@@ -13,7 +13,7 @@ from backend.mouse import Mouse
 from utils1 import Utils
 import os
 
-ui, _ = loadUiType("UI/small_neighbour_imgs.ui")
+ui, _ = loadUiType(os.path.join(os.path.dirname(os.path.abspath(__file__)), "UI/small_neighbour_imgs.ui"))
 os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
 
 

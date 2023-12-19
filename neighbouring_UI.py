@@ -14,7 +14,7 @@ import texts
 import subprocess
 sys.path.append('../oxin_help')
 
-ui, _ = loadUiType("UI/neighbour_imgs.ui")
+ui, _ = loadUiType(os.path.join(os.path.dirname(os.path.abspath(__file__)), "UI/neighbour_imgs.ui"))
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 
 
@@ -256,19 +256,11 @@ class neighbouring(QMainWindow, ui):
             self.set_annotations()
             pass
 
-
-
-
-
-
-
-
-
-
 # api = labeling_api.labeling_API(win)
 import cv2
 if __name__ == "__main__":
-    img = cv2.imread('default_dataset/binary/defect/2023-08-19_17-34-55up1_55.png',0)
+    img = cv2.imread('/home/reyhane/Desktop/train/image/3.jpg')
+    # img = cv2.resize(img, (1792, 1200))
     app = QApplication()
     win = neighbouring(img)
     win.show()

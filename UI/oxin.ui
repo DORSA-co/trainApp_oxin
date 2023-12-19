@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>1527</width>
-    <height>960</height>
+    <height>935</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -2488,7 +2488,7 @@ QPushButton:hover {
                          <string notr="true">color : rgb(20,20,20);</string>
                         </property>
                         <property name="currentIndex">
-                         <number>0</number>
+                         <number>1</number>
                         </property>
                         <widget class="QWidget" name="page_data_auquzation">
                          <property name="styleSheet">
@@ -10420,7 +10420,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>819</height>
+                                        <height>794</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -10672,7 +10672,7 @@ font-size: 30%;</string>
                                         <x>0</x>
                                         <y>0</y>
                                         <width>288</width>
-                                        <height>819</height>
+                                        <height>794</height>
                                        </rect>
                                       </property>
                                       <property name="minimumSize">
@@ -12793,7 +12793,7 @@ background-color: rgb(212, 212, 212);</string>
                                   <string notr="true">border:1px solid rgb(200, 200,200);</string>
                                  </property>
                                  <property name="currentIndex">
-                                  <number>0</number>
+                                  <number>2</number>
                                  </property>
                                  <widget class="QWidget" name="page_create_db">
                                   <layout class="QVBoxLayout" name="verticalLayout_55">
@@ -14562,7 +14562,7 @@ color : rgb(0,0,0);</string>
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>92</width>
+                                      <width>98</width>
                                       <height>164</height>
                                      </rect>
                                     </property>
@@ -14685,7 +14685,7 @@ color : rgb(0,0,0);</string>
                                               <x>0</x>
                                               <y>0</y>
                                               <width>133</width>
-                                              <height>25</height>
+                                              <height>28</height>
                                              </rect>
                                             </property>
                                             <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -25071,7 +25071,7 @@ QPushButton:hover {
                           <item>
                            <widget class="QStackedWidget" name="stackedWidget_localization">
                             <property name="currentIndex">
-                             <number>1</number>
+                             <number>0</number>
                             </property>
                             <widget class="QWidget" name="page_localization_training">
                              <layout class="QHBoxLayout" name="horizontalLayout_62">
@@ -37545,7 +37545,7 @@ font-size: 12px</string>
   <customwidget>
    <class>CheckableComboBox</class>
    <extends>QComboBox</extends>
-   <header location="global">checkablecombobox.h</header>
+   <header>checkablecombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources>

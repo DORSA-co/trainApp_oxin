@@ -2,8 +2,9 @@ from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import QApplication, QWidget
 from PySide6.QtGui import QMovie, Qt
 import sys
+import os
 
-ui, _ = loadUiType('Loading_page/loading.ui')
+ui, _ = loadUiType(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'loading.ui'))
 
 class Loading_UI(QWidget, ui):
     global widgets
@@ -19,11 +20,11 @@ class Loading_UI(QWidget, ui):
         self.setWindowFlags(flags)
         self.setAttribute(Qt.WA_TranslucentBackground)
 
-        self.movie = QMovie("Loading_page/loading6.gif")
+        self.movie = QMovie("Loading_page/loading1.gif")
         self.gif_label.setMovie(self.movie)
 
         if lang == 'en':
-            self.set_text('Please Waite ...')
+            self.set_text('Please Wait ...')
         else:
             self.set_text('لطفا منتظر بمانید...')
   
@@ -31,6 +32,7 @@ class Loading_UI(QWidget, ui):
 
     def set_text(self, text):
         self.label.setText(text)
+        self.label.setStyleSheet('color: white')
 
     def close_win(self):
         self.close()

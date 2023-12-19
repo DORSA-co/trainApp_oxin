@@ -1883,7 +1883,6 @@ HELPS_ADDRESS = {
     },
 }
 
-
 def set_title(self, lang):
     self.titleLeftApp.setText(Titles["sense"][lang])
     self.titleLeftDescription.setText(Titles["trainer"][lang])

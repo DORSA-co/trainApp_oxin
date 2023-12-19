@@ -1,10 +1,13 @@
+import subprocess
 import os
+
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+os.chdir(BASE_PATH)
+loading_process = subprocess.Popen(['/bin/python3', 'Loading_page/loading.py', 'en'])
+
 import psutil
 import PyQt5
-
-# qt_path= os.path.dirname(PyQt5.__file__)
-# os.environ['QT_PLUGIN_PATH'] = os.path.join(qt_path, "Qt/plugins")
-
+import ast
 import re
 from cgitb import enable
 import sys
@@ -81,9 +84,9 @@ from train_api import ALGORITHM_NAMES
 import subprocess
 sys.path.append('../oxin_help')
 
-ui, _ = loadUiType("UI/oxin.ui")
-# os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
 
+ui, _ = loadUiType(os.path.join(BASE_PATH, "UI/oxin.ui"))
+# os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
 
 DEBUG_UI = False
 SHAMSI_DATE = False
@@ -167,7 +170,7 @@ class UI_main_window(QMainWindow, ui):
         self.labeling_win = None
         self.login_window = UI_login_window()
 
-        self.suggested_defects_btn.setIcon(sQIcon("UI/images/suggest.png"))
+        self.suggested_defects_btn.setIcon(sQIcon(os.path.join(BASE_PATH, "UI/images/suggest.png")))
 
         self.label_dorsa_open(enable=True)
         # /////////Setting
@@ -245,10 +248,10 @@ class UI_main_window(QMainWindow, ui):
         self.label_type = "mask"
         self.zoom_type = None
 
-        self.img = cv2.imread("images/dorsa-logo.png", 0)
+        self.img = cv2.imread(os.path.join(BASE_PATH, "images/dorsa-logo.png"), 0)
         self.set_crop_image(self.img)
 
-        img = cv2.imread("UI/images/male-placeholder.jpg")
+        img = cv2.imread(os.path.join(BASE_PATH, "UI/images/male-placeholder.jpg"))
         self.set_image_label(self.user_label, img)
 
         self.set_combo_boxes()
@@ -787,14 +790,14 @@ class UI_main_window(QMainWindow, ui):
             api.language = "en"
             self.sn.language = "en"
             self.load_sheets_win.set_language("en")
-            img_path = "UI/images/english.png"
+            img_path = os.path.join(BASE_PATH, "UI/images/english.png")
 
         else:
             self.language = "fa"
             api.language = "fa"
             self.sn.language = "fa"
             self.load_sheets_win.set_language("fa")
-            img_path = "UI/images/persian.png"
+            img_path = os.path.join(BASE_PATH, "UI/images/persian.png")
 
         pixmap = sQPixmap(img_path)
         self.label_language.setPixmap(pixmap)
@@ -831,10 +834,10 @@ class UI_main_window(QMainWindow, ui):
             self.combo_change_language.currentText()
             == texts.Titles["english"][self.language]
         ):
-            img_path = "UI/images/english.png"
+            img_path = os.path.join(BASE_PATH, "UI/images/english.png")
 
         else:
-            img_path = "UI/images/persian.png"
+            img_path = os.path.join(BASE_PATH, "UI/images/persian.png")
 
         pixmap = sQPixmap(img_path)
         self.label_language.setPixmap(pixmap)
@@ -909,7 +912,7 @@ class UI_main_window(QMainWindow, ui):
         alert_window = sQMessageBox(sQMessageBox.Warning, title, message)
         alert_window.setStandardButtons(sQMessageBox.Ok)
         icon = sQIcon()
-        icon.addPixmap(sQPixmap("images/alert.png"), sQIcon.Normal)
+        icon.addPixmap(sQPixmap(os.path.join(BASE_PATH, "images/alert.png")), sQIcon.Normal)
         alert_window.setWindowIcon(icon)
         alert_window.exec()
         self.logger.create_new_log(
@@ -1066,13 +1069,13 @@ class UI_main_window(QMainWindow, ui):
             if width == 60:
                 # #print('OPEN')
                 self.toggleButton.setStyleSheet(
-                    "background-image: url(:/icons/images/icons/t2.png);"
+                    "background-image: url({});".format(os.path.join(BASE_PATH, 'images/icons/t2.png'))
                 )
                 widthExtended = maxExtend
                 # #print(widthExtended)
             else:
                 self.toggleButton.setStyleSheet(
-                    "background-image: url(:/icons/images/icons/t1.png);"
+                    "background-image: url({});".format(os.path.join(BASE_PATH, 'images/icons/t1.png'))
                 )
                 # #print('Close')
                 widthExtended = standard
@@ -1109,13 +1112,13 @@ class UI_main_window(QMainWindow, ui):
             if width != 0:
                 # #print("OPEN")
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t2.png);")
-                self.set_btn_image(self.btn_technical_move, "UI/images/images/left.png")
+                self.set_btn_image(self.btn_technical_move, os.path.join(BASE_PATH, "UI/images/images/left.png"))
                 widthExtended = maxExtend
                 # #print(widthExtended)
             else:
                 # self.toggleButton.setStyleSheet("background-image: url(:/icons/images/icons/t1.png);")
                 self.set_btn_image(
-                    self.btn_technical_move, "UI/images/images/fast-forward.png"
+                    self.btn_technical_move, os.path.join(BASE_PATH, "UI/images/images/fast-forward.png")
                 )
 
                 # #print("Close")
@@ -1227,7 +1230,7 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.maxHeight)
             self.group.start()
 
-            icon_path = "UI/images/bottom_arrow.png"
+            icon_path = os.path.join(BASE_PATH, "UI/images/bottom_arrow.png")
             self.label_show_help_btn.setIcon(sQPixmap.fromImage(sQImage(icon_path)))
 
         else:
@@ -1251,7 +1254,7 @@ class UI_main_window(QMainWindow, ui):
             self.group.addAnimation(self.maxHeight)
             self.group.start()
 
-            icon_path = "UI/images/top_arrow.png"
+            icon_path = os.path.join(BASE_PATH, "UI/images/top_arrow.png")
             self.label_show_help_btn.setIcon(sQPixmap.fromImage(sQImage(icon_path)))
 
     def label_dorsa_open(self, enable):
@@ -1375,7 +1378,7 @@ class UI_main_window(QMainWindow, ui):
 
     def maxmize_minimize(self):
         """Maximize or Minimize window"""
-        # self.show_image_in_label()
+        # self.show_image_in_label()subprocess
         if self.isMaximized():
             self.showNormal()
         else:
@@ -1453,13 +1456,13 @@ class UI_main_window(QMainWindow, ui):
     def left_bar_clear(self):
         """change left bar image with base color (white)"""
         self.Data_auquzation_btn.setStyleSheet(
-            "background-image: url(./images/icons/graber.png);"
+            "background-image: url({});".format(os.path.join(BASE_PATH, 'images/icons/graber.png'))
         )
-        self.label_btn.setStyleSheet("background-image: url(./images/icons/label.png);")
+        self.label_btn.setStyleSheet("background-image: url({});".format(os.path.join(BASE_PATH, 'images/icons/label.png')))
         self.tuning_btn.setStyleSheet(
-            "background-image: url(./images/icons/tuning.png);"
+            "background-image: url({});".format(os.path.join(BASE_PATH, 'images/icons/tuning.png'))
         )
-        self.pbt_btn.setStyleSheet("background-image: url(./images/icons/PBT.png);")
+        self.pbt_btn.setStyleSheet("background-image: url({});".format(os.path.join(BASE_PATH, 'images/icons/PBT.png')))
 
     def get_label_type(self):
         return self.label_type
@@ -1583,14 +1586,14 @@ class UI_main_window(QMainWindow, ui):
 
     def zoom_in(self):
         """change mouse shape and zoom in mode"""
-        cursor = PG.QPixmap("images/zoom-in_cursor.png")
+        cursor = PG.QPixmap(os.path.join(BASE_PATH, "images/zoom-in_cursor.png"))
         cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
         self.image.setCursor(PG.QCursor(cursor))
         self.zoom_type = "zoom_in"
 
     def zoom_out(self):
         """change mouse shape and zoom out mode"""
-        cursor = PG.QPixmap("images/zoom-out_cursor.png")
+        cursor = PG.QPixmap(os.path.join(BASE_PATH, "images/zoom-out_cursor.png"))
         cursor = cursor.scaled(25, 25, Qt.AspectRatioMode.KeepAspectRatio)
         self.image.setCursor(PG.QCursor(cursor))
         self.zoom_type = "zoom_out"
@@ -1685,7 +1688,7 @@ class UI_main_window(QMainWindow, ui):
         self.n.show()
 
     def maximize_labeling_help_images(self, n):
-        path = "images/labeling_helps"
+        path = os.path.join(BASE_PATH, "images/labeling_helps")
         help_images = sorted(os.listdir(path))
         img = cv2.imread(os.path.join(path, help_images[n - 1]))
         self.n_help = neighbouring(
@@ -1937,7 +1940,7 @@ class UI_main_window(QMainWindow, ui):
     def show_label_page(self):
         self.left_bar_clear()
         self.label_btn.setStyleSheet(
-            "background-image: url(./images/icons/label.png);background-color: rgb(170, 170, 212);color:rgp(0,0,0);"
+            "background-image: url({});background-color: rgb(170, 170, 212);color:rgp(0,0,0);".format(os.path.join(BASE_PATH, 'images/icons/label.png'))
         )
         self.stackedWidget.setCurrentWidget(self.page_label)
 
@@ -2869,14 +2872,14 @@ class UI_main_window(QMainWindow, ui):
         if btnName == "Data_auquzation_btn":
             self.left_bar_clear()
             self.Data_auquzation_btn.setStyleSheet(
-                "background-image: url(./images/icons/graber.png);background-color: rgb(170, 170, 212);color:rgp(0,0,0);"
+                "background-image: url({});background-color: rgb(170, 170, 212);color:rgp(0,0,0);".format(os.path.join(BASE_PATH, 'images/icons/graber.png'))
             )
             self.stackedWidget.setCurrentWidget(self.page_data_auquzation)
 
         if btnName == "label_btn" or btnName == "label_btn_SI":
             self.left_bar_clear()
             self.label_btn.setStyleSheet(
-                "background-image: url(./images/icons/label.png);background-color: rgb(170, 170, 212);color:rgp(0,0,0);"
+                "background-image: url({});background-color: rgb(170, 170, 212);color:rgp(0,0,0);".format(os.path.join(BASE_PATH, 'images/icons/label.png'))
             )
             self.stackedWidget.setCurrentWidget(self.page_label)
 
@@ -2980,7 +2983,7 @@ class UI_main_window(QMainWindow, ui):
         if btnName == "tuning_btn":
             self.left_bar_clear()
             self.tuning_btn.setStyleSheet(
-                "background-image: url(./images/icons/tuning.png);background-color: rgb(170, 170, 212);color:rgb(0,0,0);"
+                "background-image: url({});background-color: rgb(170, 170, 212);color:rgb(0,0,0);".format(os.path.join(BASE_PATH, 'images/icons/tuning.png'))
             )
             # self.stackedWidget.setCurrentWidget(self.page_tuning)
             self.extra_left_box_move()
@@ -2989,7 +2992,7 @@ class UI_main_window(QMainWindow, ui):
             self.left_bar_clear()
             
             self.pbt_btn.setStyleSheet(
-                "background-image: url(./images/icons/PBT.png);background-color: rgb(170, 170, 212);color:rgb(0,0,0);"
+                "background-image: url({});background-color: rgb(170, 170, 212);color:rgb(0,0,0);".format(os.path.join(BASE_PATH, 'images/icons/PBT.png'))
             )
 
             self.stackedWidget.setCurrentWidget(self.page_pbt)
@@ -3411,16 +3414,16 @@ class UI_main_window(QMainWindow, ui):
     def set_img_btn_camera(self, cam_num, status="True"):
         """set image in connection cameras active/deactive with number"""
         if status == "True":
-            img_top = "UI/images/camtop_actived.png"
-            img_btm = "UI/images/cambtm_actived.png"
+            img_top = os.path.join(BASE_PATH, "UI/images/camtop_actived.png")
+            img_btm = os.path.join(BASE_PATH, "UI/images/cambtm_actived.png")
 
         elif status == "Disconnect":
-            img_top = "UI/images/camtop.png"
-            img_btm = "UI/images/cambtm.png"
+            img_top = os.path.join(BASE_PATH, "UI/images/camtop.png")
+            img_btm = os.path.join(BASE_PATH, "UI/images/cambtm.png")
 
         else:
-            img_top = "UI/images/camtop_deactive.png"
-            img_btm = "UI/images/cambtm_deactive.png"
+            img_top = os.path.join(BASE_PATH, "UI/images/camtop_deactive.png")
+            img_btm = os.path.join(BASE_PATH, "UI/images/cambtm_deactive.png")
 
         if int(cam_num) <= 12:
             if int(cam_num) < 10:
@@ -3790,7 +3793,7 @@ class UI_main_window(QMainWindow, ui):
         self.yolo_end_day_lineedit.clear()
 
     def show_labeling_help(self, n_helps=6):
-        path = "images/labeling_helps"
+        path = os.path.join(BASE_PATH, "images/labeling_helps")
         help_images = sorted(os.listdir(path))
         for i in range(n_helps):
             img = cv2.imread(os.path.join(path, help_images[i]))
@@ -3864,5 +3867,12 @@ if __name__ == "__main__":
     app = QApplication()
     win = UI_main_window()
     api = api.API(win)
+    if len(sys.argv) > 3:
+        if sys.argv[2] != "":
+            api.login_from_operator(sys.argv[1], sys.argv[2])
+        filtered_selected = ast.literal_eval(sys.argv[3])
+        api.label_given_img(filtered_selected)
+        api.close_after_save_flag = True
+    loading_process.terminate()
     win.show()
     sys.exit(app.exec())

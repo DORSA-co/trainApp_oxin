@@ -15,7 +15,7 @@ import pandas as pd
 from PyQt5.QtGui import QPainter
 from labeling import labeling_api
 # import labeling_api
-ui, _ = loadUiType("UI/labeling.ui")
+ui, _ = loadUiType(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "UI/labeling.ui"))
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 class labeling(QMainWindow, ui):
     """This is a class for labeling user interface. It helps users to select defect class for defective regions.  

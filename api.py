@@ -465,6 +465,8 @@ class API:
         #milad
         self.baselines =None
 
+        self.close_after_save_flag = False
+
     def create_level2_ui(self):
         self.level2_win = levl2_UI()
         
@@ -2719,6 +2721,44 @@ class API:
                 level=2,
             )
 
+    def label_given_img(self, filtered_selected):
+        paths = self.db.get_path_sheet_image(filtered_selected)
+        sheets = []
+        for select_img in filtered_selected:
+            sheets.append(self.db.load_sheet(select_img[0]))
+
+        # self.ds.save_to_temp(paths, sheets, filtered_selected)
+
+        self.move_on_list.add(
+            list(zip(sheets, filtered_selected, paths)), "selected_imgs_for_label"
+        )
+        label_type = self.ui.get_label_type()
+        for sheet, selected_img_pos, img_path in zip(
+            sheets, filtered_selected, paths
+        ):
+            if img_path not in self.label_memory.get_all()[label_type].keys():
+                label = self.ds.get_label_from_annotation(selected_img_pos)
+                f = []
+                for i in label:
+                    f.append(
+                        [
+                            i["class"],
+                            np.array(i["mask"]),
+                            i["line_thickness"],
+                            i["point_thickness"],
+                        ]
+                    )
+                if f:
+                    self.label_memory.add(img_path, f, label_type)
+
+            self.image_save_status[img_path] = False
+
+        self.ui.show_label_page()
+        self.ui.show_small_neighbouring()
+        self.load_image_to_label_page()
+        self.ui.checkBox_show_neighbours.setCheckState(Qt.CheckState.Checked)
+        self.ui.checkBox_show_neighbours_labels.setCheckState(Qt.CheckState.Checked)
+        
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
@@ -3153,6 +3193,16 @@ class API:
         else:
             # #print("user_loged_in")
             self.show_message_logout()
+
+    def login_from_operator(self, user_name, password):
+        if self.logged_in:
+            self.show_message_logout()
+
+        login_window = self.ui.ret_create_login()
+        self.login_api = login_API(login_window, main_ui_obj=self.ui)
+        login_window.user_name.setText(user_name)
+        login_window.password.setText(password)
+        self.check_login()
 
     def show_message_logout(self):
         t = self.ui.show_question(
@@ -3924,6 +3974,8 @@ class API:
         self.ds_json.add_update_classification(image_name, labels)
         binary_count = self.ds_json.get_binary_count(None)
         chart_funcs.update_label_piechart(self.ui, binary_count)
+        if self.close_after_save_flag:
+            self.ui.close_win()
 
     def save_all_train_ds(self):
         count = self.move_on_list.get_count("selected_imgs_for_label")

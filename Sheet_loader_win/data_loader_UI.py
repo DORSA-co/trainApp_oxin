@@ -36,7 +36,7 @@ sys.path.append('../oxin_help')
 
 OPERATOR_PATH='Images'
 
-ui, _ = loadUiType("Sheet_loader_win/data_loader.ui")
+ui, _ = loadUiType(os.path.join(os.path.dirname(os.path.abspath(__file__)), "data_loader.ui"))
 # ui, _ = loadUiType("UI/data_loader.ui")
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 

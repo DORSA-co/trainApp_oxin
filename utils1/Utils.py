@@ -6,7 +6,7 @@ import os
 IMAGE_SHAPE = (1024, 1792)
 
 def get_selected_value(mylist , idxs):
-    return np.array(mylist)[idxs].tolist()
+    return np.array(mylist, dtype=object)[idxs].tolist()
 
 def read_image(path, color='gray'):
     if not os.path.exists(path):

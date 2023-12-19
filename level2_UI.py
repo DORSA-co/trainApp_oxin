@@ -23,7 +23,7 @@ try:
 except:
     pass
 
-ui, _ = loadUiType("UI/level2.ui")
+ui, _ = loadUiType(os.path.join(os.path.dirname(os.path.abspath(__file__)), "UI/level2.ui"))
 os.environ["QT_FONT_DPI"] = "96" # FIX Problem for High DPI and Scale above 100%
 
 
