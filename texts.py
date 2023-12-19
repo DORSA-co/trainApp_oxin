@@ -2619,8 +2619,6 @@ def set_alignment(self, lang):
         self.label_39.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_160.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
-        # self.help_win.textEdit.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-
         self.label_5.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_281.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.label_29.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -2857,8 +2855,6 @@ def set_alignment(self, lang):
         self.label_4.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_46.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_197.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-
-        # self.help_win.textEdit.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.label_102.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.label_109.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)

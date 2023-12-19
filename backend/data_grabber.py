@@ -15,6 +15,7 @@ HORIZONTAL = 3
 VERTICAL = 4
 
 IMAGE_SHAPE = (1024, 1792)
+PIP_INPUT_SHAPE = (256, 256)
 
 class sheetOverView:
     def __init__(
@@ -293,8 +294,14 @@ class sheetOverView:
                 if os.path.exists(info_path):
                     with open(info_path) as info_file:
                         info = json.load(info_file)
-                        image_shape = info['image_shape']
-                        pip_input_shape = info['pipline_input_shape']
+                        if 'image_shape' in info.keys():
+                            image_shape = info['image_shape']
+                        else:
+                            image_shape = IMAGE_SHAPE
+                        if 'pipline_input_shape' in file.keys():
+                            pip_input_shape = info['pipline_input_shape']
+                        else:
+                            pip_input_shape = PIP_INPUT_SHAPE
 
                         nx = image_shape[1]//pip_input_shape[0]
                         for i in binary_indices:

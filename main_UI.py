@@ -81,6 +81,7 @@ from PySide6.QtWidgets import QTableWidget as sQTableWidget
 # from login_win.login_api import
 
 from train_api import ALGORITHM_NAMES
+import subprocess
 sys.path.append('../oxin_help')
 
 
@@ -712,7 +713,6 @@ class UI_main_window(QMainWindow, ui):
         self.contrast_slider.valueChanged.connect(lambda: self.show_image_in_label(img=None))
         self.checkBox_eq_hist.stateChanged.connect(lambda: self.show_image_in_label(img=None))
         
-
         self.help_process = None
 
     def showTime(self):
@@ -1452,7 +1452,6 @@ class UI_main_window(QMainWindow, ui):
                         text
                         ]
                     )
-
 
     def left_bar_clear(self):
         """change left bar image with base color (white)"""

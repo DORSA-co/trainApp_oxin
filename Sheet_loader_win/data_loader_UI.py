@@ -21,7 +21,6 @@ import texts
 import texts_codes
 from PyQt5.QtGui import QPainter
 import cv2
-from help_UI import help
 from backend.date_funcs import get_datetime,convert_date,convert_get_time
 
 try:

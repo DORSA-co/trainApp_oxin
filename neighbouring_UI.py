@@ -8,7 +8,6 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
-
 import os
 import texts
 
@@ -55,12 +54,11 @@ class neighbouring(QMainWindow, ui):
         self.n_image.mousePressEvent = self.mousePressImage()
         self.n_image.mouseReleaseEvent = self.mouseReleaseImage()
         self.n_image.mouseMoveEvent = self.mouseMoveImage()
-
+        
         self.language = lang
         self.annot_checkbox.setText(texts.Titles['show_labels'][lang])
         self.label_303.setText(texts.Titles['brightness'][lang])
         self.label_305.setText(texts.Titles['contrast'][lang])
-
 
         self.org_image = self.img
         self.org_image_annt = self.annotated_image

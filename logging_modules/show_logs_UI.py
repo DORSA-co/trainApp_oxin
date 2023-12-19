@@ -8,7 +8,6 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtUiTools import loadUiType
 from PySide6.QtWidgets import *
-from help_UI import help
 import os
 from backend import date_funcs
 import texts
@@ -41,8 +40,6 @@ class show_logs(QMainWindow, ui):
         self.activate_()
         self.center()
         self._old_pos = None
-
-        self.help_win = None
         
         self.language = lang
         self.log_mainfolderpath = log_mainfolderpath
