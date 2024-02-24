@@ -79,7 +79,7 @@ from PySide6.QtCore import QThread as sQThread
 from loading_worker import loading_worker
 from PySide6.QtWidgets import QTableWidget as sQTableWidget
 # from login_win.login_api import
-
+from PyQt5.QtGui import QIcon
 from train_api import ALGORITHM_NAMES
 import subprocess
 sys.path.append('../oxin_help')
@@ -110,7 +110,7 @@ class UI_main_window(QMainWindow, ui):
         self.setWindowFlags(flags)
         self.activate_()
         self.statusBar().setMaximumHeight(5)
-
+        self.setWindowIcon(QIcon('images/Train.png'))
         self.stackedWidget.setCurrentWidget(self.page_data_auquzation)
 
         self.mask_table_widget.horizontalHeader().setVisible(True)
@@ -3876,3 +3876,4 @@ if __name__ == "__main__":
     loading_process.terminate()
     win.show()
     sys.exit(app.exec())
+                                       

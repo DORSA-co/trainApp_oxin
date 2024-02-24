@@ -274,9 +274,11 @@ def get_selected_defects(ui_obj):
 
     list = []
     for i in range(ui_obj.classes_table.rowCount()):    
-        if ui_obj.classes_table.item(i, 0).checkState() == sQtCore.Qt.Checked:
-            list.append(ui_obj.classes_table.item(i, 2).text())
-
+        try:
+            if ui_obj.classes_table.item(i, 0).checkState().name == 'Checked':
+                list.append(ui_obj.classes_table.item(i, 2).text())
+        except:
+            print(i)
     return list
 
 
