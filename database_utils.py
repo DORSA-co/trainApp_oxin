@@ -65,7 +65,13 @@ class dataBaseUtils:
     # ________________________________________________________________
     def build_sheet(self, record):
         y, m, d = record["date"].split("/")
-        hh, mm, _ = record["time"].split(":")
+        if len(record["time"])>12:
+            time = record["time"].split(' ')[1].split('.')[0]
+            hh, mm, _ = time.split(":")
+        
+        else:
+            hh, mm, _ = record["time"].split(":")
+
         sheet_obj = Sheet(
             id=record["id"],
             sheet_id=record["PLATE_ID"],
@@ -162,7 +168,12 @@ class dataBaseUtils:
         records = self.db.report_last(self.sheets_info_tabel, "PLATE_ID", count)
         res = []
         for record in records:
-            res.append(self.build_sheet(record))
+            # print(record)
+            try:
+                res.append(self.build_sheet(record))
+            except Exception as e:
+                print(e)
+                # print(record)
         return res
 
     # ________________________________________________________________

@@ -1024,7 +1024,7 @@ class UI_main_window(QMainWindow, ui):
         Returns: None
         """
         image = sQImage(
-            img, img.shape[1], img.shape[0], img.strides[0], sQImage.Format_Grayscale8
+            img, img.shape[1], img.shape[0], img.strides[0], sQImage.Format_BGR888
         )
         self.crop_image.setPixmap(sQPixmap.fromImage(image))
         

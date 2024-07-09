@@ -31,4 +31,4 @@ for cnt in range(1001, 1030):
                 #     255,
                 # )
                 # #print(res_path)
-                cv2.imwrite(os.path.join(res_path, str(f) + ".png"), img)
+                cv2.imwrite(os.path.join(res_path, str(f) + ".jpg"), img)

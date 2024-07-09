@@ -2191,7 +2191,7 @@ class API:
                                                             dataset_annotation_path = os.path.join(self.ds.dataset_path, self.ds.annotations_folder)
                                                         )
                 
-                self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=6)
+                self.start_technical_loading_threads(self.thechnicals_backend[side], n_threads=1)
 
         except Exception as e:
             print('*'*20)
@@ -2390,31 +2390,41 @@ class API:
     #
     # ----------------------------------------------------------------------------------------
     def fit_image(self, widget_name):
-        self.thechnicals_backend[self.current_technical_side].fit(
-            self.mouse.get_relative_position()
-        )
-        self.refresh_thechnical(1)
-        real_img = self.thechnicals_backend[self.current_technical_side].get_real_img(
-            eq=self.ui.light_checkBox.isChecked(),
-            intensity=self.ui.light_slider.value()
-        )
-        self.ui.set_crop_image(real_img)
-        self.ui.set_enabel(self.ui.add_btn_SI, True)
-        self.show_pointer_position()
-
+        try:
+            self.thechnicals_backend[self.current_technical_side].fit(
+                self.mouse.get_relative_position()
+            )
+            self.refresh_thechnical(1)
+            real_img = self.thechnicals_backend[self.current_technical_side].get_real_img(
+                eq=self.ui.light_checkBox.isChecked(),
+                intensity=self.ui.light_slider.value()
+            )
+            self.ui.set_crop_image(real_img)
+            self.ui.set_enabel(self.ui.add_btn_SI, True)
+            self.show_pointer_position()
+        except:
+            print('Error in fit image')
     # ----------------------------------------------------------------------------------------
     #
     # ----------------------------------------------------------------------------------------
     def show_sheet_loader(self):
         try:
             sheets = self.db.report_last_sheets(999999)
-            self.ui.load_sheets_win.show_sheets_info(sheets)
+            t1 = time.time()
+
+            self.ui.load_sheets_win.show_sheets_info(sheets,show_all=False)
+            print('show sheet info ',time.time()-t1)
             self.ui.load_sheets_win.reset_search_lines()
+            print('show sheet info reset_search_lines ',time.time()-t1)
+
             self.ui.data_loader_win_show()
+            print('show sheet info data_loader_win_show',time.time()-t1)
+
             # self.ui.close_loading_page()
             self.ui.load_sheets_win.set_warning(
                 texts.MESSEGES["refresh_success"][self.language], level=1
             )
+            print('show sheet',time.time()-t1)
         except:
             self.ui.load_sheets_win.set_warning(
                 texts.ERRORS["refresh_failed"][self.language], level=3
@@ -2610,8 +2620,8 @@ class API:
             main_path = self.sheet.get_path()
 
             x = main_path.split("/")
-            path = pathStructure.sheet_image_path(x[0], x[-1], side, cam, frame, ".png")
-            path_operator = pathStructure.sheet_image_path_operator(x[0], x[-1], side, cam, frame, ".png")
+            path = pathStructure.sheet_image_path(x[0], x[-1], side, cam, frame, ".jpg")
+            path_operator = pathStructure.sheet_image_path_operator(x[0], x[-1], side, cam, frame, ".jpg")
             if not os.path.exists(path) and not os.path.exists(path_operator):
                 self.ui.set_warning(
                     texts.WARNINGS["image_not_exist"][self.language],
@@ -7476,7 +7486,7 @@ class API:
         try:
             if not self.ui.manual_plc:
                 self.sensor = self.my_plc.get_value(
-                    self.dict_spec_pathes["MemDistanceSensor"]
+                    self.dict_spec_pathes["sensor1"]
                 )
 
                 if self.sensor[0] == "-":

@@ -368,7 +368,7 @@ class Collector():
                     Flag=False
 
             else:
-                    print('Error not grabbing')
+                    # print('Error not grabbing')
                     img=np.zeros([1024,1792],dtype=np.uint8)
                     Flag=False
 
@@ -475,7 +475,7 @@ class connect_manage_cameras:
                     offet_x=cam_parms["offsetx_value"],
                     offset_y=cam_parms["offsety_value"],
                     trigger_delay=cam_parms["delay"],
-                    manual=True ,
+                    manual=False ,
                 )
 
                 # print(collector)
@@ -628,7 +628,7 @@ if __name__ == "__main__":
             width=1000,
             offet_x=16,
             offset_y=4,
-            manual=True,
+            manual=False,
             trigger_delay=7000
         )
 

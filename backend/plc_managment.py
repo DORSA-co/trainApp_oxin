@@ -87,17 +87,17 @@ class management():
             data_value: if failed to load, return message error
         """
 
-        # try:
-        var = self.client.get_node(path)
-        # #print(var)
-        # data_value=var.get_data_value() # get value of node as a DataValue object   this line is not imporant
-        value=var.get_value() # get value of node as a python builtin
-        # #print('x'*5,value)
-        return (value, None)
+        try:
+            var = self.client.get_node(path)
+            # #print(var)
+            # data_value=var.get_data_value() # get value of node as a DataValue object   this line is not imporant
+            value=var.get_value() # get value of node as a python builtin
+            # #print('x'*5,value)
+            return (value, None)
 
-        # except:
-        #     # #print('except')
-        #     return '-', texts.ERRORS['plc_path_error'][self.ui_obj.language]
+        except:
+            print('except',path)
+            return '-', texts.ERRORS['plc_path_error'][self.ui_obj.language]
 
 
     def set_value(self, path, value):
@@ -248,6 +248,7 @@ def set_pathes(pathes):
         "UpHighThreshold",
         "UpLowThreshold",
         "MemDistanceSensor",
+        "sensor1"
     ]
     # values=['MemDistanceSensor','NCamera','MemDownValve','MemUpValve','UpTemperature','DownTemperature']
     # tom_info = pathes.get("ProjectorPulseTrig")

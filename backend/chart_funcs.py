@@ -709,7 +709,7 @@ def update_userprofile_barchart(ui_obj, classification_len):
         return
     del (classification_len['total'])
 
-    categories = list(classification_len.keys())
+    categories = [c+' ({})'.format(classification_len[c]) for c in classification_len.keys()]
     ui_obj.axisX = QBarCategoryAxis()
     ui_obj.axisX.append(categories)
     ui_obj.binary_barchart_pro.setAxisX(ui_obj.axisX, ui_obj.bar_binary_series_pro)
@@ -717,13 +717,13 @@ def update_userprofile_barchart(ui_obj, classification_len):
 
     ui_obj.axisY = QValueAxis()
     ui_obj.binary_barchart_pro.setAxisY(ui_obj.axisY, ui_obj.bar_binary_series_pro)
-    ui_obj.axisY.setRange(0, 100)
+    ui_obj.axisY.setRange(0, max(classification_len.values()))
     ui_obj.axisY.setLabelsColor(sQColor(pie_label_color))
 
     set0 = QBarSet('defects')
 
     for d in classification_len:
-        p = (classification_len[d] / total) * 100
+        p = (classification_len[d])
         set0.append(p)
         
     set0.setBrush(sQColor(bar_color))

@@ -5,7 +5,7 @@ from mysql.connector import Error
 from numpy import rec
 import texts
 import texts_codes
-
+import time
 # from tenacity import retry_if_exception
 
 
@@ -264,6 +264,7 @@ class dataBase:
     # --------------------------------------------------------------------------
     def report_last(self, table_name, parametr, count, side="DESC"):
         if self.check_connection:
+            t = time.time()
             cursor, connection = self.connect()
 
             sql_select_Query = "select * from {} ORDER BY {} {} LIMIT {}".format(
@@ -288,7 +289,7 @@ class dataBase:
                 for i in range(len(field_names)):
                     record_dict[field_names[i]] = record[i]
                 res.append(record_dict)
-
+            print('database get time ',time.time()-t)
             return res
 
             return records

@@ -161,24 +161,27 @@ class data_loader(QMainWindow, ui):
         for table_name in self.tables:
             table_name.clear()
 
-    def show_sheets_info(self, sheets, full=True):
+    def show_sheets_info(self, sheets, full=True,show_all=True):
         try:
+            count =0
             if full:
                 self.load_sheets = sheets
-            self.tableWidget_dataset.setRowCount(len(sheets))
+            if show_all:
+                self.tableWidget_dataset.setRowCount(len(sheets))
 
             self.clear_tables()                  # clear tables
             self.detail_dataset.setText('')
             for row,sheet in enumerate(sheets):
+                if show_all:
+                    for i,(feature, value) in enumerate( sheet.get_info_dict().items()):
+                        table_item = QTableWidgetItem(str(feature))
+                        table_item.setData(Qt.DisplayRole,str(value))
 
-                for i,(feature, value) in enumerate( sheet.get_info_dict().items()):
-                    table_item = QTableWidgetItem(str(feature))
-                    table_item.setData(Qt.DisplayRole,str(value))
-
-                    if i==0:
-                        table_item.setCheckState(Qt.CheckState.Unchecked)
-                    table_item.setTextAlignment(Qt.AlignCenter)
-                    self.tableWidget_dataset.setItem(row,i,table_item)
+                        if i==0:
+                            table_item.setCheckState(Qt.CheckState.Unchecked)
+                        table_item.setTextAlignment(Qt.AlignCenter)
+                        self.tableWidget_dataset.setItem(row,i,table_item)
+                    count+=1
                 self.list_plate_id.insertItem(row, str(sheet.sheet_id))   # add id in listwidget
                 self.list_order_id.insertItem(row, str(sheet.order_id))   # add id in listwidget
                 self.list_heat_id.insertItem(row, str(sheet.heat_id))   # add id in listwidget

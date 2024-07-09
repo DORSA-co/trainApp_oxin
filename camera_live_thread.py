@@ -30,7 +30,7 @@ class ImageManager(sQObject):
         self.sheet_id = 0
         self.dummy_sheet_id = 'ABC12345A'
         self.coil_dict = {}
-        self.image_format = '.png'
+        self.image_format = '.jpg'
         self.nframe = [0] * 24
         self.total_frames = 0
         self.start_cam = 1

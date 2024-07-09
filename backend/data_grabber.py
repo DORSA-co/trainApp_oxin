@@ -14,7 +14,7 @@ BOTTOM="BOTTOM"
 HORIZONTAL = 3
 VERTICAL = 4
 
-IMAGE_SHAPE = (1024, 1792)
+IMAGE_SHAPE = (1024, 1920)
 PIP_INPUT_SHAPE = (256, 256)
 
 class sheetOverView:
@@ -117,9 +117,9 @@ class sheetOverView:
 
         img = None  
         if os.path.exists(img_path):
-                img = cv2.imread(img_path, 0)
+                img = cv2.imread(img_path)
         elif os.path.exists(img_path_operator):
-                img = cv2.imread(img_path_operator, 0)
+                img = cv2.imread(img_path_operator)
 
         if img is not None:
             
@@ -193,7 +193,7 @@ class sheetOverView:
         camera_counts = last_cam - first_cam + 1
         
         single_h, single_w = self.single_image_shape
-        return np.zeros( (single_h*frame_counts, single_w*camera_counts ), dtype=np.uint8)
+        return np.zeros( (single_h*frame_counts, single_w*camera_counts, 3 ), dtype=np.uint8)
 
     def draw_defect_bbox_on_single_image(self, cam_idx:int, frame_idx:int, bboxes: list) -> np.ndarray:
         """draws defects bounding boxes on single image
@@ -227,7 +227,7 @@ class sheetOverView:
             i (int): horizentaly index. always start from 0
             j (int): verticaly index. always start from 0
         """
-        h,w = img.shape
+        h,w = img.shape[:2]
         self.sheet_full_image[j*h: (j+1)*h,
                               i*w: (i+1)*w
                               ] = img
@@ -671,7 +671,7 @@ class sheetOverView:
     # _____________________________________________________________________________________________________________________________
     def get_real_img(self, eq=True, intensity = 20):
         norm_x, norm_y = self.get_pos()
-        h,w = self.sheet_full_image.shape
+        h,w = self.sheet_full_image.shape[:2]
         x = int(norm_x * w)
         y = int(norm_y * h) 
         
